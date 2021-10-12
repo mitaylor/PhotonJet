@@ -19,7 +19,7 @@ config.section_("Data")
 config.Data.inputDataset = DatasetName
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 1
+config.Data.unitsPerJob = 10
 config.Data.publication = False
 config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName + '/'
