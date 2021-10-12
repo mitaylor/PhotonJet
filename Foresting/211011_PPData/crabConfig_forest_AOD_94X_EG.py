@@ -27,4 +27,4 @@ config.Data.outLFNDirBase = OutputBase + DatasetName + '/'
 config.section_("Site")
 # config.Site.storageSite = "T2_CH_CERN"
 config.Site.storageSite = 'T2_US_MIT'
-config.Site.whitelist = ["T2_US_MIT"]
+# config.Site.whitelist = ["T2_US_MIT"]
