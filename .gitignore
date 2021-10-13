@@ -1,2 +1,5 @@
-*.pdf
-*.DS_Store
+**/*.pdf
+**/*.txt
+**/*.DS_Store
+MainAnalysis/bin/**
+MainAnalysis/build/**
