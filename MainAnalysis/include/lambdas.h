@@ -5,33 +5,24 @@
 #include <functional>
 #include <string>
 
-#include "TFile.h"
-#include "TGaxis.h"
 #include "TGraph.h"
 #include "TH1.h"
 #include "TLatex.h"
 #include "TLegend.h"
 #include "TLine.h"
 
-auto transform_axis = [](TH1* obj, std::function<float(int64_t)> f) {
-    obj->GetXaxis()->SetLabelOffset(999);
-    obj->GetXaxis()->SetTickLength(0);
-
-    auto xmin = obj->GetBinLowEdge(1);
-    auto xmax = obj->GetBinLowEdge(obj->GetNbinsX() + 1);
-    auto ymin = obj->GetMinimumStored();
-
-    auto axis = new TGaxis(xmin, ymin, xmax, ymin, f(xmin), f(xmax));
-    axis->Draw();
+auto _for_content = [](TH1* h, std::function<float(float)> f) {
+    for (int64_t j = 1; j <= h->GetNbinsX(); ++j) {
+        auto val = h->GetBinContent(j);
+        h->SetBinContent(j, f(val));
+    }
 };
 
-auto rename_axis = [](TH1* obj, std::string const& title) {
-    obj->GetYaxis()->SetTitle(title.data());
-};
-
-auto prefix_axis = [](TH1* obj, std::string const& prefix) {
-    auto title = obj->GetYaxis()->GetTitle();
-    rename_axis(obj, prefix + title);
+auto _for_content_index = [](TH1* h, std::function<float(float, int64_t)> f) {
+    for (int64_t j = 1; j <= h->GetNbinsX(); ++j) {
+        auto val = h->GetBinContent(j);
+        h->SetBinContent(j, f(val, j));
+    }
 };
 
 auto graph_formatter = [](TGraph* obj) {
@@ -110,34 +101,6 @@ void apply_style(T p, std::string const& text, double min, double max) {
 template <typename T>
 void apply_style(T p, std::string const& text) {
     apply_style(p, text, hist_formatter);
-}
-
-template <typename T>
-void info_text(int64_t index, float pos, std::string const& format,
-               std::vector<T> const& edges, bool reverse) {
-    char buffer[128] = { '\0' };
-
-    auto lower = reverse ? edges[index] : edges[index - 1];
-    auto upper = reverse ? edges[index - 1] : edges[index];
-    sprintf(buffer, format.data(), lower, upper);
-
-    TLatex* l = new TLatex();
-    l->SetTextFont(43);
-    l->SetTextSize(13);
-    l->DrawLatexNDC(0.135, pos, buffer);
-}
-
-template <typename T, typename... U>
-void stack_text(int64_t index, float position, float spacing, T* shape,
-                std::function<U>... args) {
-    auto indices = shape->indices_for(index - 1);
-    auto it = std::begin(indices);
-
-    /* readjust position */
-    position = position + spacing;
-
-    (void)(int [sizeof...(U)]) {
-        (args(*(it++) + 1, position -= spacing), 0)... };
 }
 
 #endif /* LAMBDAS_H */

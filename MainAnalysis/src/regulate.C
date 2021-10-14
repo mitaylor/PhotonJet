@@ -16,7 +16,6 @@
 
 #include "../include/JetCorrector.h"
 #include "../include/JetUncertainty.h"
-#include "../include/phoERegression.h"
 
 #include "TF1.h"
 #include "TFile.h"
@@ -56,7 +55,6 @@ int regulate(char const* config, char const* output) {
     auto heavyion = conf->get<bool>("heavyion");
     auto mc_branches = conf->get<bool>("mc_branches");
     auto hlt_branches = conf->get<bool>("hlt_branches");
-    auto apply_weights = conf->get<bool>("apply_weights");
     auto apply_residual = conf->get<bool>("apply_residual");
     auto active = conf->get<std::vector<bool>>("active");
 
@@ -70,13 +68,12 @@ int regulate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto residual = conf->get<std::string>("residual");
     auto csn = conf->get<std::vector<float>>("csn");
-    auto xmls = conf->get<std::vector<std::string>>("xmls");
 
     auto pthat = conf->get<std::vector<int32_t>>("pthat");
     auto pthatw = conf->get<std::vector<float>>("pthatw");
     auto vzw = conf->get<std::vector<float>>("vzw");
 
-    auto ihf = new interval(dhf);
+    auto ihf = std::make_shared<interval>(dhf);
 
     for (auto& v : csn) { v = v * v; }
 
@@ -114,46 +111,19 @@ int regulate(char const* config, char const* output) {
     auto JEU = new JetUncertainty(jeu);
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
-    if (mc_branches && apply_weights) { fweight->SetParameters(
+    if (mc_branches) { fweight->SetParameters(
         vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); }
 
     TF1** fres = nullptr;
     if (apply_residual) {
         TFile* fh = new TFile(residual.data(), "read");
-        auto hres = new history<TH1F>(fh, tag + "_scale_s_dhf_f_pt");
+        auto hres = new history(fh, tag + "_es_dhf_f_pt");
 
         fres = new TF1*[hres->size()];
         hres->apply([&](TH1* h, int64_t index) {
             fres[index] = h->GetFunction(
-                ("f_s_dhf_f_pt_"s + std::to_string(index)).data()); });
+                ("f_es_dhf_f_pt_"s + std::to_string(index)).data()); });
     }
-
-    auto regr = new phoERegression();
-    if (!xmls.empty()) {
-        regr->initialiseReaderEB(xmls[0]);
-        regr->initialiseReaderEE(xmls[1]);
-    }
-
-    std::vector<float> regr_variables(17, 0);
-    auto fill_regr_variables = [&](int64_t index) {
-        regr_variables[0] = (*tree_pj->phoSCRawE)[index];
-        regr_variables[1] = (*tree_pj->phoSCEta)[index];
-        regr_variables[2] = (*tree_pj->phoSCPhi)[index];
-        regr_variables[3] = (*tree_pj->phoSCEtaWidth)[index];
-        regr_variables[4] = (*tree_pj->phoSCPhiWidth)[index];
-        regr_variables[5] = (*tree_pj->phoE3x3_2012)[index];
-        regr_variables[6] = (*tree_pj->phoMaxEnergyXtal_2012)[index];
-        regr_variables[7] = (*tree_pj->phoE2nd_2012)[index];
-        regr_variables[8] = (*tree_pj->phoELeft_2012)[index];
-        regr_variables[9] = (*tree_pj->phoERight_2012)[index];
-        regr_variables[10] = (*tree_pj->phoETop_2012)[index];
-        regr_variables[11] = (*tree_pj->phoEBottom_2012)[index];
-        regr_variables[12] = (*tree_pj->phoSigmaIEtaIEta_2012)[index];
-        regr_variables[13] = (*tree_pj->phoSigmaIEtaIPhi_2012)[index];
-        regr_variables[14] = (*tree_pj->phoSigmaIPhiIPhi_2012)[index];
-        regr_variables[15] = tree_pj->rho;
-        regr_variables[16] = (*tree_pj->phoESEn)[index];
-    };
 
     auto rng = new TRandom3(144);
 
@@ -196,7 +166,7 @@ int regulate(char const* config, char const* output) {
             tree_pj->Ncoll = 1000;
         }
 
-        tree_pj->weight = (mc_branches && apply_weights)
+        tree_pj->weight = mc_branches
             ? tree_pj->Ncoll / 1000.f
                 * fweight->Eval(tree_pj->vz)
                 * weight_for(pthat, pthatw, tree_pj->pthat)
@@ -211,7 +181,9 @@ int regulate(char const* config, char const* output) {
             JEC->SetJetPhi((*tree_pj->jtphi)[j]);
 
             float corr = JEC->GetCorrectedPT();
-            corr = corr / (apply_residual ? fres[hf_x]->Eval(corr) : 1.f);
+            float cres = (apply_residual) ? fres[hf_x]->Eval(corr) : 1.f;
+
+            corr /= cres > 0.8 ? cres : 0.8;
 
             if (!jeu.empty()) {
                 auto unc = JEU->GetUncertainty();
@@ -223,24 +195,12 @@ int regulate(char const* config, char const* output) {
             (*tree_pj->jtpt)[j] = corr;
         }
 
-        /* apply photon energy corrections */
-        if (!xmls.empty()) {
-            for (int64_t j = 0; j < tree_pj->nPho; ++j) {
-                fill_regr_variables(j);
-                (*tree_pj->phoEt)[j] = regr->getCorrectedPt(
-                    regr_variables,
-                    (*tree_pj->phoEt)[j],
-                    (*tree_pj->phoEta)[j],
-                    (*tree_pj->phoSCEta)[j]);
-            }
-        }
-
         tout->Fill();
     }
 
     fout->Write("", TObject::kOverwrite);
     fout->Close();
-
+    
     return 0;
 }
 
