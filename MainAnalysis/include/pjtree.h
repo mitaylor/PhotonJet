@@ -51,7 +51,6 @@ class pjtree {
            std::array<bool, tt::ntt> const& flags)
             : _gen(gen), _hlt(hlt), _flags(flags) {
         B_VAL_EVT_RECO(SETMONE)
-        B_VAL_EGM_RECO(SETMONE)
         B_VAL_PHO_RECO(SETMONE)
         B_VAL_ELE_RECO(SETMONE)
         B_VAL_JET_RECO(SETMONE)
@@ -81,7 +80,6 @@ class pjtree {
            std::array<bool, tt::ntt> const& flags)
             : _gen(gen), _hlt(hlt), _flags(flags) {
         B_VAL_EVT_RECO(SETZERO)
-        B_VAL_EGM_RECO(SETZERO)
         B_VAL_PHO_RECO(SETZERO)
         B_VAL_ELE_RECO(SETZERO)
         B_VAL_JET_RECO(SETZERO)
@@ -136,8 +134,6 @@ class pjtree {
         }
 
         if (_flags[tt::egm]) {
-            B_VAL_EGM_RECO(COPYVAL, tegg)
-
             if (_gen) {
                 B_VAL_EGM_GEN(COPYVAL, tegg)
                 B_VEC_EGM_GEN(COPYOBJ, tegg)
@@ -175,7 +171,6 @@ class pjtree {
     B_VAL_EVT_RECO(DECLVAL)
     B_VAL_EVT_GEN(DECLVAL)
     B_VAL_EVT_EXT(DECLVAL)
-    B_VAL_EGM_RECO(DECLVAL)
     B_VAL_EGM_GEN(DECLVAL)
     B_VEC_EGM_GEN(DECLPTR)
     B_VAL_PHO_RECO(DECLVAL)
@@ -202,8 +197,6 @@ class pjtree {
         }
 
         if (_flags[tt::egm]) {
-            B_VAL_EGM_RECO(BRANCHVAL, t)
-
             if (_gen) {
                 B_VAL_EGM_GEN(BRANCHVAL, t)
                 B_VEC_EGM_GEN(BRANCHPTR, t)
@@ -250,8 +243,6 @@ class pjtree {
         }
 
         if (_flags[tt::egm]) {
-            B_VAL_EGM_RECO(SETVALADDR, t)
-
             if (_gen) {
                 B_VAL_EGM_GEN(SETVALADDR, t)
                 B_VEC_EGM_GEN(SETVALADDR, t)
