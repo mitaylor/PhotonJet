@@ -55,6 +55,7 @@ int regulate(char const* config, char const* output) {
     auto heavyion = conf->get<bool>("heavyion");
     auto mc_branches = conf->get<bool>("mc_branches");
     auto hlt_branches = conf->get<bool>("hlt_branches");
+    auto apply_weights = conf->get<bool>("apply_weights");
     auto apply_residual = conf->get<bool>("apply_residual");
     auto active = conf->get<std::vector<bool>>("active");
 
@@ -111,7 +112,7 @@ int regulate(char const* config, char const* output) {
     auto JEU = new JetUncertainty(jeu);
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
-    if (mc_branches) { fweight->SetParameters(
+    if (mc_branches && apply_weights) { fweight->SetParameters(
         vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); }
 
     TF1** fres = nullptr;
@@ -166,7 +167,7 @@ int regulate(char const* config, char const* output) {
             tree_pj->Ncoll = 1000;
         }
 
-        tree_pj->weight = mc_branches
+        tree_pj->weight = (mc_branches && apply_weights)
             ? tree_pj->Ncoll / 1000.f
                 * fweight->Eval(tree_pj->vz)
                 * weight_for(pthat, pthatw, tree_pj->pthat)
