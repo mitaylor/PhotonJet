@@ -1,7 +1,7 @@
 # OutputBase = '/store/group/phys_heavyions/mitaylor'
 OutputBase = '/store/user/mitaylor/'
 DatasetName = '/HighEGJet/Run2017G-17Nov2017-v2/AOD'
-Tag = 'HighEGJet_Run2017G-17Nov2017-v2_AOD_944_v1'
+Tag = 'HighEGJet_Run2017G-17Nov2017-v2_AOD_944_v2'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -19,7 +19,7 @@ config.section_("Data")
 config.Data.inputDataset = DatasetName
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 21
+config.Data.unitsPerJob = 5
 config.Data.publication = False
 config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName + '/'
