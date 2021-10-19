@@ -187,6 +187,9 @@ int regulate(char const* config, char const* output) {
             std::cout << __LINE__ << " " << j << std::endl;
 
             float corr = JEC->GetCorrectedPT();
+
+            std::cout << __LINE__ << std::endl;
+
             float cres = (apply_residual) ? fres[hf_x]->Eval(corr) : 1.f;
 
             std::cout << __LINE__ << std::endl;
