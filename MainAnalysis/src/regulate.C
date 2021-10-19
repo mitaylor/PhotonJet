@@ -184,30 +184,20 @@ int regulate(char const* config, char const* output) {
             JEC->SetJetEta((*tree_pj->jteta)[j]);
             JEC->SetJetPhi((*tree_pj->jtphi)[j]);
 
-            std::cout << __LINE__ << " " << j << std::endl;
-
             float corr = JEC->GetCorrectedPT();
 
-            std::cout << __LINE__ << std::endl;
+            std::cout << corr << std::endl;
 
             float cres = (apply_residual) ? fres[hf_x]->Eval(corr) : 1.f;
 
-            std::cout << __LINE__ << std::endl;
-
             corr /= cres > 0.8 ? cres : 0.8;
-
-            std::cout << __LINE__ << std::endl;
 
             if (!jeu.empty()) {
                 auto unc = JEU->GetUncertainty();
                 corr *= direction ? (1. + unc.second) : (1. - unc.first);
             }
 
-            std::cout << __LINE__ << std::endl;
-
             if (!csn.empty()) { corr *= rng->Gaus(1., jer(csn, corr)); }
-
-            std::cout << __LINE__ << std::endl;
 
             (*tree_pj->jtpt)[j] = corr;
         }
