@@ -138,11 +138,11 @@ int regulate(char const* config, char const* output) {
         if (i % 10000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
-        std::cout << __LINE << std::endl;
+        std::cout << __LINE__ << std::endl;
 
         forest->get(i);
 
-        std::cout << __LINE << std::endl;
+        std::cout << __LINE__ << std::endl;
 
         if (!selections.empty()) {
             bool pass_selection = false;
@@ -153,7 +153,7 @@ int regulate(char const* config, char const* output) {
             if (!pass_selection) { continue; }
         }
 
-        std::cout << __LINE << std::endl;
+        std::cout << __LINE__ << std::endl;
 
         if (!skim.empty()) {
             if (tpho->nPho < 1) { continue; }
@@ -166,7 +166,7 @@ int regulate(char const* config, char const* output) {
             if (!pass_skim) { continue; }
         }
 
-        std::cout << __LINE << std::endl;
+        std::cout << __LINE__ << std::endl;
 
         tree_pj->copy(tevt, tegg, tpho, tele, tjet, thlt);
 
