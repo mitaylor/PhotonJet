@@ -178,13 +178,19 @@ int regulate(char const* config, char const* output) {
             tree_pj->Ncoll = 1000;
         }
 
+        std::cout << __LINE__ << std::endl;
+
         tree_pj->weight = (mc_branches && apply_weights)
             ? tree_pj->Ncoll / 1000.f
                 * fweight->Eval(tree_pj->vz)
                 * weight_for(pthat, pthatw, tree_pj->pthat)
             : 1.f;
 
+        std::cout << __LINE__ << std::endl;
+
         auto hf_x = ihf->index_for(tree_pj->hiHF);
+
+        std::cout << __LINE__ << std::endl;
 
         /* apply jet energy corrections and evaluate uncertainties */
         for (int64_t j = 0; j < tree_pj->nref; ++j) {
@@ -207,8 +213,14 @@ int regulate(char const* config, char const* output) {
             (*tree_pj->jtpt)[j] = corr;
         }
 
+        std::cout << __LINE__ << std::endl;
+
         tout->Fill();
+
+        std::cout << __LINE__ << std::endl;
     }
+
+    std::cout << __LINE__ << std::endl;
 
     fout->Write("", TObject::kOverwrite);
     fout->Close();
