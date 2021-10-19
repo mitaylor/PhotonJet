@@ -186,7 +186,7 @@ int regulate(char const* config, char const* output) {
 
             float corr = JEC->GetCorrectedPT();
 
-            std::cout << (*tree_pj->rawpt)[j] << " " << (*tree_pj->jteta)[j] << " " << (*tree_pj->jtphi)[j]) << std::endl;
+            std::cout << (*tree_pj->rawpt)[j] << " " << (*tree_pj->jteta)[j] << " " << (*tree_pj->jtphi)[j] << std::endl;
             std::cout << corr << std::endl;
 
             float cres = (apply_residual) ? fres[hf_x]->Eval(corr) : 1.f;
