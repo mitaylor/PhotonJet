@@ -170,7 +170,7 @@ int regulate(char const* config, char const* output) {
 
         tree_pj->copy(tevt, tegg, tpho, tele, tjet, thlt);
 
-        std::cout << __LINE << std::endl;
+        std::cout << __LINE__ << std::endl;
 
         if (!heavyion) {
             tree_pj->hiBin = 0;
