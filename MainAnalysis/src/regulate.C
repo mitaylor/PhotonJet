@@ -138,11 +138,7 @@ int regulate(char const* config, char const* output) {
         if (i % 10000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
-        std::cout << __LINE__ << std::endl;
-
         forest->get(i);
-
-        std::cout << __LINE__ << std::endl;
 
         if (!selections.empty()) {
             bool pass_selection = false;
@@ -152,8 +148,6 @@ int regulate(char const* config, char const* output) {
 
             if (!pass_selection) { continue; }
         }
-
-        std::cout << __LINE__ << std::endl;
 
         if (!skim.empty()) {
             if (tpho->nPho < 1) { continue; }
@@ -166,11 +160,7 @@ int regulate(char const* config, char const* output) {
             if (!pass_skim) { continue; }
         }
 
-        std::cout << __LINE__ << std::endl;
-
         tree_pj->copy(tevt, tegg, tpho, tele, tjet, thlt);
-
-        std::cout << __LINE__ << std::endl;
 
         if (!heavyion) {
             tree_pj->hiBin = 0;
@@ -178,15 +168,11 @@ int regulate(char const* config, char const* output) {
             tree_pj->Ncoll = 1000;
         }
 
-        std::cout << __LINE__ << std::endl;
-
         tree_pj->weight = (mc_branches && apply_weights)
             ? tree_pj->Ncoll / 1000.f
                 * fweight->Eval(tree_pj->vz)
                 * weight_for(pthat, pthatw, tree_pj->pthat)
             : 1.f;
-
-        std::cout << __LINE__ << std::endl;
 
         auto hf_x = ihf->index_for(tree_pj->hiHF);
 
@@ -198,17 +184,27 @@ int regulate(char const* config, char const* output) {
             JEC->SetJetEta((*tree_pj->jteta)[j]);
             JEC->SetJetPhi((*tree_pj->jtphi)[j]);
 
+            std::cout << __LINE__ << " " << j << std::endl;
+
             float corr = JEC->GetCorrectedPT();
             float cres = (apply_residual) ? fres[hf_x]->Eval(corr) : 1.f;
 
+            std::cout << __LINE__ << std::endl;
+
             corr /= cres > 0.8 ? cres : 0.8;
+
+            std::cout << __LINE__ << std::endl;
 
             if (!jeu.empty()) {
                 auto unc = JEU->GetUncertainty();
                 corr *= direction ? (1. + unc.second) : (1. - unc.first);
             }
 
+            std::cout << __LINE__ << std::endl;
+
             if (!csn.empty()) { corr *= rng->Gaus(1., jer(csn, corr)); }
+
+            std::cout << __LINE__ << std::endl;
 
             (*tree_pj->jtpt)[j] = corr;
         }
