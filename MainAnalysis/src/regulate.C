@@ -124,7 +124,7 @@ int regulate(char const* config, char const* output) {
         fres = new TF1*[hres->size()];
         hres->apply([&](TH1* h, int64_t index) {
             fres[index] = h->GetFunction(
-                ("f_es_dhf_f_pt_"s + std::to_string(index)).data()); });
+                ("f_s_dhf_f_pt_"s + std::to_string(index)).data()); });
     }
 
     auto rng = new TRandom3(144);
@@ -176,8 +176,6 @@ int regulate(char const* config, char const* output) {
 
         auto hf_x = ihf->index_for(tree_pj->hiHF);
 
-        std::cout << __LINE__ << std::endl;
-
         /* apply jet energy corrections and evaluate uncertainties */
         for (int64_t j = 0; j < tree_pj->nref; ++j) {
             JEC->SetJetPT((*tree_pj->rawpt)[j]);
@@ -185,13 +183,7 @@ int regulate(char const* config, char const* output) {
             JEC->SetJetPhi((*tree_pj->jtphi)[j]);
 
             float corr = JEC->GetCorrectedPT();
-
-            std::cout << (*tree_pj->rawpt)[j] << " " << (*tree_pj->jteta)[j] << " " << (*tree_pj->jtphi)[j] << std::endl;
-            std::cout << corr << std::endl;
-
-            float cres = (apply_residual) ? fres[hf_x]->Eval(corr) : 1.f;
-
-            corr /= cres > 0.8 ? cres : 0.8;
+            corr = corr / (apply_residual ? fres[hf_x]->Eval(corr) : 1.f);
 
             if (!jeu.empty()) {
                 auto unc = JEU->GetUncertainty();
@@ -203,14 +195,8 @@ int regulate(char const* config, char const* output) {
             (*tree_pj->jtpt)[j] = corr;
         }
 
-        std::cout << __LINE__ << std::endl;
-
         tout->Fill();
-
-        std::cout << __LINE__ << std::endl;
     }
-
-    std::cout << __LINE__ << std::endl;
 
     fout->Write("", TObject::kOverwrite);
     fout->Close();
