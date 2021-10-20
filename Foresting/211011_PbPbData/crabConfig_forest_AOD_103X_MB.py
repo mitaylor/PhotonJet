@@ -12,14 +12,14 @@ config.General.requestName = Tag
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'runConfig_forest_AOD_103X_MB.py'
-#config.JobType.maxMemoryMB = 1500
+config.JobType.maxMemoryMB = 2500
 config.JobType.maxJobRuntimeMin = 2750    # request longer runtime, ~48 hours.
 
 config.section_("Data")
 config.Data.inputDataset = DatasetName
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 1
+config.Data.unitsPerJob = 4
 config.Data.publication = False
 config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName + '/'
