@@ -71,6 +71,8 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pp_data_cff')
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_DATA_pp5020_2017
 process = overrideJEC_DATA_pp5020_2017(process)
 
+process.akFlowPuCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
+
 #####################################################################################
 
 ############################
@@ -110,6 +112,8 @@ process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
 process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
 process.ggHiNtuplizer.doGenParticles = False
 process.ggHiNtuplizerGED.doGenParticles = False
+process.ggHiNtuplizerGED.doEffectiveAreas = cms.bool(True)
+process.ggHiNtuplizerGED.doPhoERegression = cms.bool(True)
 
 ####################################################################################
 

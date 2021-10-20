@@ -90,6 +90,7 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_data_cff')
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_cfi")
 process.pfcandAnalyzer.doTrackMatching  = cms.bool(True)
+process.akFlowPuCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_DATA_PbPb5020_2018
 process = overrideJEC_DATA_PbPb5020_2018(process)
@@ -132,6 +133,8 @@ process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
 process.ggHiNtuplizer.doGenParticles = False
 process.ggHiNtuplizerGED.doGenParticles = False
 process.ggHiNtuplizerGED.gsfElectronLabel = "correctedElectrons"
+process.ggHiNtuplizerGED.doEffectiveAreas = cms.bool(True)
+process.ggHiNtuplizerGED.doPhoERegression = cms.bool(True)
 
 ###############################################################################
 
@@ -231,48 +234,48 @@ process.ana_step = cms.Path(
 # Event Selection
 #########################
 
-# process.load('HeavyIonsAnalysis.Configuration.collisionEventSelection_cff')
-# process.pclusterCompatibilityFilter = cms.Path(process.clusterCompatibilityFilter)
-# process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
-# process.pBeamScrapingFilter = cms.Path(process.beamScrapingFilter)
-# process.collisionEventSelectionAOD = cms.Path(process.collisionEventSelectionAOD)
-# process.collisionEventSelectionAODv2 = cms.Path(process.collisionEventSelectionAODv2)
+process.load('HeavyIonsAnalysis.Configuration.collisionEventSelection_cff')
+process.pclusterCompatibilityFilter = cms.Path(process.clusterCompatibilityFilter)
+process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
+process.pBeamScrapingFilter = cms.Path(process.beamScrapingFilter)
+process.collisionEventSelectionAOD = cms.Path(process.collisionEventSelectionAOD)
+process.collisionEventSelectionAODv2 = cms.Path(process.collisionEventSelectionAODv2)
 
-# process.load('HeavyIonsAnalysis.Configuration.hfCoincFilter_cff')
-# process.phfCoincFilter1Th3 = cms.Path(process.hfCoincFilterTh3)
-# process.phfCoincFilter2Th3 = cms.Path(process.hfCoincFilter2Th3)
-# process.phfCoincFilter3Th3 = cms.Path(process.hfCoincFilter3Th3)
-# process.phfCoincFilter4Th3 = cms.Path(process.hfCoincFilter4Th3)
-# process.phfCoincFilter5Th3 = cms.Path(process.hfCoincFilter5Th3)
-# process.phfCoincFilter1Th4 = cms.Path(process.hfCoincFilterTh4)
-# process.phfCoincFilter2Th4 = cms.Path(process.hfCoincFilter2Th4)
-# process.phfCoincFilter3Th4 = cms.Path(process.hfCoincFilter3Th4)
-# process.phfCoincFilter4Th4 = cms.Path(process.hfCoincFilter4Th4)
-# process.phfCoincFilter5Th4 = cms.Path(process.hfCoincFilter5Th4)
-# process.phfCoincFilter1Th5 = cms.Path(process.hfCoincFilterTh5)
-# process.phfCoincFilter4Th2 = cms.Path(process.hfCoincFilter4Th2)
+process.load('HeavyIonsAnalysis.Configuration.hfCoincFilter_cff')
+process.phfCoincFilter1Th3 = cms.Path(process.hfCoincFilterTh3)
+process.phfCoincFilter2Th3 = cms.Path(process.hfCoincFilter2Th3)
+process.phfCoincFilter3Th3 = cms.Path(process.hfCoincFilter3Th3)
+process.phfCoincFilter4Th3 = cms.Path(process.hfCoincFilter4Th3)
+process.phfCoincFilter5Th3 = cms.Path(process.hfCoincFilter5Th3)
+process.phfCoincFilter1Th4 = cms.Path(process.hfCoincFilterTh4)
+process.phfCoincFilter2Th4 = cms.Path(process.hfCoincFilter2Th4)
+process.phfCoincFilter3Th4 = cms.Path(process.hfCoincFilter3Th4)
+process.phfCoincFilter4Th4 = cms.Path(process.hfCoincFilter4Th4)
+process.phfCoincFilter5Th4 = cms.Path(process.hfCoincFilter5Th4)
+process.phfCoincFilter1Th5 = cms.Path(process.hfCoincFilterTh5)
+process.phfCoincFilter4Th2 = cms.Path(process.hfCoincFilter4Th2)
 
-# process.load("HeavyIonsAnalysis.VertexAnalysis.PAPileUpVertexFilter_cff")
-# process.pVertexFilterCutG = cms.Path(process.pileupVertexFilterCutG)
-# process.pVertexFilterCutGloose = cms.Path(process.pileupVertexFilterCutGloose)
-# process.pVertexFilterCutGtight = cms.Path(process.pileupVertexFilterCutGtight)
-# process.pVertexFilterCutGplus = cms.Path(process.pileupVertexFilterCutGplus)
-# process.pVertexFilterCutE = cms.Path(process.pileupVertexFilterCutE)
-# process.pVertexFilterCutEandG = cms.Path(process.pileupVertexFilterCutEandG)
+process.load("HeavyIonsAnalysis.VertexAnalysis.PAPileUpVertexFilter_cff")
+process.pVertexFilterCutG = cms.Path(process.pileupVertexFilterCutG)
+process.pVertexFilterCutGloose = cms.Path(process.pileupVertexFilterCutGloose)
+process.pVertexFilterCutGtight = cms.Path(process.pileupVertexFilterCutGtight)
+process.pVertexFilterCutGplus = cms.Path(process.pileupVertexFilterCutGplus)
+process.pVertexFilterCutE = cms.Path(process.pileupVertexFilterCutE)
+process.pVertexFilterCutEandG = cms.Path(process.pileupVertexFilterCutEandG)
 
-# process.load('HeavyIonsAnalysis.JetAnalysis.EventSelection_cff')
-# process.pHBHENoiseFilterResultProducer = cms.Path(process.HBHENoiseFilterResultProducer)
-# process.HBHENoiseFilterResult = cms.Path(process.fHBHENoiseFilterResult)
-# process.HBHENoiseFilterResultRun1 = cms.Path(process.fHBHENoiseFilterResultRun1)
-# process.HBHENoiseFilterResultRun2Loose = cms.Path(process.fHBHENoiseFilterResultRun2Loose)
-# process.HBHENoiseFilterResultRun2Tight = cms.Path(process.fHBHENoiseFilterResultRun2Tight)
-# process.HBHEIsoNoiseFilterResult = cms.Path(process.fHBHEIsoNoiseFilterResult)
+process.load('HeavyIonsAnalysis.JetAnalysis.EventSelection_cff')
+process.pHBHENoiseFilterResultProducer = cms.Path(process.HBHENoiseFilterResultProducer)
+process.HBHENoiseFilterResult = cms.Path(process.fHBHENoiseFilterResult)
+process.HBHENoiseFilterResultRun1 = cms.Path(process.fHBHENoiseFilterResultRun1)
+process.HBHENoiseFilterResultRun2Loose = cms.Path(process.fHBHENoiseFilterResultRun2Loose)
+process.HBHENoiseFilterResultRun2Tight = cms.Path(process.fHBHENoiseFilterResultRun2Tight)
+process.HBHEIsoNoiseFilterResult = cms.Path(process.fHBHEIsoNoiseFilterResult)
 
 process.pAna = cms.EndPath(process.skimanalysis)
 
-# from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
-# process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVerticesRecovery")
-# process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
+from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
+process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVerticesRecovery")
+process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
 
 if cleanJets == True:
     from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag

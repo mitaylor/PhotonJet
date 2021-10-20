@@ -1,7 +1,7 @@
 # OutputBase = '/store/group/phys_heavyions/mitaylor'
 OutputBase = '/store/user/mitaylor/'
 DatasetName = '/QCDPhoton_pThat-50_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM'
-Tag = 'QCDPhoton_pThat-50_TuneCP5_5p02TeV_pythia8_AOD_944_v1'
+Tag = 'QCDPhoton_pThat-50_TuneCP5_5p02TeV_pythia8_AOD_944_v2'
 
 from WMCore.Configuration import Configuration
 config = Configuration()

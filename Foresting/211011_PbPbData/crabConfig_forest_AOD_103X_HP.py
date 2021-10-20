@@ -1,7 +1,7 @@
 # OutputBase = '/store/group/phys_heavyions/mitaylor'
 OutputBase = '/store/user/mitaylor/'
 DatasetName = '/HIHardProbes/HIRun2018A-04Apr2019-v1/AOD'
-Tag = 'HIHardProbes_HIRun2018A-04Apr2019-v1_AOD_1033patch1_Pho25_v1'
+Tag = 'HIHardProbes_HIRun2018A-04Apr2019-v1_AOD_1033patch1_Pho25_v2'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -12,7 +12,7 @@ config.General.requestName = Tag
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'runConfig_forest_AOD_103X_HP.py'
-config.JobType.maxMemoryMB = 2500    # request high memory machines.
+#config.JobType.maxMemoryMB = 1500
 config.JobType.maxJobRuntimeMin = 2750    # request longer runtime, ~48 hours.
 
 config.section_("Data")
