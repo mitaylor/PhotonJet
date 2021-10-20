@@ -89,7 +89,7 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_cff')
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_cfi")
 process.pfcandAnalyzer.doTrackMatching  = cms.bool(True)
-process.akCs3PFJetSequence.doWTARecluster = cms.untracked.bool(True)
+process.akCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_MC_PbPb5020_2018
 process = overrideJEC_MC_PbPb5020_2018(process)
