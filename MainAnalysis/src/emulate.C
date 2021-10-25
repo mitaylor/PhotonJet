@@ -42,12 +42,12 @@ int emulate(char const* config, char const* output) {
     auto count = static_cast<int64_t>(pthats.size());
     pthats.push_back(999999);
 
-    int32_t pthatsarray[count + 1];
+    int32_t pthatsarray[100];
 
     for (int64_t i = 0; i < count + 1; i++) pthatsarray[i] = pthats[i];
 
 
-    auto npthats = new TH1F("npthats", "", count, pthatsarray);
+    TH1F* npthats = new TH1F("npthats", "", count, pthatsarray);
 
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
