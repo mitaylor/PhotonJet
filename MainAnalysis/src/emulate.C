@@ -41,7 +41,7 @@ int emulate(char const* config, char const* output) {
     /* get entries in each pthat bin */
     auto count = static_cast<int64_t>(pthats.size());
     pthats.push_back(999999);
-    auto npthats = new TH1F("npthats", "", count, &pthats[0]);
+    auto npthats = new TH1F("npthats", "", count, &(pthats[0]));
 
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
@@ -50,7 +50,7 @@ int emulate(char const* config, char const* output) {
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        for (int64_t i = 0, m = 0; i < nentries; ++i) {
+        for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
 
             npthats->Fill(pjt->pthat, pjt->weight);
@@ -71,7 +71,7 @@ int emulate(char const* config, char const* output) {
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto pthatw = new history<TH1F>("pthat"s, "", fincl, count);
 
-    for(int i = 0; i < count; ++ie){
+    for(int i = 0; i < count; ++i) {
         auto weight = xs[i]/npthats->GetBinContent(i+1);
         (*pthatw)[i]->SetBinContent(1, weight);
         printf("[%i, %i]: %f\n", pthats[i], pthats[i + 1], weight);
