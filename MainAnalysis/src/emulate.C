@@ -39,12 +39,12 @@ int emulate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* get entries in each pthat bin */
-    auto count = static_cast<int64_t>(pthats.size());
+    auto count = static_cast<int>(pthats.size());
     pthats.push_back(999999);
 
-    int32_t pthatsarray[100];
+    double pthatsarray[100];
 
-    for (int64_t i = 0; i < count + 1; i++) pthatsarray[i] = pthats[i];
+    for (int i = 0; i < count + 1; i++) pthatsarray[i] = pthats[i];
 
 
     TH1F* npthats = new TH1F("npthats", "", count, pthatsarray);
@@ -68,7 +68,7 @@ int emulate(char const* config, char const* output) {
     }
 
     /* calculate xs for each pthat bin */
-    for(int64_t i = 1; i < count; ++i) {
+    for(int i = 1; i < count; ++i) {
         xs[i] -= xs[i+1];
     }
 
@@ -77,7 +77,7 @@ int emulate(char const* config, char const* output) {
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto pthatw = new history<TH1F>("pthat"s, "", fincl, count);
 
-    for(int64_t i = 0; i < count; ++i) {
+    for(int i = 0; i < count; ++i) {
         auto weight = xs[i]/npthats->GetBinContent(i+1);
         (*pthatw)[i]->SetBinContent(1, weight);
 
