@@ -81,7 +81,7 @@ int emulate(char const* config, char const* output) {
         auto weight = xs[i]/npthats->GetBinContent(i+1);
         (*pthatw)[i]->SetBinContent(1, weight);
 
-        printf("[%i, %i]: %f\n", pthats[i], pthats[i + 1], weight);
+        printf("[%i, %i]: %E\n", pthats[i], pthats[i + 1], weight);
     }
 
     printf("\n");
