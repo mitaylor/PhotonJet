@@ -41,7 +41,13 @@ int emulate(char const* config, char const* output) {
     /* get entries in each pthat bin */
     auto count = static_cast<int64_t>(pthats.size());
     pthats.push_back(999999);
-    auto npthats = new TH1F("npthats", "", count, &(pthats[0]));
+
+    int32_t pthatsarray[count + 1];
+
+    for (int64_t i = 0; i < count + 1; i++) pthatsarray[i] = pthats[i];
+
+
+    auto npthats = new TH1F("npthats", "", count, pthatsarray);
 
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
@@ -62,7 +68,7 @@ int emulate(char const* config, char const* output) {
     }
 
     /* calculate xs for each pthat bin */
-    for(int i = 1; i < count; ++i) {
+    for(int64_t i = 1; i < count; ++i) {
         xs[i] -= xs[i+1];
     }
 
@@ -71,9 +77,10 @@ int emulate(char const* config, char const* output) {
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto pthatw = new history<TH1F>("pthat"s, "", fincl, count);
 
-    for(int i = 0; i < count; ++i) {
+    for(int64_t i = 0; i < count; ++i) {
         auto weight = xs[i]/npthats->GetBinContent(i+1);
         (*pthatw)[i]->SetBinContent(1, weight);
+
         printf("[%i, %i]: %f\n", pthats[i], pthats[i + 1], weight);
     }
 
