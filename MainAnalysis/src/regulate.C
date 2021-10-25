@@ -168,10 +168,11 @@ int regulate(char const* config, char const* output) {
             tree_pj->Ncoll = 1000;
         }
 
-        tree_pj->weight = (mc_branches && apply_weights)
+        tree_pj->w = (mc_branches && apply_weights)
             ? tree_pj->Ncoll / 1000.f
                 * fweight->Eval(tree_pj->vz)
                 * weight_for(pthat, pthatw, tree_pj->pthat)
+                * tree_pj->weight
             : 1.f;
 
         auto hf_x = ihf->index_for(tree_pj->hiHF);
