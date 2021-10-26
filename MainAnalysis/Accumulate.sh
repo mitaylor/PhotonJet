@@ -3,7 +3,7 @@
 arithmetic() {
     tag=$1
 
-    ./bin/accumulate configs/manipulate/ran/accumulate_${tag}.conf \
+    ./bin/accumulate configs/accumulate/ran/accumulate_${tag}.conf \
         data/ran/accumulate_${tag}.root
 }
 
