@@ -15,7 +15,6 @@
 
 #define B_VAL_EVT_GEN(ACTION, ...)                                          \
     ACTION(float,           pthat,                      ## __VA_ARGS__)     \
-    ACTION(float,           weight,                      ## __VA_ARGS__)     \
     ACTION(float,           Ncoll,                      ## __VA_ARGS__)     \
 
 class event : tree {
