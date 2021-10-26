@@ -3,9 +3,9 @@
 histogram() {
     tag=$1
 
-    ./bin/populate configs/populate_${tag}_raw.conf \
+    ./bin/populate configs/populate/populate_${tag}_raw.conf \
         data/populate_${tag}_raw.root &
-    ./bin/populate configs/populate_${tag}_bkg.conf \
+    ./bin/populate configs/populate/populate_${tag}_bkg.conf \
         data/populate_${tag}_bkg.root &
 }
 
