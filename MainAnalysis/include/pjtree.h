@@ -41,7 +41,7 @@
     ACTION(sv<int32_t>,     accepts,                    ## __VA_ARGS__)     \
 
 #define B_VAL_EVT_EXT(ACTION, ...)                                          \
-    ACTION(float,           weight,                          ## __VA_ARGS__)     \
+    ACTION(float,           weight,                     ## __VA_ARGS__)     \
 
 enum tt { evt, egm, pho, ele, jet, trg, ntt };
 
