@@ -236,7 +236,7 @@ process.ana_step = cms.Path(
 
 process.load('HeavyIonsAnalysis.Configuration.collisionEventSelection_cff')
 process.pclusterCompatibilityFilter = cms.Path(process.clusterCompatibilityFilter)
-process.primaryVertexFilter = cms.Path(process.primaryVertexFilter)
+process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
 process.pBeamScrapingFilter = cms.Path(process.beamScrapingFilter)
 process.collisionEventSelectionAOD = cms.Path(process.collisionEventSelectionAOD)
 process.collisionEventSelectionAODv2 = cms.Path(process.collisionEventSelectionAODv2)
