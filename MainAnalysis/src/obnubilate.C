@@ -20,7 +20,6 @@
 #include <functional>
 #include <string>
 #include <vector>
-#include <iostream>
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
@@ -104,15 +103,12 @@ int obnubilate(char const* config, char const* output) {
             std::bind(shader, _1, range));
         c->divide(cols, -1);
 
-        std::cout << "label: " << label << "\t stub: " << stub << std::endl;
-
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base");
 
         std::vector<history<TH1F>*> sets;
 
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
         zip([&](auto& batch, auto file, auto const& label) {
-            std::cout << "base history" << tag << "_" << label << stub << std::endl;
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch");
         }, batches, files, labels);
 
