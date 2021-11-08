@@ -133,9 +133,6 @@ int populate(char const* config) {
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
 
-
-    auto incl = new interval(""s, 1, 0.f, 9999.f);
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
