@@ -101,28 +101,21 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, multival* mr,
     }
 }
 
-int populate(char const* config, char const* output) {
+int populate(char const* config) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
     auto mb = conf->get<std::string>("mb");
     auto entries = conf->get<int64_t>("entries");
-    auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
 
     /* options */
-    auto heavyion = conf->get<bool>("heavyion");
-    auto gen_iso = conf->get<bool>("generator_isolation");
-    auto ele_rej = conf->get<bool>("electron_rejection");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
     auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -141,9 +134,6 @@ int populate(char const* config, char const* output) {
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
 
-    auto ipt = new interval(dpt);
-    auto ihf = new interval(dhf);
-
     auto mpthf = new multival(dpt, dhf);
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
@@ -155,41 +145,9 @@ int populate(char const* config, char const* output) {
     auto mr = new multival(rdrr, rptr);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-    auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
-    auto fx = std::bind(&interval::book<TH1F>, ix, _1, _2, _3);
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
-    auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
 
     auto fr = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", mr->size(), 0, mr->size()); };
-
-    auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
-    auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);
-
-    // auto pjet_es_f_dphi = new memory<TH1F>("pjet_es_f_dphi"s,
-    //     "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
-    // auto pjet_wta_f_dphi = new memory<TH1F>("pjet_wta_f_dphi"s,
-    //     "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
-    // auto pjet_f_x = new memory<TH1F>("pjet_f_x"s,
-    //     "1/N^{#gamma} dN/dx^{#gammaj}", fx, mpthf);
-    // auto pjet_f_ddr = new memory<TH1F>("pjet_f_ddr"s,
-    //     "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    // auto pjet_f_jpt = new memory<TH1F>("pjet_f_jpt"s,
-    //     "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
-
-    // auto mix_pjet_es_f_dphi = new memory<TH1F>("mix_pjet_es_f_dphi"s,
-    //     "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
-    // auto mix_pjet_wta_f_dphi = new memory<TH1F>("mix_pjet_wta_f_dphi"s,
-    //     "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
-    // auto mix_pjet_f_x = new memory<TH1F>("mix_pjet_f_x"s,
-    //     "1/N^{#gamma} dN/dx^{#gammaj}", fx, mpthf);
-    // auto mix_pjet_f_ddr = new memory<TH1F>("mix_pjet_f_ddr",
-    //     "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    // auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
-    //     "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
-
-    auto pjet_f_r = new memory<TH1F>("pjet_f_r"s, "", fr, mpthf);
-    auto mix_pjet_f_r = new memory<TH1F>("mix_pjet_f_r"s, "", fr, mpthf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -202,14 +160,11 @@ int populate(char const* config, char const* output) {
 
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0});
 
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    if (entries) { nentries = std::min(nentries, entries); }
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries());
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
         t->GetEntry(i);
@@ -219,7 +174,7 @@ int populate(char const* config, char const* output) {
 
         std::cout << "Event " << i << ": ";
 
-        int64_t leading = -1;
+        // int64_t leading = -1;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
@@ -227,7 +182,7 @@ int populate(char const* config, char const* output) {
 
             std::cout << " " << (*pjt->phoEt)[j];
 
-            leading = j;
+            // leading = j;
         }
         std::cout << std::endl;
         
@@ -401,8 +356,8 @@ int populate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return populate(argv[1], argv[2]);
+    if (argc == 2)
+        return populate(argv[1]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
