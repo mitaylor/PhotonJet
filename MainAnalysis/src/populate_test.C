@@ -105,12 +105,11 @@ int populate(char const* config) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
-    auto mb = conf->get<std::string>("mb");
-    auto entries = conf->get<int64_t>("entries");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
 
     /* options */
+    auto gen_iso = conf->get<bool>("generator_isolation");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
@@ -134,13 +133,8 @@ int populate(char const* config) {
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
 
-    auto mpthf = new multival(dpt, dhf);
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
-    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
-    auto ix = new interval("x^{#gammaj}"s, rx);
-    auto idr = new interval("#deltaj"s, rdr);
-    auto ijpt = new interval("p_{T}^{j}"s, rjpt);
 
     auto mr = new multival(rdrr, rptr);
 
@@ -157,9 +151,6 @@ int populate(char const* config) {
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(gen_iso, false, t, { 1, 1, 1, 1, 1, 0 });
-
-    TFile* fm = new TFile(mb.data(), "read");
-    TTree* tm = (TTree*)fm->Get("pj");
 
     printf("iterate..\n");
 
