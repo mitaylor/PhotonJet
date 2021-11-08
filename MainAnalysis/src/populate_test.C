@@ -136,13 +136,6 @@ int populate(char const* config) {
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 
-    auto mr = new multival(rdrr, rptr);
-
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-
-    auto fr = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", mr->size(), 0, mr->size()); };
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
