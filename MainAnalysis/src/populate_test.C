@@ -223,10 +223,8 @@ int populate(char const* config) {
                             det::barrel, wp::loose, pjtree
                         >(pjt, j, heavyion)) {
                     
-                    if ((*pjt->eleEta)[j] < -1.3 && ele_phi < -0.87 && ele_phi > -1.57) {
-                        edge_case++;
-                    }
-                    electrons_rejected++;
+                    std::cout << "Photon pt: " << (*pjt->phoEt)[leading];
+                    std::cout << " Electron pt: " << (*pjt->elePt)[j];
 
                     electron = true; break;
                 }
