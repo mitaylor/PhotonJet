@@ -253,6 +253,9 @@ int populate(char const* config) {
         //
     }
 
+    std::cout << "bad count " << bad_count << std::endl;
+    std::cout << "all count" << all_count << std::endl;
+
     // /* normalise histograms */
     // if (mix > 0)
     //     scale(1. / mix,
