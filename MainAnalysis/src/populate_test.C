@@ -144,6 +144,9 @@ int populate(char const* config) {
 
     printf("iterate..\n");
 
+    int64_t bad_count = 0;
+    int64_t all_count = 0;
+
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
@@ -153,22 +156,23 @@ int populate(char const* config) {
         if (pjt->hiHF <= hf_min) { continue; }
         if (pjt->hiHF >= 5199.95) { continue; }
 
-        std::cout << "Event " << i << ": ";
-
-        // int64_t leading = -1;
+        int64_t leading = -1;
+        float leadingEt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
-
-            std::cout << " " << (*pjt->phoEt)[j];
-
-            // leading = j;
+            if ((*pjt->phoEt)[j] > leadingEt) {
+                if (leadingEt != 0) { bad_count++}
+                leading = j;
+                leadingEt = (*pjt->phoEt)[j];
+            }
         }
         std::cout << std::endl;
         
         // /* require leading photon */
-        // if (leading < 0) { continue; }
+        if (leading < 0) { continue; }
+        all_count++;
 
         // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
         //         || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)

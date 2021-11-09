@@ -218,13 +218,15 @@ int populate(char const* config, char const* output) {
         if (pjt->hiHF >= 5199.95) { continue; }
 
         int64_t leading = -1;
+        float leadingEt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
-
-            leading = j;
-            break;
+            if ((*pjt->phoEt)[j] > leadingEt) {
+                leading = j;
+                leadingEt = (*pjt->phoEt)[j];
+            }
         }
 
         /* require leading photon */
