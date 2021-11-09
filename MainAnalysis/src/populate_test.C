@@ -105,7 +105,7 @@ int populate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
-    auto mb = conf->get<std::string>("mb");
+    // auto mb = conf->get<std::string>("mb");
     auto entries = conf->get<int64_t>("entries");
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
@@ -202,8 +202,8 @@ int populate(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(gen_iso, false, t, { 1, 1, 1, 1, 1, 0 });
 
-    TFile* fm = new TFile(mb.data(), "read");
-    TTree* tm = (TTree*)fm->Get("pj");
+    // TFile* fm = new TFile(mb.data(), "read");
+    // TTree* tm = (TTree*)fm->Get("pj");
     // auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0});
 
     printf("iterate..\n");
@@ -282,11 +282,11 @@ int populate(char const* config, char const* output) {
             if (electron) { continue; }
         }
 
-        double photon_pt = (*pjt->phoEt)[leading];
-        auto pt_x = ipt->index_for(photon_pt);
+        // double photon_pt = (*pjt->phoEt)[leading];
+        // auto pt_x = ipt->index_for(photon_pt);
 
-        double hf = pjt->hiHF;
-        auto hf_x = ihf->index_for(hf);
+        // double hf = pjt->hiHF;
+        // auto hf_x = ihf->index_for(hf);
 
         // auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
 
