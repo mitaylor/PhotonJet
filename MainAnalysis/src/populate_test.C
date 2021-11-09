@@ -109,6 +109,7 @@ int populate(char const* config) {
     auto tag = conf->get<std::string>("tag");
 
     /* options */
+    auto heavyion = conf->get<bool>("heavyion");
     auto gen_iso = conf->get<bool>("generator_isolation");
     auto ele_rej = conf->get<bool>("electron_rejection");
 
