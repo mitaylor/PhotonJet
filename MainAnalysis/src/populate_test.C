@@ -168,7 +168,6 @@ int populate(char const* config) {
                 leadingEt = (*pjt->phoEt)[j];
             }
         }
-        std::cout << std::endl;
         
         // /* require leading photon */
         if (leading < 0) { continue; }
