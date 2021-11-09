@@ -146,6 +146,8 @@ int populate(char const* config) {
 
     int64_t bad_count = 0;
     int64_t all_count = 0;
+    int64_t edge_case = 0;
+    int64_t electrons_rejected = 0;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     for (int64_t i = 0; i < nentries; ++i) {
@@ -195,30 +197,37 @@ int populate(char const* config) {
         // }
 
         // /* leading photon axis */
-        // auto photon_eta = (*pjt->phoEta)[leading];
-        // auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+        auto photon_eta = (*pjt->phoEta)[leading];
+        auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
 
-        // /* electron rejection */
-        // if (ele_rej) {
-        //     bool electron = false;
-        //     for (int64_t j = 0; j < pjt->nEle; ++j) {
-        //         if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+        /* electron rejection */
+        if (ele_rej) {
+            bool electron = false;
+            for (int64_t j = 0; j < pjt->nEle; ++j) {
+                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-        //         auto deta = photon_eta - (*pjt->eleEta)[j];
-        //         if (deta > 0.1) { continue; }
+                auto deta = photon_eta - (*pjt->eleEta)[j];
+                if (deta > 0.1) { continue; }
 
-        //         auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-        //         auto dphi = revert_radian(photon_phi - ele_phi);
-        //         auto dr2 = deta * deta + dphi * dphi;
+                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
+                auto dphi = revert_radian(photon_phi - ele_phi);
+                auto dr2 = deta * deta + dphi * dphi;
 
-        //         if (dr2 < 0.01 && passes_electron_id<
-        //                     det::barrel, wp::loose, pjtree
-        //                 >(pjt, j, heavyion)) {
-        //             electron = true; break; }
-        //     }
+                if (dr2 < 0.01 && passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(pjt, j, heavyion)) {
+                    
+                    if ((*pjt->eleEta)[j] < -1.3 && ele_phi < -0.87 && ele_phi > -1.57) {
+                        edge_case++;
+                    }
+                    electrons_rejected++;
 
-        //     if (electron) { continue; }
-        // }
+                    electron = true; break;
+                }
+            }
+
+            if (electron) { continue; }
+        }
 
         // double photon_pt = (*pjt->phoEt)[leading];
         // auto pt_x = ipt->index_for(photon_pt);
@@ -254,6 +263,8 @@ int populate(char const* config) {
 
     std::cout << "bad count " << bad_count << std::endl;
     std::cout << "all count" << all_count << std::endl;
+    std::cout << "edge cases " << edge_case << std::endl;
+    std::cout << "electrons rejected" << electrons_rejected << std::endl;
 
     // /* normalise histograms */
     // if (mix > 0)
