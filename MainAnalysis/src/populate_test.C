@@ -224,7 +224,7 @@ int populate(char const* config) {
                         >(pjt, j, heavyion)) {
                     
                     std::cout << "Photon pt: " << (*pjt->phoEt)[leading];
-                    std::cout << " Electron pt: " << (*pjt->elePt)[j];
+                    std::cout << " Electron pt: " << (*pjt->elePt)[j] << std::endl;
 
                     electron = true; break;
                 }
