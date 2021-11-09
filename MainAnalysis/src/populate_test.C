@@ -163,7 +163,7 @@ int populate(char const* config) {
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
             if ((*pjt->phoEt)[j] > leadingEt) {
-                if (leadingEt != 0) { bad_count++}
+                if (leadingEt != 0) { bad_count++;}
                 leading = j;
                 leadingEt = (*pjt->phoEt)[j];
             }
