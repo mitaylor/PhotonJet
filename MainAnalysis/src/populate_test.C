@@ -146,14 +146,18 @@ int populate(char const* config) {
 
     printf("iterate..\n");
 
-    int64_t bad_count = 0;
-    int64_t all_count = 0;
-    int64_t edge_case = 0;
-    int64_t electrons_rejected = 0;
+    double bad_count = 0;
+    double all_count = 0;
+    double edge_case = 0;
+    double electrons_rejected = 0;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     for (int64_t i = 0; i < nentries; ++i) {
-        if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
+        if (i % frequency == 0) { 
+            printf("entry: %li/%li\n", i, nentries);
+            std::cout << "bad photon ratio: " << bad_count / all_count << std::endl;
+            std::cout << "bad electron ratio: " << edge_case / electrons_rejected << std::endl;
+        }
 
         t->GetEntry(i);
 
