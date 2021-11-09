@@ -110,6 +110,7 @@ int populate(char const* config) {
 
     /* options */
     auto gen_iso = conf->get<bool>("generator_isolation");
+    auto ele_rej = conf->get<bool>("electron_rejection");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
