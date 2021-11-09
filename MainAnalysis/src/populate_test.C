@@ -208,6 +208,9 @@ int populate(char const* config, char const* output) {
 
     printf("iterate..\n");
 
+    double rej_cand = 0;
+    double rej = 0;
+
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     // if (entries) { nentries = std::min(nentries, entries); }
     // int64_t mentries = static_cast<int64_t>(tm->GetEntries());
@@ -272,11 +275,16 @@ int populate(char const* config, char const* output) {
                 auto dphi = revert_radian(photon_phi - ele_phi);
                 auto dr2 = deta * deta + dphi * dphi;
 
-                if (passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, heavyion)) {
-                    if (dr2 < 0.01) { electron = true; break; }
+                if (passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(pjt, j, heavyion)) {
+                    ele_dr2->Fill(dr2); 
+                    rej_cand++; }
 
-                    ele_dr2->Fill(dr2);
-                }
+                if (dr2 < 0.01 && passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(pjt, j, heavyion)) {
+                    rej++; electron = true; break; }
             }
 
             if (electron) { continue; }
@@ -312,6 +320,9 @@ int populate(char const* config, char const* output) {
         //     ++k;
         // }
     }
+
+    std::cout << "Rejection candidates: " << rej_cand << std::endl;
+    std::cout << "Rejected: " << rej << std::endl;
 
     /* normalise histograms */
     if (mix > 0)
