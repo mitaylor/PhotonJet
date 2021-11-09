@@ -141,8 +141,8 @@ int populate(char const* config, char const* output) {
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
 
-    auto ipt = new interval(dpt);
-    auto ihf = new interval(dhf);
+    // auto ipt = new interval(dpt);
+    // auto ihf = new interval(dhf);
 
     auto mpthf = new multival(dpt, dhf);
 
