@@ -204,14 +204,14 @@ int populate(char const* config, char const* output) {
 
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0});
+    // auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0});
 
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     if (entries) { nentries = std::min(nentries, entries); }
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries());
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
+    // int64_t mentries = static_cast<int64_t>(tm->GetEntries());
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
         t->GetEntry(i);
@@ -288,7 +288,7 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
 
-        auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
+        // auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
 
         // fill_axes(pjt, pthf_x, mr,
         //           photon_pt, photon_eta, photon_phi,
