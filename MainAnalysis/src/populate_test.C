@@ -106,7 +106,7 @@ int populate(char const* config, char const* output) {
 
     auto input = conf->get<std::string>("input");
     // auto mb = conf->get<std::string>("mb");
-    auto entries = conf->get<int64_t>("entries");
+    // auto entries = conf->get<int64_t>("entries");
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
@@ -209,7 +209,7 @@ int populate(char const* config, char const* output) {
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    if (entries) { nentries = std::min(nentries, entries); }
+    // if (entries) { nentries = std::min(nentries, entries); }
     // int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
