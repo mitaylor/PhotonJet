@@ -14,8 +14,8 @@
 #include <utility>
 #include <vector>
 
-using x = std::initializer_list<int64_t>;
-using v = std::initializer_list<double>;
+using x = std::initializer_list<int64_t> const;
+using v = std::initializer_list<double> const;
 
 template <typename H>
 class history {
@@ -60,13 +60,11 @@ class history {
 
     history(TFile* f, std::string const& tag)
             : _tag(tag) {
-        using namespace std::literals::string_literals;
-
         std::string desc = ((TNamed*)f->Get(tag.data()))->GetTitle();
         while (!desc.empty()) {
             desc.erase(0, 1);
 
-            auto pos = desc.find("_"s);
+            auto pos = desc.find("_");
             auto token = desc.substr(0, pos);
             _shape.push_back(std::atoi(token.data()));
 
@@ -98,13 +96,16 @@ class history {
               _size(other._size),
               _shape(other._shape),
               _factory(other._factory) {
-        using namespace std::literals::string_literals;
+        for (auto const& obj : other.objects)
+            objects.push_back((H*)obj->Clone());
 
-        for (auto const& obj : other.objects) {
-            auto name = prefix + "_" + obj->GetName();
-            objects.emplace_back((H*)obj->Clone(name.data()));
-            objects.back()->SetName(name.data());
-        }
+        rename();
+    }
+
+    history(history const& other, std::string const& old,
+            std::string const& tag)
+            : history(other, "") {
+        rename(std::string("_") + old, tag);
     }
 
     history(history const&) = delete;
@@ -240,6 +241,27 @@ class history {
     history* sum(int64_t axis, T... axes) const {
         return sum(axis)->sum(axes...); }
 
+    history* extend(std::string const& prefix, int64_t axis, int64_t size) {
+        auto shape = std::vector<int64_t>(_shape);
+        shape.insert(std::next(std::begin(shape), axis), size);
+
+        auto result = new history(prefix + "_" + _tag, _label, shape);
+
+        for (int64_t i = 0; i < _size; ++i) {
+            auto indices = indices_for(i);
+            indices.insert(std::next(std::begin(indices), axis), 0);
+
+            for (int64_t j = 0; j < size; ++j) {
+                indices[axis] = j;
+                (*result)[indices] = (H*)objects[i]->Clone();
+            }
+        }
+
+        result->rename();
+
+        return result;
+    }
+
     history* shrink(std::string const& tag,
                     std::vector<int64_t> const& shape,
                     std::vector<int64_t> const& offset) const {
@@ -269,8 +291,7 @@ class history {
         result->_size = std::accumulate(std::begin(shape), std::end(shape), 1,
                                         std::multiplies<int64_t>());
 
-        result->apply([&](auto h, int64_t i) {
-            h->SetName((result->_tag + result->stub(i)).data()); });
+        result->rename();
 
         return result;
     }
@@ -301,35 +322,34 @@ class history {
         for (int64_t i = 0; i < _size; ++i) { f(objects[i], i); } }
 
     void save(std::string const& prefix) const {
-        using namespace std::literals::string_literals;
-
+        auto full = prefix.empty() ? "" : prefix + "_";
         for (auto const& obj : objects) {
-            auto name = prefix + "_"s + obj->GetName();
+            auto name = full + obj->GetName();
             obj->Write(name.data(), TObject::kOverwrite);
         }
 
-        auto shape_desc = ""s;
-        for (auto const& s : _shape)
-            shape_desc += "_"s + std::to_string(s);
-
-        auto title = prefix + "_"s + _tag;
-        auto label = new TNamed(title.data(), shape_desc.data());
+        auto label = new TNamed((full + _tag).data(), stub(_shape).data());
         label->Write("", TObject::kOverwrite);
     }
 
-    void rename(std::string const& replace, std::string const& prefix) {
-        auto original = _tag;
+    void save() const { save(""); }
 
-        _tag = prefix + "_" + (replace.empty() ? _tag : replace);
-        for (auto const& obj : objects) {
-            std::string name = obj->GetName();
-            auto pos = name.find(original);
-            name.replace(pos, original.length(), _tag);
-            obj->SetName(name.data());
-        }
+    void rename(std::string const& old, std::string const& tag) {
+        _tag.replace(_tag.find(old), old.length(), tag); rename(); }
+
+    void rename(std::string const& tag) {
+        _tag = tag; rename(); }
+
+    void rename() {
+        for (int64_t i = 0; i < _size; ++i)
+            objects[i]->SetName((_tag + stub(i)).data());
     }
 
-    void rename(std::string const& prefix) { rename("", prefix); }
+    template <typename... T>
+    void saveas(T const&... args) { rename(args...); save(); }
+
+    template <typename... T>
+    void saveby(T const&... args) { rename(); save(args...); }
 
     int64_t const& dims() const { return _dims; }
     int64_t const& size() const { return _size; }
@@ -380,18 +400,13 @@ class history {
     }
 
     std::string stub(std::vector<int64_t> const& indices) const {
-        using namespace std::literals::string_literals;
-
-        auto add = [](std::string base, int64_t index) {
-            return std::move(base) + "_" + std::to_string(index); };
-
         return std::accumulate(std::begin(indices), std::end(indices),
-                               ""s, add);
+            std::string(), [](std::string base, int64_t index) {
+                return std::move(base) + "_" + std::to_string(index); });
     }
 
     std::string stub(int64_t index) const {
-        return stub(indices_for(index));
-    }
+        return stub(indices_for(index)); }
 
     template <typename T, typename... U>
     T forward(int64_t index, T (H::* function)(U...), U... args) {
@@ -402,8 +417,6 @@ class history {
         return ((*objects[index]).*function)(std::forward<U>(args)...); }
 
     void allocate_objects() {
-        using namespace std::literals::string_literals;
-
         objects = std::vector<H*>(_size, nullptr);
         for (int64_t i = 0; i < _size; ++i)
             objects[i] = _factory(i, _tag + stub(i), _label);

@@ -48,7 +48,7 @@ void title(std::function<void(TH1*)> f, T*... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-void fill_axes(pjtree* pjt, int64_t pthf_x, multival* mr,
+void fill_axes(pjtree* pjt, int64_t pthf_x, multival* mr, float weight,
                double photon_pt, float photon_eta, int64_t photon_phi,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
@@ -57,7 +57,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, multival* mr,
                memory<TH1F>* pjet_f_ddr,
                memory<TH1F>* pjet_f_jpt,
                memory<TH1F>* pjet_f_r) {
-    (*nevt)[pthf_x]->Fill(1., pjt->w);
+    (*nevt)[pthf_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
@@ -80,24 +80,24 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, multival* mr,
         auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
         auto photon_wta_dphi = std::abs(photon_phi - jet_wta_phi);
 
-        (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, pjt->w);
-        (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, pjt->w);
+        (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
 
-        (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, pjt->w);
-        (*pjet_f_x)[pthf_x]->Fill(jet_pt / photon_pt, pjt->w);
+        (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+        (*pjet_f_x)[pthf_x]->Fill(jet_pt / photon_pt, weight);
 
         double jt_deta = jet_eta - jet_wta_eta;
         double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
         double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
-        (*pjet_f_ddr)[pthf_x]->Fill(jt_dr, pjt->w);
+        (*pjet_f_ddr)[pthf_x]->Fill(jt_dr, weight);
 
         if (jet_pt >= 200) { continue; }
 
-        (*pjet_f_r)[pthf_x]->Fill(mr->index_for(v{jt_dr, jet_pt}), pjt->w);
+        (*pjet_f_r)[pthf_x]->Fill(mr->index_for(v{jt_dr, jet_pt}), weight);
     }
 }
 
@@ -286,8 +286,9 @@ int populate(char const* config, char const* output) {
         auto hf_x = ihf->index_for(hf);
 
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
+        auto weight = pjt->w;
 
-        fill_axes(pjt, pthf_x, mr,
+        fill_axes(pjt, pthf_x, mr, weight,
                   photon_pt, photon_eta, photon_phi,
                   nevt, pjet_es_f_dphi, pjet_wta_f_dphi,
                   pjet_f_x, pjet_f_ddr, pjet_f_jpt,
@@ -300,7 +301,7 @@ int populate(char const* config, char const* output) {
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
-            fill_axes(pjtm, pthf_x, mr,
+            fill_axes(pjtm, pthf_x, mr, weight,
                       photon_pt, photon_eta, photon_phi,
                       nmix, mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
                       mix_pjet_f_x, mix_pjet_f_ddr, mix_pjet_f_jpt,
