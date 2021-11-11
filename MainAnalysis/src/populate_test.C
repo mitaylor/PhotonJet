@@ -192,6 +192,7 @@ int populate(char const* config, char const* output) {
     auto mix_pjet_f_r = new memory<TH1F>("mix_pjet_f_r"s, "", fr, mpthf);
 
     auto ele_dr2 = new TH1F("ele_dr2", "Photon/Electron dr^{2} Distribution", 100, 0, 0.05);
+    auto pthat_w = new TH1F("pthat_w", "pthat", 90, 0, 900);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -218,6 +219,8 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
         t->GetEntry(i);
+
+        pthat_w->Fill(pjt->pthat, pjt->w);
 
         if (pjt->hiHF <= hf_min) { continue; }
         if (pjt->hiHF >= 5199.95) { continue; }
@@ -275,11 +278,11 @@ int populate(char const* config, char const* output) {
                 auto dphi = revert_radian(photon_phi - ele_phi);
                 auto dr2 = deta * deta + dphi * dphi;
 
-                if (passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(pjt, j, heavyion)) {
-                    ele_dr2->Fill(dr2); 
-                    rej_cand++; }
+                // if (passes_electron_id<
+                //             det::barrel, wp::loose, pjtree
+                //         >(pjt, j, heavyion)) {
+                //     ele_dr2->Fill(dr2); 
+                //     rej_cand++; }
 
                 if (dr2 < 0.01 && passes_electron_id<
                             det::barrel, wp::loose, pjtree
@@ -407,6 +410,7 @@ int populate(char const* config, char const* output) {
     });
 
     ele_dr2->SaveAs(output);
+    pthat_w->SaveAs(output);
 
     printf("destroying objects..\n");
 
