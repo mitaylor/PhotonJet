@@ -220,7 +220,6 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
         t->GetEntry(i);
-        std::cout << pjt->pthat << std::endl;
 
         pthat_w->Fill(pjt->pthat, pjt->w);
 
