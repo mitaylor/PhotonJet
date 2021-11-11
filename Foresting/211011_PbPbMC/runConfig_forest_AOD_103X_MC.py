@@ -90,6 +90,7 @@ process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_cfi")
 process.pfcandAnalyzer.doTrackMatching  = cms.bool(True)
 process.akCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
+process.akFlowPuCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_MC_PbPb5020_2018
 process = overrideJEC_MC_PbPb5020_2018(process)
@@ -210,7 +211,8 @@ process.ana_step = cms.Path(
     # process.hiPuRhoR3Analyzer + 
     process.correctedElectrons +
     process.ggHiNtuplizer +
-    process.ggHiNtuplizerGED 
+    process.ggHiNtuplizerGED +
+    process.hiPuRhoR3Analyzer
     # process.hiFJRhoAnalyzer +
     # process.hiFJRhoAnalyzerFinerBins +
     # process.pfcandAnalyzer +
