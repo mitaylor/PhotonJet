@@ -174,7 +174,7 @@ int congratulate(char const* config, char const* output) {
         apply_style(p, "", ymin, ymax);
         p->decorate(std::bind(decorator, "pp 320 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        p->accessory(std::bind(pp_info, _1, hists[0]));
+        p->accessory(std::bind(pp_info, _1, hists[1]));
         p->jewellery(box);
         p->divide(-1, 1);
 
@@ -182,7 +182,7 @@ int congratulate(char const* config, char const* output) {
         apply_style(a, "", ymin, ymax);
         a->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        a->accessory(std::bind(aa_info, _1, hists[1]));
+        a->accessory(std::bind(aa_info, _1, hists[0]));
         a->jewellery(box);
         a->divide(-1, ihf->size());
 
@@ -190,7 +190,7 @@ int congratulate(char const* config, char const* output) {
         apply_style(s, "", ymin, ymax);
         s->decorate(std::bind(decorator, "pp 320 pb^{-1}, PbPb 1.6 nb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        s->accessory(std::bind(aa_info, _1, hists[1]));
+        s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
         s->divide(-1, ihf->size());
 
