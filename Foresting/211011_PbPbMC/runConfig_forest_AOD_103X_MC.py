@@ -208,13 +208,12 @@ process.ana_step = cms.Path(
     process.HiGenParticleAna +
     process.genSignalSequence +
     process.jetSequence +
-    # process.hiPuRhoR3Analyzer + 
+    process.hiPuRhoR3Analyzer + 
     process.correctedElectrons +
     process.ggHiNtuplizer +
     process.ggHiNtuplizerGED +
-    process.hiPuRhoR3Analyzer
-    # process.hiFJRhoAnalyzer +
-    # process.hiFJRhoAnalyzerFinerBins +
+    process.hiFJRhoAnalyzer +
+    process.hiFJRhoAnalyzerFinerBins
     # process.pfcandAnalyzer +
     # process.pfcandAnalyzerCS +
     # process.trackSequencesPP +
