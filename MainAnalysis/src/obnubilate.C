@@ -103,13 +103,13 @@ int obnubilate(char const* config, char const* output) {
             std::bind(shader, _1, range));
         c->divide(cols, -1);
 
-        auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base"s + tag + "_"s + label + stub);
+        auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
 
         std::vector<history<TH1F>*> sets;
 
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
         zip([&](auto& batch, auto file, auto const& label) {
-            batch = new history<TH1F>(file, tag + "_" + label + stub, "batch"s + tag + "_" + label + stub);
+            batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
         }, batches, files, labels);
 
         auto total = new history<TH1F>(*base, "total");
