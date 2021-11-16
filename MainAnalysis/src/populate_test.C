@@ -192,7 +192,7 @@ int populate(char const* config, char const* output) {
     auto mix_pjet_f_r = new memory<TH1F>("mix_pjet_f_r"s, "", fr, mpthf);
 
     auto ele_dr2 = new TH1F("ele_dr2", "Photon/Electron dr^{2} Distribution", 100, 0, 0.05);
-    auto pthat_w = new TH1F("pthat_w", "pthat", 90, 0, 900);
+    auto pthat_w = new TH1F("pthat_w", "pthat", 100, 0, 200);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
