@@ -168,7 +168,7 @@ int vacillate(char const* config, char const* output) {
 
         /* fill event weight */
         auto hf_x = ihf->index_for(p->hiHF);
-        (*n)[hf_x]->Fill(1., p->weight);
+        (*n)[hf_x]->Fill(1., p->w);
 
         /* map reco jet to gen jet */
         std::unordered_map<float, int64_t> genid;
@@ -201,22 +201,22 @@ int vacillate(char const* config, char const* output) {
                                      gen_phi, (*p->WTAgenphi)[id]));
             auto g_x = mg->index_for(v{gdr, gen_pt});
 
-            (*g)[hf_x]->Fill(g_x, p->weight);
+            (*g)[hf_x]->Fill(g_x, p->w);
 
             if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
                 auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                          reco_phi, (*p->WTAphi)[j]));
                 auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                (*r)[hf_x]->Fill(r_x, p->weight);
+                (*r)[hf_x]->Fill(r_x, p->w);
 
-                (*cdr)[hf_x]->Fill(rdr, gdr, p->weight);
-                (*cpt)[hf_x]->Fill(reco_pt, gen_pt, p->weight);
-                (*c)[hf_x]->Fill(r_x, g_x, p->weight);
+                (*cdr)[hf_x]->Fill(rdr, gdr, p->w);
+                (*cpt)[hf_x]->Fill(reco_pt, gen_pt, p->w);
+                (*c)[hf_x]->Fill(r_x, g_x, p->w);
             } else {
                 /* missed */
-                (*cpt)[hf_x]->Fill(-1, gen_pt, p->weight);
-                (*c)[hf_x]->Fill(-1, g_x, p->weight);
+                (*cpt)[hf_x]->Fill(-1, gen_pt, p->w);
+                (*c)[hf_x]->Fill(-1, g_x, p->w);
             }
         }
     }
