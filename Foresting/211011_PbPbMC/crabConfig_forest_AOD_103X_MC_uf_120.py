@@ -1,6 +1,6 @@
 # OutputBase = '/store/group/phys_heavyions/mitaylor'
 OutputBase = '/store/user/mitaylor/'
-DatasetName = '/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM'
+DatasetName = '/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM'
 Tag = 'QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8_AOD_1033patch1_v1'
 
 from WMCore.Configuration import Configuration
