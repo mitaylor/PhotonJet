@@ -29,8 +29,6 @@ int emulate(char const* config, char const* output) {
     auto data = conf->get<std::string>("data");
     auto files = conf->get<std::vector<std::string>>("files");
     auto pthats = conf->get<std::vector<int32_t>>("pthats");
-    auto xs = conf->get<std::vector<float>>("xs");
-
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
     
@@ -38,16 +36,21 @@ int emulate(char const* config, char const* output) {
 
     TH1::SetDefaultSumw2();
 
+    /* merged gen inputs */
+    TChain* tcomb = new TChain("pj");
+    for (auto const& f : files)
+        tcomb->Add(f.data());
+
     /* get entries in each pthat bin */
     auto count = static_cast<int>(pthats.size());
     pthats.push_back(999999);
 
-    double pthatsarray[100];
+    double apthats[100];
 
-    for (int i = 0; i < count + 1; i++) pthatsarray[i] = pthats[i];
+    std::copy(pthats.begin(), pthats.end(), apthats);
 
-
-    TH1F* npthats = new TH1F("npthats", "", count, pthatsarray);
+    TH1F* hcomb = new TH1F("npthats", "", count, apthats);
+    TH1F* hbase = new TH1F("npthats_model", "", count, apthats);
 
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
@@ -59,7 +62,11 @@ int emulate(char const* config, char const* output) {
         for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
 
-            npthats->Fill(pjt->pthat, pjt->weight);
+            if (file == files.begin()) {
+                hbase->Fill(pjt->pthat, pjt->weight);
+            }
+
+            hcomb->Fill(pjt->pthat, pjt->weight);
         }
 
         f->Close();
@@ -67,30 +74,19 @@ int emulate(char const* config, char const* output) {
         delete pjt;
     }
 
-    /* calculate xs for each pthat bin */
-    for(int i = 1; i < count; ++i) {
-        xs[i] -= xs[i+1];
-    }
-
-    /* loop over events to assign pthat weights */
+    /* loop over and assign pthat weights */
     auto incl = new interval(""s, 1L, 0., 1.);
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto pthatw = new history<TH1F>("pthat"s, "", fincl, count);
 
     for(int i = 0; i < count; ++i) {
-        auto weight = xs[i]/npthats->GetBinContent(i+1);
-        weight = weight/xs[0]*npthats->GetBinContent(1);
+        auto weight = hbase->GetBinContent(i+1) / hcomb->GetBinContent(i+1);
         (*pthatw)[i]->SetBinContent(1, weight);
 
         printf("[%i, %i]: %E\n", pthats[i], pthats[i + 1], weight);
     }
 
     printf("\n");
-
-    /* merged gen inputs */
-    TChain* tcomb = new TChain("pj");
-    for (auto const& f : files)
-        tcomb->Add(f.data());
 
     /* calculate vz weights */
     auto ivz = new interval("v_{z}"s, rvz[0], rvz[1], rvz[2]);
