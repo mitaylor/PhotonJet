@@ -476,13 +476,13 @@ int undulate(char const* config, char const* output) {
         /* closure ratio plot */
         TH1F* closure = (TH1F*) (*result)[i]->Clone("closure");
 
-        for(int i = 0; i < (*result)[i]->GetNbinsX(); ++i) {
-            std::cout << (*result)[i]->GetBinLowEdge(i+1) << " ";
+        for(int j = 0; j < (*result)[i]->GetNbinsX(); ++j) {
+            std::cout << (*result)[i]->GetBinLowEdge(j+1) << " ";
         }
         std::cout << std::endl;
 
-        for(int i = 0; i < (*ref)[i]->GetNbinsX(); ++i) {
-            std::cout << (*ref)[i]->GetBinLowEdge(i+1) << " ";
+        for(int j = 0; j < (*ref)[i]->GetNbinsX(); ++j) {
+            std::cout << (*ref)[i]->GetBinLowEdge(j+1) << " ";
         }
         std::cout << std::endl;
 
