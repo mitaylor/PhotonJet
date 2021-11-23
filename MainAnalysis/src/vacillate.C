@@ -80,7 +80,7 @@ int vacillate(char const* config, char const* output) {
 
     auto fg = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";gen;"s + label).data(),
-            mr->size(), 0, mr->size()); };
+            mg->size(), 0, mg->size()); };
 
     auto fc = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH2F(name.data(), (";reco;gen;"s + label).data(),
@@ -201,7 +201,7 @@ int vacillate(char const* config, char const* output) {
             auto id = genid[gen_pt];
             auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id],
                                      gen_phi, (*p->WTAgenphi)[id]));
-            auto g_x = mr->index_for(v{gdr, gen_pt});
+            auto g_x = mg->index_for(v{gdr, gen_pt});
 
             (*g)[hf_x]->Fill(g_x, p->w);
 
