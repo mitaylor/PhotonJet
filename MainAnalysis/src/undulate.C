@@ -542,7 +542,7 @@ int undulate(char const* config, char const* output) {
         cs[16]->stack((*bias)[i], "bias");
         cs[16]->stack((*ref)[i], "truth");
 
-        cs[17]->add(*closure, "unfolded/truth");
+        cs[17]->add(closure, "unfolded/truth");
     });
 
     hb->set_binary("bins");
