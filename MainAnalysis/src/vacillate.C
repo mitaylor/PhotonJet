@@ -80,7 +80,7 @@ int vacillate(char const* config, char const* output) {
 
     auto fg = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";gen;"s + label).data(),
-            mg->size(), 0, mg->size()); };
+            mr->size(), 0, mr->size()); };
 
     auto fc = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH2F(name.data(), (";reco;gen;"s + label).data(),
@@ -113,13 +113,15 @@ int vacillate(char const* config, char const* output) {
         if (p->hiHF <= hf_min) { continue; }
 
         int64_t leading = -1;
+        float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
             if ((*p->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= photon_eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-
-            leading = j;
-            break;
+            if ((*p->phoEt)[j] > leading_pt) {
+                leading = j;
+                leading_pt = (*p->phoEt)[j];
+            }
         }
 
         /* require leading photon */
@@ -199,7 +201,7 @@ int vacillate(char const* config, char const* output) {
             auto id = genid[gen_pt];
             auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id],
                                      gen_phi, (*p->WTAgenphi)[id]));
-            auto g_x = mg->index_for(v{gdr, gen_pt});
+            auto g_x = mr->index_for(v{gdr, gen_pt});
 
             (*g)[hf_x]->Fill(g_x, p->w);
 
