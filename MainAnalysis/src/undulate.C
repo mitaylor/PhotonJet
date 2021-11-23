@@ -368,7 +368,7 @@ int undulate(char const* config, char const* output) {
     hb->alias("gen", "");
     hb->alias("reco", "");
 
-    std::vector<paper*> cs(17, nullptr);
+    std::vector<paper*> cs(18, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(tag + "_" + type + "_" + title, hb);
         apply_style(c, system_info);
