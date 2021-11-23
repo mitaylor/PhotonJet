@@ -62,7 +62,7 @@ int emulate(char const* config, char const* output) {
         for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
 
-            if (file == files.begin()) {
+            if (file == files[0]) {
                 hbase->Fill(pjt->pthat, pjt->weight);
             }
 
