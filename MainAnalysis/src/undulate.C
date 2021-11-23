@@ -378,7 +378,8 @@ int undulate(char const* config, char const* output) {
         "matrices"s, "pmatrix"s, "ematrix"s, "lmatrix"s,
         "logtaur"s, "logtaux"s, "logtauy"s, "lcurve"s,
         "unfold"s, "refold"s, "sresult"s, "srefold"s,
-        "fold0"s, "fold1"s, "error"s, "shaded"s, "closure"s });
+        "fold0"s, "fold1"s, "error"s, "shaded"s, "closure"s,
+        "ratio"s });
 
     cs[12]->format(std::bind(default_formatter, _1, -2., 27.));
     cs[13]->format(std::bind(default_formatter, _1, -0.001, 0.02));
@@ -475,18 +476,7 @@ int undulate(char const* config, char const* output) {
 
         /* closure ratio plot */
         TH1F* closure = (TH1F*) (*result)[i]->Clone("closure");
-
-        for(int j = 0; j < (*result)[i]->GetNbinsX(); ++j) {
-            std::cout << (*result)[i]->GetBinLowEdge(j+1) << " ";
-        }
-        std::cout << std::endl;
-
-        for(int j = 0; j < (*ref)[i]->GetNbinsX(); ++j) {
-            std::cout << (*ref)[i]->GetBinLowEdge(j+1) << " ";
-        }
-        std::cout << std::endl;
-
-        // closure->Divide((*ref)[i]);
+        closure->Divide((*ref)[i]);
 
         /* set titles */
         (*logtaur)[i]->SetTitle(";log_{10}#tau;#rho");
