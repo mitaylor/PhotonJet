@@ -474,7 +474,7 @@ int undulate(char const* config, char const* output) {
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
 
         /* closure ratio plot */
-        auto closure = (*result)[i]->Clone("closure");
+        TH1F* closure = (TH1F*) (*result)[i]->Clone("closure");
         closure->Divide((*ref)[i]);
 
         /* set titles */
