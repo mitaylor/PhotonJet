@@ -473,6 +473,10 @@ int undulate(char const* config, char const* output) {
         (*fold0)[i]->Scale(1. / (*fold0)[i]->Integral("width"));
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
 
+        /* closure ratio plot */
+        auto closure = (*result)[i]->Clone("closure");
+        closure->Divide((*ref)[i]);
+
         /* set titles */
         (*logtaur)[i]->SetTitle(";log_{10}#tau;#rho");
         (*logtaux)[i]->SetTitle(";log_{10}#tau;log_{10}L_{1}");
@@ -537,6 +541,8 @@ int undulate(char const* config, char const* output) {
         cs[16]->add((*result)[i], "unfolded");
         cs[16]->stack((*bias)[i], "bias");
         cs[16]->stack((*ref)[i], "truth");
+
+        cs[17]->add(*closure, "unfolded/truth");
     });
 
     hb->set_binary("bins");
