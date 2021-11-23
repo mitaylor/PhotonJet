@@ -223,6 +223,8 @@ int populate(char const* config, char const* output) {
 
         pthat_w->Fill(pjt->pthat, pjt->w);
 
+        if(pjt->w < 100) { continue; }
+
         if (pjt->hiHF <= hf_min) { continue; }
         if (pjt->hiHF >= 5199.95) { continue; }
 
