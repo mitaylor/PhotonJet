@@ -486,7 +486,7 @@ int undulate(char const* config, char const* output) {
         }
         std::cout << std::endl;
 
-        closure->Divide((*ref)[i]);
+        // closure->Divide((*ref)[i]);
 
         /* set titles */
         (*logtaur)[i]->SetTitle(";log_{10}#tau;#rho");
