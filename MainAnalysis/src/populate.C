@@ -84,19 +84,22 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
         auto photon_wta_dphi = std::abs(photon_phi - jet_wta_phi);
 
-        (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        auto temp = (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
         // auto temp_current_index = mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt});
         // if (temp_current_index == 240 || temp_current_index == 0) {
         //     std::cout << "here: " << revert_pi(photon_jet_dphi) << " " << jet_pt << std::endl;
         // }
+        if (pthf_x == 0) std::cout << "f temp " << temp << std::endl;
+
+        temp = (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_pi(photon_jet_dphi), jet_pt}), weight);
 
 
-        if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_jet_dphi), jet_pt}) + 1, weight);
-        if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_wta_dphi), jet_pt}) + 1, weight);
+        if (pthf_x == 0) std::cout << "u temp " << temp << std::endl;   
+        (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
