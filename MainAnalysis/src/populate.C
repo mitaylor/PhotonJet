@@ -92,12 +92,14 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         //     std::cout << "here: " << revert_pi(photon_jet_dphi) << " " << jet_pt << std::endl;
         // }
         if (pthf_x == 0) std::cout << "f temp " << temp << std::endl;
+        if (pthf_x == 0) std:: cout << "entries " << (*pjet_es_f_dphi)[pthf_x]->GetEntries() << std::endl; 
 
         temp = (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_jet_dphi), jet_pt}), weight);
 
 
-        if (pthf_x == 0) std::cout << "u temp " << temp << std::endl;   
+        if (pthf_x == 0) std::cout << "u temp " << temp << std::endl;  
+        if (pthf_x == 0) std:: cout << "entries " << (*pjet_es_u_dphi)[pthf_x]->GetEntries() << std::endl; 
         (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
