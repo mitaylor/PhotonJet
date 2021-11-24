@@ -92,14 +92,14 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         //     std::cout << "here: " << revert_pi(photon_jet_dphi) << " " << jet_pt << std::endl;
         // }
         if (pthf_x == 0) std::cout << "f temp " << temp << std::endl;
-        if (pthf_x == 0) std:: cout << "entries " << (*pjet_es_f_dphi)[pthf_x]->GetEntries() << std::endl; 
+        if (pthf_x == 0) std::cout << "entries " << (*pjet_es_f_dphi)[pthf_x]->GetEntries() << std::endl; 
 
         temp = (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_jet_dphi), jet_pt}), weight);
 
 
         if (pthf_x == 0) std::cout << "u temp " << temp << std::endl;  
-        if (pthf_x == 0) std:: cout << "entries " << (*pjet_es_u_dphi)[pthf_x]->GetEntries() << std::endl; 
+        if (pthf_x == 0) std::cout << "entries " << (*pjet_es_u_dphi)[pthf_x]->GetEntries() << std::endl; 
         (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
@@ -418,6 +418,9 @@ int populate(char const* config, char const* output) {
     *sub_pjet_wta_u_dphi -= *mix_pjet_wta_u_dphi;
     *sub_pjet_u_x -= *mix_pjet_u_x;
     *sub_pjet_u_dr -= *mix_pjet_u_dr;
+
+    std::cout << "entries f " << (*pjet_es_f_dphi)[0]->GetEntries() << std::endl;
+    std::cout << "entries u " << (*pjet_es_u_dphi)[0]->GetEntries() << std::endl; 
 
     /* save histograms */
     in(output, [&]() {
