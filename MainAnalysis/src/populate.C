@@ -380,6 +380,9 @@ int populate(char const* config, char const* output) {
         mix_pjet_es_f_dphi,
         mix_pjet_wta_f_dphi);
 
+    std::cout << "entries f " << (*pjet_es_f_dphi)[0]->GetEntries() << std::endl;
+    std::cout << "entries u " << (*pjet_es_u_dphi)[0]->GetEntries() << std::endl; 
+
     /* normalise by number of photons (events) */
     pjet_es_f_dphi->divide(*nevt);
     pjet_wta_f_dphi->divide(*nevt);
