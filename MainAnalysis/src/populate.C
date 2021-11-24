@@ -371,6 +371,9 @@ int populate(char const* config, char const* output) {
         mix_pjet_f_dr,
         mix_pjet_f_jpt);
 
+    std::cout << "entries f " << (*pjet_es_f_dphi)[0]->GetEntries() << std::endl;
+    std::cout << "entries u " << (*pjet_es_u_dphi)[0]->GetEntries() << std::endl; 
+
     scale_ia_bin_width(
         pjet_es_f_dphi,
         pjet_wta_f_dphi,
@@ -418,9 +421,6 @@ int populate(char const* config, char const* output) {
     *sub_pjet_wta_u_dphi -= *mix_pjet_wta_u_dphi;
     *sub_pjet_u_x -= *mix_pjet_u_x;
     *sub_pjet_u_dr -= *mix_pjet_u_dr;
-
-    std::cout << "entries f " << (*pjet_es_f_dphi)[0]->GetEntries() << std::endl;
-    std::cout << "entries u " << (*pjet_es_u_dphi)[0]->GetEntries() << std::endl; 
 
     /* save histograms */
     in(output, [&]() {
