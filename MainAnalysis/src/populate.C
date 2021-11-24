@@ -145,6 +145,10 @@ int populate(char const* config, char const* output) {
 
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
+    convert_in_place_pi(rudphi);
+
+    for (auto element : rdphi) std::cout << element << " ";
+    std::cout << std::endl;
 
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
@@ -370,9 +374,9 @@ int populate(char const* config, char const* output) {
     pjet_f_x->divide(*nevt);
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
-    pjet_es_u_dphi->divide(*nevt)
-    pjet_wta_u_dphi->divide(*nevt)
-    pjet_u_x->divide(*nevt)
+    pjet_es_u_dphi->divide(*nevt);
+    pjet_wta_u_dphi->divide(*nevt);
+    pjet_u_x->divide(*nevt);
     pjet_u_dr->divide(*nevt);
 
     mix_pjet_es_f_dphi->divide(*nevt);
@@ -380,9 +384,9 @@ int populate(char const* config, char const* output) {
     mix_pjet_f_x->divide(*nevt);
     mix_pjet_f_dr->divide(*nevt);
     mix_pjet_f_jpt->divide(*nevt);
-    mix_pjet_es_u_dphi->divide(*nevt)
-    mix_pjet_wta_u_dphi->divide(*nevt)
-    mix_pjet_u_x->divide(*nevt)
+    mix_pjet_es_u_dphi->divide(*nevt);
+    mix_pjet_wta_u_dphi->divide(*nevt);
+    mix_pjet_u_x->divide(*nevt);
     mix_pjet_u_dr->divide(*nevt);
 
     /* subtract histograms */
