@@ -87,8 +87,10 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
-        if (jet_pt >= 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(v{photon_jet_dphi, jet_pt}), weight);
-        if (jet_pt >= 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(v{photon_wta_dphi, jet_pt}), weight);
+        if (jet_pt >= 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_radian(photon_jet_dphi), jet_pt}), weight);
+        if (jet_pt >= 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_radian(photon_wta_dphi), jet_pt}), weight);
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
@@ -145,7 +147,6 @@ int populate(char const* config, char const* output) {
 
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
-    convert_in_place_pi(rudphi);
 
     for (auto element : rdphi) std::cout << element << " ";
     std::cout << std::endl;
