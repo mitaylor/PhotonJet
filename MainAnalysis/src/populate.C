@@ -87,9 +87,9 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
-        if (jet_pt >= 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+        if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_radian(photon_jet_dphi), jet_pt}), weight);
-        if (jet_pt >= 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+        if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_radian(photon_wta_dphi), jet_pt}), weight);
 
         /* require back-to-back jets */
@@ -104,8 +104,8 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
         (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
 
-        if (jet_pt >= 200) (*pjet_u_x)[pthf_x]->Fill(mx->index_for(v{jet_pt / photon_pt, jet_pt}), weight);
-        if (jet_pt >= 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_u_x)[pthf_x]->Fill(mx->index_for(v{jet_pt / photon_pt, jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
     }
 }
 
