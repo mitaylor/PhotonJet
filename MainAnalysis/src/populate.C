@@ -84,22 +84,11 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
         auto photon_wta_dphi = std::abs(photon_phi - jet_wta_phi);
 
-        auto temp = (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
-        // auto temp_current_index = mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt});
-        // if (temp_current_index == 240 || temp_current_index == 0) {
-        //     std::cout << "here: " << revert_pi(photon_jet_dphi) << " " << jet_pt << std::endl;
-        // }
-        if (pthf_x == 0) std::cout << "f temp " << temp << std::endl;
-        if (pthf_x == 0) std::cout << "entries " << (*pjet_es_f_dphi)[pthf_x]->GetEntries() << std::endl; 
-
-        temp = (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_jet_dphi), jet_pt}), weight);
-
-
-        if (pthf_x == 0) std::cout << "u temp " << temp << std::endl;  
-        if (pthf_x == 0) std::cout << "entries " << (*pjet_es_u_dphi)[pthf_x]->GetEntries() << std::endl; 
+        (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
         (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
@@ -371,17 +360,11 @@ int populate(char const* config, char const* output) {
         mix_pjet_f_dr,
         mix_pjet_f_jpt);
 
-    std::cout << "entries f " << (*pjet_es_f_dphi)[0]->GetEntries() << std::endl;
-    std::cout << "entries u " << (*pjet_es_u_dphi)[0]->GetEntries() << std::endl; 
-
     scale_ia_bin_width(
         pjet_es_f_dphi,
         pjet_wta_f_dphi,
         mix_pjet_es_f_dphi,
         mix_pjet_wta_f_dphi);
-
-    std::cout << "entries f " << (*pjet_es_f_dphi)[0]->GetEntries() << std::endl;
-    std::cout << "entries u " << (*pjet_es_u_dphi)[0]->GetEntries() << std::endl; 
 
     /* normalise by number of photons (events) */
     pjet_es_f_dphi->divide(*nevt);
