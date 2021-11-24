@@ -89,7 +89,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
         if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_radian(photon_jet_dphi), jet_pt}), weight);
-        if (jet_pt >= 200) std::cout << "here" << std::endl;
+        std::cout << mdphi->index_for(v{revert_radian(photon_jet_dphi), jet_pt}) << std::endl;
         if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_radian(photon_wta_dphi), jet_pt}), weight);
 
