@@ -94,9 +94,9 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
 
         if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_jet_dphi), jet_pt}), weight);
+            v{revert_pi(photon_jet_dphi) + 1, jet_pt}), weight);
         if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_wta_dphi), jet_pt}), weight);
+            v{revert_pi(photon_wta_dphi) + 1, jet_pt}), weight);
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
