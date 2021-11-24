@@ -165,8 +165,8 @@ int populate(char const* config, char const* output) {
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
 
     auto mdr = new multival(rudr, rupt);
-    auto mx = new multival(rudr, rupt);
-    auto mdphi = new multival(rudr, rupt);
+    auto mx = new multival(rux, rupt);
+    auto mdphi = new multival(rudphi, rupt);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
