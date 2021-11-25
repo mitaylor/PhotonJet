@@ -475,7 +475,7 @@ int undulate(char const* config, char const* output) {
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
 
         /* closure ratio plot */
-        TH1F* closure = (TH1F*) (*result)[i]->Copy("closure");
+        TH1F* closure = (TH1F*) (*result)[i]->Clone("closure");
         closure->Divide((*ref)[i]);
 
         /* set titles */
@@ -543,7 +543,7 @@ int undulate(char const* config, char const* output) {
         cs[16]->stack((*bias)[i], "bias");
         cs[16]->stack((*ref)[i], "truth");
 
-        cs[17]->add(closure, "unfolded/truth");
+        cs[17]->add(closure);
     });
 
     hb->set_binary("bins");
