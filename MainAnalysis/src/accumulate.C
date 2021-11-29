@@ -323,7 +323,7 @@ int accumulate(char const* config, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, collisions, -0.1, 1.5);
+        apply_style(c, collisions, -0.1, 1.7);
         c->accessory(std::bind(line_at, _1, 0.f, rx[0], rx[1]));
     }, c2, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
@@ -365,7 +365,7 @@ int accumulate(char const* config, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, collisions, -0.005, 0.05);
+        apply_style(c, collisions, -0.15, 0.5);
         c->accessory(std::bind(line_at, _1, 0.f, 0, mdphi->size()));
     }, c5, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
@@ -390,7 +390,7 @@ int accumulate(char const* config, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, collisions, -0.005, 0.05);
+        apply_style(c, collisions, -0.1, 1);
         c->accessory(std::bind(line_at, _1, 0.f, 0, mx->size()));
     }, c6, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 

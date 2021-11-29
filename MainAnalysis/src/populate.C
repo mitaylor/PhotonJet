@@ -65,7 +65,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
-        if (jet_pt <= 20) { continue; }
+        if (jet_pt <= 30) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= 1.6) { continue; }
@@ -87,9 +87,9 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
-        (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+        (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
-        (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+        (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
         /* require back-to-back jets */
