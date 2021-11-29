@@ -58,8 +58,10 @@ int accumulate(char const* config, char const* output) {
     auto rx = conf->get<std::vector<float>>("x_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
 
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
+    auto rrdr = conf->get<std::vector<float>>("rdr_range");
+    auto rrx = conf->get<std::vector<float>>("rx_range");
+    auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
+    auto rrpt = conf->get<std::vector<float>>("rpt_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -71,7 +73,9 @@ int accumulate(char const* config, char const* output) {
 
     auto ihf = new interval(dhf);
 
-    auto mr = new multival(rdrr, rptr);
+    auto mdr = new multival(rrdr, rrpt);
+    auto mx = new multival(rrx, rrpt);
+    auto mdphi = new multival(rrdphi, rrpt);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -89,21 +93,30 @@ int accumulate(char const* config, char const* output) {
         f, label + "_raw_sub_pjet_wta_f_dphi"s);
     auto pjet_f_x = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_x"s);
-    auto pjet_f_ddr = new history<TH1F>(
-        f, label + "_raw_sub_pjet_f_ddr"s);
+    auto pjet_f_dr = new history<TH1F>(
+        f, label + "_raw_sub_pjet_f_dr"s);
     auto pjet_f_jpt = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_jpt"s);
 
-    auto pjet_f_r = new history<TH1F>(
-        f, label + "_raw_sub_pjet_f_r"s);
+    auto pjet_es_u_dphi = new history<TH1F>(
+        f, label + "_raw_sub_pjet_es_u_dphi"s);
+    auto pjet_wta_u_dphi = new history<TH1F>(
+        f, label + "_raw_sub_pjet_wta_u_dphi"s);
+    auto pjet_u_x = new history<TH1F>(
+        f, label + "_raw_sub_pjet_u_x"s);
+    auto pjet_u_dr = new history<TH1F>(
+        f, label + "_raw_sub_pjet_u_dr"s);
 
     /* rescale by number of signal photons (events) */
     pjet_es_f_dphi->multiply(*nevt);
     pjet_wta_f_dphi->multiply(*nevt);
     pjet_f_x->multiply(*nevt);
-    pjet_f_ddr->multiply(*nevt);
+    pjet_f_dr->multiply(*nevt);
     pjet_f_jpt->multiply(*nevt);
-    pjet_f_r->multiply(*nevt);
+    pjet_es_u_dphi->multiply(*nevt);
+    pjet_wta_u_dphi->multiply(*nevt);
+    pjet_u_x->multiply(*nevt);
+    pjet_u_dr->multiply(*nevt);
 
     /* discard overflow photon pt bin */
     auto discard = [](history<TH1F>*& h, int64_t axis) {
@@ -116,9 +129,12 @@ int accumulate(char const* config, char const* output) {
     discard(pjet_es_f_dphi, 0);
     discard(pjet_wta_f_dphi, 0);
     discard(pjet_f_x, 0);
-    discard(pjet_f_ddr, 0);
+    discard(pjet_f_dr, 0);
     discard(pjet_f_jpt, 0);
-    discard(pjet_f_r, 0);
+    discard(pjet_es_u_dphi, 0);
+    discard(pjet_wta_u_dphi, 0);
+    discard(pjet_u_x, 0);
+    discard(pjet_u_dr, 0);
 
     /* integrate histograms */
     auto nevt_d_pt = nevt->sum(1);
@@ -130,20 +146,29 @@ int accumulate(char const* config, char const* output) {
     auto pjet_wta_f_dphi_d_hf = pjet_wta_f_dphi->sum(0);
     auto pjet_f_x_d_pt = pjet_f_x->sum(1);
     auto pjet_f_x_d_hf = pjet_f_x->sum(0);
-    auto pjet_f_ddr_d_pt = pjet_f_ddr->sum(1);
-    auto pjet_f_ddr_d_hf = pjet_f_ddr->sum(0);
+    auto pjet_f_dr_d_pt = pjet_f_dr->sum(1);
+    auto pjet_f_dr_d_hf = pjet_f_dr->sum(0);
     auto pjet_f_jpt_d_pt = pjet_f_jpt->sum(1);
     auto pjet_f_jpt_d_hf = pjet_f_jpt->sum(0);
-    auto pjet_f_r_d_pt = pjet_f_r->sum(1);
-    auto pjet_f_r_d_hf = pjet_f_r->sum(0);
+    auto pjet_es_u_dphi_d_pt = pjet_es_u_dphi->sum(1);
+    auto pjet_es_u_dphi_d_hf = pjet_es_u_dphi->sum(0);
+    auto pjet_wta_u_dphi_d_pt = pjet_wta_u_dphi->sum(1);
+    auto pjet_wta_u_dphi_d_hf = pjet_wta_u_dphi->sum(0);
+    auto pjet_u_x_d_pt = pjet_u_x->sum(1);
+    auto pjet_u_x_d_hf = pjet_u_x->sum(0);
+    auto pjet_u_dr_d_pt = pjet_u_dr->sum(1);
+    auto pjet_u_dr_d_hf = pjet_u_dr->sum(0);
 
     /* normalise by number of signal photons (events) */
     pjet_es_f_dphi->divide(*nevt);
     pjet_wta_f_dphi->divide(*nevt);
     pjet_f_x->divide(*nevt);
-    pjet_f_ddr->divide(*nevt);
+    pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
-    pjet_f_r->divide(*nevt);
+    pjet_es_u_dphi->divide(*nevt);
+    pjet_wta_u_dphi->divide(*nevt);
+    pjet_u_x->divide(*nevt);
+    pjet_u_dr->divide(*nevt);
 
     pjet_es_f_dphi_d_pt->divide(*nevt_d_pt);
     pjet_es_f_dphi_d_hf->divide(*nevt_d_hf);
@@ -151,18 +176,24 @@ int accumulate(char const* config, char const* output) {
     pjet_wta_f_dphi_d_hf->divide(*nevt_d_hf);
     pjet_f_x_d_pt->divide(*nevt_d_pt);
     pjet_f_x_d_hf->divide(*nevt_d_hf);
-    pjet_f_ddr_d_pt->divide(*nevt_d_pt);
-    pjet_f_ddr_d_hf->divide(*nevt_d_hf);
+    pjet_f_dr_d_pt->divide(*nevt_d_pt);
+    pjet_f_dr_d_hf->divide(*nevt_d_hf);
     pjet_f_jpt_d_pt->divide(*nevt_d_pt);
     pjet_f_jpt_d_hf->divide(*nevt_d_hf);
-    pjet_f_r_d_pt->divide(*nevt_d_pt);
-    pjet_f_r_d_hf->divide(*nevt_d_hf);
+    pjet_es_u_dphi_d_pt->divide(*nevt_d_pt);
+    pjet_es_u_dphi_d_hf->divide(*nevt_d_hf);
+    pjet_wta_u_dphi_d_pt->divide(*nevt_d_pt);
+    pjet_wta_u_dphi_d_hf->divide(*nevt_d_hf);
+    pjet_u_x_d_pt->divide(*nevt_d_pt);
+    pjet_u_x_d_hf->divide(*nevt_d_hf);
+    pjet_u_dr_d_pt->divide(*nevt_d_pt);
+    pjet_u_dr_d_hf->divide(*nevt_d_hf);
 
     /* normalise to unity */
     normalise_to_unity(
-        pjet_f_ddr,
-        pjet_f_ddr_d_pt,
-        pjet_f_ddr_d_hf);
+        pjet_f_dr,
+        pjet_f_dr_d_pt,
+        pjet_f_dr_d_hf);
 
     normalise_ia_to_unity(
         pjet_es_f_dphi,
@@ -173,9 +204,9 @@ int accumulate(char const* config, char const* output) {
         pjet_wta_f_dphi_d_hf);
 
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
-        pjet_f_ddr,
-        pjet_f_ddr_d_pt,
-        pjet_f_ddr_d_hf);
+        pjet_f_dr,
+        pjet_f_dr_d_pt,
+        pjet_f_dr_d_hf);
 
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#Delta#phi^{#gammaj}"),
         pjet_es_f_dphi,
@@ -192,9 +223,12 @@ int accumulate(char const* config, char const* output) {
         pjet_es_f_dphi->save(tag);
         pjet_wta_f_dphi->save(tag);
         pjet_f_x->save(tag);
-        pjet_f_ddr->save(tag);
+        pjet_f_dr->save(tag);
         pjet_f_jpt->save(tag);
-        pjet_f_r->save(tag);
+        pjet_es_u_dphi->save(tag);
+        pjet_wta_u_dphi->save(tag);
+        pjet_u_x->save(tag);
+        pjet_u_dr->save(tag);
 
         pjet_es_f_dphi_d_pt->save(tag);
         pjet_es_f_dphi_d_hf->save(tag);
@@ -202,12 +236,18 @@ int accumulate(char const* config, char const* output) {
         pjet_wta_f_dphi_d_hf->save(tag);
         pjet_f_x_d_pt->save(tag);
         pjet_f_x_d_hf->save(tag);
-        pjet_f_ddr_d_pt->save(tag);
-        pjet_f_ddr_d_hf->save(tag);
+        pjet_f_dr_d_pt->save(tag);
+        pjet_f_dr_d_hf->save(tag);
         pjet_f_jpt_d_pt->save(tag);
         pjet_f_jpt_d_hf->save(tag);
-        pjet_f_r_d_pt->save(tag);
-        pjet_f_r_d_hf->save(tag);
+        pjet_es_u_dphi_d_pt->save(tag);
+        pjet_es_u_dphi_d_hf->save(tag);
+        pjet_wta_u_dphi_d_pt->save(tag);
+        pjet_wta_u_dphi_d_hf->save(tag);
+        pjet_u_x_d_pt->save(tag);
+        pjet_u_x_d_hf->save(tag);
+        pjet_u_dr_d_pt->save(tag);
+        pjet_u_dr_d_hf->save(tag);
     });
 
     /* draw plots */
@@ -247,6 +287,9 @@ int accumulate(char const* config, char const* output) {
     std::vector<paper*> c3(3, nullptr);
     std::vector<paper*> c4(3, nullptr);
     std::vector<paper*> c5(3, nullptr);
+    std::vector<paper*> c6(3, nullptr);
+    std::vector<paper*> c7(3, nullptr);
+    std::vector<paper*> c8(3, nullptr);
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -290,7 +333,7 @@ int accumulate(char const* config, char const* output) {
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
-        c = new paper(tag + "_ddr_" + suffix, hb);
+        c = new paper(tag + "_dr_" + suffix, hb);
         c->divide(-1, rows);
         c->accessory(text);
 
@@ -298,9 +341,9 @@ int accumulate(char const* config, char const* output) {
         c->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     }, c3, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
-    pjet_f_ddr->apply([&](TH1* h) { c3[0]->add(h, system); });
-    pjet_f_ddr_d_pt->apply([&](TH1* h) { c3[1]->add(h, system); });
-    pjet_f_ddr_d_hf->apply([&](TH1* h) { c3[2]->add(h, system); });
+    pjet_f_dr->apply([&](TH1* h) { c3[0]->add(h, system); });
+    pjet_f_dr_d_pt->apply([&](TH1* h) { c3[1]->add(h, system); });
+    pjet_f_dr_d_hf->apply([&](TH1* h) { c3[2]->add(h, system); });
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -318,22 +361,61 @@ int accumulate(char const* config, char const* output) {
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
-        c = new paper(tag + "_r_" + suffix, hb);
+        c = new paper(tag + "_u_dphi_" + suffix, hb);
         c->divide(-1, rows);
         c->accessory(text);
 
         apply_style(c, collisions, -0.005, 0.05);
-        c->accessory(std::bind(line_at, _1, 0.f, 0, mr->size()));
+        c->accessory(std::bind(line_at, _1, 0.f, 0, mdphi->size()));
     }, c5, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
-    pjet_f_r->apply([&](TH1* h) { c5[0]->add(h, system); });
-    pjet_f_r_d_pt->apply([&](TH1* h) { c5[1]->add(h, system); });
-    pjet_f_r_d_hf->apply([&](TH1* h) { c5[2]->add(h, system); });
+    nevt->apply([&](TH1*, int64_t index) {
+        c5[0]->add((*pjet_es_u_dphi)[index], system, "es");
+        c5[0]->stack((*pjet_wta_u_dphi)[index], system, "wta");
+    });
+
+    nevt_d_pt->apply([&](TH1*, int64_t index) {
+        c5[1]->add((*pjet_es_u_dphi_d_pt)[index], system, "es");
+        c5[1]->stack((*pjet_wta_u_dphi_d_pt)[index], system, "wta");
+    });
+
+    nevt_d_hf->apply([&](TH1*, int64_t index) {
+        c5[2]->add((*pjet_es_u_dphi_d_hf)[index], system, "es");
+        c5[2]->stack((*pjet_wta_u_dphi_d_hf)[index], system, "wta");
+    });
+    
+    zip([&](paper*& c, int64_t rows, std::string const& suffix,
+            std::function<void(int64_t)> text) {
+        c = new paper(tag + "_u_x_" + suffix, hb);
+        c->divide(-1, rows);
+        c->accessory(text);
+
+        apply_style(c, collisions, -0.005, 0.05);
+        c->accessory(std::bind(line_at, _1, 0.f, 0, mx->size()));
+    }, c6, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+
+    pjet_u_x->apply([&](TH1* h) { c6[0]->add(h, system); });
+    pjet_u_x_d_pt->apply([&](TH1* h) { c6[1]->add(h, system); });
+    pjet_u_x_d_hf->apply([&](TH1* h) { c6[2]->add(h, system); });
+
+    zip([&](paper*& c, int64_t rows, std::string const& suffix,
+            std::function<void(int64_t)> text) {
+        c = new paper(tag + "_u_dr_" + suffix, hb);
+        c->divide(-1, rows);
+        c->accessory(text);
+
+        apply_style(c, collisions, -0.005, 0.05);
+        c->accessory(std::bind(line_at, _1, 0.f, 0, mdr->size()));
+    }, c7, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+
+    pjet_u_dr->apply([&](TH1* h) { c7[0]->add(h, system); });
+    pjet_u_dr_d_pt->apply([&](TH1* h) { c7[1]->add(h, system); });
+    pjet_u_dr_d_hf->apply([&](TH1* h) { c7[2]->add(h, system); });
 
     hb->set_binary("system");
     hb->sketch();
 
-    for (auto const& c : { c1, c2, c3, c4, c5 })
+    for (auto const& c : { c1, c2, c3, c4, c5, c6, c7 })
         for (auto p : c) { p->draw("pdf"); }
 
     return 0;

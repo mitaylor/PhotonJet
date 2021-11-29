@@ -137,10 +137,10 @@ int populate(char const* config, char const* output) {
     auto rx = conf->get<std::vector<float>>("x_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
 
-    auto rudr = conf->get<std::vector<float>>("udr_range");
-    auto rux = conf->get<std::vector<float>>("ux_range");
-    auto rudphi = conf->get<std::vector<float>>("udphi_range");
-    auto rupt = conf->get<std::vector<float>>("upt_range");
+    auto rrdr = conf->get<std::vector<float>>("rdr_range");
+    auto rrx = conf->get<std::vector<float>>("rx_range");
+    auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
+    auto rrpt = conf->get<std::vector<float>>("rpt_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -162,9 +162,9 @@ int populate(char const* config, char const* output) {
     auto idr = new interval("#deltaj"s, rdr);
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
 
-    auto mdr = new multival(rudr, rupt);
-    auto mx = new multival(rux, rupt);
-    auto mdphi = new multival(rudphi, rupt);
+    auto mdr = new multival(rrdr, rrpt);
+    auto mx = new multival(rrx, rrpt);
+    auto mdphi = new multival(rrdphi, rrpt);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
