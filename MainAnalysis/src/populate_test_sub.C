@@ -14,6 +14,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1.h"
+#include "TH2.h"
 
 #include <memory>
 #include <string>
@@ -90,25 +91,25 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight, float iso,
         (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
-        // if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-        //     v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
-        // if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-        //     v{revert_pi(photon_wta_dphi), jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
+        if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
+            v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
-        // /* require back-to-back jets */
-        // if (photon_jet_dphi < 0.875_pi) { continue; }
+        /* require back-to-back jets */
+        if (photon_jet_dphi < 0.875_pi) { continue; }
 
-        // (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-        // (*pjet_f_x)[pthf_x]->Fill(jet_pt / photon_pt, weight);
+        (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+        (*pjet_f_x)[pthf_x]->Fill(jet_pt / photon_pt, weight);
 
-        // double jt_deta = jet_eta - jet_wta_eta;
-        // double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
-        // double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
+        double jt_deta = jet_eta - jet_wta_eta;
+        double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
+        double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
-        // (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
+        (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
 
-        // if (jet_pt < 200) (*pjet_u_x)[pthf_x]->Fill(mx->index_for(v{jet_pt / photon_pt, jet_pt}), weight);
-        // if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_u_x)[pthf_x]->Fill(mx->index_for(v{jet_pt / photon_pt, jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
     }
 }
 
@@ -158,7 +159,7 @@ int populate(char const* config, char const* output) {
 
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
-    auto iiso = new interval(diso)
+    auto iiso = new interval(diso);
 
     auto mpthf = new multival(dpt, dhf, diso);
 
@@ -217,13 +218,13 @@ int populate(char const* config, char const* output) {
     auto pjet_u_x = new memory<TH1F>("pjet_u_x"s, "", fux, mpthf);
     auto pjet_es_u_dphi = new memory<TH1F>("pjet_es_u_dphi"s, "", fudphi, mpthf);
     auto pjet_wta_u_dphi = new memory<TH1F>("pjet_wta_u_dphi"s, "", fudphi, mpthf);
-    auto pjet_dphi_deta = new memory<TH2F>("pjet_dphi_deta"s, "", fdedp, mpthf);
+    auto pjet_dphi_deta = new memory<TH2F>("pjet_dphi_deta"s, "", fdpde, mpthf);
 
     auto mix_pjet_u_dr = new memory<TH1F>("mix_pjet_u_dr"s, "", fudr, mpthf);
     auto mix_pjet_u_x = new memory<TH1F>("mix_pjet_u_x"s, "", fux, mpthf);
     auto mix_pjet_es_u_dphi = new memory<TH1F>("mix_pjet_es_u_dphi"s, "", fudphi, mpthf);
     auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", fudphi, mpthf);
-    auto mix_pjet_dphi_deta = new memory<TH2F>("mix_pjet_dphi_deta"s, "", fdedp, mpthf);
+    auto mix_pjet_dphi_deta = new memory<TH2F>("mix_pjet_dphi_deta"s, "", fdpde, mpthf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -322,10 +323,10 @@ int populate(char const* config, char const* output) {
 
         auto weight = pjt->w;
 
-        for (int64_t r = 0; r < diso.size(); r++) {
-            auto pthf_x = mpthf->index_for(x{pt_x, hf_x, r});
+        for (auto r : diso) {
+            auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iiso->index_for(r)});
 
-            fill_axes(pjt, pthf_x, weight, diso[r],
+            fill_axes(pjt, pthf_x, weight, r,
                     photon_pt, photon_eta, photon_phi,
                     mdphi, mx, mdr, nevt,
                     pjet_es_f_dphi, pjet_wta_f_dphi,
@@ -341,10 +342,10 @@ int populate(char const* config, char const* output) {
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
-            for (int64_t r = 0; r < diso.size(); r++) {
-                auto pthf_x = mpthf->index_for(x{pt_x, hf_x, r});
+            for (auto r : diso) {
+                auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iiso->index_for(r)});
 
-                fill_axes(pjtm, pthf_x, weight, diso[r],
+                fill_axes(pjtm, pthf_x, weight, r,
                         photon_pt, photon_eta, photon_phi,
                         mdphi, mx, mdr, nmix,
                         mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
