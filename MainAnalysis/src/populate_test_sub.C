@@ -8,6 +8,9 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
 
+#include "../git/paper-and-pencil/include/paper.h"
+#include "../git/paper-and-pencil/include/pencil.h"
+
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
@@ -476,8 +479,6 @@ int populate(char const* config, char const* output) {
         sub_pjet_u_dr->save(tag);
         sub_pjet_dphi_deta->save(tag);
     });
-
-    printf("destroying objects..\n");
 
     return 0;
 }
