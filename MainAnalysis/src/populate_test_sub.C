@@ -187,7 +187,7 @@ int populate(char const* config, char const* output) {
         return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
 
     auto fdpde = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH2F(name.data(), ";dphi;deta", 20, 0, 3.14159, 20, -4, 4,); };
+        return new TH2F(name.data(), ";dphi;deta", 20, 0, 3.14159, 20, -4, 4); };
 
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
     auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);
@@ -397,7 +397,7 @@ int populate(char const* config, char const* output) {
     pjet_wta_u_dphi->divide(*nevt);
     pjet_u_x->divide(*nevt);
     pjet_u_dr->divide(*nevt);
-    pjet_dphi_deta->divide(*nevt);
+    // pjet_dphi_deta->divide(*nevt);
 
     mix_pjet_es_f_dphi->divide(*nevt);
     mix_pjet_wta_f_dphi->divide(*nevt);
@@ -408,7 +408,7 @@ int populate(char const* config, char const* output) {
     mix_pjet_wta_u_dphi->divide(*nevt);
     mix_pjet_u_x->divide(*nevt);
     mix_pjet_u_dr->divide(*nevt);
-    mix_pjet_dphi_deta->divide(*nevt);
+    // mix_pjet_dphi_deta->divide(*nevt);
 
     /* subtract histograms */
     auto sub_pjet_es_f_dphi = new memory<TH1F>(*pjet_es_f_dphi, "sub");
