@@ -80,13 +80,19 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight, float iso,
 
         if (pj_dr < iso) { continue; }
 
+        std::cout << "place 1" << std::endl;
+
         (*pjet_dphi_deta)[pthf_x]->Fill(pj_dphi, pj_deta, weight);
+
+        std::cout << "place 2" << std::endl;
 
         auto jet_wta_eta = (*pjt->WTAeta)[j];
         auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
 
         auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
         auto photon_wta_dphi = std::abs(photon_phi - jet_wta_phi);
+
+        std::cout << "place 3" << std::endl;
 
         (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
@@ -95,6 +101,8 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight, float iso,
             v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
         if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
             v{revert_pi(photon_wta_dphi), jet_pt}), weight);
+
+        std::cout << "place 4" << std::endl;
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
@@ -107,6 +115,8 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight, float iso,
         double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
         (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
+
+        std::cout << "place 5" << std::endl;
 
         if (jet_pt < 200) (*pjet_u_x)[pthf_x]->Fill(mx->index_for(v{jet_pt / photon_pt, jet_pt}), weight);
         if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
