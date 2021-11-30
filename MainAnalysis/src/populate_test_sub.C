@@ -171,6 +171,7 @@ int populate(char const* config, char const* output) {
 
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
+    diso.push_back(100);
     auto iiso = new interval(diso);
 
     auto mpthf = new multival(dpt, dhf, diso);
@@ -336,6 +337,8 @@ int populate(char const* config, char const* output) {
         auto weight = pjt->w;
 
         for (auto r : diso) {
+            if (r == diso.back()) { continue; }
+
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iiso->index_for(r)});
 
             std::cout << pt_x << " " << hf_x << " " << iiso->index_for(r) << std::endl;
