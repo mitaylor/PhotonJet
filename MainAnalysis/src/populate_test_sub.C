@@ -246,10 +246,13 @@ int populate(char const* config, char const* output) {
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    if (entries) { nentries = std::min(nentries, entries); }
+    int64_t mod = 1;
+    if (entries) { mod = nentries / entries; }
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
+
+        if (nentries % mod != 0) { continue; }
 
         t->GetEntry(i);
 
