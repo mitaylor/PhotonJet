@@ -360,6 +360,8 @@ int populate(char const* config, char const* output) {
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
             for (auto r : diso) {
+                if (r == diso.back()) { continue; }
+
                 auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iiso->index_for(r)});
 
                 fill_axes(pjtm, pthf_x, weight, r,
