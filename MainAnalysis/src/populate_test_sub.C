@@ -250,12 +250,12 @@ int populate(char const* config, char const* output) {
     if (entries) { mod = nentries / entries; }
 
     std::cout << mod << std::endl;
-    
+
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
-        if (nentries % mod != 0) { continue; }
+        if (i % mod != 0) { continue; }
 
         t->GetEntry(i);
 
