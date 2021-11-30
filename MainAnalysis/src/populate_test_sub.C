@@ -66,6 +66,8 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight, float iso,
     (*nevt)[pthf_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
+        std::cout << "place 0" << std::endl;
+
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_pt <= 20) { continue; }
 
@@ -335,6 +337,8 @@ int populate(char const* config, char const* output) {
 
         for (auto r : diso) {
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iiso->index_for(r)});
+
+            std::cout << pt_x << " " << hf_x << " " << iiso->index_for(r) << std::endl;
 
             fill_axes(pjt, pthf_x, weight, r,
                     photon_pt, photon_eta, photon_phi,
