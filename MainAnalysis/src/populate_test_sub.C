@@ -319,12 +319,13 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
 
+
         auto weight = pjt->w;
 
-        for (auto iso_x : diso) {
-            auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iso_x});
+        for (int64_t r = 0; r < diso.size(); r++) {
+            auto pthf_x = mpthf->index_for(x{pt_x, hf_x, r});
 
-            fill_axes(pjt, pthf_x, weight, iso_x,
+            fill_axes(pjt, pthf_x, weight, diso[r],
                     photon_pt, photon_eta, photon_phi,
                     mdphi, mx, mdr, nevt,
                     pjet_es_f_dphi, pjet_wta_f_dphi,
@@ -340,10 +341,10 @@ int populate(char const* config, char const* output) {
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
-            for (auto iso_x : diso) {
-                auto pthf_x = mpthf->index_for(x{pt_x, hf_x, iso_x});
+            for (int64_t r = 0; r < diso.size(); r++) {
+                auto pthf_x = mpthf->index_for(x{pt_x, hf_x, r});
 
-                fill_axes(pjtm, pthf_x, weight, iso_x,
+                fill_axes(pjtm, pthf_x, weight, diso[r],
                         photon_pt, photon_eta, photon_phi,
                         mdphi, mx, mdr, nmix,
                         mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
