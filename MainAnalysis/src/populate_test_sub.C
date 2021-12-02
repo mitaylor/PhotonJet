@@ -245,6 +245,7 @@ int populate(char const* config, char const* output) {
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
     if (entries) { mod = nentries / entries; }
+    if (mod !=1) { printf("mod: %i\n", mod); }
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
@@ -473,7 +474,6 @@ int populate(char const* config, char const* output) {
     });
 
     auto p = new pencil();
-    p->category("system", "PbPb", "pp");
 
     auto canvases = ipt->size() * ihf->size();
     std::vector<paper*> c(canvases, nullptr);
@@ -490,7 +490,7 @@ int populate(char const* config, char const* output) {
     for (int i = 0; i < ipt->size(); ++i) {
         for (int j = 0; j < ihf->size(); ++j) {
             auto canvas = i * ihf->size() + j;
-            auto suffix = std::to_string(i) + "_" + std::to_string(j);
+            auto suffix = "_" + std::to_string(i) + "_" + std::to_string(j);
 
             c[canvas] = new paper(tag + "_dphi_deta" + suffix, p);
             apply_style(c[canvas], ""); // apply_style(c, "", -0.04, 0.24);
@@ -498,19 +498,16 @@ int populate(char const* config, char const* output) {
 
             c[canvas]->accessory(iso_jt_info);
 
-            auto system = heavyion ? "PbPb" : "pp";
-
-            for (int k = 0; k < ijtmin->size(); ++k) {
-                for (int l = 0; l < iiso->size(); ++l) {
-                    auto index = mindex->index_for(x{i, j, l, k});
-                    c[canvas]->add((*sub_pjet_dphi_deta)[index], system);
+            for (int k = 0; k < iiso->size(); ++k) {
+                for (int l = 0; l < ijtmin->size(); ++l) {
+                    auto index = mindex->index_for(x{i, j, k, l});
+                    c[canvas]->add((*sub_pjet_dphi_deta)[index]);
                     c[canvas]->adjust((*sub_pjet_dphi_deta)[index], "colz", "");
                 }
             }
         }
     }
 
-    p->set_binary("system");
     p->sketch();
 
     for (auto canvas : c)
