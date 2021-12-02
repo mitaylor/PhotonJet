@@ -75,6 +75,8 @@ void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetp
     (*nevt)[index_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
+        std::cout << "beginning" << std::endl;
+
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_pt <= jetpt_min) { continue; }
 
@@ -299,8 +301,6 @@ int populate(char const* config, char const* output) {
         auto photon_eta = (*pjt->phoEta)[leading];
         auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
 
-        std::cout << "1" << std::endl;
-
         /* electron rejection */
         if (ele_rej) {
             bool electron = false;
@@ -332,16 +332,20 @@ int populate(char const* config, char const* output) {
 
         auto weight = pjt->w;
 
-        std::cout << "2" << std::endl;
-
         for (auto r : diso) {
             if (r == diso.back()) { continue; }
             auto iso_x = iiso->index_for(r);
 
+            std::cout << r << " " << iso_x << std::endl;
+
             for (auto min : djtmin) {
                 if (r == diso.back()) { continue; }
+
                 auto jtmin_x = ijtmin->index_for(min);
                 auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
+
+                std::cout << min << " " << jtmin_x << std::endl;
+                std::cout << index_x << std::endl;
 
                 fill_axes(pjt, index_x, weight, r, min,
                         photon_eta, photon_phi, heavyion, mdphi, mdr, nevt,
@@ -381,8 +385,6 @@ int populate(char const* config, char const* output) {
 
             ++k;
         }
-
-        std::cout << "4" << std::endl;
     }
 
     /* normalise histograms */
