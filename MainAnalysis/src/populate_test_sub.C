@@ -410,7 +410,7 @@ int populate(char const* config, char const* output) {
     pjet_es_u_dphi->divide(*nevt);
     pjet_wta_u_dphi->divide(*nevt);
     pjet_u_dr->divide(*nevt);
-    scale_TH2(pjet_dphi_deta, nevt);
+    // scale_TH2(pjet_dphi_deta, nevt);
 
     mix_pjet_es_f_dphi->divide(*nevt);
     mix_pjet_wta_f_dphi->divide(*nevt);
@@ -419,7 +419,7 @@ int populate(char const* config, char const* output) {
     mix_pjet_es_u_dphi->divide(*nevt);
     mix_pjet_wta_u_dphi->divide(*nevt);
     mix_pjet_u_dr->divide(*nevt);
-    scale_TH2(mix_pjet_dphi_deta, nevt);
+    // scale_TH2(mix_pjet_dphi_deta, nevt);
 
     /* subtract histograms */
     auto sub_pjet_es_f_dphi = new memory<TH1F>(*pjet_es_f_dphi, "sub");
