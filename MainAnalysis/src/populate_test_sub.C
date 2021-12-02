@@ -132,6 +132,7 @@ int populate(char const* config, char const* output) {
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
+    auto type = conf->get<std::string>("type");
 
     /* options */
     auto heavyion = conf->get<bool>("heavyion");
@@ -497,7 +498,7 @@ int populate(char const* config, char const* output) {
             auto max = (*sub_pjet_dphi_deta)[index]->GetMaximum();
             auto min = (*sub_pjet_dphi_deta)[index]->GetMinimum();
 
-            c[canvas] = new paper(tag + "_dphi_deta" + suffix, p);
+            c[canvas] = new paper(tag + "_" + type + "_dphi_deta" + suffix, p);
             apply_style(c[canvas], ""); // apply_style(c, "", -0.04, 0.24);
             c[canvas]->divide(-1, iiso->size());
 
