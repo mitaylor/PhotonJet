@@ -61,8 +61,8 @@ void scale_TH2(memory<TH2F>* hist, memory<TH1F>* scale) {
 }
 
 void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetpt_min,
-               float photon_eta, int64_t photon_phi,
-               multival* mdphi, multival* mdr, bool heavyion,
+               float photon_eta, int64_t photon_phi, bool heavyion,
+               multival* mdphi, multival* mdr,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
                memory<TH1F>* pjet_wta_f_dphi,
@@ -340,8 +340,7 @@ int populate(char const* config, char const* output) {
                 auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
                 fill_axes(pjt, index_x, weight, r, min,
-                        photon_eta, photon_phi,
-                        mdphi, mdr, nevt, heavyion,
+                        photon_eta, photon_phi, heavyion, mdphi, mdr, nevt,
                         pjet_es_f_dphi, pjet_wta_f_dphi,
                         pjet_f_dr, pjet_f_jpt,
                         pjet_es_u_dphi, pjet_wta_u_dphi, 
@@ -366,8 +365,7 @@ int populate(char const* config, char const* output) {
                     auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
                     fill_axes(pjtm, index_x, weight, r, min,
-                            photon_eta, photon_phi,
-                            mdphi, mdr, nmix, heavyion,
+                            photon_eta, photon_phi, heavyion, mdphi, mdr, nmix,
                             mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
                             mix_pjet_f_dr, mix_pjet_f_jpt,
                             mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
@@ -497,7 +495,7 @@ int populate(char const* config, char const* output) {
 
             c[canvas] = new paper(tag + "_dphi_deta" + suffix, p);
             apply_style(c[canvas], ""); // apply_style(c, "", -0.04, 0.24);
-            c[canvas]->divide(-1, iiso.size());
+            c[canvas]->divide(-1, iiso->size());
 
             c[canvas]->accessory(iso_jt_info);
 
