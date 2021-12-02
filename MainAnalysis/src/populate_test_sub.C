@@ -61,8 +61,8 @@ void scale_TH2(memory<TH2F>* hist, memory<TH1F>* scale) {
 }
 
 void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetpt_min,
-               double photon_pt, float photon_eta, int64_t photon_phi,
-               multival* mdphi, multival* mdr,
+               float photon_eta, int64_t photon_phi,
+               multival* mdphi, multival* mdr, bool heavyion,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
                memory<TH1F>* pjet_wta_f_dphi,
@@ -340,8 +340,8 @@ int populate(char const* config, char const* output) {
                 auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
                 fill_axes(pjt, index_x, weight, r, min,
-                        photon_pt, photon_eta, photon_phi,
-                        mdphi, mdr, nevt,
+                        photon_eta, photon_phi,
+                        mdphi, mdr, nevt, heavyion,
                         pjet_es_f_dphi, pjet_wta_f_dphi,
                         pjet_f_dr, pjet_f_jpt,
                         pjet_es_u_dphi, pjet_wta_u_dphi, 
@@ -366,8 +366,8 @@ int populate(char const* config, char const* output) {
                     auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
                     fill_axes(pjtm, index_x, weight, r, min,
-                            photon_pt, photon_eta, photon_phi,
-                            mdphi, mdr, nmix,
+                            photon_eta, photon_phi,
+                            mdphi, mdr, nmix, heavyion,
                             mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
                             mix_pjet_f_dr, mix_pjet_f_jpt,
                             mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
@@ -477,7 +477,7 @@ int populate(char const* config, char const* output) {
     auto p = new pencil();
     p->category("system", "PbPb", "pp");
 
-    auto canvases = ipt.size() * ihf.size();
+    auto canvases = ipt->size() * ihf->size();
     std::vector<paper*> c(canvases, nullptr);
 
     std::function<void(int64_t, float)> iso_info = [&](int64_t x, float pos) {
@@ -489,10 +489,10 @@ int populate(char const* config, char const* output) {
     auto iso_jt_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, nevt, iso_info, jt_info); };
 
-    for (int i = 0; i < ipt.size(); ++i) {
-        for (int j = 0; j < ihf.size(); ++j) {
-            auto canvas = i * ihf.size() + j;
-            auto suffix = to_string(i) + "_" + to_string(j);
+    for (int i = 0; i < ipt->size(); ++i) {
+        for (int j = 0; j < ihf->size(); ++j) {
+            auto canvas = i * ihf->size() + j;
+            auto suffix = std::to_string(i) + "_" + std::to_string(j);
 
             c[canvas] = new paper(tag + "_dphi_deta" + suffix, p);
             apply_style(c[canvas], ""); // apply_style(c, "", -0.04, 0.24);
@@ -502,8 +502,8 @@ int populate(char const* config, char const* output) {
 
             auto system = heavyion ? "PbPb" : "pp";
 
-            for (int k = 0; k < ijtpt.size(); ++k) {
-                for (int l = 0; l < iiso.size(); ++l) {
+            for (int k = 0; k < ijtpt->size(); ++k) {
+                for (int l = 0; l < iiso->size(); ++l) {
                     auto index = mindex->index_for(x{i, j, l, k});
                     c[canvas]->add((*sub_pjet_dphi_deta)[index], system);
                     c[canvas]->adjust((*sub_pjet_dphi_deta)[index], "colz", "");
@@ -512,8 +512,8 @@ int populate(char const* config, char const* output) {
         }
     }
 
-    hb->set_binary("system");
-    hb->sketch();
+    p->set_binary("system");
+    p->sketch();
 
     for (auto canvas : c)
         c->draw("pdf");

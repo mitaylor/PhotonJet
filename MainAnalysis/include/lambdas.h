@@ -131,8 +131,8 @@ template <typename T>
 void info_text(int64_t index, float pos, std::string const& format,
                std::vector<T> const& edges) {
     char buffer[128] = { '\0' };
-    
-    sprintf(buffer, format.data(), edges[index - 1];
+
+    sprintf(buffer, format.data(), edges[index - 1]);
 
     TLatex* l = new TLatex();
     l->SetTextFont(43);
