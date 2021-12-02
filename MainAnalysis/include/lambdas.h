@@ -153,4 +153,25 @@ void stack_text(int64_t index, float position, float spacing, T* shape,
         (args(*(it++) + 1, position -= spacing), 0)... };
 }
 
+template <typename T, typename... U>
+void stack_text(int64_t index, float position, float spacing, std::vector<int64_t> shape,
+                std::function<U>... args) {
+    
+    index -= 1;
+    std::vector<int64_t> indices(shape.size());
+    for (int64_t i = 0; i < shape.size(); ++i) {
+        indices[i] = index % shape[i];
+        index = index / shape[i];
+    }
+
+    auto it = std::begin(indices);
+
+    /* readjust position */
+    position = position + spacing;
+
+    (void)(int [sizeof...(U)]) {
+        (args(*(it++) + 1, position -= spacing), 0)... };
+}
+
+
 #endif /* LAMBDAS_H */
