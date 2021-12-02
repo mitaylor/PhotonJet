@@ -153,7 +153,7 @@ void stack_text(int64_t index, float position, float spacing, T* shape,
         (args(*(it++) + 1, position -= spacing), 0)... };
 }
 
-template <typename T, typename... U>
+template <typename... U>
 void stack_text(int64_t index, float position, float spacing, std::vector<int64_t> shape,
                 std::function<U>... args) {
     
