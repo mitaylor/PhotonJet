@@ -515,8 +515,8 @@ int populate(char const* config, char const* output) {
     hb->set_binary("system");
     hb->sketch();
 
-    for (auto const& c : { c1, c2, c3, c4, c5, c6, c7 })
-        for (auto p : c) { p->draw("pdf"); }
+    for (auto canvas : c)
+        c->draw("pdf");
 
     return 0;
 }
