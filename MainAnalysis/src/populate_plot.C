@@ -99,8 +99,8 @@ int populate(char const* config) {
             for (int k = 0; k < iiso->size(); ++k) {
                 for (int l = 0; l < ijtmin->size(); ++l) {
                     index = mindex->index_for(x{i, j, k, l});
-                    (*data_pjet_es_f_dphi)[index]->SetAxisRange(min, max, "Z");
-                    (*mc_pjet_es_f_dphi)[index]->SetAxisRange(min, max, "Z");
+                    (*data_pjet_es_f_dphi)[index]->SetAxisRange(min, max, "Y");
+                    (*mc_pjet_es_f_dphi)[index]->SetAxisRange(min, max, "Y");
 
                     c[canvas]->add((*data_pjet_es_f_dphi)[index], "data");
                     c[canvas]->stack((*mc_pjet_es_f_dphi)[index], "mc");
