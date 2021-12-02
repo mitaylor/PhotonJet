@@ -55,7 +55,7 @@ int populate(char const* config) {
     TFile* fd = new TFile(data.data(), "read");
     auto data_pjet_es_f_dphi = new history<TH1F>(fd, histname);
 
-    TFile* fm = new TFile(data.data(), "read");
+    TFile* fm = new TFile(mc.data(), "read");
     auto mc_pjet_es_f_dphi = new history<TH1F>(fm, histname);
 
 
