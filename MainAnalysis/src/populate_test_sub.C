@@ -245,7 +245,7 @@ int populate(char const* config, char const* output) {
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
     if (entries) { mod = nentries / entries; }
-    if (mod !=1) { printf("mod: %i\n", mod); }
+    if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
