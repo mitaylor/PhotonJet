@@ -477,7 +477,7 @@ int populate(char const* config, char const* output) {
 
     auto canvases = ipt->size() * ihf->size();
     std::vector<paper*> c(canvases, nullptr);
-    vector<int64_t> shape { iiso->size(), ijtmin->size() };
+    std::vector<int64_t> shape { iiso->size(), ijtmin->size() };
 
     std::function<void(int64_t, float)> iso_info = [&](int64_t x, float pos) {
         info_text(x, pos, "R_{iso,#gamma} = %.1f", diso); };
