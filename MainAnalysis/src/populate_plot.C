@@ -33,7 +33,7 @@ int populate(char const* config) {
     auto data = conf->get<std::string>("data");
     auto mc = conf->get<std::string>("mc");
     auto tag = conf->get<std::string>("tag");
-    std::string histname = tag + "_pjet_es_f_dphi"s;
+    std::string histname = tag + "_sub_pjet_es_f_dphi"s;
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
