@@ -27,7 +27,7 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 
-int populate(char const* config, char const* output) {
+int populate(char const* config) {
     auto conf = new configurer(config);
 
     auto data = conf->get<std::string>("data");
@@ -39,9 +39,6 @@ int populate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto diso = conf->get<std::vector<float>>("iso_diff");
     auto djtmin = conf->get<std::vector<float>>("jtmin_diff");
-
-    /* convert to integral angle units (cast to double) */
-    convert_in_place_pi(rdphi);
 
     /* push back vectors for the photon isolation cone and min jet pT */
     diso.push_back(999999);
@@ -63,7 +60,7 @@ int populate(char const* config, char const* output) {
 
 
     auto p = new pencil();
-    hb->category("type", "data", "mc");
+    p->category("type", "data", "mc");
 
     auto canvases = ipt->size() * ihf->size();
     std::vector<paper*> c(canvases, nullptr);
@@ -93,7 +90,7 @@ int populate(char const* config, char const* output) {
             auto max = (data_max > mc_max) ? data_max : mc_max;
             auto min = (data_min < mc_min) ? data_min : mc_min;
 
-            c[canvas] = new paper(tag + "_" + type + "_es_dphi" + suffix, p);
+            c[canvas] = new paper(tag + "_es_dphi" + suffix, p);
             apply_style(c[canvas], "");
             c[canvas]->divide(-1, iiso->size());
 
@@ -106,15 +103,13 @@ int populate(char const* config, char const* output) {
                     (*mc_pjet_es_f_dphi)[index]->SetAxisRange(min, max, "Z");
 
                     c[canvas]->add((*data_pjet_es_f_dphi)[index], "data");
-                    c[canvas]->adjust((*data_pjet_es_f_dphi)[index]);
-                    c[canvas]->stack((*mc_pjet_es_f_dphi)[index]), "mc";
-                    c[canvas]->adjust((*mc_pjet_es_f_dphi)[index]);
+                    c[canvas]->stack((*mc_pjet_es_f_dphi)[index], "mc");
                 }
             }
         }
     }
 
-    hb->set_binary("type");
+    p->set_binary("type");
     p->sketch();
 
     for (auto canvas : c)
@@ -124,9 +119,9 @@ int populate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return populate(argv[1], argv[2]);
+    if (argc == 2)
+        return populate(argv[1]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config]\n", argv[0]);
     return 1;
 }
