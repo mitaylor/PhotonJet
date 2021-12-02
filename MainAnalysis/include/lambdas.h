@@ -159,7 +159,7 @@ void stack_text(int64_t index, float position, float spacing, std::vector<int64_
     
     index -= 1;
     std::vector<int64_t> indices(shape.size());
-    for (int64_t i = 0; i < shape.size(); ++i) {
+    for (std::vector<int64_t>::size_type i = 0; i < shape.size(); ++i) {
         indices[i] = index % shape[i];
         index = index / shape[i];
     }
