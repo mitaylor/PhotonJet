@@ -75,8 +75,6 @@ void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetp
     (*nevt)[index_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
-        std::cout << "beginning" << std::endl;
-
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_pt <= jetpt_min) { continue; }
 
@@ -248,8 +246,6 @@ int populate(char const* config, char const* output) {
     int64_t mod = 1;
     if (entries) { mod = nentries / entries; }
 
-    std::cout << mod << std::endl;
-
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
@@ -336,16 +332,11 @@ int populate(char const* config, char const* output) {
             if (r == diso.back()) { continue; }
             auto iso_x = iiso->index_for(r);
 
-            std::cout << r << " " << iso_x << std::endl;
-
             for (auto min : djtmin) {
-                if (r == diso.back()) { continue; }
+                if (min == djtmin.back()) { continue; }
 
                 auto jtmin_x = ijtmin->index_for(min);
                 auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
-
-                std::cout << min << " " << jtmin_x << std::endl;
-                std::cout << index_x << std::endl;
 
                 fill_axes(pjt, index_x, weight, r, min,
                         photon_eta, photon_phi, heavyion, mdphi, mdr, nevt,
@@ -355,8 +346,6 @@ int populate(char const* config, char const* output) {
                         pjet_u_dr, pjet_dphi_deta);
             }
         }
-
-        std::cout << "3" << std::endl;
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -370,7 +359,7 @@ int populate(char const* config, char const* output) {
                 auto iso_x = iiso->index_for(r);
 
                 for (auto min : djtmin) {
-                    if (r == diso.back()) { continue; }
+                    if (min == djtmin.back()) { continue; }
                     auto jtmin_x = ijtmin->index_for(min);
                     auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
