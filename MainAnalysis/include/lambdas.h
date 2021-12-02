@@ -127,6 +127,19 @@ void info_text(int64_t index, float pos, std::string const& format,
     l->DrawLatexNDC(0.135, pos, buffer);
 }
 
+template <typename T>
+void info_text(int64_t index, float pos, std::string const& format,
+               std::vector<T> const& edges) {
+    char buffer[128] = { '\0' };
+    
+    sprintf(buffer, format.data(), edges[index - 1];
+
+    TLatex* l = new TLatex();
+    l->SetTextFont(43);
+    l->SetTextSize(13);
+    l->DrawLatexNDC(0.135, pos, buffer);
+}
+
 template <typename T, typename... U>
 void stack_text(int64_t index, float position, float spacing, T* shape,
                 std::function<U>... args) {

@@ -185,11 +185,18 @@ int vacillate(char const* config, char const* output) {
             auto gen_phi = (*p->refphi)[j];
 
             if (gen_pt < rptg.front()) { continue; }
-            if (std::abs(gen_eta) >= jet_eta_max) { continue; }
 
             auto reco_pt = (*p->jtpt)[j];
             auto reco_eta = (*p->jteta)[j];
             auto reco_phi = (*p->jtphi)[j];
+
+            if (std::abs(reco_eta) >= jet_eta_max) { continue; }
+
+            auto pj_deta = photon_eta - reco_eta;
+            auto pj_dphi = revert_radian(std::abs(photon_phi - convert_radian(reco_phi)));
+            auto pj_dr = std::sqrt(pj_deta * pj_deta + pj_dphi * pj_dphi);
+
+            if (pj_dr < 0.4) { continue; }
 
             if (heavyion && in_hem_failure_region(reco_eta, reco_phi))
                 continue;
