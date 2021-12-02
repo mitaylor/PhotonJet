@@ -372,6 +372,7 @@ int populate(char const* config, char const* output) {
                             mix_pjet_f_dr, mix_pjet_f_jpt,
                             mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
                             mix_pjet_u_dr, mix_pjet_dphi_deta);
+                }
             }
 
             ++k;
@@ -502,7 +503,7 @@ int populate(char const* config, char const* output) {
 
             auto system = heavyion ? "PbPb" : "pp";
 
-            for (int k = 0; k < ijtpt->size(); ++k) {
+            for (int k = 0; k < ijtmin->size(); ++k) {
                 for (int l = 0; l < iiso->size(); ++l) {
                     auto index = mindex->index_for(x{i, j, l, k});
                     c[canvas]->add((*sub_pjet_dphi_deta)[index], system);
@@ -516,7 +517,7 @@ int populate(char const* config, char const* output) {
     p->sketch();
 
     for (auto canvas : c)
-        c->draw("pdf");
+        canvas->draw("pdf");
 
     return 0;
 }
