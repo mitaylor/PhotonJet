@@ -299,7 +299,7 @@ int populate(char const* config, char const* output) {
         auto photon_eta = (*pjt->phoEta)[leading];
         auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
 
-        std::cout << "1" << endl;
+        std::cout << "1" << std::endl;
 
         /* electron rejection */
         if (ele_rej) {
@@ -332,7 +332,7 @@ int populate(char const* config, char const* output) {
 
         auto weight = pjt->w;
 
-        std::cout << "2" << endl;
+        std::cout << "2" << std::endl;
 
         for (auto r : diso) {
             if (r == diso.back()) { continue; }
@@ -352,7 +352,7 @@ int populate(char const* config, char const* output) {
             }
         }
 
-        std::cout << "3" << endl;
+        std::cout << "3" << std::endl;
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -382,7 +382,7 @@ int populate(char const* config, char const* output) {
             ++k;
         }
 
-        std::cout << "4" << endl;
+        std::cout << "4" << std::endl;
     }
 
     /* normalise histograms */
