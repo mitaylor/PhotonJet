@@ -256,8 +256,6 @@ int populate(char const* config, char const* output) {
                 tentries = 0;
             }
         }
-        
-        time = clock();
 
         if (i % mod != 0) { continue; }
 
@@ -363,7 +361,7 @@ int populate(char const* config, char const* output) {
 
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
-
+            time = clock();
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
                 auto iso_x = iiso->index_for(r);
@@ -381,10 +379,10 @@ int populate(char const* config, char const* output) {
                             mix_pjet_f_dr, mix_pjet_f_jpt,
                             mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
                             mix_pjet_u_dr, mix_pjet_dphi_deta);
-                    
-                    time_mebs += clock() - time;
                 }
             }
+            
+            time_mebs += clock() - time;
 
             ++k;
         }
