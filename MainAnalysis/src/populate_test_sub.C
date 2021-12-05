@@ -474,52 +474,6 @@ int populate(char const* config, char const* output) {
         sub_pjet_dphi_deta->save(tag);
     });
 
-    auto p = new pencil();
-
-    auto canvases = ipt->size() * ihf->size();
-    std::vector<paper*> c(canvases, nullptr);
-    std::vector<int64_t> shape { ijtmin->size(), iiso->size() };
-
-    std::function<void(int64_t, float)> iso_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "R_{iso,#gamma} = %.1f", diso); };
-
-    std::function<void(int64_t, float)> jt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "Jet min p_{T} = %.0f", djtmin); };
-
-    auto iso_jt_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, shape, jt_info, iso_info); };
-
-    for (int i = 0; i < ipt->size(); ++i) {
-        for (int j = 0; j < ihf->size(); ++j) {
-            auto canvas = i * ihf->size() + j;
-            auto suffix = "_" + std::to_string(i) + "_" + std::to_string(j);
-
-            auto index = mindex->index_for(x{i, j, 0, 0});
-            auto max = (*sub_pjet_dphi_deta)[index]->GetMaximum();
-            auto min = (*sub_pjet_dphi_deta)[index]->GetMinimum();
-
-            c[canvas] = new paper(tag + "_" + type + "_dphi_deta" + suffix, p);
-            apply_style(c[canvas], ""); // apply_style(c, "", -0.04, 0.24);
-            c[canvas]->divide(-1, iiso->size());
-
-            c[canvas]->accessory(iso_jt_info);
-
-            for (int k = 0; k < iiso->size(); ++k) {
-                for (int l = 0; l < ijtmin->size(); ++l) {
-                    index = mindex->index_for(x{i, j, k, l});
-                    (*sub_pjet_dphi_deta)[index]->SetAxisRange(min, max, "Z");
-                    c[canvas]->add((*sub_pjet_dphi_deta)[index]);
-                    c[canvas]->adjust((*sub_pjet_dphi_deta)[index], "colz", "");
-                }
-            }
-        }
-    }
-
-    p->sketch();
-
-    for (auto canvas : c)
-        canvas->draw("pdf");
-
     return 0;
 }
 

@@ -26,6 +26,15 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+void scale_TH2(history<TH2F>* hist, history<TH1F>* scale) {
+    auto size = hist->size();
+
+    for (int64_t i = 0; i < size; ++i) {
+        auto factor = (*scale)[i]->GetBinContent(1);
+        (*hist)[i]->Scale(1/factor);
+    }
+}
+
 double get_max(TH1* h1, TH1* h2) {
     auto max_1 = h1->GetMaximum();
     auto max_2 = h2->GetMaximum();
@@ -78,11 +87,16 @@ int populate(char const* config) {
     auto data_pjet_es_f_dphi = new history<TH1F>(fd, tag + "_sub_pjet_es_f_dphi"s);
     auto data_pjet_es_f_dr = new history<TH1F>(fd, tag + "_sub_pjet_f_dr"s);
     auto data_pjet_dphi_deta = new history<TH1F>(fd, tag + "_sub_pjet_dphi_deta"s);
+    auto data_nevt = new history<TH1F>(fd, tag + "_nevt"s);
 
     TFile* fm = new TFile(mc.data(), "read");
     auto mc_pjet_es_f_dphi = new history<TH1F>(fm, tag + "_sub_pjet_es_f_dphi"s);
     auto mc_pjet_es_f_dr = new history<TH1F>(fm, tag + "_sub_pjet_f_dr"s);
     auto mc_pjet_dphi_deta = new history<TH1F>(fm, tag + "_sub_pjet_dphi_deta"s);
+    auto mc_nevt = new history<TH1F>(fm, tag + "_nevt"s);
+
+    scale_TH2(data_pjet_dphi_deta, data_nevt);
+    scale_TH2(mc_pjet_dphi_deta, mc_nevt);
 
     /* plot info */
     std::vector<int64_t> shape { ijtmin->size(), iiso->size() };
