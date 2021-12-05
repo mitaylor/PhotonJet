@@ -244,6 +244,7 @@ int populate(char const* config, char const* output) {
     int64_t tentries = 0;
     clock_t time = 0;
     clock_t time_mebs = 0;
+    int64_t tries = 0;
 
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
@@ -251,9 +252,11 @@ int populate(char const* config, char const* output) {
             if (tentries != 0) {
                 std::cout << "Average time for mixed-event background subtraction: " << (double)(time_mebs)/CLOCKS_PER_SEC/tentries << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
+                std::cout << "Average tries: " << (double) tries / tentries << std::endl;
                 time = 0;
                 time_mebs = 0;
                 tentries = 0;
+                tries = 0;
             }
         }
 
@@ -357,6 +360,7 @@ int populate(char const* config, char const* output) {
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             time = clock();
             tm->GetEntry(m);
+            tries++;
 
             if(m == 0) { std::cout << "looping " << mentries << std::endl;}
 
