@@ -22,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <ctime>
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
@@ -242,6 +243,8 @@ int populate(char const* config, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
+        clock_t time_begin, time;
+        if (i % frequency == 0) time_begin = clock();
 
         if (i % mod != 0) { continue; }
 
@@ -321,6 +324,11 @@ int populate(char const* config, char const* output) {
 
         auto weight = pjt->w;
 
+        if (i % frequency == 0) {
+            time = clock();
+            std::cout << "Selections: " << (float)(time-time_begin)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
+        }
+
         for (auto r : diso) {
             if (r == diso.back()) { continue; }
             auto iso_x = iiso->index_for(r);
@@ -338,6 +346,11 @@ int populate(char const* config, char const* output) {
                         pjet_es_u_dphi, pjet_wta_u_dphi, 
                         pjet_u_dr, pjet_dphi_deta);
             }
+        }
+
+        if (i % frequency == 0) {
+            std::cout << "Filling observables: " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
+            time = clock();
         }
 
         /* mixing events in minimum bias */
@@ -368,6 +381,11 @@ int populate(char const* config, char const* output) {
             }
 
             ++k;
+        }
+
+        if (i % frequency == 0) {
+            std::cout << "MEBG Subtraction: " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
+            std::cout << "Total elapsed: " << (float)(clock()-time_begin)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
         }
     }
 
