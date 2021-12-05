@@ -243,20 +243,14 @@ int populate(char const* config, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     int64_t tentries = 0;
     clock_t time = 0;
-    clock_t time_selections = 0;
-    clock_t time_observables = 0;
     clock_t time_mebs = 0;
 
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
             if (tentries != 0) {
-                std::cout << "Average time for selections: " << (double)(time_selections)/CLOCKS_PER_SEC/tentries << std::endl;
-                std::cout << "Average time for filling observables: " << (double)(time_observables)/CLOCKS_PER_SEC/tentries << std::endl;
                 std::cout << "Average time for mixed-event background subtraction: " << (double)(time_mebs)/CLOCKS_PER_SEC/tentries << std::endl;
                 time = 0;
-                time_selections = 0;
-                time_observables = 0;
                 time_mebs = 0;
                 tentries = 0;
             }
@@ -341,9 +335,6 @@ int populate(char const* config, char const* output) {
 
         auto weight = pjt->w;
 
-        time_selections += clock() - time;
-        time = clock();
-
         for (auto r : diso) {
             if (r == diso.back()) { continue; }
             auto iso_x = iiso->index_for(r);
@@ -363,9 +354,6 @@ int populate(char const* config, char const* output) {
             }
         }
 
-        time_observables += clock() - time;
-        time = clock();
-
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             tm->GetEntry(m);
@@ -384,12 +372,16 @@ int populate(char const* config, char const* output) {
                     auto jtmin_x = ijtmin->index_for(min);
                     auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
+                    time = clock();
+
                     fill_axes(pjtm, index_x, weight, r, min,
                             photon_eta, photon_phi, heavyion, mdphi, mdr, nmix,
                             mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
                             mix_pjet_f_dr, mix_pjet_f_jpt,
                             mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
                             mix_pjet_u_dr, mix_pjet_dphi_deta);
+                    
+                    time_mebs += clock() - time;
                 }
             }
 
