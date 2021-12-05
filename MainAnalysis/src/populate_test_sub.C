@@ -243,7 +243,8 @@ int populate(char const* config, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
-        clock_t time_begin, time;
+        clock_t time_begin = 0;
+        clock_t time = 0;
         if (i % frequency == 0) time_begin = clock();
 
         if (i % mod != 0) { continue; }
