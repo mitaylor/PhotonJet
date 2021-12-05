@@ -250,6 +250,7 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { 
             if (tentries != 0) {
                 std::cout << "Average time for mixed-event background subtraction: " << (double)(time_mebs)/CLOCKS_PER_SEC/tentries << std::endl;
+                std::cout << "Entries: " << tentries << std::endl;
                 time = 0;
                 time_mebs = 0;
                 tentries = 0;
