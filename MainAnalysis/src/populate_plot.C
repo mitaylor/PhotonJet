@@ -30,14 +30,14 @@ double get_max(TH1* h1, TH1* h2) {
     auto max_1 = h1->GetMaximum();
     auto max_2 = h2->GetMaximum();
     auto max = (max_1 > max_2) ? max_1 : max_2;
-    auto max *= 1.2
+    max *= 1.2
 }
 
 double get_min(TH1* h1, TH1* h2) {
     auto min_1 = h1->GetMinimum();
     auto min_2 = h2->GetMinimum();
     auto min = (min_1 < min_2) ? min_1 : min_2;
-    auto min = min > 0 ? 0 : min * 1.2;
+    min = min > 0 ? 0 : min * 1.2;
 }
 
 int populate(char const* config) {
@@ -134,10 +134,10 @@ int populate(char const* config) {
             c3[canvas]->divide(-1, iiso->size());
             c4[canvas]->divide(-1, iiso->size());
 
-            c1->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
-            c2->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+            c1[canvas]->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
+            c2[canvas]->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
 
-            c1->jewellery(redraw_dphi_axis);
+            c1[canvas]->jewellery(redraw_dphi_axis);
 
             c1[canvas]->accessory(iso_jt_info);
             c2[canvas]->accessory(iso_jt_info);
