@@ -51,15 +51,6 @@ static bool in_hem_failure_region(float eta, float phi) {
     return (eta < -1.242 && -1.72 < phi && phi < -0.72);
 }
 
-void scale_TH2(memory<TH2F>* hist, memory<TH1F>* scale) {
-    auto size = hist->size();
-
-    for (int64_t i = 0; i < size; ++i) {
-        auto factor = (*scale)[i]->GetBinContent(1);
-        (*hist)[i]->Scale(1/factor);
-    }
-}
-
 void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetpt_min,
                float photon_eta, int64_t photon_phi, bool heavyion,
                multival* mdphi, multival* mdr,
@@ -353,6 +344,8 @@ int populate(char const* config, char const* output) {
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             tm->GetEntry(m);
 
+            if(m == 0) { std::cout << "looping " << mentries << std::endl;}
+
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
@@ -411,7 +404,6 @@ int populate(char const* config, char const* output) {
     pjet_es_u_dphi->divide(*nevt);
     pjet_wta_u_dphi->divide(*nevt);
     pjet_u_dr->divide(*nevt);
-    // scale_TH2(pjet_dphi_deta, nevt);
 
     mix_pjet_es_f_dphi->divide(*nevt);
     mix_pjet_wta_f_dphi->divide(*nevt);
@@ -420,7 +412,6 @@ int populate(char const* config, char const* output) {
     mix_pjet_es_u_dphi->divide(*nevt);
     mix_pjet_wta_u_dphi->divide(*nevt);
     mix_pjet_u_dr->divide(*nevt);
-    // scale_TH2(mix_pjet_dphi_deta, nevt);
 
     /* subtract histograms */
     auto sub_pjet_es_f_dphi = new memory<TH1F>(*pjet_es_f_dphi, "sub");
