@@ -363,7 +363,7 @@ int populate(char const* config, char const* output) {
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             time_mebs += clock() - time;
-            
+
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
                 auto iso_x = iiso->index_for(r);
@@ -384,9 +384,6 @@ int populate(char const* config, char const* output) {
 
             ++k;
         }
-
-        time_mebs += clock() - time;
-        time = clock();
 
         tentries++;
     }
