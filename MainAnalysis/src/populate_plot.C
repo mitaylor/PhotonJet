@@ -30,7 +30,8 @@ double get_max(TH1* h1, TH1* h2) {
     auto max_1 = h1->GetMaximum();
     auto max_2 = h2->GetMaximum();
     auto max = (max_1 > max_2) ? max_1 : max_2;
-    max *= 1.2
+    max *= 1.2;
+    return max;
 }
 
 double get_min(TH1* h1, TH1* h2) {
@@ -38,6 +39,7 @@ double get_min(TH1* h1, TH1* h2) {
     auto min_2 = h2->GetMinimum();
     auto min = (min_1 < min_2) ? min_1 : min_2;
     min = min > 0 ? 0 : min * 1.2;
+    return min;
 }
 
 int populate(char const* config) {
