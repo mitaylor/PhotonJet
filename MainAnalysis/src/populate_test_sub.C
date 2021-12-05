@@ -241,11 +241,19 @@ int populate(char const* config, char const* output) {
     if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
+    int64_t tentries = 0;
+    clock_t time = clock();
+
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
-        clock_t time_begin = 0;
-        clock_t time = 0;
-        if (i % 1000 == 0) time_begin = clock();
+        if (i % frequency == 0) { 
+            if (tentries != 0) {
+                std::cout << "Average time per event: " << (double)(clock()-time)/CLOCKS_PER_SEC/tentries << std::endl;
+                time = clock();
+                tentries = 0;
+            }
+        }
+
 
         if (i % mod != 0) { continue; }
 
@@ -322,13 +330,7 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
 
-
         auto weight = pjt->w;
-
-        if (i % 1000 == 0) {
-            time = clock();
-            std::cout << "Selections: " << (float)(time-time_begin)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
-        }
 
         for (auto r : diso) {
             if (r == diso.back()) { continue; }
@@ -349,10 +351,7 @@ int populate(char const* config, char const* output) {
             }
         }
 
-        if (i % 1000 == 0) {
-            std::cout << "Filling observables: " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
-            time = clock();
-        }
+        tentries++;
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -382,11 +381,6 @@ int populate(char const* config, char const* output) {
             }
 
             ++k;
-        }
-
-        if (i % 1000 == 0) {
-            std::cout << "MEBG Subtraction: " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
-            std::cout << "Total elapsed: " << (float)(clock()-time_begin)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
         }
     }
 
