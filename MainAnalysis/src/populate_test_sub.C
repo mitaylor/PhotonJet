@@ -355,13 +355,15 @@ int populate(char const* config, char const* output) {
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
+            time = clock();
             tm->GetEntry(m);
 
             if(m == 0) { std::cout << "looping " << mentries << std::endl;}
 
             /* hf within +/- 10% */
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
-            time = clock();
+            time_mebs += clock() - time;
+            
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
                 auto iso_x = iiso->index_for(r);
@@ -379,8 +381,6 @@ int populate(char const* config, char const* output) {
                             mix_pjet_u_dr, mix_pjet_dphi_deta);
                 }
             }
-
-            time_mebs += clock() - time;
 
             ++k;
         }
