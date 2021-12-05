@@ -245,7 +245,7 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         clock_t time_begin = 0;
         clock_t time = 0;
-        if (i % frequency == 0) time_begin = clock();
+        if (i % 1000 == 0) time_begin = clock();
 
         if (i % mod != 0) { continue; }
 
@@ -325,7 +325,7 @@ int populate(char const* config, char const* output) {
 
         auto weight = pjt->w;
 
-        if (i % frequency == 0) {
+        if (i % 1000 == 0) {
             time = clock();
             std::cout << "Selections: " << (float)(time-time_begin)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
         }
@@ -349,7 +349,7 @@ int populate(char const* config, char const* output) {
             }
         }
 
-        if (i % frequency == 0) {
+        if (i % 1000 == 0) {
             std::cout << "Filling observables: " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
             time = clock();
         }
@@ -384,7 +384,7 @@ int populate(char const* config, char const* output) {
             ++k;
         }
 
-        if (i % frequency == 0) {
+        if (i % 1000 == 0) {
             std::cout << "MEBG Subtraction: " << (float)(clock()-time)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
             std::cout << "Total elapsed: " << (float)(clock()-time_begin)/CLOCKS_PER_SEC << " seconds elapsed" << std::endl;
         }
