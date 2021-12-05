@@ -371,8 +371,6 @@ int populate(char const* config, char const* output) {
                     auto jtmin_x = ijtmin->index_for(min);
                     auto index_x = mindex->index_for(x{pt_x, hf_x, iso_x, jtmin_x});
 
-                    time = clock();
-
                     fill_axes(pjtm, index_x, weight, r, min,
                             photon_eta, photon_phi, heavyion, mdphi, mdr, nmix,
                             mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
@@ -381,7 +379,7 @@ int populate(char const* config, char const* output) {
                             mix_pjet_u_dr, mix_pjet_dphi_deta);
                 }
             }
-            
+
             time_mebs += clock() - time;
 
             ++k;
