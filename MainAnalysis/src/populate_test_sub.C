@@ -379,7 +379,7 @@ int populate(char const* config, char const* output) {
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             }
 
-            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > 0.5) {
+            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > 0.2) {
                 std::cout << "here: " << big_times << " " << pjt->hiHF << std::endl;
             }
 
