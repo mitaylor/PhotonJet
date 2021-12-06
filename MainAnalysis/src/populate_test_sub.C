@@ -263,6 +263,7 @@ int populate(char const* config, char const* output) {
                 time = clock();
             }
         }
+        mebs_time = 0;
 
         if (i % mod != 0) { continue; }
 
@@ -363,7 +364,6 @@ int populate(char const* config, char const* output) {
         /* mixing events in minimum bias */
         mebs_time = clock();
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
-            mebs_duration += clock() - mebs_time;
             tm->GetEntry(m);
             tries++;
 
@@ -377,6 +377,8 @@ int populate(char const* config, char const* output) {
                 /* hf within +/- 10% */
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             }
+
+            mebs_duration += clock() - mebs_time;
 
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
