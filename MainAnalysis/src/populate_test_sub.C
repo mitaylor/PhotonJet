@@ -263,7 +263,6 @@ int populate(char const* config, char const* output) {
                 time = clock();
             }
         }
-        mebs_time = 0;
 
         if (i % mod != 0) { continue; }
 
@@ -376,6 +375,10 @@ int populate(char const* config, char const* output) {
             else {
                 /* hf within +/- 10% */
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
+            }
+
+            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > .0011) {
+                std::cout << "here" << std::endl;
             }
 
             mebs_duration += clock() - mebs_time;
