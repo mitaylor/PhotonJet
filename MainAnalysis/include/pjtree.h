@@ -95,9 +95,20 @@ class pjtree {
             B_VEC_JET_GEN(SETZERO)
             B_VEC_JET_REF(SETZERO)
         }
+        else {
+            B_VAL_EVT_GEN(UNSETBRANCH, t)
+            B_VAL_EGM_GEN(UNSETBRANCH, t)
+            B_VAL_JET_GEN(UNSETBRANCH, t)
+            B_VEC_EGM_GEN(UNSETBRANCH, t)
+            B_VEC_JET_GEN(UNSETBRANCH, t)
+            B_VEC_JET_REF(UNSETBRANCH, t)
+        }
 
         if (_hlt) {
             B_VEC_TRG(SETZERO)
+        }
+        else {
+            B_VEC_TRG(UNSETBRANCH, t)
         }
 
         B_VAL_EVT_EXT(SETZERO)

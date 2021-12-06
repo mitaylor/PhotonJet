@@ -10,6 +10,9 @@
 #define ALLOCARR(type, var, size) var = new type[size];
 #define ALLOCOBJ(type, var) var = new type();
 
+#define UNSETBRANCH(type, var, tree)                                        \
+    tree->SetBranchStatus(#var, 0);  
+
 #define SETVALADDR(type, var, tree)                                         \
     tree->SetBranchStatus(#var, 1);                                         \
     tree->SetBranchAddress(#var, &var);
