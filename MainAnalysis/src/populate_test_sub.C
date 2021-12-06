@@ -253,7 +253,7 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { 
             if (tentries != 0) {
                 duration = clock() - time;
-                std::cout << "Time per " << frequency/mod << "entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                std::cout << "Time per " << frequency/mod << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
                 std::cout << "Time for loading each MEBS try: " << (double)(mebs_duration)/CLOCKS_PER_SEC/tries << " seconds" << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
@@ -379,7 +379,7 @@ int populate(char const* config, char const* output) {
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             }
 
-            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > .1) {
+            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > 1) {
                 std::cout << "here: " << big_times << " " << pjt->hiHF << std::endl;
             }
 
