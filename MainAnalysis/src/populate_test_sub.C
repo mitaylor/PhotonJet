@@ -129,6 +129,7 @@ int populate(char const* config, char const* output) {
     auto heavyion = conf->get<bool>("heavyion");
     auto gen_iso = conf->get<bool>("generator_isolation");
     auto ele_rej = conf->get<bool>("electron_rejection");
+    auto use_hibin = conf->get<bool>("use_hibin");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
@@ -241,7 +242,7 @@ int populate(char const* config, char const* output) {
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     int64_t tentries = 0;
-    clock_t time = 0;
+    clock_t time = clock();
     clock_t duration = 0;
     int64_t tries = 0;
 
@@ -250,7 +251,7 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { 
             if (tentries != 0) {
                 duration = clock() - time;
-                std::cout << "Average time for selected event: " << (double)(duration)/CLOCKS_PER_SEC/tentries << std::endl;
+                std::cout << "Time: " << (double)(duration)/CLOCKS_PER_SEC << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
                 tentries = 0;
@@ -259,7 +260,6 @@ int populate(char const* config, char const* output) {
             }
         }
 
-        time = clock();
 
         if (i % mod != 0) { continue; }
 
@@ -364,8 +364,14 @@ int populate(char const* config, char const* output) {
 
             if(m == 0) { std::cout << "looping " << mentries << std::endl;}
 
-            /* hf within +/- 10% */
-            if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
+            if (use_hibin) {
+                /* hibin within +/- 2 */
+                if (std::abs(pjtm->hiBin - pjt->hiBin) > 2) { continue; }
+            }
+            else {
+                /* hf within +/- 10% */
+                if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
+            }
 
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
@@ -387,7 +393,7 @@ int populate(char const* config, char const* output) {
 
             ++k;
         }
-        
+
         tentries++;
     }
 
