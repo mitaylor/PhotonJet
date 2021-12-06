@@ -124,7 +124,6 @@ int populate(char const* config, char const* output) {
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
-    auto type = conf->get<std::string>("type");
 
     /* options */
     auto heavyion = conf->get<bool>("heavyion");
@@ -243,22 +242,23 @@ int populate(char const* config, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     int64_t tentries = 0;
     clock_t time = 0;
-    clock_t time_mebs = 0;
+    clock_t duration = 0;
     int64_t tries = 0;
 
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
             if (tentries != 0) {
-                std::cout << "Average time for mixed-event background subtraction: " << (double)(time_mebs)/CLOCKS_PER_SEC/tentries << std::endl;
+                std::cout << "Average time for selected event: " << (double)(duration)/CLOCKS_PER_SEC/tentries << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
-                time = 0;
-                time_mebs = 0;
+                duration = 0;
                 tentries = 0;
                 tries = 0;
             }
         }
+
+        time = clock();
 
         if (i % mod != 0) { continue; }
 
@@ -358,15 +358,13 @@ int populate(char const* config, char const* output) {
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
-            time = clock();
             tm->GetEntry(m);
             tries++;
 
             if(m == 0) { std::cout << "looping " << mentries << std::endl;}
 
             /* hf within +/- 10% */
-            if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
-            time_mebs += clock() - time;
+            if (std::abs(pjtm->hiBin - pjt->hiBin) < 3) { continue; }
 
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
@@ -389,6 +387,7 @@ int populate(char const* config, char const* output) {
             ++k;
         }
 
+        duration += clock() - time;
         tentries++;
     }
 
