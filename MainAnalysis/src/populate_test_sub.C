@@ -362,9 +362,11 @@ int populate(char const* config, char const* output) {
 
         /* mixing events in minimum bias */
         mebs_time = clock();
+        auto big_times = 0;
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             tm->GetEntry(m);
             tries++;
+            big_times++;
 
             if(m == 0) { std::cout << "looping " << mentries << std::endl;}
 
@@ -377,9 +379,11 @@ int populate(char const* config, char const* output) {
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             }
 
-            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > .021) {
-                std::cout << "here" << std::endl;
+            if((double)(clock()-mebs_time)/CLOCKS_PER_SEC > .031) {
+                std::cout << "here: " << big_times << " " << pjt->hiHF << std::endl;
             }
+
+            big_times = 0;
 
             mebs_duration += clock() - mebs_time;
 
