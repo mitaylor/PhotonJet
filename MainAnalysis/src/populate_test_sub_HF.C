@@ -249,12 +249,13 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
             if (tentries != 0) {
+                duration = clock() - time;
                 std::cout << "Average time for selected event: " << (double)(duration)/CLOCKS_PER_SEC/tentries << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
-                duration = 0;
                 tentries = 0;
                 tries = 0;
+                time = clock();
             }
         }
 
@@ -386,8 +387,7 @@ int populate(char const* config, char const* output) {
 
             ++k;
         }
-
-        duration += clock() - time;
+        
         tentries++;
     }
 

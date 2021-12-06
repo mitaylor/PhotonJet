@@ -241,7 +241,7 @@ int populate(char const* config, char const* output) {
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     int64_t tentries = 0;
-    clock_t time = 0;
+    clock_t time = clock();
     clock_t duration = 0;
     int64_t tries = 0;
 
@@ -249,16 +249,16 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
             if (tentries != 0) {
-                std::cout << "Average time for selected event: " << (double)(duration)/CLOCKS_PER_SEC/tentries << std::endl;
+                duration = clock() - time;
+                std::cout << "Average time per event: " << (double)(duration)/CLOCKS_PER_SEC/tentries << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
-                duration = 0;
                 tentries = 0;
                 tries = 0;
+                time = clock();
             }
         }
 
-        time = clock();
 
         if (i % mod != 0) { continue; }
 
@@ -387,7 +387,6 @@ int populate(char const* config, char const* output) {
             ++k;
         }
 
-        duration += clock() - time;
         tentries++;
     }
 
