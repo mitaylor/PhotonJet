@@ -79,7 +79,7 @@ class pjtree {
     pjtree(bool gen, bool hlt, TTree* t,
            std::array<bool, tt::ntt> const& flags)
             : _gen(gen), _hlt(hlt), _flags(flags) {
-        tree->SetBranchStatus("*", 0);  
+        t->SetBranchStatus("*", 0);  
 
         B_VAL_EVT_RECO(SETZERO)
         B_VAL_PHO_RECO(SETZERO)
