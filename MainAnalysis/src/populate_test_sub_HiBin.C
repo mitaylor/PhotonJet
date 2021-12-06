@@ -363,8 +363,8 @@ int populate(char const* config, char const* output) {
 
             if(m == 0) { std::cout << "looping " << mentries << std::endl;}
 
-            /* hf within +/- 10% */
-            if (std::abs(pjtm->hiBin - pjt->hiBin) < 3) { continue; }
+            /* hibin within +- 2 */
+            if (std::abs(pjtm->hiBin - pjt->hiBin) > 2) { continue; }
 
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
