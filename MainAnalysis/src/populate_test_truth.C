@@ -227,11 +227,11 @@ int populate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, t, { 1, 1, 1, 1, 1, 0 });
+    auto pjt = new pjtree(true, false, t, { 1, 1, 1, 1, 1, 0 });
 
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0});
+    auto pjtm = new pjtree(true, false, tm, { 1, 1, 1, 1, 1, 0});
 
     printf("iterate..\n");
 
@@ -253,7 +253,7 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { 
             if (tentries != 0) {
                 duration = clock() - time;
-                std::cout << "Time per " << frequency/mod << "entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                std::cout << "Time per " << frequency/mod << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
                 std::cout << "Time for loading each MEBS try: " << (double)(mebs_duration)/CLOCKS_PER_SEC/tries << " seconds" << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
@@ -363,7 +363,6 @@ int populate(char const* config, char const* output) {
         /* mixing events in minimum bias */
         mebs_time = clock();
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
-            mebs_duration += clock() - mebs_time;
             tm->GetEntry(m);
             tries++;
 
@@ -377,6 +376,8 @@ int populate(char const* config, char const* output) {
                 /* hf within +/- 10% */
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             }
+
+            mebs_duration += clock() - mebs_time;
 
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
