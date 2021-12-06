@@ -244,6 +244,8 @@ int populate(char const* config, char const* output) {
     int64_t tentries = 0;
     clock_t time = clock();
     clock_t duration = 0;
+    clock_t mebs_time = 0;
+    clock_t mebs_duration = 0;
     int64_t tries = 0;
 
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
@@ -251,15 +253,16 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { 
             if (tentries != 0) {
                 duration = clock() - time;
-                std::cout << "Time: " << (double)(duration)/CLOCKS_PER_SEC << std::endl;
+                std::cout << "Time per " << frequency/mod << "entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                std::cout << "Time for loading each MEBS try: " << (double)(mebs_duration)/CLOCKS_PER_SEC/tries << " seconds" << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 std::cout << "Average tries: " << (double) tries / tentries << std::endl;
+                mebs_duration = 0;
                 tentries = 0;
                 tries = 0;
                 time = clock();
             }
         }
-
 
         if (i % mod != 0) { continue; }
 
@@ -358,6 +361,7 @@ int populate(char const* config, char const* output) {
         }
 
         /* mixing events in minimum bias */
+        mebs_time = clock();
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             tm->GetEntry(m);
             tries++;
@@ -372,6 +376,8 @@ int populate(char const* config, char const* output) {
                 /* hf within +/- 10% */
                 if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
             }
+
+            mebs_duration += clock() - mebs_time;
 
             for (auto r : diso) {
                 if (r == diso.back()) { continue; }
@@ -392,6 +398,7 @@ int populate(char const* config, char const* output) {
             }
 
             ++k;
+            mebs_time = clock();
         }
 
         tentries++;
