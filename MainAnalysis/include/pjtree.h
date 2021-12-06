@@ -79,6 +79,8 @@ class pjtree {
     pjtree(bool gen, bool hlt, TTree* t,
            std::array<bool, tt::ntt> const& flags)
             : _gen(gen), _hlt(hlt), _flags(flags) {
+        tree->SetBranchStatus("*", 0);  
+
         B_VAL_EVT_RECO(SETZERO)
         B_VAL_PHO_RECO(SETZERO)
         B_VAL_ELE_RECO(SETZERO)
@@ -95,20 +97,9 @@ class pjtree {
             B_VEC_JET_GEN(SETZERO)
             B_VEC_JET_REF(SETZERO)
         }
-        else {
-            B_VAL_EVT_GEN(UNSETBRANCH, t)
-            B_VAL_EGM_GEN(UNSETBRANCH, t)
-            B_VAL_JET_GEN(UNSETBRANCH, t)
-            B_VEC_EGM_GEN(UNSETBRANCH, t)
-            B_VEC_JET_GEN(UNSETBRANCH, t)
-            B_VEC_JET_REF(UNSETBRANCH, t)
-        }
 
         if (_hlt) {
             B_VEC_TRG(SETZERO)
-        }
-        else {
-            B_VEC_TRG(UNSETBRANCH, t)
         }
 
         B_VAL_EVT_EXT(SETZERO)
