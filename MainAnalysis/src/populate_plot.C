@@ -91,10 +91,10 @@ int populate(char const* config) {
     auto data_nevt = new history<TH1F>(fd, tag + "_nevt"s);
 
     TFile* fm = new TFile(mc.data(), "read");
-    auto mc_pjet_es_f_dphi = new history<TH1F>(fm, tag + "_sub_pjet_es_f_dphi"s);
-    auto mc_pjet_es_f_dr = new history<TH1F>(fm, tag + "_sub_pjet_f_dr"s);
-    auto mc_pjet_dphi_deta = new history<TH2F>(fm, tag + "_sub_pjet_dphi_deta"s);
-    auto mc_nevt = new history<TH1F>(fm, tag + "_nevt"s);
+    auto mc_pjet_es_f_dphi = new history<TH1F>(fm, "qcd_sub_pjet_es_f_dphi"s);
+    auto mc_pjet_es_f_dr = new history<TH1F>(fm, "qcd_sub_pjet_f_dr"s);
+    auto mc_pjet_dphi_deta = new history<TH2F>(fm, "qcd_sub_pjet_dphi_deta"s);
+    auto mc_nevt = new history<TH1F>(fm, "qcd_nevt"s);
 
     scale_TH2(data_pjet_dphi_deta, data_nevt);
     scale_TH2(mc_pjet_dphi_deta, mc_nevt);
