@@ -34,7 +34,7 @@ int populate(char const* config) {
     auto frequency = conf->get<int64_t>("frequency");
 
     /* exclude most peripheral events */
-    auto jetpt = new TH1F("jet pt", "", 250, 0, 500);
+    auto jetpt = new TH1F("jet pt", "", 500, -500, 500);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
