@@ -48,7 +48,7 @@ int populate(char const* config) {
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
         t->GetEntry(i);
