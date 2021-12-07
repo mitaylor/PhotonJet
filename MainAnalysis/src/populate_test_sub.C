@@ -66,10 +66,10 @@ void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetp
                memory<TH2F>* pjet_dphi_deta, 
                bool doprint) {
     (*nevt)[index_x]->Fill(1., weight);
-    if (doprint) std::cout << "nref: " << pjt->nref << " reality: " << (*pjt->jtpt).size() << std::endl;
+    if (doprint && pjt->nref < 10) std::cout << "nref: " << pjt->nref << " reality: " << (*pjt->jtpt).size() << std::endl;
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
-        if (doprint) std::cout << (*pjt->jtpt)[j] << std::endl;
+        if (doprint && pjt->nref < 10) std::cout << (*pjt->jtpt)[j] << std::endl;
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_pt <= jetpt_min) { continue; }
 
