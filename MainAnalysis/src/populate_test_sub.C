@@ -63,8 +63,10 @@ void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetp
                memory<TH1F>* pjet_es_u_dphi,
                memory<TH1F>* pjet_wta_u_dphi,
                memory<TH1F>* pjet_u_dr,
-               memory<TH2F>* pjet_dphi_deta) {
+               memory<TH2F>* pjet_dphi_deta, 
+               bool doprint) {
     (*nevt)[index_x]->Fill(1., weight);
+    if (doprint) std::cout << "nref: " << pjt->nref << " reality: " << (*pjt->jtpt).size() << std::endl;
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
@@ -356,7 +358,7 @@ int populate(char const* config, char const* output) {
                         pjet_es_f_dphi, pjet_wta_f_dphi,
                         pjet_f_dr, pjet_f_jpt,
                         pjet_es_u_dphi, pjet_wta_u_dphi, 
-                        pjet_u_dr, pjet_dphi_deta);
+                        pjet_u_dr, pjet_dphi_deta, true);
             }
         }
 
@@ -401,7 +403,7 @@ int populate(char const* config, char const* output) {
                             mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
                             mix_pjet_f_dr, mix_pjet_f_jpt,
                             mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
-                            mix_pjet_u_dr, mix_pjet_dphi_deta);
+                            mix_pjet_u_dr, mix_pjet_dphi_deta, false);
                 }
             }
 
