@@ -69,6 +69,7 @@ void fill_axes(pjtree* pjt, int64_t index_x, float weight, float iso, float jetp
     if (doprint) std::cout << "nref: " << pjt->nref << " reality: " << (*pjt->jtpt).size() << std::endl;
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
+        if (doprint) std::cout << (*pjt->jtpt)[j] << std::endl;
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_pt <= jetpt_min) { continue; }
 
