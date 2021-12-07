@@ -58,6 +58,7 @@ int populate(char const* config) {
     auto mc = conf->get<std::string>("mc");
     auto tag = conf->get<std::string>("tag");
     auto system = conf->get<std::string>("system");
+    auto matching = conf->get<std::string>("matching");
 
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
@@ -135,10 +136,10 @@ int populate(char const* config) {
             auto max_dpde = get_max((*data_pjet_dphi_deta)[index], (*mc_pjet_dphi_deta)[index]);
             auto min_dpde = get_min((*data_pjet_dphi_deta)[index], (*mc_pjet_dphi_deta)[index]);
 
-            c1[canvas] = new paper(system + "_" + tag + "_es_dphi" + suffix, p);
-            c2[canvas] = new paper(system + "_" + tag + "_dr" + suffix, p);
-            c3[canvas] = new paper(system + "_" + tag + "_mc_dphi_deta" + suffix, p);
-            c4[canvas] = new paper(system + "_" + tag + "_data_dphi_deta" + suffix, p);
+            c1[canvas] = new paper(system + "_" + tag + "_es_dphi_" + matching + suffix, p);
+            c2[canvas] = new paper(system + "_" + tag + "_dr_" + matching + suffix, p);
+            c3[canvas] = new paper(system + "_" + tag + "_mc_dphi_deta_" + matching + suffix, p);
+            c4[canvas] = new paper(system + "_" + tag + "_data_dphi_deta_" + matching + suffix, p);
 
             apply_style(c1[canvas], "");
             apply_style(c2[canvas], "");
