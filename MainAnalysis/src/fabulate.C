@@ -134,17 +134,17 @@ int fabulate(char const* config, char const* output) {
 
             auto index = mptetahf->index_for(v{gen_pt, gen_eta, p->hiHF});
 
-            (*scale)[index]->Fill(reco_pt / gen_pt, p->weight);
+            (*scale)[index]->Fill(reco_pt / gen_pt, p->w);
 
             auto deta = reco_eta - gen_eta;
             auto dphi = revert_radian(convert_radian(reco_phi)
                 - convert_radian(gen_phi));
 
-            (*eta)[index]->Fill(deta, p->weight);
-            (*phi)[index]->Fill(dphi, p->weight);
+            (*eta)[index]->Fill(deta, p->w);
+            (*phi)[index]->Fill(dphi, p->w);
 
             (*angle)[index]->Fill(sgn(gen_phi) * (deta * deta + dphi * dphi),
-                                  p->weight);
+                                  p->w);
         }
     }
 
