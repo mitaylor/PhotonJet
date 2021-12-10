@@ -313,8 +313,12 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
 
+        std::cout << hf_x << " " << pt_x << std::endl;
+
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
         auto weight = pjt->w;
+
+        std::cout << "here1" << std::endl;
 
         fill_axes(pjt, pthf_x, weight,
                   photon_eta, photon_phi, heavyion,
@@ -322,6 +326,8 @@ int populate(char const* config, char const* output) {
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
                   pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr);
+
+        std::cout << "here2" << std::end;
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -339,6 +345,8 @@ int populate(char const* config, char const* output) {
 
             ++k;
         }
+
+        std::cout << "here3" << std::endl;
 
         tentries++;
     }
