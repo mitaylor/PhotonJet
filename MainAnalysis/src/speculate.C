@@ -64,12 +64,15 @@ int speculate(char const* config, char const* output) {
         if (std::abs(p->vz) > 15) { continue; }
 
         int64_t leading = -1;
+        float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
-            leading = j;
-            break;
+            if ((*p->phoEt)[j] > leading_pt) {
+                leading = j;
+                leading_pt = (*pjt->phoEt)[j];
+            }
         }
 
         /* require leading photon */
