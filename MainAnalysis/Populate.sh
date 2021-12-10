@@ -3,9 +3,9 @@
 histogram() {
     tag=$1
 
-    nohup ./bin/populate configs/populate/ran_jes_on/populate_${tag}_raw.conf \
+    echo nohup ./bin/populate configs/populate/ran_jes_on/populate_${tag}_raw.conf \
         data/jes_on/populate_${tag}_raw.root > log/populate_${tag}_raw_jes_on_log.txt 2>&1 &
-    nohup ./bin/populate configs/populate/ran_jes_on/populate_${tag}_bkg.conf \
+    echo nohup ./bin/populate configs/populate/ran_jes_on/populate_${tag}_bkg.conf \
         data/jes_on/populate_${tag}_bkg.root > log/populate_${tag}_bkg_jes_on_log.txt 2>&1 &
 }
 
