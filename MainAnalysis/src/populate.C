@@ -58,8 +58,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
                memory<TH1F>* pjet_f_jpt,
                memory<TH1F>* pjet_es_u_dphi,
                memory<TH1F>* pjet_wta_u_dphi,
-               memory<TH1F>* pjet_u_dr,
-               memory<TH2F>* pjet_dphi_deta) {
+               memory<TH1F>* pjet_u_dr) {
     (*nevt)[pthf_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
