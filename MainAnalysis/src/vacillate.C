@@ -103,6 +103,8 @@ int vacillate(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto p = new pjtree(true, false, t, { 1, 1, 1, 0, 1, 0 });
 
+    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+
     /* fill histograms */
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
@@ -141,7 +143,7 @@ int vacillate(char const* config, char const* output) {
         if (gen_index == -1) { continue; }
 
         /* isolation requirement */
-        if ((*pjt->mcCalIsoDR04)[gen_index] > 5) { continue; }
+        if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
 
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
             + (*p->pho_hcalRechitIsoR3)[leading]
