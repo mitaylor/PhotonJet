@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <ctime>
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
@@ -43,24 +44,22 @@ void scale_ia_bin_width(T*... args) {
     }), 0)... };
 }
 
-template <typename... T>
-void title(std::function<void(TH1*)> f, T*... args) {
-    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+static bool in_hem_failure_region(float eta, float phi) {
+    return (eta < -1.242 && -1.72 < phi && phi < -0.72);
 }
 
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
-               double photon_pt, float photon_eta, int64_t photon_phi,
-               multival* mdphi, multival* mx, multival* mdr,
+               float photon_eta, int64_t photon_phi, bool heavyion,
+               multival* mdphi, multival* mdr,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
                memory<TH1F>* pjet_wta_f_dphi,
-               memory<TH1F>* pjet_f_x,
                memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt,
                memory<TH1F>* pjet_es_u_dphi,
                memory<TH1F>* pjet_wta_u_dphi,
-               memory<TH1F>* pjet_u_x,
-               memory<TH1F>* pjet_u_dr) {
+               memory<TH1F>* pjet_u_dr,
+               memory<TH2F>* pjet_dphi_deta) {
     (*nevt)[pthf_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
@@ -73,10 +72,13 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         auto jet_phi = convert_radian((*pjt->jtphi)[j]);
 
         auto pj_deta = photon_eta - jet_eta;
-        auto pj_dphi = revert_radian(photon_phi - jet_phi);
-        auto pj_dr = pj_deta * pj_deta + pj_dphi * pj_dphi;
+        auto pj_dphi = revert_radian(std::abs(photon_phi - jet_phi));
+        auto pj_dr = std::sqrt(pj_deta * pj_deta + pj_dphi * pj_dphi);
 
-        if (pj_dr < 0.16) { continue; }
+        if (pj_dr < 0.4) { continue; }
+
+        /* hem failure region exclusion */
+        if (heavyion && in_hem_failure_region(jet_eta, revert_radian(jet_phi))) { continue; }
 
         auto jet_wta_eta = (*pjt->WTAeta)[j];
         auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
@@ -87,16 +89,15 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
 
-        if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
-        if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(mdphi->index_for(
-            v{revert_pi(photon_wta_dphi), jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(
+            mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
+        if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(
+            mdphi->index_for(v{revert_pi(photon_wta_dphi), jet_pt}), weight);
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
 
         (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-        (*pjet_f_x)[pthf_x]->Fill(jet_pt / photon_pt, weight);
 
         double jt_deta = jet_eta - jet_wta_eta;
         double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
@@ -104,7 +105,6 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
         (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
 
-        if (jet_pt < 200) (*pjet_u_x)[pthf_x]->Fill(mx->index_for(v{jet_pt / photon_pt, jet_pt}), weight);
         if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
     }
 }
@@ -134,11 +134,9 @@ int populate(char const* config, char const* output) {
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
-    auto rx = conf->get<std::vector<float>>("x_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
 
     auto rrdr = conf->get<std::vector<float>>("rdr_range");
-    auto rrx = conf->get<std::vector<float>>("rx_range");
     auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
     auto rrpt = conf->get<std::vector<float>>("rpt_range");
 
@@ -158,24 +156,19 @@ int populate(char const* config, char const* output) {
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
-    auto ix = new interval("x^{#gammaj}"s, rx);
     auto idr = new interval("#deltaj"s, rdr);
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
 
     auto mdr = new multival(rrdr, rrpt);
-    auto mx = new multival(rrx, rrpt);
     auto mdphi = new multival(rrdphi, rrpt);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
-    auto fx = std::bind(&interval::book<TH1F>, ix, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
     auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
 
     auto frdr = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", mdr->size(), 0, mdr->size()); };
-    auto frx = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", mx->size(), 0, mx->size()); };
     auto frdphi = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
 
@@ -186,8 +179,6 @@ int populate(char const* config, char const* output) {
         "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
     auto pjet_wta_f_dphi = new memory<TH1F>("pjet_wta_f_dphi"s,
         "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
-    auto pjet_f_x = new memory<TH1F>("pjet_f_x"s,
-        "1/N^{#gamma} dN/dx^{#gammaj}", fx, mpthf);
     auto pjet_f_dr = new memory<TH1F>("pjet_f_dr"s,
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto pjet_f_jpt = new memory<TH1F>("pjet_f_jpt"s,
@@ -197,20 +188,16 @@ int populate(char const* config, char const* output) {
         "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
     auto mix_pjet_wta_f_dphi = new memory<TH1F>("mix_pjet_wta_f_dphi"s,
         "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
-    auto mix_pjet_f_x = new memory<TH1F>("mix_pjet_f_x"s,
-        "1/N^{#gamma} dN/dx^{#gammaj}", fx, mpthf);
     auto mix_pjet_f_dr = new memory<TH1F>("mix_pjet_f_dr",
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
 
     auto pjet_u_dr = new memory<TH1F>("pjet_u_dr"s, "", frdr, mpthf);
-    auto pjet_u_x = new memory<TH1F>("pjet_u_x"s, "", frx, mpthf);
     auto pjet_es_u_dphi = new memory<TH1F>("pjet_es_u_dphi"s, "", frdphi, mpthf);
     auto pjet_wta_u_dphi = new memory<TH1F>("pjet_wta_u_dphi"s, "", frdphi, mpthf);
 
     auto mix_pjet_u_dr = new memory<TH1F>("mix_pjet_u_dr"s, "", frdr, mpthf);
-    auto mix_pjet_u_x = new memory<TH1F>("mix_pjet_u_x"s, "", frx, mpthf);
     auto mix_pjet_es_u_dphi = new memory<TH1F>("mix_pjet_es_u_dphi"s, "", frdphi, mpthf);
     auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);
 
@@ -230,10 +217,29 @@ int populate(char const* config, char const* output) {
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    if (entries) { nentries = std::min(nentries, entries); }
+    int64_t mod = 1;
+    if (entries) { mod = nentries / entries; }
+    if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
+
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
+    
+    int64_t tentries = 0;
+    clock_t time = clock();
+    clock_t duration = 0;
+
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
+        if (i % frequency == 0) { 
+            if (tentries != 0) {
+                duration = clock() - time;
+                std::cout << "Time per " << frequency/mod << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                std::cout << "Entries: " << tentries << std::endl;
+                tentries = 0;
+                time = clock();
+            }
+        }
+
+        if (i % mod != 0) { continue; }
 
         t->GetEntry(i);
 
@@ -312,12 +318,11 @@ int populate(char const* config, char const* output) {
         auto weight = pjt->w;
 
         fill_axes(pjt, pthf_x, weight,
-                  photon_pt, photon_eta, photon_phi,
-                  mdphi, mx, mdr, nevt,
-                  pjet_es_f_dphi, pjet_wta_f_dphi,
-                  pjet_f_x, pjet_f_dr, pjet_f_jpt,
-                  pjet_es_u_dphi, pjet_wta_u_dphi, 
-                  pjet_u_x, pjet_u_dr);
+                  photon_eta, photon_phi, heavyion,
+                  mdphi, mdr, nevt,
+                  pjet_es_f_dphi, pjet_wta_f_dphi, 
+                  pjet_f_dr, pjet_f_jpt,
+                  pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr);
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -327,15 +332,16 @@ int populate(char const* config, char const* output) {
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
             fill_axes(pjtm, pthf_x, weight,
-                      photon_pt, photon_eta, photon_phi,
-                      mdphi, mx, mdr, nmix,
-                      mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi,
-                      mix_pjet_f_x, mix_pjet_f_dr, mix_pjet_f_jpt,
-                      mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi,
-                      mix_pjet_u_x, mix_pjet_u_dr);
+                      photon_eta, photon_phi, heavyion,
+                      mdphi, mdr, nmix,
+                      mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
+                      mix_pjet_f_dr, mix_pjet_f_jpt,
+                      mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr);
 
             ++k;
         }
+
+        tentries++;
     }
 
     /* normalise histograms */
@@ -344,19 +350,15 @@ int populate(char const* config, char const* output) {
             mix_pjet_es_f_dphi,
             mix_pjet_wta_f_dphi,
             mix_pjet_f_dr,
-            mix_pjet_f_x,
             mix_pjet_f_jpt,
             mix_pjet_es_u_dphi,
             mix_pjet_wta_u_dphi,
-            mix_pjet_u_x,
             mix_pjet_u_dr);
 
     /* scale by bin width */
     scale_bin_width(
-        pjet_f_x,
         pjet_f_dr,
         pjet_f_jpt,
-        mix_pjet_f_x,
         mix_pjet_f_dr,
         mix_pjet_f_jpt);
 
@@ -369,43 +371,35 @@ int populate(char const* config, char const* output) {
     /* normalise by number of photons (events) */
     pjet_es_f_dphi->divide(*nevt);
     pjet_wta_f_dphi->divide(*nevt);
-    pjet_f_x->divide(*nevt);
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
     pjet_es_u_dphi->divide(*nevt);
     pjet_wta_u_dphi->divide(*nevt);
-    pjet_u_x->divide(*nevt);
     pjet_u_dr->divide(*nevt);
 
     mix_pjet_es_f_dphi->divide(*nevt);
     mix_pjet_wta_f_dphi->divide(*nevt);
-    mix_pjet_f_x->divide(*nevt);
     mix_pjet_f_dr->divide(*nevt);
     mix_pjet_f_jpt->divide(*nevt);
     mix_pjet_es_u_dphi->divide(*nevt);
     mix_pjet_wta_u_dphi->divide(*nevt);
-    mix_pjet_u_x->divide(*nevt);
     mix_pjet_u_dr->divide(*nevt);
 
     /* subtract histograms */
     auto sub_pjet_es_f_dphi = new memory<TH1F>(*pjet_es_f_dphi, "sub");
     auto sub_pjet_wta_f_dphi = new memory<TH1F>(*pjet_wta_f_dphi, "sub");
-    auto sub_pjet_f_x = new memory<TH1F>(*pjet_f_x, "sub");
     auto sub_pjet_f_dr = new memory<TH1F>(*pjet_f_dr, "sub");
     auto sub_pjet_f_jpt = new memory<TH1F>(*pjet_f_jpt, "sub");
     auto sub_pjet_es_u_dphi = new memory<TH1F>(*pjet_es_u_dphi, "sub");
     auto sub_pjet_wta_u_dphi = new memory<TH1F>(*pjet_wta_u_dphi, "sub");
-    auto sub_pjet_u_x = new memory<TH1F>(*pjet_u_x, "sub");
     auto sub_pjet_u_dr = new memory<TH1F>(*pjet_u_dr, "sub");
 
     *sub_pjet_es_f_dphi -= *mix_pjet_es_f_dphi;
     *sub_pjet_wta_f_dphi -= *mix_pjet_wta_f_dphi;
-    *sub_pjet_f_x -= *mix_pjet_f_x;
     *sub_pjet_f_dr -= *mix_pjet_f_dr;
     *sub_pjet_f_jpt -= *mix_pjet_f_jpt;
     *sub_pjet_es_u_dphi -= *mix_pjet_es_u_dphi;
     *sub_pjet_wta_u_dphi -= *mix_pjet_wta_u_dphi;
-    *sub_pjet_u_x -= *mix_pjet_u_x;
     *sub_pjet_u_dr -= *mix_pjet_u_dr;
 
     /* save histograms */
@@ -415,32 +409,26 @@ int populate(char const* config, char const* output) {
 
         pjet_es_f_dphi->save(tag);
         pjet_wta_f_dphi->save(tag);
-        pjet_f_x->save(tag);
         pjet_f_dr->save(tag);
         pjet_f_jpt->save(tag);
         pjet_es_u_dphi->save(tag);
         pjet_wta_u_dphi->save(tag);
-        pjet_u_x->save(tag);
         pjet_u_dr->save(tag);
 
         mix_pjet_es_f_dphi->save(tag);
         mix_pjet_wta_f_dphi->save(tag);
-        mix_pjet_f_x->save(tag);
         mix_pjet_f_dr->save(tag);
         mix_pjet_f_jpt->save(tag);
         mix_pjet_es_u_dphi->save(tag);
         mix_pjet_wta_u_dphi->save(tag);
-        mix_pjet_u_x->save(tag);
         mix_pjet_u_dr->save(tag);
 
         sub_pjet_es_f_dphi->save(tag);
         sub_pjet_wta_f_dphi->save(tag);
-        sub_pjet_f_x->save(tag);
         sub_pjet_f_dr->save(tag);
         sub_pjet_f_jpt->save(tag);
         sub_pjet_es_u_dphi->save(tag);
         sub_pjet_wta_u_dphi->save(tag);
-        sub_pjet_u_x->save(tag);
         sub_pjet_u_dr->save(tag);
     });
 

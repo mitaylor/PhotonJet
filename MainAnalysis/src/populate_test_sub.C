@@ -8,9 +8,6 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
 
-#include "../git/paper-and-pencil/include/paper.h"
-#include "../git/paper-and-pencil/include/pencil.h"
-
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
@@ -241,6 +238,7 @@ int populate(char const* config, char const* output) {
     if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
+    
     int64_t tentries = 0;
     clock_t time = clock();
     clock_t duration = 0;
