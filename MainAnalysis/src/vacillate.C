@@ -38,8 +38,8 @@ int vacillate(char const* config, char const* output) {
     auto input = conf->get<std::string>("input");
     auto tag = conf->get<std::string>("tag");
 
-    auto start = conf->get<int64_t>("start");
-    auto end = conf->get<int64_t>("end");
+    auto mod = conf->get<bool>("mod");
+    auto parity = conf->get<bool>("parity");
 
     auto heavyion = conf->get<bool>("heavyion");
     auto jet_eta_max = conf->get<float>("jet_eta_max");
@@ -104,9 +104,11 @@ int vacillate(char const* config, char const* output) {
     auto p = new pjtree(true, false, t, { 1, 1, 1, 0, 1, 0 });
 
     /* fill histograms */
-    if (!end) { end = t->GetEntries(); }
-    for (int64_t i = start; i < end; ++i) {
-        if (i % 100000 == 0) { printf("%li/%li\n", i, end); }
+    for (int64_t i = 0; i < nentries; ++i) {
+        if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
+
+        if (mod) {
+            if ((i + parity) % 2 == 0) { continue; }
 
         t->GetEntry(i);
 
@@ -139,6 +141,8 @@ int vacillate(char const* config, char const* output) {
         if (gen_index == -1) { continue; }
 
         /* isolation requirement */
+        if ((*pjt->mcCalIsoDR04)[gen_index] > 5) { continue; }
+
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
             + (*p->pho_hcalRechitIsoR3)[leading]
             + (*p->pho_trackIsoR3PtCut20)[leading];
