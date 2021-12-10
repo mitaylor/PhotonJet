@@ -327,7 +327,7 @@ int populate(char const* config, char const* output) {
                   pjet_f_dr, pjet_f_jpt,
                   pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr);
 
-        std::cout << "here2" << std::end;
+        std::cout << "here2" << std::endl;
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
