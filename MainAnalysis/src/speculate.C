@@ -71,7 +71,7 @@ int speculate(char const* config, char const* output) {
 
             if ((*p->phoEt)[j] > leading_pt) {
                 leading = j;
-                leading_pt = (*pjt->phoEt)[j];
+                leading_pt = (*p->phoEt)[j];
             }
         }
 
