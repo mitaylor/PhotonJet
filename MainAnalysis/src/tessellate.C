@@ -41,19 +41,22 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         if (p->hiHF <= hf_min) { continue; }
 
         int64_t leading = -1;
+        float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] < pt_min) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) > eta_max) { continue; }
+            if ((*p->phoEt)[j] <= pt_min) { continue; }
+            if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-
-            if (heavyion && within_hem_failure_region(p, j)) { continue; }
-
-            leading = j;
-            break;
+            if ((*p->phoEt)[j] > leading_pt) {
+                leading = j;
+                leading_pt = (*p->phoEt)[j];
+            }
         }
 
         /* require leading photon */
         if (leading < 0) { continue; }
+
+        /* hem failure region exclusion */
+        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
 
         /* isolation requirement */
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -65,7 +68,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         auto const& see = isolation > iso_max ? see_noniso : see_iso;
         int64_t index = mpthf->index_for(v{(*p->phoEt)[leading], p->hiHF});
-        (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading], p->weight);
+        (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading], p->w);
     }
 
     printf("\n");
@@ -87,19 +90,22 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         if (p->hiHF <= hf_min) { continue; }
 
         int64_t leading = -1;
+        float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] < pt_min) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) > eta_max) { continue; }
+            if ((*p->phoEt)[j] <= pt_min) { continue; }
+            if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-
-            if (heavyion && within_hem_failure_region(p, j)) { continue; }
-
-            leading = j;
-            break;
+            if ((*p->phoEt)[j] > leading_pt) {
+                leading = j;
+                leading_pt = (*p->phoEt)[j];
+            }
         }
 
         /* require leading photon */
         if (leading < 0) { continue; }
+
+        /* hem failure region exclusion */
+        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
 
         /* require gen-matching */
         int64_t gen_index = (*p->pho_genMatchedIndex)[leading];
@@ -115,7 +121,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
 
         int64_t index = mpthf->index_for(v{(*p->phoEt)[leading], p->hiHF});
         (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading] + offset,
-            p->weight);
+            p->w);
 
         /* isolation requirement */
         float recoiso = (*p->pho_ecalClusterIsoR3)[leading]
@@ -125,7 +131,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         if ((recoiso > iso_max && recoiso < noniso_min)
             || recoiso > noniso_max) { continue; }
 
-        (*sfrac)[index]->Fill(recoiso > iso_max ? 1.5 : 0.5, p->weight);
+        (*sfrac)[index]->Fill(recoiso > iso_max ? 1.5 : 0.5, p->w);
     }
 
     printf("\n");
