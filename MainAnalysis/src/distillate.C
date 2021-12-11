@@ -194,7 +194,7 @@ int distillate(char const* config, char const* output) {
             l->SetLineStyle(7);
             l->Draw();
         }
-    }
+    };
 
     auto tag_object = tag + "_" + object;
     auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";
