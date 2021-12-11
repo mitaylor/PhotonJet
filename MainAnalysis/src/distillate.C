@@ -189,6 +189,8 @@ int distillate(char const* config, char const* output) {
         stack_text(index, 0.75, 0.04, obj_detahf, eta_info, hf_info); };
 
     auto guide_lines = [&](int64_t index) {
+        if (index > ihf->size()) { return; }
+        
         for (auto val : s_lines) {
             TLine* l = new TLine(rpt.front(), val, rpt.back(), val);
             l->SetLineStyle(7);
