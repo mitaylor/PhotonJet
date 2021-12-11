@@ -59,11 +59,11 @@ int jubilate(char const* config, char const* output) {
 
     auto pjet_es_f_dphi = new history<TH1F>(f, "raw_pjet_es_f_dphi");
     auto pjet_wta_f_dphi = new history<TH1F>(f, "raw_pjet_wta_f_dphi");
-    auto pjet_f_ddr = new history<TH1F>(f, "raw_pjet_f_dr");
+    auto pjet_f_dr = new history<TH1F>(f, "raw_pjet_f_dr");
 
     auto mix_pjet_es_f_dphi = new history<TH1F>(f, "raw_mix_pjet_es_f_dphi");
     auto mix_pjet_wta_f_dphi = new history<TH1F>(f, "raw_mix_pjet_wta_f_dphi");
-    auto mix_pjet_f_ddr = new history<TH1F>(f, "raw_mix_pjet_f_dr");
+    auto mix_pjet_f_dr = new history<TH1F>(f, "raw_mix_pjet_f_dr");
 
     /* shrink to remove overflow photon pt bin */
     auto shape = nevt->shape();
@@ -75,17 +75,17 @@ int jubilate(char const* config, char const* output) {
     wrap(nevt);
     wrap(pjet_es_f_dphi);
     wrap(pjet_wta_f_dphi);
-    wrap(pjet_f_ddr);
+    wrap(pjet_f_dr);
     wrap(mix_pjet_es_f_dphi);
     wrap(mix_pjet_wta_f_dphi);
-    wrap(mix_pjet_f_ddr);
+    wrap(mix_pjet_f_dr);
 
     // /* scale by bin width */
     // scale_bin_width(
     //     pjet_f_x,
-    //     pjet_f_ddr,
+    //     pjet_f_dr,
     //     mix_pjet_f_x,
-    //     mix_pjet_f_ddr);
+    //     mix_pjet_f_dr);
 
     /* draw figures */
     auto redraw_dphi_axis = [&](TH1* h, int64_t) {
@@ -123,7 +123,7 @@ int jubilate(char const* config, char const* output) {
     c2->jewellery(redraw_dphi_axis);
     c2->divide(-1 , ihf->size());
 
-    auto c3 = new paper(tag + "_mixing_ddr_d_pthf", hb);
+    auto c3 = new paper(tag + "_mixing_dr_d_pthf", hb);
     apply_style(c3, collisions, -1., 24.);
     c3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     c3->accessory(pthf_info);
@@ -136,8 +136,8 @@ int jubilate(char const* config, char const* output) {
         c2->add((*pjet_wta_f_dphi)[i], system, "raw");
         c2->stack((*mix_pjet_wta_f_dphi)[i], system, "mix");
 
-        c3->add((*pjet_f_ddr)[i], system, "raw");
-        c3->stack((*mix_pjet_f_ddr)[i], system, "mix");
+        c3->add((*pjet_f_dr)[i], system, "raw");
+        c3->stack((*mix_pjet_f_dr)[i], system, "mix");
     }
 
     hb->sketch();
