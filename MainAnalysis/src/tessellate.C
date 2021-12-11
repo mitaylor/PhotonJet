@@ -293,6 +293,7 @@ int tessellate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < mpthf->size(); ++i) {
         std::vector<float> iters = {0};
+        auto indices = mpthf->indices_for(i);
 
         TF1* f = nullptr;
         TH1F* pfit = nullptr;
@@ -300,37 +301,43 @@ int tessellate(char const* config, char const* output) {
 
         float bkgnorm = 1;
 
-        do {
-            auto res = fit_templates(
-                (*see_data)[i], (*see_sig)[i], (*see_bkg)[i],
-                (*purity)[i], (*sfrac)[i], see_max, rfit, bkgnorm);
+        if (indices[0] < ipt->size() - 1) {
+            do {
+                auto res = fit_templates(
+                    (*see_data)[i], (*see_sig)[i], (*see_bkg)[i],
+                    (*purity)[i], (*sfrac)[i], see_max, rfit, bkgnorm);
 
-            f = std::get<0>(res);
-            pfit = std::get<1>(res);
-            pbkg = std::get<2>(res);
+                f = std::get<0>(res);
+                pfit = std::get<1>(res);
+                pbkg = std::get<2>(res);
 
-            auto norm = f->GetParameter(0);
-            auto frac = f->GetParameter(1);
-            auto chi2 = f->GetChisquare();
-            auto ndof = f->GetNDF();
+                auto norm = f->GetParameter(0);
+                auto frac = f->GetParameter(1);
+                auto chi2 = f->GetChisquare();
+                auto ndof = f->GetNDF();
 
-            bkgnorm = norm * (1. - frac);
+                bkgnorm = norm * (1. - frac);
 
-            auto nsig = pfit->Integral(1, pfit->FindBin(see_max))
-                * frac / pfit->Integral();
-            auto nbkg = pbkg->Integral(1, pbkg->FindBin(see_max))
-                * (1. - frac) / pbkg->Integral();
+                auto nsig = pfit->Integral(1, pfit->FindBin(see_max))
+                    * frac / pfit->Integral();
+                auto nbkg = pbkg->Integral(1, pbkg->FindBin(see_max))
+                    * (1. - frac) / pbkg->Integral();
 
-            auto val = nsig / (nsig + nbkg);
-            (*purity)[i]->SetBinContent(1, val);
-            printf("  purity: %.3f, chi2/ndof: %.0f/%i\n", val, chi2, ndof);
+                auto val = nsig / (nsig + nbkg);
+                (*purity)[i]->SetBinContent(1, val);
+                printf("  purity: %.3f, chi2/ndof: %.0f/%i\n", val, chi2, ndof);
 
-            iters.push_back(val);
-        } while (std::abs(iters.end()[-1] - iters.end()[-2]) > 0.001);
+                iters.push_back(val);
+
+                if (iters.size() > 1000) { printf("breaking iteration"); break; }
+            } while (std::abs(iters.end()[-1] - iters.end()[-2]) > 0.001);
+        }
+        else {
+            (*purity)[i]->SetBinContent(1, 1);
+        }
 
         printf("iterations: %zu\n", iters.size());
 
-        auto indices = mpthf->indices_for(i);
         if (indices[0] < ipt->size() - 1) {
             auto entries = f->GetParameter(0);
             auto fraction = f->GetParameter(1);
