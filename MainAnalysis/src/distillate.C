@@ -188,6 +188,14 @@ int distillate(char const* config, char const* output) {
     auto etahf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, obj_detahf, eta_info, hf_info); };
 
+    auto guide_lines = [&](int64_t index) {
+        for (auto val : s_lines) {
+            TLine* l = new TLine(rpt.front(), val, rpt.back(), val);
+            l->SetLineStyle(7);
+            l->Draw();
+        }
+    }
+
     auto tag_object = tag + "_" + object;
     auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";
 
@@ -231,6 +239,7 @@ int distillate(char const* config, char const* output) {
     auto c2 = new paper(tag_object + "_dhf_f_pt_s", hb);
     apply_style(c2, system_info);
     c2->accessory(std::bind(hf_info, _1, 0.75));
+    c2->accessory(guide_lines);
     c2->divide(idhf->size(), -1);
     c2->set(paper::flags::logx);
 
@@ -332,6 +341,7 @@ int distillate(char const* config, char const* output) {
         c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
         apply_style(c8[i], system_info);
         c8[i]->accessory(std::bind(hf_info, _1, 0.75));
+        c8[i]->accessory(guide_lines);
         c8[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
         c8[i]->divide(idhf->size(), -1);
         c8[i]->set(paper::flags::logx);
