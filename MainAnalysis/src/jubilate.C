@@ -80,12 +80,12 @@ int jubilate(char const* config, char const* output) {
     wrap(mix_pjet_wta_f_dphi);
     wrap(mix_pjet_f_dr);
 
-    // /* scale by bin width */
-    // scale_bin_width(
-    //     pjet_f_x,
-    //     pjet_f_dr,
-    //     mix_pjet_f_x,
-    //     mix_pjet_f_dr);
+// /* scale by bin width */
+// scale_bin_width(
+//     pjet_f_x,
+//     pjet_f_dr,
+//     mix_pjet_f_x,
+//     mix_pjet_f_dr);
 
     /* draw figures */
     auto redraw_dphi_axis = [&](TH1* h, int64_t) {
@@ -110,14 +110,14 @@ int jubilate(char const* config, char const* output) {
     auto collisions = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
 
     auto c1 = new paper(tag + "_mixing_dphi_es_d_pthf", hb);
-    apply_style(c1, collisions, -0.04, 0.4);
+    apply_style(c1, collisions, -0.3, 3);
     c1->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
     c1->accessory(pthf_info);
     c1->jewellery(redraw_dphi_axis);
     c1->divide(-1 , ihf->size());
 
     auto c2 = new paper(tag + "_mixing_dphi_wta_d_pthf", hb);
-    apply_style(c2, collisions, -0.04, 0.4);
+    apply_style(c2, collisions, -0.3, 3);
     c2->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
     c2->accessory(pthf_info);
     c2->jewellery(redraw_dphi_axis);
