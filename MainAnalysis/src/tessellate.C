@@ -46,6 +46,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
             if ((*p->phoEt)[j] <= pt_min) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
+            if (heavyion && within_hem_failure_region(p, j)) { continue; }
             if ((*p->phoEt)[j] > leading_pt) {
                 leading = j;
                 leading_pt = (*p->phoEt)[j];
@@ -56,7 +57,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         if (leading < 0) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+        // if (heavyion && within_hem_failure_region(p, leading)) { continue; }
 
         /* isolation requirement */
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -95,6 +96,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
             if ((*p->phoEt)[j] <= pt_min) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
+            if (heavyion && within_hem_failure_region(p, j)) { continue; }
             if ((*p->phoEt)[j] > leading_pt) {
                 leading = j;
                 leading_pt = (*p->phoEt)[j];
@@ -105,7 +107,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         if (leading < 0) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+        // if (heavyion && within_hem_failure_region(p, leading)) { continue; }
 
         /* require gen-matching */
         int64_t gen_index = (*p->pho_genMatchedIndex)[leading];
