@@ -200,6 +200,9 @@ int tessellate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto dpt_short = dpt;
+    dpt_short.pop_back();
+
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
 
@@ -263,6 +266,11 @@ int tessellate(char const* config, char const* output) {
         h->SetFillStyle(3001);
     });
 
+    auto convert_index = [&](int64_t index) {
+        auto final = index - index % dpt.size();
+        return final;
+    }
+
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
@@ -270,12 +278,12 @@ int tessellate(char const* config, char const* output) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
+        stack_text(convert_index(index), 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto purity_info = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "purity: %.3f",
-            (*purity)[index - 1]->GetBinContent(1));
+            (*purity)[convert_index(index) - 1]->GetBinContent(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
