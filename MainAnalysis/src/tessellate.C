@@ -269,7 +269,7 @@ int tessellate(char const* config, char const* output) {
     auto convert_index = [&](int64_t index) {
         auto final = index - index % dpt.size();
         return final;
-    }
+    };
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
