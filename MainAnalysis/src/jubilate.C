@@ -59,11 +59,11 @@ int jubilate(char const* config, char const* output) {
 
     auto pjet_es_f_dphi = new history<TH1F>(f, "raw_pjet_es_f_dphi");
     auto pjet_wta_f_dphi = new history<TH1F>(f, "raw_pjet_wta_f_dphi");
-    auto pjet_f_ddr = new history<TH1F>(f, "raw_pjet_f_ddr");
+    auto pjet_f_ddr = new history<TH1F>(f, "raw_pjet_f_dr");
 
     auto mix_pjet_es_f_dphi = new history<TH1F>(f, "raw_mix_pjet_es_f_dphi");
     auto mix_pjet_wta_f_dphi = new history<TH1F>(f, "raw_mix_pjet_wta_f_dphi");
-    auto mix_pjet_f_ddr = new history<TH1F>(f, "raw_mix_pjet_f_ddr");
+    auto mix_pjet_f_ddr = new history<TH1F>(f, "raw_mix_pjet_f_dr");
 
     /* shrink to remove overflow photon pt bin */
     auto shape = nevt->shape();
