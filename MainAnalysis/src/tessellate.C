@@ -271,7 +271,7 @@ int tessellate(char const* config, char const* output) {
     });
 
     auto convert_index = [&](int64_t index) {
-        auto final = index + (index - 1) / (ipt.size() - 1);
+        auto final = index + (index - 1) / (ipt->size() - 1);
         // std::cout << index << " " << final << std::endl;
         return final;
     };
