@@ -3,8 +3,8 @@
 arithmetic() {
     tag=$1
 
-    ./bin/accumulate configs/accumulate/ran/accumulate_${tag}.conf \
-        data/ran/accumulate_${tag}.root
+    ./bin/accumulate configs/accumulate/ran_jes_on/accumulate_${tag}.conf \
+        data/jes_on/accumulate_${tag}.root
 }
 
 nominal() {
