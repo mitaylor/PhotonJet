@@ -151,7 +151,7 @@ int vacillate(char const* config, char const* output) {
         /* photon axis */
         auto reco_photon_eta = (*p->phoEta)[leading];
         auto reco_photon_phi = convert_radian((*p->phoPhi)[leading]);
-        auto gen_photon_phi = convert_radian(*p->mcPhi[gen_index]);
+        auto gen_photon_phi = convert_radian((*p->mcPhi)[gen_index]);
 
         /* electron rejection */
         bool electron = false;
