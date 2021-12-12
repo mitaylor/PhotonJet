@@ -25,13 +25,6 @@ static bool in_hem_failure_region(float eta, float phi) {
     return (eta < -1.242 && -1.72 < phi && phi < -0.72);
 }
 
-static float dr2(float eta1, float eta2, float phi1, float phi2) {
-    auto deta = eta1 - eta2;
-    auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
-
-    return deta * deta + dphi * dphi;
-}
-
 int vacillate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -217,7 +210,7 @@ int vacillate(char const* config, char const* output) {
                 auto r_x = mr->index_for(v{rdphi, reco_pt});
                 (*r)[hf_x]->Fill(r_x, p->w);
 
-                (*cdphi)[hf_x]->Fill(rdr, gdr, p->w);
+                (*cdphi)[hf_x]->Fill(rdphi, gdphi, p->w);
                 (*cpt)[hf_x]->Fill(reco_pt, gen_pt, p->w);
                 (*c)[hf_x]->Fill(r_x, g_x, p->w);
             } else {
