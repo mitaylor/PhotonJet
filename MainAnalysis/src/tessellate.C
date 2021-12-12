@@ -306,11 +306,6 @@ int tessellate(char const* config, char const* output) {
     for (int64_t i = 0; i < mpthf->size(); ++i) {
         auto indices = mpthf->indices_for(i);
 
-        TF1* f = nullptr;
-        TH1F* pfit = nullptr;
-        TH1F* pbkg = nullptr;
-
-
         if (indices[0] < ipt->size() - 1) {
             auto res = fit_templates((*see_data)[i], (*see_sig)[i], (*see_bkg)[i], rfit);
 
