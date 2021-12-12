@@ -277,7 +277,7 @@ int tessellate(char const* config, char const* output) {
         text->DrawLatexNDC(0.54, 0.56, buffer);
     };
 
-    auto c1 = new paper(tag + "_purity", hb);
+    auto c1 = new paper(tag + "_purity_old", hb);
     apply_style(c1, system + " #sqrt{s_{NN}} = 5.02 TeV"s);
     c1->accessory(pthf_info);
     c1->accessory(purity_info);
