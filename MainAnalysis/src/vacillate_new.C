@@ -50,6 +50,8 @@ int vacillate(char const* config, char const* output) {
     auto see_max = conf->get<float>("see_max");
     auto iso_max = conf->get<float>("iso_max");
 
+    auto rdphir = conf->get<std::vector<float>>("dphir_range");
+    auto rdphig = conf->get<std::vector<float>>("dphig_range");
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rdrg = conf->get<std::vector<float>>("drg_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
@@ -64,33 +66,41 @@ int vacillate(char const* config, char const* output) {
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
 
+    auto mcdphi = new multival(rdphir, rdphig);
     auto mcdr = new multival(rdrr, rdrg);
     auto mcpt = new multival(rptr, rptg);
 
-    auto mr = new multival(rdrr, rptr);
-    auto mg = new multival(rdrg, rptg);
+    auto mdphir = new multival(rdphir, rptr);
+    auto mdphig = new multival(rdphig, rptg);
+    auto mdrr = new multival(rdrr, rptr);
+    auto mdrg = new multival(rdrg, rptg);
 
     auto fn = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+    auto fcdphi = std::bind(&multival::book<TH2F>, mcdphi, _1, _2, _3);
     auto fcdr = std::bind(&multival::book<TH2F>, mcdr, _1, _2, _3);
     auto fcpt = std::bind(&multival::book<TH2F>, mcpt, _1, _2, _3);
 
-    auto fr = [&](int64_t, std::string const& name, std::string const& label) {
+    auto frdr = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";reco;"s + label).data(),
-            mr->size(), 0, mr->size()); };
+            mdrr->size(), 0, mdrr->size()); };
+    auto frdphi = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TH1F(name.data(), (";reco;"s + label).data(),
+            mdrr->size(), 0, mdrr->size()); };
 
     auto fg = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";gen;"s + label).data(),
-            mg->size(), 0, mg->size()); };
+            mdrg->size(), 0, mdrg->size()); };
 
     auto fc = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH2F(name.data(), (";reco;gen;"s + label).data(),
-            mr->size(), 0, mr->size(), mg->size(), 0, mg->size()); };
+            mdrr->size(), 0, mdrr->size(), mdrg->size(), 0, mdrg->size()); };
 
     auto n = new history<TH1F>("n"s, "events", fn, ihf->size());
-    auto r = new history<TH1F>("r"s, "counts", fr, ihf->size());
+    auto r = new history<TH1F>("r"s, "counts", frdr, ihf->size());
     auto g = new history<TH1F>("g"s, "counts", fg, ihf->size());
     auto c = new history<TH2F>("c"s, "counts", fc, ihf->size());
 
+    auto cdphi = new history<TH2F>("cdphi"s, "counts", fcdphi, ihf->size());
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
 
@@ -215,14 +225,14 @@ int vacillate(char const* config, char const* output) {
             auto id = genid[gen_pt];
             auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id],
                                      gen_phi, (*p->WTAgenphi)[id]));
-            auto g_x = mg->index_for(v{gdr, gen_pt});
+            auto g_x = mdrg->index_for(v{gdr, gen_pt});
 
             (*g)[hf_x]->Fill(g_x, p->w);
 
             if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
                 auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                          reco_phi, (*p->WTAphi)[j]));
-                auto r_x = mr->index_for(v{rdr, reco_pt});
+                auto r_x = mdr->index_for(v{rdr, reco_pt});
 
                 (*r)[hf_x]->Fill(r_x, p->w);
 
@@ -246,6 +256,7 @@ int vacillate(char const* config, char const* output) {
         r->save(tag);
         g->save(tag);
 
+        cdphi->save(tag);
         cdr->save(tag);
         cpt->save(tag);
         c->save(tag);
