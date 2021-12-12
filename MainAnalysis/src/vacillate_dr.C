@@ -143,6 +143,10 @@ int vacillate(char const* config, char const* output) {
         auto gen_index = (*p->pho_genMatchedIndex)[leading];
         if (gen_index == -1) { continue; }
 
+        auto pid = (*p->mcPID)[gen_index];
+        auto mpid = (*p->mcMomPID)[gen_index];
+        if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+
         /* isolation requirement */
         if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
 

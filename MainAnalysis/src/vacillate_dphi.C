@@ -52,8 +52,6 @@ int vacillate(char const* config, char const* output) {
 
     auto rdphir = conf->get<std::vector<float>>("dphir_range");
     auto rdphig = conf->get<std::vector<float>>("dphig_range");
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rdrg = conf->get<std::vector<float>>("drg_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
     auto rptg = conf->get<std::vector<float>>("ptg_range");
 
@@ -67,41 +65,33 @@ int vacillate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
 
     auto mcdphi = new multival(rdphir, rdphig);
-    auto mcdr = new multival(rdrr, rdrg);
     auto mcpt = new multival(rptr, rptg);
 
-    auto mdphir = new multival(rdphir, rptr);
-    auto mdphig = new multival(rdphig, rptg);
-    auto mdrr = new multival(rdrr, rptr);
-    auto mdrg = new multival(rdrg, rptg);
+    auto mr = new multival(rdphir, rptr);
+    auto mg = new multival(rdphig, rptg);
 
     auto fn = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fcdphi = std::bind(&multival::book<TH2F>, mcdphi, _1, _2, _3);
-    auto fcdr = std::bind(&multival::book<TH2F>, mcdr, _1, _2, _3);
     auto fcpt = std::bind(&multival::book<TH2F>, mcpt, _1, _2, _3);
 
-    auto frdr = [&](int64_t, std::string const& name, std::string const& label) {
+    auto fr = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";reco;"s + label).data(),
-            mdrr->size(), 0, mdrr->size()); };
-    auto frdphi = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TH1F(name.data(), (";reco;"s + label).data(),
-            mdrr->size(), 0, mdrr->size()); };
+            mr->size(), 0, mr->size()); };
 
     auto fg = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";gen;"s + label).data(),
-            mdrg->size(), 0, mdrg->size()); };
+            mg->size(), 0, mg->size()); };
 
     auto fc = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH2F(name.data(), (";reco;gen;"s + label).data(),
-            mdrr->size(), 0, mdrr->size(), mdrg->size(), 0, mdrg->size()); };
+            mr->size(), 0, mr->size(), mg->size(), 0, mg->size()); };
 
     auto n = new history<TH1F>("n"s, "events", fn, ihf->size());
-    auto r = new history<TH1F>("r"s, "counts", frdr, ihf->size());
+    auto r = new history<TH1F>("r"s, "counts", fr, ihf->size());
     auto g = new history<TH1F>("g"s, "counts", fg, ihf->size());
     auto c = new history<TH2F>("c"s, "counts", fc, ihf->size());
 
     auto cdphi = new history<TH2F>("cdphi"s, "counts", fcdphi, ihf->size());
-    auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
 
     /* manage memory manually */
@@ -153,6 +143,10 @@ int vacillate(char const* config, char const* output) {
         auto gen_index = (*p->pho_genMatchedIndex)[leading];
         if (gen_index == -1) { continue; }
 
+        auto pid = (*p->mcPID)[gen_index];
+        auto mpid = (*p->mcMomPID)[gen_index];
+        if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+
         /* isolation requirement */
         if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
 
@@ -162,19 +156,20 @@ int vacillate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         /* photon axis */
-        auto photon_eta = (*p->phoEta)[leading];
-        auto photon_phi = convert_radian((*p->phoPhi)[leading]);
+        auto reco_photon_eta = (*p->phoEta)[leading];
+        auto reco_photon_phi = convert_radian((*p->phoPhi)[leading]);
+        auto gen_photon_phi = convert_radian(*p->mcPhi[gen_index]);
 
         /* electron rejection */
         bool electron = false;
         for (int64_t j = 0; j < p->nEle; ++j) {
             if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-            auto deta = photon_eta - (*p->eleEta)[j];
+            auto deta = reco_photon_eta - (*p->eleEta)[j];
             if (deta > 0.1) { continue; }
 
             auto ele_phi = convert_radian((*p->elePhi)[j]);
-            auto dphi = revert_radian(photon_phi - ele_phi);
+            auto dphi = revert_radian(reco_photon_phi - ele_phi);
             auto dr2 = deta * deta + dphi * dphi;
 
             if (dr2 < 0.01 && passes_electron_id<
@@ -189,16 +184,10 @@ int vacillate(char const* config, char const* output) {
         auto hf_x = ihf->index_for(p->hiHF);
         (*n)[hf_x]->Fill(1., p->w);
 
-        /* map reco jet to gen jet */
-        std::unordered_map<float, int64_t> genid;
-        for (int64_t j = 0; j < p->ngen; ++j)
-            genid[(*p->genpt)[j]] = j;
-
         for (int64_t j = 0; j < p->nref; ++j) {
             if ((*p->subid)[j] > 0) { continue; }
 
             auto gen_pt = (*p->refpt)[j];
-            auto gen_eta = (*p->refeta)[j];
             auto gen_phi = (*p->refphi)[j];
 
             if (gen_pt < rptg.front()) { continue; }
@@ -209,8 +198,8 @@ int vacillate(char const* config, char const* output) {
 
             if (std::abs(reco_eta) >= jet_eta_max) { continue; }
 
-            auto pj_deta = photon_eta - reco_eta;
-            auto pj_dphi = revert_radian(std::abs(photon_phi - convert_radian(reco_phi)));
+            auto pj_deta = reco_photon_eta - reco_eta;
+            auto pj_dphi = revert_radian(std::abs(reco_photon_phi - convert_radian(reco_phi)));
             auto pj_dr = std::sqrt(pj_deta * pj_deta + pj_dphi * pj_dphi);
 
             if (pj_dr < 0.4) { continue; }
@@ -218,25 +207,17 @@ int vacillate(char const* config, char const* output) {
             if (heavyion && in_hem_failure_region(reco_eta, reco_phi))
                 continue;
 
-            /* require back-to-back jets */
-            if (std::abs(photon_phi - convert_radian(reco_phi)) < 0.875_pi)
-                continue;
-
-            auto id = genid[gen_pt];
-            auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id],
-                                     gen_phi, (*p->WTAgenphi)[id]));
-            auto g_x = mdrg->index_for(v{gdr, gen_pt});
+            auto gdphi = revert_pi(std::abs(gen_photon_phi - convert_radian(gen_phi)));
+            auto g_x = mg->index_for(v{gdphi, gen_pt});
 
             (*g)[hf_x]->Fill(g_x, p->w);
 
             if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
-                auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
-                                         reco_phi, (*p->WTAphi)[j]));
-                auto r_x = mdr->index_for(v{rdr, reco_pt});
-
+                auto rdphi = revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi)));
+                auto r_x = mr->index_for(v{rdphi, reco_pt});
                 (*r)[hf_x]->Fill(r_x, p->w);
 
-                (*cdr)[hf_x]->Fill(rdr, gdr, p->w);
+                (*cdphi)[hf_x]->Fill(rdr, gdr, p->w);
                 (*cpt)[hf_x]->Fill(reco_pt, gen_pt, p->w);
                 (*c)[hf_x]->Fill(r_x, g_x, p->w);
             } else {
@@ -257,7 +238,6 @@ int vacillate(char const* config, char const* output) {
         g->save(tag);
 
         cdphi->save(tag);
-        cdr->save(tag);
         cpt->save(tag);
         c->save(tag);
     });
