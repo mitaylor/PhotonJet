@@ -269,7 +269,7 @@ int tessellate(char const* config, char const* output) {
     });
 
     auto convert_index = [&](int64_t index) {
-        auto final = index + index / dpt.size();
+        auto final = index + (index+1) / dpt.size();
         return final;
     };
 
