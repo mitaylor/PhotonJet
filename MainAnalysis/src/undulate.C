@@ -387,7 +387,7 @@ int undulate(char const* config, char const* output) {
     /* unfold */
     uf->apply([&](TUnfoldDensity* u, int64_t i) {
         if (u->SetInput((*victims)[i], scale[i]) > 9999) {
-            printf("  [!] error: set input\n"); exit(1);
+            printf("  [!] error: set input\n"); //exit(1);
         }
 
         /* calculate condition number */
