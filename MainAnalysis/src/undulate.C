@@ -228,6 +228,8 @@ int undulate(char const* config, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
     auto type = conf->get<std::string>("type");
+    auto observable = conf->get<std::string>("observable");
+    auto xlabel = conf->get<std::string>("xlabel");
 
     auto victim = conf->get<std::string>("victim");
     auto label = conf->get<std::string>("label");
@@ -246,15 +248,17 @@ int undulate(char const* config, char const* output) {
     auto rptr = conf->get<std::vector<float>>("ptr_range");
     auto rptg = conf->get<std::vector<float>>("ptg_range");
 
+    auto rfold0 = conf->get<std::vector<float>>("fold0_range");
+
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto mpthf = new multival(dpt, dhf);
 
-    auto idrr = new interval("#deltaj"s, rdrr);
+    auto idrr = new interval(xlabel, rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
-    auto idrg = new interval("#deltaj"s, rdrg);
+    auto idrg = new interval(xlabel, rdrg);
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto mr = new multival(*idrr, *iptr);
@@ -370,7 +374,7 @@ int undulate(char const* config, char const* output) {
 
     std::vector<paper*> cs(18, nullptr);
     zip([&](paper*& c, std::string const& title) {
-        c = new paper(tag + "_" + type + "_" + title, hb);
+        c = new paper(tag + "_" + type + "_" + observable + " " + title, hb);
         apply_style(c, system_info);
         c->accessory(pthf_info);
         c->divide(divisions[0], divisions[1]);
@@ -381,7 +385,7 @@ int undulate(char const* config, char const* output) {
         "fold0"s, "fold1"s, "error"s, "shaded"s, "closure"s,
         "ratio"s });
 
-    cs[12]->format(std::bind(default_formatter, _1, -2., 27.));
+    cs[12]->format(std::bind(default_formatter, _1, rfold0[0], rfold0[1]));
     cs[13]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
     /* unfold */
