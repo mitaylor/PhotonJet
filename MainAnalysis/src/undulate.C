@@ -374,7 +374,7 @@ int undulate(char const* config, char const* output) {
 
     std::vector<paper*> cs(18, nullptr);
     zip([&](paper*& c, std::string const& title) {
-        c = new paper(tag + "_" + type + "_" + observable + " " + title, hb);
+        c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);
         apply_style(c, system_info);
         c->accessory(pthf_info);
         c->divide(divisions[0], divisions[1]);
