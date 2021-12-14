@@ -29,7 +29,7 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 template <typename... T>
-void zero_errors(T*... args) {
+void zero_error(T*... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH2* obj) {
         for (int64_t i = 1; i <= obj->GetNbinsX(); ++i) {
             for (int64_t j = 1; j <= obj->GetNbinsY(); ++j) {
