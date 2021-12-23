@@ -226,7 +226,7 @@ process.pAna = cms.EndPath(process.skimanalysis)
 # KT : filter events on reco photons
 # photon selection
 process.selectedPhotons = cms.EDFilter("PhotonSelector",
-    src = cms.InputTag("gedPhotons"),
+    src = cms.InputTag("slimmedPhotons"),
     cut = cms.string('abs(eta) < 2.5')
 )
 
