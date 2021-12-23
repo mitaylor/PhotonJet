@@ -29,6 +29,7 @@ process.source = cms.Source("PoolSource",
         "/store/hidata/HIRun2018A/HISingleMuon/MINIAOD/PbPb18_MiniAODv1-v1/00000/00345f79-641f-4002-baf1-19ae8e83c48b.root"
     ),
 )
+
 #input file produced from:
 #"file:/afs/cern.ch/work/r/rbi/public/forest/HIHardProbes_HIRun2018A-PromptReco-v2_AOD.root"
 
@@ -45,7 +46,6 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
-
 
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_promptlike_hi', '')
@@ -105,6 +105,7 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 from HeavyIonsAnalysis.EventAnalysis.hltobject_cfi import trigger_list_data
 process.hltobject.triggerNames = trigger_list_data
 
+process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load('HeavyIonsAnalysis.EventAnalysis.particleFlowAnalyser_cfi')
 ################################
 # electrons, photons, muons
@@ -163,9 +164,8 @@ if addR3Jets or addR4Jets :
     if addR3Jets :
         setupHeavyIonJets('akCs3PF', process.extraJetsData, process, isMC = 0, radius = 0.30, JECTag = 'AK3PF')
         process.akCs3PFpatJetCorrFactors.levels = ['L2Relative', 'L2L3Residual']
-        process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(
-            jetTag = "akCs3PFpatJets"
-        )
+        process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs3PFpatJets")
+        process.akCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
         process.forest += process.extraJetsData * process.akCs3PFJetAnalyzer
         process.forest += process.hiPuRhoAnalyzer
@@ -175,8 +175,10 @@ if addR3Jets or addR4Jets :
         setupHeavyIonJets('akCs0PF', process.extraJetsData, process, isMC = 0, radius = 0.40, JECTag = 'AK4PF')
         process.akCs0PFpatJetCorrFactors.levels = ['L2Relative', 'L2L3Residual']
         process.akCs4PFJetAnalyzer.jetTag = cms.InputTag('akCs0PFpatJets')
+        process.akCs4PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
         process.forest += process.extraJetsData * process.akCs4PFJetAnalyzer
+        process.forest += process.hiPuRhoAnalyzer
 
 
 addCandidateTagging = False
@@ -206,7 +208,7 @@ if addCandidateTagging:
     process.forest.insert(1,process.candidateBtagging*process.updatedPatJets)
 
     process.akCs4PFJetAnalyzer.addDeepCSV = True
-    process.akCs3PFJetAnalyzer.addDeepCSV = True # Added by Molly
+    process.akCs3PFJetAnalyzer.addDeepCSV = True
 
 #########################
 # Event Selection -> add the needed filters here
@@ -218,3 +220,30 @@ process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
 process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
 process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
+
+
+# Customization
+# KT : filter events on reco photons
+# photon selection
+process.selectedPhotons = cms.EDFilter("PhotonSelector",
+    src = cms.InputTag("gedPhotons"),
+    cut = cms.string('abs(eta) < 2.5')
+)
+
+# leading photon E_T filter
+process.photonFilter = cms.EDFilter("EtMinPhotonCountFilter",
+    src = cms.InputTag("selectedPhotons"),
+    etMin = cms.double(30.0),
+    minNumber = cms.uint32(1)
+)
+
+process.photonFilterSequence = cms.Sequence(process.selectedPhotons *
+                                            process.photonFilter
+)
+
+# needed to apply the filter on skimanalysis tree
+process.superFilterPath = cms.Path(process.photonFilterSequence)
+process.skimanalysis.superFilters = cms.vstring("superFilterPath")
+
+for path in process.paths:
+  getattr(process,path)._seq = process.photonFilterSequence * getattr(process,path)._seq
