@@ -1,4 +1,4 @@
-OutputBase = '/store/user/mitay/PhotonJet'
+OutputBase = '/store/user/mitaylor/PhotonJet'
 DatasetName = '/HIHardProbes/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD'
 Tag = '20211223PbPbHP'
 
