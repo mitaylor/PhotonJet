@@ -68,14 +68,6 @@ process.GlobalTag.toGet.extend([
         ),
     ])
 
-process.GlobalTag.toGet.extend([
-    cms.PSet(
-        record = cms.string("BTagTrackProbability3DRcd"),
-        tag = cms.string("JPcalib_Data103X_2018PbPb_v1"),
-        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
-        )
-    ])
-
 ###############################################################################
 
 # root output
@@ -192,20 +184,25 @@ process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
 
 
-# Customization
-# KT : filter events on reco photons
-# photon selection
+process.selectedPhotons = cms.EDFilter("PhotonSelector",
+    src = cms.InputTag("photons"),
+    cut = cms.string('abs(eta) < 2.5')
+)
 
 # leading photon E_T filter
-process.photonFilter = cms.EDFilter("CandPtrSelector",
-    src = cms.InputTag("slimmedPhotons"),
-    etMin = cms.double(30.0),
+process.photonFilter = cms.EDFilter("EtMinPhotonCountFilter",
+    src = cms.InputTag("selectedPhotons"),
+    etMin = cms.double(20.0),
     minNumber = cms.uint32(1)
 )
 
+process.photonFilterSequence = cms.Sequence(process.selectedPhotons *
+                                            process.photonFilter
+)
+
 # needed to apply the filter on skimanalysis tree
-process.superFilterPath = cms.Path(process.photonFilter)
+process.superFilterPath = cms.Path(process.photonFilterSequence)
 process.skimanalysis.superFilters = cms.vstring("superFilterPath")
 
 for path in process.paths:
-  getattr(process,path)._seq = process.photonFilter * getattr(process,path)._seq
+  getattr(process,path)._seq = process.photonFilterSequence * getattr(process,path)._seq

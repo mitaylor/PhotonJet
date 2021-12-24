@@ -68,14 +68,6 @@ process.GlobalTag.toGet.extend([
         ),
     ])
 
-process.GlobalTag.toGet.extend([
-    cms.PSet(
-        record = cms.string("BTagTrackProbability3DRcd"),
-        tag = cms.string("JPcalib_Data103X_2018PbPb_v1"),
-        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
-        )
-    ])
-
 ###############################################################################
 
 # root output
