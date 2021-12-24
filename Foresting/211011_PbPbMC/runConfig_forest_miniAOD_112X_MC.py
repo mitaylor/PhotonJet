@@ -1,6 +1,6 @@
 ### HiForest Configuration
 # Input: miniAOD
-# Type: data
+# Type: mc
 
 import FWCore.ParameterSet.Config as cms
 from Configuration.Eras.Era_Run2_2018_pp_on_AA_cff import Run2_2018_pp_on_AA
@@ -11,7 +11,7 @@ process = cms.Process('HiForest', Run2_2018_pp_on_AA,run2_miniAOD_pp_on_AA_103X)
 
 # HiForest info
 process.load("HeavyIonsAnalysis.EventAnalysis.HiForestInfo_cfi")
-process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 112X, data")
+process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 112X, mc")
 
 # import subprocess, os
 # version = subprocess.check_output(
@@ -26,11 +26,9 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 112X, data")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        "/store/hidata/HIRun2018A/HIHardProbes/MINIAOD/PbPb18_MiniAODv1-v1/110000/dbc440fc-c54f-40f1-8a4d-9da72c2dd983.root"
+        'file:/afs/cern.ch/work/m/mnguyen/public/integration/CMSSW_11_2_4_patch4/src/step3_inMINIAODSIM.root'
     ),
 )
-#input file produced from:
-#"file:/afs/cern.ch/work/r/rbi/public/forest/HIHardProbes_HIRun2018A-PromptReco-v2_AOD.root"
 
 # number of events to process, set to -1 to process all events
 process.maxEvents = cms.untracked.PSet(
@@ -48,33 +46,16 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_promptlike_hi', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase1_2018_realistic_hi', '')
 process.HiForestInfo.GlobalTagLabel = process.GlobalTag.globaltag
-
-centralityTag = "CentralityTable_HFtowers200_DataPbPb_periHYDJETshape_run2v1031x02_offline"
-process.HiForestInfo.info.append(centralityTag)
-
-print('\n')
-print('\033[31m~*~ CENTRALITY TABLE FOR 2018 PBPB DATA ~*~\033[0m')
-print('\033[36m~*~ TAG: ' + centralityTag + ' ~*~\033[0m')
-print('\n')
 process.GlobalTag.snapshotTime = cms.string("9999-12-31 23:59:59.000")
 process.GlobalTag.toGet.extend([
-    cms.PSet(
-        record = cms.string("HeavyIonRcd"),
-        tag = cms.string(centralityTag),
-        label = cms.untracked.string("HFtowers"),
-        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
-        ),
-    ])
+    cms.PSet(record = cms.string("BTagTrackProbability3DRcd"),
+             tag = cms.string("JPcalib_MC103X_2018PbPb_v4"),
+             connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS")
+         )
+])
 
-process.GlobalTag.toGet.extend([
-    cms.PSet(
-        record = cms.string("BTagTrackProbability3DRcd"),
-        tag = cms.string("JPcalib_Data103X_2018PbPb_v1"),
-        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
-        )
-    ])
 
 ###############################################################################
 
@@ -95,36 +76,50 @@ process.TFileService = cms.Service("TFileService",
 
 ###############################################################################
 
+#############################
+# Gen Analyzer
+#############################
+process.load('HeavyIonsAnalysis.EventAnalysis.HiGenAnalyzer_cfi')
+# making cuts looser so that we can actually check dNdEta
+process.HiGenParticleAna.ptMin = cms.untracked.double(0.4) # default is 5
+process.HiGenParticleAna.etaMax = cms.untracked.double(5.) # default is 2.5
+
 # event analysis
 process.load('HeavyIonsAnalysis.EventAnalysis.hltanalysis_cfi')
-process.load('HeavyIonsAnalysis.EventAnalysis.hievtanalyzer_data_cfi')
+process.load('HeavyIonsAnalysis.EventAnalysis.particleFlowAnalyser_cfi')
+process.load('HeavyIonsAnalysis.EventAnalysis.hievtanalyzer_mc_cfi')
+#process.load('HeavyIonsAnalysis.EventAnalysis.hltanalysis_cfi')
 process.load('HeavyIonsAnalysis.EventAnalysis.skimanalysis_cfi')
 process.load('HeavyIonsAnalysis.EventAnalysis.hltobject_cfi')
 process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 
-from HeavyIonsAnalysis.EventAnalysis.hltobject_cfi import trigger_list_data
-process.hltobject.triggerNames = trigger_list_data
+from HeavyIonsAnalysis.EventAnalysis.hltobject_cfi import trigger_list_mc
+process.hltobject.triggerNames = trigger_list_mc
 
-process.load('HeavyIonsAnalysis.EventAnalysis.particleFlowAnalyser_cfi')
+# process.load('HeavyIonsAnalysis.EventAnalysis.particleFlowAnalyser_cfi')
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 ################################
 # electrons, photons, muons
-SSHIRun2018A = "HeavyIonsAnalysis/EGMAnalysis/data/SSHIRun2018A.dat"
+SS2018PbPbMC = "HeavyIonsAnalysis/EGMAnalysis/data/SS2018PbPbMC.dat"
 process.load('HeavyIonsAnalysis.EGMAnalysis.correctedElectronProducer_cfi')
-process.correctedElectrons.correctionFile = SSHIRun2018A
+process.correctedElectrons.correctionFile = SS2018PbPbMC
 
-process.load('HeavyIonsAnalysis.MuonAnalysis.unpackedMuons_cfi')
-process.load("HeavyIonsAnalysis.MuonAnalysis.muonAnalyzer_cfi")
 process.load('HeavyIonsAnalysis.EGMAnalysis.ggHiNtuplizer_cfi')
+process.ggHiNtuplizer.doGenParticles = cms.bool(True)
 process.ggHiNtuplizer.doMuons = cms.bool(False)
 process.ggHiNtuplizer.electronSrc = "correctedElectrons"
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 ################################
 # jet reco sequence
-process.load('HeavyIonsAnalysis.JetAnalysis.akCs4PFJetSequence_pponPbPb_data_cff')
+process.load('HeavyIonsAnalysis.JetAnalysis.akCs4PFJetSequence_pponPbPb_mc_cff')
 ################################
 # tracks
 process.load("HeavyIonsAnalysis.TrackAnalysis.TrackAnalyzers_cff")
+#muons
+process.load("HeavyIonsAnalysis.MuonAnalysis.unpackedMuons_cfi")
+process.load("HeavyIonsAnalysis.MuonAnalysis.muonAnalyzer_cfi")
+process.muonAnalyzer.doGen = cms.bool(True)
+
 ###############################################################################
 
 
@@ -139,6 +134,7 @@ process.forest = cms.Path(
     process.trackSequencePbPb +
     process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
+    process.HiGenParticleAna +
     process.unpackedMuons +
     process.correctedElectrons +
     process.ggHiNtuplizer +
@@ -163,26 +159,26 @@ if addR3Jets or addR4Jets :
 
     if addR3Jets :
         process.jetsR3 = cms.Sequence()
-        setupHeavyIonJets('akCs3PF', process.jetsR3, process, isMC = 0, radius = 0.30, JECTag = 'AK3PF')
-        process.akCs3PFpatJetCorrFactors.levels = ['L2Relative', 'L2L3Residual']
+        setupHeavyIonJets('akCs3PF', process.jetsR3, process, isMC = 1, radius = 0.30, JECTag = 'AK3PF')
+        process.akCs3PFpatJetCorrFactors.levels = ['L2Relative', 'L3Absolute']
         process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
-        process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs3PFpatJets", jetName = 'akCs3PF')
+        process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs3PFpatJets", jetName = 'akCs3PF', genjetTag = "ak3GenJetsNoNu")      
         process.akCs3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
-        process.forest += process.extraJetsData * process.jetsR3 * process.akCs3PFJetAnalyzer
+        process.forest += process.extraJetsMC * process.jetsR3 * process.akCs3PFJetAnalyzer
         process.forest += process.hiPuRhoAnalyzer
 
     if addR4Jets :
         # Recluster using an alias "0" in order not to get mixed up with the default AK4 collections
         process.jetsR4 = cms.Sequence()
-        setupHeavyIonJets('akCs0PF', process.jetsR4, process, isMC = 0, radius = 0.40, JECTag = 'AK4PF')
-        process.akCs0PFpatJetCorrFactors.levels = ['L2Relative', 'L2L3Residual']
+        setupHeavyIonJets('akCs0PF', process.jetsR4, process, isMC = 1, radius = 0.40, JECTag = 'AK4PF')
+        process.akCs0PFpatJetCorrFactors.levels = ['L2Relative', 'L3Absolute']
         process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
         process.akCs4PFJetAnalyzer.jetTag = 'akCs0PFpatJets'
         process.akCs4PFJetAnalyzer.jetName = 'akCs0PF'
-        process.forest += process.extraJetsData * process.jetsR4 * process.akCs4PFJetAnalyzer
+        process.forest += process.extraJetsMC * process.jetsR4 * process.akCs4PFJetAnalyzer
         process.forest += process.hiPuRhoAnalyzer
 
-# this is only for non-reclustered jets
+
 addCandidateTagging = False
 
 if addCandidateTagging:
@@ -217,6 +213,4 @@ if addCandidateTagging:
 process.load('HeavyIonsAnalysis.EventAnalysis.collisionEventSelection_cff')
 process.pclusterCompatibilityFilter = cms.Path(process.clusterCompatibilityFilter)
 process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
-process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
-process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)

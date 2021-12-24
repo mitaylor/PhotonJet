@@ -106,6 +106,7 @@ from HeavyIonsAnalysis.EventAnalysis.hltobject_cfi import trigger_list_data
 process.hltobject.triggerNames = trigger_list_data
 
 process.load('HeavyIonsAnalysis.EventAnalysis.particleFlowAnalyser_cfi')
+process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 ################################
 # electrons, photons, muons
 SSHIRun2018A = "HeavyIonsAnalysis/EGMAnalysis/data/SSHIRun2018A.dat"
