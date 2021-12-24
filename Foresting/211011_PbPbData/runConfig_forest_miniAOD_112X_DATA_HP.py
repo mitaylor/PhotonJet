@@ -219,3 +219,26 @@ process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
 process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
 process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
+
+process.selectedPhotons = cms.EDFilter("PhotonSelector",
+    src = cms.InputTag("gedPhotons"),
+    cut = cms.string('abs(eta) < 2.5')
+)
+
+# leading photon E_T filter
+process.photonFilter = cms.EDFilter("EtMinPhotonCountFilter",
+    src = cms.InputTag("selectedPhotons"),
+    etMin = cms.double(20.0),
+    minNumber = cms.uint32(1)
+)
+
+process.photonFilterSequence = cms.Sequence(process.selectedPhotons *
+                                            process.photonFilter
+)
+
+# needed to apply the filter on skimanalysis tree
+process.superFilterPath = cms.Path(process.photonFilterSequence)
+process.skimanalysis.superFilters = cms.vstring("superFilterPath")
+
+for path in process.paths:
+  getattr(process,path)._seq = process.photonFilterSequence * getattr(process,path)._seq
