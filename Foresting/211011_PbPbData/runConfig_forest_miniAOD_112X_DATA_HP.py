@@ -26,7 +26,7 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 112X, data")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        "/store/hidata/HIRun2018A/HISingleMuon/MINIAOD/PbPb18_MiniAODv1-v1/00000/00345f79-641f-4002-baf1-19ae8e83c48b.root"
+        "/store/hidata/HIRun2018A/HIHardProbes/MINIAOD/PbPb18_MiniAODv1-v1/110000/dbc440fc-c54f-40f1-8a4d-9da72c2dd983.root"
     ),
 )
 #input file produced from:
