@@ -221,7 +221,7 @@ process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
 
 process.selectedPhotons = cms.EDFilter("PhotonSelector",
-    src = cms.InputTag("gedPhotons"),
+    src = cms.InputTag("photons"),
     cut = cms.string('abs(eta) < 2.5')
 )
 
