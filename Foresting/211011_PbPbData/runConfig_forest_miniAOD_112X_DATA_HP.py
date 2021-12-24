@@ -208,4 +208,4 @@ process.superFilterPath = cms.Path(process.photonFilter)
 process.skimanalysis.superFilters = cms.vstring("superFilterPath")
 
 for path in process.paths:
-  getattr(process,path)._seq = process.photonFilterSequence * getattr(process,path)._seq
+  getattr(process,path)._seq = process.photonFilter * getattr(process,path)._seq
