@@ -195,24 +195,16 @@ process.pAna = cms.EndPath(process.skimanalysis)
 # Customization
 # KT : filter events on reco photons
 # photon selection
-process.selectedPhotons = cms.EDFilter("PhotonSelector",
-    src = cms.InputTag("slimmedPhotons"),
-    cut = cms.string('abs(eta) < 2.5')
-)
 
 # leading photon E_T filter
-process.photonFilter = cms.EDFilter("EtMinPhotonCountFilter",
-    src = cms.InputTag("selectedPhotons"),
+process.photonFilter = cms.EDFilter("CandPtrSelector",
+    src = cms.InputTag("slimmedPhotons"),
     etMin = cms.double(30.0),
     minNumber = cms.uint32(1)
 )
 
-process.photonFilterSequence = cms.Sequence(process.selectedPhotons *
-                                            process.photonFilter
-)
-
 # needed to apply the filter on skimanalysis tree
-process.superFilterPath = cms.Path(process.photonFilterSequence)
+process.superFilterPath = cms.Path(process.photonFilter)
 process.skimanalysis.superFilters = cms.vstring("superFilterPath")
 
 for path in process.paths:
