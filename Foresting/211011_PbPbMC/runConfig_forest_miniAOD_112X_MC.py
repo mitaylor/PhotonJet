@@ -135,10 +135,10 @@ process.forest = cms.Path(
     process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
     process.HiGenParticleAna +
-    process.unpackedMuons +
+    # process.unpackedMuons +
     process.correctedElectrons +
-    process.ggHiNtuplizer +
-    process.muonAnalyzer
+    process.ggHiNtuplizer
+    # process.muonAnalyzer
     )
 
 #customisation
