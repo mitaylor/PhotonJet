@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/'
 DatasetName = '/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD'
-Tag = '20211223PbPbMB'
+Tag = '20220215PbPbMB'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
