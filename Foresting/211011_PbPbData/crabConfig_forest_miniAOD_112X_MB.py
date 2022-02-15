@@ -1,4 +1,4 @@
-OutputBase = '/store/user/mitaylor/'
+OutputBase = '/store/user/mitaylor'
 DatasetName = '/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD'
 Tag = '20220215PbPbMB'
 
