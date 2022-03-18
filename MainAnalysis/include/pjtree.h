@@ -9,7 +9,7 @@
 #include "../git/foliage/include/photons.h"
 #include "../git/foliage/include/jets.h"
 #include "../git/foliage/include/triggers.h"
-#include "../git/foliage/include/rho.h"
+#include "../git/foliage/include/evtrho.h"
 
 #include "TTree.h"
 
@@ -139,7 +139,7 @@ class pjtree {
     }
 
     void copy(event* tevt, eggen* tegg, photons* tpho, electrons* tele,
-              jets* tjet, triggers* thlt, rho* trho) {
+              jets* tjet, triggers* thlt, evtrho* trho) {
         if (_flags[tt::evt]) {
             B_VAL_EVT_RECO(COPYVAL, tevt)
 

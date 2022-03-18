@@ -1,6 +1,6 @@
-#include "../include/rho.h"
+#include "../include/evtrho.h"
 
-void rho::read(TTree* t) {
+void evtrho::read(TTree* t) {
     B_VEC_RHO(SETZERO)
 
     t->SetBranchStatus("etaMin", 1);                                         \

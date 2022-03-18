@@ -8,7 +8,7 @@
 #include "../git/foliage/include/jets.h"
 #include "../git/foliage/include/photons.h"
 #include "../git/foliage/include/triggers.h"
-#include "../git/foliage/include/rho.h"
+#include "../git/foliage/include/evtrho.h"
 
 #include "../git/history/include/interval.h"
 #include "../git/history/include/history.h"
@@ -94,7 +94,7 @@ int regulate(char const* config, char const* output) {
     auto tpho = harvest<photons>(chain_eg);
     auto tjet = harvest<jets>(chain_jet, mc_branches, array_size);
     auto thlt = harvest<triggers>(chain_hlt, paths);
-    auto trho = harvest<rho>(chain_rho);
+    auto trho = harvest<evtrho>(chain_rho);
 
     std::array<bool, tt::ntt> flags = { tevt, tegg, tpho, tele, tjet, thlt, trho };
     std::transform(flags.begin(), flags.end(), active.begin(), flags.begin(),
