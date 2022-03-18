@@ -43,13 +43,13 @@
 #define B_VAL_EVT_EXT(ACTION, ...)                                          \
     ACTION(float,           w,                          ## __VA_ARGS__)     \
 
-enum tt { evt, egm, pho, ele, jet, trg, ntt };
+enum tt { evt, egm, pho, ele, jet, trg, rho, ntt };
 
 class pjtree {
   public:
-    pjtree(TTree* t, bool gen, bool hlt,
+    pjtree(TTree* t, bool gen, bool hlt, bool hi,
            std::array<bool, tt::ntt> const& flags)
-            : _gen(gen), _hlt(hlt), _flags(flags) {
+            : _gen(gen), _hlt(hlt), _hi(hi), _flags(flags) {
         B_VAL_EVT_RECO(SETMONE)
         B_VAL_PHO_RECO(SETMONE)
         B_VAL_ELE_RECO(SETMONE)
@@ -71,14 +71,18 @@ class pjtree {
             B_VEC_TRG(ALLOCOBJ)
         }
 
+        if (_hi) {
+            B_VEC_RHO(ALLOCOBJ)
+        }
+
         B_VAL_EVT_EXT(SETMONE)
 
         branch(t);
     }
 
-    pjtree(bool gen, bool hlt, TTree* t,
+    pjtree(bool gen, bool hlt, bool hi, TTree* t,
            std::array<bool, tt::ntt> const& flags)
-            : _gen(gen), _hlt(hlt), _flags(flags) {
+            : _gen(gen), _hlt(hlt), _hi(hi), _flags(flags) {
         t->SetBranchStatus("*", 0);  
 
         B_VAL_EVT_RECO(SETZERO)
@@ -102,6 +106,10 @@ class pjtree {
             B_VEC_TRG(SETZERO)
         }
 
+        if (_hi) {
+            B_VEC_RHO(SETZERO)
+        }
+
         B_VAL_EVT_EXT(SETZERO)
 
         read(t);
@@ -123,10 +131,14 @@ class pjtree {
         if (_hlt) {
             B_VEC_TRG(CLEAROBJ)
         }
+
+        if (_hi) {
+            B_VEC_RHO(CLEAROBJ)
+        }
     }
 
     void copy(event* tevt, eggen* tegg, photons* tpho, electrons* tele,
-              jets* tjet, triggers* thlt) {
+              jets* tjet, triggers* thlt, rho* trho) {
         if (_flags[tt::evt]) {
             B_VAL_EVT_RECO(COPYVAL, tevt)
 
@@ -168,6 +180,10 @@ class pjtree {
                 B_VEC_TRG(COPYPTR, thlt, thlt->size())
             }
         }
+
+        if (_flags[tt::rho]) {
+            B_VEC_RHO(COPYOBJ, tpho)
+        }
     }
 
     B_VAL_EVT_RECO(DECLVAL)
@@ -185,6 +201,7 @@ class pjtree {
     B_VEC_JET_GEN(DECLPTR)
     B_VEC_JET_REF(DECLPTR)
     B_VEC_TRG(DECLPTR)
+    B_VEC_RHO(DECLPTR)
 
   private:
     void branch(TTree* t) {
@@ -230,6 +247,10 @@ class pjtree {
             if (_hlt) {
                 B_VEC_TRG(BRANCHPTR, t)
             }
+        }
+
+        if (_flags[tt::rho]) {
+            B_VEC_RHO(BRANCHPTR, t)
         }
     }
 
@@ -277,10 +298,15 @@ class pjtree {
                 B_VEC_TRG(SETVALADDR, t)
             }
         }
+
+        if (_flags[tt::rho]) {
+            B_VEC_RHO(SETVALADDR, t)
+        }
     }
 
     bool _gen;
     bool _hlt;
+    bool _hi;
     std::array<bool, tt::ntt> _flags;
 };
 
