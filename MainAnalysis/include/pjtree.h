@@ -183,7 +183,7 @@ class pjtree {
         }
 
         if (_flags[tt::rho]) {
-            B_VEC_RHO(COPYOBJ, tpho)
+            B_VEC_RHO(COPYOBJ, trho)
         }
     }
 
