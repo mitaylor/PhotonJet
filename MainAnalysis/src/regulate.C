@@ -182,12 +182,15 @@ int regulate(char const* config, char const* output) {
             tree_pj->Ncoll = 1000;
         }
 
-        tree_pj->w = (mc_branches && apply_weights)
-                ? fweight->Eval(tree_pj->vz)
-                * weight_for(pthat, pthatw, tree_pj->pthat)
-                * tree_pj->weight
-            : 1.f;
-
+        if (mc_branches) {
+            if (apply_weights)
+                tree_pj->w = fweight->Eval(tree_pj->vz) * weight_for(pthat, pthatw, tree_pj->pthat) * tree_pj->weight;
+            else
+                tree_pj->w = tree_pj->weight;
+        }
+        else
+            tree_pj->w = 1.f;
+        
         /* apply jet energy corrections and evaluate uncertainties */
         // for (int64_t j = 0; j < tree_pj->nref; ++j) {
         //     JEC->SetJetPT((*tree_pj->rawpt)[j]);
