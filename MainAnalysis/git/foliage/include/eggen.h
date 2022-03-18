@@ -8,6 +8,9 @@
 
 #include <vector>
 
+#define B_VAL_EGM_RECO(ACTION, ...)                                         \
+    ACTION(float,           rho,                        ## __VA_ARGS__)     \
+
 #define B_VAL_EGM_GEN(ACTION, ...)                                          \
     ACTION(int32_t,         nMC,                        ## __VA_ARGS__)     \
 
@@ -39,6 +42,7 @@ class eggen : tree {
 
     void read(TTree* t);
 
+    B_VAL_EGM_RECO(DECLVAL)
     B_VAL_EGM_GEN(DECLVAL)
     B_VEC_EGM_GEN(DECLPTR)
 
