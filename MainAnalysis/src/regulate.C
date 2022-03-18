@@ -65,6 +65,7 @@ int regulate(char const* config, char const* output) {
     auto photon_dir = conf->get<std::string>("photon_dir");
     auto selections = conf->get<std::vector<std::string>>("selections");
     auto paths = conf->get<std::vector<std::string>>("paths");
+    auto paths_only = conf->get<bool>("paths_only");
 
     auto xmls = conf->get<std::vector<std::string>>("xmls");
 
@@ -171,7 +172,7 @@ int regulate(char const* config, char const* output) {
                 if (thlt->accept(path) == 1)
                     pass_skim = true;
 
-            if (!pass_skim) { continue; }
+            if (!pass_skim && paths_only) { continue; }
         }
 
         tree_pj->copy(tevt, tegg, tpho, tele, tjet, thlt, trho);
