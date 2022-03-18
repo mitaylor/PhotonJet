@@ -9,6 +9,7 @@
 #include "../git/foliage/include/photons.h"
 #include "../git/foliage/include/jets.h"
 #include "../git/foliage/include/triggers.h"
+#include "../git/foliage/include/rho.h"
 
 #include "TTree.h"
 
