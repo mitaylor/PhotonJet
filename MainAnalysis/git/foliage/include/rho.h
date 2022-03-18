@@ -22,7 +22,7 @@ class rho : tree {
 
     void read(TTree* t);
 
-    B_VEC_RHO_READ(DECLPTR)
+    B_VEC_RHO(DECLPTR)
 };
 
 #endif  /* RHO_H */

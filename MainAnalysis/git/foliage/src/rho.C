@@ -1,6 +1,6 @@
 #include "../include/rho.h"
 
-void photons::read(TTree* t) {
+void rho::read(TTree* t) {
     B_VEC_RHO(SETZERO)
 
     t->SetBranchStatus("etaMin", 1);                                         \
