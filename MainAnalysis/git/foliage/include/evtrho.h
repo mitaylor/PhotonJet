@@ -1,5 +1,5 @@
 #ifndef EVTRHO_H
-#define EVTRH0_H
+#define EVTRHO_H
 
 #include "tree.h"
 #include "foliage.h"
