@@ -44,6 +44,9 @@
 #define B_VAL_EVT_EXT(ACTION, ...)                                          \
     ACTION(float,           w,                          ## __VA_ARGS__)     \
 
+#define B_VEC_EVT_EXT(ACTION, ...)                                          \
+    ACTION(sv<float>,       hfweight,                    ## __VA_ARGS__)    \
+
 enum tt { evt, egm, pho, ele, jet, trg, rho, ntt };
 
 class pjtree {
@@ -67,6 +70,7 @@ class pjtree {
             B_VEC_EGM_GEN(ALLOCOBJ)
             B_VEC_JET_GEN(ALLOCOBJ)
             B_VEC_JET_REF(ALLOCOBJ)
+            B_VEC_EVT_EXT(ALLOCOBJ)
         }
 
         if (_hlt) {
@@ -103,6 +107,7 @@ class pjtree {
             B_VEC_EGM_GEN(SETZERO)
             B_VEC_JET_GEN(SETZERO)
             B_VEC_JET_REF(SETZERO)
+            B_VEC_EVT_EXT(SETZERO)
         }
 
         if (_hlt) {
@@ -129,6 +134,7 @@ class pjtree {
             B_VEC_EGM_GEN(CLEAROBJ)
             B_VEC_JET_GEN(CLEAROBJ)
             B_VEC_JET_REF(CLEAROBJ)
+            B_VEC_EVT_EXT(CLEAROBJ)
         }
 
         if (_hlt) {
@@ -206,6 +212,7 @@ class pjtree {
     B_VAL_JET_GEN(DECLVAL)
     B_VEC_JET_GEN(DECLPTR)
     B_VEC_JET_REF(DECLPTR)
+    B_VEC_EVT_EXT(DECLPTR)
     B_VEC_TRG(DECLPTR)
     B_VEC_RHO(DECLPTR)
 
@@ -216,6 +223,7 @@ class pjtree {
 
             if (_gen) {
                 B_VAL_EVT_GEN(BRANCHVAL, t)
+                B_VEC_EVT_EXT(BRANCHVAL, t)
             }
 
             B_VAL_EVT_EXT(BRANCHVAL, t)
@@ -268,6 +276,7 @@ class pjtree {
 
             if (_gen) {
                 B_VAL_EVT_GEN(SETVALADDR, t)
+                B_VEC_EVT_EXT(SETVALADDR, t)
             }
 
             B_VAL_EVT_EXT(SETVALADDR, t)
