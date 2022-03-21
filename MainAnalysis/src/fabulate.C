@@ -81,7 +81,7 @@ int fabulate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, t, { 1, 1, 1, 0, 1, 0 });
+    auto p = new pjtree(true, false, t, { 1, 1, 1, 0, 1, 0, 0 });
 
     /* fill histograms */
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -106,8 +106,6 @@ int fabulate(char const* config, char const* output) {
         }
 
         for (int64_t j = 0; j < p->nref; ++j) {
-            if ((*p->subid)[j] > 0) { continue; }
-
             auto gen_pt = (*p->refpt)[j];
             if (gen_pt < pt_min) { continue; }
 
