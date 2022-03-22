@@ -85,16 +85,6 @@ int64_t inosculate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    std::vector<std::vector<float>> scale_factors;
-    for (auto const& type : { "bb"s })
-        scale_factors.push_back(
-            conf->get<std::vector<float>>(type + "_scales"));
-
-    std::vector<std::vector<float>> smear_factors;
-    for (auto const& type : { "bb"s })
-        smear_factors.push_back(
-            conf->get<std::vector<float>>(type + "_smears"));
-
     auto hf_min = dhf.front();
 
     /* manage memory manually */
@@ -104,7 +94,7 @@ int64_t inosculate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(false, false, t, { 1, 0, 1, 0, 0, 0 });
+    auto p = new pjtree(false, false, false, t, { 1, 0, 1, 0, 0, 0, 0 });
 
     /* prepare histograms */
     auto ihf = new interval(dhf);
@@ -114,8 +104,6 @@ int64_t inosculate(char const* config, char const* output) {
     auto fmass = std::bind(&interval::book<TH1F>, imass, _1, _2, _3);
 
     auto minv = new history<TH1F>("mass"s, "counts"s, fmass, shape);
-
-    TRandom3* gen = new TRandom3(144);
 
     /* iterate */
     int64_t nentries = t->GetEntries();
@@ -152,10 +140,6 @@ int64_t inosculate(char const* config, char const* output) {
                     continue;
 
                 /* double electron invariant mass */
-                auto scf = scale_factors[0][hf_x];
-                auto smf = smear_factors[0][hf_x] / 91.1876;
-                auto sf = scf * gen->Gaus(1., smf);
-
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
                     (*p->phoEt)[j] * sf,
                     (*p->phoEta)[j],

@@ -23,16 +23,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void mold(TF1* f, std::vector<double> const& value,
-          std::vector<int32_t> const& exact,
-          std::vector<int32_t> const& limit,
-          std::vector<double> const& lower,
-          std::vector<double> const& upper) {
+void mold(TF1* f, std::vector<double> const& value) {
     if (!value.empty()) { f->SetParameters(value.data()); }
-    if (!exact.empty() && !value.empty())
-        for (auto e : exact) f->FixParameter(e, value[e]);
-    if (!limit.empty() && !lower.empty() && !upper.empty())
-        for (auto l : limit) { f->SetParLimits(l, lower[l], upper[l]); }
 }
 
 int distillate(char const* config, char const* output) {
@@ -46,10 +38,6 @@ int distillate(char const* config, char const* output) {
     auto label = conf->get<std::string>("label");
     auto pdf = conf->get<std::string>("pdf");
     auto value = conf->get<std::vector<double>>("value");
-    auto exact = conf->get<std::vector<int32_t>>("exact");
-    auto limit = conf->get<std::vector<int32_t>>("limit");
-    auto lower = conf->get<std::vector<double>>("lower");
-    auto upper = conf->get<std::vector<double>>("upper");
 
     auto heavyion = conf->get<bool>("heavyion");
     auto fit = conf->get<bool>("fit");
@@ -220,7 +208,7 @@ int distillate(char const* config, char const* output) {
 
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, value, exact, limit, lower, upper);
+        mold(f, value);
         h->Fit(label.data(), "WLMQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 
         (*s_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
@@ -293,7 +281,7 @@ int distillate(char const* config, char const* output) {
 
         auto label = "f_obj_detahf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, value, exact, limit, lower, upper);
+        mold(f, value);
         h->Fit(label.data(), "WLMQ", "", fle[hf_x][eta_x], fhe[hf_x][eta_x]);
 
         (*s_detahf)[index]->SetBinContent(1, f->GetParameter(1));
@@ -365,7 +353,7 @@ int distillate(char const* config, char const* output) {
 
         auto label = "f_obj_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, value, exact, limit, lower, upper);
+        mold(f, value);
         h->Fit(label.data(), "WLMQ", "",
             fl[hf_x][eta_x][pt_x], fh[hf_x][eta_x][pt_x]);
 
