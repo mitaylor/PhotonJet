@@ -160,7 +160,7 @@ int populate(char const* config, char const* output) {
             /* hem failure region exclusion */
             if (heavyion && in_hem_failure_region(jet_eta, jet_phi)) { continue; }
 
-            jetSelectedEtaPhi->(jet_eta, jet_phi);
+            jetSelectedEtaPhi->Fill(jet_eta, jet_phi);
         }  
     }
 
