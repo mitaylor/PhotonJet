@@ -44,7 +44,7 @@ float weight_for(std::vector<int32_t> const& divisions,
 }
 
 float jer(std::vector<float> const& csn, float pt) {
-    return std::sqrt((csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
+    return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
 }
 
 int regulate(char const* config, char const* output) {
