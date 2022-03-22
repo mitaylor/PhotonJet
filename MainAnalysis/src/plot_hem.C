@@ -57,6 +57,11 @@ int populate(char const* config, char const* output) {
     auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
     auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","Selected Jet Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
 
+    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","Selected Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","Selected Jet Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -84,7 +89,7 @@ int populate(char const* config, char const* output) {
             auto jet_phi = (*pjt->jtphi)[j];
 
             /* hem failure region exclusion */
-            if (heavyion && in_hem_failure_region(jet_eta, jet_phi)) { continue; }
+            if (!in_hem_failure_region(jet_eta, jet_phi)) { jetEtaPhiEx->Fill(jet_eta, jet_phi); }
             
             jetEtaPhi->Fill(jet_eta, jet_phi);
         }  
@@ -94,6 +99,9 @@ int populate(char const* config, char const* output) {
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             photonEtaPhi->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
+            if (!within_hem_failure_region(pjt, leading)) {
+                photonEtaPhiEx->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
+            }
 
             if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
@@ -115,9 +123,6 @@ int populate(char const* config, char const* output) {
             + (*pjt->pho_hcalRechitIsoR3)[leading]
             + (*pjt->pho_trackIsoR3PtCut20)[leading];
         if (isolation > iso_max) { continue; }
-
-        /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(pjt, leading)) { continue; }
         
         auto photon_eta = (*pjt->phoEta)[leading];
         auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
@@ -144,7 +149,10 @@ int populate(char const* config, char const* output) {
             if (electron) { continue; }
         }
 
-        photonSelectedEtaPhi->Fill(photon_eta, photon_phi);
+        photonSelectedEtaPhi->Fill((*pjt->phoEta)[leading], (*pjt->phoPhi)[leading]);
+        if (!within_hem_failure_region(pjt, leading)) { 
+            photonSelectedEtaPhiEx->Fill((*pjt->phoEta)[leading], (*pjt->phoPhi)[leading]);
+        }
 
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_pt = (*pjt->jtpt)[j];
@@ -158,7 +166,7 @@ int populate(char const* config, char const* output) {
             auto jet_phi = (*pjt->jtphi)[j];
 
             /* hem failure region exclusion */
-            if (heavyion && in_hem_failure_region(jet_eta, jet_phi)) { continue; }
+            if (!in_hem_failure_region(jet_eta, jet_phi)) { jetSelectedEtaPhiEx->Fill(jet_eta, jet_phi); }
 
             jetSelectedEtaPhi->Fill(jet_eta, jet_phi);
         }  
@@ -171,6 +179,11 @@ int populate(char const* config, char const* output) {
     photonSelectedEtaPhi->Write();
     jetEtaPhi->Write();
     jetSelectedEtaPhi->Write();
+
+    photonEtaPhiEx->Write();
+    photonSelectedEtaPhiEx->Write();
+    jetEtaPhiEx->Write();
+    jetSelectedEtaPhiEx->Write();
 
     o->Close();
 

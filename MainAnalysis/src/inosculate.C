@@ -141,11 +141,11 @@ int64_t inosculate(char const* config, char const* output) {
 
                 /* double electron invariant mass */
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
-                    (*p->phoEt)[j] * sf,
+                    (*p->phoEt)[j],
                     (*p->phoEta)[j],
                     (*p->phoPhi)[j],
                     0.f,
-                    (*p->phoEt)[k] * sf,
+                    (*p->phoEt)[k],
                     (*p->phoEta)[k],
                     (*p->phoPhi)[k],
                     0.f));
