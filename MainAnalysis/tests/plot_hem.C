@@ -165,7 +165,7 @@ int populate(char const* config, char const* output) {
     }
 
     /* save histograms */
-    TFile* o = new TFile(output.data(), "recreate");
+    TFile* o = new TFile(output, "recreate");
 
     photonEtaPhi->Write();
     photonSelectedEtaPhi->Write();
