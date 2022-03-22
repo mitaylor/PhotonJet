@@ -79,8 +79,6 @@ int populate(char const* config, char const* output) {
 
         t->GetEntry(i);
 
-        photonEtaPhi->Fill(pjt->phoEta, pjt->phoPhi);
-
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_eta = (*pjt->jteta)[j];
             auto jet_phi = (*pjt->jtphi)[j];
@@ -88,13 +86,15 @@ int populate(char const* config, char const* output) {
             /* hem failure region exclusion */
             if (heavyion && in_hem_failure_region(jet_eta, jet_phi)) { continue; }
             
-            jetEtaPhi->Fill(pjt->jteta, pjt->jtphi);
+            jetEtaPhi->Fill(jet_eta, jet_phi);
         }  
 
 
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
+            photonEtaPhi->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
+
             if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
@@ -165,7 +165,7 @@ int populate(char const* config, char const* output) {
     }
 
     /* save histograms */
-    TFile* o = new TFile(output.data(), "recreate");
+    TFile* o = new TFile(output, "recreate");
 
     photonEtaPhi->Write();
     photonSelectedEtaPhi->Write();
