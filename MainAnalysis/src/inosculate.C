@@ -135,6 +135,8 @@ int64_t inosculate(char const* config, char const* output) {
                     continue;
                 if (heavyion && within_hem_failure_region(p, k))
                     continue;
+                if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
+                    continue;
 
                 if ((*p->phoHoverE)[k] > hovere_max) { continue; }
                 if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
