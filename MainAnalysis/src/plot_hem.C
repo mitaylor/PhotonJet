@@ -99,7 +99,7 @@ int populate(char const* config, char const* output) {
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             photonEtaPhi->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
-            if (!within_hem_failure_region(pjt, leading)) {
+            if (!within_hem_failure_region(pjt, j)) {
                 photonEtaPhiEx->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
             }
 
