@@ -69,12 +69,6 @@ static std::string index_to_string(int64_t i, int64_t j) {
     return std::to_string(i) + "_"s + std::to_string(j);
 }
 
-template <typename T>
-bool pass_claustrophobic_selections(T* t, int64_t index) {
-    return ((*t->phoHoverE)[index] < 0.119947
-        && (*t->phoSigmaIEtaIEta_2012)[index] < 0.010392);
-}
-
 int64_t inosculate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -85,7 +79,6 @@ int64_t inosculate(char const* config, char const* output) {
     auto const hovere_max = conf->get<float>("hovere_max");
     auto const see_min = conf->get<float>("see_min");
     auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
