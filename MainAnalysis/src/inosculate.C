@@ -82,6 +82,11 @@ int64_t inosculate(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
     auto heavyion = conf->get<bool>("heavyion");
 
+    auto const hovere_max = conf->get<float>("hovere_max");
+    auto const see_min = conf->get<float>("see_min");
+    auto const see_max = conf->get<float>("see_max");
+    auto const iso_max = conf->get<float>("iso_max");
+
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -125,8 +130,10 @@ int64_t inosculate(char const* config, char const* output) {
             if (heavyion && within_hem_failure_region(p, j))
                 continue;
 
-            if (!pass_claustrophobic_selections(p, j))
-                continue;
+            if ((*p->phoHoverE)[j] > hovere_max) { continue; }
+            if ((*p->phoSigmaIEtaIEta_2012)[j] > see_max
+                || (*p->phoSigmaIEtaIEta_2012)[j] < see_min)
+            { continue; }
 
             for (int64_t k = j + 1; k < p->nPho; ++k) {
                 if ((*p->phoEt)[k] < 20)
@@ -136,8 +143,10 @@ int64_t inosculate(char const* config, char const* output) {
                 if (heavyion && within_hem_failure_region(p, k))
                     continue;
 
-                if (!pass_claustrophobic_selections(p, k))
-                    continue;
+                if ((*p->phoHoverE)[k] > hovere_max) { continue; }
+                if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
+                    || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
+                { continue; }
 
                 /* double electron invariant mass */
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
