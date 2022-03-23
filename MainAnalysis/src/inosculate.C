@@ -116,7 +116,7 @@ int64_t inosculate(char const* config, char const* output) {
         std::vector<float> masses;
 
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] < 10)
+            if ((*p->phoEt)[j] < 15) //15
                 continue;
             if (std::abs((*p->phoSCEta)[j]) > 1.4442)
                 continue;
@@ -129,7 +129,7 @@ int64_t inosculate(char const* config, char const* output) {
             { continue; }
 
             for (int64_t k = j + 1; k < p->nPho; ++k) {
-                if ((*p->phoEt)[k] < 10)
+                if ((*p->phoEt)[k] < 15) //15
                     continue;
                 if (std::abs((*p->phoSCEta)[k]) > 1.4442)
                     continue;
