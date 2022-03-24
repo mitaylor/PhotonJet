@@ -92,7 +92,7 @@ int64_t inosculate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(false, false, false, t, { 1, 0, 1, 1, 0, 0, 0 });
+    auto p = new pjtree(false, false, false, t, { 1, 0, 1, 0, 0, 1, 0 });
 
     /* prepare histograms */
     auto ihf = new interval(dhf);
