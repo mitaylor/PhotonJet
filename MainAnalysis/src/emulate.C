@@ -33,6 +33,7 @@ int emulate(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
     
     auto rvz = conf->get<std::vector<float>>("vz_range");
+    auto extra = conf->get<bool>("extra");
 
     TH1::SetDefaultSumw2();
 
@@ -62,7 +63,7 @@ int emulate(char const* config, char const* output) {
         for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
 
-            if (file == files[0]) {
+            if (file == files[0] || (extra && file == files[1])) {
                 hbase->Fill(pjt->pthat, pjt->weight);
             }
 
