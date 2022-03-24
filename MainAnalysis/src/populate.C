@@ -244,6 +244,7 @@ int populate(char const* config, char const* output) {
 
         if (pjt->hiHF <= hf_min) { continue; }
         if (pjt->hiHF >= 5199.95) { continue; }
+        if (std::abs(pjt->vz) > 15) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;

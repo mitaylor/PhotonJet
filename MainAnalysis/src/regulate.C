@@ -85,7 +85,7 @@ int regulate(char const* config, char const* output) {
     auto chain_eg = forest->attach((photon_dir + "/EventTree").data(), !photon_dir.empty());
     auto chain_jet = forest->attach((jet_dir + "/t").data(), !jet_dir.empty());
     auto chain_hlt = forest->attach("hltanalysis/HltTree", hlt_branches);
-    auto chain_rho = forest->attach(rho_dir + "/t", heavyion); //hiPuRhoAnalyzer
+    auto chain_rho = forest->attach(rho_dir + "/t", heavyion);
 
     (*forest)();
 
