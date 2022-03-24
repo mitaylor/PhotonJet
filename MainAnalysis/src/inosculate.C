@@ -109,6 +109,7 @@ int64_t inosculate(char const* config, char const* output) {
         if (i % 100000 == 0) { printf("entry: %li/%li\n", i, nentries); }
 
         t->GetEntry(i);
+        if ((*p->accepts)[0] == 0) { continue; }
 
         if (p->hiHF <= hf_min) { continue; }
 
