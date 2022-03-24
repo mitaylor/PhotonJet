@@ -129,23 +129,23 @@ int64_t inosculate(char const* config, char const* output) {
                 || (*p->phoSigmaIEtaIEta_2012)[j] < see_min)
             { continue; }
 
-            auto photon_eta = (*pjt->phoEta)[j];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[j]);
+            auto photon_eta = (*p->phoEta)[j];
+            auto photon_phi = convert_radian((*p->phoPhi)[j]);
 
             bool electron = false;
-            for (int64_t h = 0; h < pjt->nEle; ++h) {
-                if (std::abs((*pjt->eleSCEta)[h]) > 1.4442) { continue; }
+            for (int64_t h = 0; h < p->nEle; ++h) {
+                if (std::abs((*p->eleSCEta)[h]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*pjt->eleEta)[h];
+                auto deta = photon_eta - (*p->eleEta)[h];
                 if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*pjt->elePhi)[h]);
+                auto ele_phi = convert_radian((*p->elePhi)[h]);
                 auto dphi = revert_radian(photon_phi - ele_phi);
                 auto dr2 = deta * deta + dphi * dphi;
 
                 if (dr2 < 0.01 && passes_electron_id<
                             det::barrel, wp::loose, pjtree
-                        >(pjt, h, heavyion)) {
+                        >(p, h, heavyion)) {
                     electron = true; break; }
             }
 
@@ -166,23 +166,23 @@ int64_t inosculate(char const* config, char const* output) {
                     || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
                 { continue; }
 
-                photon_eta = (*pjt->phoEta)[k];
-                photon_phi = convert_radian((*pjt->phoPhi)[k]);
+                photon_eta = (*p->phoEta)[k];
+                photon_phi = convert_radian((*p->phoPhi)[k]);
 
                 bool electron = false;
-                for (int64_t h = 0; h < pjt->nEle; ++h) {
-                    if (std::abs((*pjt->eleSCEta)[h]) > 1.4442) { continue; }
+                for (int64_t h = 0; h < p->nEle; ++h) {
+                    if (std::abs((*p->eleSCEta)[h]) > 1.4442) { continue; }
 
-                    auto deta = photon_eta - (*pjt->eleEta)[h];
+                    auto deta = photon_eta - (*p->eleEta)[h];
                     if (deta > 0.1) { continue; }
 
-                    auto ele_phi = convert_radian((*pjt->elePhi)[h]);
+                    auto ele_phi = convert_radian((*p->elePhi)[h]);
                     auto dphi = revert_radian(photon_phi - ele_phi);
                     auto dr2 = deta * deta + dphi * dphi;
 
                     if (dr2 < 0.01 && passes_electron_id<
                                 det::barrel, wp::loose, pjtree
-                            >(pjt, h, heavyion)) {
+                            >(p, h, heavyion)) {
                         electron = true; break; }
                 }
 
