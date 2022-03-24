@@ -135,8 +135,8 @@ int64_t inosculate(char const* config, char const* output) {
                     continue;
                 if (heavyion && within_hem_failure_region(p, k))
                     continue;
-                if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
-                    continue;
+                // if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
+                //     continue;
 
                 if ((*p->phoHoverE)[k] > hovere_max) { continue; }
                 if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
@@ -232,7 +232,7 @@ int64_t inosculate(char const* config, char const* output) {
     auto c1 = new paper(tag + "_mass", hb);
     apply_style(c1, "PbPb #sqrt{s} = 5.02 TeV"s);
     c1->legend(std::bind(coordinates, 0.135, 0.4, 0.75, 0.04));
-    c1->accessory(std::bind(hf_info, _1, 0.75));
+    if (heavyion) c1->accessory(std::bind(hf_info, _1, 0.75));
     c1->accessory(fit_info);
     c1->divide(ihf->size(), 1);
 
