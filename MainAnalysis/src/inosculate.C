@@ -10,6 +10,7 @@
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
+#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/maglev.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
@@ -92,7 +93,7 @@ int64_t inosculate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(false, false, false, t, { 1, 0, 1, 0, 0, 0, 0 });
+    auto p = new pjtree(false, false, false, t, { 1, 0, 1, 1, 0, 0, 0 });
 
     /* prepare histograms */
     auto ihf = new interval(dhf);
@@ -116,7 +117,7 @@ int64_t inosculate(char const* config, char const* output) {
         std::vector<float> masses;
 
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] < 20) //15
+            if ((*p->phoEt)[j] < 15) //15
                 continue;
             if (std::abs((*p->phoSCEta)[j]) > 1.4442)
                 continue;
@@ -128,8 +129,30 @@ int64_t inosculate(char const* config, char const* output) {
                 || (*p->phoSigmaIEtaIEta_2012)[j] < see_min)
             { continue; }
 
+            auto photon_eta = (*pjt->phoEta)[j];
+            auto photon_phi = convert_radian((*pjt->phoPhi)[j]);
+
+            bool electron = false;
+            for (int64_t h = 0; h < pjt->nEle; ++h) {
+                if (std::abs((*pjt->eleSCEta)[h]) > 1.4442) { continue; }
+
+                auto deta = photon_eta - (*pjt->eleEta)[h];
+                if (deta > 0.1) { continue; }
+
+                auto ele_phi = convert_radian((*pjt->elePhi)[h]);
+                auto dphi = revert_radian(photon_phi - ele_phi);
+                auto dr2 = deta * deta + dphi * dphi;
+
+                if (dr2 < 0.01 && passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(pjt, h, heavyion)) {
+                    electron = true; break; }
+            }
+
+            if (electron) { continue; }
+
             for (int64_t k = j + 1; k < p->nPho; ++k) {
-                if ((*p->phoEt)[k] < 20) //15
+                if ((*p->phoEt)[k] < 15) //15
                     continue;
                 if (std::abs((*p->phoSCEta)[k]) > 1.4442)
                     continue;
@@ -142,6 +165,28 @@ int64_t inosculate(char const* config, char const* output) {
                 if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
                 { continue; }
+
+                photon_eta = (*pjt->phoEta)[k];
+                photon_phi = convert_radian((*pjt->phoPhi)[k]);
+
+                bool electron = false;
+                for (int64_t h = 0; h < pjt->nEle; ++h) {
+                    if (std::abs((*pjt->eleSCEta)[h]) > 1.4442) { continue; }
+
+                    auto deta = photon_eta - (*pjt->eleEta)[h];
+                    if (deta > 0.1) { continue; }
+
+                    auto ele_phi = convert_radian((*pjt->elePhi)[h]);
+                    auto dphi = revert_radian(photon_phi - ele_phi);
+                    auto dr2 = deta * deta + dphi * dphi;
+
+                    if (dr2 < 0.01 && passes_electron_id<
+                                det::barrel, wp::loose, pjtree
+                            >(pjt, h, heavyion)) {
+                        electron = true; break; }
+                }
+
+                if (electron) { continue; }
 
                 /* double electron invariant mass */
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
