@@ -116,7 +116,7 @@ int64_t inosculate(char const* config, char const* output) {
         std::vector<float> masses;
 
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] < 15) //15
+            if ((*p->phoEt)[j] < 20) //15
                 continue;
             if (std::abs((*p->phoSCEta)[j]) > 1.4442)
                 continue;
@@ -129,14 +129,14 @@ int64_t inosculate(char const* config, char const* output) {
             { continue; }
 
             for (int64_t k = j + 1; k < p->nPho; ++k) {
-                if ((*p->phoEt)[k] < 15) //15
+                if ((*p->phoEt)[k] < 20) //15
                     continue;
                 if (std::abs((*p->phoSCEta)[k]) > 1.4442)
                     continue;
                 if (heavyion && within_hem_failure_region(p, k))
                     continue;
-                // if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
-                //     continue;
+                if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
+                    continue;
 
                 if ((*p->phoHoverE)[k] > hovere_max) { continue; }
                 if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
