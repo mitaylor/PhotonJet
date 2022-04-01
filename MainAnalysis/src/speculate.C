@@ -94,9 +94,16 @@ int speculate(char const* config, char const* output) {
 
         auto et = (*p->phoEt)[leading];
 
-        (*counts)[0]->Fill(et);
-        if ((*p->accepts)[0] == 1)
-            (*counts)[1]->Fill(et);
+        if (mc_branches) {
+            (*counts)[0]->Fill(et, p->weight);
+            if ((*p->accepts)[0] == 1)
+                (*counts)[1]->Fill(et, p->weight);
+        }
+        else {
+            (*counts)[0]->Fill(et);
+            if ((*p->accepts)[0] == 1)
+                (*counts)[1]->Fill(et);
+        }
     }
 
     /* calculate efficiency */
@@ -104,7 +111,7 @@ int speculate(char const* config, char const* output) {
     hframe->GetYaxis()->SetTitle("trigger efficiency");
     hframe->GetXaxis()->SetTitle("photon p_{T}");
 
-    auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "c1=0.683 b(1,1) mode");
+    auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "cl=0.683 b(1,1) mode");
 
     /* draw efficiency */
     auto hb = new pencil();
