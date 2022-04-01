@@ -103,7 +103,7 @@ int speculate(char const* config, char const* output) {
     hframe->GetYaxis()->SetTitle("trigger efficiency");
     hframe->GetXaxis()->SetTitle("photon p_{T}");
 
-    auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0]); //"c1=0.683 b(1,1) mode"
+    auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "c1=0.683 b(1,1) mode");
 
     /* draw efficiency */
     auto hb = new pencil();
