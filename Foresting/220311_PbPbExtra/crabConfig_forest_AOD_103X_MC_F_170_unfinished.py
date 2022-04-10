@@ -12,7 +12,7 @@ config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'runConfig_forest_AOD_103X_MC.py'
 config.JobType.maxMemoryMB = 2500
-config.JobType.maxJobRuntimeMin = 1500   
+config.JobType.maxJobRuntimeMin = 2500   
 
 config.section_("Data")
 config.Data.inputDataset = DatasetName
