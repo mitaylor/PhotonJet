@@ -210,11 +210,13 @@ int regulate(char const* config, char const* output) {
         if (!xmls.empty()) {
             for (int64_t j = 0; j < tree_pj->nPho; ++j) {
                 fill_regr_variables(j);
+                std::cout << "Initial energy: " << (*tree_pj->phoEt)[j] << "\t";
                 (*tree_pj->phoEt)[j] = regr->getCorrectedPt(
                     regr_variables,
                     (*tree_pj->phoEt)[j],
                     (*tree_pj->phoEta)[j],
                     (*tree_pj->phoSCEta)[j]);
+                std::cout << "Corrected energy: " << (*tree_pj->phoEt)[j] << std::endl;
             }
         }
 
