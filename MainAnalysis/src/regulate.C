@@ -62,8 +62,8 @@ float get_UE(pjtree* tree_pj, float eta) {
 
     for(int i = 0; i < NBin; i++)
     {
-        float etaMin = static_cast<float> (*tree_pj->etaMin)[i];
-        float etaMax = static_cast<float> (*tree_pj->etaMax)[i];
+        float etaMin = static_cast<float>((*tree_pj->etaMin)[i]);
+        float etaMax = static_cast<float>((*tree_pj->etaMax)[i]);
 
         if(etaMin < (eta - R))
             continue;
