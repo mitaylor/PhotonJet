@@ -18,6 +18,7 @@
 #include "../include/JetCorrector.h"
 #include "../include/JetUncertainty.h"
 #include "../include/phoERegression.h"
+#include "../include/phoERegressionNew.h"
 
 #include "TF1.h"
 #include "TFile.h"
@@ -47,6 +48,42 @@ float jer(std::vector<float> const& csn, float pt) {
     return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
 }
 
+double get_UE(pjtree* tree_pj) {
+   double result = 0;
+   double R = 0.3;
+   double eta = tree_pj->jteta;
+
+   if(tree_pj->etaMin == nullptr)
+      return -1;
+
+   int NBin = tree_pj->etaMin->size();
+   if(NBin == 0)
+      return -1;
+
+   for(int i = 0; i < NBin; i++)
+   {
+      if(tree_pj->etaMax->at(i) < eta - R)
+         continue;
+      if(tree_pj->etaMin->at(i) > eta + R)
+         continue;
+
+      double XMin = (max(tree_pj->etaMin->at(i), eta - R) - eta) / R;
+      double XMax = (min(tree_pj->etaMax->at(i), eta + R) - eta) / R;
+
+      if(XMin <= -1)
+         XMin = -0.99999;
+      if(XMax >= +1)
+         XMax = +0.99999;
+
+      double high = XMax * sqrt(1 - XMax * XMax) + asin(XMax);
+      double low = XMin * sqrt(1 - XMin * XMin) + asin(XMin);
+
+      result = result + R * R * (high - low) * tree_pj->evtRho->at(i);
+   }
+
+   return result;
+}
+
 int regulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -69,8 +106,11 @@ int regulate(char const* config, char const* output) {
     auto paths_only = conf->get<bool>("paths_only");
 
     auto xmls = conf->get<std::vector<std::string>>("xmls");
+    auto xmls_new = conf->get<std::vector<std::string>>("xmls_new");
 
-    // auto jecs = conf->get<std::vector<std::string>>("jecs");
+    auto jecs = conf->get<std::vector<std::string>>("jecs");
+    auto jecs_scale = conf->get<std::vector<std::string>>("jecs_scale");
+
     auto csn = conf->get<std::vector<float>>("csn");
     auto pthat = conf->get<std::vector<int32_t>>("pthat");
     auto pthatw = conf->get<std::vector<float>>("pthatw");
@@ -110,7 +150,8 @@ int regulate(char const* config, char const* output) {
     auto tree_pj = new pjtree(tout, mc_branches, hlt_branches, heavyion, flags);
 
     /* weights, corrections */
-    // auto JEC = new JetCorrector(jecs);
+    auto JEC = new JetCorrector(jecs);
+    auto JEC_scale = new JetCorrector(jecs_scale);
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
     if (mc_branches && apply_weights) {
@@ -121,6 +162,12 @@ int regulate(char const* config, char const* output) {
     if (!xmls.empty()) {
         regr->initialiseReaderEB(xmls[0]);
         regr->initialiseReaderEE(xmls[1]);
+    }
+
+    auto regr_new = new phoERegressionNew();
+    if (!xmls_new.empty()) {
+        regr_new->initialiseReaderEB(xmls_new[0]);
+        regr_new->initialiseReaderEE(xmls_new[1]);
     }
 
     std::vector<float> regr_variables(17, 0);
@@ -194,29 +241,46 @@ int regulate(char const* config, char const* output) {
             tree_pj->w = 1.f;
         
         /* apply jet energy corrections and evaluate uncertainties */
-        // for (int64_t j = 0; j < tree_pj->nref; ++j) {
-        //     JEC->SetJetPT((*tree_pj->rawpt)[j]);
-        //     JEC->SetJetEta((*tree_pj->jteta)[j]);
-        //     JEC->SetJetPhi((*tree_pj->jtphi)[j]);
+        for (int64_t j = 0; j < tree_pj->nref; ++j) {
+            double jet_area = 0.3 * 0.3 * 3.14159265359;
+            auto avg_rho = get_UE(tree_pj) / jet_area;
 
-        //     float corr = JEC->GetCorrectedPT();
+            JEC->SetJetPT((*tree_pj->rawpt)[j]);
+            JEC->SetJetEta((*tree_pj->jteta)[j]);
+            JEC->SetJetPhi((*tree_pj->jtphi)[j]);
+            JEC->SetJetArea(jet_area);
+            JEC->SetRho(avg_rho);
 
-        //     if (!csn.empty()) { corr *= rng->Gaus(1., jer(csn, corr)); }
+            JEC_scale->SetJetPT((*tree_pj->rawpt)[j]);
+            JEC_scale->SetJetEta((*tree_pj->jteta)[j]);
+            JEC_scale->SetJetPhi((*tree_pj->jtphi)[j]);
+            JEC_scale->SetJetArea(jet_area);
+            JEC_scale->SetRho(avg_rho);
 
-        //     (*tree_pj->jtpt)[j] = corr;
-        // }
+            if(JEC.GetCorrection() > 0)
+                tree_pj->jtptCor->push_back(JEC->GetCorrectedPT());
+
+            if(JEC_scale.GetCorrection() > 0)
+                tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
+
+            if (!csn.empty()) { 
+                auto rnd = rng->Gaus(1., jer(csn, corr);
+                (*tree_pj->jtpt)[j] *= rnd);
+                (*tree_pj->jtptCor)[j] *= rnd);
+            }
+        }
 
         /* apply photon energy corrections */
-        if (!xmls.empty()) {
+        if (!xmls.empty() || !xmls_new.empty()) {
             for (int64_t j = 0; j < tree_pj->nPho; ++j) {
                 fill_regr_variables(j);
-                std::cout << "Initial energy: " << (*tree_pj->phoEt)[j] << "\t";
-                (*tree_pj->phoEt)[j] = regr->getCorrectedPt(
-                    regr_variables,
-                    (*tree_pj->phoEt)[j],
-                    (*tree_pj->phoEta)[j],
-                    (*tree_pj->phoSCEta)[j]);
-                std::cout << "Corrected energy: " << (*tree_pj->phoEt)[j] << std::endl;
+                auto phoEt = (*tree_pj->phoEt)[j];
+                auto phoEta = (*tree_pj->phoEta)[j];
+                auto phoSCEta = (*tree_pj->phoSCEta)[j];
+                if (!xmls.empty())
+                    tree_pj->phoEtEr->push_back(regr->getCorrectedPt(regr_variables, phoEt, phoEta, phoSCEta));
+                if (!xmls_new.empty())
+                    tree_pj->phoEtErNew->push_back(regr_new->getCorrectedPt(regr_variables, phoEt, phoEta, phoSCEta));
             }
         }
 

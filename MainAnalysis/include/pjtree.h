@@ -45,7 +45,15 @@
     ACTION(float,           w,                          ## __VA_ARGS__)     \
 
 #define B_VEC_EVT_EXT(ACTION, ...)                                          \
-    ACTION(sv<float>,       hfweight,                    ## __VA_ARGS__)    \
+    ACTION(sv<float>,       hfweight,                   ## __VA_ARGS__)     \
+
+#define B_VEC_PHO_EXT(ACTION, ...)                                          \
+    ACTION(sv<float>,       phoEtEr,                   ## __VA_ARGS__)     \
+    ACTION(sv<float>,       phoEtErNew,                ## __VA_ARGS__)     \
+
+#define B_VEC_JET_EXT(ACTION, ...)                                          \
+    ACTION(sv<float>,       jtptCorScale,               ## __VA_ARGS__)     \
+    ACTION(sv<float>,       jtptCor,                    ## __VA_ARGS__)     \
 
 enum tt { evt, egm, pho, ele, jet, trg, rho, ntt };
 
@@ -62,6 +70,8 @@ class pjtree {
         B_VEC_PHO_RECO(ALLOCOBJ)
         B_VEC_ELE_RECO(ALLOCOBJ)
         B_VEC_JET_RECO(ALLOCOBJ)
+        B_VEC_PHO_EXT(ALLOCOBJ)
+        B_VEC_JET_EXT(ALLOCOBJ)
 
         if (_gen) {
             B_VAL_EVT_GEN(SETMONE)
@@ -99,6 +109,8 @@ class pjtree {
         B_VEC_PHO_RECO(SETZERO)
         B_VEC_ELE_RECO(SETZERO)
         B_VEC_JET_RECO(SETZERO)
+        B_VEC_PHO_EXT(SETZERO)
+        B_VEC_JET_EXT(SETZERO)
 
         if (_gen) {
             B_VAL_EVT_GEN(SETZERO)
@@ -129,6 +141,8 @@ class pjtree {
         B_VEC_PHO_RECO(CLEAROBJ)
         B_VEC_ELE_RECO(CLEAROBJ)
         B_VEC_JET_RECO(CLEAROBJ)
+        B_VEC_PHO_EXT(CLEAROBJ)
+        B_VEC_JET_EXT(CLEAROBJ)
 
         if (_gen) {
             B_VEC_EGM_GEN(CLEAROBJ)
@@ -205,10 +219,12 @@ class pjtree {
     B_VEC_EGM_GEN(DECLPTR)
     B_VAL_PHO_RECO(DECLVAL)
     B_VEC_PHO_RECO(DECLPTR)
+    B_VEC_PHO_EXT(DECLPTR)
     B_VAL_ELE_RECO(DECLVAL)
     B_VEC_ELE_RECO(DECLPTR)
     B_VAL_JET_RECO(DECLVAL)
     B_VEC_JET_RECO(DECLPTR)
+    B_VEC_JET_EXT(DECLPTR)
     B_VAL_JET_GEN(DECLVAL)
     B_VEC_JET_GEN(DECLPTR)
     B_VEC_JET_REF(DECLPTR)
@@ -223,7 +239,7 @@ class pjtree {
 
             if (_gen) {
                 B_VAL_EVT_GEN(BRANCHVAL, t)
-                B_VEC_EVT_EXT(BRANCHVAL, t)
+                B_VEC_EVT_EXT(BRANCHPTR, t)
             }
 
             B_VAL_EVT_EXT(BRANCHVAL, t)
@@ -241,6 +257,7 @@ class pjtree {
         if (_flags[tt::pho]) {
             B_VAL_PHO_RECO(BRANCHVAL, t)
             B_VEC_PHO_RECO(BRANCHPTR, t)
+            B_VEC_PHO_EXT(BRANCHPTR, t)
         }
 
         if (_flags[tt::ele]) {
@@ -251,6 +268,7 @@ class pjtree {
         if (_flags[tt::jet]) {
             B_VAL_JET_RECO(BRANCHVAL, t)
             B_VEC_JET_RECO(BRANCHPTR, t)
+            B_VEC_JET_EXT(BRANCHPTR, t)
 
             if (_gen) {
                 B_VAL_JET_GEN(BRANCHVAL, t)
@@ -294,6 +312,7 @@ class pjtree {
         if (_flags[tt::pho]) {
             B_VAL_PHO_RECO(SETVALADDR, t)
             B_VEC_PHO_RECO(SETVALADDR, t)
+            B_VEC_PHO_EXT(SETVALADDR, t)
         }
 
         if (_flags[tt::ele]) {
@@ -304,6 +323,7 @@ class pjtree {
         if (_flags[tt::jet]) {
             B_VAL_JET_RECO(SETVALADDR, t)
             B_VEC_JET_RECO(SETVALADDR, t)
+            B_VEC_JET_EXT(SETVALADDR, t)
 
             if (_gen) {
                 B_VAL_JET_GEN(SETVALADDR, t)
