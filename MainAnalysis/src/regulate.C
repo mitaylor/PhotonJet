@@ -48,10 +48,9 @@ float jer(std::vector<float> const& csn, float pt) {
     return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
 }
 
-double get_UE(pjtree* tree_pj) {
+double get_UE(pjtree* tree_pj, float eta) {
    double result = 0;
    double R = 0.3;
-   double eta = tree_pj->jteta;
 
    if(tree_pj->etaMin == nullptr)
       return -1;
@@ -67,8 +66,8 @@ double get_UE(pjtree* tree_pj) {
       if(tree_pj->etaMin->at(i) > eta + R)
          continue;
 
-      double XMin = (max(tree_pj->etaMin->at(i), eta - R) - eta) / R;
-      double XMax = (min(tree_pj->etaMax->at(i), eta + R) - eta) / R;
+      double XMin = (std::max(tree_pj->etaMin->at(i), eta - R) - eta) / R;
+      double XMax = (std::min(tree_pj->etaMax->at(i), eta + R) - eta) / R;
 
       if(XMin <= -1)
          XMin = -0.99999;
@@ -243,7 +242,7 @@ int regulate(char const* config, char const* output) {
         /* apply jet energy corrections and evaluate uncertainties */
         for (int64_t j = 0; j < tree_pj->nref; ++j) {
             double jet_area = 0.3 * 0.3 * 3.14159265359;
-            auto avg_rho = get_UE(tree_pj) / jet_area;
+            auto avg_rho = get_UE(tree_pj, (*tree_pj->jteta)[j]) / jet_area;
 
             JEC->SetJetPT((*tree_pj->rawpt)[j]);
             JEC->SetJetEta((*tree_pj->jteta)[j]);
@@ -257,17 +256,18 @@ int regulate(char const* config, char const* output) {
             JEC_scale->SetJetArea(jet_area);
             JEC_scale->SetRho(avg_rho);
 
-            if(JEC.GetCorrection() > 0)
+            if(JEC->GetCorrection() > 0)
                 tree_pj->jtptCor->push_back(JEC->GetCorrectedPT());
 
-            if(JEC_scale.GetCorrection() > 0)
+            if(JEC_scale->GetCorrection() > 0)
                 tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
 
-            if (!csn.empty()) { 
-                auto rnd = rng->Gaus(1., jer(csn, corr);
-                (*tree_pj->jtpt)[j] *= rnd);
-                (*tree_pj->jtptCor)[j] *= rnd);
-            }
+            // if (!csn.empty()) { 
+            //     auto rnd = rng->Gaus(1., jer(csn, corr);
+            //     (*tree_pj->jtpt)[j] *= rnd);
+            //     (*tree_pj->jtptCor)[j] *= rnd);
+            //     (*tree_pj->jtptCorScale)[j] *= rnd);
+            // }
         }
 
         /* apply photon energy corrections */
