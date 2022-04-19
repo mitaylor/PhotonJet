@@ -266,11 +266,11 @@ int regulate(char const* config, char const* output) {
             if (!jecs.empty()) tree_pj->jtptCor->push_back(JEC->GetCorrectedPT());
             if (!jecs_scale.empty()) tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
 
-            if ((*tree_pj->refpt)[j] > 15 && (*tree_pj->jteta)[j] > -2 && (*tree_pj->jteta)[j] < 2) {
-                std::cout << "refpt: " << (*tree_pj->refpt)[j] << "\tjtpt: " << (*tree_pj->jtpt)[j];
-                std::cout << "\tjtptCor: " << (*tree_pj->jtptCor)[j] << "\tjtptCorScale: " << (*tree_pj->jtptCorScale)[j];
-                std::cout << "\trho: " << avg_rho << "\t" << get_UE(tree_pj, (*tree_pj->jteta)[j]) << std::endl;
-            }
+            // if ((*tree_pj->refpt)[j] > 15 && (*tree_pj->jteta)[j] > -2 && (*tree_pj->jteta)[j] < 2) {
+            //     std::cout << "refpt: " << (*tree_pj->refpt)[j] << "\tjtpt: " << (*tree_pj->jtpt)[j];
+            //     std::cout << "\tjtptCor: " << (*tree_pj->jtptCor)[j] << "\tjtptCorScale: " << (*tree_pj->jtptCorScale)[j];
+            //     std::cout << "\trho: " << avg_rho << "\t" << get_UE(tree_pj, (*tree_pj->jteta)[j]) << std::endl;
+            // }
 
             // if (!csn.empty()) { 
             //     auto rnd = rng->Gaus(1., jer(csn, corr);
