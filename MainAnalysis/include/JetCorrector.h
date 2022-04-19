@@ -160,7 +160,7 @@ void SingleJetCorrector::Initialize(std::string FileName)
       {
          // Otherwise it's a line with actual JECs, add it to the list
 
-         if(Parts.size() < nvar * 2 + npar * 2 + 1)
+         if((int) Parts.size() < nvar * 2 + npar * 2 + 1)
             continue;
 
          std::vector<double> Parameter;
@@ -273,8 +273,6 @@ std::vector<double> SingleJetCorrector::GetParameters()
 
 int SingleJetCorrector::FindBin()
 {
-   int N = Formulas.size();
-
    for(int iE = 0; iE < N; iE++)
    {
       bool InBin = true;
