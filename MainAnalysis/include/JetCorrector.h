@@ -273,7 +273,7 @@ std::vector<double> SingleJetCorrector::GetParameters()
 
 int SingleJetCorrector::FindBin()
 {
-   for(int iE = 0; iE < N; iE++)
+   for(int iE = 0; iE < (int) Formulas.size(); iE++)
    {
       bool InBin = true;
 
@@ -295,8 +295,6 @@ double SingleJetCorrector::GetCorrection()
 {
    if(Initialized == false)
       return -1;
-
-   int N = Formulas.size();
 
    int iE = FindBin();
    if(iE < 0)
