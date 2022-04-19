@@ -264,7 +264,7 @@ int regulate(char const* config, char const* output) {
             if ((*tree_pj->refpt)[j] > 15) {
                 std::cout << "refpt: " << (*tree_pj->refpt)[j] << "\tjtpt: " << (*tree_pj->jtpt)[j];
                 std::cout << "\tjtptCor: " << (*tree_pj->jtptCor)[j] << "\tjtptCorScale: " << (*tree_pj->jtptCorScale)[j];
-                std::cout << "\trho" << avg_rho << std::endl;
+                std::cout << "\trho: " << avg_rho << "\t" << get_UE(tree_pj, (*tree_pj->jteta)[j]) << std::endl;
             }
 
             // if (!csn.empty()) { 
