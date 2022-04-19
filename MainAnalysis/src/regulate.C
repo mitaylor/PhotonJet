@@ -244,23 +244,22 @@ int regulate(char const* config, char const* output) {
             float jet_area = 0.3 * 0.3 * 3.14159265359;
             auto avg_rho = get_UE(tree_pj, (*tree_pj->jteta)[j]) / jet_area;
 
-            JEC->SetJetPT((*tree_pj->rawpt)[j]);
+            JEC->SetJetPT((*tree_pj->jtpt)[j]);
+            // JEC->SetJetPT((*tree_pj->rawpt)[j]);
             JEC->SetJetEta((*tree_pj->jteta)[j]);
             JEC->SetJetPhi((*tree_pj->jtphi)[j]);
             JEC->SetJetArea(jet_area);
             JEC->SetRho(avg_rho);
 
-            JEC_scale->SetJetPT((*tree_pj->rawpt)[j]);
+            JEC_scale->SetJetPT((*tree_pj->jtpt)[j]);
+            // JEC_scale->SetJetPT((*tree_pj->rawpt)[j]);
             JEC_scale->SetJetEta((*tree_pj->jteta)[j]);
             JEC_scale->SetJetPhi((*tree_pj->jtphi)[j]);
             JEC_scale->SetJetArea(jet_area);
             JEC_scale->SetRho(avg_rho);
 
-            if(JEC->GetCorrection() > 0)
-                tree_pj->jtptCor->push_back(JEC->GetCorrectedPT());
-
-            if(JEC_scale->GetCorrection() > 0)
-                tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
+            if (!jecs.empty()) tree_pj->jtptCor->push_back(JEC->GetCorrectedPT());
+            if (!jecs_scale.empty()) tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
 
             // if (!csn.empty()) { 
             //     auto rnd = rng->Gaus(1., jer(csn, corr);
