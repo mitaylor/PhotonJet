@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 using namespace std::literals::string_literals;
 
@@ -61,9 +62,9 @@ float get_UE(pjtree* tree_pj, float eta) {
 
    for(int i = 0; i < NBin; i++)
    {
-      if(tree_pj->etaMax->at(i) < eta - R)
+      if((*tree_pj->etaMin)[i] < eta - R)
          continue;
-      if(tree_pj->etaMin->at(i) > eta + R)
+      if((*tree_pj->etaMax)[i] > eta + R)
          continue;
 
       float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
@@ -74,8 +75,8 @@ float get_UE(pjtree* tree_pj, float eta) {
       if(XMax >= +1)
          XMax = +0.99999;
 
-      float high = XMax * sqrt(1 - XMax * XMax) + asin(XMax);
-      float low = XMin * sqrt(1 - XMin * XMin) + asin(XMin);
+      float high = XMax * std::sqrt(1 - XMax * XMax) + std::asin(XMax);
+      float low = XMin * std::sqrt(1 - XMin * XMin) + std::asin(XMin);
 
       result = result + R * R * (high - low) * (*tree_pj->evtRho)[i];
    }
