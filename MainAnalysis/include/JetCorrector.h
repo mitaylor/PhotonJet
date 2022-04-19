@@ -1,7 +1,7 @@
 // SingleJetCorrector
 // v3.0
 // Author: Yi Chen
-//
+// 
 // This class applies JEC for any given level using TF1 as the workhorse
 // Supposedly runs faster than v1.0
 // v3.0: one can add list of text files to apply them one by one
@@ -66,13 +66,15 @@ public:
    bool CheckDefinition(std::string Line);
    std::string StripBracket(std::string Line);
    SingleJetCorrector::Type ToType(std::string Line);
+   std::vector<double> GetParameters();
+   int FindBin();
    double GetCorrection();
    double GetCorrectedPT();
    double GetValue(Type T);
 private:
    std::string Hack4(std::string Formula, char V, int N);
 };
-
+   
 void JetCorrector::Initialize(std::vector<std::string> Files)
 {
    JEC.clear();
@@ -92,7 +94,7 @@ double JetCorrector::GetCorrectedPT()
 {
    double PT = JetPT;
 
-   for(int i = 0; i < (int)JEC.size(); i++)
+   for(int i = 0; i < (int)JEC.size(); i++)  
    {
       JEC[i].SetJetPT(PT);
       JEC[i].SetJetEta(JetEta);
@@ -138,14 +140,14 @@ void SingleJetCorrector::Initialize(std::string FileName)
          // Found a definition line - update current formula
 
          nvar = atoi(Parts[0].c_str());
-         if(Parts.size() <= static_cast<uint32_t>(nvar + 1))
+         if(Parts.size() <= nvar + 1)
             continue;
          npar = atoi(Parts[nvar+1].c_str());
-         if(Parts.size() <= static_cast<uint32_t>(nvar + 1 + npar + 1))
+         if(Parts.size() <= nvar + 1 + npar + 1)
             continue;
 
          CurrentFormula = Parts[nvar+1+npar+1];
-
+         
          CurrentBinTypes.clear();
          for(int i = 0; i < nvar; i++)
             CurrentBinTypes.push_back(ToType(Parts[1+i]));
@@ -158,7 +160,7 @@ void SingleJetCorrector::Initialize(std::string FileName)
       {
          // Otherwise it's a line with actual JECs, add it to the list
 
-         if(Parts.size() < static_cast<uint32_t>(nvar * 2 + npar * 2 + 1))
+         if(Parts.size() < nvar * 2 + npar * 2 + 1)
             continue;
 
          std::vector<double> Parameter;
@@ -249,9 +251,11 @@ std::string SingleJetCorrector::StripBracket(std::string Line)
 SingleJetCorrector::Type SingleJetCorrector::ToType(std::string Line)
 {
    if(Line == "JetPt")    return TypeJetPT;
+   if(Line == "JetPT")    return TypeJetPT;
    if(Line == "JetEta")   return TypeJetEta;
    if(Line == "JetPhi")   return TypeJetPhi;
    if(Line == "JetA")     return TypeJetArea;
+   if(Line == "JetRho")   return TypeRho;
    if(Line == "Rho")      return TypeRho;
 
    std::cerr << "[SingleJetCorrector] Warning: variable type " << Line << " not found!" << std::endl;
@@ -259,11 +263,16 @@ SingleJetCorrector::Type SingleJetCorrector::ToType(std::string Line)
    return TypeNone;
 }
 
-double SingleJetCorrector::GetCorrection()
+std::vector<double> SingleJetCorrector::GetParameters()
 {
-   if(Initialized == false)
-      return -1;
+   int iE = FindBin();
+   if(iE < 0)
+      return {};
+   return Parameters[iE];
+}
 
+int SingleJetCorrector::FindBin()
+{
    int N = Formulas.size();
 
    for(int iE = 0; iE < N; iE++)
@@ -277,70 +286,82 @@ double SingleJetCorrector::GetCorrection()
             InBin = false;
       }
 
-      if(InBin == false)
-         continue;
-
-      if(Dependencies[iE].size() == 0)
-         return -1;   // huh?
-      if(Dependencies[iE].size() > 4)
-      {
-         std::cerr << "[SingleJetCorrector] There are " << Dependencies[iE].size() << " parameters!" << std::endl;
-         return -1;   // huh?
-      }
-
-      double V[3] = {0, 0, 0};
-      for(int i = 0; i < 3; i++)
-      {
-         if(Dependencies[iE].size() <= static_cast<uint32_t>(i))
-            continue;
-
-         double Value = GetValue(Dependencies[iE][i]);
-         if(Value < DependencyRanges[iE][i*2])
-            Value = DependencyRanges[iE][i*2];
-         if(Value > DependencyRanges[iE][i*2+1])
-            Value = DependencyRanges[iE][i*2+1];
-         V[i] = Value;
-      }
-
-      TF1 *Function = nullptr;
-
-      if(Functions[iE] == nullptr)
-      {
-         if(Dependencies[iE].size() == 1)
-            Function = new TF1(Form("Function%d", iE), (Formulas[iE] + "+0*x").c_str());
-         if(Dependencies[iE].size() == 2)
-            Function = new TF2(Form("Function%d", iE), (Formulas[iE] + "+0*x+0*y").c_str());
-         if(Dependencies[iE].size() == 3)
-            Function = new TF3(Form("Function%d", iE), (Formulas[iE] + "+0*x+0*y+0*z").c_str());
-         if(Dependencies[iE].size() == 4)
-            Function = new TF3(Form("Function%d", iE), (Formulas[iE] + "+0*x+0*y+0*z").c_str());
-
-         Functions[iE] = Function;
-      }
-      else
-         Function = Functions[iE];
-
-      for(int i = 0; i < (int)Parameters[iE].size(); i++)
-         Function->SetParameter(i, Parameters[iE][i]);
-      if(Dependencies[iE].size() == 4)
-         Function->SetParameter(Parameters[iE].size(), GetValue(Dependencies[iE][3]));
-      double Result = Function->EvalPar(V);
-
-      // cout << Formulas[iE] << endl;
-      // cout << "P" << endl;
-      // for(int i = 0; i < (int)Parameters[iE].size(); i++)
-      //    cout << " " << Parameters[iE][i] << endl;
-      // cout << "V" << endl;
-      // cout << " " << V[0] << endl;
-      // cout << " " << V[1] << endl;
-      // cout << " " << V[2] << endl;
-      // cout << Dependencies[iE].size() << endl;
-      // cout << Function->EvalPar(V) << endl;
-
-      return Result;
+      if(InBin == true)
+         return iE;
    }
 
    return -1;
+}
+
+double SingleJetCorrector::GetCorrection()
+{
+   if(Initialized == false)
+      return -1;
+
+   int N = Formulas.size();
+
+   int iE = FindBin();
+   if(iE < 0)
+      return -1;
+
+   if(Dependencies[iE].size() == 0)
+      return -1;   // huh?
+   if(Dependencies[iE].size() > 4)
+   {
+      std::cerr << "[SingleJetCorrector] There are " << Dependencies[iE].size() << " parameters!" << std::endl;
+      return -1;   // huh?
+   }
+
+   double V[3] = {0, 0, 0};
+   for(int i = 0; i < 3; i++)
+   {
+      if(Dependencies[iE].size() <= i)
+         continue;
+
+      double Value = GetValue(Dependencies[iE][i]);
+      if(Value < DependencyRanges[iE][i*2])
+         Value = DependencyRanges[iE][i*2];
+      if(Value > DependencyRanges[iE][i*2+1])
+         Value = DependencyRanges[iE][i*2+1];
+      V[i] = Value;
+   }
+
+   TF1 *Function = nullptr;
+
+   if(Functions[iE] == nullptr)
+   {
+      if(Dependencies[iE].size() == 1)
+         Function = new TF1(Form("Function%d", iE), (Formulas[iE] + "+0*x").c_str());
+      if(Dependencies[iE].size() == 2)
+         Function = new TF2(Form("Function%d", iE), (Formulas[iE] + "+0*x+0*y").c_str());
+      if(Dependencies[iE].size() == 3)
+         Function = new TF3(Form("Function%d", iE), (Formulas[iE] + "+0*x+0*y+0*z").c_str());
+      if(Dependencies[iE].size() == 4)
+         Function = new TF3(Form("Function%d", iE), (Formulas[iE] + "+0*x+0*y+0*z").c_str());
+
+      Functions[iE] = Function;
+   }
+   else
+      Function = Functions[iE];
+
+   for(int i = 0; i < (int)Parameters[iE].size(); i++)
+      Function->SetParameter(i, Parameters[iE][i]);
+   if(Dependencies[iE].size() == 4)
+      Function->SetParameter(Parameters[iE].size(), GetValue(Dependencies[iE][3]));
+   double Result = Function->EvalPar(V);
+
+   // cout << Formulas[iE] << endl;
+   // cout << "P" << endl;
+   // for(int i = 0; i < (int)Parameters[iE].size(); i++)
+   //    cout << " " << Parameters[iE][i] << endl;
+   // cout << "V" << endl;
+   // cout << " " << V[0] << endl;
+   // cout << " " << V[1] << endl;
+   // cout << " " << V[2] << endl;
+   // cout << Dependencies[iE].size() << endl;
+   // cout << Function->EvalPar(V) << endl;
+
+   return Result;
 }
 
 double SingleJetCorrector::GetCorrectedPT()
