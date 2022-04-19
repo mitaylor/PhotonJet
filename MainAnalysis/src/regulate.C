@@ -49,9 +49,10 @@ float jer(std::vector<float> const& csn, float pt) {
     return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
 }
 
-float get_UE(pjtree* tree_pj, float eta) {
-    float result = 0;
-    float R = 0.3;
+double get_UE(pjtree* tree_pj, float eta_in) {
+    double result = 0;
+    double R = 0.3;
+    double eta = static_cast<double>(eta_in);
 
     if(tree_pj->etaMin == nullptr)
         return -1;
@@ -69,8 +70,8 @@ float get_UE(pjtree* tree_pj, float eta) {
 
         std::cout << "eta - R: " << eta-R << " etaMin: " << (*tree_pj->etaMin)[i] << " etaMax: " << (*tree_pj->etaMax)[i] << std::endl;
 
-        float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
-        float XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
+        double XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
+        double XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
 
         std::cout << "XMin: " << XMin << " XMax: " << XMax << std::endl;
 
@@ -79,8 +80,8 @@ float get_UE(pjtree* tree_pj, float eta) {
         if(XMax >= +1)
             XMax = +0.99999;
 
-        float high = XMax * std::sqrt(1 - XMax * XMax) + std::asin(XMax);
-        float low = XMin * std::sqrt(1 - XMin * XMin) + std::asin(XMin);
+        double high = XMax * std::sqrt(1 - XMax * XMax) + std::asin(XMax);
+        double low = XMin * std::sqrt(1 - XMin * XMin) + std::asin(XMin);
 
         std::cout << "high: " << high << " low: " << low << std::endl;
 
