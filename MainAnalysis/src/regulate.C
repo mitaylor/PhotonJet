@@ -70,6 +70,8 @@ float get_UE(pjtree* tree_pj, float eta) {
       float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
       float XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
 
+      std::cout << "XMin: " << XMin << " XMax: " << XMax << std::endl;
+
       if(XMin <= -1)
          XMin = -0.99999;
       if(XMax >= +1)
@@ -77,6 +79,8 @@ float get_UE(pjtree* tree_pj, float eta) {
 
       float high = XMax * std::sqrt(1 - XMax * XMax) + std::asin(XMax);
       float low = XMin * std::sqrt(1 - XMin * XMin) + std::asin(XMin);
+
+      std::cout << "high: " << high << " low: " << low << std::endl;
 
       result = result + R * R * (high - low) * (*tree_pj->evtRho)[i];
    }
