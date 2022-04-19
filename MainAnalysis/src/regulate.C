@@ -50,42 +50,44 @@ float jer(std::vector<float> const& csn, float pt) {
 }
 
 float get_UE(pjtree* tree_pj, float eta) {
-   float result = 0;
-   float R = 0.3;
+    float result = 0;
+    float R = 0.3;
 
-   if(tree_pj->etaMin == nullptr)
-      return -1;
+    if(tree_pj->etaMin == nullptr)
+        return -1;
 
-   int NBin = tree_pj->etaMin->size();
-   if(NBin == 0)
-      return -1;
+    int NBin = tree_pj->etaMin->size();
+    if(NBin == 0)
+        return -1;
 
-   for(int i = 0; i < NBin; i++)
-   {
-      if((*tree_pj->etaMin)[i] < eta - R)
-         continue;
-      if((*tree_pj->etaMax)[i] > eta + R)
-         continue;
+    for(int i = 0; i < NBin; i++)
+    {
+        if((*tree_pj->etaMin)[i] < eta - R)
+            continue;
+        if((*tree_pj->etaMax)[i] > eta + R)
+            continue;
 
-      float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
-      float XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
+        std::cout << "eta: " << eta << " etaMin: " << (*tree_pj->etaMin)[i] << std::endl;
 
-      std::cout << "XMin: " << XMin << " XMax: " << XMax << std::endl;
+        float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
+        float XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
 
-      if(XMin <= -1)
-         XMin = -0.99999;
-      if(XMax >= +1)
-         XMax = +0.99999;
+        std::cout << "XMin: " << XMin << " XMax: " << XMax << std::endl;
 
-      float high = XMax * std::sqrt(1 - XMax * XMax) + std::asin(XMax);
-      float low = XMin * std::sqrt(1 - XMin * XMin) + std::asin(XMin);
+        if(XMin <= -1)
+            XMin = -0.99999;
+        if(XMax >= +1)
+            XMax = +0.99999;
 
-      std::cout << "high: " << high << " low: " << low << std::endl;
+        float high = XMax * std::sqrt(1 - XMax * XMax) + std::asin(XMax);
+        float low = XMin * std::sqrt(1 - XMin * XMin) + std::asin(XMin);
 
-      result = result + R * R * (high - low) * (*tree_pj->evtRho)[i];
-   }
+        std::cout << "high: " << high << " low: " << low << std::endl;
 
-   return result;
+        result = result + R * R * (high - low) * (*tree_pj->evtRho)[i];
+    }
+
+    return result;
 }
 
 int regulate(char const* config, char const* output) {
