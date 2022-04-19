@@ -9,9 +9,9 @@
 #include <vector>
 
 #define B_VEC_RHO(ACTION, ...)                                              \
-    ACTION(sv<float>,       etaMin,                     ## __VA_ARGS__)     \
-    ACTION(sv<float>,       etaMax,                     ## __VA_ARGS__)     \
-    ACTION(sv<float>,       evtRho,                     ## __VA_ARGS__)     \
+    ACTION(sv<double>,       etaMin,                     ## __VA_ARGS__)     \
+    ACTION(sv<double>,       etaMax,                     ## __VA_ARGS__)     \
+    ACTION(sv<double>,       evtRho,                     ## __VA_ARGS__)     \
 
 class evtrho : tree {
   public:
