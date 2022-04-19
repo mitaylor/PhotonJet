@@ -66,9 +66,9 @@ float get_UE(pjtree* tree_pj, float eta) {
         float etaMax = static_cast<float>((*tree_pj->etaMax)[i]);
         float evtRho = static_cast<float>((*tree_pj->evtRho)[i]);
 
-        if(etaMax < Eta - R)
+        if(etaMax < eta - R)
             continue;
-        if(etaMin > Eta + R)
+        if(etaMin > eta + R)
             continue;
 
         float XMin = (std::max(etaMin, eta - R) - eta) / R;
