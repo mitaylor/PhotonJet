@@ -140,10 +140,10 @@ void SingleJetCorrector::Initialize(std::string FileName)
          // Found a definition line - update current formula
 
          nvar = atoi(Parts[0].c_str());
-         if(Parts.size() <= nvar + 1)
+         if((int) Parts.size() <= nvar + 1)
             continue;
          npar = atoi(Parts[nvar+1].c_str());
-         if(Parts.size() <= nvar + 1 + npar + 1)
+         if((int) Parts.size() <= nvar + 1 + npar + 1)
             continue;
 
          CurrentFormula = Parts[nvar+1+npar+1];
@@ -315,7 +315,7 @@ double SingleJetCorrector::GetCorrection()
    double V[3] = {0, 0, 0};
    for(int i = 0; i < 3; i++)
    {
-      if(Dependencies[iE].size() <= i)
+      if((int) Dependencies[iE].size() <= i)
          continue;
 
       double Value = GetValue(Dependencies[iE][i]);
