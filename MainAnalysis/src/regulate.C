@@ -62,12 +62,12 @@ float get_UE(pjtree* tree_pj, float eta) {
 
     for(int i = 0; i < NBin; i++)
     {
-        if((*tree_pj->etaMin)[i] < eta - R)
+        if((*tree_pj->etaMin)[i] < (eta - R))
             continue;
-        if((*tree_pj->etaMax)[i] > eta + R)
+        if((*tree_pj->etaMax)[i] > (eta + R))
             continue;
 
-        std::cout << "eta: " << eta << " etaMin: " << (*tree_pj->etaMin)[i] << std::endl;
+        std::cout << "eta - R: " << eta-R << " etaMin: " << (*tree_pj->etaMin)[i] << " etaMax: " << (*tree_pj->etaMax)[i] << std::endl;
 
         float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
         float XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
