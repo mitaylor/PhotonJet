@@ -48,9 +48,9 @@ float jer(std::vector<float> const& csn, float pt) {
     return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
 }
 
-double get_UE(pjtree* tree_pj, float eta) {
-   double result = 0;
-   double R = 0.3;
+float get_UE(pjtree* tree_pj, float eta) {
+   float result = 0;
+   float R = 0.3;
 
    if(tree_pj->etaMin == nullptr)
       return -1;
@@ -66,16 +66,16 @@ double get_UE(pjtree* tree_pj, float eta) {
       if(tree_pj->etaMin->at(i) > eta + R)
          continue;
 
-      double XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
-      double XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
+      float XMin = (std::max((*tree_pj->etaMin)[i], eta - R) - eta) / R;
+      float XMax = (std::min((*tree_pj->etaMax)[i], eta + R) - eta) / R;
 
       if(XMin <= -1)
          XMin = -0.99999;
       if(XMax >= +1)
          XMax = +0.99999;
 
-      double high = XMax * sqrt(1 - XMax * XMax) + asin(XMax);
-      double low = XMin * sqrt(1 - XMin * XMin) + asin(XMin);
+      float high = XMax * sqrt(1 - XMax * XMax) + asin(XMax);
+      float low = XMin * sqrt(1 - XMin * XMin) + asin(XMin);
 
       result = result + R * R * (high - low) * (*tree_pj->evtRho)[i];
    }
@@ -241,7 +241,7 @@ int regulate(char const* config, char const* output) {
         
         /* apply jet energy corrections and evaluate uncertainties */
         for (int64_t j = 0; j < tree_pj->nref; ++j) {
-            double jet_area = 0.3 * 0.3 * 3.14159265359;
+            float jet_area = 0.3 * 0.3 * 3.14159265359;
             auto avg_rho = get_UE(tree_pj, (*tree_pj->jteta)[j]) / jet_area;
 
             JEC->SetJetPT((*tree_pj->rawpt)[j]);
