@@ -263,7 +263,7 @@ int regulate(char const* config, char const* output) {
             if (!jecs_scale.empty()) tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
 
             std::cout << "refpt: " << (*tree_pj->refpt)[j] << "\tjtpt: " << (*tree_pj->jtpt)[j];
-            std::cout << "\tjtptCor: " << (*tree_pj->jtptCor)[j] << "\tjtptCorScale" << (*tree_pj->jtptCorScale)[j] << std::endl;
+            std::cout << "\tjtptCor: " << (*tree_pj->jtptCor)[j] << "\tjtptCorScale: " << (*tree_pj->jtptCorScale)[j] << std::endl;
 
             // if (!csn.empty()) { 
             //     auto rnd = rng->Gaus(1., jer(csn, corr);
