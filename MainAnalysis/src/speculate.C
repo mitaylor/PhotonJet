@@ -42,7 +42,7 @@ int speculate(char const* config, char const* output) {
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
-    auto type = conf->get<int>("type");
+    auto type = conf->get<int64_t>("type");
     std::cout << type << std::endl;
 
     auto rpt = conf->get<std::vector<float>>("pt_range");
