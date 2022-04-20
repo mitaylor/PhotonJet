@@ -72,9 +72,7 @@ int speculate(char const* config, char const* output) {
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
-            float pho_et = -1;
-
-            if (type == 1) pho_et = (*p->phoEt)[j];
+            float pho_et = (*p->phoEt)[j];
             if (type == 2) pho_et = (*p->phoEtEr)[j];
             if (type == 3) pho_et = (*p->phoEtErNew)[j];
 
@@ -100,9 +98,7 @@ int speculate(char const* config, char const* output) {
             + (*p->pho_trackIsoR3PtCut20)[leading];
         if (isolation > iso_max) { continue; }
 
-        float et;
-        
-        if (type == 1) et = (*p->phoEt)[leading];
+        float et = (*p->phoEt)[leading];
         if (type == 2) et = (*p->phoEtEr)[leading];
         if (type == 3) et = (*p->phoEtErNew)[leading];
 
