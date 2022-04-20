@@ -72,7 +72,7 @@ int speculate(char const* config, char const* output) {
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
-            float pho_et;
+            float pho_et = -1;
 
             if (type == 1) pho_et = (*p->phoEt)[j];
             if (type == 2) pho_et = (*p->phoEtEr)[j];
