@@ -41,6 +41,8 @@ int speculate(char const* config, char const* output) {
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
+    auto const type = conf->get<int>("type");
+
     auto rpt = conf->get<std::vector<float>>("pt_range");
 
     /* load forest */
@@ -70,9 +72,15 @@ int speculate(char const* config, char const* output) {
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
-            if ((*p->phoEt)[j] > leading_pt) {
+            float pho_et;
+
+            if (type == 1) pho_et = (*p->phoEt)[j];
+            if (type == 2) pho_et = (*p->phoEtEr)[j];
+            if (type == 3) pho_et = (*p->phoEtErNew)[j];
+
+            if (pho_et > leading_pt) {
                 leading = j;
-                leading_pt = (*p->phoEt)[j];
+                leading_pt = pho_et;
             }
         }
 
@@ -92,7 +100,11 @@ int speculate(char const* config, char const* output) {
             + (*p->pho_trackIsoR3PtCut20)[leading];
         if (isolation > iso_max) { continue; }
 
-        auto et = (*p->phoEt)[leading];
+        float et;
+        
+        if (type == 1) et = (*p->phoEt)[leading];
+        if (type == 2) et = (*p->phoEtEr)[leading];
+        if (type == 3) et = (*p->phoEtErNew)[leading];
 
         if (mc_branches) {
             (*counts)[0]->Fill(et, p->weight);
