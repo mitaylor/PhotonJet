@@ -57,6 +57,9 @@ int speculate(char const* config, char const* output) {
 
     auto counts = new history<TH1F>("count", "counts", fpt, 2);
 
+    int64_t total = 0;
+    int64_t total_accepts = 0;
+
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
     if (max_entries) nentries = std::min(nentries, max_entries);
@@ -105,14 +108,20 @@ int speculate(char const* config, char const* output) {
         if (type == 3) et = (*p->phoEtErNew)[leading];
 
         if (mc_branches) {
+            if (et > 40) total++;
             (*counts)[0]->Fill(et, p->weight);
-            if ((*p->accepts)[0] == 1)
+            if ((*p->accepts)[0] == 1) {
                 (*counts)[1]->Fill(et, p->weight);
+                if (et > 40) total_accepts++;
+            }
         }
         else {
+            if (et > 40) total++;
             (*counts)[0]->Fill(et);
-            if ((*p->accepts)[0] == 1)
+            if ((*p->accepts)[0] == 1) {
                 (*counts)[1]->Fill(et);
+                if (et > 40) total_accepts++;
+            }
         }
     }
 
