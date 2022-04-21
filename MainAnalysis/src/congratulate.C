@@ -109,10 +109,10 @@ int congratulate(char const* config, char const* output) {
         info->DrawLatexNDC(0.89, 0.92, system.data());
 
         TLatex* info_extra = new TLatex();
-        info->SetTextFont(42);
-        info->SetTextSize(0.056);
-        info->SetTextAlign(31);
-        info->DrawLatexNDC(0.89, 0.98, extra.data());
+        info_extra->SetTextFont(42);
+        info_extra->SetTextSize(0.056);
+        info_extra->SetTextAlign(31);
+        info_extra->DrawLatexNDC(0.89, 0.98, extra.data());
     };
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
