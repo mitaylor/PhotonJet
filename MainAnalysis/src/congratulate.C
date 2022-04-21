@@ -94,7 +94,7 @@ int congratulate(char const* config, char const* output) {
         prel->SetTextFont(52);
         prel->SetTextSize(0.056);
         prel->SetTextAlign(13);
-        prel->DrawLatexNDC(0.135, 0.81, "Unofficial");
+        prel->DrawLatexNDC(0.135, 0.80, "Unofficial");
 
         TLatex* com = new TLatex();
         com->SetTextFont(42);
@@ -110,9 +110,9 @@ int congratulate(char const* config, char const* output) {
 
         TLatex* info_extra = new TLatex();
         info_extra->SetTextFont(42);
-        info_extra->SetTextSize(0.056);
+        info_extra->SetTextSize(0.038);
         info_extra->SetTextAlign(31);
-        info_extra->DrawLatexNDC(0.89, 0.98, extra.data());
+        info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
     };
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
@@ -122,10 +122,10 @@ int congratulate(char const* config, char const* output) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pp_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.75, 0.04, h, pt_info); };
+        stack_text(index, 0.73, 0.04, h, pt_info); };
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.75, 0.04, h, pt_info, hf_info); };
+        stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
