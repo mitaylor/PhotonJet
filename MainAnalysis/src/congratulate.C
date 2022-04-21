@@ -104,13 +104,13 @@ int congratulate(char const* config, char const* output) {
 
         TLatex* info = new TLatex();
         info->SetTextFont(42);
-        info->SetTextSize(0.056);
+        info->SetTextSize(0.04);
         info->SetTextAlign(31);
         info->DrawLatexNDC(0.89, 0.92, system.data());
 
         TLatex* info_extra = new TLatex();
         info_extra->SetTextFont(42);
-        info_extra->SetTextSize(0.038);
+        info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
     };
