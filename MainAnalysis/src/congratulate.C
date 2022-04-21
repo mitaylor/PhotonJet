@@ -83,7 +83,7 @@ int congratulate(char const* config, char const* output) {
     hb->alias("aa", "PbPb");
     hb->alias("ss", "pp (smeared)");
 
-    auto decorator = [](std::string const& system) {
+    auto decorator = [](std::string const& system, std::string const& extra = "") {
         TLatex* cms = new TLatex();
         cms->SetTextFont(62);
         cms->SetTextSize(0.084);
@@ -94,7 +94,7 @@ int congratulate(char const* config, char const* output) {
         prel->SetTextFont(52);
         prel->SetTextSize(0.056);
         prel->SetTextAlign(13);
-        prel->DrawLatexNDC(0.135, 0.81, "Preliminary");
+        prel->DrawLatexNDC(0.135, 0.81, "Unofficial");
 
         TLatex* com = new TLatex();
         com->SetTextFont(42);
@@ -107,6 +107,12 @@ int congratulate(char const* config, char const* output) {
         info->SetTextSize(0.056);
         info->SetTextAlign(31);
         info->DrawLatexNDC(0.89, 0.92, system.data());
+
+        TLatex* info_extra = new TLatex();
+        info->SetTextFont(42);
+        info->SetTextSize(0.056);
+        info->SetTextAlign(31);
+        info->DrawLatexNDC(0.89, 0.98, extra.data());
     };
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
@@ -188,7 +194,7 @@ int congratulate(char const* config, char const* output) {
 
         auto s = new paper("results_ss_" + figure, hb);
         apply_style(s, "", ymin, ymax);
-        s->decorate(std::bind(decorator, "pp 320 pb^{-1}, PbPb 1.6 nb^{-1}"));
+        s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 320 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
