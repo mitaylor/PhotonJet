@@ -49,8 +49,8 @@ void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion,
                 auto pid = (*p->mcPID)[gen_index];
                 auto mpid = (*p->mcMomPID)[gen_index];
 
-                if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
-                if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
+                if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { return; }
+                if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { return; }
 
                 float phoEt = 0;
                 if (type == 1) phoEt = (*p->phoEt)[index];
