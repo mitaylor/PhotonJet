@@ -44,7 +44,7 @@ void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion,
 
                 int64_t gen_index = (*p->pho_genMatchedIndex)[index];
 
-                if (gen_index == -1) { continue; }
+                if (gen_index == -1) { return; }
 
                 auto pid = (*p->mcPID)[gen_index];
                 auto mpid = (*p->mcMomPID)[gen_index];
