@@ -168,12 +168,14 @@ int regression_checks(char const* config, char const* output) {
     hscale->Write();
     hscale_cor->Write();
 
+    o->Close();
+
     return 0;
 }
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return regression_checks(argv[1]);
+        return regression_checks(argv[1],argv[2]);
 
     return 0;
 }
