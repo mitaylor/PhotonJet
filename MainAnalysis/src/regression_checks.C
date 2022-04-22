@@ -199,7 +199,7 @@ int regression_checks(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Uncorrected", "Corrected v1", "Corrected v2");
 
-    auto c1 = new paper(tag + "_photon_energy_resolution_cut27", hb);
+    auto c1 = new paper(tag + "_photon_energy_resolution", hb);
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
     c1->accessory(pthf_info);
     c1->accessory(mean_info);
