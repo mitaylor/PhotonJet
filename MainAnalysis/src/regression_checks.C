@@ -29,6 +29,7 @@ using namespace std::placeholders;
 void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion, 
     multival* mpthf, float iso_max, float geniso_max, float see_max, float see_min) {
 
+         std::cout << __LINE__ << std::endl;
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
         || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
 
@@ -41,7 +42,7 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion
                 + (*p->pho_trackIsoR3PtCut20)[index];
 
             if (isolation < iso_max) { 
-
+                 std::cout << __LINE__ << std::endl;
                 int64_t gen_index = (*p->pho_genMatchedIndex)[index];
 
                 if (gen_index == -1) { return; }
@@ -51,18 +52,21 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion
 
                 if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { return; }
                 if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { return; }
-
+                std::cout << __LINE__ << std::endl;
                 float phoEt = 0;
                 if (type == 1) phoEt = (*p->phoEt)[index];
                 if (type == 2) phoEt = (*p->phoEtEr)[index];
                 if (type == 3) phoEt = (*p->phoEtErNew)[index];
 
                 auto ratio = phoEt / (*p->mcEt)[gen_index];
+                 std::cout << __LINE__ << std::endl;
 
                 if ((*p->mcEt)[gen_index] < 200) {
+                     std::cout << __LINE__ << std::endl;
                     int64_t index = mpthf->index_for(v{(*p->mcEt)[gen_index], p->hiHF});
                     (*hist)[index]->Fill(ratio, p->weight);
                 }
+                 std::cout << __LINE__ << std::endl;
             }
         }
     }
@@ -112,8 +116,9 @@ int regression_checks(char const* config, char const* output) {
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
-
+        std::cout << __LINE__ << std::endl;
         t->GetEntry(i);
+         std::cout << __LINE__ << std::endl;
 
         if (std::abs(p->vz) > 15) { continue; }
         if (p->hiHF <= hf_min) { continue; }
@@ -147,13 +152,17 @@ int regression_checks(char const* config, char const* output) {
                 leading_pt_cor_2 = (*p->phoEtErNew)[j];
             }
         }
+         std::cout << __LINE__ << std::endl;
 
         /* require leading photon */
         if (leading < 0) { continue; }
 
         fill_hist(p, 1, leading, hscale, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+         std::cout << __LINE__ << std::endl;
         fill_hist(p, 2, leading_cor, hscale_cor, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+         std::cout << __LINE__ << std::endl;
         fill_hist(p, 3, leading_cor_2, hscale_cor_2, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+         std::cout << __LINE__ << std::endl;
     }
 
     std::cout << stats << std::endl;
