@@ -30,7 +30,7 @@ void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion,
     float iso_max, float geniso_max, float see_max, float see_min) {
 
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
-        || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) 
+        || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
 
         /* hem failure region exclusion */
         if (!heavyion || !within_hem_failure_region(p, index)) { 
@@ -53,9 +53,9 @@ void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion,
                 if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
 
                 float phoEt = 0;
-                if (type == 1) phoEt = (*p->phoEt)[leading];
-                if (type == 2) phoEt = (*p->phoEtEr)[leading];
-                if (type == 3) phoEt = (*p->phoEtErNew)[leading];
+                if (type == 1) phoEt = (*p->phoEt)[index];
+                if (type == 2) phoEt = (*p->phoEtEr)[index];
+                if (type == 3) phoEt = (*p->phoEtErNew)[index];
 
                 auto ratio = phoEt / (*p->mcEt)[gen_index];
 
