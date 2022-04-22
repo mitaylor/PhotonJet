@@ -111,7 +111,7 @@ int regression_checks(char const* config) {
 
                     auto ratio = (*p->phoEt)[leading] / (*p->mcEt)[gen_index];
 
-                    hscale->Fill(ratio,p->weight);
+                    hscale->Fill(ratio);
                     stats++;
                     std::cout << ratio << std::endl;
                 }
