@@ -111,7 +111,7 @@ int regression_checks(char const* config) {
 
                     auto ratio = (*p->phoEt)[leading] / (*p->mcEt)[gen_index];
 
-                    hscale->Fill(ratio);
+                    hscale->Fill(ratio,p->weight);
                     stats++;
                     std::cout << ratio << std::endl;
                 }
@@ -150,21 +150,14 @@ int regression_checks(char const* config) {
     }
 
     std::cout << stats << std::endl;
-
-    /* calculate efficiency */
-    auto hframe = frame(hscale->GetXaxis(), hscale->GetYaxis());
-    hframe->GetYaxis()->SetTitle("counts");
-    hframe->GetXaxis()->SetTitle("photon energy scale");
-
-    /* draw efficiency */
+    
     auto hb = new pencil();
     hb->category("type", "Uncorrected", "Corrected");
 
     auto c1 = new paper(tag + "photon_energy_resolution", hb);
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
 
-    c1->add(hframe);
-    c1->stack(hscale, "Uncorrected");
+    c1->add(hscale, "Uncorrected");
     c1->stack(hscale_cor, "Corrected");
 
     hb->sketch();
