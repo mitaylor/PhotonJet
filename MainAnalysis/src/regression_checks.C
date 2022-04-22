@@ -27,7 +27,7 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion, 
-    float iso_max, float geniso_max, float see_max, float see_min) {
+    multival* mpthf, float iso_max, float geniso_max, float see_max, float see_min) {
 
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
         || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
@@ -90,6 +90,7 @@ int regression_checks(char const* config, char const* output) {
     auto mpthf = new multival(dpt, dhf);
     auto hf_min = dhf.front();
 
+    auto ipt = new interval(dpt);
     auto iratio = new interval("Reco Et / Gen Et"s, 50, 0.8, 1.5);
     auto fratio = std::bind(&interval::book<TH1F>, iratio, _1, _2, _3);
 
@@ -148,9 +149,9 @@ int regression_checks(char const* config, char const* output) {
         /* require leading photon */
         if (leading < 0) { continue; }
 
-        fill_hist(p, 1, leading, hscale, heavyion, iso_max, geniso_max, see_max, see_min);
-        fill_hist(p, 2, leading_cor, hscale_cor, heavyion, iso_max, geniso_max, see_max, see_min);
-        fill_hist(p, 3, leading_cor_2, hscale_cor_2, heavyion, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 1, leading, hscale, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 2, leading_cor, hscale_cor, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 3, leading_cor_2, hscale_cor_2, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
     }
 
     std::cout << stats << std::endl;
