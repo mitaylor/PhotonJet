@@ -42,6 +42,13 @@ int regression_checks(char const* config, char const* output) {
     auto const iso_max = conf->get<float>("iso_max");
     auto geniso_max = conf->get<float>("geniso_max");
 
+    auto dpt = conf->get<std::vector<float>>("pt_diff");
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto mpthf = new multival(dpt, dhf);
+    auto hf_min = dhf.front();
+
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
@@ -61,6 +68,7 @@ int regression_checks(char const* config, char const* output) {
         t->GetEntry(i);
 
         if (std::abs(p->vz) > 15) { continue; }
+        f (p->hiHF <= hf_min) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -149,9 +157,6 @@ int regression_checks(char const* config, char const* output) {
     }
 
     std::cout << stats << std::endl;
-
-    std::vector<float> dpt = {25,9999};
-    std::vector<float> dcent = {100,0};
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
