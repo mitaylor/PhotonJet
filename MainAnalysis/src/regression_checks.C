@@ -26,7 +26,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion, 
+void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion, 
     float iso_max, float geniso_max, float see_max, float see_min) {
 
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
@@ -59,7 +59,8 @@ void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion,
 
                 auto ratio = phoEt / (*p->mcEt)[gen_index];
 
-                hist->Fill(ratio, p->weight);
+                int64_t index = mpthf->index_for(v{(*p->mcEt)[gen_index], p->hiHF});
+                (*hist)[index]->Fill(ratio, p->weight);
             }
         }
     }
@@ -89,15 +90,17 @@ int regression_checks(char const* config, char const* output) {
     auto mpthf = new multival(dpt, dhf);
     auto hf_min = dhf.front();
 
+    auto iratio = new interval("Reco Et / Gen Et"s, 50, 0.8, 1.5);
+    auto fratio = std::bind(&interval::book<TH1F>, iratio, _1, _2, _3);
+
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
     auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
-    auto hscale = new TH1F("photon_energy_scale","",50,0.8,1.5);
-    auto hscale_cor = new TH1F("photon_energy_scale_cor","",50,0.8,1.5);
-    auto hscale_cor_2 = new TH1F("photon_energy_scale_cor_2","",50,0.8,1.5);
-
+    auto hscale = new memory<TH1F>("photon_energy_scale"s, "counts", fratio, mpthf);
+    auto hscale_cor = new memory<TH1F>("photon_energy_scale_cor"s, "counts", fratio, mpthf);
+    auto hscale_cor_2 = new memory<TH1F>("photon_energy_scale_cor_2"s, "counts", fratio, mpthf);
 
     int stats = 0;
     /* iterate */
@@ -153,7 +156,7 @@ int regression_checks(char const* config, char const* output) {
     std::cout << stats << std::endl;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+        info_text(x, pos, "%.0f < Gen p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
@@ -168,22 +171,20 @@ int regression_checks(char const* config, char const* output) {
         info->SetTextFont(43);
         info->SetTextSize(11);
 
-        sprintf(buffer, "Uncor. mean: %.3f", hscale->GetMean());
+        sprintf(buffer, "Uncor. mean: %.3f", (*hscale)[index - 1]->GetMean());
         info->DrawLatexNDC(0.5, 0.64, buffer);
-        sprintf(buffer, "Uncor. sigma: %.3f", hscale->GetMeanError());
+        sprintf(buffer, "Uncor. sigma: %.3f", (*hscale)[index - 1]->GetMeanError());
         info->DrawLatexNDC(0.5, 0.61, buffer);
 
-        sprintf(buffer, "Cor. v1 mean: %.3f", hscale_cor->GetMean());
+        sprintf(buffer, "Cor. v1 mean: %.3f", (*hscale_cor)[index - 1]->GetMean());
         info->DrawLatexNDC(0.5, 0.57, buffer);
-        sprintf(buffer, "Cor. v1 sigma: %.3f", hscale_cor->GetMeanError());
+        sprintf(buffer, "Cor. v1 sigma: %.3f", (*hscale_cor)[index - 1]->GetMeanError());
         info->DrawLatexNDC(0.5, 0.54, buffer);
 
-        sprintf(buffer, "Cor. v2 mean: %.3f", hscale_cor_2->GetMean());
+        sprintf(buffer, "Cor. v2 mean: %.3f", (*hscale_cor_2)[index - 1]->GetMean());
         info->DrawLatexNDC(0.5, 0.50, buffer);
-        sprintf(buffer, "Cor. v2 sigma: %.3f", hscale_cor_2->GetMeanError());
+        sprintf(buffer, "Cor. v2 sigma: %.3f", (*hscale_cor_2)[index - 1]->GetMeanError());
         info->DrawLatexNDC(0.5, 0.47, buffer);
-
-        std::cout << index << std::endl;
     };
 
     auto hb = new pencil();
@@ -193,10 +194,14 @@ int regression_checks(char const* config, char const* output) {
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
     c1->accessory(pthf_info);
     c1->accessory(mean_info);
+    c1->divide(ipt->size(), -1);
 
-    c1->add(hscale, "Uncorrected");
-    c1->stack(hscale_cor, "Corrected v1");
-    c1->stack(hscale_cor_2, "Corrected v2");
+
+    for (int64_t i = 0; i < mpthf->size(); ++i) {
+        c1->add((*hscale)[i], "Uncorrected");
+        c1->stack((*hscale_cor)[i], "Corrected v1");
+        c1->stack((*hscale_cor_2)[i], "Corrected v2");
+    }
 
     hb->sketch();
     c1->draw("pdf");
