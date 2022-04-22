@@ -47,8 +47,8 @@ int regression_checks(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
-    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0,2);
-    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale",50,0,2);
+    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0.5,1.5);
+    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale",50,0.5,1.5);
 
     int stats = 0;
     /* iterate */
@@ -149,6 +149,29 @@ int regression_checks(char const* config, char const* output) {
     }
 
     std::cout << stats << std::endl;
+
+    vector<float> dpt = {25,9999};
+    vector<float> dcent = {100,0};
+
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%i - %i%%", dcent, true); };
+
+    auto pthf_info = [&](int64_t index) {
+        stack_text(convert_index(index), 0.75, 0.04, mpthf, pt_info, hf_info); };
+
+    auto mean_info = [&](int64_t index) {
+        char buffer[512] = { '\0' };
+        sprintf(buffer, "uncorrected mean: %.3f\nuncorrected sigma: %.3f\n\ncorrected mean: %.3f\n corrected sigma: %.3f",
+            hscale->GetMean(),hscale->GetMeanError(),hscale_cor->GetMean(),hscale_cor->GetMeanError());
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.56, buffer);
+    };
 
     auto hb = new pencil();
     hb->category("type", "Uncorrected", "Corrected");
