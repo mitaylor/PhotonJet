@@ -42,7 +42,6 @@ int speculate(char const* config, char const* output) {
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
-    auto type = conf->get<int64_t>("type");
     std::cout << type << std::endl;
 
     auto rpt = conf->get<std::vector<float>>("pt_range");
@@ -78,8 +77,7 @@ int speculate(char const* config, char const* output) {
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
-            if (type == 2) pho_et = (*p->phoEtEr)[j];
-            if (type == 3) pho_et = (*p->phoEtErNew)[j];
+            if (pho_et > 30) pho_et = (*p->phoEtErNew)[j];
 
             if (pho_et > leading_pt) {
                 leading = j;
@@ -104,8 +102,7 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         float et = (*p->phoEt)[leading];
-        if (type == 2) et = (*p->phoEtEr)[leading];
-        if (type == 3) et = (*p->phoEtErNew)[leading];
+            if (et > 30) pho_et = (*p->phoEtErNew)[leading];
 
         if (mc_branches) {
             if (et > 40) total++;
