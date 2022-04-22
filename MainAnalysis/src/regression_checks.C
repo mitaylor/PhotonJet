@@ -64,8 +64,8 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hetaphi
                 auto mcEt = (*p->mcEt)[gen_index];
                 auto ratio = phoEt / mcEt;
 
-                if (30 < mcEt && mcEt < 200) {
-                    int64_t index = mpthf->index_for(v{mcEt, p->hiHF});
+                if (30 < phoEt && phoEt < 200) {
+                    int64_t index = mpthf->index_for(v{phoEt, p->hiHF});
                     (*hist)[index]->Fill(ratio, p->weight);
                 }
             }
@@ -165,7 +165,7 @@ int regression_checks(char const* config, char const* output) {
     }
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < Gen p_{T}^{#gamma} < %.0f", dpt, false); };
+        info_text(x, pos, "%.0f < Reco p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
