@@ -42,8 +42,6 @@ int speculate(char const* config, char const* output) {
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
-    std::cout << type << std::endl;
-
     auto rpt = conf->get<std::vector<float>>("pt_range");
 
     /* load forest */
@@ -102,7 +100,7 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         float et = (*p->phoEt)[leading];
-            if (et > 30) pho_et = (*p->phoEtErNew)[leading];
+            if (et > 30) et = (*p->phoEtErNew)[leading];
 
         if (mc_branches) {
             if (et > 40) total++;
