@@ -60,7 +60,10 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion
                 auto ratio = phoEt / (*p->mcEt)[gen_index];
 
                 int64_t index = mpthf->index_for(v{(*p->mcEt)[gen_index], p->hiHF});
-                (*hist)[index]->Fill(ratio, p->weight);
+
+                if ((*p->mcEt)[gen_index] < 200) {
+                    (*hist)[index]->Fill(ratio, p->weight);
+                }
             }
         }
     }
