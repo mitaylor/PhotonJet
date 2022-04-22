@@ -165,7 +165,7 @@ int regression_checks(char const* config, char const* output) {
     }
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < Gen p_{T}^{#gamma} < %.0f", dpt, false); };
+        info_text(x, pos, "%.0f < Reco p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
@@ -204,7 +204,7 @@ int regression_checks(char const* config, char const* output) {
     c1->accessory(pthf_info);
     c1->accessory(mean_info);
     c1->divide(ipt->size(), -1);
-    c1->set(paper::flags::logy);
+    // c1->set(paper::flags::logy);
 
 
     for (int64_t i = 0; i < mpthf->size(); ++i) {
