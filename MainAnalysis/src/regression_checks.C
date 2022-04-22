@@ -69,7 +69,7 @@ int regression_checks(char const* config, char const* output) {
         t->GetEntry(i);
 
         if (std::abs(p->vz) > 15) { continue; }
-        f (p->hiHF <= hf_min) { continue; }
+        if (p->hiHF <= hf_min) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
