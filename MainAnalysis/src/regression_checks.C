@@ -25,7 +25,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int regression_checks(char const* config) {
+int regression_checks(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
@@ -90,7 +90,7 @@ int regression_checks(char const* config) {
                 || (*p->phoSigmaIEtaIEta_2012)[leading] > see_min) {
 
             /* hem failure region exclusion */
-            if (!heavyion || within_hem_failure_region(p, leading)) { 
+            if (!heavyion || !within_hem_failure_region(p, leading)) { 
 
                 /* isolation requirement */
                 float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -122,7 +122,7 @@ int regression_checks(char const* config) {
                 || (*p->phoSigmaIEtaIEta_2012)[leading_cor] > see_min) {
 
             /* hem failure region exclusion */
-            if (!heavyion || within_hem_failure_region(p, leading_cor)) { 
+            if (!heavyion || !within_hem_failure_region(p, leading_cor)) { 
 
                 /* isolation requirement */
                 float isolation = (*p->pho_ecalClusterIsoR3)[leading_cor]
@@ -163,11 +163,17 @@ int regression_checks(char const* config) {
     hb->sketch();
     c1->draw("pdf");
 
+    /* save histograms */
+    TFile* o = new TFile(output, "recreate");
+
+    hscale->Write();
+    hscale_cor->Write();
+
     return 0;
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 2)
+    if (argc == 3)
         return regression_checks(argv[1]);
 
     return 0;
