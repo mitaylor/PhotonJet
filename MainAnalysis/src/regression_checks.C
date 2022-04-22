@@ -113,6 +113,7 @@ int regression_checks(char const* config) {
 
                     hscale->Fill(ratio,p->weight);
                     stats++;
+                    std::cout << ratio << endl;
                 }
             }
         }
