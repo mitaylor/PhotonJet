@@ -5,6 +5,7 @@
 #include "../git/config/include/configurer.h"
 
 #include "../git/history/include/interval.h"
+#include "../git/history/include/multival.h"
 #include "../git/history/include/history.h"
 
 #include "../git/paper-and-pencil/include/paper.h"
@@ -176,6 +177,7 @@ int regression_checks(char const* config, char const* output) {
         text->SetTextFont(43);
         text->SetTextSize(12);
         text->DrawLatexNDC(0.54, 0.56, buffer);
+        std::cout << index << std::endl;
     };
 
     auto hb = new pencil();
