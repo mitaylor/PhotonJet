@@ -47,9 +47,10 @@ int regression_checks(char const* config) {
     TTree* t = (TTree*)f->Get("pj");
     auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
-    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0,10);
+    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0,2);
     auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale",50,0,10);
 
+    int stats = 0;
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
     if (max_entries) nentries = std::min(nentries, max_entries);
@@ -111,6 +112,7 @@ int regression_checks(char const* config) {
                     auto ratio = (*p->phoEt)[leading] / (*p->mcEt)[gen_index];
 
                     hscale->Fill(ratio,p->weight);
+                    stats++;
                 }
             }
         }
@@ -145,6 +147,8 @@ int regression_checks(char const* config) {
             }
         }
     }
+
+    std::cout << stats << std::endl;
 
     /* calculate efficiency */
     auto hframe = frame(hscale->GetXaxis(), hscale->GetYaxis());
