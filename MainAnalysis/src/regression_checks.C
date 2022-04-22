@@ -94,7 +94,7 @@ int regression_checks(char const* config, char const* output) {
     auto hf_min = dhf.front();
 
     auto ipt = new interval(dpt);
-    auto iratio = new interval("Reco Et / Gen Et"s, 50, 0.8, 1.5);
+    auto iratio = new interval("Reco Et / Gen Et"s, 100, 0.5, 2);
     auto fratio = std::bind(&interval::book<TH1F>, iratio, _1, _2, _3);
 
     /* load forest */
@@ -177,17 +177,17 @@ int regression_checks(char const* config, char const* output) {
 
         sprintf(buffer, "Uncor. mean: %.3f", (*hscale)[index - 1]->GetMean());
         info->DrawLatexNDC(0.5, 0.64, buffer);
-        sprintf(buffer, "Uncor. sigma: %.3f", (*hscale)[index - 1]->GetMeanError());
+        sprintf(buffer, "Uncor. sigma: %.3f", (*hscale)[index - 1]->GetStdDev());
         info->DrawLatexNDC(0.5, 0.61, buffer);
 
         sprintf(buffer, "Cor. v1 mean: %.3f", (*hscale_cor)[index - 1]->GetMean());
         info->DrawLatexNDC(0.5, 0.57, buffer);
-        sprintf(buffer, "Cor. v1 sigma: %.3f", (*hscale_cor)[index - 1]->GetMeanError());
+        sprintf(buffer, "Cor. v1 sigma: %.3f", (*hscale_cor)[index - 1]->GetStdDev());
         info->DrawLatexNDC(0.5, 0.54, buffer);
 
         sprintf(buffer, "Cor. v2 mean: %.3f", (*hscale_cor_2)[index - 1]->GetMean());
         info->DrawLatexNDC(0.5, 0.50, buffer);
-        sprintf(buffer, "Cor. v2 sigma: %.3f", (*hscale_cor_2)[index - 1]->GetMeanError());
+        sprintf(buffer, "Cor. v2 sigma: %.3f", (*hscale_cor_2)[index - 1]->GetStdDev());
         info->DrawLatexNDC(0.5, 0.47, buffer);
     };
 
