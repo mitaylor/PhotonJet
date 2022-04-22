@@ -75,7 +75,7 @@ int speculate(char const* config, char const* output) {
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
-            if (pho_et > 30) pho_et = (*p->phoEtErNew)[j];
+            if (pho_et > 30) pho_et = (*p->phoEtEr)[j];
 
             if (pho_et > leading_pt) {
                 leading = j;
@@ -100,7 +100,7 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         float et = (*p->phoEt)[leading];
-            if (et > 30) et = (*p->phoEtErNew)[leading];
+            if (et > 30) et = (*p->phoEtEr)[leading];
 
         if (mc_branches) {
             if (et > 40) total++;
