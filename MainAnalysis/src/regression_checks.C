@@ -110,7 +110,7 @@ int regression_checks(char const* config) {
 
                     auto ratio = (*p->phoEt)[leading] / (*p->mcEt)[gen_index];
 
-                    hscale->Fille(ratio,p->weight);
+                    hscale->Fill(ratio,p->weight);
                 }
             }
         }
@@ -138,16 +138,16 @@ int regression_checks(char const* config) {
                     if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
                     if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
 
-                    auto ratio = (*p->phoEt)[leading_cor] / (*p->mcEt)[gen_index];
+                    auto ratio = (*p->phoEtErNew)[leading_cor] / (*p->mcEt)[gen_index];
 
-                    hscale->Fille(ratio,p->weight);
+                    hscale_cor->Fill(ratio,p->weight);
                 }
             }
         }
     }
 
     /* calculate efficiency */
-    auto hframe = frame((*counts)[0]->GetXaxis(), (*counts)[0]->GetYaxis());
+    auto hframe = frame(hscale->GetXaxis(), hscale->GetYaxis());
     hframe->GetYaxis()->SetTitle("counts");
     hframe->GetXaxis()->SetTitle("photon energy scale");
 
@@ -157,11 +157,10 @@ int regression_checks(char const* config) {
 
     auto c1 = new paper(tag + "photon_energy_resolution", hb);
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
-    c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
     c1->add(hframe);
-    c1->stack(eff, "Uncorrected");
-    c1->stack(eff, "Corrected");
+    c1->stack(hscale, "Uncorrected");
+    c1->stack(hscale_cor, "Corrected");
 
     hb->sketch();
     c1->draw("pdf");
@@ -169,9 +168,9 @@ int regression_checks(char const* config) {
     return 0;
 }
 
-int regression_checks(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     if (argc == 2)
-        return speculate(argv[1]);
+        return regression_checks(argv[1]);
 
     return 0;
 }
