@@ -94,9 +94,9 @@ int regression_checks(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
-    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0.5,1.5);
-    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale v1",50,0.5,1.5);
-    auto hscale_cor_2 = new TH1F("photon_energy_scale_cor_2","Corrected Photon Energy Scale v2",50,0.5,1.5);
+    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0.8,1.5);
+    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale v1",50,0.8,1.5);
+    auto hscale_cor_2 = new TH1F("photon_energy_scale_cor_2","Corrected Photon Energy Scale v2",50,0.8,1.5);
 
 
     int stats = 0;
@@ -169,25 +169,25 @@ int regression_checks(char const* config, char const* output) {
         info->SetTextSize(11);
 
         sprintf(buffer, "Uncor. mean: %.3f", hscale->GetMean());
-        info->DrawLatexNDC(0.675, 0.78, buffer);
+        info->DrawLatexNDC(0.575, 0.64, buffer);
         sprintf(buffer, "Uncor. sigma: %.3f", hscale->GetMeanError());
-        info->DrawLatexNDC(0.675, 0.75, buffer);
+        info->DrawLatexNDC(0.575, 0.61, buffer);
 
         sprintf(buffer, "Cor. v1 mean: %.3f", hscale_cor->GetMean());
-        info->DrawLatexNDC(0.675, 0.71, buffer);
+        info->DrawLatexNDC(0.575, 0.57, buffer);
         sprintf(buffer, "Cor. v1 sigma: %.3f", hscale_cor->GetMeanError());
-        info->DrawLatexNDC(0.675, 0.68, buffer);
+        info->DrawLatexNDC(0.575, 0.54, buffer);
 
         sprintf(buffer, "Cor. v2 mean: %.3f", hscale_cor_2->GetMean());
-        info->DrawLatexNDC(0.675, 0.64, buffer);
+        info->DrawLatexNDC(0.575, 0.50, buffer);
         sprintf(buffer, "Cor. v2 sigma: %.3f", hscale_cor_2->GetMeanError());
-        info->DrawLatexNDC(0.675, 0.61, buffer);
+        info->DrawLatexNDC(0.575, 0.47, buffer);
 
         std::cout << index << std::endl;
     };
 
     auto hb = new pencil();
-    hb->category("type", "Uncorrected", "Corrected");
+    hb->category("type", "Uncorrected", "Corrected v1", "Corrected v2");
 
     auto c1 = new paper(tag + "photon_energy_resolution", hb);
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
@@ -196,7 +196,7 @@ int regression_checks(char const* config, char const* output) {
 
     c1->add(hscale, "Uncorrected");
     c1->stack(hscale_cor, "Corrected v1");
-    c1->stack(hscale_cor, "Corrected v2");
+    c1->stack(hscale_cor_2, "Corrected v2");
 
     hb->sketch();
     c1->draw("pdf");
