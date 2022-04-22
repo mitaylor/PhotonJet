@@ -26,6 +26,45 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+void fill_hist(pjtree* p, int type, int index, TH1F* hist, bool heavyion, 
+    float iso_max, float geniso_max, float see_max, float see_min) {
+
+    if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
+        || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) 
+
+        /* hem failure region exclusion */
+        if (!heavyion || !within_hem_failure_region(p, index)) { 
+
+            /* isolation requirement */
+            float isolation = (*p->pho_ecalClusterIsoR3)[index]
+                + (*p->pho_hcalRechitIsoR3)[index]
+                + (*p->pho_trackIsoR3PtCut20)[index];
+
+            if (isolation < iso_max) { 
+
+                int64_t gen_index = (*p->pho_genMatchedIndex)[index];
+
+                if (gen_index == -1) { continue; }
+
+                auto pid = (*p->mcPID)[gen_index];
+                auto mpid = (*p->mcMomPID)[gen_index];
+
+                if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+                if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
+
+                float phoEt = 0;
+                if (type == 1) phoEt = (*p->phoEt)[leading];
+                if (type == 2) phoEt = (*p->phoEtEr)[leading];
+                if (type == 3) phoEt = (*p->phoEtErNew)[leading];
+
+                auto ratio = phoEt / (*p->mcEt)[gen_index];
+
+                hist->Fill(ratio, p->weight);
+            }
+        }
+    }
+}
+
 int regression_checks(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -56,7 +95,9 @@ int regression_checks(char const* config, char const* output) {
     auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
     auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0.5,1.5);
-    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale",50,0.5,1.5);
+    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale v1",50,0.5,1.5);
+    auto hscale_cor_2 = new TH1F("photon_energy_scale_cor_2","Corrected Photon Energy Scale v2",50,0.5,1.5);
+
 
     int stats = 0;
     /* iterate */
@@ -73,6 +114,7 @@ int regression_checks(char const* config, char const* output) {
 
         int64_t leading = -1;
         float leading_pt = 0;
+
         int64_t leading_cor = -1;
         float leading_pt_cor = 0;
 
@@ -95,66 +137,9 @@ int regression_checks(char const* config, char const* output) {
         /* require leading photon */
         if (leading < 0) { continue; }
 
-        if ((*p->phoSigmaIEtaIEta_2012)[leading] < see_max
-                || (*p->phoSigmaIEtaIEta_2012)[leading] > see_min) {
-
-            /* hem failure region exclusion */
-            if (!heavyion || !within_hem_failure_region(p, leading)) { 
-
-                /* isolation requirement */
-                float isolation = (*p->pho_ecalClusterIsoR3)[leading]
-                    + (*p->pho_hcalRechitIsoR3)[leading]
-                    + (*p->pho_trackIsoR3PtCut20)[leading];
-
-                if (isolation < iso_max) { 
-
-                    int64_t gen_index = (*p->pho_genMatchedIndex)[leading];
-
-                    if (gen_index == -1) { continue; }
-
-                    auto pid = (*p->mcPID)[gen_index];
-                    auto mpid = (*p->mcMomPID)[gen_index];
-
-                    if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
-                    if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
-
-                    auto ratio = (*p->phoEt)[leading] / (*p->mcEt)[gen_index];
-
-                    hscale->Fill(ratio,p->weight);
-                    stats++;
-                }
-            }
-        }
-
-        if ((*p->phoSigmaIEtaIEta_2012)[leading_cor] < see_max
-                || (*p->phoSigmaIEtaIEta_2012)[leading_cor] > see_min) {
-
-            /* hem failure region exclusion */
-            if (!heavyion || !within_hem_failure_region(p, leading_cor)) { 
-
-                /* isolation requirement */
-                float isolation = (*p->pho_ecalClusterIsoR3)[leading_cor]
-                    + (*p->pho_hcalRechitIsoR3)[leading_cor]
-                    + (*p->pho_trackIsoR3PtCut20)[leading_cor];
-
-                if (isolation < iso_max) { 
-
-                    int64_t gen_index = (*p->pho_genMatchedIndex)[leading_cor];
-
-                    if (gen_index == -1) { continue; }
-
-                    auto pid = (*p->mcPID)[gen_index];
-                    auto mpid = (*p->mcMomPID)[gen_index];
-
-                    if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
-                    if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
-
-                    auto ratio = (*p->phoEtErNew)[leading_cor] / (*p->mcEt)[gen_index];
-
-                    hscale_cor->Fill(ratio,p->weight);
-                }
-            }
-        }
+        fill_hist(p, 1, leading, hscale, heavyion, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 2, leading, hscale_cor, heavyion, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 3, leading, hscale_cor_2, heavyion, iso_max, geniso_max, see_max, see_min);
     }
 
     std::cout << stats << std::endl;
@@ -169,14 +154,27 @@ int regression_checks(char const* config, char const* output) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto mean_info = [&](int64_t index) {
-        char buffer[512] = { '\0' };
-        sprintf(buffer, "uncorrected mean: %.3f\nuncorrected sigma: %.3f\n\ncorrected mean: %.3f\n corrected sigma: %.3f",
-            hscale->GetMean(),hscale->GetMeanError(),hscale_cor->GetMean(),hscale_cor->GetMeanError());
+        char buffer[128] = { '\0' };
 
-        TLatex* text = new TLatex();
-        text->SetTextFont(43);
-        text->SetTextSize(12);
-        text->DrawLatexNDC(0.54, 0.56, buffer);
+        TLatex* info = new TLatex();
+        info->SetTextFont(43);
+        info->SetTextSize(11);
+
+        sprintf(buffer, "Uncor. mean: %.3f", hscale->GetMean());
+        info->DrawLatexNDC(0.675, 0.78, buffer);
+        sprintf(buffer, "Uncor. sigma: %.3f", hscale->GetMeanError());
+        info->DrawLatexNDC(0.675, 0.75, buffer);
+
+        sprintf(buffer, "Cor. v1 mean: %.3f", hscale_cor->GetMean());
+        info->DrawLatexNDC(0.675, 0.71, buffer);
+        sprintf(buffer, "Cor. v1 sigma: %.3f", hscale_cor->GetMeanError());
+        info->DrawLatexNDC(0.675, 0.68, buffer);
+
+        sprintf(buffer, "Cor. v2 mean: %.3f", hscale_cor_2->GetMean());
+        info->DrawLatexNDC(0.675, 0.64, buffer);
+        sprintf(buffer, "Cor. v2 sigma: %.3f", hscale_cor_2->GetMeanError());
+        info->DrawLatexNDC(0.675, 0.61, buffer);
+
         std::cout << index << std::endl;
     };
 
@@ -189,7 +187,8 @@ int regression_checks(char const* config, char const* output) {
     c1->accessory(mean_info);
 
     c1->add(hscale, "Uncorrected");
-    c1->stack(hscale_cor, "Corrected");
+    c1->stack(hscale_cor, "Corrected v1");
+    c1->stack(hscale_cor, "Corrected v2");
 
     hb->sketch();
     c1->draw("pdf");
@@ -199,6 +198,7 @@ int regression_checks(char const* config, char const* output) {
 
     hscale->Write();
     hscale_cor->Write();
+    hscale_cor_2->Write();
 
     o->Close();
 
