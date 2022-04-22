@@ -150,8 +150,8 @@ int regression_checks(char const* config, char const* output) {
 
     std::cout << stats << std::endl;
 
-    vector<float> dpt = {25,9999};
-    vector<float> dcent = {100,0};
+    std::vector<float> dpt = {25,9999};
+    std::vector<float> dcent = {100,0};
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
@@ -160,7 +160,7 @@ int regression_checks(char const* config, char const* output) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(convert_index(index), 0.75, 0.04, mpthf, pt_info, hf_info); };
+        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto mean_info = [&](int64_t index) {
         char buffer[512] = { '\0' };
@@ -178,6 +178,8 @@ int regression_checks(char const* config, char const* output) {
 
     auto c1 = new paper(tag + "photon_energy_resolution", hb);
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
+    c1->accessory(pthf_info);
+    c1->accessory(mean_info);
 
     c1->add(hscale, "Uncorrected");
     c1->stack(hscale_cor, "Corrected");
