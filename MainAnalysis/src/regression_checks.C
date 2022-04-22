@@ -26,7 +26,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion, 
+void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hetaphi, bool heavyion, 
     multival* mpthf, float iso_max, float geniso_max, float see_max, float see_min) {
 
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
@@ -41,6 +41,14 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion
                 + (*p->pho_trackIsoR3PtCut20)[index];
 
             if (isolation < iso_max) { 
+                float phoEt = 0;
+                if (type == 1) phoEt = (*p->phoEt)[index];
+                if (type == 2) phoEt = (*p->phoEtEr)[index];
+                if (type == 3) phoEt = (*p->phoEtErNew)[index];
+
+                if (phoEt > 40) {
+                    hetaphi->Fill((*p->phoEta)[index], (*p->phoPhi)[index], p->weight);
+                }
 
                 int64_t gen_index = (*p->pho_genMatchedIndex)[index];
 
@@ -51,11 +59,6 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, bool heavyion
 
                 if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { return; }
                 if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { return; }
-
-                float phoEt = 0;
-                if (type == 1) phoEt = (*p->phoEt)[index];
-                if (type == 2) phoEt = (*p->phoEtEr)[index];
-                if (type == 3) phoEt = (*p->phoEtErNew)[index];
 
                 auto mcEt = (*p->mcEt)[gen_index];
                 auto ratio = phoEt / mcEt;
@@ -106,7 +109,10 @@ int regression_checks(char const* config, char const* output) {
     auto hscale_cor = new memory<TH1F>("photon_energy_scale_cor"s, "counts", fratio, mpthf);
     auto hscale_cor_2 = new memory<TH1F>("photon_energy_scale_cor_2"s, "counts", fratio, mpthf);
 
-    int stats = 0;
+    auto hetaphi = new TH2F("photon_eta_phi","",100,-1.442,1.442,100,-3.15,3.15);
+    auto hetaphi_cor = new TH2F("photon_eta_phi_cor","",100,-1.442,1.442,100,-3.15,3.15);
+    auto hetaphi_cor_2 = new TH2F("photon_eta_phi_cor_2","",100,-1.442,1.442,100,-3.15,3.15);
+
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
     if (max_entries) nentries = std::min(nentries, max_entries);
@@ -152,12 +158,10 @@ int regression_checks(char const* config, char const* output) {
         /* require leading photon */
         if (leading < 0) { continue; }
 
-        fill_hist(p, 1, leading, hscale, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
-        fill_hist(p, 2, leading_cor, hscale_cor, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
-        fill_hist(p, 3, leading_cor_2, hscale_cor_2, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 1, leading, hscale, hetaphi, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 2, leading_cor, hscale_cor, hetaphi_cor, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 3, leading_cor_2, hscale_cor_2, hetaphi_cor_2, heavyion, mpthf, iso_max, geniso_max, see_max, see_min);
     }
-
-    std::cout << stats << std::endl;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < Gen p_{T}^{#gamma} < %.0f", dpt, false); };
@@ -194,7 +198,7 @@ int regression_checks(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Uncorrected", "Corrected v1", "Corrected v2");
 
-    auto c1 = new paper(tag + "photon_energy_resolution", hb);
+    auto c1 = new paper(tag + "_photon_energy_resolution", hb);
     apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
     c1->accessory(pthf_info);
     c1->accessory(mean_info);
@@ -215,6 +219,9 @@ int regression_checks(char const* config, char const* output) {
         hscale->save(tag);
         hscale_cor->save(tag);
         hscale_cor_2->save(tag);
+        hetaphi->Write();
+        hetaphi_cor->Write();
+        hetaphi_cor_2->Write();
     });
 
     return 0;
