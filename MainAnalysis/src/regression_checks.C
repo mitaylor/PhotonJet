@@ -118,6 +118,9 @@ int regression_checks(char const* config, char const* output) {
         int64_t leading_cor = -1;
         float leading_pt_cor = 0;
 
+        int64_t leading_cor_2 = -1;
+        float leading_pt_cor_2 = 0;
+
         for (int64_t j = 0; j < p->nPho; ++j) {
             if ((*p->phoEt)[j] <= 25) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
@@ -130,7 +133,12 @@ int regression_checks(char const* config, char const* output) {
 
             if ((*p->phoEtErNew)[j] > leading_pt_cor) {
                 leading_cor = j;
-                leading_pt_cor = (*p->phoEtErNew)[j];
+                leading_pt_cor = (*p->phoEtEr)[j];
+            }
+
+            if ((*p->phoEtErNew)[j] > leading_pt_cor_2) {
+                leading_cor_2 = j;
+                leading_pt_cor_2 = (*p->phoEtErNew)[j];
             }
         }
 
@@ -138,8 +146,8 @@ int regression_checks(char const* config, char const* output) {
         if (leading < 0) { continue; }
 
         fill_hist(p, 1, leading, hscale, heavyion, iso_max, geniso_max, see_max, see_min);
-        fill_hist(p, 2, leading, hscale_cor, heavyion, iso_max, geniso_max, see_max, see_min);
-        fill_hist(p, 3, leading, hscale_cor_2, heavyion, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 2, leading_cor, hscale_cor, heavyion, iso_max, geniso_max, see_max, see_min);
+        fill_hist(p, 3, leading_cor_2, hscale_cor_2, heavyion, iso_max, geniso_max, see_max, see_min);
     }
 
     std::cout << stats << std::endl;
