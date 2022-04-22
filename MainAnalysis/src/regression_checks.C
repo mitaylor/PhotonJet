@@ -45,12 +45,10 @@ int regression_checks(char const* config) {
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, true, false, t, { 1, 0, 1, 0, 0, 1, 0 });
+    auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
-    auto ipt = new interval("photon p_{T}"s, rpt);
-    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
-
-    auto counts = new history<TH1F>("count", "counts", fpt, 2);
+    auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0,10);
+    auto hscale_corr = new TH1F("photon_energy_scale_corr","Corrected Photon Energy Scale",50,0,10);
 
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -65,75 +63,108 @@ int regression_checks(char const* config) {
 
         int64_t leading = -1;
         float leading_pt = 0;
+        int64_t leading_cor = -1;
+        float leading_pt_cor = 0;
+
         for (int64_t j = 0; j < p->nPho; ++j) {
+            if ((*p->phoEt)[j] <= 25) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
-            float pho_et = (*p->phoEt)[j];
-            if (type == 2) pho_et = (*p->phoEtEr)[j];
-            if (type == 3) pho_et = (*p->phoEtErNew)[j];
-
-            if (pho_et > leading_pt) {
+            if ((*p->phoEt)[j] > leading_pt) {
                 leading = j;
-                leading_pt = pho_et;
+                leading_pt = (*p->phoEt)[j];
+            }
+
+            if ((*p->phoEtErNew)[j] > leading_pt_cor) {
+                leading_cor = j;
+                leading_pt_cor = (*p->phoEtErNew)[j];
             }
         }
 
         /* require leading photon */
         if (leading < 0) { continue; }
 
-        if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
-                || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
-            continue;
+        if ((*p->phoSigmaIEtaIEta_2012)[leading] < see_max
+                || (*p->phoSigmaIEtaIEta_2012)[leading] > see_min) {
 
-        /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+            /* hem failure region exclusion */
+            if (!heavyion || within_hem_failure_region(p, leading)) { 
 
-        /* isolation requirement */
-        float isolation = (*p->pho_ecalClusterIsoR3)[leading]
-            + (*p->pho_hcalRechitIsoR3)[leading]
-            + (*p->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
+                /* isolation requirement */
+                float isolation = (*p->pho_ecalClusterIsoR3)[leading]
+                    + (*p->pho_hcalRechitIsoR3)[leading]
+                    + (*p->pho_trackIsoR3PtCut20)[leading];
 
-        float et = (*p->phoEt)[leading];
-        if (type == 2) et = (*p->phoEtEr)[leading];
-        if (type == 3) et = (*p->phoEtErNew)[leading];
+                if (isolation < iso_max) { 
 
-        if (mc_branches) {
-            (*counts)[0]->Fill(et, p->weight);
-            if ((*p->accepts)[0] == 1)
-                (*counts)[1]->Fill(et, p->weight);
+                    int64_t gen_index = (*p->pho_genMatchedIndex)[leading];
+
+                    if (gen_index == -1) { continue; }
+
+                    auto pid = (*p->mcPID)[gen_index];
+                    auto mpid = (*p->mcMomPID)[gen_index];
+
+                    if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+                    if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
+
+                    auto ratio = (*p->phoEt)[leading] / (*p->mcEt)[gen_index];
+
+                    hscale->Fille(ratio,p->weight);
+                }
+            }
         }
-        else {
-            (*counts)[0]->Fill(et);
-            if ((*p->accepts)[0] == 1)
-                (*counts)[1]->Fill(et);
+
+        if ((*p->phoSigmaIEtaIEta_2012)[leading_cor] < see_max
+                || (*p->phoSigmaIEtaIEta_2012)[leading_cor] > see_min) {
+
+            /* hem failure region exclusion */
+            if (!heavyion || within_hem_failure_region(p, leading_cor)) { 
+
+                /* isolation requirement */
+                float isolation = (*p->pho_ecalClusterIsoR3)[leading_cor]
+                    + (*p->pho_hcalRechitIsoR3)[leading_cor]
+                    + (*p->pho_trackIsoR3PtCut20)[leading_cor];
+
+                if (isolation < iso_max) { 
+
+                    int64_t gen_index = (*p->pho_genMatchedIndex)[leading_cor];
+
+                    if (gen_index == -1) { continue; }
+
+                    auto pid = (*p->mcPID)[gen_index];
+                    auto mpid = (*p->mcMomPID)[gen_index];
+
+                    if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+                    if ((*p->mcCalIsoDR04)[gen_index] > geniso_max) { continue; }
+
+                    auto ratio = (*p->phoEt)[leading_cor] / (*p->mcEt)[gen_index];
+
+                    hscale->Fille(ratio,p->weight);
+                }
+            }
         }
     }
 
     /* calculate efficiency */
     auto hframe = frame((*counts)[0]->GetXaxis(), (*counts)[0]->GetYaxis());
-    hframe->GetYaxis()->SetTitle("trigger efficiency");
-    hframe->GetXaxis()->SetTitle("photon p_{T}");
-
-    auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "cl=0.683 b(1,1) mode");
+    hframe->GetYaxis()->SetTitle("counts");
+    hframe->GetXaxis()->SetTitle("photon energy scale");
 
     /* draw efficiency */
     auto hb = new pencil();
-    hb->category("sample", "pp", "PbPb");
+    hb->category("type", "Uncorrected", "Corrected");
 
-    auto c1 = new paper(tag + "_efficiency", hb);
-    apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, 0., 1.2);
+    auto c1 = new paper(tag + "photon_energy_resolution", hb);
+    apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
     c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
     c1->add(hframe);
-    c1->stack(eff, system);
+    c1->stack(eff, "Uncorrected");
+    c1->stack(eff, "Corrected");
 
     hb->sketch();
     c1->draw("pdf");
-
-    /* save output */
-    in(output, [&]() { counts->save(tag); });
 
     return 0;
 }
