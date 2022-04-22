@@ -207,13 +207,11 @@ int regression_checks(char const* config, char const* output) {
     c1->draw("pdf");
 
     /* save histograms */
-    TFile* o = new TFile(output, "recreate");
-
-    hscale->Write();
-    hscale_cor->Write();
-    hscale_cor_2->Write();
-
-    o->Close();
+    in(output, [&]() {
+        hscale->save(tag);
+        hscale_cor->save(tag);
+        hscale_cor_2->save(tag);
+    });
 
     return 0;
 }
