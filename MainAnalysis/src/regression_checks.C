@@ -18,6 +18,7 @@
 #include "TGraphAsymmErrors.h"
 #include "TLine.h"
 #include "TTree.h"
+#include "TH2F.h"
 
 #include <string>
 #include <vector>
