@@ -110,9 +110,9 @@ int regression_checks(char const* config, char const* output) {
     auto hscale_cor = new memory<TH1F>("photon_energy_scale_cor"s, "counts", fratio, mpthf);
     auto hscale_cor_2 = new memory<TH1F>("photon_energy_scale_cor_2"s, "counts", fratio, mpthf);
 
-    auto hetaphi = new TH2F("photon_eta_phi","",100,-1.442,1.442,100,-3.15,3.15);
-    auto hetaphi_cor = new TH2F("photon_eta_phi_cor","",100,-1.442,1.442,100,-3.15,3.15);
-    auto hetaphi_cor_2 = new TH2F("photon_eta_phi_cor_2","",100,-1.442,1.442,100,-3.15,3.15);
+    auto hetaphi = new TH2F("photon_eta_phi","",60,-1.442,1.442,60,-3.15,3.15);
+    auto hetaphi_cor = new TH2F("photon_eta_phi_cor","",60,-1.442,1.442,60,-3.15,3.15);
+    auto hetaphi_cor_2 = new TH2F("photon_eta_phi_cor_2","",60,-1.442,1.442,60,-3.15,3.15);
 
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -204,6 +204,7 @@ int regression_checks(char const* config, char const* output) {
     c1->accessory(pthf_info);
     c1->accessory(mean_info);
     c1->divide(ipt->size(), -1);
+    c1->set(paper::flags::logy);
 
 
     for (int64_t i = 0; i < mpthf->size(); ++i) {
