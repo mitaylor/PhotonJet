@@ -64,8 +64,8 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hetaphi
                 auto mcEt = (*p->mcEt)[gen_index];
                 auto ratio = phoEt / mcEt;
 
-                if (25 < mcEt && mcEt < 200) {
-                    int64_t index = mpthf->index_for(v{mcEt, p->hiHF});
+                if (25 < phoEt && phoEt < 200) {
+                    int64_t index = mpthf->index_for(v{phoEt, p->hiHF});
                     (*hist)[index]->Fill(ratio, p->weight);
                 }
             }
@@ -216,14 +216,14 @@ int regression_checks(char const* config, char const* output) {
     c1->draw("pdf");
 
     /* save histograms */
-    in(output, [&]() {
-        hscale->save(tag);
-        hscale_cor->save(tag);
-        hscale_cor_2->save(tag);
-        hetaphi->Write();
-        hetaphi_cor->Write();
-        hetaphi_cor_2->Write();
-    });
+
+    TFile* o = new TFile(output, "recreate");
+
+    hetaphi->Write();
+    hetaphi_cor->Write();
+    hetaphi_cor_2->Write();
+
+    o->Close();
 
     return 0;
 }
