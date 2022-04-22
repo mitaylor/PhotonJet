@@ -48,7 +48,7 @@ int regression_checks(char const* config) {
     auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
 
     auto hscale = new TH1F("photon_energy_scale","Photon Energy Scale",50,0,10);
-    auto hscale_corr = new TH1F("photon_energy_scale_corr","Corrected Photon Energy Scale",50,0,10);
+    auto hscale_cor = new TH1F("photon_energy_scale_cor","Corrected Photon Energy Scale",50,0,10);
 
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
