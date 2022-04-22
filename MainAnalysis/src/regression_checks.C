@@ -136,7 +136,7 @@ int regression_checks(char const* config, char const* output) {
         float leading_pt_cor_2 = 0;
 
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] <= 30) { continue; }
+            if ((*p->phoEt)[j] <= 25) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
