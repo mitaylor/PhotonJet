@@ -49,7 +49,7 @@ int speculate(char const* config, char const* output) {
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(mc_branches, true, false, t, { 1, 0, 1, 0, 0, 1, 0 });
+    auto p = new pjtree(mc_branches, true, false, t, { 1, 0, 1, 1, 0, 1, 0 });
 
     auto ipt = new interval("photon p_{T}"s, rpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
@@ -108,12 +108,10 @@ int speculate(char const* config, char const* output) {
 
         /* electron rejection */
         if (ele_rej) {
-            std::cout << "here" << std::endl;
             bool electron = false;
+            std::cout << p->nEle << std::endl;
             for (int64_t j = 0; j < p->nEle; ++j) {
                 if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
-
-                std::cout << "here" << std::endl;
 
                 auto deta = photon_eta - (*p->eleEta)[j];
                 if (deta > 0.1) { continue; }
