@@ -106,6 +106,7 @@ int speculate(char const* config, char const* output) {
         auto photon_eta = (*p->phoEta)[leading];
         auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
+        std::cout<<ele_rej<<std::endl;
         /* electron rejection */
         if (ele_rej) {
             bool electron = false;
