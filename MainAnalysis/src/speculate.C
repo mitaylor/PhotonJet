@@ -102,7 +102,7 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         /* leading photon axis */
-        auto photon_eta = (p->phoEta)[leading];
+        auto photon_eta = (*p->phoEta)[leading];
         auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
         /* electron rejection */
