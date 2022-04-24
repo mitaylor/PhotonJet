@@ -113,6 +113,7 @@ int speculate(char const* config, char const* output) {
 
                 auto deta = photon_eta - (*p->eleEta)[j];
                 if (deta > 0.1) { continue; }
+                std::cout << "here" << std::endl;
 
                 auto ele_phi = convert_radian((*p->elePhi)[j]);
                 auto dphi = revert_radian(photon_phi - ele_phi);
