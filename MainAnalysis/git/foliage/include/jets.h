@@ -28,7 +28,7 @@
 #define B_VAL_JET_GEN(ACTION, ...)                                          \
     ACTION(int,             ngen,                       ## __VA_ARGS__)     \
 
-#define B_ARR_JET_GEN(ACTION, ...)                                          \     \
+#define B_ARR_JET_GEN(ACTION, ...)                                          \
     ACTION(float,           genpt,                      ## __VA_ARGS__)     \
     ACTION(float,           geneta,                     ## __VA_ARGS__)     \
     ACTION(float,           genphi,                     ## __VA_ARGS__)     \
