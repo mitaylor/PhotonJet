@@ -102,25 +102,25 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         /* leading photon axis */
-        auto photon_eta = (*pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+        auto photon_eta = (p->phoEta)[leading];
+        auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
         /* electron rejection */
         if (ele_rej) {
             bool electron = false;
-            for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+            for (int64_t j = 0; j < p->nEle; ++j) {
+                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*pjt->eleEta)[j];
+                auto deta = photon_eta - (*p->eleEta)[j];
                 if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
+                auto ele_phi = convert_radian((*p->elePhi)[j]);
                 auto dphi = revert_radian(photon_phi - ele_phi);
                 auto dr2 = deta * deta + dphi * dphi;
 
                 if (dr2 < 0.01 && passes_electron_id<
                             det::barrel, wp::loose, pjtree
-                        >(pjt, j, heavyion)) {
+                        >(p, j, heavyion)) {
                     electron = true; break; }
             }
 
