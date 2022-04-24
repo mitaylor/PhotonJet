@@ -106,9 +106,9 @@ int speculate(char const* config, char const* output) {
         auto photon_eta = (*p->phoEta)[leading];
         auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
-        std::cout<<ele_rej<<std::endl;
         /* electron rejection */
         if (ele_rej) {
+            std::cout << "here" << std::endl;
             bool electron = false;
             for (int64_t j = 0; j < p->nEle; ++j) {
                 if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
