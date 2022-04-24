@@ -119,13 +119,15 @@ int speculate(char const* config, char const* output) {
                 auto dphi = revert_radian(photon_phi - ele_phi);
                 auto dr2 = deta * deta + dphi * dphi;
 
+                std::cout << "here" << std::endl;
+
                 if (dr2 < 0.01 && passes_electron_id<
                             det::barrel, wp::loose, pjtree
                         >(p, j, heavyion)) {
                     electron = true; break; }
             }
 
-            if (electron) { continue; }
+            if (electron) { std::cout << "here 2" << std::endl; continue; }
         }
 
         float et = (*p->phoEt)[leading];
