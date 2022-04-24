@@ -5,21 +5,26 @@
 #include "../git/config/include/configurer.h"
 
 #include "../git/history/include/interval.h"
+#include "../git/history/include/multival.h"
+#include "../git/history/include/memory.h"
 #include "../git/history/include/history.h"
 
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/train.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
+#include "TF1.h"
+#include "TH1.h"
 #include "TFile.h"
 #include "TGraphAsymmErrors.h"
 #include "TLine.h"
 #include "TTree.h"
+#include "TLatex.h"
 
 #include <string>
+#include <tuple>
 #include <vector>
 #include <iostream>
 
@@ -30,13 +35,12 @@ int speculate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
-    auto max_entries = conf->get<int64_t>("max_entries");
+    auto signal = conf->get<std::string>("signal");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
     auto heavyion = conf->get<bool>("heavyion");
     auto mc_branches = conf->get<bool>("mc_branches");
-    auto ele_rej = conf->get<bool>("ele_rej");
 
     auto const eta_abs = conf->get<float>("eta_abs");
     auto const hovere_max = conf->get<float>("hovere_max");
@@ -61,7 +65,6 @@ int speculate(char const* config, char const* output) {
 
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
-    if (max_entries) nentries = std::min(nentries, max_entries);
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
@@ -100,32 +103,6 @@ int speculate(char const* config, char const* output) {
             + (*p->pho_hcalRechitIsoR3)[leading]
             + (*p->pho_trackIsoR3PtCut20)[leading];
         if (isolation > iso_max) { continue; }
-
-        /* leading photon axis */
-        auto photon_eta = (*pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
-
-        /* electron rejection */
-        if (ele_rej) {
-            bool electron = false;
-            for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
-
-                auto deta = photon_eta - (*pjt->eleEta)[j];
-                if (deta > 0.1) { continue; }
-
-                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
-
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(pjt, j, heavyion)) {
-                    electron = true; break; }
-            }
-
-            if (electron) { continue; }
-        }
 
         float et = (*p->phoEt)[leading];
         if (et > 30) et = (*p->phoEtEr)[leading];
