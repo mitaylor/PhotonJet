@@ -110,10 +110,10 @@ int speculate(char const* config, char const* output) {
             bool electron = false;
             for (int64_t j = 0; j < p->nEle; ++j) {
                 if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+                std::cout << "here" << std::endl;
 
                 auto deta = photon_eta - (*p->eleEta)[j];
                 if (deta > 0.1) { continue; }
-                std::cout << "here" << std::endl;
 
                 auto ele_phi = convert_radian((*p->elePhi)[j]);
                 auto dphi = revert_radian(photon_phi - ele_phi);
@@ -125,8 +125,7 @@ int speculate(char const* config, char const* output) {
                     electron = true; break; }
             }
 
-            if (electron) { 
-                std::cout << "here" << std::endl; continue; }
+            if (electron) { continue; }
         }
 
         float et = (*p->phoEt)[leading];
