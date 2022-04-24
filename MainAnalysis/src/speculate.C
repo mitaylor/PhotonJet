@@ -109,7 +109,6 @@ int speculate(char const* config, char const* output) {
         /* electron rejection */
         if (ele_rej) {
             bool electron = false;
-            std::cout << p->nEle << std::endl;
             for (int64_t j = 0; j < p->nEle; ++j) {
                 if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
