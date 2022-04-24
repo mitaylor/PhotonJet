@@ -124,7 +124,8 @@ int speculate(char const* config, char const* output) {
                     electron = true; break; }
             }
 
-            if (electron) { continue; }
+            if (electron) { 
+                std::cout << "here" << std::endl; continue; }
         }
 
         float et = (*p->phoEt)[leading];
