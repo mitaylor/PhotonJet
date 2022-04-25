@@ -158,6 +158,7 @@ int speculate(char const* config, char const* output) {
     auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "cl=0.683 b(1,1) mode");
 
     std::cout << total_accepts << std::endl;
+    
     /* draw efficiency */
     auto hb = new pencil();
     hb->category("sample", "pp", "PbPb");
