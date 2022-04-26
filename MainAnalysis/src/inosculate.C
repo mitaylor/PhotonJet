@@ -144,13 +144,22 @@ int64_t inosculate(char const* config, char const* output) {
                     || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
                 { continue; }
 
+
+                float phoEt_j = (*p->phoEt)[j];
+                if ((*p->phoEt)[j] > 30 && heavyion) phoEt_j = (*p->phoEtErNew)[j];
+                if ((*p->phoEt)[j] > 30 && !heavyion) phoEt_j = (*p->phoEtEr)[j];
+
+                float phoEt_k = (*p->phoEt)[k];
+                if ((*p->phoEt)[k] > 30 && heavyion) phoEt_k = (*p->phoEtErNew)[k];
+                if ((*p->phoEt)[k] > 30 && !heavyion) phoEt_k = (*p->phoEtEr)[k];
+
                 /* double electron invariant mass */
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
-                    (*p->phoEt)[j],
+                    phoEt_j,
                     (*p->phoEta)[j],
                     (*p->phoPhi)[j],
                     0.f,
-                    (*p->phoEt)[k],
+                    phoEt_k,
                     (*p->phoEta)[k],
                     (*p->phoPhi)[k],
                     0.f));
