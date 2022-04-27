@@ -154,7 +154,7 @@ int narrate(char const* config, char const* output) {
             (*rho_mc)[index]->SetMaximum(10);
             (*rho_mc)[index]->SetMinimum(1E-7);
 
-            (*rho_ratio)[index]>Divide((*rho_data)[index], (*rho_mc)[index]);
+            (*rho_ratio)[index]->Divide((*rho_data)[index], (*rho_mc)[index]);
         }
     }
 
