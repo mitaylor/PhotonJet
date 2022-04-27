@@ -99,9 +99,6 @@ int narrate(char const* config, char const* output) {
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
             auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j], i);
-            if (hf_x < 3 && avg_rho > 150) {
-                std::cout << i << " " << avg_rho << std::endl;
-            }
 
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
         }
