@@ -82,7 +82,7 @@ int narrate(char const* config, char const* output) {
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     // int64_t nentries = 10000;
 
-    for (int64_t i = 3864475; i < nentries-1; ++i) {
+    for (int64_t i = 0; i < nentries-1; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
@@ -92,13 +92,7 @@ int narrate(char const* config, char const* output) {
         if (hf_x < 0) continue;
         if (hf_x == ihf->size()) continue;
 
-        if (i > 3864475 && i < 3864599) {
-            std::cout << i << std::endl;
-            std::cout << "phoEt: "; for (auto var : (*pjt->phoEt)) std::cout << var << ' '; std::cout << std::endl;
-            std::cout << "jtpt: "; for (auto var : (*pjt->jtpt)) std::cout << var << ' '; std::cout << std::endl;
-            std::cout << "evtRho: "; for (auto var : (*pjt->evtRho)) std::cout << var << ' '; std::cout << std::endl;
-            std::cout << std::endl << std::endl;
-        }
+        if (i > 3864475 && i < 3864599) continue;
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
