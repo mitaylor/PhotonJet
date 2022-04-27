@@ -34,9 +34,9 @@ double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
         return -1;
 
     for(int i = 0; i < NBin; i++) {
-        if ((*pjt->etaMax)[i] > eta_max)
+        if ((*pjt->etaMax)[i-1] > eta_max)
             continue;
-        if ((*pjt->etaMin)[i] < eta_min)
+        if ((*pjt->etaMin)[i+1] < eta_min)
             continue;
 
         count++;
@@ -93,7 +93,12 @@ int narrate(char const* config, char const* output) {
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
+            auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
+            if (hf_x < 3 && avg_rho > 150) {
+                std::cout << i << " " << avg_rho << std::endl;
+            }
+
+            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
         }
     }
 
@@ -120,8 +125,9 @@ int narrate(char const* config, char const* output) {
                     auto eta_x = static_cast<int64_t>(j);
                     auto hf_x = static_cast<int64_t>(k);
                     auto index = rho_data->index_for(x{eta_x,hf_x});
+                    auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
 
-                    (*rho_mc)[index]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]), pjt->w);
+                    (*rho_mc)[index]->Fill(avg_rho, pjt->w);
                 }
             }
         }
