@@ -83,7 +83,7 @@ int narrate(char const* config, char const* output) {
     // int64_t nentries = 10000;
 
     for (int64_t i = 0; i < nentries-1; ++i) {
-        if (i % 10000 == 0)
+        if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
         t->GetEntry(i);
@@ -110,7 +110,7 @@ int narrate(char const* config, char const* output) {
         // nentries = 10000;
 
         for (int64_t i = 0; i < nentries-1; ++i) {
-            if (i % 10000 == 0)
+            if (i % 100000 == 0)
                 printf("entry: %li/%li\n", i, nentries);
 
             t->GetEntry(i);
@@ -120,7 +120,7 @@ int narrate(char const* config, char const* output) {
                     auto eta_x = static_cast<int64_t>(j);
                     auto hf_x = static_cast<int64_t>(k);
 
-                    (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
+                    (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]), pjt->w);
                 }
             }
         }
