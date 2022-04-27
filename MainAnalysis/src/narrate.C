@@ -77,12 +77,12 @@ int narrate(char const* config, char const* output) {
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
+    auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 0, 1, 0, 1 });
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     // int64_t nentries = 10000;
 
-    for (int64_t i = 0; i < nentries-1; ++i) {
+    for (int64_t i = 3864475; i < nentries-1; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
