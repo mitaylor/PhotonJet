@@ -96,6 +96,8 @@ int narrate(char const* config, char const* output) {
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
+    std::cout<<__LINE__<<std::endl;
+
     for (int64_t i = 0; i < nentries; ++i) {
         t->GetEntry(i);
         auto hf = ihf->index_for(pjt->hiHF);
