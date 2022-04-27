@@ -24,7 +24,7 @@ using namespace std::placeholders;
 
 double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
     double result = 0;
-    int count = 0;
+    double count = 0;
 
     if(pjt->etaMin == nullptr)
         return -1;
