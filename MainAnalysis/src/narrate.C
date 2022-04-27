@@ -93,7 +93,7 @@ int narrate(char const* config, char const* output) {
         if (hf_x == ihf->size()) continue;
 
         if (i > 3864475 && i < 3864599) {
-            std::cout << index << std::endl;
+            std::cout << i << std::endl;
             std::cout << "phoEt: "; for (auto var : (*pjt->phoEt)) std::cout << var << ' '; std::cout << std::endl;
             std::cout << "jtpt: "; for (auto var : (*pjt->jtpt)) std::cout << var << ' '; std::cout << std::endl;
             std::cout << "evtRho: "; for (auto var : (*pjt->evtRho)) std::cout << var << ' '; std::cout << std::endl;
@@ -102,7 +102,7 @@ int narrate(char const* config, char const* output) {
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
-            auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j], i);
+            auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
 
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
         }
