@@ -22,7 +22,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-double get_avg_rho(pjtree* pjt, double eta_min, double eta_max, int64_t index = 0) {
+double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
     double result = 0;
     int count = 0;
 
@@ -41,10 +41,6 @@ double get_avg_rho(pjtree* pjt, double eta_min, double eta_max, int64_t index = 
 
         count++;
         result += (*pjt->evtRho)[i];
-
-        if (index > 3864475 && index < 3864599) {
-            std::cout << index << "\t" << (*pjt->evtRho)[i] << "\t" << pjt->hiHF << std::endl;
-        }
     }
 
     if (count > 0) return result/count;
@@ -95,6 +91,14 @@ int narrate(char const* config, char const* output) {
 
         if (hf_x < 0) continue;
         if (hf_x == ihf->size()) continue;
+
+        if (i > 3864475 && i < 3864599) {
+            std::cout << index << std::endl;
+            std::cout << "phoEt: "; for (auto var : (*pjt->phoEt)) std::cout << var << ' '; std::cout << std::endl;
+            std::cout << "jtpt: "; for (auto var : (*pjt->jtpt)) std::cout << var << ' '; std::cout << std::endl;
+            std::cout << "evtRho: "; for (auto var : (*pjt->evtRho)) std::cout << var << ' '; std::cout << std::endl;
+            std::cout << std::endl << std::endl;
+        }
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
@@ -148,9 +152,9 @@ int narrate(char const* config, char const* output) {
             (*rho_data)[index]->Scale(1. / (*rho_data)[index]->Integral());
             (*rho_mc)[index]->Scale(1. / (*rho_mc)[index]->Integral());
 
-            (*rho_data)[index]->SetMaximum(1);
+            (*rho_data)[index]->SetMaximum(10);
             (*rho_data)[index]->SetMinimum(1E-7);
-            (*rho_mc)[index]->SetMaximum(1);
+            (*rho_mc)[index]->SetMaximum(10);
             (*rho_mc)[index]->SetMinimum(1E-7);
         }
     }
