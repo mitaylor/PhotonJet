@@ -99,6 +99,9 @@ int narrate(char const* config, char const* output) {
     std::cout<<nentries<<std::endl;
 
     for (int64_t i = 0; i < nentries-1; ++i) {
+        if (i % 10000 == 0)
+            printf("entry: %li/%li\n", i, nentries);
+
         t->GetEntry(i);
         auto hf_x = ihf->index_for(pjt->hiHF);
 
@@ -125,6 +128,9 @@ int narrate(char const* config, char const* output) {
         nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
+            if (i % 10000 == 0)
+                printf("entry: %li/%li\n", i, nentries);
+                
             t->GetEntry(i);
 
             for (size_t j = 0; j < eta_min.size(); ++j) 
