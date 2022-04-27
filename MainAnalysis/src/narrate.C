@@ -72,8 +72,8 @@ int narrate(char const* config, char const* output) {
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
     auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
-    auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size dim_2_size);
-    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size;
+    auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
+    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size);
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
