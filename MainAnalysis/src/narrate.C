@@ -107,8 +107,7 @@ int narrate(char const* config, char const* output) {
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
-            std::cout<< eta_x <<std::endl;
-            std::cout<< hf_x <<std::endl;
+            std::cout<< pjt->hiHF <<std::endl;
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
             std::cout<<__LINE__<<std::endl;
         }
