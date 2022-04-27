@@ -116,7 +116,7 @@ int narrate(char const* config, char const* output) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{eta_x,hf_x}]->Scale(1. / (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Integral());
+            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Scale(1. / (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Integral());
         }
 
         (*rho_mc)[i]->Scale(1. / (*rho_mc)[i]->Integral());
