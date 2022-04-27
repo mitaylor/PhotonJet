@@ -85,7 +85,7 @@ int narrate(char const* config, char const* output) {
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto etaj = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{etaj,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]))
+            (*rho_data)[rho_data->index_for(x{etaj,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
     }
 
@@ -116,7 +116,7 @@ int narrate(char const* config, char const* output) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
             // auto etai = static_cast<int64_t>(i);
             // auto hfj = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{i,j)}]->Scale(1. / (*rho_data)[rho_data->index_for(x{i,j)})]->Integral());
+            (*rho_data)[rho_data->index_for(x{i,j}]->Scale(1. / (*rho_data)[rho_data->index_for(x{i,j})]->Integral());
         }
 
         (*rho_mc)[i]->Scale(1. / (*rho_mc)[i]->Integral());
