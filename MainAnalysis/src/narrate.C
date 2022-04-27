@@ -83,8 +83,10 @@ int narrate(char const* config, char const* output) {
         t->GetEntry(i);
         auto hf = ihf->index_for(pjt->hiHF);
 
-        for (size_t j = 0; j < eta_min.size(); ++j) 
-            (*rho_data)[rho_data->index_for(j,hf)]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]))
+        for (size_t j = 0; j < eta_min.size(); ++j) {
+            auto etaj = static_cast<int64_t>(j);
+            (*rho_data)[rho_data->index_for(x{petaj,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]))
+        }
     }
 
     f->Close();
@@ -102,7 +104,7 @@ int narrate(char const* config, char const* output) {
             t->GetEntry(i);
 
             for (size_t j = 0; j < eta_min.size(); ++j) 
-                (*rho_mc)[j]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]))
+                (*rho_mc)[j]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
 
         f->Close();
@@ -111,9 +113,12 @@ int narrate(char const* config, char const* output) {
     }
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
-        for (size_t j = 0; j < dhf.size()-1; ++j) 
-            (*rho_data)[rho_data->index_for(i,j)]->Scale(1. / (*rho_data)[rho_data->index_for(i,j)]->Integral());
-    
+        for (size_t j = 0; j < dhf.size()-1; ++j) {
+            // auto etai = static_cast<int64_t>(i);
+            // auto hfj = static_cast<int64_t>(j);
+            (*rho_data)[rho_data->index_for(x{i,j)}]->Scale(1. / (*rho_data)[rho_data->index_for(x{i,j)})]->Integral());
+        }
+
         (*rho_mc)[i]->Scale(1. / (*rho_mc)[i]->Integral());
     }
 
@@ -132,7 +137,7 @@ int narrate(char const* config, char const* output) {
         c1->set(paper::flags::logy);
 
         for (int64_t j = 0; j < dhf->size(); ++j) {
-            c1->add((*rho_data)[rho_data->index_for(i,j)], "Data");
+            c1->add((*rho_data)[rho_data->index_for({i,j})], "Data");
             c1->stack((*rho_mc)[i], "MC");
         }
 
