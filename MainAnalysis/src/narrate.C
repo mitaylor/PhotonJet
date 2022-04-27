@@ -72,8 +72,11 @@ int narrate(char const* config, char const* output) {
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
     auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
+
     auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
     auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size, dim_2_size);
+    auto rho_ratio = new history<TH1F>("rho_ratio"s, "", frho, dim_1_size, dim_2_size);
+
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
@@ -150,6 +153,8 @@ int narrate(char const* config, char const* output) {
             (*rho_data)[index]->SetMinimum(1E-7);
             (*rho_mc)[index]->SetMaximum(10);
             (*rho_mc)[index]->SetMinimum(1E-7);
+
+            (*rho_ratio)[index]>Divide((*rho_data)[index], (*rho_mc)[index]);
         }
     }
 
@@ -180,10 +185,33 @@ int narrate(char const* config, char const* output) {
         c1->draw("pdf");
     }
 
+    for (size_t i = 0; i < eta_min.size(); ++i) {
+        auto hb = new pencil();
+        hb->category("type", "Data/MC");
+        
+        auto c1 = new paper(tag + "_rho_weight" + bound_string[i], hb);
+        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
+        c1->accessory(hf_info);
+        c1->divide(ihf->size(), -1);
+        c1->set(paper::flags::logy);
+
+        for (size_t j = 0; j < dhf.size()-1; ++j) {
+            auto eta_x = static_cast<int64_t>(i);
+            auto hf_x = static_cast<int64_t>(j);
+            auto index = rho_ratio->index_for(x{eta_x,hf_x});
+            
+            c1->add((*rho_ratio)[index], "Data/MC");
+        }
+
+        hb->sketch();
+        c1->draw("pdf");
+    }
+
     /* save output */
     in(output, [&]() {
         rho_data->save(tag);
         rho_mc->save(tag);
+        rho_ratio->save(tag);
     });
 
     return 0;
