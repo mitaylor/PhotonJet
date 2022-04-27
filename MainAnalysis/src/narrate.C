@@ -100,15 +100,16 @@ int narrate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < nentries-1; ++i) {
         t->GetEntry(i);
-        auto hf = ihf->index_for(pjt->hiHF);
+        auto hf_x = ihf->index_for(pjt->hiHF);
 
         if (i > 9552) {
             std::cout<<i<<std::endl;
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
-            std::cout<< get_avg_rho(pjt, eta_min[j], eta_max[j])<<std::endl;
-            (*rho_data)[rho_data->index_for(x{eta_x,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
+            std::cout<< eta_x <<std::endl;
+            std::cout<< hf_x <<std::endl;
+            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
             std::cout<<__LINE__<<std::endl;
         }
         }
