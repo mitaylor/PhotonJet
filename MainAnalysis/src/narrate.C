@@ -59,44 +59,27 @@ int narrate(char const* config, char const* output) {
     auto eta_min = conf->get<std::vector<double>>("eta_min");
     auto eta_max = conf->get<std::vector<double>>("eta_max");
     auto bound_string = conf->get<std::vector<std::string>>("bound_string");
-
-    std::cout<<__LINE__<<std::endl;
     
     auto rho_range = conf->get<std::vector<double>>("rho_range");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     TH1::SetDefaultSumw2();
-
-    std::cout<<__LINE__<<std::endl;
     
     auto ihf = new interval(dhf);
-
-    std::cout<<__LINE__<<std::endl;
-
     auto irho = new interval("rho"s, rho_range[0], rho_range[1], rho_range[2]);
-
-    std::cout<<__LINE__<<std::endl;
-
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
-
-    std::cout<<__LINE__<<std::endl;
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
     auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
     auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
     auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size);
 
-    std::cout<<__LINE__<<std::endl;
-
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
-    std::cout<<__LINE__<<std::endl;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-
-    std::cout<<nentries<<std::endl;
 
     for (int64_t i = 0; i < nentries-1; ++i) {
         if (i % 10000 == 0)
@@ -112,37 +95,32 @@ int narrate(char const* config, char const* output) {
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
     }
-    std::cout<<__LINE__<<std::endl;
 
     f->Close();
     delete f;
     delete pjt;
-    std::cout<<__LINE__<<std::endl;
 
     for (auto const& file : files) {
         f = new TFile(file.data(), "read");
         t = (TTree*)f->Get("pj");
         pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
-        std::cout<<__LINE__<<std::endl;
 
         nentries = static_cast<int64_t>(t->GetEntries());
 
-        for (int64_t i = 0; i < nentries; ++i) {
+        for (int64_t i = 0; i < nentries-1; ++i) {
             if (i % 10000 == 0)
                 printf("entry: %li/%li\n", i, nentries);
-                
+
             t->GetEntry(i);
 
             for (size_t j = 0; j < eta_min.size(); ++j) 
                 (*rho_mc)[j]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
-        std::cout<<__LINE__<<std::endl;
 
         f->Close();
         delete f;
         delete pjt;
     }
-    std::cout<<__LINE__<<std::endl;
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
