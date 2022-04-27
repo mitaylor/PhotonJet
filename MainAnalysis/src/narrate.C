@@ -22,7 +22,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
+double get_avg_rho(pjtree* pjt, double eta_min, double eta_max, int64_t index = 0) {
     double result = 0;
     int count = 0;
 
@@ -41,6 +41,10 @@ double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
 
         count++;
         result += (*pjt->evtRho)[i];
+
+        if (index > 3864475 && index < 3864599) {
+            std::cout << index << "\t" << (*pjt->evtRho)[i] << "\t" << pjt->hiHF << std::endl;
+        }
     }
 
     if (count > 0) return result/count;
@@ -93,7 +97,7 @@ int narrate(char const* config, char const* output) {
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
-            auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
+            auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j], i);
             if (hf_x < 3 && avg_rho > 150) {
                 std::cout << i << " " << avg_rho << std::endl;
             }
