@@ -73,7 +73,7 @@ int narrate(char const* config, char const* output) {
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
     auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
     auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
-    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size);
+    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size, dim_2_size);
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
@@ -115,8 +115,14 @@ int narrate(char const* config, char const* output) {
 
             t->GetEntry(i);
 
-            for (size_t j = 0; j < eta_min.size(); ++j) 
-                (*rho_mc)[j]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
+            for (size_t j = 0; j < eta_min.size(); ++j) {
+                for (size_t k = 0; k < dhf.size()-1; ++k) {
+                    auto eta_x = static_cast<int64_t>(j);
+                    auto hf_x = static_cast<int64_t>(k);
+
+                    (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
+                }
+            }
         }
 
         f->Close();
@@ -129,9 +135,8 @@ int narrate(char const* config, char const* output) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Scale(1. / (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Integral());
+            (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Scale(1. / (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Integral());
         }
-
-        (*rho_mc)[i]->Scale(1. / (*rho_mc)[i]->Integral());
     }
 
     /* draw rho distributions */
@@ -152,7 +157,7 @@ int narrate(char const* config, char const* output) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
             c1->add((*rho_data)[rho_data->index_for(x{eta_x,hf_x})], "Data");
-            c1->stack((*rho_mc)[i], "MC");
+            c1->stack((*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})], "MC");
         }
 
         hb->sketch();
