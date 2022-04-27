@@ -70,8 +70,10 @@ int narrate(char const* config, char const* output) {
     auto irho = new interval("rho"s, rho_range[0], rho_range[1], rho_range[2]);
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
 
-    auto rho_data = new history<TH1F>("rho_data"s, "", frho, eta_min.size(), dhf.size()-1);
-    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, eta_min.size());
+    auto dim_1_size = static_cast<int64_t>(eta_min.size());
+    auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
+    auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size dim_2_size);
+    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size;
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
