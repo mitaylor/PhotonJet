@@ -59,16 +59,22 @@ int narrate(char const* config, char const* output) {
     auto eta_min = conf->get<std::vector<double>>("eta_min");
     auto eta_max = conf->get<std::vector<double>>("eta_max");
     auto bound_string = conf->get<std::vector<std::string>>("bound_string");
+
+    std::cout<<__LINE__<<std::endl;
     
     auto rho_range = conf->get<std::vector<double>>("rho_range");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     TH1::SetDefaultSumw2();
+
+    std::cout<<__LINE__<<std::endl;
     
     auto ihf = new interval(dhf);
     auto irho = new interval("rho"s, rho_range[0], rho_range[1], rho_range[2]);
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
+
+    std::cout<<__LINE__<<std::endl;
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
     auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
