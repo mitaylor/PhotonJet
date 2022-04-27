@@ -79,7 +79,8 @@ int narrate(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
 
-    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    // int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    int64_t nentries = 10000;
 
     for (int64_t i = 0; i < nentries-1; ++i) {
         if (i % 10000 == 0)
@@ -105,7 +106,8 @@ int narrate(char const* config, char const* output) {
         t = (TTree*)f->Get("pj");
         pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
 
-        nentries = static_cast<int64_t>(t->GetEntries());
+        // nentries = static_cast<int64_t>(t->GetEntries());
+        nentries = 10000;
 
         for (int64_t i = 0; i < nentries-1; ++i) {
             if (i % 10000 == 0)
@@ -136,10 +138,10 @@ int narrate(char const* config, char const* output) {
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "%i - %i%%", dcent, true); };
 
-    auto hb = new pencil();
-    hb->category("type", "Data", "MC");
-
     for (size_t i = 0; i < eta_min.size(); ++i) {
+        auto hb = new pencil();
+        hb->category("type", "Data", "MC");
+        
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
         apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
         c1->accessory(hf_info);
