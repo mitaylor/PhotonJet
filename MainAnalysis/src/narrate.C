@@ -136,7 +136,7 @@ int narrate(char const* config, char const* output) {
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
 
-        for (int64_t j = 0; j < dhf.size(); ++j) {
+        for (size_t j = 0; j < dhf.size(); ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
             c1->add((*rho_data)[rho_data->index_for({eta_x,hf_x})], "Data");
