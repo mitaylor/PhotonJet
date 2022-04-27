@@ -94,7 +94,7 @@ int narrate(char const* config, char const* output) {
         auto hf_x = ihf->index_for(pjt->hiHF);
 
         if (hf_x < 0) continue;
-        std::cout << hf_x << std::endl;
+        if (hf_x == ihf->size()) continue;
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
