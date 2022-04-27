@@ -102,15 +102,11 @@ int narrate(char const* config, char const* output) {
         t->GetEntry(i);
         auto hf_x = ihf->index_for(pjt->hiHF);
 
-        if (i > 9552) {
-            std::cout<<i<<std::endl;
+        if (hf_x < 0) continue;
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
-            std::cout<< pjt->hiHF <<std::endl;
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
-            std::cout<<__LINE__<<std::endl;
-        }
         }
     }
     std::cout<<__LINE__<<std::endl;
