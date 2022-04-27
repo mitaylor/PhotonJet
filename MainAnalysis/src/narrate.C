@@ -75,9 +75,12 @@ int narrate(char const* config, char const* output) {
     auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
     auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size);
 
+    std::cout<<__LINE__<<std::endl;
+
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
+    std::cout<<__LINE__<<std::endl;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -90,15 +93,18 @@ int narrate(char const* config, char const* output) {
             (*rho_data)[rho_data->index_for(x{eta_x,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
     }
+    std::cout<<__LINE__<<std::endl;
 
     f->Close();
     delete f;
     delete pjt;
+    std::cout<<__LINE__<<std::endl;
 
     for (auto const& file : files) {
         f = new TFile(file.data(), "read");
         t = (TTree*)f->Get("pj");
         pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
+        std::cout<<__LINE__<<std::endl;
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -108,11 +114,13 @@ int narrate(char const* config, char const* output) {
             for (size_t j = 0; j < eta_min.size(); ++j) 
                 (*rho_mc)[j]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
+        std::cout<<__LINE__<<std::endl;
 
         f->Close();
         delete f;
         delete pjt;
     }
+    std::cout<<__LINE__<<std::endl;
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
