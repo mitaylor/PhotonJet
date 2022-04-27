@@ -12,7 +12,7 @@
 #include "../git/tricks-and-treats/include/trunk.h"
 
 #include "TFile.h"
-#include "TH1.h"
+#include "TH1F.h"
 #include "TLatex.h"
 
 #include <string>
@@ -71,7 +71,13 @@ int narrate(char const* config, char const* output) {
     std::cout<<__LINE__<<std::endl;
     
     auto ihf = new interval(dhf);
+
+    std::cout<<__LINE__<<std::endl;
+
     auto irho = new interval("rho"s, rho_range[0], rho_range[1], rho_range[2]);
+
+    std::cout<<__LINE__<<std::endl;
+
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
 
     std::cout<<__LINE__<<std::endl;
