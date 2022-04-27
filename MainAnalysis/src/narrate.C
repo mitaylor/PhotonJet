@@ -96,13 +96,13 @@ int narrate(char const* config, char const* output) {
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-    std::cout<<__LINE__<<std::endl;
+    std::cout<<nentries<<std::endl;
 
-    for (int64_t i = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < nentries-1; ++i) {
         t->GetEntry(i);
         auto hf = ihf->index_for(pjt->hiHF);
 
-        std::cout<<__LINE__<<std::endl;
+        std::cout<<i<<std::endl;
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
