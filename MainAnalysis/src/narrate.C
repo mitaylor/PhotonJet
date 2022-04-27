@@ -84,8 +84,8 @@ int narrate(char const* config, char const* output) {
         auto hf = ihf->index_for(pjt->hiHF);
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
-            auto etaj = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{etaj,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
+            auto eta_x = static_cast<int64_t>(j);
+            (*rho_data)[rho_data->index_for(x{eta_x,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
         }
     }
 
@@ -114,9 +114,9 @@ int narrate(char const* config, char const* output) {
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
-            // auto etai = static_cast<int64_t>(i);
-            // auto hfj = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{i,j}]->Scale(1. / (*rho_data)[rho_data->index_for(x{i,j})]->Integral());
+            auto eta_x = static_cast<int64_t>(i);
+            auto hf_x = static_cast<int64_t>(j);
+            (*rho_data)[rho_data->index_for(x{eta_x,hf_x}]->Scale(1. / (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Integral());
         }
 
         (*rho_mc)[i]->Scale(1. / (*rho_mc)[i]->Integral());
@@ -136,8 +136,10 @@ int narrate(char const* config, char const* output) {
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
 
-        for (int64_t j = 0; j < dhf->size(); ++j) {
-            c1->add((*rho_data)[rho_data->index_for({i,j})], "Data");
+        for (int64_t j = 0; j < dhf.size(); ++j) {
+            auto eta_x = static_cast<int64_t>(i);
+            auto hf_x = static_cast<int64_t>(j);
+            c1->add((*rho_data)[rho_data->index_for({eta_x,hf_x})], "Data");
             c1->stack((*rho_mc)[i], "MC");
         }
 
