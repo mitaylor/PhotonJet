@@ -89,22 +89,20 @@ int narrate(char const* config, char const* output) {
     for (int64_t i = 0; i < nentries-1; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
-std::cout << __LINE__ << std::endl;
+
         t->GetEntry(i);
         auto hf_x = ihf->index_for(pjt->hiHF);
 
-        std::cout << __LINE__ << std::endl;
-
         if (hf_x < 0) continue;
-std::cout << __LINE__ << std::endl;
+        std::cout << hf_x << std::endl;
+
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
             auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j], i);
-            std::cout << __LINE__ << std::endl;
             if (hf_x < 3 && avg_rho > 150) {
                 std::cout << i << " " << avg_rho << std::endl;
             }
-std::cout << __LINE__ << std::endl;
+
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
         }
     }
