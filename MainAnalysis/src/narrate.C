@@ -71,7 +71,7 @@ int narrate(char const* config, char const* output) {
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
-    auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
+    auto dim_2_size = static_cast<int64_t>(ihf->size());
     auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
     auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size);
 
@@ -125,7 +125,7 @@ int narrate(char const* config, char const* output) {
     }
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
-        for (size_t j = 0; j < dhf.size()-1; ++j) {
+        for (size_t j = 0; j < ihf->size(); ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
             (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Scale(1. / (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Integral());
@@ -141,14 +141,14 @@ int narrate(char const* config, char const* output) {
     for (size_t i = 0; i < eta_min.size(); ++i) {
         auto hb = new pencil();
         hb->category("type", "Data", "MC");
-        
+
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
         apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
 
-        for (size_t j = 0; j < dhf.size(); ++j) {
+        for (size_t j = 0; j < ihf->size(); ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
             c1->add((*rho_data)[rho_data->index_for(x{eta_x,hf_x})], "Data");
