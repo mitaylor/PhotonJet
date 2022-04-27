@@ -102,6 +102,8 @@ int narrate(char const* config, char const* output) {
         t->GetEntry(i);
         auto hf = ihf->index_for(pjt->hiHF);
 
+        std::cout<<__LINE__<<std::endl;
+
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
             (*rho_data)[rho_data->index_for(x{eta_x,hf})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]));
@@ -120,7 +122,7 @@ int narrate(char const* config, char const* output) {
         pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
         std::cout<<__LINE__<<std::endl;
 
-        int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
