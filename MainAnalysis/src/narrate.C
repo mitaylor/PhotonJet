@@ -26,24 +26,24 @@ double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
     double result = 0;
     int count = 0;
 
-    if(tree_pj->etaMin == nullptr)
+    if(pjt->etaMin == nullptr)
         return -1;
 
-    int NBin = tree_pj->etaMin->size();
+    int NBin = pjt->etaMin->size();
     if(NBin == 0)
         return -1;
 
     for(int i = 0; i < NBin; i++) {
-        if ((*tree_pj->etaMax)[i] > eta_max)
+        if ((*pjt->etaMax)[i] > eta_max)
             continue;
-        if ((*tree_pj->etaMin)[i] < eta_min)
+        if ((*pjt->etaMin)[i] < eta_min)
             continue;
 
         count++;
-        result += (*tree_pj->evtRho)[i];
+        result += (*pjt->evtRho)[i];
     }
 
-    if (cout > 0) return result/count;
+    if (count > 0) return result/count;
     else return -1;
 }
 
@@ -84,7 +84,7 @@ int narrate(char const* config, char const* output) {
         auto hf = ihf->index_for(pjt->hiHF);
 
         for (size_t j = 0; j < eta_min.size(); ++j) 
-            (*rho_data)[index_for(j,hf)]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]))
+            (*rho_data)[(*rho_data)->index_for(j,hf)]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]))
     }
 
     f->Close();
@@ -112,7 +112,7 @@ int narrate(char const* config, char const* output) {
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
         for (size_t j = 0; j < dhf.size()-1; ++j) 
-            (*rho_data)[index_for(i,j)]->Scale(1. / (*rho_data)[index_for(i,j)]->Integral());
+            (*rho_data)[(*rho_data)->index_for(i,j)]->Scale(1. / (*rho_data)[(*rho_data)->index_for(i,j)]->Integral());
     
         (*rho_mc)[i]->Scale(1. / (*rho_mc)[i]->Integral());
     }
@@ -124,7 +124,7 @@ int narrate(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
 
-    for (size_t i = 0; i < eta_min.size(); ++i) {}
+    for (size_t i = 0; i < eta_min.size(); ++i) {
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
         apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
         c1->accessory(hf_info);
@@ -132,7 +132,7 @@ int narrate(char const* config, char const* output) {
         c1->set(paper::flags::logy);
 
         for (int64_t j = 0; j < dhf->size(); ++j) {
-            c1->add((*rho_data)[index_for(i,j)], "Data");
+            c1->add((*rho_data)[(*rho_data)->index_for(i,j)], "Data");
             c1->stack((*rho_mc)[i], "MC");
         }
 
