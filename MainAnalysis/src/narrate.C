@@ -79,8 +79,8 @@ int narrate(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
 
-    // int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    int64_t nentries = 10000;
+    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    // int64_t nentries = 10000;
 
     for (int64_t i = 0; i < nentries-1; ++i) {
         if (i % 10000 == 0)
@@ -106,8 +106,8 @@ int narrate(char const* config, char const* output) {
         t = (TTree*)f->Get("pj");
         pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
 
-        // nentries = static_cast<int64_t>(t->GetEntries());
-        nentries = 10000;
+        nentries = static_cast<int64_t>(t->GetEntries());
+        // nentries = 10000;
 
         for (int64_t i = 0; i < nentries-1; ++i) {
             if (i % 10000 == 0)
@@ -156,8 +156,9 @@ int narrate(char const* config, char const* output) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
-            c1->add((*rho_data)[rho_data->index_for(x{eta_x,hf_x})], "Data");
-            c1->stack((*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})], "MC");
+            
+            c1->add((*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})], "MC");
+            c1->stack((*rho_data)[rho_data->index_for(x{eta_x,hf_x})], "Data");
         }
 
         hb->sketch();
