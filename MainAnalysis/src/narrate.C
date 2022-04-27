@@ -119,8 +119,9 @@ int narrate(char const* config, char const* output) {
                 for (size_t k = 0; k < dhf.size()-1; ++k) {
                     auto eta_x = static_cast<int64_t>(j);
                     auto hf_x = static_cast<int64_t>(k);
+                    auto index = rho_data->index_for(x{eta_x,hf_x});
 
-                    (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]), pjt->w);
+                    (*rho_mc)[index]->Fill(get_avg_rho(pjt, eta_min[j], eta_max[j]), pjt->w);
                 }
             }
         }
@@ -134,8 +135,15 @@ int narrate(char const* config, char const* output) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
-            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Scale(1. / (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Integral());
-            (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Scale(1. / (*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})]->Integral());
+            auto index = rho_data->index_for(x{eta_x,hf_x});
+
+            (*rho_data)[index]->Scale(1. / (*rho_data)[index]->Integral());
+            (*rho_mc)[index]->Scale(1. / (*rho_mc)[index]->Integral());
+
+            (*rho_data)[index]->SetMaximum(1);
+            (*rho_data)[index]->SetMinimum(1E-7);
+            (*rho_mc)[index]->SetMaximum(1);
+            (*rho_mc)[index]->SetMinimum(1E-7);
         }
     }
 
@@ -156,9 +164,10 @@ int narrate(char const* config, char const* output) {
         for (size_t j = 0; j < dhf.size()-1; ++j) {
             auto eta_x = static_cast<int64_t>(i);
             auto hf_x = static_cast<int64_t>(j);
+            auto index = rho_data->index_for(x{eta_x,hf_x});
             
-            c1->add((*rho_mc)[rho_mc->index_for(x{eta_x,hf_x})], "MC");
-            c1->stack((*rho_data)[rho_data->index_for(x{eta_x,hf_x})], "Data");
+            c1->add((*rho_mc)[index], "MC");
+            c1->stack((*rho_data)[index], "Data");
         }
 
         hb->sketch();
