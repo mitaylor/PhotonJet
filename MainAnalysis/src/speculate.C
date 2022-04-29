@@ -36,7 +36,9 @@ int speculate(char const* config, char const* output) {
 
     auto heavyion = conf->get<bool>("heavyion");
     auto mc_branches = conf->get<bool>("mc_branches");
-    // auto ele_rej = conf->get<bool>("ele_rej");
+    auto ele_rej = conf->get<bool>("ele_rej");
+    auto apply_er = conf->get<bool>("apply_er");
+    auto filter = conf->get<bool>("filter");
 
     auto const eta_abs = conf->get<float>("eta_abs");
     auto const hovere_max = conf->get<float>("hovere_max");
@@ -56,10 +58,6 @@ int speculate(char const* config, char const* output) {
 
     auto counts = new history<TH1F>("count", "counts", fpt, 2);
 
-    int64_t total = 0;
-    int64_t total_accepts = 0;
-    int64_t statistics = 0;
-
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
     if (max_entries) nentries = std::min(nentries, max_entries);
@@ -78,9 +76,9 @@ int speculate(char const* config, char const* output) {
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
-            if (pho_et > 30 && heavyion) pho_et = (*p->phoEtErNew)[j];
-            if (pho_et > 30 && !heavyion) pho_et = (*p->phoEtEr)[j];
-            if (pho_et/(*p->phoEt)[j] > 1.2) continue;
+            if (pho_et > 30 && heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+            if (pho_et > 30 && !heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            if (filter && pho_et/(*p->phoEt)[j] > 1.2) { continue; }
 
             if (pho_et > leading_pt) {
                 leading = j;
@@ -105,57 +103,44 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         /* leading photon axis */
-        // auto photon_eta = (*p->phoEta)[leading];
-        // auto photon_phi = convert_radian((*p->phoPhi)[leading]);
+        auto photon_eta = (*p->phoEta)[leading];
+        auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
         /* electron rejection */
-        // if (ele_rej) {
-        //     bool electron = false;
-        //     for (int64_t j = 0; j < p->nEle; ++j) {
-        //         if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+        if (ele_rej) {
+            bool electron = false;
+            for (int64_t j = 0; j < p->nEle; ++j) {
+                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-        //         auto deta = photon_eta - (*p->eleEta)[j];
-        //         if (deta > 0.1) { continue; }
+                auto deta = photon_eta - (*p->eleEta)[j];
+                if (deta > 0.1) { continue; }
 
-        //         auto ele_phi = convert_radian((*p->elePhi)[j]);
-        //         auto dphi = revert_radian(photon_phi - ele_phi);
-        //         auto dr2 = deta * deta + dphi * dphi;
+                auto ele_phi = convert_radian((*p->elePhi)[j]);
+                auto dphi = revert_radian(photon_phi - ele_phi);
+                auto dr2 = deta * deta + dphi * dphi;
 
-        //         if (dr2 < 0.01 && passes_electron_id<
-        //                     det::barrel, wp::loose, pjtree
-        //                 >(p, j, heavyion)) {
-        //             electron = true; break; }
-        //     }
+                if (dr2 < 0.01 && passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(p, j, heavyion)) {
+                    electron = true; break; }
+            }
 
-        //     if (electron) { continue; }
-        // }
-
-        float et = (*p->phoEt)[leading];
-        if (et > 30 && heavyion) et = (*p->phoEtErNew)[leading];
-        if (et > 30 && !heavyion) et = (*p->phoEtEr)[leading];
-
-        if (et > 40)
-            statistics++;
+            if (electron) { continue; }
+        }
 
         if (mc_branches) {
-            if (et > 40) total++;
-            (*counts)[0]->Fill(et, p->weight);
+            (*counts)[0]->Fill(leading_pt, p->weight);
             if ((*p->accepts)[0] == 1) {
-                (*counts)[1]->Fill(et, p->weight);
-                if (et > 40) total_accepts++;
+                (*counts)[1]->Fill(leading_pt, p->weight);
             }
         }
         else {
-            if (et > 40) total++;
-            (*counts)[0]->Fill(et);
+            (*counts)[0]->Fill(leading_pt);
             if ((*p->accepts)[0] == 1) {
-                (*counts)[1]->Fill(et);
-                if (et > 40) total_accepts++;
+                (*counts)[1]->Fill(leading_pt);
             }
         }
     }
-
-    std::cout << statistics << std::endl;
 
     /* calculate efficiency */
     auto hframe = frame((*counts)[0]->GetXaxis(), (*counts)[0]->GetYaxis());
@@ -163,8 +148,6 @@ int speculate(char const* config, char const* output) {
     hframe->GetXaxis()->SetTitle("photon p_{T}");
 
     auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "cl=0.683 b(1,1) mode");
-
-    std::cout << total_accepts << std::endl;
     
     /* draw efficiency */
     auto hb = new pencil();
