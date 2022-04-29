@@ -78,8 +78,9 @@ int speculate(char const* config, char const* output) {
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
-            // if (pho_et > 30 && heavyion) pho_et = (*p->phoEtErNew)[j];
-            // if (pho_et > 30 && !heavyion) pho_et = (*p->phoEtEr)[j];
+            if (pho_et > 30 && heavyion) pho_et = (*p->phoEtErNew)[j];
+            if (pho_et > 30 && !heavyion) pho_et = (*p->phoEtEr)[j];
+            if (pho_et/(*p->phoEt)[j] > 1.2) continue;
 
             if (pho_et > leading_pt) {
                 leading = j;
@@ -130,10 +131,8 @@ int speculate(char const* config, char const* output) {
         // }
 
         float et = (*p->phoEt)[leading];
-        // if (et > 30 && heavyion) et = (*p->phoEtErNew)[leading];
-        // if (et > 30 && !heavyion) et = (*p->phoEtEr)[leading];
-
-        // if (et/(*p->phoEt)[leading] > 1.2) continue;
+        if (et > 30 && heavyion) et = (*p->phoEtErNew)[leading];
+        if (et > 30 && !heavyion) et = (*p->phoEtEr)[leading];
 
         statistics++;
 
