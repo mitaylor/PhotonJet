@@ -107,8 +107,6 @@ int narrate(char const* config, char const* output) {
         if (hf_x < 0) continue;
         if (hf_x == ihf->size()) continue;
 
-        if (i > 3864475 && i < 3864599) continue;
-
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
             auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
