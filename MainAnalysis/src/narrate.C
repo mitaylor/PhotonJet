@@ -92,7 +92,7 @@ int narrate(char const* config, char const* output) {
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 0, 1, 0, 1 });
+    auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     // int64_t nentries = 10000;
@@ -201,7 +201,7 @@ int narrate(char const* config, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data/MC");
         
-        auto c1 = new paper(tag + "_rho_weight" + bound_string[i], hb);
+        auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
         apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
