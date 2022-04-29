@@ -134,7 +134,8 @@ int speculate(char const* config, char const* output) {
         if (et > 30 && heavyion) et = (*p->phoEtErNew)[leading];
         if (et > 30 && !heavyion) et = (*p->phoEtEr)[leading];
 
-        statistics++;
+        if (et > 40)
+            statistics++;
 
         if (mc_branches) {
             if (et > 40) total++;
