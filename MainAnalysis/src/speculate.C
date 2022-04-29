@@ -58,6 +58,7 @@ int speculate(char const* config, char const* output) {
 
     int64_t total = 0;
     int64_t total_accepts = 0;
+    int64_t statistics = 0;
 
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -107,30 +108,32 @@ int speculate(char const* config, char const* output) {
         auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
         /* electron rejection */
-        if (ele_rej) {
-            bool electron = false;
-            for (int64_t j = 0; j < p->nEle; ++j) {
-                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+        // if (ele_rej) {
+        //     bool electron = false;
+        //     for (int64_t j = 0; j < p->nEle; ++j) {
+        //         if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*p->eleEta)[j];
-                if (deta > 0.1) { continue; }
+        //         auto deta = photon_eta - (*p->eleEta)[j];
+        //         if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*p->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
+        //         auto ele_phi = convert_radian((*p->elePhi)[j]);
+        //         auto dphi = revert_radian(photon_phi - ele_phi);
+        //         auto dr2 = deta * deta + dphi * dphi;
 
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(p, j, heavyion)) {
-                    electron = true; break; }
-            }
+        //         if (dr2 < 0.01 && passes_electron_id<
+        //                     det::barrel, wp::loose, pjtree
+        //                 >(p, j, heavyion)) {
+        //             electron = true; break; }
+        //     }
 
-            if (electron) { continue; }
-        }
+        //     if (electron) { continue; }
+        // }
 
         float et = (*p->phoEt)[leading];
         if (et > 30 && heavyion) et = (*p->phoEtErNew)[leading];
         if (et > 30 && !heavyion) et = (*p->phoEtEr)[leading];
+
+        statistics++;
 
         if (mc_branches) {
             if (et > 40) total++;
@@ -149,6 +152,8 @@ int speculate(char const* config, char const* output) {
             }
         }
     }
+
+    std::cout << statistics << std::endl;
 
     /* calculate efficiency */
     auto hframe = frame((*counts)[0]->GetXaxis(), (*counts)[0]->GetYaxis());
