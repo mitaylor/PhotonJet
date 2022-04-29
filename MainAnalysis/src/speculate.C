@@ -36,7 +36,7 @@ int speculate(char const* config, char const* output) {
 
     auto heavyion = conf->get<bool>("heavyion");
     auto mc_branches = conf->get<bool>("mc_branches");
-    auto ele_rej = conf->get<bool>("ele_rej");
+    // auto ele_rej = conf->get<bool>("ele_rej");
 
     auto const eta_abs = conf->get<float>("eta_abs");
     auto const hovere_max = conf->get<float>("hovere_max");
@@ -104,8 +104,8 @@ int speculate(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         /* leading photon axis */
-        auto photon_eta = (*p->phoEta)[leading];
-        auto photon_phi = convert_radian((*p->phoPhi)[leading]);
+        // auto photon_eta = (*p->phoEta)[leading];
+        // auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
         /* electron rejection */
         // if (ele_rej) {
