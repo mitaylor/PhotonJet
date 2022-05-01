@@ -27,10 +27,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static bool in_hem_failure_region(float eta, float phi) {
-    return (eta < -1.242 && -1.72 < phi && phi < -0.72);
-}
-
 int populate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -97,7 +93,7 @@ int populate(char const* config, char const* output) {
             auto jet_phi = (*pjt->jtphi)[j];
 
             /* hem failure region exclusion */
-            if (heavyion && !in_hem_failure_region(jet_eta, jet_phi)) { jetEtaPhiEx->Fill(jet_eta, jet_phi); }
+            if (heavyion && !in_jet_failure_region(pjt,j)) { jetEtaPhiEx->Fill(jet_eta, jet_phi); }
             
             jetEtaPhi->Fill(jet_eta, jet_phi);
         }  
@@ -107,7 +103,7 @@ int populate(char const* config, char const* output) {
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             photonEtaPhi->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
-            if (!within_hem_failure_region(pjt, j)) {
+            if (!in_pho_failure_region(pjt, j)) {
                 photonEtaPhiEx->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
             }
 
@@ -163,7 +159,7 @@ int populate(char const* config, char const* output) {
         }
 
         photonSelectedEtaPhi->Fill((*pjt->phoEta)[leading], (*pjt->phoPhi)[leading]);
-        if (heavyion && !within_hem_failure_region(pjt, leading)) { 
+        if (heavyion && !in_pho_failure_region(pjt, leading)) { 
             photonSelectedEtaPhiEx->Fill((*pjt->phoEta)[leading], (*pjt->phoPhi)[leading]);
         }
 
@@ -181,7 +177,7 @@ int populate(char const* config, char const* output) {
             auto jet_phi = (*pjt->jtphi)[j];
 
             /* hem failure region exclusion */
-            if (heavyion && !in_hem_failure_region(jet_eta, jet_phi)) { jetSelectedEtaPhiEx->Fill(jet_eta, jet_phi); }
+            if (heavyion && !in_jet_failure_region(pjt,j)) { jetSelectedEtaPhiEx->Fill(jet_eta, jet_phi); }
 
             jetSelectedEtaPhi->Fill(jet_eta, jet_phi);
         }  

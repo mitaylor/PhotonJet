@@ -123,7 +123,7 @@ int fabulate(char const* config, char const* output) {
 
             if (match == true) { continue; }
 
-            if (heavyion && in_hem_failure_region(gen_eta, gen_phi))
+            if (heavyion && in_jet_failure_region(p, j))
                 continue;
 
             auto reco_pt = (*p->jtpt)[j];

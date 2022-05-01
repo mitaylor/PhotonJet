@@ -121,7 +121,7 @@ int64_t inosculate(char const* config, char const* output) {
                 continue;
             if (std::abs((*p->phoSCEta)[j]) > 1.4442)
                 continue;
-            if (heavyion && within_hem_failure_region(p, j))
+            if (heavyion && in_pho_failure_region(p, j))
                 continue;
 
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
@@ -134,7 +134,7 @@ int64_t inosculate(char const* config, char const* output) {
                     continue;
                 if (std::abs((*p->phoSCEta)[k]) > 1.4442)
                     continue;
-                if (heavyion && within_hem_failure_region(p, k))
+                if (heavyion && in_pho_failure_region(p, k))
                     continue;
                 if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
                     continue;

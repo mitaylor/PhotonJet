@@ -2,10 +2,25 @@
 #define SPECIFICS_H
 
 template <typename T>
-bool within_hem_failure_region(T* t, int64_t i) {
-    return ((*t->phoSCEta)[i] < -1.3
-        && (*t->phoSCPhi)[i] < -0.87
-        && (*t->phoSCPhi)[i] > -1.57);
+bool in_pho_failure_region(T* t, int64_t i) {
+    auto ex_1 = (*t->phoSCEta)[i] < -1.3 && 
+                (*t->phoSCPhi)[i] < -0.7 && (*t->phoSCPhi)[i] > -1.6;
+    auto ex_2 = (*t->phoSCEta)[i] < 1.5 && (*t->phoSCEta)[i] > 0.1 &&
+                (*t->phoSCPhi)[i] < 1.0 && (*t->phoSCPhi)[i] > 0.2;
+
+    return ex_1 || ex_2;
+}
+
+template <typename T>
+bool in_jet_failure_region(T* t, int64_t i) {
+    auto ex_1 = (*t->jteta)[i] < -1.3 && 
+                (*t->jtphi)[i] < -0.8 && (*t->jtphi)[i] > -1.7;
+    auto ex_2 = (*t->jteta)[i] < 1.5 && (*t->jteta)[i] > -0.5 &&
+                (*t->jtphi)[i] < 0 && (*t->jtphi)[i] > 1.0;
+    auto ex_3 = (*t->jteta)[i] < 1.6 && (*t->jteta)[i] > 1.5 &&
+                (*t->jtphi)[i] < -1.0 && (*t->jtphi)[i] > -1.5;
+
+    return ex_1 || ex_2 || ex_3;
 }
 
 template <typename T>

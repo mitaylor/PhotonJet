@@ -94,7 +94,7 @@ int speculate(char const* config, char const* output) {
             continue;
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
         /* isolation requirement */
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
