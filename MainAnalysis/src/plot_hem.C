@@ -242,6 +242,9 @@ int populate(char const* config, char const* output) {
 
     hb->sketch();
 
+    c1->draw("pdf");
+    c2->draw("pdf");
+
     /* save histograms */
     TFile* o = new TFile(output, "recreate");
 
