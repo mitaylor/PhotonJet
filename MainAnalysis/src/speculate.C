@@ -128,19 +128,16 @@ int speculate(char const* config, char const* output) {
             if (electron) { continue; }
         }
 
-        float et = (*p->phoEt)[leading];
-        if (et > 30) et = (*p->phoEtErNew)[leading];
-
         if (mc_branches) {
-            (*counts)[0]->Fill(et, p->weight);
+            (*counts)[0]->Fill(leading_pt, p->weight);
             if ((*p->accepts)[0] == 1) {
-                (*counts)[1]->Fill(et, p->weight);
+                (*counts)[1]->Fill(leading_pt, p->weight);
             }
         }
         else {
-            (*counts)[0]->Fill(et);
+            (*counts)[0]->Fill(leading_pt);
             if ((*p->accepts)[0] == 1) {
-                (*counts)[1]->Fill(et);
+                (*counts)[1]->Fill(leading_pt);
             }
         }
     }
