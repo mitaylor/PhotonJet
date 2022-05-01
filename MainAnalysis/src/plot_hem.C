@@ -38,6 +38,8 @@ int populate(char const* config, char const* output) {
     auto entries = conf->get<int64_t>("entries");
     auto frequency = conf->get<int64_t>("frequency");
 
+    auto tag = conf->get<std::string>("tag");
+
     /* options */
     auto heavyion = conf->get<bool>("heavyion");
     auto ele_rej = conf->get<bool>("electron_rejection");
@@ -189,7 +191,7 @@ int populate(char const* config, char const* output) {
     hb->category("type", "data");
     hb->alias("data", "");
 
-    auto c1 = new paper(tag + "photon_distribution", hb);
+    auto c1 = new paper(tag + "_photon_distribution", hb);
     apply_style(c1, tag);
     c1->divide(4, -1);
 
@@ -214,7 +216,7 @@ int populate(char const* config, char const* output) {
     c1->adjust(photonSelectedEtaPhiEx, "colz", "");
 
 
-    auto c2 = new paper(tag + "jet_distribution", hb);
+    auto c2 = new paper(tag + "_jet_distribution", hb);
     apply_style(c2, tag);
     c2->divide(4, -1);
 
