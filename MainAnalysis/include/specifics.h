@@ -3,10 +3,10 @@
 
 template <typename T>
 bool in_pho_failure_region(T* t, int64_t i) {
-    auto ex_1 = (*t->phoSCEta)[i] < -1.3 && 
-                (*t->phoSCPhi)[i] < -0.7 && (*t->phoSCPhi)[i] > -1.6;
-    auto ex_2 = (*t->phoSCEta)[i] < 1.5 && (*t->phoSCEta)[i] > 0.1 &&
-                (*t->phoSCPhi)[i] < 1.0 && (*t->phoSCPhi)[i] > 0.2;
+    auto ex_1 = (*t->phoEta)[i] < -1.3 && 
+                (*t->phoPhi)[i] < -0.7 && (*t->phoPhi)[i] > -1.6;
+    auto ex_2 = (*t->phoEta)[i] < 1.5 && (*t->phoEta)[i] > 0.1 &&
+                (*t->phoPhi)[i] < 1.0 && (*t->phoPhi)[i] > 0.2;
 
     return ex_1 || ex_2;
 }
@@ -16,7 +16,7 @@ bool in_jet_failure_region(T* t, int64_t i) {
     auto ex_1 = (*t->jteta)[i] < -1.3 && 
                 (*t->jtphi)[i] < -0.8 && (*t->jtphi)[i] > -1.7;
     auto ex_2 = (*t->jteta)[i] < 1.5 && (*t->jteta)[i] > -0.5 &&
-                (*t->jtphi)[i] < 0 && (*t->jtphi)[i] > 1.0;
+                (*t->jtphi)[i] < 1.0 && (*t->jtphi)[i] > 0;
     auto ex_3 = (*t->jteta)[i] < 1.6 && (*t->jteta)[i] > 1.5 &&
                 (*t->jtphi)[i] < -1.0 && (*t->jtphi)[i] > -1.5;
 
