@@ -38,9 +38,11 @@ int populate(char const* config, char const* output) {
     /* options */
     auto heavyion = conf->get<bool>("heavyion");
     auto ele_rej = conf->get<bool>("electron_rejection");
+    auto apply_er = conf->get<bool>("apply_er");
+    auto apply_jes = conf->get<bool>("apply_jes");
+    auto filter = conf->get<bool>("filter");
 
     /* selections */
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
     auto const hovere_max = conf->get<float>("hovere_max");
     auto const see_min = conf->get<float>("see_min");
@@ -89,7 +91,7 @@ int populate(char const* config, char const* output) {
             auto jet_phi = (*pjt->jtphi)[j];
 
             /* hem failure region exclusion */
-            if (!in_hem_failure_region(jet_eta, jet_phi)) { jetEtaPhiEx->Fill(jet_eta, jet_phi); }
+            if (heavyion && !in_hem_failure_region(jet_eta, jet_phi)) { jetEtaPhiEx->Fill(jet_eta, jet_phi); }
             
             jetEtaPhi->Fill(jet_eta, jet_phi);
         }  
@@ -103,12 +105,17 @@ int populate(char const* config, char const* output) {
                 photonEtaPhiEx->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
             }
 
-            if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
+            float pho_et = (*p->phoEt)[j];
+            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            if (filter && pho_et/(*p->phoEt)[j] > 1.2) { continue; }
+            
+            if (pho_et <= 40) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
-            if ((*pjt->phoEt)[j] > leading_pt) {
+            if (pho_et > leading_pt) {
                 leading = j;
-                leading_pt = (*pjt->phoEt)[j];
+                leading_pt = pho_et;
             }
         }
 
@@ -150,12 +157,13 @@ int populate(char const* config, char const* output) {
         }
 
         photonSelectedEtaPhi->Fill((*pjt->phoEta)[leading], (*pjt->phoPhi)[leading]);
-        if (!within_hem_failure_region(pjt, leading)) { 
+        if (heavyion && !within_hem_failure_region(pjt, leading)) { 
             photonSelectedEtaPhiEx->Fill((*pjt->phoEta)[leading], (*pjt->phoPhi)[leading]);
         }
 
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_pt = (*pjt->jtpt)[j];
+            if (heavyion && apply_jes) jet_pt = (*p->jtptCor)[j];
 
             if (jet_pt <= jet_pt_min) { continue; }
 
@@ -166,7 +174,7 @@ int populate(char const* config, char const* output) {
             auto jet_phi = (*pjt->jtphi)[j];
 
             /* hem failure region exclusion */
-            if (!in_hem_failure_region(jet_eta, jet_phi)) { jetSelectedEtaPhiEx->Fill(jet_eta, jet_phi); }
+            if (heavyion && !in_hem_failure_region(jet_eta, jet_phi)) { jetSelectedEtaPhiEx->Fill(jet_eta, jet_phi); }
 
             jetSelectedEtaPhi->Fill(jet_eta, jet_phi);
         }  
