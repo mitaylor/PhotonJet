@@ -39,7 +39,8 @@ int populate(char const* config, char const* output) {
     auto heavyion = conf->get<bool>("heavyion");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto apply_er = conf->get<bool>("apply_er");
-    auto apply_jes = conf->get<bool>("apply_jes");
+    auto apply_jes_flex = conf->get<bool>("apply_jes_flex");
+    auto apply_jes_stat = conf->get<bool>("apply_jes_stat");
     auto filter = conf->get<bool>("filter");
 
     /* selections */
@@ -163,7 +164,8 @@ int populate(char const* config, char const* output) {
 
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_pt = (*pjt->jtpt)[j];
-            if (heavyion && apply_jes) jet_pt = (*pjt->jtptCor)[j];
+            if (heavyion && apply_jes_flex) jet_pt = (*pjt->jtptCor)[j];
+            f (heavyion && apply_jes_stat) jet_pt = (*pjt->jtptCorScale)[j];
 
             if (jet_pt <= jet_pt_min) { continue; }
 
@@ -179,6 +181,61 @@ int populate(char const* config, char const* output) {
             jetSelectedEtaPhi->Fill(jet_eta, jet_phi);
         }  
     }
+
+    auto hb = new pencil();
+    hb->category("type", "data");
+    hb->alias("data", "");
+
+    auto c1 = new paper(tag + "photon_distribution", hb);
+    apply_style(c1, tag);
+    c1->divide(4, -1);
+
+    photonEtaPhi->SetMinimum(0);
+    photonEtaPhi->SetMaximum(800);
+    c1->add(photonEtaPhi);
+    c1->adjust(photonEtaPhi, "colz", "");
+
+    photonEtaPhiEx->SetMinimum(0);
+    photonEtaPhiEx->SetMaximum(800);
+    c1->add(photonEtaPhiEx);
+    c1->adjust(photonEtaPhiEx, "colz", "");
+
+    photonSelectedEtaPhi->SetMinimum(0);
+    photonSelectedEtaPhi->SetMaximum(80);
+    c1->add(photonSelectedEtaPhi);
+    c1->adjust(photonSelectedEtaPhi, "colz", "");
+
+    photonSelectedEtaPhiEx->SetMinimum(0);
+    photonSelectedEtaPhiEx->SetMaximum(80);
+    c1->add(photonSelectedEtaPhiEx);
+    c1->adjust(photonSelectedEtaPhiEx, "colz", "");
+
+
+    auto c2 = new paper(tag + "jet_distribution", hb);
+    apply_style(c2, tag);
+    c2->divide(4, -1);
+
+    jetEtaPhi->SetMinimum(0);
+    jetEtaPhi->SetMaximum(40000);
+    c2->add(jetEtaPhi);
+    c2->adjust(jetEtaPhi, "colz", "");
+
+    jetEtaPhiEx->SetMinimum(0);
+    jetEtaPhiEx->SetMaximum(40000);
+    c2->add(jetEtaPhiEx);
+    c2->adjust(jetEtaPhiEx, "colz", "");
+
+    jetSelectedEtaPhi->SetMinimum(0);
+    jetSelectedEtaPhi->SetMaximum(600);
+    c2->add(jetSelectedEtaPhi);
+    c2->adjust(jetSelectedEtaPhi, "colz", "");
+
+    jetSelectedEtaPhiEx->SetMinimum(0);
+    jetSelectedEtaPhiEx->SetMaximum(600);
+    c2->add(jetSelectedEtaPhiEx);
+    c2->adjust(jetSelectedEtaPhiEx, "colz", "");
+
+    hb->sketch();
 
     /* save histograms */
     TFile* o = new TFile(output, "recreate");
