@@ -94,7 +94,7 @@ int speculate(char const* config, char const* output) {
             continue;
 
         /* hem failure region exclusion */
-        // if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
         /* isolation requirement */
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -128,16 +128,19 @@ int speculate(char const* config, char const* output) {
             if (electron) { continue; }
         }
 
+        float et = (*p->phoEt)[leading];
+        if (et > 30) et = (*p->phoEtErNew)[leading];
+
         if (mc_branches) {
-            (*counts)[0]->Fill(leading_pt, p->weight);
+            (*counts)[0]->Fill(et, p->weight);
             if ((*p->accepts)[0] == 1) {
-                (*counts)[1]->Fill(leading_pt, p->weight);
+                (*counts)[1]->Fill(et, p->weight);
             }
         }
         else {
-            (*counts)[0]->Fill(leading_pt);
+            (*counts)[0]->Fill(et);
             if ((*p->accepts)[0] == 1) {
-                (*counts)[1]->Fill(leading_pt);
+                (*counts)[1]->Fill(et);
             }
         }
     }
