@@ -168,7 +168,7 @@ int populate(char const* config, char const* output) {
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_pt = (*pjt->jtpt)[j];
             if (heavyion && apply_jes_flex) jet_pt = (*pjt->jtptCor)[j];
-            f (heavyion && apply_jes_stat) jet_pt = (*pjt->jtptCorScale)[j];
+            if (heavyion && apply_jes_stat) jet_pt = (*pjt->jtptCorScale)[j];
 
             if (jet_pt <= jet_pt_min) { continue; }
 
