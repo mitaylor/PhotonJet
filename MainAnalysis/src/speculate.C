@@ -58,8 +58,6 @@ int speculate(char const* config, char const* output) {
 
     auto counts = new history<TH1F>("count", "counts", fpt, 2);
 
-    std::cout << apply_er << " " << heavyion << std::endl;
-
     /* iterate */
     auto nentries = static_cast<int64_t>(t->GetEntries());
     if (max_entries) nentries = std::min(nentries, max_entries);
