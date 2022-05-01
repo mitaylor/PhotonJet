@@ -105,10 +105,10 @@ int populate(char const* config, char const* output) {
                 photonEtaPhiEx->Fill((*pjt->phoEta)[j], (*pjt->phoPhi)[j]);
             }
 
-            float pho_et = (*p->phoEt)[j];
-            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
-            if (filter && pho_et/(*p->phoEt)[j] > 1.2) { continue; }
+            float pho_et = (*pjt->phoEt)[j];
+            if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*pj->phoEtEr)[j];
+            if (filter && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
             
             if (pho_et <= 40) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
