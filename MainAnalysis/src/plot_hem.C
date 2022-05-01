@@ -195,23 +195,27 @@ int populate(char const* config, char const* output) {
     apply_style(c1, tag);
     c1->divide(4, -1);
 
+    photonEtaPhi->Scale(1/photonEtaPhi->Integral());
     photonEtaPhi->SetMinimum(0);
-    photonEtaPhi->SetMaximum(800);
+    photonEtaPhi->SetMaximum(0.000017);
     c1->add(photonEtaPhi);
     c1->adjust(photonEtaPhi, "colz", "");
 
+    photonEtaPhiEx->Scale(1/photonEtaPhiEx->Integral());
     photonEtaPhiEx->SetMinimum(0);
-    photonEtaPhiEx->SetMaximum(800);
+    photonEtaPhiEx->SetMaximum(0.00017);
     c1->add(photonEtaPhiEx);
     c1->adjust(photonEtaPhiEx, "colz", "");
 
+    photonSelectedEtaPhi->Scale(1/photonSelectedEtaPhi->Integral());
     photonSelectedEtaPhi->SetMinimum(0);
-    photonSelectedEtaPhi->SetMaximum(80);
+    photonSelectedEtaPhi->SetMaximum(0.000017);
     c1->add(photonSelectedEtaPhi);
     c1->adjust(photonSelectedEtaPhi, "colz", "");
 
+    photonSelectedEtaPhiEx->Scale(1/photonSelectedEtaPhiEx->Integral());
     photonSelectedEtaPhiEx->SetMinimum(0);
-    photonSelectedEtaPhiEx->SetMaximum(80);
+    photonSelectedEtaPhiEx->SetMaximum(0.000017);
     c1->add(photonSelectedEtaPhiEx);
     c1->adjust(photonSelectedEtaPhiEx, "colz", "");
 
@@ -220,23 +224,27 @@ int populate(char const* config, char const* output) {
     apply_style(c2, tag);
     c2->divide(4, -1);
 
+    jetEtaPhi->Scale(1/jetEtaPhi->Integral());
     jetEtaPhi->SetMinimum(0);
-    jetEtaPhi->SetMaximum(40000);
+    jetEtaPhi->SetMaximum(0.000017);
     c2->add(jetEtaPhi);
     c2->adjust(jetEtaPhi, "colz", "");
 
+    jetEtaPhiEx->Scale(1/jetEtaPhiEx->Integral());
     jetEtaPhiEx->SetMinimum(0);
-    jetEtaPhiEx->SetMaximum(40000);
+    jetEtaPhiEx->SetMaximum(0.000017);
     c2->add(jetEtaPhiEx);
     c2->adjust(jetEtaPhiEx, "colz", "");
 
+    jetSelectedEtaPhi->Scale(1/jetSelectedEtaPhi->Integral());
     jetSelectedEtaPhi->SetMinimum(0);
-    jetSelectedEtaPhi->SetMaximum(600);
+    jetSelectedEtaPhi->SetMaximum(0.000017);
     c2->add(jetSelectedEtaPhi);
     c2->adjust(jetSelectedEtaPhi, "colz", "");
 
+    jetSelectedEtaPhiEx->Scale(1/jetSelectedEtaPhiEx->Integral());
     jetSelectedEtaPhiEx->SetMinimum(0);
-    jetSelectedEtaPhiEx->SetMaximum(600);
+    jetSelectedEtaPhiEx->SetMaximum(0.000017);
     c2->add(jetSelectedEtaPhiEx);
     c2->adjust(jetSelectedEtaPhiEx, "colz", "");
 
