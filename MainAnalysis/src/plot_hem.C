@@ -63,12 +63,12 @@ int populate(char const* config, char const* output) {
     auto photonEtaPhi = new TH2F("photon_eta_phi_nosel","Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
     auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel","Selected Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
     auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","Selected Jet Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","Selected Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
     auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
     auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","Selected Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
     auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","Selected Jet Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","Selected Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
