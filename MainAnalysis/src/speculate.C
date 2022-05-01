@@ -51,7 +51,7 @@ int speculate(char const* config, char const* output) {
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(mc_branches, true, false, t, { 1, 0, 1, 1, 0, 1, 0 });
+    auto p = new pjtree(mc_branches, true, false, t, { 1, 0, 1, 0, 0, 1, 0 });
 
     auto ipt = new interval("photon p_{T}"s, rpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
@@ -76,7 +76,7 @@ int speculate(char const* config, char const* output) {
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
-            if (pho_et > 30 && heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            if (pho_et > 30 && heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
             if (pho_et > 30 && !heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
             if (filter && pho_et/(*p->phoEt)[j] > 1.2) { continue; }
 
