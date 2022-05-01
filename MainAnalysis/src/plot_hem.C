@@ -107,7 +107,7 @@ int populate(char const* config, char const* output) {
 
             float pho_et = (*pjt->phoEt)[j];
             if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*pj->phoEtEr)[j];
+            if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
             if (filter && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
             
             if (pho_et <= 40) { continue; }
@@ -163,7 +163,7 @@ int populate(char const* config, char const* output) {
 
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_pt = (*pjt->jtpt)[j];
-            if (heavyion && apply_jes) jet_pt = (*p->jtptCor)[j];
+            if (heavyion && apply_jes) jet_pt = (*pjt->jtptCor)[j];
 
             if (jet_pt <= jet_pt_min) { continue; }
 
