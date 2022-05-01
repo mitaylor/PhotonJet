@@ -1,4 +1,5 @@
 #include "../include/pjtree.h"
+#include "../include/specifics.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -18,10 +19,6 @@
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
-
-static bool in_hem_failure_region(float eta, float phi) {
-    return (eta < -1.242 && -1.72 < phi && phi < -0.72);
-}
 
 static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
