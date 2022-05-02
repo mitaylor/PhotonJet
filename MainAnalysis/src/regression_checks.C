@@ -34,7 +34,7 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hetaphi
         || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
 
         /* hem failure region exclusion */
-        if (!heavyion || !within_hem_failure_region(p, index)) { 
+        if (!heavyion || !in_pho_failure_region(p, index)) { 
 
             /* isolation requirement */
             float isolation = (*p->pho_ecalClusterIsoR3)[index]
