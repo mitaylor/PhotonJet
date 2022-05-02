@@ -30,8 +30,6 @@ double get_avg_rho(T* pjt, double eta_min, double eta_max) {
             fraction = ((*pjt->etaMin)[i+1] - eta_min) / ((*pjt->etaMin)[i+1] - (*pjt->etaMin)[i]);
         }
 
-        if (fraction < 0) std::cout << "problem" << std:: endl;
-
         count += fraction;
         result += (*pjt->evtRho)[i] * fraction;
     }
