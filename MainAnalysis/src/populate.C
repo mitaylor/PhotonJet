@@ -156,9 +156,6 @@ int populate(char const* config, char const* output) {
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
 
-    /* exclude most peripheral events */
-    auto hf_min = dhf.front();
-
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
 
@@ -271,8 +268,8 @@ int populate(char const* config, char const* output) {
 
         t->GetEntry(i);
 
-        if (pjt->hiHF <= hf_min) { continue; }
-        if (pjt->hiHF >= 5199.95) { continue; }
+        if (rho.empty() && pjt->hiHF <= 24.7924) { continue; }
+        if (rho.empty() && pjt->hiHF >= 5199.95) { continue; }
         if (std::abs(pjt->vz) > 15) { continue; }
 
         int64_t leading = -1;
@@ -282,11 +279,11 @@ int populate(char const* config, char const* output) {
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-            auto pho_et = (*pjt->phoEtEr)[j];
+            auto pho_et = (*pjt->phoEt)[j];
             if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
             if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-            if (filter && (*pjt->phoEtEr)[j]/pho_et > 1.2) { continue; }
+            if (filter && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
 
             if (pho_et < photon_pt_min) { continue; }
 
@@ -351,7 +348,6 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         if (!rho.empty()) hf = (dhf[0] + dhf[1]) / 2;
         auto hf_x = ihf->index_for(hf);
-        std::cout << hf_x << std::endl;
 
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
         auto weight = pjt->w;
