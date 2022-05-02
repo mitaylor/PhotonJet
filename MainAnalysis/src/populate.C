@@ -227,12 +227,22 @@ int populate(char const* config, char const* output) {
     printf("iterate..\n");
 
     /* load efficiency correction */
-    TFile* fe = new TFile(eff.data(), "read");
-    history<TH1F>* efficiency = new history<TH1F>(fe, eff_label);
+    TFile* fe;
+    history<TH1F>* efficiency;
+
+    if (!eff.empty()) {
+        fe = new TFile(eff.data(), "read");
+        efficiency = new history<TH1F>(fe, eff_label);
+    }
 
     /* load centrality weighting for MC */
-    TFile* fr = new TFile(rho.data(), "read");
-    history<TH1F>* rho_weighting = new history<TH1F>(fr, rho_label);
+    TFile* fr;
+    history<TH1F>* rho_weighting;
+
+    if (!eff.empty()) {
+        fr = new TFile(rho.data(), "read");
+        rho_weighting = new history<TH1F>(fr, rho_label);
+    }
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
