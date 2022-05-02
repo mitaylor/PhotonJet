@@ -268,8 +268,8 @@ int populate(char const* config, char const* output) {
 
         t->GetEntry(i);
 
-        if (rho.empty() && pjt->hiHF <= 24.7924) { continue; }
-        if (rho.empty() && pjt->hiHF >= 5199.95) { continue; }
+        if (rho.empty() && heavyion && pjt->hiHF <= 24.7924) { continue; }
+        if (rho.empty() && heavyion && pjt->hiHF >= 5199.95) { continue; }
         if (std::abs(pjt->vz) > 15) { continue; }
 
         int64_t leading = -1;
