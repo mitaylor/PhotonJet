@@ -226,8 +226,6 @@ int populate(char const* config, char const* output) {
 
     printf("iterate..\n");
 
-
-
     /* load efficiency correction */
     TFile* fe;
     history<TH1F>* efficiency = nullptr;
