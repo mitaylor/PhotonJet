@@ -45,7 +45,7 @@ void scale_ia_bin_width(T*... args) {
 }
 
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
-               float photon_eta, int64_t photon_phi, bool exclude, bool heavyion,
+               float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
                multival* mdphi, multival* mdr,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
@@ -60,7 +60,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
-        if (heavyion) jet_pt = (*pjt->jtptCor)[j];
+        if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
         if (jet_pt <= 20) { continue; }
 
@@ -132,6 +132,8 @@ int populate(char const* config, char const* output) {
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
     auto filter = conf->get<bool>("filter");
+    auto no_jes = conf->get<bool>("no_jes");
+    std::cout << no_jes << std::endl;
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
@@ -367,7 +369,7 @@ int populate(char const* config, char const* output) {
         }
 
         fill_axes(pjt, pthf_x, weight,
-                  photon_eta, photon_phi, exclude, heavyion,
+                  photon_eta, photon_phi, exclude, heavyion && !no_jes,
                   mdphi, mdr, nevt,
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
@@ -381,7 +383,7 @@ int populate(char const* config, char const* output) {
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
             fill_axes(pjtm, pthf_x, weight,
-                      photon_eta, photon_phi, exclude, heavyion,
+                      photon_eta, photon_phi, exclude, heavyion && !no_jes,
                       mdphi, mdr, nmix,
                       mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                       mix_pjet_f_dr, mix_pjet_f_jpt,
