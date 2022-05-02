@@ -114,7 +114,11 @@ int populate(char const* config, char const* output) {
     auto mb = conf->get<std::string>("mb");
     
     auto eff = conf->get<std::string>("eff");
-    auto label = conf->get<std::string>("label");
+    auto eff_label = conf->get<std::string>("eff_label");
+
+    auto rho = conf->get<std::string>("eff");
+    auto rho_label = conf->get<std::string>("rho_label");
+    auto index = conf->get<int64_t>("index");
 
     auto entries = conf->get<int64_t>("entries");
     auto mix = conf->get<int64_t>("mix");
@@ -224,7 +228,11 @@ int populate(char const* config, char const* output) {
 
     /* load efficiency correction */
     TFile* fe = new TFile(eff.data(), "read");
-    history<TH1F>* efficiency = new history<TH1F>(fe, label);
+    history<TH1F>* efficiency = new history<TH1F>(fe, eff_label);
+
+    /* load centrality weighting for MC */
+    TFile* fr = new TFile(rho.data(), "read");
+    history<TH1F>* rho_weighting = new history<TH1F>(fr, rho_label);
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
@@ -331,7 +339,9 @@ int populate(char const* config, char const* output) {
         auto pt_x = ipt->index_for(leading_pt);
 
         double hf = pjt->hiHF;
+        if (!rho.empty()) hf = (dhf[0] + dhf[1]) / 2;
         auto hf_x = ihf->index_for(hf);
+        std::cout << hf_x << std::endl;
 
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
         auto weight = pjt->w;
@@ -340,6 +350,15 @@ int populate(char const* config, char const* output) {
             auto bin = (*efficiency)[1]->FindBin(leading_pt);
             auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; return -1; }
+            std::cout << leading_pt << " " << bin << " " << corr << std::endl;
+            weight *= corr;
+        }
+
+        if (!rho.empty()) {
+            auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
+            auto bin = (*rho_weighting)[0][index]->FindBin(avg_rho);
+            auto corr = (*rho_weighting)[0][index]->GetBinContent(bin);
+            std::cout << avg_rho << " " << bin << " " << corr << std::endl;
             weight *= corr;
         }
 
