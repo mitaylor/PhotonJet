@@ -235,16 +235,16 @@ int populate(char const* config, char const* output) {
     if (!eff.empty()) {
         fe = new TFile(eff.data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
-    }
+    }std::cout << __LINE__ << std::endl;
 
     /* load centrality weighting for MC */
     TFile* fr;
     history<TH1F>* rho_weighting = nullptr;
-
+std::cout << __LINE__ << std::endl;
     if (!eff.empty()) {
         fr = new TFile(rho.data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
-    }
+    }std::cout << __LINE__ << std::endl;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
