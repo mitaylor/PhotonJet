@@ -228,7 +228,7 @@ int populate(char const* config, char const* output) {
 
     /* load efficiency correction */
     TFile* fe;
-    history<TH1F>* efficiency;
+    history<TH1F>* efficiency = nullptr;
 
     if (!eff.empty()) {
         fe = new TFile(eff.data(), "read");
@@ -237,7 +237,7 @@ int populate(char const* config, char const* output) {
 
     /* load centrality weighting for MC */
     TFile* fr;
-    history<TH1F>* rho_weighting;
+    history<TH1F>* rho_weighting = nullptr;
 
     if (!eff.empty()) {
         fr = new TFile(rho.data(), "read");
