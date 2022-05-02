@@ -326,7 +326,7 @@ int populate(char const* config, char const* output) {
 
         if (!eff.empty() && photon_pt < 70) {
             auto bin = (*efficiency)[1]->FindBin(photon_pt);
-            auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin)
+            auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; return -1; }
             weight *= corr;
         }
