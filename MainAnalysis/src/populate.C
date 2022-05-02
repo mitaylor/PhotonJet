@@ -228,14 +228,18 @@ int populate(char const* config, char const* output) {
 
     std::cout << __LINE__ << std::endl;
 
-    /* load efficiency correction and rho weighting */
-    TFile* fe, fr;
-    history<TH1F>* efficiency, rho_weighting = nullptr;
+    /* load efficiency correction */
+    TFile* fe;
+    history<TH1F>* efficiency = nullptr;
 
     if (!eff.empty()) {
         fe = new TFile(eff.data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
     }
+
+    /* load centrality weighting for MC */
+    TFile* fr;
+    history<TH1F>* rho_weighting = nullptr;
 
     if (!eff.empty()) {
         fr = new TFile(rho.data(), "read");
