@@ -235,7 +235,7 @@ int populate(char const* config, char const* output) {
     if (!eff.empty()) {
         fe = new TFile(eff.data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
-
+    }
 
     /* load centrality weighting for MC */
     TFile* fr;
