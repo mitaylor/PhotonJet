@@ -272,11 +272,11 @@ int populate(char const* config, char const* output) {
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-            pho_et = (*p->phoEtEr)[j];
-            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            auto pho_et = (*pjt->phoEtEr)[j];
+            if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-            if (filter && (*p->phoEtEr)[j]/pho_et > 1.2) { continue; }
+            if (filter && (*pjt->phoEtEr)[j]/pho_et > 1.2) { continue; }
 
             if (pho_et < photon_pt_min) { continue; }
 
@@ -356,8 +356,8 @@ int populate(char const* config, char const* output) {
 
         if (!rho.empty()) {
             auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
-            auto bin = (*rho_weighting)[0][index]->FindBin(avg_rho);
-            auto corr = (*rho_weighting)[0][index]->GetBinContent(bin);
+            auto bin = (*rho_weighting)[index]->FindBin(avg_rho);
+            auto corr = (*rho_weighting)[index]->GetBinContent(bin);
             std::cout << avg_rho << " " << bin << " " << corr << std::endl;
             weight *= corr;
         }
