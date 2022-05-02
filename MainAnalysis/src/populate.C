@@ -45,7 +45,7 @@ void scale_ia_bin_width(T*... args) {
 }
 
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
-               float photon_eta, int64_t photon_phi, bool exclude,
+               float photon_eta, int64_t photon_phi, bool exclude, bool heavyion,
                multival* mdphi, multival* mdr,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
@@ -60,6 +60,8 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
+        if (heavyion) jet_pt = (*pjt->jtptCor)[j];
+        
         if (jet_pt <= 20) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
@@ -110,6 +112,7 @@ int populate(char const* config, char const* output) {
 
     auto input = conf->get<std::string>("input");
     auto mb = conf->get<std::string>("mb");
+    
     auto eff = conf->get<std::string>("eff");
     auto label = conf->get<std::string>("label");
 
@@ -123,6 +126,8 @@ int populate(char const* config, char const* output) {
     auto gen_iso = conf->get<bool>("generator_isolation");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
+    auto apply_er = conf->get<bool>("apply_er");
+    auto filter = conf->get<bool>("filter");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
@@ -255,13 +260,21 @@ int populate(char const* config, char const* output) {
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
-            if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
+            if ((*pjt->phoEt)[j] <= 30) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-            if ((*pjt->phoEt)[j] > leading_pt) {
+            pho_et = (*p->phoEtEr)[j];
+            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+
+            if (filter && (*p->phoEtEr)[j]/pho_et > 1.2) { continue; }
+
+            if (pho_et < photon_pt_min) { continue; }
+
+            if (pho_et > leading_pt) {
                 leading = j;
-                leading_pt = (*pjt->phoEt)[j];
+                leading_pt = pho_et;
             }
         }
 
@@ -315,8 +328,7 @@ int populate(char const* config, char const* output) {
             if (electron) { continue; }
         }
 
-        double photon_pt = (*pjt->phoEt)[leading];
-        auto pt_x = ipt->index_for(photon_pt);
+        auto pt_x = ipt->index_for(leading_pt);
 
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
@@ -324,15 +336,15 @@ int populate(char const* config, char const* output) {
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
         auto weight = pjt->w;
 
-        if (!eff.empty() && photon_pt < 70) {
-            auto bin = (*efficiency)[1]->FindBin(photon_pt);
+        if (!eff.empty() && leading_pt < 70) {
+            auto bin = (*efficiency)[1]->FindBin(leading_pt);
             auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; return -1; }
             weight *= corr;
         }
 
         fill_axes(pjt, pthf_x, weight,
-                  photon_eta, photon_phi, exclude,
+                  photon_eta, photon_phi, exclude, heavyion,
                   mdphi, mdr, nevt,
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
@@ -346,7 +358,7 @@ int populate(char const* config, char const* output) {
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
             fill_axes(pjtm, pthf_x, weight,
-                      photon_eta, photon_phi, exclude,
+                      photon_eta, photon_phi, exclude, heavyion,
                       mdphi, mdr, nmix,
                       mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                       mix_pjet_f_dr, mix_pjet_f_jpt,

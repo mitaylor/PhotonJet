@@ -1,5 +1,6 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
+#include "../include/specifics.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -21,43 +22,6 @@
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
-
-double get_avg_rho(pjtree* pjt, double eta_min, double eta_max) {
-    double result = 0;
-    double count = 0;
-
-    if(pjt->etaMin == nullptr)
-        return -1;
-
-    int NBin = pjt->etaMin->size();
-    if(NBin == 0)
-        return -1;
-
-    for(int i = 0; i < NBin; i++) {
-        double fraction = 1;
-
-        if ((*pjt->etaMax)[i-1] > eta_max)
-            continue;
-        if ((*pjt->etaMin)[i+1] < eta_min)
-            continue;
-        
-        if ((*pjt->etaMax)[i] > eta_max) {
-            fraction = (eta_max - (*pjt->etaMax)[i-1]) / ((*pjt->etaMax)[i] - (*pjt->etaMax)[i-1]);
-        }
-
-        if ((*pjt->etaMin)[i] < eta_min) {
-            fraction = ((*pjt->etaMin)[i+1] - eta_min) / ((*pjt->etaMin)[i+1] - (*pjt->etaMin)[i]);
-        }
-
-        if (fraction < 0) std::cout << "problem" << std:: endl;
-
-        count += fraction;
-        result += (*pjt->evtRho)[i] * fraction;
-    }
-
-    if (count > 0) return result/count;
-    else return -1;
-}
 
 int narrate(char const* config, char const* output) {
     auto conf = new configurer(config);
