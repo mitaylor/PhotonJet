@@ -226,23 +226,15 @@ int populate(char const* config, char const* output) {
 
     printf("iterate..\n");
 
-    /* load efficiency correction */
-    TFile* fe;
-    history<TH1F>* efficiency = nullptr;
+    std::cout << __LINE__ << std::endl;
 
-    if (!eff.empty()) {
-        fe = new TFile(eff.data(), "read");
-        efficiency = new history<TH1F>(fe, eff_label);
-    }
+    /* load efficiency correction */
+    TFile* fe = new TFile(eff.data(), "read");
+    history<TH1F>* efficiency = new history<TH1F>(fe, eff_label);std::cout << __LINE__ << std::endl;
 
     /* load centrality weighting for MC */
-    TFile* fr;
-    history<TH1F>* rho_weighting = nullptr;
-
-    if (!eff.empty()) {
-        fr = new TFile(rho.data(), "read");
-        rho_weighting = new history<TH1F>(fr, rho_label);
-    }
+    TFile* fr = new TFile(rho.data(), "read");
+    history<TH1F>* rho_weighting = new history<TH1F>(fr, rho_label);std::cout << __LINE__ << std::endl;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
@@ -254,7 +246,7 @@ int populate(char const* config, char const* output) {
     int64_t tentries = 0;
     clock_t time = clock();
     clock_t duration = 0;
-
+std::cout << __LINE__ << std::endl;
     for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
@@ -266,14 +258,14 @@ int populate(char const* config, char const* output) {
                 time = clock();
             }
         }
-
+std::cout << __LINE__ << std::endl;
         if (i % mod != 0) { continue; }
 
-        t->GetEntry(i);
+        t->GetEntry(i);std::cout << __LINE__ << std::endl;
 
         if (pjt->hiHF <= hf_min) { continue; }
         if (pjt->hiHF >= 5199.95) { continue; }
-        if (std::abs(pjt->vz) > 15) { continue; }
+        if (std::abs(pjt->vz) > 15) { continue; }std::cout << __LINE__ << std::endl;
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -295,7 +287,7 @@ int populate(char const* config, char const* output) {
                 leading_pt = pho_et;
             }
         }
-
+std::cout << __LINE__ << std::endl;
         /* require leading photon */
         if (leading < 0) { continue; }
 
@@ -319,7 +311,7 @@ int populate(char const* config, char const* output) {
                 + (*pjt->pho_trackIsoR3PtCut20)[leading];
             if (isolation > iso_max) { continue; }
         }
-
+std::cout << __LINE__ << std::endl;
         /* leading photon axis */
         auto photon_eta = (*pjt->phoEta)[leading];
         auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
@@ -345,7 +337,7 @@ int populate(char const* config, char const* output) {
 
             if (electron) { continue; }
         }
-
+std::cout << __LINE__ << std::endl;
         auto pt_x = ipt->index_for(leading_pt);
 
         double hf = pjt->hiHF;
@@ -355,7 +347,7 @@ int populate(char const* config, char const* output) {
 
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
         auto weight = pjt->w;
-
+std::cout << __LINE__ << std::endl;
         if (!eff.empty() && leading_pt < 70) {
             auto bin = (*efficiency)[1]->FindBin(leading_pt);
             auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
@@ -363,7 +355,7 @@ int populate(char const* config, char const* output) {
             std::cout << leading_pt << " " << bin << " " << corr << std::endl;
             weight *= corr;
         }
-
+std::cout << __LINE__ << std::endl;
         if (!rho.empty()) {
             auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
             auto bin = (*rho_weighting)[index]->FindBin(avg_rho);
@@ -371,7 +363,7 @@ int populate(char const* config, char const* output) {
             std::cout << avg_rho << " " << bin << " " << corr << std::endl;
             weight *= corr;
         }
-
+std::cout << __LINE__ << std::endl;
         fill_axes(pjt, pthf_x, weight,
                   photon_eta, photon_phi, exclude, heavyion,
                   mdphi, mdr, nevt,
