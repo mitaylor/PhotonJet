@@ -45,7 +45,7 @@ void scale_ia_bin_width(T*... args) {
 }
 
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
-               float photon_eta, int64_t photon_phi, bool heavyion,
+               float photon_eta, int64_t photon_phi, bool exclude,
                multival* mdphi, multival* mdr,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
@@ -55,11 +55,12 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
                memory<TH1F>* pjet_es_u_dphi,
                memory<TH1F>* pjet_wta_u_dphi,
                memory<TH1F>* pjet_u_dr) {
+
     (*nevt)[pthf_x]->Fill(1., weight);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
-        if (jet_pt <= 30) { continue; }
+        if (jet_pt <= 20) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= 1.6) { continue; }
@@ -73,7 +74,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         if (pj_dr < 0.4) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && in_jet_failure_region(pjt,j)) { continue; }
+        if (exclude && in_jet_failure_region(pjt,j)) { continue; }
 
         auto jet_wta_eta = (*pjt->WTAeta)[j];
         auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
@@ -109,6 +110,9 @@ int populate(char const* config, char const* output) {
 
     auto input = conf->get<std::string>("input");
     auto mb = conf->get<std::string>("mb");
+    auto eff = conf->get<std::string>("eff");
+    auto label = conf->get<std::string>("label");
+
     auto entries = conf->get<int64_t>("entries");
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
@@ -118,6 +122,7 @@ int populate(char const* config, char const* output) {
     auto heavyion = conf->get<bool>("heavyion");
     auto gen_iso = conf->get<bool>("generator_isolation");
     auto ele_rej = conf->get<bool>("electron_rejection");
+    auto exclude = conf->get<bool>("exclude");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
@@ -126,6 +131,7 @@ int populate(char const* config, char const* output) {
     auto const see_min = conf->get<float>("see_min");
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
+    auto const gen_iso_max = conf->get<float>("gen_iso_max");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -203,13 +209,17 @@ int populate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, t, { 1, 1, 1, 1, 1, 0 });
+    auto pjt = new pjtree(gen_iso, false, t, { 1, 1, 1, 1, 1, 0, 1 });
 
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0});
+    auto pjtm = new pjtree(gen_iso, false, tm, { 1, 1, 1, 1, 1, 0, 1 });
 
     printf("iterate..\n");
+
+    /* load efficiency correction */
+    TFile* fe = new TFile(eff.data(), "read");
+    history<TH1F>* efficiency = new history<TH1F>(fe, label);
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     int64_t mod = 1;
@@ -248,6 +258,7 @@ int populate(char const* config, char const* output) {
             if ((*pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+
             if ((*pjt->phoEt)[j] > leading_pt) {
                 leading = j;
                 leading_pt = (*pjt->phoEt)[j];
@@ -262,7 +273,7 @@ int populate(char const* config, char const* output) {
             continue;
 
         /* hem failure region exclusion */
-        if (heavyion && in_pho_failure_region(pjt, leading)) { continue; }
+        if (exclude && in_pho_failure_region(pjt, leading)) { continue; }
 
         /* isolation requirement */
         if (gen_iso) {
@@ -270,7 +281,7 @@ int populate(char const* config, char const* output) {
             if (gen_index == -1) { continue; }
 
             float isolation = (*pjt->mcCalIsoDR04)[gen_index];
-            if (isolation > iso_max) { continue; }
+            if (isolation > gen_iso_max) { continue; }
         } else {
             float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
                 + (*pjt->pho_hcalRechitIsoR3)[leading]
@@ -313,8 +324,15 @@ int populate(char const* config, char const* output) {
         auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
         auto weight = pjt->w;
 
+        if (!eff.empty() && photon_pt < 70) {
+            auto bin = (*efficiency)[1]->FindBin(photon_pt);
+            auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin)
+            if (corr < 1) { std::cout << "error" << std::endl; return -1; }
+            weight *= corr;
+        }
+
         fill_axes(pjt, pthf_x, weight,
-                  photon_eta, photon_phi, heavyion,
+                  photon_eta, photon_phi, exclude,
                   mdphi, mdr, nevt,
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
@@ -328,7 +346,7 @@ int populate(char const* config, char const* output) {
             if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
 
             fill_axes(pjtm, pthf_x, weight,
-                      photon_eta, photon_phi, heavyion,
+                      photon_eta, photon_phi, exclude,
                       mdphi, mdr, nmix,
                       mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                       mix_pjet_f_dr, mix_pjet_f_jpt,
