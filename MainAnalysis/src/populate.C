@@ -116,7 +116,7 @@ int populate(char const* config, char const* output) {
     auto eff = conf->get<std::string>("eff");
     auto eff_label = conf->get<std::string>("eff_label");
 
-    auto rho = conf->get<std::string>("eff");
+    auto rho = conf->get<std::string>("rho");
     auto rho_label = conf->get<std::string>("rho_label");
     auto index = conf->get<int64_t>("index");
 
