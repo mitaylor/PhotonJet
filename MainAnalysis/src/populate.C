@@ -44,10 +44,6 @@ void scale_ia_bin_width(T*... args) {
     }), 0)... };
 }
 
-static bool in_hem_failure_region(float eta, float phi) {
-    return (eta < -1.242 && -1.72 < phi && phi < -0.72);
-}
-
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
                float photon_eta, int64_t photon_phi, bool heavyion,
                multival* mdphi, multival* mdr,
@@ -77,7 +73,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         if (pj_dr < 0.4) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && in_hem_failure_region(jet_eta, revert_radian(jet_phi))) { continue; }
+        if (heavyion && in_jet_failure_region(pjt,j)) { continue; }
 
         auto jet_wta_eta = (*pjt->WTAeta)[j];
         auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
@@ -266,7 +262,7 @@ int populate(char const* config, char const* output) {
             continue;
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(pjt, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(pjt, leading)) { continue; }
 
         /* isolation requirement */
         if (gen_iso) {
