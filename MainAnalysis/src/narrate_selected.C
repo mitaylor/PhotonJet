@@ -123,18 +123,18 @@ int narrate(char const* config, char const* output) {
 
             if (std::abs(pjt->vz) > 15) { continue; }
 
-            // int64_t leading = -1;
-            // float leading_pt = 0;
-            // for (int64_t j = 0; j < pjt->nPho; ++j) {
-            //     if ((*pjt->phoEt)[j] <= 40) { continue; }
-            //     if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
-            //     if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if ((*pjt->phoEt)[j] <= 40) { continue; }
+                // if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+                // if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
-            //     if ((*pjt->phoEt)[j] > leading_pt) {
-            //         leading = j;
-            //         leading_pt = (*pjt->phoEt)[j];
-            //     }
-            // }
+                if ((*pjt->phoEt)[j] > leading_pt) {
+                    leading = j;
+                    leading_pt = (*pjt->phoEt)[j];
+                }
+            }
 
             // if (leading < 0) { continue; }
             // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
