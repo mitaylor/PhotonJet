@@ -135,6 +135,7 @@ int narrate(char const* config, char const* output) {
                     leading_pt = (*pjt->phoEt)[j];
                 }
             }
+            std::cout << leading << std::endl;
 
             // if (leading < 0) { continue; }
             // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
