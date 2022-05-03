@@ -77,7 +77,7 @@ int narrate(char const* config, char const* output) {
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             if ((*pjt->phoEt)[j] <= 40) { continue; }
-            if (std::abs((*pjt->phoSCEta)[j]) >= eta_max) { continue; }
+            if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
             if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
             if ((*pjt->phoEt)[j] > leading_pt) {
