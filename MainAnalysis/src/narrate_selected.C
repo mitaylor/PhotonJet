@@ -110,7 +110,7 @@ int narrate(char const* config, char const* output) {
     for (auto const& file : files) {
         f = new TFile(file.data(), "read");
         t = (TTree*)f->Get("pj");
-        pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1 });
+        pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1 });
 
         // nentries = static_cast<int64_t>(t->GetEntries());
         nentries = 10000;
@@ -127,24 +127,23 @@ int narrate(char const* config, char const* output) {
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
                 if ((*pjt->phoEt)[j] <= 40) { continue; }
-                // if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
-                // if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+                if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
                 if ((*pjt->phoEt)[j] > leading_pt) {
                     leading = j;
                     leading_pt = (*pjt->phoEt)[j];
                 }
             }
-            std::cout << leading << std::endl;
 
-            // if (leading < 0) { continue; }
-            // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
-            // if (in_pho_failure_region(pjt, leading)) { continue; }
+            if (leading < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
+            if (in_pho_failure_region(pjt, leading)) { continue; }
 
-            // float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-            //     + (*pjt->pho_hcalRechitIsoR3)[leading]
-            //     + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            // if (isolation > 2.099277) { continue; }
+            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+                + (*pjt->pho_hcalRechitIsoR3)[leading]
+                + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > 2.099277) { continue; }
 
             for (size_t j = 0; j < eta_min.size(); ++j) {
                 for (size_t k = 0; k < dhf.size()-1; ++k) {
