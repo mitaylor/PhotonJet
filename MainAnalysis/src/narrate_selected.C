@@ -58,8 +58,8 @@ int narrate(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1 });
 
-    // int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    int64_t nentries = 10000;
+    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    // int64_t nentries = 10000;
 
     for (int64_t i = 0; i < nentries-1; ++i) {
         if (i % 100000 == 0)
@@ -112,8 +112,8 @@ int narrate(char const* config, char const* output) {
         t = (TTree*)f->Get("pj");
         pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1 });
 
-        // nentries = static_cast<int64_t>(t->GetEntries());
-        nentries = 10000;
+        nentries = static_cast<int64_t>(t->GetEntries());
+        // nentries = 10000;
 
         for (int64_t i = 0; i < nentries-1; ++i) {
             if (i % 100000 == 0)
