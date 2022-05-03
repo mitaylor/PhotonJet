@@ -136,7 +136,7 @@ int narrate(char const* config, char const* output) {
                 }
             }
 
-            // if (leading < 0) { continue; }
+            if (leading < 0) { continue; }
             // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
             // if (in_pho_failure_region(pjt, leading)) { continue; }
 
