@@ -99,6 +99,7 @@ int beneficiate(char const* output) {
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
 
                     (*nacc)[jpdphi_x]->Fill(1);
+                    std::cout << i << " " << j << " " << k << " " << l << std::endl;
                 }
             }
         }
