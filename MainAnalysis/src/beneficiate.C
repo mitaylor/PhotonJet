@@ -13,7 +13,7 @@
 
 #include "TFile.h"
 #include "TTree.h"
-#include "TH1.h"
+#include "TH2.h"
 
 #include <memory>
 #include <string>
@@ -59,7 +59,7 @@ int beneficiate(char const* output) {
     auto ijeta = new interval("jetEta"s, dim_size, jet_eta_min, jet_eta_max);
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
     auto idphi = new interval("dphi"s, dim_size, 0.f, phi_max);
-    
+
     auto mpjeta = new multival(*ijeta, *ipeta);
 
     auto fincl = std::bind(&multival::book<TH2F>, mpjeta, _1, _2, _3);
