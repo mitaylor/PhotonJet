@@ -79,6 +79,7 @@ int beneficiate(char const* output) {
         for (int64_t j = 0; j < dim_size; ++j) {
             for (int64_t k = 0; k < dim_size; ++k) {
                 for (int64_t l = 0; l < dim_size; ++l) {
+                    std::cout << i << " " << j << " " << k << " " << l << std::endl;
                     auto jeta_edges = ijeta->edges(i);
                     auto peta_edges = ipeta->edges(j);
                     auto jphi_edges = ijphi->edges(k);
@@ -99,7 +100,6 @@ int beneficiate(char const* output) {
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
 
                     (*nacc)[jpdphi_x]->Fill(1);
-                    std::cout << i << " " << j << " " << k << " " << l << std::endl;
                 }
             }
         }
