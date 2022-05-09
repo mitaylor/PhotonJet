@@ -92,8 +92,9 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
             auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
             auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
             corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-            std::cout << bin << " " << corr << std::endl;
             if (corr < 1) { std::cout << "error" << std::endl; }
+
+            if (!(cor > 1) && !(cor < 3)) std::cout << bin << " " << corr << " " << dphi_x << " " << jet_eta << " " << photon_eta << " " << revert_pi(photon_jet_dphi) << std::endl;
         }
 
         /* fill histograms */
