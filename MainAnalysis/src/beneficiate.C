@@ -91,7 +91,7 @@ int beneficiate(char const* output) {
 
                     (*nevt)[jpdphi_x]->Fill(1);
 
-                    if (in_pho_failure_region || in_jet_failure_region) { continue; }
+                    if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
 
                     (*nacc)[jpdphi_x]->Fill(1);
                 }
