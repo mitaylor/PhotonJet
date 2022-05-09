@@ -95,9 +95,9 @@ int beneficiate(char const* output) {
                     std::cout << i << " " << j << " " << k << " " << l << std::endl;
                     std::cout << jetEta << " " << phoEta << " " << jetPhi << " " << phoPhi << std::endl;
                     auto dphi_x = idphi->index_for(dphi); std::cout << dphi << std::endl;
-                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x}); std::cout << dphi << std::endl;
+                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x}); std::cout << jpdphi_x << std::endl;
 
-                    (*nevt)[jpdphi_x]->Fill(1);
+                    (*nevt)[jpdphi_x]->Fill(1); std::cout << jpdphi_x << std::endl;
 
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
 
