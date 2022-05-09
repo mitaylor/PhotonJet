@@ -17,6 +17,7 @@
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
+using x = std::initializer_list<int64_t> const;
 
 bool in_pho_failure_region(float phoEta, float phoPhi) {
     auto ex_1 = phoEta < -1.3 && 
@@ -72,7 +73,7 @@ int beneficiate(char const* output) {
     for (int64_t i = 0; i < dim_size; ++i) {
         for (int64_t j = 0; j < dim_size; ++j) {
             for (int64_t k = 0; k < dim_size; ++k) {
-                for (int64_t m = 0; m < dim_size; ++l) {
+                for (int64_t l = 0; l < dim_size; ++l) {
                     auto jeta_edges = ijeta->edges(i);
                     auto peta_edges = ipeta->edges(j);
                     auto jphi_edges = ijphi->edges(k);
