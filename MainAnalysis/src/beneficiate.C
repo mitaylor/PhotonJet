@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/pjtree.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -11,7 +12,6 @@
 #include "TFile.h"
 #include "TH1.h"
 
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -38,7 +38,7 @@ bool in_jet_failure_region(float jetEta, float jetPhi) {
     return ex_1 || ex_2 || ex_3;
 }
 
-int beneficiate(char const* config, char const* output) {
+int beneficiate(char const* output) {
     std::string tag = "aa";
 
     int64_t dim_size = 100;
@@ -72,7 +72,7 @@ int beneficiate(char const* config, char const* output) {
     for (int64_t i = 0; i < dim_size; ++i) {
         for (int64_t j = 0; j < dim_size; ++j) {
             for (int64_t k = 0; k < dim_size; ++k) {
-                for (int64_t m = 0; m < dim_size; ++m) {
+                for (int64_t m = 0; m < dim_size; ++l) {
                     auto jeta_edges = ijeta->edges(i);
                     auto peta_edges = ipeta->edges(j);
                     auto jphi_edges = ijphi->edges(k);
@@ -112,8 +112,8 @@ int beneficiate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return beneficiate(argv[1], argv[2]);
+    if (argc == 2)
+        return beneficiate(argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
