@@ -19,10 +19,8 @@
 #include <string>
 #include <vector>
 
-
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
-// using x = std::initializer_list<int64_t> const;
 
 bool in_pho_failure_region(float phoEta, float phoPhi) {
     auto ex_1 = phoEta < -1.3 && 
