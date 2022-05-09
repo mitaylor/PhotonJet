@@ -48,10 +48,10 @@ int beneficiate(char const* output) {
     int64_t dim_size = 100;
 
     /* define history based on multival of jet eta, photon eta, and dphi */
-    double jet_eta_min = -1.6;
-    double jet_eta_max = 1.6;
-    double pho_eta_min = -1.5;
-    double pho_eta_max = 1.5;
+    double jet_eta_min = -2;
+    double jet_eta_max = 2;
+    double pho_eta_min = -2;
+    double pho_eta_max = 2;
 
     double phi_min = -3.1416;
     double phi_max = 3.1416;
