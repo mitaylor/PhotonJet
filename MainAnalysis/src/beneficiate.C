@@ -59,14 +59,13 @@ int beneficiate(char const* output) {
     auto ijeta = new interval("jetEta"s, dim_size, jet_eta_min, jet_eta_max);
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
     auto idphi = new interval("dphi"s, dim_size, 0.f, phi_max);
+    
+    auto mpjeta = new multival(*ijeta, *ipeta);
 
-    auto mjpdphi = new multival(*ijeta, *ipeta, *idphi);
+    auto fincl = std::bind(&multival::book<TH2F>, mpjeta, _1, _2, _3);
 
-    auto incl = new interval("none"s, 1, 0.f, 9999.f);
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-
-    auto nevt = new memory<TH1F>("nevt"s, "none", fincl, mjpdphi);
-    auto nacc = new memory<TH1F>("nacc"s, "none", fincl, mjpdphi);
+    auto nevt = new memory<TH2F>("nevt"s, "none", fincl, multival(idphi));
+    auto nacc = new memory<TH2F>("nacc"s, "none", fincl, multival(idphi));
 
     /* create vectors for photon and jet phi */
     auto ijphi = new interval("jetPhi"s, dim_size, phi_min, phi_max);
@@ -90,13 +89,12 @@ int beneficiate(char const* output) {
                     auto dphi = revert_radian(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
 
                     auto dphi_x = idphi->index_for(dphi);
-                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x});
 
-                    (*nevt)[jpdphi_x]->Fill(1);
+                    (*nevt)[dphi_x]->Fill(jetEta, phoEta);
 
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
 
-                    (*nacc)[jpdphi_x]->Fill(1);
+                    (*nacc)[dphi_x]->Fill(jetEta, phoEta);
                 }
             }
         }
