@@ -60,7 +60,7 @@ int beneficiate(char const* output) {
 
     auto ijeta = new interval("jetEta"s, dim_size, jet_eta_min, jet_eta_max);
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
-    auto idphi = new interval("dphi"s, dim_size, 0, phi_max);
+    auto idphi = new interval("dphi"s, dim_size, 0.f, phi_max);
 
     auto mjpdphi = new multival(*ijeta, *ipeta, *idphi);
 
@@ -110,6 +110,8 @@ int beneficiate(char const* output) {
     /* normalise by number of entries */
     // nacc->divide(*nevt);
 
+    std::cout << output << std::endl;
+
     /* save histograms */
     in(output, [&]() {
         nacc->save(tag);
@@ -123,6 +125,6 @@ int main(int argc, char* argv[]) {
     if (argc == 2)
         return beneficiate(argv[2]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [output]\n", argv[0]);
     return 1;
 }
