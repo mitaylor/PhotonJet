@@ -1,5 +1,6 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
+#include "../include/specifics.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -8,12 +9,16 @@
 #include "../git/history/include/history.h"
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
+#include "../git/tricks-and-treats/include/trunk.h"
 
 #include "TFile.h"
+#include "TTree.h"
 #include "TH1.h"
 
+#include <memory>
 #include <string>
 #include <vector>
+
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
