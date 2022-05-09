@@ -89,7 +89,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         /* do acceptance weighting */
         double corr = 1;
         if (exclude) {
-            auto dphi_x = idphi->get_index(revert_pi(photon_jet_dphi));
+            auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
             auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
             corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; return -1; }
