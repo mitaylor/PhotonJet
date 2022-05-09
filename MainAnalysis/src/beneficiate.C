@@ -61,11 +61,12 @@ int beneficiate(char const* output) {
     auto idphi = new interval("dphi"s, dim_size, 0.f, phi_max);
 
     auto mpjeta = new multival(*ijeta, *ipeta);
+    auto mdphi = new multival (*idphi);
 
     auto fincl = std::bind(&multival::book<TH2F>, mpjeta, _1, _2, _3);
 
-    auto nevt = new memory<TH2F>("nevt"s, "none", fincl, multival(idphi));
-    auto nacc = new memory<TH2F>("nacc"s, "none", fincl, multival(idphi));
+    auto nevt = new memory<TH2F>("nevt"s, "none", fincl, mdphi);
+    auto nacc = new memory<TH2F>("nacc"s, "none", fincl, mdphi);
 
     /* create vectors for photon and jet phi */
     auto ijphi = new interval("jetPhi"s, dim_size, phi_min, phi_max);
