@@ -79,21 +79,21 @@ int beneficiate(char const* output) {
         for (int64_t j = 0; j < dim_size; ++j) {
             for (int64_t k = 0; k < dim_size; ++k) {
                 for (int64_t l = 0; l < dim_size; ++l) {
-                    std::cout << i << " " << j << " " << k << " " << l << std::endl;
-                    auto jeta_edges = ijeta->edges(i); std::cout << i << std::endl;
-                    auto peta_edges = ipeta->edges(j); std::cout << j << std::endl;
-                    auto jphi_edges = ijphi->edges(k); std::cout << k << std::endl;
-                    auto pphi_edges = ipphi->edges(l); std::cout << l << std::endl;
+                    auto jeta_edges = ijeta->edges(i);
+                    auto peta_edges = ipeta->edges(j);
+                    auto jphi_edges = ijphi->edges(k);
+                    auto pphi_edges = ipphi->edges(l);
 
                     auto jetEta = (jeta_edges[1] + jeta_edges[0])/2;
                     auto phoEta = (peta_edges[1] + peta_edges[0])/2;
                     auto jetPhi = (jphi_edges[1] + jphi_edges[0])/2;
                     auto phoPhi = (pphi_edges[1] + pphi_edges[0])/2;
+                    std::cout << i << std::endl;
 
-                    auto dphi = revert_radian(convert_radian(phoPhi) - convert_radian(jetPhi));
+                    auto dphi = revert_radian(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
 
-                    auto dphi_x = idphi->index_for(dphi);
-                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x});
+                    auto dphi_x = idphi->index_for(dphi); std::cout << i << std::endl;
+                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x}); std::cout << i << std::endl;
 
                     (*nevt)[jpdphi_x]->Fill(1);
 
