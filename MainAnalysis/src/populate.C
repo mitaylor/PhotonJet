@@ -133,7 +133,6 @@ int populate(char const* config, char const* output) {
     auto apply_er = conf->get<bool>("apply_er");
     auto filter = conf->get<bool>("filter");
     auto no_jes = conf->get<bool>("no_jes");
-    std::cout << no_jes << std::endl;
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
@@ -358,20 +357,15 @@ int populate(char const* config, char const* output) {
             auto bin = (*efficiency)[1]->FindBin(leading_pt);
             auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; return -1; }
-            std::cout << "eff corr: " << corr << std::endl;
             weight *= corr;
         }
-        std::cout << "weight: " << weight << std::endl;
 
         if (!rho.empty()) {
             auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
             auto bin = (*rho_weighting)[index]->FindBin(avg_rho);
             auto corr = (*rho_weighting)[index]->GetBinContent(bin);
-            std::cout << "rho corr: " << corr << std::endl;
             weight *= corr;
         }
-
-        std::cout << "weight: " << weight << std::endl;
 
         fill_axes(pjt, pthf_x, weight,
                   photon_eta, photon_phi, exclude, heavyion && !no_jes,
