@@ -108,7 +108,7 @@ int beneficiate(char const* output) {
 
 
     /* normalise by number of entries */
-    nacc->divide(*nevt);
+    // nacc->divide(*nevt);
 
     /* save histograms */
     in(output, [&]() {
