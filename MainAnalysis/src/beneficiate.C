@@ -88,16 +88,13 @@ int beneficiate(char const* output) {
                     auto phoEta = (peta_edges[1] + peta_edges[0])/2;
                     auto jetPhi = (jphi_edges[1] + jphi_edges[0])/2;
                     auto phoPhi = (pphi_edges[1] + pphi_edges[0])/2;
-                    std::cout << i << std::endl;
 
                     auto dphi = revert_radian(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
 
-                    std::cout << i << " " << j << " " << k << " " << l << std::endl;
-                    std::cout << jetEta << " " << phoEta << " " << jetPhi << " " << phoPhi << std::endl;
-                    auto dphi_x = idphi->index_for(dphi); std::cout << dphi << std::endl;
-                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x}); std::cout << jpdphi_x << std::endl;
+                    auto dphi_x = idphi->index_for(dphi);
+                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x});
 
-                    (*nevt)[jpdphi_x]->Fill(1); std::cout << jpdphi_x << std::endl;
+                    (*nevt)[jpdphi_x]->Fill(1);
 
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
 
