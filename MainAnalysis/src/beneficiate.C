@@ -56,9 +56,11 @@ int beneficiate(char const* output) {
     double phi_min = -3.1416;
     double phi_max = 3.1416;
 
+    std::vector<float> dphi_range{ 0 0.0625 0.125 0.1875 0.25 0.3125 0.375 0.4375 0.5 0.5625 0.625 0.6875 0.75 0.8125 0.875 0.9375 1 };
+
     auto ijeta = new interval("jetEta"s, dim_size, jet_eta_min, jet_eta_max);
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
-    auto idphi = new interval("dphi"s, dim_size, 0.f, phi_max);
+    auto idphi = new interval("dphi"s, dphi_range);
 
     auto mpjeta = new multival(*ijeta, *ipeta);
     auto mdphi = new multival (*idphi);
@@ -87,7 +89,7 @@ int beneficiate(char const* output) {
                     auto jetPhi = (jphi_edges[1] + jphi_edges[0])/2;
                     auto phoPhi = (pphi_edges[1] + pphi_edges[0])/2;
 
-                    auto dphi = revert_radian(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
+                    auto dphi = revert_pi(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
 
                     auto dphi_x = idphi->index_for(dphi);
 

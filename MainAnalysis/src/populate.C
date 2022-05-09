@@ -46,7 +46,7 @@ void scale_ia_bin_width(T*... args) {
 
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
                float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
-               multival* mdphi, multival* mdr,
+               multival* mdphi, multival* mdr, interval* idphi,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
                memory<TH1F>* pjet_wta_f_dphi,
@@ -54,7 +54,8 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
                memory<TH1F>* pjet_f_jpt,
                memory<TH1F>* pjet_es_u_dphi,
                memory<TH1F>* pjet_wta_u_dphi,
-               memory<TH1F>* pjet_u_dr) {
+               memory<TH1F>* pjet_u_dr,
+               history<TH2F>* acceptance, history<TH2F>* total) {
 
     (*nevt)[pthf_x]->Fill(1., weight);
 
@@ -84,26 +85,36 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
         auto photon_wta_dphi = std::abs(photon_phi - jet_wta_phi);
 
-        (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
-        (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, weight);
+        /* do acceptance weighting */
+        double corr = 1;
+        if (exclude) {
+            auto dphi_x = idphi->get_index(revert_pi(photon_jet_dphi));
+            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+            corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+            if (corr < 1) { std::cout << "error" << std::endl; return -1; }
+        }
+
+        /* fill histograms */
+        (*pjet_es_f_dphi)[pthf_x]->Fill(photon_jet_dphi, corr*weight);
+        (*pjet_wta_f_dphi)[pthf_x]->Fill(photon_wta_dphi, corr*weight);
 
         if (jet_pt < 200) (*pjet_es_u_dphi)[pthf_x]->Fill(
-            mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt}), weight); 
+            mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt}), corr*weight); 
         if (jet_pt < 200) (*pjet_wta_u_dphi)[pthf_x]->Fill(
-            mdphi->index_for(v{revert_pi(photon_wta_dphi), jet_pt}), weight);
+            mdphi->index_for(v{revert_pi(photon_wta_dphi), jet_pt}), corr*weight);
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
 
-        (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+        (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, corr*weight);
 
         double jt_deta = jet_eta - jet_wta_eta;
         double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
         double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
-        (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
+        (*pjet_f_dr)[pthf_x]->Fill(jt_dr, corr*weight);
 
-        if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), weight);
+        if (jet_pt < 200) (*pjet_u_dr)[pthf_x]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr*weight);
     }
 }
 
@@ -119,6 +130,10 @@ int populate(char const* config, char const* output) {
     auto rho = conf->get<std::string>("rho");
     auto rho_label = conf->get<std::string>("rho_label");
     auto index = conf->get<int64_t>("index");
+
+    auto acc = conf->get<std::string>("acc");
+    auto acc_label_ref = conf->get<std::string>("acc_label_ref");
+    auto acc_label_acc = conf->get<std::string>("acc_label_acc");
 
     auto entries = conf->get<int64_t>("entries");
     auto mix = conf->get<int64_t>("mix");
@@ -240,6 +255,17 @@ int populate(char const* config, char const* output) {
     if (!rho.empty()) {
         fr = new TFile(rho.data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
+    }
+
+    /* load acceptance weighting for HI */
+    TFile* fa;
+    history<TH2F>* acceptance = nullptr;
+    history<TH2F>* total = nullptr;
+
+    if (!acc.empty()) {
+        fa = new TFile(acc.data(), "read");
+        acceptance = new history<TH2F>(fa, acc_label_acc);
+        total = new history<TH2F>(fa, acc_label_ref);
     }
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
@@ -369,10 +395,11 @@ int populate(char const* config, char const* output) {
 
         fill_axes(pjt, pthf_x, weight,
                   photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                  mdphi, mdr, nevt,
+                  mdphi, mdr, idphi, nevt,
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
-                  pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr);
+                  pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
+                  acceptance, total);
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -383,10 +410,11 @@ int populate(char const* config, char const* output) {
 
             fill_axes(pjtm, pthf_x, weight,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                      mdphi, mdr, nmix,
+                      mdphi, mdr,idphi, nmix,
                       mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                       mix_pjet_f_dr, mix_pjet_f_jpt,
-                      mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr);
+                      mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
+                      acceptance, total);
 
             ++k;
         }
