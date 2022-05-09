@@ -6,7 +6,7 @@
 
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
-#include "../git/history/include/history.h"
+#include "../git/history/include/memory.h"
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
@@ -22,7 +22,7 @@
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
-using x = std::initializer_list<int64_t> const;
+// using x = std::initializer_list<int64_t> const;
 
 bool in_pho_failure_region(float phoEta, float phoPhi) {
     auto ex_1 = phoEta < -1.3 && 
@@ -67,8 +67,8 @@ int beneficiate(char const* output) {
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
-    auto nevt = new history<TH1F>("nevt"s, "", fincl, mjpdphi);
-    auto nacc = new history<TH1F>("nacc"s, "", fincl, mjpdphi);
+    auto nevt = new memory<TH1F>("nevt"s, "", fincl, mjpdphi);
+    auto nacc = new memory<TH1F>("nacc"s, "", fincl, mjpdphi);
 
     /* create vectors for photon and jet phi */
     auto ijphi = new interval("jetPhi"s, dim_size, phi_min, phi_max);
