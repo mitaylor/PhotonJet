@@ -50,8 +50,8 @@ int beneficiate(char const* output) {
     /* define history based on multival of jet eta, photon eta, and dphi */
     double jet_eta_min = -1.6;
     double jet_eta_max = 1.6;
-    double pho_eta_min = -1.442;
-    double pho_eta_max = 1.442;
+    double pho_eta_min = -1.5;
+    double pho_eta_max = 1.5;
 
     double phi_min = -3.1416;
     double phi_max = 3.1416;
