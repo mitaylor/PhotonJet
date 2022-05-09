@@ -92,8 +92,10 @@ int beneficiate(char const* output) {
 
                     auto dphi = revert_radian(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
 
-                    auto dphi_x = idphi->index_for(dphi); std::cout << i << std::endl;
-                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x}); std::cout << i << std::endl;
+                    std::cout << i << " " << j << " " << k << " " << l << std::endl;
+                    std::cout << jetEta << " " << phoEta << " " << jetPhi << " " << phoPhi << std::endl;
+                    auto dphi_x = idphi->index_for(dphi); std::cout << dphi << std::endl;
+                    auto jpdphi_x = mjpdphi->index_for(x{i, j, dphi_x}); std::cout << dphi << std::endl;
 
                     (*nevt)[jpdphi_x]->Fill(1);
 
