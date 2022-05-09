@@ -62,7 +62,7 @@ int beneficiate(char const* output) {
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
     auto idphi = new interval("dphi"s, dim_size, 0, phi_max);
 
-    auto mjpdphi = new multival(ijeta, ipeta, idphi);
+    auto mjpdphi = new multival(*ijeta, *ipeta, *idphi);
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
