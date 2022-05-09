@@ -55,8 +55,8 @@ int beneficiate(char const* output) {
     double pho_eta_min = -1.442;
     double pho_eta_max = 1.442;
 
-    int64_t phi_min = -3.1416;
-    int64_t phi_max = 3.1416;
+    double phi_min = -3.1416;
+    double phi_max = 3.1416;
 
     auto ijeta = new interval("jetEta"s, dim_size, jet_eta_min, jet_eta_max);
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
