@@ -102,13 +102,8 @@ int beneficiate(char const* output) {
         }
     }
 
-    std::cout << "done" << std::endl;
-
-
     /* normalise by number of entries */
-    // nacc->divide(*nevt);
-
-    std::cout << output << std::endl;
+    nacc->divide(*nevt);
 
     /* save histograms */
     in(output, [&]() {
@@ -121,7 +116,7 @@ int beneficiate(char const* output) {
 
 int main(int argc, char* argv[]) {
     if (argc == 2)
-        return beneficiate(argv[2]);
+        return beneficiate(argv[1]);
 
     printf("usage: %s [output]\n", argv[0]);
     return 1;
