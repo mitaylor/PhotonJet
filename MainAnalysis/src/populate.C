@@ -47,7 +47,7 @@ void scale_ia_bin_width(T*... args) {
 
 void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
                float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
-               multival* mdphi, multival* mdr, interval* idphi,
+               float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
                memory<TH1F>* pjet_wta_f_dphi,
@@ -64,7 +64,7 @@ void fill_axes(pjtree* pjt, int64_t pthf_x, float weight,
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
-        if (jet_pt <= 20) { continue; }
+        if (jet_pt <= jet_pt_min) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= 1.6) { continue; }
@@ -158,6 +158,8 @@ int populate(char const* config, char const* output) {
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
     auto const gen_iso_max = conf->get<float>("gen_iso_max");
+    auto const jet_pt_min = conf->get<float>("jet_pt_min");
+    auto const hf_threshold = conf->get<float>("hf_threshold");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -396,7 +398,7 @@ int populate(char const* config, char const* output) {
 
         fill_axes(pjt, pthf_x, weight,
                   photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                  mdphi, mdr, idphi, nevt,
+                  jet_pt_min, mdphi, mdr, idphi, nevt,
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
                   pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
@@ -407,11 +409,11 @@ int populate(char const* config, char const* output) {
             tm->GetEntry(m);
 
             /* hf within +/- 10% */
-            if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > 0.1) { continue; }
+            if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > hf_threshold) { continue; }
 
             fill_axes(pjtm, pthf_x, weight,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                      mdphi, mdr,idphi, nmix,
+                      jet_pt_min, mdphi, mdr,idphi, nmix,
                       mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                       mix_pjet_f_dr, mix_pjet_f_jpt,
                       mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
