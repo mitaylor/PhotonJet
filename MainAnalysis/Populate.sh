@@ -3,8 +3,8 @@
 histogram() {
     tag=$1
 
-    echo "nohup ./bin/populate configs/populate/new/populate_${tag}_raw.conf data/populate_${tag}_raw.root > log/populate_${tag}_raw_log.txt 2>&1 &"
-    echo "nohup ./bin/populate configs/populate/new/populate_${tag}_bkg.conf data/populate_${tag}_bkg.root > log/populate_${tag}_bkg_log.txt 2>&1 &"
+    echo "nohup ./bin/populate configs/populate/new/jet_30/populate_${tag}_raw.conf data/jet_30/populate_${tag}_raw.root > log/populate_${tag}_raw_jet_30_log.txt 2>&1 &"
+    echo "nohup ./bin/populate configs/populate/new/jet_30/populate_${tag}_bkg.conf data/jet_30/populate_${tag}_bkg.root > log/populate_${tag}_bkg_jet_30_log.txt 2>&1 &"
 }
 
 samples=(pp)
