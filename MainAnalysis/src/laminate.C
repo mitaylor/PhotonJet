@@ -53,7 +53,7 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
     std::vector<float> accepted_jet_eta;
     std::vector<int64_t> accepted_jet_x;
 
-    for (int64_t j = 0; j < pjt->nref; ++j) {
+    for (size_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
@@ -86,7 +86,7 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
         }
     }
 
-    if (leading < 0) { return; }
+    if (leading_jet_x < 0) { return; }
 
     for (size_t i = 0; i < accepted_jet_x.size(); ++i) {
         if (i == leading_jet_x) { continue; }
@@ -139,9 +139,6 @@ int populate(char const* config, char const* output) {
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-
-    auto ipt = new interval(dpt);
-    auto ihf = new interval(dhf);
 
     auto mpthf = new multival(dpt, dhf);
 
@@ -333,7 +330,7 @@ int populate(char const* config, char const* output) {
 
     /* scale by bin width */
     scale_bin_width(
-        pjet_lead_jet_deta
+        pjet_lead_jet_deta,
         mix_pjet_lead_jet_deta);
 
     /* normalise */
