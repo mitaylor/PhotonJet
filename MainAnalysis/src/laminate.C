@@ -330,7 +330,7 @@ int populate(char const* config, char const* output) {
 
                 if (revert_radian(std::abs(jet_phi - leading_jet_phi)) < 1.57079632679) { continue; }std::cout << __LINE__ << std::endl;
 
-                auto pthf_x = mpthf->index_for(v{jet_pt, hf_energy});std::cout << __LINE__ << " " << pthf_x << " " << jet_pt << " " hf_energy << std::endl;
+                auto pthf_x = mpthf->index_for(v{jet_pt, hf_energy});std::cout << __LINE__ << " " << pthf_x << " " << jet_pt << " " << hf_energy << std::endl;
                 auto deta = std::abs(leading_jet_eta - jet_eta);std::cout << __LINE__ << std::endl;
 
                 (*mix_pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);std::cout << __LINE__ << std::endl;
