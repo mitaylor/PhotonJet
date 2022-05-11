@@ -70,35 +70,62 @@ int hallucinate(char const* config, char const* output) {
         return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
 
     /* create histograms */
-    std::vector<std::string> labels = { "nevt", "sub_pjet_es_f_dphi", "sub_pjet_wta_f_dphi",
-        "sub_pjet_f_dr", "sub_pjet_f_jpt", "sub_pjet_es_u_dphi", "sub_pjet_wta_u_dphi", "sub_pjet_u_dr" };
+    std::vector<std::string> labels = { "nevt", 
+        "pjet_es_f_dphi", "mix_pjet_es_f_dphi", "sub_pjet_es_f_dphi", 
+        "pjet_wta_f_dphi", "mix_pjet_wta_f_dphi", "sub_pjet_wta_f_dphi",
+        "pjet_f_dr", "mix_pjet_f_dr", "sub_pjet_f_dr",
+        "pjet_f_jpt", "mix_pjet_f_jpt", "sub_pjet_f_jpt",
+        "pjet_es_u_dphi", "mix_pjet_es_u_dphi", "sub_pjet_es_u_dphi",
+        "pjet_wta_u_dphi", "mix_pjet_wta_u_dphi", "sub_pjet_wta_u_dphi",
+        "pjet_u_dr", "mix_pjet_u_dr", "sub_pjet_u_dr" };
 
-    std::vector<history<TH1F>*> new_histograms(labels.size(), nullptr); std::cout << __LINE__ << std::endl;
+    std::vector<history<TH1F>*> new_histograms(labels.size(), nullptr);
 
     new_histograms[0] = new memory<TH1F>(labels[0], "", fincl, mpthf); // nevt
-    new_histograms[1] = new memory<TH1F>(labels[1], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // sub_pjet_es_f_dphi
-    new_histograms[2] = new memory<TH1F>(labels[2], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // sub_pjet_wta_f_dphi
-    new_histograms[3] = new memory<TH1F>(labels[3], "1/N^{#gamma} dN/d#deltaj", fdr, mpthf); // sub_pjet_f_dr
-    new_histograms[4] = new memory<TH1F>(labels[4], "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf); // sub_pjet_f_jpt
-    new_histograms[5] = new memory<TH1F>(labels[5], "", frdphi, mpthf); // sub_pjet_es_u_dphi
-    new_histograms[6] = new memory<TH1F>(labels[6], "", frdphi, mpthf); // sub_pjet_wta_u_dphi
-    new_histograms[7] = new memory<TH1F>(labels[7], "", frdr, mpthf); // sub_pjet_u_dr
-std::cout << __LINE__ << std::endl;
+
+    new_histograms[1] = new memory<TH1F>(labels[1], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // pjet_es_f_dphi
+    new_histograms[2] = new memory<TH1F>(labels[2], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // mix_pjet_es_f_dphi
+    new_histograms[3] = new memory<TH1F>(labels[3], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // sub_pjet_es_f_dphi
+
+    new_histograms[4] = new memory<TH1F>(labels[4], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // pjet_wta_f_dphi
+    new_histograms[5] = new memory<TH1F>(labels[5], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // mix_pjet_wta_f_dphi
+    new_histograms[6] = new memory<TH1F>(labels[6], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // sub_pjet_wta_f_dphi
+
+    new_histograms[7] = new memory<TH1F>(labels[7], "1/N^{#gamma} dN/d#deltaj", fdr, mpthf); // pjet_f_dr
+    new_histograms[8] = new memory<TH1F>(labels[8], "1/N^{#gamma} dN/d#deltaj", fdr, mpthf); // mix_pjet_f_dr
+    new_histograms[9] = new memory<TH1F>(labels[9], "1/N^{#gamma} dN/d#deltaj", fdr, mpthf); // sub_pjet_f_dr
+
+    new_histograms[10] = new memory<TH1F>(labels[10], "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf); // pjet_f_jpt
+    new_histograms[11] = new memory<TH1F>(labels[11], "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf); // mix_pjet_f_jpt
+    new_histograms[12] = new memory<TH1F>(labels[12], "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf); // sub_pjet_f_jpt
+
+    new_histograms[13] = new memory<TH1F>(labels[13], "", frdphi, mpthf); // pjet_es_u_dphi
+    new_histograms[14] = new memory<TH1F>(labels[14], "", frdphi, mpthf); // mix_pjet_es_u_dphi
+    new_histograms[15] = new memory<TH1F>(labels[15], "", frdphi, mpthf); // sub_pjet_es_u_dphi
+
+    new_histograms[16] = new memory<TH1F>(labels[16], "", frdphi, mpthf); // pjet_wta_u_dphi
+    new_histograms[17] = new memory<TH1F>(labels[17], "", frdphi, mpthf); // mix_pjet_wta_u_dphi
+    new_histograms[18] = new memory<TH1F>(labels[18], "", frdphi, mpthf); // sub_pjet_wta_u_dphi
+
+    new_histograms[19] = new memory<TH1F>(labels[19], "", frdr, mpthf); // pjet_u_dr
+    new_histograms[20] = new memory<TH1F>(labels[20], "", frdr, mpthf); // mix_pjet_u_dr
+    new_histograms[21] = new memory<TH1F>(labels[21], "", frdr, mpthf); // sub_pjet_u_dr
+
     /* read inputs */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
-std::cout << __LINE__ << std::endl;
+
     /* load histograms and combine */
     for (size_t i = 0; i < labels.size(); ++i) {
         std::vector<history<TH1F>*> histograms(inputs.size(), nullptr);
-std::cout << __LINE__ << std::endl;
+
         zip([&](auto const file, auto& hist) {
-            auto name = tag + "_"s + labels[i]; std::cout << name << " " << file << std::endl;
+            auto name = tag + "_"s + labels[i];
             hist = new history<TH1F>(file, name);
         }, files, histograms);
-std::cout << __LINE__ << " " << histograms[0]->size() << std::endl;
+
 
         for (int64_t j = 0; j < histograms[0]->size(); ++j) {
             (*new_histograms[i])[ x{j, 0}] = (TH1F*) (*histograms[0])[j]->Clone();
@@ -106,17 +133,17 @@ std::cout << __LINE__ << " " << histograms[0]->size() << std::endl;
             (*new_histograms[i])[ x{j, 2}] = (TH1F*) (*histograms[2])[j]->Clone();
             (*new_histograms[i])[ x{j, 3}] = (TH1F*) (*histograms[3])[j]->Clone();
         }
-std::cout << __LINE__ << std::endl;
+
         new_histograms[i]->rename();
     }
-std::cout << __LINE__ << std::endl;
+
     /* save histograms */
     in(output, [&]() {
         for (auto new_histogram : new_histograms) {
             new_histogram->save(tag);
         }
     });
-std::cout << __LINE__ << std::endl;
+
     return 0;
 }
 
