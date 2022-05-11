@@ -54,7 +54,6 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
     std::vector<int64_t> accepted_jet_x;
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
-        if (test) std::cout << j << std::endl;
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
@@ -97,7 +96,7 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
         auto pthf_x = mpthf->index_for(v{accepted_jet_pt[i], pjt->hiHF});
         auto deta = std::abs(leading_jet_eta - accepted_jet_eta[i]);
 
-        if (test) std::cout << pthf_x << " " << deta << std::endl;
+        if (test) std::cout << pthf_x << " " << deta << " " << accepted_jet_pt[i] << " " << pjt->hiHF << std::endl;
 
         (*pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);
     }
@@ -305,7 +304,6 @@ int populate(char const* config, char const* output) {
         }
         bool test = false;
         if (i > 520000) test = true;
-        if (test) std::cout << i << " " << photon_eta << " " << photon_phi << " " << std::endl;
         fill_axes(pjt, weight, photon_eta, photon_phi, mpthf, 
                   exclude, heavyion && !no_jes, jet_pt_min, 
                   max_dphi, pjet_lead_jet_deta, test);
