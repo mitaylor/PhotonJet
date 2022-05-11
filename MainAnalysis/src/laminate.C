@@ -308,16 +308,16 @@ int populate(char const* config, char const* output) {
             /* hf within +/- 10% */
             if (std::abs(pjtm->rho / pjt->rho - 1.) > 0.1) { continue; }
 
-            for (int64_t j = 0; j < pjt->nref; ++j) {
-                auto jet_pt = (*pjt->jtpt)[j];
-                if (heavyion && !no_jes) jet_pt = (*pjt->jtptCor)[j];
+            for (int64_t j = 0; j < pjtm->nref; ++j) {
+                auto jet_pt = (*pjtm->jtpt)[j];
+                if (heavyion && !no_jes) jet_pt = (*pjtm->jtptCor)[j];
                 
                 if (jet_pt <= jet_pt_min) { continue; }
 
-                auto jet_eta = (*pjt->jteta)[j];
+                auto jet_eta = (*pjtm->jteta)[j];
                 if (std::abs(jet_eta) >= 1.6) { continue; }
 
-                auto jet_phi = convert_radian((*pjt->jtphi)[j]);
+                auto jet_phi = convert_radian((*pjtm->jtphi)[j]);
 
                 auto pj_deta = photon_eta - jet_eta;
                 auto pj_dphi = revert_radian(std::abs(photon_phi - jet_phi));
@@ -326,7 +326,7 @@ int populate(char const* config, char const* output) {
                 if (pj_dr < 0.4) { continue; }
 
                 /* hem failure region exclusion */
-                if (exclude && in_jet_failure_region(pjt,j)) { continue; }
+                if (exclude && in_jet_failure_region(pjtm,j)) { continue; }
 
                 if (revert_radian(std::abs(jet_phi - leading_jet_phi)) < 0.5_rad) { continue; }
 
