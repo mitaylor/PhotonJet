@@ -65,7 +65,7 @@ int jubilate(char const* config, char const* output) {
     history<TH1F>* mix_pjet_wta_f_dphi;
     history<TH1F>* mix_pjet_f_dr;
 
-    (if !background) {
+    if (!background) {
         nevt = new history<TH1F>(f, "raw_nevt");
 
         pjet_es_f_dphi = new history<TH1F>(f, "raw_pjet_es_f_dphi");
