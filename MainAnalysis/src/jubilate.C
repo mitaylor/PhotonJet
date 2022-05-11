@@ -45,6 +45,8 @@ int jubilate(char const* config, char const* output) {
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto background = conf->get<bool>("background");
+
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
 
@@ -55,25 +57,35 @@ int jubilate(char const* config, char const* output) {
 
     TH1::SetDefaultSumw2();
 
-    auto nevt = new history<TH1F>(f, "raw_nevt");
+    history<TH1F>* nevt;
+    history<TH1F>* pjet_es_f_dphi;
+    history<TH1F>* pjet_wta_f_dphi;
+    history<TH1F>* pjet_f_dr;
+    history<TH1F>* mix_pjet_es_f_dphi;
+    history<TH1F>* mix_pjet_wta_f_dphi;
+    history<TH1F>* mix_pjet_f_dr;
 
-    auto pjet_es_f_dphi = new history<TH1F>(f, "raw_pjet_es_f_dphi");
-    auto pjet_wta_f_dphi = new history<TH1F>(f, "raw_pjet_wta_f_dphi");
-    auto pjet_f_dr = new history<TH1F>(f, "raw_pjet_f_dr");
+    (if !background) {
+        nevt = new history<TH1F>(f, "raw_nevt");
 
-    auto mix_pjet_es_f_dphi = new history<TH1F>(f, "raw_mix_pjet_es_f_dphi");
-    auto mix_pjet_wta_f_dphi = new history<TH1F>(f, "raw_mix_pjet_wta_f_dphi");
-    auto mix_pjet_f_dr = new history<TH1F>(f, "raw_mix_pjet_f_dr");
+        pjet_es_f_dphi = new history<TH1F>(f, "raw_pjet_es_f_dphi");
+        pjet_wta_f_dphi = new history<TH1F>(f, "raw_pjet_wta_f_dphi");
+        pjet_f_dr = new history<TH1F>(f, "raw_pjet_f_dr");
 
-    // auto nevt = new history<TH1F>(f, "bkg_nevt");
+        mix_pjet_es_f_dphi = new history<TH1F>(f, "raw_mix_pjet_es_f_dphi");
+        mix_pjet_wta_f_dphi = new history<TH1F>(f, "raw_mix_pjet_wta_f_dphi");
+        mix_pjet_f_dr = new history<TH1F>(f, "raw_mix_pjet_f_dr");
+    } else {
+        nevt = new history<TH1F>(f, "bkg_nevt");
 
-    // auto pjet_es_f_dphi = new history<TH1F>(f, "bkg_pjet_es_f_dphi");
-    // auto pjet_wta_f_dphi = new history<TH1F>(f, "bkg_pjet_wta_f_dphi");
-    // auto pjet_f_dr = new history<TH1F>(f, "bkg_pjet_f_dr");
+        pjet_es_f_dphi = new history<TH1F>(f, "bkg_pjet_es_f_dphi");
+        pjet_wta_f_dphi = new history<TH1F>(f, "bkg_pjet_wta_f_dphi");
+        pjet_f_dr = new history<TH1F>(f, "bkg_pjet_f_dr");
 
-    // auto mix_pjet_es_f_dphi = new history<TH1F>(f, "bkg_mix_pjet_es_f_dphi");
-    // auto mix_pjet_wta_f_dphi = new history<TH1F>(f, "bkg_mix_pjet_wta_f_dphi");
-    // auto mix_pjet_f_dr = new history<TH1F>(f, "bkg_mix_pjet_f_dr");
+        mix_pjet_es_f_dphi = new history<TH1F>(f, "bkg_mix_pjet_es_f_dphi");
+        mix_pjet_wta_f_dphi = new history<TH1F>(f, "bkg_mix_pjet_wta_f_dphi");
+        mix_pjet_f_dr = new history<TH1F>(f, "bkg_mix_pjet_f_dr");
+    }
 
     /* shrink to remove overflow photon pt bin */
     auto shape = nevt->shape();
