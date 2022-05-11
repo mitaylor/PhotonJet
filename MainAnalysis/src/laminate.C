@@ -43,7 +43,7 @@ void scale_bin_width(T*... args) {
 
 void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi, 
                multival* mpthf, bool exclude, bool jet_cor, float jet_pt_min,
-               float max_dphi, memory<TH1F>* pjet_lead_jet_deta) {
+               float max_dphi, memory<TH1F>* pjet_lead_jet_deta, bool test) {
 
     float leading_jet_pt = 0;
     float leading_jet_eta = -999;
@@ -54,6 +54,7 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
     std::vector<int64_t> accepted_jet_x;
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
+        if (test) std::cout << j << std::endl;
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
@@ -88,11 +89,15 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
 
     if (leading_jet_x < 0) { return; }
 
+    if (test) std::cout << "here" << std::endl;
+
     for (int64_t i = 0; i < (int64_t) accepted_jet_x.size(); ++i) {
         if (i == leading_jet_x) { continue; }
 
         auto pthf_x = mpthf->index_for(v{accepted_jet_pt[i], pjt->hiHF});
         auto deta = std::abs(leading_jet_eta - accepted_jet_eta[i]);
+
+        if (test) std::cout << pthf_x << " " << deta << std::endl;
 
         (*pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);
     }
@@ -298,10 +303,12 @@ int populate(char const* config, char const* output) {
             auto corr = (*rho_weighting)[index]->GetBinContent(bin);
             weight *= corr;
         }
-
+        bool test = false;
+        if (i > 520000) test = true;
+        if (test) std::cout << i << " " << photon_eta << " " << photon_phi << " " << std::endl;
         fill_axes(pjt, weight, photon_eta, photon_phi, mpthf, 
                   exclude, heavyion && !no_jes, jet_pt_min, 
-                  max_dphi, pjet_lead_jet_deta);
+                  max_dphi, pjet_lead_jet_deta, test);
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -312,7 +319,7 @@ int populate(char const* config, char const* output) {
 
             fill_axes(pjtm, weight, photon_eta, photon_phi, mpthf,
                       exclude, heavyion && !no_jes, jet_pt_min, 
-                      max_dphi, mix_pjet_lead_jet_deta);
+                      max_dphi, mix_pjet_lead_jet_deta, test);
 
             ++k;
         }
