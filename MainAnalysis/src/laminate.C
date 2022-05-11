@@ -49,9 +49,9 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
     float leading_jet_eta = -999;
     int64_t leading_jet_x = -1;
 
-    vector<float> accepted_jet_pt;
-    vector<float> accepted_jet_eta;
-    vector<int64_t> accepted_jet_x;
+    std::vector<float> accepted_jet_pt;
+    std::vector<float> accepted_jet_eta;
+    std::vector<int64_t> accepted_jet_x;
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
