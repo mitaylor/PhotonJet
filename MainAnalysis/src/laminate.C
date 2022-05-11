@@ -291,12 +291,12 @@ int populate(char const* config, char const* output) {
 
         if (leading_jet_x < 0) { continue; }
 
-        for (int64_t i = 0; i < (int64_t) accepted_jet_x.size(); ++i) {
-            if (i == leading_jet_x) { continue; }
-            if (revert_radian(std::abs(accepted_jet_phi[i] - leading_jet_phi)) < 1.57079632679) { continue; }
+        for (int64_t j = 0; j < (int64_t) accepted_jet_x.size(); ++j) {
+            if (j == leading_jet_x) { continue; }
+            if (revert_radian(std::abs(accepted_jet_phi[j] - leading_jet_phi)) < 1.57079632679) { continue; }
 
-            auto pthf_x = mpthf->index_for(v{accepted_jet_pt[i], hf_energy});
-            auto deta = std::abs(leading_jet_eta - accepted_jet_eta[i]);
+            auto pthf_x = mpthf->index_for(v{accepted_jet_pt[j], hf_energy});
+            auto deta = std::abs(leading_jet_eta - accepted_jet_eta[j]);
 
             (*pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);
         }
@@ -328,7 +328,7 @@ int populate(char const* config, char const* output) {
                 /* hem failure region exclusion */
                 if (exclude && in_jet_failure_region(pjtm,j)) { continue; }
 
-                if (revert_radian(std::abs(jet_phi - leading_jet_phi)) < 0.5_rad) { continue; }
+                if (revert_radian(std::abs(jet_phi - leading_jet_phi)) < 1.57079632679) { continue; }
 
                 auto pthf_x = mpthf->index_for(v{jet_pt, hf_energy});
                 auto deta = std::abs(leading_jet_eta - jet_eta);
