@@ -53,7 +53,7 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
     std::vector<float> accepted_jet_eta;
     std::vector<int64_t> accepted_jet_x;
 
-    for (size_t j = 0; j < pjt->nref; ++j) {
+    for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
@@ -88,7 +88,7 @@ void fill_axes(pjtree* pjt, float weight, float photon_eta, int64_t photon_phi,
 
     if (leading_jet_x < 0) { return; }
 
-    for (size_t i = 0; i < accepted_jet_x.size(); ++i) {
+    for (int64_t i = 0; i < (int64_t) accepted_jet_x.size(); ++i) {
         if (i == leading_jet_x) { continue; }
 
         auto pthf_x = mpthf->index_for(v{accepted_jet_pt[i], pjt->hiHF});
@@ -142,10 +142,7 @@ int populate(char const* config, char const* output) {
 
     auto mpthf = new multival(dpt, dhf);
 
-    auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ideta = new interval("#Delta#eta^{jj}"s, rdeta);
-
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdeta = std::bind(&interval::book<TH1F>, ideta, _1, _2, _3);
 
     auto pjet_lead_jet_deta = new memory<TH1F>("pjet_lead_jet_deta"s,
