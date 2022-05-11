@@ -121,7 +121,7 @@ int hallucinate(char const* config, char const* output) {
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return populate(argv[1], argv[2]);
+        return hallucinate(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
