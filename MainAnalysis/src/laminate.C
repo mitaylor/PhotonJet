@@ -303,7 +303,7 @@ int populate(char const* config, char const* output) {
             weight *= corr;
         }
         bool test = false;
-        if (i > 520000) test = true; if (test) { std::cout << pjt->hiHF << " " << i << std::endl; }
+        if (i > 520000) { test = true; } if (test) { std::cout << pjt->hiHF << " " << i << std::endl; }
         fill_axes(pjt, weight, photon_eta, photon_phi, mpthf, 
                   exclude, heavyion && !no_jes, jet_pt_min, 
                   max_dphi, pjet_lead_jet_deta, test);
