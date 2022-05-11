@@ -177,14 +177,14 @@ int populate(char const* config, char const* output) {
         }
 
         /* require leading photon */
-        if (leading < 0) { continue; }
+        if (leading < 0) { continue; } std::cout << __LINE__ << std::endl;
 
         if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
                 || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
             continue;
 
         /* hem failure region exclusion */
-        if (exclude && in_pho_failure_region(pjt, leading)) { continue; }
+        if (exclude && in_pho_failure_region(pjt, leading)) { continue; } std::cout << __LINE__ << std::endl;
 
         /* isolation requirement */
         if (gen_iso) {
@@ -208,7 +208,7 @@ int populate(char const* config, char const* output) {
         if (ele_rej) {
             bool electron = false;
             for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; } std::cout << __LINE__ << std::endl;
 
                 auto deta = photon_eta - (*pjt->eleEta)[j];
                 if (deta > 0.1) { continue; }
@@ -226,7 +226,7 @@ int populate(char const* config, char const* output) {
             if (electron) { continue; }
         }
 
-        auto weight = pjt->w;
+        auto weight = pjt->w; std::cout << __LINE__ << std::endl;
 
         if (!eff.empty() && leading_pt < 70) {
             auto bin = (*efficiency)[1]->FindBin(leading_pt);
@@ -240,7 +240,7 @@ int populate(char const* config, char const* output) {
             auto bin = (*rho_weighting)[index]->FindBin(avg_rho);
             auto corr = (*rho_weighting)[index]->GetBinContent(bin);
             weight *= corr;
-        }
+        } std::cout << __LINE__ << std::endl;
 
         auto hf_energy = pjt->hiHF;
 
@@ -248,7 +248,7 @@ int populate(char const* config, char const* output) {
         float leading_jet_eta = -999;
         int64_t leading_jet_phi = -999;
         int64_t leading_jet_x = -1;
-
+        std::cout << __LINE__ << std::endl;
         std::vector<float> accepted_jet_pt;
         std::vector<float> accepted_jet_eta;
         std::vector<int64_t> accepted_jet_phi;
@@ -263,7 +263,7 @@ int populate(char const* config, char const* output) {
             auto jet_eta = (*pjt->jteta)[j];
             if (std::abs(jet_eta) >= 1.6) { continue; }
 
-            auto jet_phi = convert_radian((*pjt->jtphi)[j]);
+            auto jet_phi = convert_radian((*pjt->jtphi)[j]); std::cout << __LINE__ << std::endl;
 
             auto pj_deta = photon_eta - jet_eta;
             auto pj_dphi = revert_radian(std::abs(photon_phi - jet_phi));
