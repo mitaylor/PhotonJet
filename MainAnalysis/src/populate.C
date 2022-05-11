@@ -147,7 +147,7 @@ int populate(char const* config, char const* output) {
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
-    auto filter = conf->get<bool>("filter");
+    auto filtered = conf->get<bool>("filtered");
     auto no_jes = conf->get<bool>("no_jes");
 
     /* selections */
@@ -299,8 +299,8 @@ int populate(char const* config, char const* output) {
 
         t->GetEntry(i);
 
-        if (rho.empty() && heavyion && pjt->hiHF <= 24.7924) { continue; }
-        if (rho.empty() && heavyion && pjt->hiHF >= 5199.95) { continue; }
+        if (rho.empty() && pjt->hiHF <= dhf.front()) { continue; }
+        if (rho.empty() && pjt->hiHF >= dhf.back()) { continue; }
         if (std::abs(pjt->vz) > 15) { continue; }
 
         int64_t leading = -1;
@@ -314,7 +314,7 @@ int populate(char const* config, char const* output) {
             if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
             if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-            if (filter && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
+            if (filtered && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
 
             if (pho_et < photon_pt_min) { continue; }
 
