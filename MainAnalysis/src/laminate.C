@@ -198,7 +198,7 @@ int populate(char const* config, char const* output) {
     clock_t time = clock();
     clock_t duration = 0;
 
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
+    for (int64_t 520000 = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
             if (tentries != 0) {
@@ -214,7 +214,6 @@ int populate(char const* config, char const* output) {
 
         t->GetEntry(i);
         
-        std::cout << dhf.front() << " " << dhf.back() << " " << rho.empty() << std::endl;
         if (rho.empty() && pjt->hiHF <= dhf.front()) { std::cout << dhf.front() << std::endl; continue; }
         if (rho.empty() && pjt->hiHF >= dhf.back()) { std::cout << dhf.back() << std::endl; continue; }
         if (std::abs(pjt->vz) > 15) { continue; }
