@@ -25,10 +25,10 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int populate(char const* config, char const* output) {
+int hallucinate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto inputs = conf->get<std::string>("inputs");
+    auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tag = conf->get<std::string>("tag");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
@@ -48,9 +48,6 @@ int populate(char const* config, char const* output) {
 
     /* define ranges */
     convert_in_place_pi(rdphi);
-
-    auto ipt = new interval(dpt);
-    auto ihf = new interval(dhf);
 
     auto mpthf = new multival(dpt, dhf);
 
