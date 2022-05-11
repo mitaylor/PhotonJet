@@ -73,7 +73,7 @@ int hallucinate(char const* config, char const* output) {
     std::vector<std::string> labels = { "nevt", "sub_pjet_es_f_dphi", "sub_pjet_wta_f_dphi",
         "sub_pjet_f_dr", "sub_pjet_f_jpt", "sub_pjet_es_u_dphi", "sub_pjet_wta_u_dphi", "sub_pjet_u_dr" };
 
-    std::vector<history<TH1F>*> new_histograms(labels.size(), nullptr);
+    std::vector<history<TH1F>*> new_histograms(labels.size(), nullptr); std::cout << __LINE << std::endl;
 
     new_histograms[0] = new memory<TH1F>(labels[0], "", fincl, mpthf); // nevt
     new_histograms[1] = new memory<TH1F>(labels[1], "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf); // sub_pjet_es_f_dphi
@@ -83,39 +83,39 @@ int hallucinate(char const* config, char const* output) {
     new_histograms[5] = new memory<TH1F>(labels[5], "", frdphi, mpthf); // sub_pjet_es_u_dphi
     new_histograms[6] = new memory<TH1F>(labels[6], "", frdphi, mpthf); // sub_pjet_wta_u_dphi
     new_histograms[7] = new memory<TH1F>(labels[7], "", frdr, mpthf); // sub_pjet_u_dr
-
+std::cout << __LINE << std::endl;
     /* read inputs */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
-
+std::cout << __LINE << std::endl;
     /* load histograms and combine */
     for (size_t i = 0; i < labels.size(); ++i) {
         std::vector<history<TH1F>*> histograms(inputs.size(), nullptr);
-
+std::cout << __LINE << std::endl;
         zip([&](auto const file, auto& hist) {
             auto name = tag + "_"s + labels[i];
             hist = new history<TH1F>(file, name);
         }, files, histograms);
-
+std::cout << __LINE << std::endl;
         for (int64_t j = 0; j < histograms[i]->size(); ++j) {
             (*new_histograms[i])[ x{j, 0}] = (TH1F*) (*histograms[0])[j]->Clone();
             (*new_histograms[i])[ x{j, 1}] = (TH1F*) (*histograms[1])[j]->Clone();
             (*new_histograms[i])[ x{j, 2}] = (TH1F*) (*histograms[2])[j]->Clone();
             (*new_histograms[i])[ x{j, 3}] = (TH1F*) (*histograms[3])[j]->Clone();
         }
-
+std::cout << __LINE << std::endl;
         new_histograms[i]->rename();
     }
-
+std::cout << __LINE << std::endl;
     /* save histograms */
     in(output, [&]() {
         for (auto new_histogram : new_histograms) {
             new_histogram->save(tag);
         }
     });
-
+std::cout << __LINE << std::endl;
     return 0;
 }
 
