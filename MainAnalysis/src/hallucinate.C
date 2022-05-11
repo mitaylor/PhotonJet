@@ -98,7 +98,7 @@ std::cout << __LINE__ << std::endl;
             auto name = tag + "_"s + labels[i]; std::cout << name << " " << file << std::endl;
             hist = new history<TH1F>(file, name);
         }, files, histograms);
-std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << histograms[i]->size() << std::endl;
         for (int64_t j = 0; j < histograms[i]->size(); ++j) {
             (*new_histograms[i])[ x{j, 0}] = (TH1F*) (*histograms[0])[j]->Clone();
             (*new_histograms[i])[ x{j, 1}] = (TH1F*) (*histograms[1])[j]->Clone();
