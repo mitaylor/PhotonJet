@@ -95,7 +95,7 @@ std::cout << __LINE__ << std::endl;
         std::vector<history<TH1F>*> histograms(inputs.size(), nullptr);
 std::cout << __LINE__ << std::endl;
         zip([&](auto const file, auto& hist) {
-            auto name = tag + "_"s + labels[i];
+            auto name = tag + "_"s + labels[i]; std::cout << name << " " << file << std::endl;
             hist = new history<TH1F>(file, name);
         }, files, histograms);
 std::cout << __LINE__ << std::endl;
