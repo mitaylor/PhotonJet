@@ -10,6 +10,7 @@
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
+#include "../git/tricks-and-treats/include/zip.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -92,9 +93,6 @@ int populate(char const* config, char const* output) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
 
-    /* prepare output */
-    TFile* fout = new TFile(output, "recreate");
-
     /* load histograms and combine */
     for (size_t i = 0; i < labels.size(); ++i) {
         std::vector<history<TH1F>*> histograms(inputs.size(), nullptr);
@@ -105,10 +103,10 @@ int populate(char const* config, char const* output) {
         }, files, histograms);
 
         for (int64_t j = 0; j < histograms[i]->size(); ++j) {
-            (*new_histograms[i])[ x{j, 0}] = (*histograms[0])[j]->Clone();
-            (*new_histograms[i])[ x{j, 1}] = (*histograms[1])[j]->Clone();
-            (*new_histograms[i])[ x{j, 2}] = (*histograms[2])[j]->Clone();
-            (*new_histograms[i])[ x{j, 3}] = (*histograms[3])[j]->Clone();
+            (*new_histograms[i])[ x{j, 0}] = (TH1F*) (*histograms[0])[j]->Clone();
+            (*new_histograms[i])[ x{j, 1}] = (TH1F*) (*histograms[1])[j]->Clone();
+            (*new_histograms[i])[ x{j, 2}] = (TH1F*) (*histograms[2])[j]->Clone();
+            (*new_histograms[i])[ x{j, 3}] = (TH1F*) (*histograms[3])[j]->Clone();
         }
 
         new_histograms[i]->rename();
@@ -116,7 +114,7 @@ int populate(char const* config, char const* output) {
 
     /* save histograms */
     in(output, [&]() {
-        for (new_histogram : new_histograms) {
+        for (auto new_histogram : new_histograms) {
             new_histogram->save(tag);
         }
     });
