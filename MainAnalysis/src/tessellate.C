@@ -7,6 +7,7 @@
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
+#include "../git/history/include/history.h"
 
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
@@ -27,8 +28,8 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
-               multival* mpthf, TTree* t, pjtree* p, bool heavyion,
-               float pt_min, float eta_max, float hovere_max, float hf_min,
+               multival* mpthf, TTree* t, pjtree* p, bool heavyion, bool apply_er,
+               float pt_min, float eta_max, float hovere_max, float hf_min, float hf_max,
                float iso_max, float noniso_min, float noniso_max) {
     printf("fill data\n");
 
@@ -39,17 +40,25 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         t->GetEntry(i);
 
         if (p->hiHF <= hf_min) { continue; }
+        if (p->hiHF > hf_max) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] <= pt_min) { continue; }
+            auto pho_et = (*p->phoEt)[j];
+
+            if (pho_et <= 30) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            // if (heavyion && within_hem_failure_region(p, j)) { continue; }
-            if ((*p->phoEt)[j] > leading_pt) {
+            
+            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+
+            if (pho_et < pt_min) { continue; }
+
+            if (pho_et > leading_pt) {
                 leading = j;
-                leading_pt = (*p->phoEt)[j];
+                leading_pt = pho_et;
             }
         }
 
@@ -57,7 +66,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         if (leading < 0) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
         /* isolation requirement */
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -68,7 +77,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
             || isolation > noniso_max) { continue; }
 
         auto const& see = isolation > iso_max ? see_noniso : see_iso;
-        int64_t index = mpthf->index_for(v{(*p->phoEt)[leading], p->hiHF});
+        int64_t index = mpthf->index_for(v{leading_pt, p->hiHF});
         (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading], p->w);
     }
 
@@ -76,10 +85,11 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 }
 
 void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
-                 multival* mpthf, TTree* t, pjtree* p, bool heavyion,
-                 float pt_min, float eta_max, float hovere_max, float hf_min,
-                 float iso_max, float noniso_min, float noniso_max,
-                 float geniso_max, float offset) {
+                 multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
+                 bool heavyion, bool apply_er, float pt_min, float eta_max, 
+                 float hovere_max, float hf_min, float hf_max, float iso_max,
+                 float noniso_min, float noniso_max, float geniso_max, float offset, 
+                 history<TH1F>* rho_weighting) {
     printf("fill signal\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -89,17 +99,25 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         t->GetEntry(i);
 
         if (p->hiHF <= hf_min) { continue; }
+        if (p->hiHF > hf_max) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] <= pt_min) { continue; }
+            auto pho_et = (*p->phoEt)[j];
+
+            if (pho_et <= 30) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            // if (heavyion && within_hem_failure_region(p, j)) { continue; }
-            if ((*p->phoEt)[j] > leading_pt) {
+            
+            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+
+            if (pho_et < pt_min) { continue; }
+
+            if (pho_et > leading_pt) {
                 leading = j;
-                leading_pt = (*p->phoEt)[j];
+                leading_pt = pho_et;
             }
         }
 
@@ -107,7 +125,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         if (leading < 0) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
         /* require gen-matching */
         int64_t gen_index = (*p->pho_genMatchedIndex)[leading];
@@ -121,19 +139,35 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         float isolation = (*p->mcCalIsoDR04)[gen_index];
         if (isolation > geniso_max) { continue; }
 
-        int64_t index = mpthf->index_for(v{(*p->phoEt)[leading], p->hiHF});
-        (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading] + offset,
-            p->w);
+        std::vector<float> weight(ihf->size(), p->w);
 
-        /* isolation requirement */
-        float recoiso = (*p->pho_ecalClusterIsoR3)[leading]
-            + (*p->pho_hcalRechitIsoR3)[leading]
-            + (*p->pho_trackIsoR3PtCut20)[leading];
+        if (!rho.empty()) {
+            auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
 
-        if ((recoiso > iso_max && recoiso < noniso_min)
-            || recoiso > noniso_max) { continue; }
+            for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
+                auto bin = (*rho_weighting)[hf_x]->FindBin(avg_rho);
+                auto corr = (*rho_weighting)[hf_x]->GetBinContent(bin);
+                weight[hf_x] *= corr;
+            }
+        }
 
-        (*sfrac)[index]->Fill(recoiso > iso_max ? 1.5 : 0.5, p->w);
+        auto pt_x = ipt->index_for(leading_pt);
+
+        for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
+            auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
+
+            (*see)[pthf_x]->Fill((*p->phoSigmaIEtaIEta_2012)[leading] + offset, weight[hf_x]);
+
+            /* isolation requirement */
+            float recoiso = (*p->pho_ecalClusterIsoR3)[leading]
+                + (*p->pho_hcalRechitIsoR3)[leading]
+                + (*p->pho_trackIsoR3PtCut20)[leading];
+
+            if ((recoiso > iso_max && recoiso < noniso_min)
+                || recoiso > noniso_max) { continue; }
+
+            (*sfrac)[pthf_x]->Fill(recoiso > iso_max ? 1.5 : 0.5, weight[hf_x]);
+        }
     }
 
     printf("\n");
@@ -186,6 +220,10 @@ int tessellate(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     auto heavyion = conf->get<bool>("heavyion");
+    auto apply_er = conf->get<bool>("apply_er");
+
+    auto rho = conf->get<std::string>("rho");
+    auto rho_label = conf->get<std::string>("rho_label");
 
     auto pt_min = conf->get<float>("pt_min");
     auto eta_max = conf->get<float>("eta_max");
@@ -209,8 +247,11 @@ int tessellate(char const* config, char const* output) {
 
     /* exclude most peripheral events */
     auto hf_min = dhf.front();
+    auto hf_max = dhf.back();
 
     /* prepare histograms */
+    auto ipt = new interval(dpt);
+    auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
     auto incl = new interval(""s, 1, 0., 1.);
@@ -234,6 +275,15 @@ int tessellate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
+    /* load centrality weighting for MC */
+    TFile* fr;
+    history<TH1F>* rho_weighting = nullptr;
+
+    if (!rho.empty()) {
+        fr = new TFile(rho.data(), "read");
+        rho_weighting = new history<TH1F>(fr, rho_label);
+    }
+
     /* load inputs */
     TFile* fd = new TFile(data.data(), "read");
     TTree* td = (TTree*)fd->Get("pj");
@@ -243,14 +293,15 @@ int tessellate(char const* config, char const* output) {
     TTree* ts = (TTree*)fs->Get("pj");
     auto ps = new pjtree(true, false, ts, { 1, 1, 1, 0, 0, 0 });
 
-    fill_data(see_data, see_bkg, mpthf, td, pd, heavyion,
-              pt_min, eta_max, hovere_max, hf_min,
-              iso_max, noniso_min, noniso_max);
+    fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
+              pt_min, eta_max, hovere_max, hf_min, hf_max, iso_max, 
+              noniso_min, noniso_max);
 
-    fill_signal(see_sig, sfrac, mpthf, ts, ps, heavyion,
-                pt_min, eta_max, hovere_max, hf_min,
-                iso_max, noniso_min, noniso_max, geniso_max,
-                offset);
+    fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
+                heavyion, apply_er, pt_min, eta_max, 
+                hovere_max, hf_min, hf_max, iso_max, 
+                noniso_min, noniso_max, geniso_max, offset, 
+                rho_weighting);
 
     auto hb = new pencil();
     hb->category("type", "data", "sig", "bkg");
