@@ -263,7 +263,7 @@ int populate(char const* config, char const* output) {
             auto jet_eta = (*pjt->jteta)[j];
             if (std::abs(jet_eta) >= 1.6) { continue; }
 
-            auto jet_phi = convert_radian((*pjt->jtphi)[j]);std::cout << __LINE__ << std::endl;
+            auto jet_phi = convert_radian((*pjt->jtphi)[j]);
 
             auto pj_deta = photon_eta - jet_eta;
             auto pj_dphi = revert_radian(std::abs(photon_phi - jet_phi));
@@ -277,7 +277,7 @@ int populate(char const* config, char const* output) {
             accepted_jet_pt.push_back(jet_pt);
             accepted_jet_eta.push_back(jet_eta);
             accepted_jet_phi.push_back(jet_phi);
-            accepted_jet_x.push_back(j);std::cout << __LINE__ << std::endl;
+            accepted_jet_x.push_back(j);
             
             if (pj_dphi < 2.74889357189) { continue; } // 0.875 * pi
 
@@ -286,10 +286,10 @@ int populate(char const* config, char const* output) {
                 leading_jet_eta = jet_eta;
                 leading_jet_phi = jet_phi;
                 leading_jet_x = j;
-            }std::cout << __LINE__ << std::endl;
+            }
         }
 
-        if (leading_jet_x < 0) { continue; }std::cout << __LINE__ << std::endl;
+        if (leading_jet_x < 0) { continue; }
 
         for (int64_t j = 0; j < (int64_t) accepted_jet_x.size(); ++j) {
             if (j == leading_jet_x) { continue; }
@@ -299,7 +299,7 @@ int populate(char const* config, char const* output) {
             auto deta = std::abs(leading_jet_eta - accepted_jet_eta[j]);
 
             (*pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);
-        }std::cout << __LINE__ << std::endl;
+        }
 
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
@@ -309,7 +309,7 @@ int populate(char const* config, char const* output) {
             if (std::abs(pjtm->rho / pjt->rho - 1.) > 0.1) { continue; }
 
             for (int64_t j = 0; j < pjtm->nref; ++j) {
-                auto jet_pt = (*pjtm->jtpt)[j];std::cout << __LINE__ << std::endl;
+                auto jet_pt = (*pjtm->jtpt)[j];
                 if (heavyion && !no_jes) jet_pt = (*pjtm->jtptCor)[j];
                 
                 if (jet_pt <= jet_pt_min) { continue; }
@@ -317,21 +317,21 @@ int populate(char const* config, char const* output) {
                 auto jet_eta = (*pjtm->jteta)[j];
                 if (std::abs(jet_eta) >= 1.6) { continue; }
 
-                auto jet_phi = convert_radian((*pjtm->jtphi)[j]);std::cout << __LINE__ << std::endl;
+                auto jet_phi = convert_radian((*pjtm->jtphi)[j]);
 
                 auto pj_deta = photon_eta - jet_eta;
                 auto pj_dphi = revert_radian(std::abs(photon_phi - jet_phi));
                 auto pj_dr = std::sqrt(pj_deta * pj_deta + pj_dphi * pj_dphi);
 
-                if (pj_dr < 0.4) { continue; }std::cout << __LINE__ << std::endl;
+                if (pj_dr < 0.4) { continue; }
 
                 /* hem failure region exclusion */
                 if (exclude && in_jet_failure_region(pjtm,j)) { continue; }std::cout << __LINE__ << std::endl;
 
-                if (revert_radian(std::abs(jet_phi - leading_jet_phi)) < 1.57079632679) { continue; }
+                if (revert_radian(std::abs(jet_phi - leading_jet_phi)) < 1.57079632679) { continue; }std::cout << __LINE__ << std::endl;
 
-                auto pthf_x = mpthf->index_for(v{jet_pt, hf_energy});
-                auto deta = std::abs(leading_jet_eta - jet_eta);
+                auto pthf_x = mpthf->index_for(v{jet_pt, hf_energy});std::cout << __LINE__ << " " << pthf_x << " " << jet_pt << " " hf_energy << std::endl;
+                auto deta = std::abs(leading_jet_eta - jet_eta);std::cout << __LINE__ << std::endl;
 
                 (*mix_pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);std::cout << __LINE__ << std::endl;
             }
