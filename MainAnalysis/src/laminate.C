@@ -213,7 +213,8 @@ int populate(char const* config, char const* output) {
         if (i % mod != 0) { continue; }
 
         t->GetEntry(i);
-
+        
+        std::cout << dhf.front() << " " << dhf.back() << " " << rho.empty() << std::endl;
         if (rho.empty() && pjt->hiHF <= dhf.front()) { std::cout << dhf.front() << std::endl; continue; }
         if (rho.empty() && pjt->hiHF >= dhf.back()) { std::cout << dhf.back() << std::endl; continue; }
         if (std::abs(pjt->vz) > 15) { continue; }
