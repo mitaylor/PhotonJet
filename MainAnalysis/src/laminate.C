@@ -333,7 +333,7 @@ int populate(char const* config, char const* output) {
                 auto pthf_x = mpthf->index_for(v{jet_pt, hf_energy});
                 auto deta = std::abs(leading_jet_eta - jet_eta);
 
-                (*pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);
+                (*mix_pjet_lead_jet_deta)[pthf_x]->Fill(deta, weight);
             }
 
             ++k;
