@@ -262,8 +262,6 @@ int tessellate(char const* config, char const* output) {
     auto ftwo = std::bind(&interval::book<TH1F>, itwo, _1, _2, _3);
     auto fsee = std::bind(&interval::book<TH1F>, isee, _1, _2, _3);
 
-    auto ipt = new interval(dpt);
-
     auto see_data = new memory<TH1F>("see_data"s, "counts", fsee, mpthf);
     auto see_sig = new memory<TH1F>("see_sig"s, "counts", fsee, mpthf);
     auto see_bkg = new memory<TH1F>("see_bkg"s, "counts", fsee, mpthf);
@@ -287,11 +285,11 @@ int tessellate(char const* config, char const* output) {
     /* load inputs */
     TFile* fd = new TFile(data.data(), "read");
     TTree* td = (TTree*)fd->Get("pj");
-    auto pd = new pjtree(false, false, td, { 1, 0, 1, 0, 0, 0 });
+    auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, 1});
 
     TFile* fs = new TFile(signal.data(), "read");
     TTree* ts = (TTree*)fs->Get("pj");
-    auto ps = new pjtree(true, false, ts, { 1, 1, 1, 0, 0, 0 });
+    auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, 1});
 
     fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
               pt_min, eta_max, hovere_max, hf_min, hf_max, iso_max, 
