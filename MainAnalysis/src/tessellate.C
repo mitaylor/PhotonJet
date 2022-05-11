@@ -142,7 +142,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         std::vector<float> weight(ihf->size(), p->w);
 
         if (rho_weighting != nullptr) {
-            auto avg_rho = get_avg_rho(pjt,-eta_max,eta_max);
+            auto avg_rho = get_avg_rho(p,-eta_max,eta_max);
 
             for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
                 auto bin = (*rho_weighting)[hf_x]->FindBin(avg_rho);
