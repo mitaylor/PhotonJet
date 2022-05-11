@@ -257,7 +257,7 @@ int populate(char const* config, char const* output) {
 
         for (int64_t j = 0; j < pjt->nref; ++j) {
             auto jet_pt = (*pjt->jtpt)[j];
-            if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
+            if (heavyion && !no_jes) jet_pt = (*pjt->jtptCor)[j];
             
             if (jet_pt <= jet_pt_min) { continue; }
 
@@ -311,7 +311,7 @@ int populate(char const* config, char const* output) {
 
             for (int64_t j = 0; j < pjt->nref; ++j) {
                 auto jet_pt = (*pjt->jtpt)[j];
-                if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
+                if (heavyion && !no_jes) jet_pt = (*pjt->jtptCor)[j];
                 
                 if (jet_pt <= jet_pt_min) { continue; }
 
