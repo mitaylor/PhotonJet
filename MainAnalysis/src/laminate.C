@@ -198,7 +198,7 @@ int populate(char const* config, char const* output) {
     clock_t time = clock();
     clock_t duration = 0;
 
-    for (int64_t i = 520000, m = 0; i < nentries; ++i) {
+    for (int64_t i = 0, m = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % frequency == 0) { 
             if (tentries != 0) {
