@@ -210,8 +210,8 @@ int populate(char const* config, char const* output) {
 
         t->GetEntry(i);
         
-        if (rho.empty() && pjt->hiHF <= dhf.front()) { std::cout << dhf.front() << std::endl; continue; }
-        if (rho.empty() && pjt->hiHF >= dhf.back()) { std::cout << dhf.back() << std::endl; continue; }
+        if (rho.empty() && pjt->hiHF <= dhf.front()) { continue; }
+        if (rho.empty() && pjt->hiHF >= dhf.back()) { continue; }
         if (std::abs(pjt->vz) > 15) { continue; }
 
         int64_t leading = -1;
