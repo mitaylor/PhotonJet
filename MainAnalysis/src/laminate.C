@@ -292,6 +292,8 @@ int populate(char const* config, char const* output) {
 
         if (leading_jet_x < 0) { continue; }
 
+        std::cout << "here" << std::endl;
+
         for (int64_t i = 0; i < (int64_t) accepted_jet_x.size(); ++i) {
             if (i == leading_jet_x) { continue; }
             if (revert_radian(std::abs(accepted_jet_phi[i] - leading_jet_phi)) < 0.5_rad) { continue; }
