@@ -244,7 +244,6 @@ int populate(char const* config, char const* output) {
 
         auto hf_energy = pjt->hiHF;
 
-
         float leading_jet_pt = 0;
         float leading_jet_eta = -999;
         int64_t leading_jet_phi = -999;
@@ -280,7 +279,7 @@ int populate(char const* config, char const* output) {
             accepted_jet_phi.push_back(jet_phi);
             accepted_jet_x.push_back(j);
             
-            if (pj_dphi < 0.875_rad) { continue; }
+            if (pj_dphi < 2.74889357189) { continue; } // 0.875 * pi
 
             if (jet_pt > leading_jet_pt) {
                 leading_jet_pt = jet_pt;
@@ -292,11 +291,9 @@ int populate(char const* config, char const* output) {
 
         if (leading_jet_x < 0) { continue; }
 
-        std::cout << "here" << std::endl;
-
         for (int64_t i = 0; i < (int64_t) accepted_jet_x.size(); ++i) {
             if (i == leading_jet_x) { continue; }
-            if (revert_radian(std::abs(accepted_jet_phi[i] - leading_jet_phi)) < 0.5_rad) { continue; }
+            if (revert_radian(std::abs(accepted_jet_phi[i] - leading_jet_phi)) < 1.57079632679) { continue; }
 
             auto pthf_x = mpthf->index_for(v{accepted_jet_pt[i], hf_energy});
             auto deta = std::abs(leading_jet_eta - accepted_jet_eta[i]);
