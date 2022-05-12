@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/PhotonJet'
-DatasetName = '/MinimumBias/Run2017G-09Aug2019_UL2017-v1/AOD'
-Tag = '20220215PPMB'
+DatasetName = '/HighEGJet/Run2017G-17Nov2017-v2/AOD'
+Tag = '20220512PPEG'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -10,15 +10,15 @@ config.General.requestName = Tag
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'runConfig_forest_AOD_106X_data.py'
-config.JobType.maxMemoryMB = 5000
-config.JobType.maxJobRuntimeMin = 1500
+config.JobType.psetName = 'runConfig_forest_AOD_94X_EG.py'
+config.JobType.maxMemoryMB = 2500
+config.JobType.maxJobRuntimeMin = 2750
 
 config.section_("Data")
 config.Data.inputDataset = DatasetName
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 1
+config.Data.unitsPerJob = 5
 config.Data.publication = False
 config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName

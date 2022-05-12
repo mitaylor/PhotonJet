@@ -4,8 +4,7 @@
 # Input: AOD
 
 import FWCore.ParameterSet.Config as cms
-from Configuration.Eras.Era_Run2_2017_ppRef_cff import Run2_2017_ppRef
-process = cms.Process('HiForest',Run2_2017_ppRef)
+process = cms.Process('HiForest')
 process.options = cms.untracked.PSet()
 
 #####################################################################################
@@ -13,7 +12,7 @@ process.options = cms.untracked.PSet()
 #####################################################################################
 
 process.load("HeavyIonsAnalysis.JetAnalysis.HiForest_cff")
-process.HiForest.inputLines = cms.vstring("HiForest 106X",)
+process.HiForest.inputLines = cms.vstring("HiForest 94X",)
 import subprocess, os
 version = subprocess.check_output(['git',
     '-C', os.path.expandvars('$CMSSW_BASE/src'), 'describe', '--tags'])
@@ -42,7 +41,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '106X_dataRun2_v35', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v6', '')
 process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
 
 process.GlobalTag.toGet.extend([
@@ -68,10 +67,11 @@ process.TFileService = cms.Service("TFileService",
 # Jets
 #############################
 process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pp_data_cff')
-process.ak3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_DATA_pp5020_2017
 process = overrideJEC_DATA_pp5020_2017(process)
+
+process.ak3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 
 #####################################################################################
 
@@ -110,11 +110,6 @@ process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
 # Photons
 #####################
 process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
-process.load('RecoHI.HiEgammaAlgos.photonIsolationHIProducer_cfi')
-process.photonIsolationHIProducerpp.ebRecHitCollection = cms.InputTag("reducedEcalRecHitsEB")
-process.photonIsolationHIProducerpp.eeRecHitCollection = cms.InputTag("reducedEcalRecHitsEE")
-process.photonIsolationHIProducerppGED.ebRecHitCollection = cms.InputTag("reducedEcalRecHitsEB")
-process.photonIsolationHIProducerppGED.eeRecHitCollection = cms.InputTag("reducedEcalRecHitsEE")
 process.ggHiNtuplizer.doGenParticles = False
 process.ggHiNtuplizerGED.doGenParticles = False
 process.ggHiNtuplizerGED.doEffectiveAreas = cms.bool(True)
@@ -148,16 +143,14 @@ for idmod in my_id_modules:
 process.ana_step = cms.Path(
     process.hltanalysis *
     process.hltobject *
-    process.l1object +
+    # process.l1object +
     process.hiEvtAnalyzer *
     process.jetSequence +
     # Should be added in the path for VID module
     # process.egmGsfElectronIDSequence +
-    process.photonIsolationHIProducerpp +
-    process.photonIsolationHIProducerppGED +
     process.ggHiNtuplizer +
     process.ggHiNtuplizerGED +
-    # process.pfcandAnalyzer +
+    process.pfcandAnalyzer +
     process.HiForest
     # process.trackSequencesPP
 )
@@ -203,28 +196,3 @@ process.pVertexFilterCutEandG = cms.Path(process.pileupVertexFilterCutEandG)
 process.pAna = cms.EndPath(process.skimanalysis)
 
 # Customization
-# Customization
-# KT : filter events on reco photons
-# photon selection
-process.selectedPhotons = cms.EDFilter("PhotonSelector",
-    src = cms.InputTag("gedPhotons"),
-    cut = cms.string('abs(eta) < 2.5')
-)
-
-# leading photon E_T filter
-process.photonFilter = cms.EDFilter("EtMinPhotonCountFilter",
-    src = cms.InputTag("selectedPhotons"),
-    etMin = cms.double(25.0),
-    minNumber = cms.uint32(1)
-)
-
-process.photonFilterSequence = cms.Sequence(process.selectedPhotons *
-                                            process.photonFilter
-)
-
-# needed to apply the filter on skimanalysis tree
-process.superFilterPath = cms.Path(process.photonFilterSequence)
-process.skimanalysis.superFilters = cms.vstring("superFilterPath")
-
-for path in process.paths:
-  getattr(process,path)._seq = process.photonFilterSequence * getattr(process,path)._seq
