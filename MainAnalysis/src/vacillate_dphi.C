@@ -52,12 +52,14 @@ int vacillate(char const* config, char const* output) {
     auto rdphig = conf->get<std::vector<float>>("dphig_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
     auto rptg = conf->get<std::vector<float>>("ptg_range");
+    auto rdphi = conf->get<std::vector<float>>("dphi_range");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
+    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
     auto mcdphi = new multival(rdphir, rdphig);
     auto mcpt = new multival(rptr, rptg);
@@ -206,7 +208,7 @@ int vacillate(char const* config, char const* output) {
         std::vector<float> weights(ihf->size(), weight);
         
         if (heavyion) {
-            auto avg_rho = get_avg_rho(pjt,-photon_eta_max,photon_eta_max);
+            auto avg_rho = get_avg_rho(p, -photon_eta_max, photon_eta_max);
 
             for (int64_t j = 0; j < ihf->size(); ++j) {
                 auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
@@ -243,7 +245,7 @@ int vacillate(char const* config, char const* output) {
             double corr = 1;
             if (heavyion) {
                 auto dphi_x = idphi->index_for(revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi))));
-                auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+                auto bin = (*total)[dphi_x]->FindBin(reco_eta, reco_photon_eta);
                 corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
                 if (corr < 1) { std::cout << "error" << std::endl; }
             }
