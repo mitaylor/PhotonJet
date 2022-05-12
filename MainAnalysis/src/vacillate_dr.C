@@ -261,8 +261,8 @@ int vacillate(char const* config, char const* output) {
             /* do acceptance weighting */
             double corr = 1;
             if (heavyion) {
-                auto dphi_x = idphi->index_for(revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi))));
-                auto bin = (*total)[dphi_x]->FindBin(reco_eta, reco_photon_eta);
+                auto dphi_x = idphi->index_for(revert_pi(std::abs(photon_phi - convert_radian(reco_phi))));
+                auto bin = (*total)[dphi_x]->FindBin(reco_eta, photon_eta);
                 corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
                 if (corr < 1) { std::cout << "error" << std::endl; }
             }
@@ -282,7 +282,7 @@ int vacillate(char const* config, char const* output) {
 
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     (*r)[k]->Fill(r_x, weights[k]*corr);
-                    (*cdr)[k]->Fill(rdphi, gdphi, weights[k]*corr);
+                    (*cdr)[k]->Fill(rdphi, gdr, weights[k]*corr);
                     (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*corr);
                     (*c)[k]->Fill(r_x, g_x, weights[k]*corr);
                 }
