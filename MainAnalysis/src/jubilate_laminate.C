@@ -58,7 +58,7 @@ int jubilate(char const* config, char const* output) {
     /* normalize */
     for (int64_t i = 0; i < pjet_lead_jet_deta->size(); ++i) {
         auto maximum = std::max((*pjet_lead_jet_deta)[i]->GetMaximum(),(*mix_pjet_lead_jet_deta)[i]->GetMaximum());
-        maximum *= 1.2;
+        maximum *= 1.5;
 
         (*pjet_lead_jet_deta)[i]->SetMaximum(maximum);
         (*mix_pjet_lead_jet_deta)[i]->SetMaximum(maximum);
