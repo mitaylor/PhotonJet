@@ -59,8 +59,15 @@ int jubilate(char const* config, char const* output) {
     for (int64_t i = 0; i < pjet_lead_jet_deta->size(); ++i) {
         auto maximum = std::max((*pjet_lead_jet_deta)[i]->GetMaximum(),(*mix_pjet_lead_jet_deta)[i]->GetMaximum());
         maximum *= 1.2;
+
         (*pjet_lead_jet_deta)[i]->SetMaximum(maximum);
         (*mix_pjet_lead_jet_deta)[i]->SetMaximum(maximum);
+
+        (*pjet_lead_jet_deta)[i]->SetMinimum(0);
+        (*mix_pjet_lead_jet_deta)[i]->SetMinimum(0);
+
+        (*pjet_lead_jet_deta)[i]->GetYaxis()->SetTitle("dN/d#Delta#eta^{jj}");
+        (*mix_pjet_lead_jet_deta)[i]->GetYaxis()->SetTitle("dN/d#Delta#eta^{jj}");
     }
 
 
@@ -76,7 +83,7 @@ int jubilate(char const* config, char const* output) {
 
     /* draw figures */
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{jet} < %.0f", dpt, false); };
+        info_text(x, pos, "%.0f < p_{T}^{cor jet} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
