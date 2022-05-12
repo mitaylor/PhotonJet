@@ -282,7 +282,7 @@ int vacillate(char const* config, char const* output) {
 
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     (*r)[k]->Fill(r_x, weights[k]*corr);
-                    (*cdr)[k]->Fill(rdphi, gdr, weights[k]*corr);
+                    (*cdr)[k]->Fill(rdr, gdr, weights[k]*corr);
                     (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*corr);
                     (*c)[k]->Fill(r_x, g_x, weights[k]*corr);
                 }
