@@ -20,7 +20,7 @@ using namespace std::placeholders;
 
 template <typename... T> //obj->Integral("width")
 void normalise_to_unity(double integral, T&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+    (void)(int [sizeof...(T)]) { (args->apply([integral](TH1* obj) {
         obj->Scale(1. / integral); }), 0)... };
 }
 
@@ -33,7 +33,7 @@ int jubilate(char const* config, char const* output) {
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-    
+
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto background = conf->get<bool>("background");
 
@@ -57,15 +57,15 @@ int jubilate(char const* config, char const* output) {
 
     /* normalize */
     for (int64_t i = 0; i < pjet_lead_jet_deta->size(); ++i) {
-        auto maximum = std::max(pjet_lead_jet_deta[i]->GetMaximum(),mix_pjet_lead_jet_deta[i]->GetMaximum());
+        auto maximum = std::max((*pjet_lead_jet_deta)[i]->GetMaximum(),(*mix_pjet_lead_jet_deta)[i]->GetMaximum());
         maximum *= 1.2;
-        pjet_lead_jet_deta[i]->SetMaximum(maximum);
-        mix_pjet_lead_jet_deta[i]->SetMaximum(maximum);
+        (*pjet_lead_jet_deta)[i]->SetMaximum(maximum);
+        (*mix_pjet_lead_jet_deta)[i]->SetMaximum(maximum);
     }
 
 
     /* shrink to remove overflow photon pt bin */
-    auto shape = nevt->shape();
+    auto shape = pjet_lead_jet_deta->shape();
     shape[0] = shape[0] - 1;
 
     auto wrap = [&](history<TH1F>*& h) {
@@ -98,13 +98,13 @@ int jubilate(char const* config, char const* output) {
     c1->divide(-1 , ihf->size());
 
     for (int64_t i = 0; i < nevt->size(); ++i) {
-        c1->add((*pjet_es_f_dphi)[i], system, "raw");
-        c1->stack((*mix_pjet_es_f_dphi)[i], system, "mix");
+        c1->add((*pjet_lead_jet_deta)[i], system, "raw");
+        c1->stack((*mix_pjet_lead_jet_deta)[i], system, "mix");
     }
 
     hb->sketch();
 
-    for (auto const& c : { c1, c2, c3 })
+    for (auto const& c : { c1 })
         c->draw("pdf");
 
     /* save output */
