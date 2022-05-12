@@ -21,10 +21,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static bool in_hem_failure_region(float eta, float phi) {
-    return (eta < -1.242 && -1.72 < phi && phi < -0.72);
-}
-
 static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
     auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
@@ -38,10 +34,19 @@ int vacillate(char const* config, char const* output) {
     auto input = conf->get<std::string>("input");
     auto tag = conf->get<std::string>("tag");
 
+    auto rho = conf->get<std::string>("rho");
+    auto rho_label = conf->get<std::string>("rho_label");
+
+    auto acc = conf->get<std::string>("acc");
+    auto acc_label_ref = conf->get<std::string>("acc_label_ref");
+    auto acc_label_acc = conf->get<std::string>("acc_label_acc");
+
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
     auto heavyion = conf->get<bool>("heavyion");
+    auto apply_er = conf->get<bool>("apply_er");
+
     auto jet_eta_max = conf->get<float>("jet_eta_max");
     auto photon_pt_min = conf->get<float>("photon_pt_min");
     auto photon_eta_max = conf->get<float>("photon_eta_max");
@@ -56,9 +61,6 @@ int vacillate(char const* config, char const* output) {
     auto rptg = conf->get<std::vector<float>>("ptg_range");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-
-    /* exclude most peripheral events */
-    auto hf_min = dhf.front();
 
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
@@ -101,7 +103,27 @@ int vacillate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, t, { 1, 1, 1, 0, 1, 0 });
+    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion });
+
+    /* load centrality weighting for MC */
+    TFile* fr;
+    history<TH1F>* rho_weighting = nullptr;
+
+    if (!rho.empty()) {
+        fr = new TFile(rho.data(), "read");
+        rho_weighting = new history<TH1F>(fr, rho_label);
+    }
+
+    /* load acceptance weighting for HI */
+    TFile* fa;
+    history<TH2F>* acceptance = nullptr;
+    history<TH2F>* total = nullptr;
+
+    if (!acc.empty()) {
+        fa = new TFile(acc.data(), "read");
+        acceptance = new history<TH2F>(fa, acc_label_acc);
+        total = new history<TH2F>(fa, acc_label_ref);
+    }
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -115,17 +137,22 @@ int vacillate(char const* config, char const* output) {
 
         t->GetEntry(i);
 
-        if (p->hiHF <= hf_min) { continue; }
-
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] <= photon_pt_min) { continue; }
+            if ((*p->phoEt)[j] <= 30) { continue; }
             if (std::abs((*p->phoSCEta)[j]) >= photon_eta_max) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            if ((*p->phoEt)[j] > leading_pt) {
+
+            auto pho_et = (*p->phoEt)[j];
+            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+
+            if (pho_et < photon_pt_min) { continue; }
+
+            if (pho_et > leading_pt) {
                 leading = j;
-                leading_pt = (*p->phoEt)[j];
+                leading_pt = pho_et;
             }
         }
 
@@ -137,7 +164,7 @@ int vacillate(char const* config, char const* output) {
             continue;
 
         /* hem failure region exclusion */
-        if (heavyion && within_hem_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
         /* require match to gen */
         auto gen_index = (*p->pho_genMatchedIndex)[leading];
@@ -180,8 +207,23 @@ int vacillate(char const* config, char const* output) {
         if (electron) { continue; }
 
         /* fill event weight */
-        auto hf_x = ihf->index_for(p->hiHF);
-        (*n)[hf_x]->Fill(1., p->w);
+        auto weight = p->w;
+
+        std::vector<float> weights(ihf->size(), weight);
+        double avg_rho;
+        
+        if (heavyion) {
+            auto avg_rho = get_avg_rho(pjt,-photon_eta_max,photon_eta_max);
+
+            for (int64_t j = 0; j < ihf->size(); ++j) {
+                auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
+                auto corr = (*rho_weighting)[j]->GetBinContent(bin);
+                weights[j] *= corr;
+            }
+        }
+
+        for (int64_t j = 0; j < ihf->size(); ++j) {
+            (*n)[j]->Fill(1., weights[j]); }
 
         /* map reco jet to gen jet */
         std::unordered_map<float, int64_t> genid;
@@ -189,8 +231,6 @@ int vacillate(char const* config, char const* output) {
             genid[(*p->genpt)[j]] = j;
 
         for (int64_t j = 0; j < p->nref; ++j) {
-            if ((*p->subid)[j] > 0) { continue; }
-
             auto gen_pt = (*p->refpt)[j];
             auto gen_eta = (*p->refeta)[j];
             auto gen_phi = (*p->refphi)[j];
@@ -209,34 +249,47 @@ int vacillate(char const* config, char const* output) {
 
             if (pj_dr < 0.4) { continue; }
 
-            if (heavyion && in_hem_failure_region(reco_eta, reco_phi))
+            if (heavyion && in_jet_failure_region(p, j))
                 continue;
 
             /* require back-to-back jets */
             if (std::abs(photon_phi - convert_radian(reco_phi)) < 0.875_pi)
                 continue;
 
+            /* do acceptance weighting */
+            double corr = 1;
+            if (heavyion) {
+                auto dphi_x = idphi->index_for(revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi))));
+                auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+                corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+                if (corr < 1) { std::cout << "error" << std::endl; }
+            }
+
             auto id = genid[gen_pt];
             auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id],
                                      gen_phi, (*p->WTAgenphi)[id]));
             auto g_x = mg->index_for(v{gdr, gen_pt});
 
-            (*g)[hf_x]->Fill(g_x, p->w);
+            for (int64_t k = 0; k < ihf->size(); ++k) {
+                (*g)[k]->Fill(g_x, weights[k]*corr); }
 
             if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
                 auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                          reco_phi, (*p->WTAphi)[j]));
                 auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                (*r)[hf_x]->Fill(r_x, p->w);
-
-                (*cdr)[hf_x]->Fill(rdr, gdr, p->w);
-                (*cpt)[hf_x]->Fill(reco_pt, gen_pt, p->w);
-                (*c)[hf_x]->Fill(r_x, g_x, p->w);
+                for (int64_t k = 0; k < ihf->size(); ++k) {
+                    (*r)[k]->Fill(r_x, weights[k]*corr);
+                    (*cdr)[k]->Fill(rdphi, gdphi, weights[k]*corr);
+                    (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*corr);
+                    (*c)[k]->Fill(r_x, g_x, weights[k]*corr);
+                }
             } else {
                 /* missed */
-                (*cpt)[hf_x]->Fill(-1, gen_pt, p->w);
-                (*c)[hf_x]->Fill(-1, g_x, p->w);
+                for (int64_t k = 0; k < ihf->size(); ++k) {
+                    (*cpt)[k]->Fill(-1, gen_pt, weights[k]*corr);
+                    (*c)[k]->Fill(-1, g_x, weights[k]*corr);
+                }
             }
         }
     }
