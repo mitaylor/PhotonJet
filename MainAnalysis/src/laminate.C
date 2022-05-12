@@ -363,8 +363,8 @@ int populate(char const* config, char const* output) {
         mix_pjet_lead_jet_deta);
 
     /* normalise */
-    pjet_es_f_dphi->divide(*nevt);
-    mix_pjet_lead_jet_deta->divide(*nevt);
+    // pjet_es_f_dphi->divide(*nevt);
+    // mix_pjet_lead_jet_deta->divide(*nevt);
 
     /* subtract histograms */
     auto sub_pjet_lead_jet_deta = new memory<TH1F>(*pjet_lead_jet_deta, "sub");
