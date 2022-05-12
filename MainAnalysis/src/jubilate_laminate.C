@@ -82,7 +82,7 @@ int jubilate(char const* config, char const* output) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
+        stack_text(index, 0.75, 0.04, pjet_lead_jet_deta, pt_info, hf_info); };
 
     auto hb = new pencil();
     hb->category("system", "pp", "PbPb");
@@ -97,7 +97,7 @@ int jubilate(char const* config, char const* output) {
     c1->accessory(pthf_info);
     c1->divide(-1 , ihf->size());
 
-    for (int64_t i = 0; i < nevt->size(); ++i) {
+    for (int64_t i = 0; i < pjet_lead_jet_deta->size(); ++i) {
         c1->add((*pjet_lead_jet_deta)[i], system, "raw");
         c1->stack((*mix_pjet_lead_jet_deta)[i], system, "mix");
     }
