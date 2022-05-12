@@ -66,8 +66,8 @@ int jubilate(char const* config, char const* output) {
         (*pjet_lead_jet_deta)[i]->SetMinimum(0);
         (*mix_pjet_lead_jet_deta)[i]->SetMinimum(0);
 
-        (*pjet_lead_jet_deta)[i]->GetXaxis()->SetRange(0,1.6);
-        (*mix_pjet_lead_jet_deta)[i]->GetXaxis()->SetRange(0,1.6);
+        (*pjet_lead_jet_deta)[i]->GetXaxis()->SetRangeUser(0,1.6);
+        (*mix_pjet_lead_jet_deta)[i]->GetXaxis()->SetRangeUser(0,1.6);
 
         (*pjet_lead_jet_deta)[i]->GetYaxis()->SetTitle("dN/d#Delta#eta^{jj}");
         (*mix_pjet_lead_jet_deta)[i]->GetYaxis()->SetTitle("dN/d#Delta#eta^{jj}");
