@@ -3,8 +3,8 @@
 arithmetic() {
     tag=$1
 
-    ./bin/manipulate configs/manipulate/ran_jes_on/manipulate_${tag}.conf \
-        data/jes_on/manipulate_${tag}.root
+    ./bin/manipulate configs/manipulate/new/manipulate_${tag}.conf \
+        data/manipulate_${tag}.root
 }
 
 nominal() {
@@ -22,12 +22,13 @@ systematic() {
     arithmetic ${sample}_${syst}
 }
 
-samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+# samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(aa)
 
 for sample in ${samples[@]}; do
     nominal $sample
 
-    for syst in jeu_down jeu_up wo_ele_rej qcd qcd_gen_iso; do
+    for syst in wo_ele_rej qcd qcd_gen_iso; do
         systematic $sample $syst
     done
 done
