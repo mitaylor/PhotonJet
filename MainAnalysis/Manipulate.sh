@@ -3,8 +3,8 @@
 arithmetic() {
     tag=$1
 
-    ./bin/manipulate configs/manipulate/new/manipulate_${tag}.conf \
-        data/manipulate_${tag}.root
+    ./bin/manipulate configs/manipulate/new/jet_30/manipulate_${tag}.conf \
+        data/jet_30/manipulate_${tag}.root
 }
 
 nominal() {
