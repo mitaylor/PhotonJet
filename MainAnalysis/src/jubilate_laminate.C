@@ -92,7 +92,7 @@ int jubilate(char const* config, char const* output) {
 
     auto collisions = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
 
-    auto c1 = new paper(tag + "_mixing_dphi_es_d_pthf", hb);
+    auto c1 = new paper(tag + "_mixing_jet_deta_pthf", hb);
     apply_style(c1, collisions);
     c1->accessory(pthf_info);
     c1->divide(-1 , ihf->size());
