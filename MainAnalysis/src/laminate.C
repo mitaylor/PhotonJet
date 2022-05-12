@@ -252,7 +252,7 @@ int populate(char const* config, char const* output) {
         auto hf_energy = pjt->hiHF;
         auto hf_x = ihf->index_for(hf_energy);
         
-        for (int64_t j; j < ipt->size(); ++j) {
+        for (int64_t j = 0; j < ipt->size(); ++j) {
             auto pthf_x = mpthf->index_for(x{j, hf_x}); 
             (*nevt)[pthf_x]->Fill(1., weight);
         }
