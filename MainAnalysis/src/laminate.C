@@ -83,6 +83,9 @@ int populate(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
+    auto ipt = new interval(dpt);
+    auto ihf = new interval(dhf);
+
     auto mpthf = new multival(dpt, dhf);
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
