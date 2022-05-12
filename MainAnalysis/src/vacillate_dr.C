@@ -212,7 +212,6 @@ int vacillate(char const* config, char const* output) {
         auto weight = p->w;
 
         std::vector<float> weights(ihf->size(), weight);
-        double avg_rho;
         
         if (heavyion) {
             auto avg_rho = get_avg_rho(p, -photon_eta_max, photon_eta_max);
