@@ -106,12 +106,12 @@ int vacillate(char const* config, char const* output) {
     auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion });
 
     /* load centrality weighting for MC */
-    TFile* fr;
+    TFile* frho;
     history<TH1F>* rho_weighting = nullptr;
 
     if (!rho.empty()) {
-        fr = new TFile(rho.data(), "read");
-        rho_weighting = new history<TH1F>(fr, rho_label);
+        frho = new TFile(rho.data(), "read");
+        rho_weighting = new history<TH1F>(frho, rho_label);
     }
 
     /* load acceptance weighting for HI */
