@@ -85,9 +85,13 @@ int populate(char const* config, char const* output) {
 
     auto mpthf = new multival(dpt, dhf);
 
+    auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ideta = new interval("#Delta#eta^{jj}"s, rdeta);
+
+    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdeta = std::bind(&interval::book<TH1F>, ideta, _1, _2, _3);
 
+    auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
     auto pjet_lead_jet_deta = new memory<TH1F>("pjet_lead_jet_deta"s,
         "1/N^{#gamma} dN/d#Delta#eta^{jj}", fdeta, mpthf);
     auto mix_pjet_lead_jet_deta = new memory<TH1F>("mix_pjet_lead_jet_deta"s,
@@ -243,6 +247,12 @@ int populate(char const* config, char const* output) {
         }
 
         auto hf_energy = pjt->hiHF;
+        auto hf_x = ihf->index_for(hf_energy);
+        
+        for (int64_t j; j < ipt->size(); ++j) {
+            auto pthf_x = mpthf->index_for(x{j, hf_x}); 
+            (*nevt)[pthf_x]->Fill(1., weight);
+        }
 
         float leading_jet_pt = 0;
         float leading_jet_eta = -999;
@@ -353,7 +363,8 @@ int populate(char const* config, char const* output) {
         mix_pjet_lead_jet_deta);
 
     /* normalise */
-    // figure out how to normalize well
+    pjet_es_f_dphi->divide(*nevt);
+    mix_pjet_lead_jet_deta->divide(*nevt);
 
     /* subtract histograms */
     auto sub_pjet_lead_jet_deta = new memory<TH1F>(*pjet_lead_jet_deta, "sub");
@@ -362,6 +373,7 @@ int populate(char const* config, char const* output) {
 
     /* save histograms */
     in(output, [&]() {
+        nevt->save(tag);
         pjet_lead_jet_deta->save(tag);
         mix_pjet_lead_jet_deta->save(tag);
         sub_pjet_lead_jet_deta->save(tag);
