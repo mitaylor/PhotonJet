@@ -299,7 +299,7 @@ int undulate(char const* config, char const* output) {
         std::vector<double> bounds(rptr.begin(), rptr.end());
         auto temp = (*victims)[i]->Rebin((int)(rptr.size()-1), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
         delete (*victims)[i];
-        (*victims)[i] = temp;
+        (*victims)[i] = (TH1F*) temp;
     }
 
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
