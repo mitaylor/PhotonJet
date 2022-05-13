@@ -302,7 +302,7 @@ int undulate(char const* config, char const* output) {
     }
 
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
-        (*victims)[0]->GetXaxis()->GetBinLowEdge(bin)
+        (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1)
     }
 
     zip([&](int64_t extension, int64_t dimension) {
