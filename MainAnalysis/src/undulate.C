@@ -303,9 +303,9 @@ int undulate(char const* config, char const* output) {
             auto temp = new TH1F(name, ";index;", mr->size(), 0, mr->size());
             
             for (int j = 0; j < mr->size(); ++j) {
-                auto bin = (*victims)[0]->GetNbinsX() - mr->size()
                 temp->SetBinContent(j + 1, (*victims)[i]->GetBinContent((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
                 temp->SetBinError(j + 1, (*victims)[i]->GetBinError((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
+                
                 if (temp->GetBinContent(j+1) < 0) {
                     temp->SetBinContent(j+1, 0);
                     temp->SetBinError(j+1, 0);
