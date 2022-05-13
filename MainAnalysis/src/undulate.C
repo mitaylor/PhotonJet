@@ -307,7 +307,7 @@ int undulate(char const* config, char const* output) {
             for (int j = 0; j < (*victims)[0]->GetNbinsX(); ++j) {
                 if ((*victims)[i]->GetBinContent(j+1) < 0) {
                     (*victims)[i]->SetBinContent(j+1, 0);
-                    std::cout << "Histogram " << i << " bin " << j+1 << " set to 0"
+                    std::cout << "Histogram " << i << " bin " << j+1 << " set to 0" << std::endl;
                 }
             }
         }
