@@ -303,6 +303,13 @@ int undulate(char const* config, char const* output) {
             auto temp = (*victims)[i]->Rebin((int) mr->size(), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
             delete (*victims)[i];
             (*victims)[i] = (TH1F*) temp;
+            
+            for (int j = 0; j < (*victims)[0]->GetNbinsX(); ++j) {
+                if ((*victims)[i]->GetBinContent(j+1) < 0) {
+                    (*victims)[i]->SetBinContent(j+1, 0);
+                    std::cout << "Histogram " << i << " bin " << j+1 << " set to 0"
+                }
+            }
         }
     }
 
