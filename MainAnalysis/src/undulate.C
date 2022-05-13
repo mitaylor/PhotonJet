@@ -298,18 +298,24 @@ int undulate(char const* config, char const* output) {
     /* shrink the victim to remove the jet pt 20 bin */
     if ((*victims)[0]->GetNbinsX() > mr->size()) {
         for (int64_t i = 0; i < victims->size(); ++i) {
-            std::vector<double> bounds(mr->size()+1);
-            std::iota(bounds.begin(), bounds.end(), idrr->size());
+            auto name = (*victims)[i]->GetName()
+
+            auto temp = new TH1F(name, ";index;", mr->size(), 0, mdr->size())
             auto temp = (*victims)[i]->Rebin((int) mr->size(), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
-            delete (*victims)[i];
-            (*victims)[i] = (TH1F*) temp;
             
-            for (int j = 0; j < (*victims)[0]->GetNbinsX(); ++j) {
-                if ((*victims)[i]->GetBinContent(j+1) < 0) {
-                    (*victims)[i]->SetBinContent(j+1, 0);
+            for (int j = 0; j < mr->size(); ++j) {
+                auto bin = (*victims)[0]->GetNbinsX() - mr->size()
+                temp->SetBinContent(j + 1, (*victims)[i]->GetBinContent((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
+                temp->SetBinError(j + 1, (*victims)[i]->GetBinError((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
+                if (temp->GetBinContent(j+1) < 0) {
+                    temp->SetBinContent(j+1, 0);
+                    temp->SetBinError(j+1, 0);
                     std::cout << "Histogram " << i << " bin " << j+1 << " set to 0" << std::endl;
                 }
             }
+
+            delete (*victims)[i];
+            (*victims)[i] = (TH1F*) temp;
         }
     }
 
