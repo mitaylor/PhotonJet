@@ -290,11 +290,19 @@ int undulate(char const* config, char const* output) {
     auto victims = new history<TH1F>(fv, label);
     auto ref = new history<TH1F>(fv, reference);
 
+    for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
+        (*victims)[0]->GetXaxis()->GetBinLowEdge(bin)
+    }
+
     /* shrink the victim to remove the jet pt 20 bin */
     for (int64_t i = 0; i < victims->size(); ++i) {
         auto temp = (*victims)[i]->Rebin((int)(rptr.size()-1), "nominal_s_pure_raw_sub_pjet_u_sum0", rptr.data())
         delete (*victims)[i];
         (*victims)[i] = temp;
+    }
+
+    for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
+        (*victims)[0]->GetXaxis()->GetBinLowEdge(bin)
     }
 
     zip([&](int64_t extension, int64_t dimension) {
