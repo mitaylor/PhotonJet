@@ -293,7 +293,7 @@ int undulate(char const* config, char const* output) {
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
         std::cout << (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1) << " ";
     }
-    std::endl;
+    cout << std::endl;
 
     /* shrink the victim to remove the jet pt 20 bin */
     for (int64_t i = 0; i < victims->size(); ++i) {
@@ -306,7 +306,7 @@ int undulate(char const* config, char const* output) {
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
         std::cout << (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1) << " ";
     }
-    std::endl;
+    cout << std::endl;
 
     zip([&](int64_t extension, int64_t dimension) {
         matrices = matrices->extend("ext"s + std::to_string(extension),
