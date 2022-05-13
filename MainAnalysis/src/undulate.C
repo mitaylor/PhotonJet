@@ -299,7 +299,7 @@ int undulate(char const* config, char const* output) {
     for (int64_t i = 0; i < victims->size(); ++i) {
         std::vector<double> bounds(mr->size()-idrr->size()+1);
         std::iota(bounds.begin(), bounds.end(), rdrr.size());
-        std::cout << bounds.first() << " " << bounds.last() << std::endl;
+        std::cout << bounds.front() << " " << bounds.back() << std::endl;
         std::cout << (*victims)[0]->GetNbinsX() << " " << mr->size()-idrr->size()+1 << std::endl;
         auto temp = (*victims)[i]->Rebin((int)(mr->size()-idrr->size()), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
         delete (*victims)[i];
