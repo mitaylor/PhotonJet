@@ -254,10 +254,10 @@ int undulate(char const* config, char const* output) {
     auto taus = conf->get<std::vector<float>>("taus");
     auto scale = conf->get<std::vector<float>>("scale");
 
-    auto rdrr = conf->get<std::vector<double>>("drr_range");
-    auto rdrg = conf->get<std::vector<double>>("drg_range");
-    auto rptr = conf->get<std::vector<double>>("ptr_range");
-    auto rptg = conf->get<std::vector<double>>("ptg_range");
+    auto rdrr = conf->get<std::vector<float>>("drr_range");
+    auto rdrg = conf->get<std::vector<float>>("drg_range");
+    auto rptr = conf->get<std::vector<float>>("ptr_range");
+    auto rptg = conf->get<std::vector<float>>("ptg_range");
 
     auto rfold0 = conf->get<std::vector<float>>("fold0_range");
 
@@ -296,7 +296,8 @@ int undulate(char const* config, char const* output) {
 
     /* shrink the victim to remove the jet pt 20 bin */
     for (int64_t i = 0; i < victims->size(); ++i) {
-        auto temp = (*victims)[i]->Rebin((int)(rptr.size()-1), "nominal_s_pure_raw_sub_pjet_u_sum0", rptr.data())
+        vector<double> bounds(rptr.begin(), rptr.end());
+        auto temp = (*victims)[i]->Rebin((int)(rptr.size()-1), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
         delete (*victims)[i];
         (*victims)[i] = temp;
     }
