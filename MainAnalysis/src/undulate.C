@@ -388,7 +388,7 @@ int undulate(char const* config, char const* output) {
     auto fold0 = new history<TH1F>("fold0"s, "", null<TH1F>, shape);
     auto fold1 = new history<TH1F>("fold1"s, "", null<TH1F>, shape);
 
-    std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
+    std::array<int64_t, 4> osg = { 0, 0, 3, 0 };
     std::array<int64_t, 4> osr = { 0, 0, 0, 0 };
 
     /* info text */
