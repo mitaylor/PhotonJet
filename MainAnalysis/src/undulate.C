@@ -290,11 +290,6 @@ int undulate(char const* config, char const* output) {
     auto victims = new history<TH1F>(fv, label);
     auto ref = new history<TH1F>(fv, reference);
 
-    for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
-        std::cout << (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1) << " ";
-    }
-    std::cout << std::endl;
-
     /* shrink the victim to remove the jet pt 20 bin */
     if ((*victims)[0]->GetNbinsX() > mr->size()) {
         for (int64_t i = 0; i < victims->size(); ++i) {
@@ -303,6 +298,7 @@ int undulate(char const* config, char const* output) {
             auto temp = new TH1F(name, ";index;", mr->size(), 0, mr->size());
             
             for (int j = 0; j < mr->size(); ++j) {
+                std::cout << j + 1 << " " << (*victims)[0]->GetNbinsX() - mr->size() + j + 1 << std::endl;
                 temp->SetBinContent(j + 1, (*victims)[i]->GetBinContent((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
                 temp->SetBinError(j + 1, (*victims)[i]->GetBinError((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
 
@@ -317,11 +313,6 @@ int undulate(char const* config, char const* output) {
             (*victims)[i] = (TH1F*) temp;
         }
     }
-
-    for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
-        std::cout << (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1) << " ";
-    }
-    std::cout << std::endl;
 
     zip([&](int64_t extension, int64_t dimension) {
         matrices = matrices->extend("ext"s + std::to_string(extension),
@@ -393,7 +384,7 @@ int undulate(char const* config, char const* output) {
     auto fold0 = new history<TH1F>("fold0"s, "", null<TH1F>, shape);
     auto fold1 = new history<TH1F>("fold1"s, "", null<TH1F>, shape);
 
-    std::array<int64_t, 4> osg = { 0, 0, 3, 0 };
+    std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
     std::array<int64_t, 4> osr = { 0, 0, 0, 0 };
 
     /* info text */
