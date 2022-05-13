@@ -28,16 +28,16 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-// template <typename... T>
-// void zero_error(T*... args) {
-//     (void)(int [sizeof...(T)]) { (args->apply([](TH2* obj) {
-//         for (int64_t i = 1; i <= obj->GetNbinsX(); ++i) {
-//             for (int64_t j = 1; j <= obj->GetNbinsY(); ++j) {
-//                 obj->SetBinError(i, j, 0);
-//             }
-//         }
-//     }), 0)... };
-// }
+template <typename... T>
+void zero_error(T*... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH2* obj) {
+        for (int64_t i = 1; i <= obj->GetNbinsX(); ++i) {
+            for (int64_t j = 1; j <= obj->GetNbinsY(); ++j) {
+                obj->SetBinError(i, j, 0);
+            }
+        }
+    }), 0)... };
+}
 
 template <typename T>
 T* null(int64_t, std::string const&, std::string const&) {
@@ -284,7 +284,7 @@ int undulate(char const* config, char const* output) {
     /* load input, victims, and references */
     TFile* fi = new TFile(input.data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
-    // zero_error(matrices);
+    zero_error(matrices);
 
     TFile* fv = new TFile(victim.data(), "read");
     auto victims = new history<TH1F>(fv, label);
