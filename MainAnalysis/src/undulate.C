@@ -305,12 +305,12 @@ int undulate(char const* config, char const* output) {
             for (int j = 0; j < mr->size(); ++j) {
                 temp->SetBinContent(j + 1, (*victims)[i]->GetBinContent((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
                 temp->SetBinError(j + 1, (*victims)[i]->GetBinError((*victims)[0]->GetNbinsX() - mr->size() + j + 1));
-                
-                if (temp->GetBinContent(j+1) < 0) {
-                    temp->SetBinContent(j+1, 0);
-                    temp->SetBinError(j+1, 0);
-                    std::cout << "Histogram " << i << " bin " << j+1 << " set to 0" << std::endl;
-                }
+
+                // if (temp->GetBinContent(j+1) < 0) {
+                //     temp->SetBinContent(j+1, 0);
+                //     temp->SetBinError(j+1, 0);
+                //     std::cout << "Histogram " << i << " bin " << j+1 << " set to 0" << std::endl;
+                // }
             }
 
             delete (*victims)[i];
