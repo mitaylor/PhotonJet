@@ -298,9 +298,7 @@ int undulate(char const* config, char const* output) {
     /* shrink the victim to remove the jet pt 20 bin */
     for (int64_t i = 0; i < victims->size(); ++i) {
         std::vector<double> bounds(mr->size()+1);
-        std::iota(bounds.begin(), bounds.end(), rdrr.size());
-        std::cout << bounds.front() << " " << bounds.back() << std::endl;
-        std::cout << (*victims)[0]->GetNbinsX() << " " << mr->size()+1 << std::endl;
+        std::iota(bounds.begin(), bounds.end(), idrr->size());
         auto temp = (*victims)[i]->Rebin((int) mr->size(), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
         delete (*victims)[i];
         (*victims)[i] = (TH1F*) temp;
