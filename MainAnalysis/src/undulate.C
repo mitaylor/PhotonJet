@@ -254,10 +254,10 @@ int undulate(char const* config, char const* output) {
     auto taus = conf->get<std::vector<float>>("taus");
     auto scale = conf->get<std::vector<float>>("scale");
 
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rdrg = conf->get<std::vector<float>>("drg_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
-    auto rptg = conf->get<std::vector<float>>("ptg_range");
+    auto rdrr = conf->get<std::vector<double>>("drr_range");
+    auto rdrg = conf->get<std::vector<double>>("drg_range");
+    auto rptr = conf->get<std::vector<double>>("ptr_range");
+    auto rptg = conf->get<std::vector<double>>("ptg_range");
 
     auto rfold0 = conf->get<std::vector<float>>("fold0_range");
 
@@ -291,7 +291,7 @@ int undulate(char const* config, char const* output) {
     auto ref = new history<TH1F>(fv, reference);
 
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
-        (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1)
+        (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1);
     }
 
     /* shrink the victim to remove the jet pt 20 bin */
@@ -302,7 +302,7 @@ int undulate(char const* config, char const* output) {
     }
 
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
-        (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1)
+        (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1);
     }
 
     zip([&](int64_t extension, int64_t dimension) {
