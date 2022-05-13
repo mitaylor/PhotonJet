@@ -298,7 +298,7 @@ int undulate(char const* config, char const* output) {
     /* shrink the victim to remove the jet pt 20 bin */
     if ((*victims)[0]->GetNbinsX() > mr->size()) {
         for (int64_t i = 0; i < victims->size(); ++i) {
-            auto name = (*victims)[i]->GetName()
+            auto name = (*victims)[i]->GetName();
 
             auto temp = new TH1F(name, ";index;", mr->size(), 0, mdr->size())
             auto temp = (*victims)[i]->Rebin((int) mr->size(), "nominal_s_pure_raw_sub_pjet_u_sum0", bounds.data());
