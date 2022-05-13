@@ -57,31 +57,34 @@ int remove_extra_bins(char const* config, char const* output) {
         auto new_hist = new history<TH1F>(*hist, "");
 
         for (int64_t i = 0; i < hist->size(); ++i) {
-            auto name = (*victims)[i]->GetName();
+            auto name = (*hist)[i]->GetName();
 
-            auto temp = new TH1F(name, ";index;", mr->size(), 0, mr->size());
 
             std::cout << (*hist)[0]->GetNbinsX() << std::endl
             
             if ((*hist)[0]->GetNbinsX() == 240) {
-                for (int j = 0; j < mr->size(); ++j) {
-                    temp->SetBinContent(j + 1, (*victims)[i]->GetBinContent((*victims)[i]->GetNbinsX() - mr->size() + j + 1));
-                    temp->SetBinError(j + 1, (*victims)[i]->GetBinError((*victims)[i]->GetNbinsX() - mr->size() + j + 1));
+                auto temp = new TH1F(name, ";index;", mdr->size(), 0, mdr->size());
+
+                for (int j = 0; j < mdr->size(); ++j) {
+                    temp->SetBinContent(j + 1, (*hist)[i]->GetBinContent((*hist)[i]->GetNbinsX() - mdr->size() + j + 1));
+                    temp->SetBinError(j + 1, (*hist)[i]->GetBinError((*hist)[i]->GetNbinsX() - mdr->size() + j + 1));
                 }
+
+                delete (*new_hist)[i];
+                (*new_hist)[i] = (TH1F*) temp;
             }
             if ((*hist)[0]->GetNbinsX() == 224) {
-                for (int j = 0; j < mr->size(); ++j) {
-                    temp->SetBinContent(j + 1, (*victims)[i]->GetBinContent((*victims)[i]->GetNbinsX() - mr->size() + j + 1));
-                    temp->SetBinError(j + 1, (*victims)[i]->GetBinError((*victims)[i]->GetNbinsX() - mr->size() + j + 1));
+                auto temp = new TH1F(name, ";index;", mdphi->size(), 0, mdphi->size());
+
+                for (int j = 0; j < mdphi->size(); ++j) {
+                    temp->SetBinContent(j + 1, (*hist)[i]->GetBinContent((*hist)[i]->GetNbinsX() - mdphi->size() + j + 1));
+                    temp->SetBinError(j + 1, (*hist)[i]->GetBinError((*hist)[i]->GetNbinsX() - mdphi->size() + j + 1));
                 }
+
+                delete (*new_hist)[i];
+                (*new_hist)[i] = (TH1F*) temp;
             }
-
-            delete (*new_hist)[i];
-            (*new_hist)[i] = (TH1F*) temp;
         }
-    }
-
-
 
         new_hist->rename(label);
         new_hist->save();
