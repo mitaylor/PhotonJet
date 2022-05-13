@@ -60,7 +60,7 @@ int remove_extra_bins(char const* config, char const* output) {
             auto name = (*hist)[i]->GetName();
 
 
-            std::cout << (*hist)[0]->GetNbinsX() << std::endl;
+            std::cout << (*hist)[0]->GetNbinsX() << " " << mdr->size() << " " << mdphi->size() << std::endl;
             
             if ((*hist)[0]->GetNbinsX() == 240) {
                 auto temp = new TH1F(name, ";index;", mdr->size(), 0, mdr->size());
