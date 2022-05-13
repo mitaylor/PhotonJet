@@ -291,7 +291,7 @@ int undulate(char const* config, char const* output) {
     auto ref = new history<TH1F>(fv, reference);
 
     for (int i = 0; i < (*victims)[0]->GetNbinsX(); ++i) {
-        (*victims)[0]->GetXaxis()->GetBinLowEdge(bin)
+        (*victims)[0]->GetXaxis()->GetBinLowEdge(i+1)
     }
 
     /* shrink the victim to remove the jet pt 20 bin */
