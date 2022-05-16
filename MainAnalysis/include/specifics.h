@@ -48,14 +48,13 @@ bool in_pho_failure_region(T* t, int64_t i) {
     return ex_1 || ex_2;
 }
 
-template <typename T>
 float pho_failure_region_fraction(float eta_abs) {
     float area = 0;
     if (eta_abs > 1.3) {
         area += (-1.3 + eta_abs) * (-0.7 + 1.6);
     }
     if (eta_abs > 0.1) {
-        area += (1.5 -  0.1) * (1.0 - 0.2);
+        area += (eta_abs -  0.1) * (1.0 - 0.2);
     }
     
     return (area)/(eta_abs * 2 * 3.14159 * 2);
