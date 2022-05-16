@@ -49,6 +49,19 @@ bool in_pho_failure_region(T* t, int64_t i) {
 }
 
 template <typename T>
+float pho_failure_region_fraction(float eta_abs) {
+    float area = 0;
+    if (eta_abs > 1.3) {
+        area += (-1.3 + eta_abs) * (-0.7 + 1.6);
+    }
+    if (eta_abs > 0.1) {
+        area += (1.5 -  0.1) * (1.0 - 0.2);
+    }
+    
+    return (area)/(eta_abs * 2 * 3.14159 * 2);
+}
+
+template <typename T>
 bool in_jet_failure_region(T* t, int64_t i) {
     auto ex_1 = (*t->jteta)[i] < -1.3 && 
                 (*t->jtphi)[i] < -0.8 && (*t->jtphi)[i] > -1.7;
