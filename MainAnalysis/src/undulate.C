@@ -177,7 +177,7 @@ float averages(std::vector<float> const& w) {
 template <TUnfold::ERegMode M>
 void pattern(TUnfoldDensity* u, multival* m);
 
-template <>
+template <> // try kRegModeDerivative and kRegModeSize
 void pattern<TUnfold::ERegMode::kRegModeCurvature>(TUnfoldDensity* u,
                                                    multival* m) {
     std::array<std::vector<float>, 2> ws = { widths(m, 0), widths(m, 1) };
@@ -356,7 +356,7 @@ int undulate(char const* config, char const* output) {
             (*bg)[i],
             (*br)[i]
         );
-    };
+    }; // try kRegModeDerivative, kRegModeCurvature, kEConstraintArea, kDensityModeBinWidth
 
     auto uf = new history<TUnfoldDensity>("uf"s, "", factory, shape);
 
