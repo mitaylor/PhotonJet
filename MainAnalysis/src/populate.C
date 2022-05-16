@@ -391,7 +391,7 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
 
-        std::vector<int64_t> pthf_x
+        std::vector<int64_t> pthf_x;
         if (!rho.empty()) {
             for (int64_t k = 0; k < ihf->size(); ++k) {
                 pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
