@@ -24,7 +24,7 @@ using namespace std::placeholders;
 int vacillate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tag = conf->get<std::string>("tag");
 
     auto rho = conf->get<std::string>("rho");
@@ -95,11 +95,6 @@ int vacillate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    /* load input */
-    TFile* f = new TFile(input.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion});
-
     /* load centrality weighting for MC */
     TFile* frho;
     history<TH1F>* rho_weighting = nullptr;
@@ -120,157 +115,164 @@ int vacillate(char const* config, char const* output) {
         total = new history<TH2F>(fa, acc_label_ref);
     }
 
-    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    /* load input */
+    for (auto const& input : inputs) {
+        TFile* f = new TFile(input.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion });
 
-    /* fill histograms */
-    for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        if (mod) {
-            if ((i + parity) % 2 == 0) { continue; }
-        }
+        /* fill histograms */
+        for (int64_t i = 0; i < nentries; ++i) {
+            if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
 
-        t->GetEntry(i);
-
-        int64_t leading = -1;
-        float leading_pt = 0;
-        for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_max) { continue; }
-            if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-
-            auto pho_et = (*p->phoEt)[j];
-            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
-
-            if (pho_et < photon_pt_min) { continue; }
-
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
+            if (mod) {
+                if ((i + parity) % 2 == 0) { continue; }
             }
-        }
 
-        /* require leading photon */
-        if (leading < 0) { continue; }
+            t->GetEntry(i);
 
-        if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
-                || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
-            continue;
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < p->nPho; ++j) {
+                if ((*p->phoEt)[j] <= 30) { continue; }
+                if (std::abs((*p->phoSCEta)[j]) >= photon_eta_max) { continue; }
+                if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
-        /* hem failure region exclusion */
-        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+                auto pho_et = (*p->phoEt)[j];
+                if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
+                if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
 
-        /* require match to gen */
-        auto gen_index = (*p->pho_genMatchedIndex)[leading];
-        if (gen_index == -1) { continue; }
+                if (pho_et < photon_pt_min) { continue; }
 
-        auto pid = (*p->mcPID)[gen_index];
-        auto mpid = (*p->mcMomPID)[gen_index];
-        if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
-
-        /* isolation requirement */
-        if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
-
-        float isolation = (*p->pho_ecalClusterIsoR3)[leading]
-            + (*p->pho_hcalRechitIsoR3)[leading]
-            + (*p->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
-
-        /* photon axis */
-        auto reco_photon_eta = (*p->phoEta)[leading];
-        auto reco_photon_phi = convert_radian((*p->phoPhi)[leading]);
-        auto gen_photon_phi = convert_radian((*p->mcPhi)[gen_index]);
-
-        /* electron rejection */
-        bool electron = false;
-        for (int64_t j = 0; j < p->nEle; ++j) {
-            if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
-
-            auto deta = reco_photon_eta - (*p->eleEta)[j];
-            if (deta > 0.1) { continue; }
-
-            auto ele_phi = convert_radian((*p->elePhi)[j]);
-            auto dphi = revert_radian(reco_photon_phi - ele_phi);
-            auto dr2 = deta * deta + dphi * dphi;
-
-            if (dr2 < 0.01 && passes_electron_id<
-                        det::barrel, wp::loose, pjtree
-                    >(p, j, heavyion)) {
-                electron = true; break; }
-        }
-
-        if (electron) { continue; }
-
-        /* fill event weight */
-        auto weight = p->w;
-
-        std::vector<float> weights(ihf->size(), weight);
-        
-        if (heavyion) {
-            auto avg_rho = get_avg_rho(p, -photon_eta_max, photon_eta_max);
-
-            for (int64_t j = 0; j < ihf->size(); ++j) {
-                auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
-                auto corr = (*rho_weighting)[j]->GetBinContent(bin);
-                weights[j] *= corr;
+                if (pho_et > leading_pt) {
+                    leading = j;
+                    leading_pt = pho_et;
+                }
             }
-        }
 
-        for (int64_t j = 0; j < ihf->size(); ++j) {
-            (*n)[j]->Fill(1., weights[j]); }
+            /* require leading photon */
+            if (leading < 0) { continue; }
 
-        for (int64_t j = 0; j < p->nref; ++j) {
-            auto gen_pt = (*p->refpt)[j];
-            auto gen_phi = (*p->refphi)[j];
-
-            if (gen_pt < rptg.front()) { continue; }
-
-            auto reco_pt = (*p->jtpt)[j];
-            auto reco_eta = (*p->jteta)[j];
-            auto reco_phi = (*p->jtphi)[j];
-
-            if (std::abs(reco_eta) >= jet_eta_max) { continue; }
-
-            auto pj_deta = reco_photon_eta - reco_eta;
-            auto pj_dphi = revert_radian(std::abs(reco_photon_phi - convert_radian(reco_phi)));
-            auto pj_dr = std::sqrt(pj_deta * pj_deta + pj_dphi * pj_dphi);
-
-            if (pj_dr < 0.4) { continue; }
-
-            if (heavyion && in_jet_failure_region(p, j))
+            if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
+                    || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
                 continue;
 
-            /* do acceptance weighting */
-            double corr = 1;
-            if (heavyion) {
-                auto dphi_x = idphi->index_for(revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi))));
-                auto bin = (*total)[dphi_x]->FindBin(reco_eta, reco_photon_eta);
-                corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-                if (corr < 1) { std::cout << "error" << std::endl; }
+            /* hem failure region exclusion */
+            if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+
+            /* require match to gen */
+            auto gen_index = (*p->pho_genMatchedIndex)[leading];
+            if (gen_index == -1) { continue; }
+
+            auto pid = (*p->mcPID)[gen_index];
+            auto mpid = (*p->mcMomPID)[gen_index];
+            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+
+            /* isolation requirement */
+            if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
+
+            float isolation = (*p->pho_ecalClusterIsoR3)[leading]
+                + (*p->pho_hcalRechitIsoR3)[leading]
+                + (*p->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > iso_max) { continue; }
+
+            /* photon axis */
+            auto reco_photon_eta = (*p->phoEta)[leading];
+            auto reco_photon_phi = convert_radian((*p->phoPhi)[leading]);
+            auto gen_photon_phi = convert_radian((*p->mcPhi)[gen_index]);
+
+            /* electron rejection */
+            bool electron = false;
+            for (int64_t j = 0; j < p->nEle; ++j) {
+                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+
+                auto deta = reco_photon_eta - (*p->eleEta)[j];
+                if (deta > 0.1) { continue; }
+
+                auto ele_phi = convert_radian((*p->elePhi)[j]);
+                auto dphi = revert_radian(reco_photon_phi - ele_phi);
+                auto dr2 = deta * deta + dphi * dphi;
+
+                if (dr2 < 0.01 && passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(p, j, heavyion)) {
+                    electron = true; break; }
             }
 
-            auto gdphi = revert_pi(std::abs(gen_photon_phi - convert_radian(gen_phi)));
-            auto g_x = mg->index_for(v{gdphi, gen_pt});
+            if (electron) { continue; }
 
-            for (int64_t k = 0; k < ihf->size(); ++k) {
-                (*g)[k]->Fill(g_x, weights[k]*corr); }
+            /* fill event weight */
+            auto weight = p->w;
 
-            if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
-                auto rdphi = revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi)));
-                auto r_x = mr->index_for(v{rdphi, reco_pt});
+            std::vector<float> weights(ihf->size(), weight);
+            
+            if (heavyion) {
+                auto avg_rho = get_avg_rho(p, -photon_eta_max, photon_eta_max);
 
-                for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*r)[k]->Fill(r_x, weights[k]*corr);
-                    (*cdphi)[k]->Fill(rdphi, gdphi, weights[k]*corr);
-                    (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*corr);
-                    (*c)[k]->Fill(r_x, g_x, weights[k]*corr);
+                for (int64_t j = 0; j < ihf->size(); ++j) {
+                    auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
+                    auto corr = (*rho_weighting)[j]->GetBinContent(bin);
+                    weights[j] *= corr;
                 }
-            } else {
-                /* missed */
+            }
+
+            for (int64_t j = 0; j < ihf->size(); ++j) {
+                (*n)[j]->Fill(1., weights[j]); }
+
+            for (int64_t j = 0; j < p->nref; ++j) {
+                auto gen_pt = (*p->refpt)[j];
+                auto gen_phi = (*p->refphi)[j];
+
+                if (gen_pt < rptg.front()) { continue; }
+
+                auto reco_pt = (*p->jtpt)[j];
+                auto reco_eta = (*p->jteta)[j];
+                auto reco_phi = (*p->jtphi)[j];
+
+                if (std::abs(reco_eta) >= jet_eta_max) { continue; }
+
+                auto pj_deta = reco_photon_eta - reco_eta;
+                auto pj_dphi = revert_radian(std::abs(reco_photon_phi - convert_radian(reco_phi)));
+                auto pj_dr = std::sqrt(pj_deta * pj_deta + pj_dphi * pj_dphi);
+
+                if (pj_dr < 0.4) { continue; }
+
+                if (heavyion && in_jet_failure_region(p, j))
+                    continue;
+
+                /* do acceptance weighting */
+                double corr = 1;
+                if (heavyion) {
+                    auto dphi_x = idphi->index_for(revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi))));
+                    auto bin = (*total)[dphi_x]->FindBin(reco_eta, reco_photon_eta);
+                    corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+                    if (corr < 1) { std::cout << "error" << std::endl; }
+                }
+
+                auto gdphi = revert_pi(std::abs(gen_photon_phi - convert_radian(gen_phi)));
+                auto g_x = mg->index_for(v{gdphi, gen_pt});
+
                 for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*cpt)[k]->Fill(-1, gen_pt, weights[k]*corr);
-                    (*c)[k]->Fill(-1, g_x, weights[k]*corr);
+                    (*g)[k]->Fill(g_x, weights[k]*corr); }
+
+                if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
+                    auto rdphi = revert_pi(std::abs(reco_photon_phi - convert_radian(reco_phi)));
+                    auto r_x = mr->index_for(v{rdphi, reco_pt});
+
+                    for (int64_t k = 0; k < ihf->size(); ++k) {
+                        (*r)[k]->Fill(r_x, weights[k]*corr);
+                        (*cdphi)[k]->Fill(rdphi, gdphi, weights[k]*corr);
+                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*corr);
+                        (*c)[k]->Fill(r_x, g_x, weights[k]*corr);
+                    }
+                } else {
+                    /* missed */
+                    for (int64_t k = 0; k < ihf->size(); ++k) {
+                        (*cpt)[k]->Fill(-1, gen_pt, weights[k]*corr);
+                        (*c)[k]->Fill(-1, g_x, weights[k]*corr);
+                    }
                 }
             }
         }
