@@ -98,7 +98,7 @@ int fabulate(char const* config, char const* output) {
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
 
-        t->GetEntry(i); std::cout << __LINE << std::endl;
+        t->GetEntry(i); std::cout << __LINE__ << std::endl;
 
         std::vector<int64_t> exclusion;
         for (int64_t j = 0; j < p->nMC; ++j) {
@@ -129,7 +129,7 @@ int fabulate(char const* config, char const* output) {
                     match = true; break; }
             }
 
-            if (match == true) { continue; }v
+            if (match == true) { continue; }
 
             if (heavyion && in_jet_failure_region(p, j))
                 continue;
