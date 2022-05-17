@@ -195,7 +195,7 @@ int regulate(char const* config, char const* output) {
         regr_variables[16] = (*tree_pj->phoESEn)[index];
     };
 
-    // auto rng = new TRandom3(144);
+    auto rng = new TRandom3(144);
 
     /* boom! */
     int64_t nentries = forest->count();
