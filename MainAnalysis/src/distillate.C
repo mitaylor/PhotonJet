@@ -148,7 +148,7 @@ int distillate(char const* config, char const* output) {
         TF1* f = new TF1(label, "sqrt([0]*[0]+[1]*[1]/x+[2]*[2]/(x*x))");
 
         if (!heavyion || csn.empty()) {
-            f->SetParameters(0.08, 0.32, 0.);
+            f->SetParameters(0.097, 0.6, 0.);
         } else {
             f->SetParameters(csn[0], csn[1], csn[2]);
             if (hf_x > 0) {
