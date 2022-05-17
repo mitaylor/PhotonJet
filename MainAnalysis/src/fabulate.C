@@ -111,16 +111,16 @@ int fabulate(char const* config, char const* output) {
             if (isolation > 5.) { continue; }
 
             exclusion.push_back(j);
-        }std::cout << __LINE << std::endl;
+        }std::cout << __LINE__ << std::endl;
 
         for (int64_t j = 0; j < p->nref; ++j) {
-            auto gen_pt = (*p->refpt)[j];std::cout << __LINE << std::endl;
+            auto gen_pt = (*p->refpt)[j];std::cout << __LINE__ << std::endl;
             if (gen_pt < pt_min) { continue; }
 
             auto gen_eta = (*p->refeta)[j];
             if (std::abs(gen_eta) >= eta_max) { continue; }
 
-            auto gen_phi = (*p->refphi)[j];std::cout << __LINE << std::endl;
+            auto gen_phi = (*p->refphi)[j];std::cout << __LINE__ << std::endl;
 
             bool match = false;
             for (auto const& index : exclusion) {
@@ -143,7 +143,7 @@ int fabulate(char const* config, char const* output) {
                 - convert_radian(gen_phi));
 
             auto weight = p->w;
-            std::vector<float> weights(ihf->size(), weight);std::cout << __LINE << std::endl;
+            std::vector<float> weights(ihf->size(), weight);std::cout << __LINE__ << std::endl;
             
             /* fill event weight */
             if (heavyion) {
@@ -154,7 +154,7 @@ int fabulate(char const* config, char const* output) {
                     auto corr = (*rho_weighting)[j]->GetBinContent(bin);
                     weights[j] *= corr;
                 }
-            }std::cout << __LINE << std::endl;
+            }std::cout << __LINE__ << std::endl;
 
             /* fill histograms */
             for (int64_t j = 0; j < ihf->size(); ++j) {
@@ -166,8 +166,8 @@ int fabulate(char const* config, char const* output) {
                 (*eta)[index]->Fill(deta, weights[j]);
                 (*phi)[index]->Fill(dphi, weights[j]);
                 (*angle)[index]->Fill(sgn(gen_phi) * (deta * deta + dphi * dphi), weights[j]);
-            }std::cout << __LINE << std::endl;
-        }std::cout << __LINE << std::endl;
+            }std::cout << __LINE__ << std::endl;
+        }std::cout << __LINE__ << std::endl;
     }
 
     /* save output */
