@@ -155,9 +155,9 @@ int distillate(char const* config, char const* output) {
                 f->FixParameter(0, csn[0]);
                 f->FixParameter(1, csn[1]);
             }
-            if (hf_x == 0) {
-                f->FixParameter(2, 0);
-            }
+            // if (hf_x == 0) {
+            //     f->FixParameter(2, 0);
+            // }
         }
 
         return f;
