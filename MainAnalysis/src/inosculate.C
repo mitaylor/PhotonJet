@@ -75,6 +75,7 @@ int64_t inosculate(char const* config, char const* output) {
     auto input = conf->get<std::string>("input");
     auto tag = conf->get<std::string>("tag");
     auto heavyion = conf->get<bool>("heavyion");
+    auto use_er = conf->get<bool>("use_er");
 
     auto const hovere_max = conf->get<float>("hovere_max");
     auto const see_min = conf->get<float>("see_min");
@@ -146,12 +147,12 @@ int64_t inosculate(char const* config, char const* output) {
 
 
                 float phoEt_j = (*p->phoEt)[j];
-                if ((*p->phoEt)[j] > 30 && heavyion) phoEt_j = (*p->phoEtErNew)[j];
-                if ((*p->phoEt)[j] > 30 && !heavyion) phoEt_j = (*p->phoEtEr)[j];
+                if ((*p->phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*p->phoEtErNew)[j];
+                if ((*p->phoEt)[j] > 30 && !heavyion && use_er) phoEt_j = (*p->phoEtEr)[j];
 
                 float phoEt_k = (*p->phoEt)[k];
-                if ((*p->phoEt)[k] > 30 && heavyion) phoEt_k = (*p->phoEtErNew)[k];
-                if ((*p->phoEt)[k] > 30 && !heavyion) phoEt_k = (*p->phoEtEr)[k];
+                if ((*p->phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*p->phoEtErNew)[k];
+                if ((*p->phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*p->phoEtEr)[k];
 
                 /* double electron invariant mass */
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
