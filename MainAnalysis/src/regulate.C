@@ -267,10 +267,9 @@ int regulate(char const* config, char const* output) {
             if (!jecs_scale.empty()) tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
 
             if (!csn.empty()) { 
-                auto rnd = rng->Gaus(1., jer(csn, corr);
-                (*tree_pj->jtpt)[j] *= rnd);
-                (*tree_pj->jtptCor)[j] *= rnd);
-                (*tree_pj->jtptCorScale)[j] *= rnd);
+                (*tree_pj->jtpt)[j] *= rng->Gaus(1., jer(csn, (*tree_pj->jtpt)[j]));
+                (*tree_pj->jtptCor)[j] *= rng->Gaus(1., jer(csn, (*tree_pj->jtptCor)[j]));
+                (*tree_pj->jtptCorScale)[j] *= rng->Gaus(1., jer(csn, (*tree_pj->jtptCorScale)[j]));
             }
         }
 
