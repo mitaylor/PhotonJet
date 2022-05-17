@@ -37,6 +37,7 @@ int fabulate(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     auto heavyion = conf->get<bool>("heavyion");
+    auto apply_jec = conf->get<bool>("apply_jec");
 
     auto rho = conf->get<std::string>("rho");
     auto rho_label = conf->get<std::string>("rho_label");
@@ -133,7 +134,7 @@ int fabulate(char const* config, char const* output) {
             if (heavyion && in_jet_failure_region(p, j))
                 continue;
 
-            auto reco_pt = (*p->jtpt)[j];
+            auto reco_pt = apply_jec ? (*p->jtptCor)[j] : (*p->jtpt)[j];
             auto reco_eta = (*p->jteta)[j];
             auto reco_phi = (*p->jtphi)[j];
 
