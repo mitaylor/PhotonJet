@@ -66,6 +66,7 @@ int fabulate(char const* config, char const* output) {
     auto mptetahf = new multival(dpt, deta, dhf);
     auto ipt = new interval(dpt);
     auto ieta = new interval(deta);
+    auto ihf = new interval(dhf);
 
     auto ies = new interval("energy scale"s, res[0], res[1], res[2]);
     auto idr = new interval("#deltar^{2}"s, rdr[0], rdr[1], rdr[2]);
