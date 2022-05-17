@@ -45,7 +45,7 @@ float weight_for(std::vector<int32_t> const& divisions,
     return weights[index];
 }
 
-float jer(std::vector<float> const& csn, float pt) {
+float smear(std::vector<float> const& csn, float pt) {
     return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
 }
 
@@ -266,18 +266,12 @@ int regulate(char const* config, char const* output) {
             if (!jecs.empty()) tree_pj->jtptCor->push_back(JEC->GetCorrectedPT());
             if (!jecs_scale.empty()) tree_pj->jtptCorScale->push_back(JEC_scale->GetCorrectedPT());
 
-            // if ((*tree_pj->refpt)[j] > 15 && (*tree_pj->jteta)[j] > -2 && (*tree_pj->jteta)[j] < 2) {
-            //     std::cout << "refpt: " << (*tree_pj->refpt)[j] << "\tjtpt: " << (*tree_pj->jtpt)[j];
-            //     std::cout << "\tjtptCor: " << (*tree_pj->jtptCor)[j] << "\tjtptCorScale: " << (*tree_pj->jtptCorScale)[j];
-            //     std::cout << "\trho: " << avg_rho << "\t" << get_UE(tree_pj, (*tree_pj->jteta)[j]) << std::endl;
-            // }
-
-            // if (!csn.empty()) { 
-            //     auto rnd = rng->Gaus(1., jer(csn, corr);
-            //     (*tree_pj->jtpt)[j] *= rnd);
-            //     (*tree_pj->jtptCor)[j] *= rnd);
-            //     (*tree_pj->jtptCorScale)[j] *= rnd);
-            // }
+            if (!csn.empty()) { 
+                auto rnd = rng->Gaus(1., jer(csn, corr);
+                (*tree_pj->jtpt)[j] *= rnd);
+                (*tree_pj->jtptCor)[j] *= rnd);
+                (*tree_pj->jtptCorScale)[j] *= rnd);
+            }
         }
 
         /* apply photon energy corrections */
