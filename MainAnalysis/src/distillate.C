@@ -239,7 +239,7 @@ int distillate(char const* config, char const* output) {
         if (fit) {
             auto label = "f_s_dhf_f_pt_"s + std::to_string(index);
             TF1* f = new TF1(label.data(), func.data());
-            h->Fit(f, "MEQ", "", 30, rpt.back());
+            h->Fit(f, "MEQ", "", 20, rpt.back());
         }
 
         c2->add(h, "mc");
@@ -256,7 +256,7 @@ int distillate(char const* config, char const* output) {
 
         auto label = "f_r_dhf_f_pt_"s + std::to_string(index);
         auto f = resolution_function(label.data(), index);
-        h->Fit(label.data(), "MEQ", "", 30, rpt.back());
+        h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
         csn[0] = f->GetParameter(0);
         csn[1] = f->GetParameter(1);
@@ -378,7 +378,7 @@ int distillate(char const* config, char const* output) {
         if (fit) {
             auto label = "f_s_f_pt_"s + std::to_string(index);
             TF1* f = new TF1(label.data(), func.data());
-            h->Fit(f, "MEQ", "", 30, rpt.back());
+            h->Fit(f, "MEQ", "", 20, rpt.back());
         }
 
         auto eta_x = s_f_pt->indices_for(index)[0];
@@ -390,7 +390,7 @@ int distillate(char const* config, char const* output) {
 
         auto label = "f_r_f_pt_"s + std::to_string(index);
         auto f = resolution_function(label.data(), index);
-        h->Fit(label.data(), "MEQ", "", 30, rpt.back());
+        h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
         csn[1] = f->GetParameter(1);
         csn[2] = f->GetParameter(2);
