@@ -38,6 +38,9 @@ int fabulate(char const* config, char const* output) {
 
     auto heavyion = conf->get<bool>("heavyion");
 
+    auto rho = conf->get<std::string>("rho");
+    auto rho_label = conf->get<std::string>("rho_label");
+
     auto pt_min = conf->get<float>("pt_min");
     auto eta_max = conf->get<float>("eta_max");
 
@@ -50,11 +53,19 @@ int fabulate(char const* config, char const* output) {
     auto deta = conf->get<std::vector<float>>("eta_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
-    /* exclude most peripheral events */
-    auto hf_min = dhf.front();
+    /* load centrality weighting for MC */
+    TFile* frho;
+    history<TH1F>* rho_weighting = nullptr;
+
+    if (!rho.empty()) {
+        frho = new TFile(rho.data(), "read");
+        rho_weighting = new history<TH1F>(frho, rho_label);
+    }
 
     /* prepare histograms */
     auto mptetahf = new multival(dpt, deta, dhf);
+    auto ipt = new interval(dpt);
+    auto ieta = new interval(deta);
 
     auto ies = new interval("energy scale"s, res[0], res[1], res[2]);
     auto idr = new interval("#deltar^{2}"s, rdr[0], rdr[1], rdr[2]);
@@ -78,7 +89,7 @@ int fabulate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, false, t, { 1, 1, 1, 0, 1, 0, 0 });
+    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion });
 
     /* fill histograms */
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -86,8 +97,6 @@ int fabulate(char const* config, char const* output) {
         if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
 
         t->GetEntry(i);
-
-        if (p->hiHF <= hf_min) { continue; }
 
         std::vector<int64_t> exclusion;
         for (int64_t j = 0; j < p->nMC; ++j) {
@@ -127,19 +136,35 @@ int fabulate(char const* config, char const* output) {
             auto reco_eta = (*p->jteta)[j];
             auto reco_phi = (*p->jtphi)[j];
 
-            auto index = mptetahf->index_for(v{gen_pt, gen_eta, p->hiHF});
-
-            (*scale)[index]->Fill(reco_pt / gen_pt, p->w);
-
             auto deta = reco_eta - gen_eta;
             auto dphi = revert_radian(convert_radian(reco_phi)
                 - convert_radian(gen_phi));
 
-            (*eta)[index]->Fill(deta, p->w);
-            (*phi)[index]->Fill(dphi, p->w);
+            auto weight = p->w;
+            std::vector<float> weights(ihf->size(), weight);
+            
+            /* fill event weight */
+            if (heavyion) {
+                auto avg_rho = get_avg_rho(p, -1.442, 1.442);
 
-            (*angle)[index]->Fill(sgn(gen_phi) * (deta * deta + dphi * dphi),
-                                  p->w);
+                for (int64_t j = 0; j < ihf->size(); ++j) {
+                    auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
+                    auto corr = (*rho_weighting)[j]->GetBinContent(bin);
+                    weights[j] *= corr;
+                }
+            }
+
+            /* fill histograms */
+            for (int64_t j = 0; j < ihf->size(); ++j) {
+                auto pt_x = ipt->index_for(gen_pt);
+                auto eta_x = ieta->index_for(gen_eta);
+                auto index = mptetahf->index_for(x{pt_x, eta_x, j});
+
+                (*scale)[index]->Fill(reco_pt / gen_pt, weights[j]);
+                (*eta)[index]->Fill(deta, weights[j]);
+                (*phi)[index]->Fill(dphi, weights[j]);
+                (*angle)[index]->Fill(sgn(gen_phi) * (deta * deta + dphi * dphi), weights[j]);
+            }
         }
     }
 
