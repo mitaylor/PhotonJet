@@ -46,6 +46,7 @@ int vacillate(char const* config, char const* output) {
 
     auto heavyion = conf->get<bool>("heavyion");
     auto apply_er = conf->get<bool>("apply_er");
+    auto ele_rej = conf->get<bool>("ele_rej");
 
     auto jet_eta_max = conf->get<float>("jet_eta_max");
     auto photon_pt_min = conf->get<float>("photon_pt_min");
@@ -97,6 +98,9 @@ int vacillate(char const* config, char const* output) {
 
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
+
+    std::vector<double> pass_gen_iso(2, 0);
+    std::vector<double> pass_reco_iso(2, 0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -177,12 +181,18 @@ int vacillate(char const* config, char const* output) {
             auto mpid = (*p->mcMomPID)[gen_index];
             if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
 
-            /* isolation requirement */
-            if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
-
             float isolation = (*p->pho_ecalClusterIsoR3)[leading]
                 + (*p->pho_hcalRechitIsoR3)[leading]
                 + (*p->pho_trackIsoR3PtCut20)[leading];
+
+            if ((*p->mcCalIsoDR04)[gen_index] > 5) { pass_gen_iso[0] += p->w; }
+            else { pass_gen_iso[1] += p->w; }
+
+            if (isolation > iso_max) { pass_reco_iso[0] += p->w; }
+            else { pass_reco_iso[1] += p->w; }
+
+            /* isolation requirement */
+            if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
             if (isolation > iso_max) { continue; }
 
             /* photon axis */
@@ -190,24 +200,26 @@ int vacillate(char const* config, char const* output) {
             auto photon_phi = convert_radian((*p->phoPhi)[leading]);
 
             /* electron rejection */
-            bool electron = false;
-            for (int64_t j = 0; j < p->nEle; ++j) {
-                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+            if (ele_rej) {
+                bool electron = false;
+                for (int64_t j = 0; j < p->nEle; ++j) {
+                    if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*p->eleEta)[j];
-                if (deta > 0.1) { continue; }
+                    auto deta = photon_eta - (*p->eleEta)[j];
+                    if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*p->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
+                    auto ele_phi = convert_radian((*p->elePhi)[j]);
+                    auto dphi = revert_radian(photon_phi - ele_phi);
+                    auto dr2 = deta * deta + dphi * dphi;
 
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(p, j, heavyion)) {
-                    electron = true; break; }
+                    if (dr2 < 0.01 && passes_electron_id<
+                                det::barrel, wp::loose, pjtree
+                            >(p, j, heavyion)) {
+                        electron = true; break; }
+                }
+
+                if (electron) { continue; }
             }
-
-            if (electron) { continue; }
 
             /* fill event weight */
             auto weight = p->w;
@@ -296,6 +308,9 @@ int vacillate(char const* config, char const* output) {
             }
         }
     }
+
+    std::cout << "Reco iso pass: " << pass_reco_iso[0] << "\tfail: " << pass_reco_iso[1] << std::endl;
+    std::cout << "Gen iso pass: " << pass_gen_iso[0] << "\tfail: " << pass_gen_iso[1] << std::endl;
 
     r->divide(*n);
     g->divide(*n);

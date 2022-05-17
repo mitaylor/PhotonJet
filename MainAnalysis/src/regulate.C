@@ -250,14 +250,12 @@ int regulate(char const* config, char const* output) {
             auto avg_rho = get_UE(tree_pj, (*tree_pj->jteta)[j]) / jet_area;
 
             JEC->SetJetPT((*tree_pj->jtpt)[j]);
-            // JEC->SetJetPT((*tree_pj->rawpt)[j]);
             JEC->SetJetEta((*tree_pj->jteta)[j]);
             JEC->SetJetPhi((*tree_pj->jtphi)[j]);
             JEC->SetJetArea(jet_area);
             JEC->SetRho(avg_rho);
 
             JEC_scale->SetJetPT((*tree_pj->jtpt)[j]);
-            // JEC_scale->SetJetPT((*tree_pj->rawpt)[j]);
             JEC_scale->SetJetEta((*tree_pj->jteta)[j]);
             JEC_scale->SetJetPhi((*tree_pj->jtphi)[j]);
             JEC_scale->SetJetArea(jet_area);
@@ -268,8 +266,8 @@ int regulate(char const* config, char const* output) {
 
             if (!csn.empty()) { 
                 (*tree_pj->jtpt)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtpt)[j]));
-                (*tree_pj->jtptCor)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtptCor)[j]));
-                (*tree_pj->jtptCorScale)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtptCorScale)[j]));
+                if (!jecs.empty()) (*tree_pj->jtptCor)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtptCor)[j]));
+                if (!jecs_scale.empty()) (*tree_pj->jtptCorScale)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtptCorScale)[j]));
             }
         }
 
