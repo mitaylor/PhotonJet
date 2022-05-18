@@ -32,10 +32,6 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     return deta * deta + dphi * dphi;
 }
 
-float smear(std::vector<float> const& csn, float pt) {
-    return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
-}
-
 int vacillate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -70,8 +66,6 @@ int vacillate(char const* config, char const* output) {
     auto see_max = conf->get<float>("see_max");
     auto iso_max = conf->get<float>("iso_max");
 
-    auto csn = conf->get<std::vector<float>>("csn");
-
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rdrg = conf->get<std::vector<float>>("drg_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
@@ -79,10 +73,6 @@ int vacillate(char const* config, char const* output) {
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-
-    /* prepare for csn smearing */
-    for (auto& v : csn) { v = v * v; }
-    auto rng = new TRandom3(140);
 
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
@@ -305,11 +295,6 @@ int vacillate(char const* config, char const* output) {
                 if (jer_up) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
 
                 reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt;
-
-                /* smear jet */
-                if (!csn.empty()) { 
-                    reco_pt *= rng->Gaus(1., smear(csn, reco_pt));
-                }
 
                 /* jet energy scale uncertainty */
                 if (!jeu.empty()) {
