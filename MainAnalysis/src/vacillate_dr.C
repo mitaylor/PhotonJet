@@ -109,8 +109,7 @@ int vacillate(char const* config, char const* output) {
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
 
-    std::vector<double> pass_gen_iso(2, 0);
-    std::vector<double> pass_reco_iso(2, 0);
+    std::vector<double> pass_fail_gen_reco(4,0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -199,8 +198,10 @@ int vacillate(char const* config, char const* output) {
                 + (*p->pho_hcalRechitIsoR3)[leading]
                 + (*p->pho_trackIsoR3PtCut20)[leading];
 
-            if ((*p->mcCalIsoDR04)[gen_index] > 5) { pass_gen_iso[0] += p->w; }
-            else { pass_gen_iso[1] += p->w; }
+            if ((*p->mcCalIsoDR04)[gen_index] > 5 && isolation > iso_max)   { pass_fail_gen_reco[0] += p->w; }
+            else if ((*p->mcCalIsoDR04)[gen_index] > 5)                     { pass_fail_gen_reco[1] += p->w; }
+            else if (isolation > iso_max)                                   { pass_fail_gen_reco[2] += p->w; }
+            else                                                            { pass_fail_gen_reco[3] += p->w; }
 
             if (isolation > iso_max) { pass_reco_iso[0] += p->w; }
             else { pass_reco_iso[1] += p->w; }
@@ -341,8 +342,8 @@ int vacillate(char const* config, char const* output) {
         }
     }
 
-    std::cout << "Reco iso pass: " << pass_reco_iso[0] << "\tfail: " << pass_reco_iso[1] << std::endl;
-    std::cout << "Gen iso pass: " << pass_gen_iso[0] << "\tfail: " << pass_gen_iso[1] << std::endl;
+    std::cout << "Pass both: " << pass_fail_gen_reco[0] << "\tgen only: " << pass_fail_gen_reco[1];
+    std::cout << "\treco only: " << pass_fail_gen_reco[2] << "\tfail both: " << pass_fail_gen_reco[3] << std::endl;
 
     r->divide(*n);
     g->divide(*n);
