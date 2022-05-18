@@ -274,7 +274,7 @@ int vacillate(char const* config, char const* output) {
 
                 if (gen_pt < rptg.front()) { continue; }
 
-                auto reco_pt = (!no_jes && heavyion) ? (*pjt->jtptCor)[j] : (*p->jtpt)[j];
+                auto reco_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
                 auto reco_eta = (*p->jteta)[j];
                 auto reco_phi = (*p->jtphi)[j];
 
@@ -309,7 +309,7 @@ int vacillate(char const* config, char const* output) {
                 if (!csn.empty()) { 
                     reco_pt *= rng->Gaus(1., smear(csn, reco_pt));
                 }
-                
+
                 /* jet energy scale uncertainty */
                 if (!jeu.empty()) {
                     auto jes_uncertainty = JEU->GetUncertainty();
