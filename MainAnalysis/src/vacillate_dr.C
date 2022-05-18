@@ -297,6 +297,10 @@ int vacillate(char const* config, char const* output) {
 
                 /* jet energy scale uncertainty */
                 if (!jeu.empty()) {
+                    JEU->SetJetPT(reco_pt);
+                    JEU->SetJetEta(reco_eta);
+                    JEU->SetJetPhi(reco_phi);
+
                     auto jes_uncertainty = JEU->GetUncertainty();
                     reco_pt *= direction ? (1. + jes_uncertainty.second) : (1. - jes_uncertainty.first);
                 }
