@@ -290,7 +290,8 @@ int vacillate(char const* config, char const* output) {
                 auto jer_scale_factors = JERSF->GetParameters();
 
                 auto jer_scale = jer_scale_factors[0];
-                if (jer_up) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
+                if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
+                else if  (jer_up && !heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]);
 
                 reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt;
 
