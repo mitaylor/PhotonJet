@@ -135,7 +135,7 @@ TH2F* shade(T* flat, multival const* m, std::array<int64_t, 4> const& offset) {
 int plot_unfolding_inputs(char const* config) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto input = conf->get<std::string>("input");std::cout << __LINE__ << std::endl;
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
     auto type = conf->get<std::string>("type");
@@ -155,7 +155,7 @@ int plot_unfolding_inputs(char const* config) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto mpthf = new multival(dpt, dhf);
+    auto mpthf = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
     auto ihf = new interval(dhf);
 
     auto idrr = new interval(xlabel, rdrr);
@@ -165,7 +165,7 @@ int plot_unfolding_inputs(char const* config) {
 
     /* manage memory manually */
     TH1::AddDirectory(false);
-    TH1::SetDefaultSumw2();
+    TH1::SetDefaultSumw2();std::cout << __LINE__ << std::endl;
 
     /* load input and victims */
     TFile* fi = new TFile(input.data(), "read");
