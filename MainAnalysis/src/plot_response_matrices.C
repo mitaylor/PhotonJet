@@ -197,7 +197,7 @@ int plot_unfolding_inputs(char const* config) {
     /* figures */
     auto hb = new pencil();
     std::cout << __LINE__ << std::endl;
-    std::vector<paper*> cs(18, nullptr);
+    std::vector<paper*> cs(5, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);
         apply_style(c, system_info);
