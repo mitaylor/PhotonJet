@@ -3,6 +3,7 @@
 arithmetic() {
     tag=$1
 
+    echo "./bin/plot_response_matrices configs/test/plot_response_matrices/plot_response_matrices_${tag}.conf"
     ./bin/plot_response_matrices configs/test/plot_response_matrices/plot_response_matrices_${tag}.conf
 }
 

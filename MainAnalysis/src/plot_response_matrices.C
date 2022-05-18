@@ -161,24 +161,24 @@ int plot_unfolding_inputs(char const* config) {
     auto idrr = new interval(xlabel, rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
-    auto mr = new multival(*idrr, *iptr); std::cout << __LINE__ << std::endl;
+    auto mr = new multival(*idrr, *iptr);
 
     /* manage memory manually */
-    TH1::AddDirectory(false);std::cout << __LINE__ << std::endl;
+    TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* load input and victims */
     TFile* fi = new TFile(input.data(), "read");
-    auto matrices = new history<TH2F>(fi, tag + "_c");std::cout << __LINE__ << std::endl;
+    auto matrices = new history<TH2F>(fi, tag + "_c");
 
     TFile* fv = new TFile(victim.data(), "read");
-    auto victims = new history<TH1F>(fv, label);std::cout << __LINE__ << std::endl;
+    auto victims = new history<TH1F>(fv, label);
 
-    auto shape = victims->shape();std::cout << __LINE__ << std::endl;
+    auto shape = victims->shape();
 
     auto shaded = new history<TH2F>(label + "_shade", "", null<TH2F>, shape);
     auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, shape);
-    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape);std::cout << __LINE__ << std::endl;
+    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape);
 
     std::array<int64_t, 4> osr = { 0, 0, 0, 0 };
 
@@ -193,10 +193,10 @@ int plot_unfolding_inputs(char const* config) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";
-    std::cout << __LINE__ << std::endl;
+
     /* figures */
     auto hb = new pencil();
-    std::cout << __LINE__ << std::endl;
+
     std::vector<paper*> cs(5, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);
@@ -206,14 +206,14 @@ int plot_unfolding_inputs(char const* config) {
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "fold0"s, "fold1"s, "shaded"s });
 
-    cs[2]->format(std::bind(default_formatter, _1, rfold0[0], rfold0[1]));std::cout << __LINE__ << std::endl;
+    cs[2]->format(std::bind(default_formatter, _1, rfold0[0], rfold0[1]));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* input folds */
         (*shaded)[i] = shade((*victims)[i], mr, osr);
         (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
-        (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);std::cout << __LINE__ << std::endl;
+        (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
 
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
@@ -228,7 +228,7 @@ int plot_unfolding_inputs(char const* config) {
 
         cs[4]->add((*shaded)[i]);
         cs[4]->adjust((*shaded)[i], "colz", "");
-    };std::cout << __LINE__ << std::endl;
+    };
 
     hb->sketch();
 
