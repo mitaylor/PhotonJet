@@ -132,7 +132,7 @@ TH2F* shade(T* flat, multival const* m, std::array<int64_t, 4> const& offset) {
     return hshade;
 }
 
-int plot_unfolding_inputs(char const* config, char const* output) {
+int plot_unfolding_inputs(char const* config) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
@@ -180,7 +180,6 @@ int plot_unfolding_inputs(char const* config, char const* output) {
     auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, shape);
     auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape);
 
-    std::array<int64_t, 4> osg = { 0, 0, 0, 0 };
     std::array<int64_t, 4> osr = { 0, 0, 0, 0 };
 
     /* info text */
