@@ -203,9 +203,6 @@ int vacillate(char const* config, char const* output) {
             else if (isolation > iso_max)                                   { pass_fail_gen_reco[2] += p->w; }
             else                                                            { pass_fail_gen_reco[3] += p->w; }
 
-            if (isolation > iso_max) { pass_reco_iso[0] += p->w; }
-            else { pass_reco_iso[1] += p->w; }
-
             /* isolation requirement */
             if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
             if (isolation > iso_max) { continue; }
