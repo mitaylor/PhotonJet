@@ -164,7 +164,7 @@
     --Output Output/AACentUp0.root
 
 # AACentDown: Execute
-./Execute --Data ../../MainAnalysis/data/jet_20accumulate_aa_cent_down.root \
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa_cent_down.root \
     --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/jet_20/vacillate_aa_cent_down.root \
     --ResponseHistogram aa_c_0 \
