@@ -10,6 +10,9 @@
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
+#include "../include/JetCorrector.h"
+#include "../include/JetUncertainty.h"
+
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
@@ -28,6 +31,10 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     return deta * deta + dphi * dphi;
 }
 
+float smear(std::vector<float> const& csn, float pt) {
+    return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
+}
+
 int vacillate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -40,13 +47,19 @@ int vacillate(char const* config, char const* output) {
     auto acc = conf->get<std::string>("acc");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
+    
+    auto jersf = conf->get<std::string>("jersf");
+    auto jeu = conf->get<std::string>("jeu");
+    auto direction = conf->get<bool>("direction");
 
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
     auto heavyion = conf->get<bool>("heavyion");
     auto apply_er = conf->get<bool>("apply_er");
+    auto no_jes = conf->get<bool>("no_jes");
     auto ele_rej = conf->get<bool>("ele_rej");
+    auto jer_up = conf->get<bool>("jer_up");
 
     auto jet_eta_max = conf->get<float>("jet_eta_max");
     auto photon_pt_min = conf->get<float>("photon_pt_min");
@@ -56,6 +69,8 @@ int vacillate(char const* config, char const* output) {
     auto see_max = conf->get<float>("see_max");
     auto iso_max = conf->get<float>("iso_max");
 
+    auto csn = conf->get<std::vector<float>>("csn");
+
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rdrg = conf->get<std::vector<float>>("drg_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
@@ -63,6 +78,10 @@ int vacillate(char const* config, char const* output) {
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
+
+    /* prepare for csn smearing */
+    for (auto& v : csn) { v = v * v; }
+    auto rng = new TRandom3(140);
 
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
@@ -125,6 +144,10 @@ int vacillate(char const* config, char const* output) {
         acceptance = new history<TH2F>(fa, acc_label_acc);
         total = new history<TH2F>(fa, acc_label_ref);
     }
+
+    /* get data/MC resolution correction */
+    auto JERSF = new SingleJetCorrector(jersf);
+    auto JEU = new JetUncertainty(jeu);
 
     /* load input */
     for (auto const& input : inputs) {
@@ -231,8 +254,8 @@ int vacillate(char const* config, char const* output) {
 
                 for (int64_t j = 0; j < ihf->size(); ++j) {
                     auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
-                    auto corr = (*rho_weighting)[j]->GetBinContent(bin);
-                    weights[j] *= corr;
+                    auto cor = (*rho_weighting)[j]->GetBinContent(bin);
+                    weights[j] *= cor;
                 }
             }
 
@@ -251,7 +274,7 @@ int vacillate(char const* config, char const* output) {
 
                 if (gen_pt < rptg.front()) { continue; }
 
-                auto reco_pt = (*p->jtpt)[j];
+                auto reco_pt = (!no_jes && heavyion) ? (*pjt->jtptCor)[j] : (*p->jtpt)[j];
                 auto reco_eta = (*p->jteta)[j];
                 auto reco_phi = (*p->jtphi)[j];
 
@@ -270,13 +293,36 @@ int vacillate(char const* config, char const* output) {
                 if (std::abs(photon_phi - convert_radian(reco_phi)) < 0.875_pi)
                     continue;
 
+                /* correct jet pt for data/MC JER difference */
+                JERSF->SetJetPT(reco_pt);
+                JERSF->SetJetEta(reco_eta);
+                JERSF->SetJetPhi(reco_phi);
+
+                auto jer_scale_factors = JERSF->GetParameters();
+
+                auto jer_scale = jer_scale_factors[0];
+                if (jer_up) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
+
+                reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt;
+
+                /* smear jet */
+                if (!csn.empty()) { 
+                    reco_pt *= rng->Gaus(1., smear(csn, reco_pt));
+                }
+                
+                /* jet energy scale uncertainty */
+                if (!jeu.empty()) {
+                    auto jes_uncertainty = JEU->GetUncertainty();
+                    reco_pt *= direction ? (1. + jes_uncertainty.second) : (1. - jes_uncertainty.first);
+                }
+
                 /* do acceptance weighting */
-                double corr = 1;
+                double cor = 1;
                 if (heavyion) {
                     auto dphi_x = idphi->index_for(revert_pi(std::abs(photon_phi - convert_radian(reco_phi))));
                     auto bin = (*total)[dphi_x]->FindBin(reco_eta, photon_eta);
-                    corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-                    if (corr < 1) { std::cout << "error" << std::endl; }
+                    cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+                    if (cor < 1) { std::cout << "error" << std::endl; }
                 }
 
                 auto id = genid[gen_pt];
@@ -285,7 +331,7 @@ int vacillate(char const* config, char const* output) {
                 auto g_x = mg->index_for(v{gdr, gen_pt});
 
                 for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*g)[k]->Fill(g_x, weights[k]*corr); }
+                    (*g)[k]->Fill(g_x, weights[k]*cor); }
 
                 if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
                     auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
@@ -293,16 +339,16 @@ int vacillate(char const* config, char const* output) {
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*r)[k]->Fill(r_x, weights[k]*corr);
-                        (*cdr)[k]->Fill(rdr, gdr, weights[k]*corr);
-                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*corr);
-                        (*c)[k]->Fill(r_x, g_x, weights[k]*corr);
+                        (*r)[k]->Fill(r_x, weights[k]*cor);
+                        (*cdr)[k]->Fill(rdr, gdr, weights[k]*cor);
+                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k]*cor);
+                        (*c)[k]->Fill(r_x, g_x, weights[k]*cor);
                     }
                 } else {
                     /* missed */
                     for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*cpt)[k]->Fill(-1, gen_pt, weights[k]*corr);
-                        (*c)[k]->Fill(-1, g_x, weights[k]*corr);
+                        (*cpt)[k]->Fill(-1, gen_pt, weights[k]*cor);
+                        (*c)[k]->Fill(-1, g_x, weights[k]*cor);
                     }
                 }
             }
