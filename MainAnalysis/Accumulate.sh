@@ -33,7 +33,7 @@ for sample in ${samples[@]}; do
     done
 done
 
-samples=(a)
+samples=(aa)
 
 for sample in ${samples[@]}; do
     for syst in cent_up cent_down; do
