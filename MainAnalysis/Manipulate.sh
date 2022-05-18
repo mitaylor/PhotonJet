@@ -3,8 +3,8 @@
 arithmetic() {
     tag=$1
 
-    ./bin/manipulate configs/manipulate/new/jet_30/manipulate_${tag}.conf \
-        data/jet_30/manipulate_${tag}.root
+    ./bin/manipulate configs/manipulate/new/jet_20/manipulate_${tag}.conf \
+        data/jet_20/manipulate_${tag}.root
 }
 
 nominal() {
@@ -22,7 +22,8 @@ systematic() {
     arithmetic ${sample}_${syst}
 }
 
-samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+# samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(pp aa)
 
 for sample in ${samples[@]}; do
     nominal $sample
