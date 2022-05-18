@@ -169,16 +169,16 @@ int plot_unfolding_inputs(char const* config) {
 
     /* load input and victims */
     TFile* fi = new TFile(input.data(), "read");
-    auto matrices = new history<TH2F>(fi, tag + "_c");
+    auto matrices = new history<TH2F>(fi, tag + "_c");std::cout << __LINE__ << std::endl;
 
     TFile* fv = new TFile(victim.data(), "read");
-    auto victims = new history<TH1F>(fv, label);
+    auto victims = new history<TH1F>(fv, label);std::cout << __LINE__ << std::endl;
 
     auto shape = victims->shape();
 
     auto shaded = new history<TH2F>(label + "_shade", "", null<TH2F>, shape);
     auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, shape);
-    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape);
+    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape); std::cout << __LINE__ << std::endl;
 
     std::array<int64_t, 4> osr = { 0, 0, 0, 0 };
 
@@ -192,45 +192,45 @@ int plot_unfolding_inputs(char const* config) {
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
-    auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";
+    auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";std::cout << __LINE__ << std::endl;
 
     /* figures */
     auto hb = new pencil();
 
     std::vector<paper*> cs(5, nullptr);
     zip([&](paper*& c, std::string const& title) {
-        c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);
+        c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);std::cout << __LINE__ << std::endl;
         apply_style(c, system_info);
         c->accessory(pthf_info);
         c->divide(divisions[0], divisions[1]);
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "fold0"s, "fold1"s, "shaded"s });
 
-    cs[2]->format(std::bind(default_formatter, _1, rfold0[0], rfold0[1]));
+    cs[2]->format(std::bind(default_formatter, _1, rfold0[0], rfold0[1]));std::cout << __LINE__ << std::endl;
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* input folds */
         (*shaded)[i] = shade((*victims)[i], mr, osr);
         (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
-        (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
+        (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);std::cout << __LINE__ << std::endl;
 
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
 
         /* figures */
         cs[0]->add((*matrices)[i]);
-        cs[0]->adjust((*matrices)[i], "colz", "");
+        cs[0]->adjust((*matrices)[i], "colz", "");std::cout << __LINE__ << std::endl;
 
         cs[1]->add((*victims)[i]);
         cs[2]->add((*side0)[i]);
         cs[3]->add((*side1)[i]);
 
         cs[4]->add((*shaded)[i]);
-        cs[4]->adjust((*shaded)[i], "colz", "");
+        cs[4]->adjust((*shaded)[i], "colz", "");std::cout << __LINE__ << std::endl;
     };
 
-    hb->sketch();
+    hb->sketch();std::cout << __LINE__ << std::endl;
 
     for (auto c : cs)
         c->draw("pdf");
