@@ -14,7 +14,7 @@ TestRun: Execute
 		--ResponseTruth aa_g_0 \
 		--ResponseReco aa_r_0 \
 		--PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
-		--BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+		--BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
 		--PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
 		--BinningGenBins 10,20,30,40,50,60,70,80,100,120,200 \
 		--Output Output/AANominal0.root
