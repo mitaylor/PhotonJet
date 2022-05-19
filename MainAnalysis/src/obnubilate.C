@@ -122,14 +122,14 @@ int obnubilate(char const* config, char const* output) {
             for (int64_t i = 0; i < batch->size(); ++i) {
                 for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
                     if (j == 2) {
-                        auto value = (*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 3);
-                        value *= 2/3;
+                        double value = (*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 3);
+                        value = value * 2 / 3;
                         value += (*batch)[i]->GetBinContent(j + 3);
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
                     if (j == 3) {
-                        auto value = (*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 2);
-                        value *= 1/3;
+                        double value = (*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 2);
+                        value = value * 2 / 3;
                         value += (*batch)[i]->GetBinContent(j + 2);
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
