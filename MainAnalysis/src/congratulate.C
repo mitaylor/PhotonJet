@@ -40,12 +40,12 @@ int congratulate(char const* config, char const* output) {
     auto ymaxs = conf->get<std::vector<float>>("ymax");
     auto oflows = conf->get<std::vector<bool>>("oflow");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
+    // auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto ipt = new interval(dpt);
+    // auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
 
     /* manage memory manually */
