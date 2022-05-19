@@ -152,6 +152,11 @@ int congratulate(char const* config, char const* output) {
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
 
+        for (size_t i = 2; i < files.size(); ++i) {
+            hists[i]->rename("a_" + i);
+            systs[i]->rename("b_" + i);
+        }
+
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
