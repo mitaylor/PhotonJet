@@ -35,6 +35,7 @@ int obnubilate(char const* config, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto labels = conf->get<std::vector<std::string>>("labels");
     auto legends = conf->get<std::vector<std::string>>("legends");
+    auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto columns = conf->get<std::vector<int32_t>>("columns");
     auto ranges = conf->get<std::vector<float>>("ranges");
@@ -63,7 +64,7 @@ int obnubilate(char const* config, char const* output) {
     hb->category("type", "total", labels);
 
     zip([&](auto const& label, auto const& legend) {
-        hb->alias(label, legend); }, labels, legends);
+        hb->alias(label, legend); }, legend_keys, legends);
 
     auto cs = std::vector<paper*>(figures.size(), nullptr);
 
@@ -148,7 +149,7 @@ int obnubilate(char const* config, char const* output) {
             });
 
             batch->save(tag);
-        }, batches, labels);
+        }, batches, legend_keys);
 
         /* add info text */
         if (info == "pt") { c->accessory(std::bind(pt_info, _1, 0.75)); }
