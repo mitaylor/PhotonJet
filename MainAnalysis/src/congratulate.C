@@ -228,7 +228,7 @@ int congratulate(char const* config, char const* output) {
         for (int64_t i = 0; i < 4; ++i) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
                 std::cout << h->GetName() << std::endl; 
-                s->stack((ipt->size() - 1) * i + index + 1, h, "ss");
+                s->stack(index + 1, h, "ss");
             });
         }
 
