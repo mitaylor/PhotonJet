@@ -123,6 +123,7 @@ int obnubilate(char const* config, char const* output) {
                 for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
                     if (j == 2) {
                         double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 3));
+                        std::cout << value << " " << (*batch)[i]->GetBinContent(j) << " " << (*batch)[i]->GetBinContent(j + 3) << " " << std::endl;
                         value = value * 2 / 3;
                         value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 3));
                         (*batch)[i]->SetBinContent(j + 1, value);
