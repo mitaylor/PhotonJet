@@ -26,7 +26,7 @@ samples=(pp aa)
 for sample in ${samples[@]}; do
     nominal $sample
 
-    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity; do
+    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up; do
         systematic $sample $syst
     done
 done
