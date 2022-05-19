@@ -196,7 +196,7 @@ int quantitate(char const* config, char const* output) {
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
-        (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 1, osg);
+        (*fold1)[j] = fold((*unfolded)[j], MUnfolded, mg, 1, osg);
     }
 
     normalise_to_unity(fold0, fold1);
