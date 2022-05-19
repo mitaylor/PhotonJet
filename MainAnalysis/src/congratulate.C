@@ -193,7 +193,7 @@ int congratulate(char const* config, char const* output) {
         apply_style(p, "", ymin, ymax);
         p->decorate(std::bind(decorator, "pp 320 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        p->accessory(std::bind(pp_info, _1, hists[1]));
+        // p->accessory(std::bind(pp_info, _1, hists[1]));
         p->jewellery(box);
         p->divide(-1, 1);
 
