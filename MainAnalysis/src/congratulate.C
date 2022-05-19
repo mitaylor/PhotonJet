@@ -49,14 +49,14 @@ int congratulate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
 
     /* manage memory manually */
-    TH1::AddDirectory(false); std::cout << __LINE__ << std::endl;
+    TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile(input.data(), "read");
-    }, files, inputs); std::cout << __LINE__ << std::endl;
+    }, files, inputs);
 
     /* load histograms */
     // std::vector<std::string> tags = {
@@ -75,15 +75,15 @@ int congratulate(char const* config, char const* output) {
         "pp"s,
         "pp"s,
         "pp"s
-    }; std::cout << __LINE__ << std::endl;
+    };
 
     std::vector<std::string> base_stubs(6);
     std::vector<std::string> syst_stubs(6);
 
     zip([&](auto& base, auto& syst, auto const& tag) {
-        base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_"; std::cout << __LINE__ << std::endl;
+        base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
         syst = tag + "_total_base_" + tag + "_nominal_s_pure_raw_sub_";
-    }, base_stubs, syst_stubs, tags); std::cout << __LINE__ << std::endl;
+    }, base_stubs, syst_stubs, tags);
 
     /* prepare plots */
     auto hb = new pencil();
@@ -123,7 +123,7 @@ int congratulate(char const* config, char const* output) {
         info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    }; std::cout << __LINE__ << std::endl;
+    };
 
     // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
     //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
@@ -138,7 +138,7 @@ int congratulate(char const* config, char const* output) {
     //     stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, hf_info); }; std::cout << __LINE__ << std::endl;
+        stack_text(index, 0.73, 0.04, h, hf_info); };
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
@@ -148,9 +148,9 @@ int congratulate(char const* config, char const* output) {
 
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
-            hist = new history<TH1F>(file, base_stub + figure);std::cout << __LINE__ << std::endl;
-            syst = new history<TH1F>(file, syst_stub + figure);std::cout << __LINE__ << std::endl;
-        }, hists, systs, files, base_stubs, syst_stubs); std::cout << __LINE__ << std::endl;
+            hist = new history<TH1F>(file, base_stub + figure);
+            syst = new history<TH1F>(file, syst_stub + figure);
+        }, hists, systs, files, base_stubs, syst_stubs);
 
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
@@ -160,7 +160,7 @@ int congratulate(char const* config, char const* output) {
         }, hists, systs);
 
         std::unordered_map<TH1*, int32_t> colours;
-        hists[0]->apply([&](TH1* h) { colours[h] = 1; }); std::cout << __LINE__ << std::endl;
+        hists[0]->apply([&](TH1* h) { colours[h] = 1; });
 
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
@@ -183,7 +183,7 @@ int congratulate(char const* config, char const* output) {
 
                 gr->DrawClone("f");
             }
-        }; std::cout << __LINE__ << std::endl;
+        };
 
         /* minor adjustments */
         if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
@@ -233,7 +233,7 @@ int congratulate(char const* config, char const* output) {
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
-        }; std::cout << __LINE__ << std::endl;
+        };
 
         hb->style("pp", pp_style);
         hb->style("aa", aa_style);
@@ -243,7 +243,7 @@ int congratulate(char const* config, char const* output) {
         p->draw("pdf");
         a->draw("pdf");
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs, oflows); std::cout << __LINE__ << std::endl;
+    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
 
     in(output, []() {});
 
