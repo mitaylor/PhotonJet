@@ -163,8 +163,8 @@ int quantitate(char const* config, char const* output) {
         auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
         auto shape = hin->shape();
 
-        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0", "", null<TH1F>, shape);
-        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1", "", null<TH1F>, shape);
+        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
+        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
 
         for (int64_t i = 0; i < hin->size(); ++i) {
             (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
