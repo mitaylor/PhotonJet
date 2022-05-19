@@ -49,7 +49,7 @@ int quantitate(char const* config, char const* output) {
     zip([&](auto const& figure) {
         auto stub = "_"s + figure;
 
-        auto hin = new history<TH1F>(fbefore, tag + "_"s + label + stub);
+        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
         hin->save();
 
     }, before_figures);
