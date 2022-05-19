@@ -111,6 +111,13 @@ int obnubilate(char const* config, char const* output) {
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
         zip([&](auto& batch, auto file, auto const& label) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
+        }, batches, files, labels);
+
+        auto total = new history<TH1F>(*base, "total");
+        total->apply([](TH1* h) { h->Reset("MICES"); });
+
+        for (auto const& batch : batches) {
+            batch->add(*base, -1);
 
             for (int64_t i = 0; i < batch->size(); ++i) {
                 for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
@@ -128,13 +135,7 @@ int obnubilate(char const* config, char const* output) {
                     }
                 }
             }
-        }, batches, files, labels);
-
-        auto total = new history<TH1F>(*base, "total");
-        total->apply([](TH1* h) { h->Reset("MICES"); });
-
-        for (auto const& batch : batches) {
-            batch->add(*base, -1);
+            
             batch->apply(square_);
         }
 
