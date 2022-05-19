@@ -186,13 +186,13 @@ int quantitate(char const* config, char const* output) {
 
     /* prepare the post-unfolded data */
 
-    auto unfolded = new history<TH1D>("unfolded", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
     auto fold0 = new history<TH1F>("fold0", "", null<TH1F>, (int64_t) afters.size());
     auto fold1 = new history<TH1F>("fold1", "", null<TH1F>, (int64_t) afters.size());
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        auto HUnfoldedBayes = (TH1D*) fafters[j]->Get("HUnfoldedBayes2");
-        auto MUnfolded = (TH2D*) fafters[j]->Get("MUnfolded2");
+        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get("HUnfoldedBayes2");
+        auto MUnfolded = (TH2F*) fafters[j]->Get("MUnfolded2");
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
