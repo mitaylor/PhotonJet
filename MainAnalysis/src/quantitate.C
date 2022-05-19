@@ -157,8 +157,8 @@ int quantitate(char const* config, char const* output) {
     }, before_figures);
 
     /* prepare folds from pre-unfolded data */
-    zip([&](auto const& fold) {
-        auto stub = "_"s + fold;
+    zip([&](auto const& figure) {
+        auto stub = "_"s + figure;
 
         auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
         auto shape = hin->shape();
