@@ -159,17 +159,25 @@ int quantitate(char const* config, char const* output) {
     /* prepare folds from pre-unfolded data */
     zip([&](auto const& figure) {
         auto stub = "_"s + figure;
+        std::cout << stub << std::endl;
 
         auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
         auto shape = hin->shape();
 
+        std::cout << shape[0] << std::endl;
+
         auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
         auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
+
+        std::cout << side0->size() << " " << side1->size() << std::endl;
+        std::cout << (*side0)[0] << std::endl;
 
         for (int64_t i = 0; i < hin->size(); ++i) {
             (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
             (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
         }
+
+        std::cout << (*side0)[0] << " " << (*side0)[0]->GetName() << std::endl;
 
         normalise_to_unity(side0, side1);
 
