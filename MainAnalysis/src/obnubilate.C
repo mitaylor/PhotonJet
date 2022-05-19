@@ -128,7 +128,7 @@ int obnubilate(char const* config, char const* output) {
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
                     if (j == 3) {
-                        double value = std::abs(((*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 2));
+                        double value = std::abs((*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 2));
                         value = value * 1 / 3;
                         value += std::min((*batch)[i]->GetBinContent(j - 1), (*batch)[i]->GetBinContent(j + 2));
                         (*batch)[i]->SetBinContent(j + 1, value);
