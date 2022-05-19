@@ -126,10 +126,10 @@ int quantitate(char const* config, char const* output) {
     // auto rptg = conf->get<std::vector<float>>("ptg_range");
 
     /* create intervals and multivals */
-    auto idrr = new interval(xlabel, rdrr);
+    auto idrr = new interval("#deltaj"s, rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
-    // auto idrg = new interval(xlabel, rdrg);
+    // auto idrg = new interval("#deltaj"s, rdrg);
     // auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto mr = new multival(*idrr, *iptr);
@@ -163,8 +163,8 @@ int quantitate(char const* config, char const* output) {
         auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
         auto shape = hin->shape();
 
-        auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, shape);
-        auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape);
+        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0", "", null<TH1F>, shape);
+        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1", "", null<TH1F>, shape);
 
         for (int64_t i = 0; i < hin->size(); ++i) {
             (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
