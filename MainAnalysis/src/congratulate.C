@@ -81,7 +81,7 @@ int congratulate(char const* config, char const* output) {
     std::vector<std::string> syst_stubs(6);
 
     zip([&](auto& base, auto& syst, auto const& tag) {
-        base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
+        base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_"; std::cout << __LINE__ << std::endl;
         syst = tag + "_total_base_" + tag + "_nominal_s_pure_raw_sub_";
     }, base_stubs, syst_stubs, tags); std::cout << __LINE__ << std::endl;
 
@@ -148,8 +148,8 @@ int congratulate(char const* config, char const* output) {
 
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
-            hist = new history<TH1F>(file, base_stub + figure);
-            syst = new history<TH1F>(file, syst_stub + figure);
+            hist = new history<TH1F>(file, base_stub + figure);std::cout << __LINE__ << std::endl;
+            syst = new history<TH1F>(file, syst_stub + figure);std::cout << __LINE__ << std::endl;
         }, hists, systs, files, base_stubs, syst_stubs); std::cout << __LINE__ << std::endl;
 
         /* link histograms, uncertainties */
