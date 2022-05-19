@@ -203,7 +203,7 @@ int congratulate(char const* config, char const* output) {
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
         a->jewellery(box);
-        a->divide(-1, ihf->size());
+        a->divide(ihf->size(), -1);
 
         auto s = new paper("results_ss_" + figure, hb);
         apply_style(s, "", ymin, ymax);
@@ -211,7 +211,7 @@ int congratulate(char const* config, char const* output) {
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
-        s->divide(-1, ihf->size());
+        s->divide(ihf->size(), -1);
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { a->add(h, "aa"); s->add(h, "aa"); });
