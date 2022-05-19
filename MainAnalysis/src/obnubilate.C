@@ -136,7 +136,7 @@ int obnubilate(char const* config, char const* output) {
                     // }
                 }
             }
-            std::endl;
+            std::cout << std::endl;
 
             batch->apply(square_);
         }
