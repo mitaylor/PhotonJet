@@ -154,7 +154,7 @@ int congratulate(char const* config, char const* output) {
 
         for (size_t i = 2; i < files.size(); ++i) {
             std::string name1 = std::string(i) + "happy";
-            std::string name1 = std::string(i) + "sad";
+            std::string name2 = std::string(i) + "sad";
             hists[i]->rename(name1);
             systs[i]->rename(name2);
         }
