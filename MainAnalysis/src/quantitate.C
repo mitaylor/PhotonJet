@@ -142,7 +142,6 @@ int quantitate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     TFile* fbefore = new TFile(before.data(), "read");
-    TFile* fafter = new TFile(after.data(), "read");
 
     /* prepare output from pre-unfolded data */
     TFile* fout = new TFile(output, "recreate");
@@ -182,18 +181,33 @@ int quantitate(char const* config, char const* output) {
 
     /* prepare the post-unfolded data */
 
-    auto unfolded = new history<TH1F>(tag + "_raw_sub_pjet_u_dr_sum0_unfolded"s, "", null<TH1F>, shape);
-    auto fold0 = new history<TH1F>(tag + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s, "", null<TH1F>, shape);
-    auto fold0 = new history<TH1F>(tag + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s, "", null<TH1F>, shape);
+    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, afters.size());
+    auto fold0 = new history<TH1F>("fold0", "", null<TH1F>, afters.size());
+    auto fold1 = new history<TH1F>("", "", null<TH1F>, afters.size());
 
-    for 
-    fafter
+    std::vector<TFile*> fafters(afters.size(), nullptr);
+    zip([&](auto& fafter, auto const& after) {
+        fafter = new TFile(after.data(), "read");
+    }, fafters, afters);
 
-    TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
-   TH2F *HInputResponse      = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
-   TH1F *HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
-   TH1F *HInputResponseReco  = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
+    for (size_t j = 0; j < fafters.size(); ++j) {
+        auto HUnfoldedBayes = (TH1F*) fafter[j]->Get("HUnfoldedBayes2");
+        auto MUnfolded = (TH2F*) fafter[j]->Get("MUnfolded2");
 
+        (*unfolded)[j] = HUnfoldedBayes;
+        (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
+        (*fold1)[j] = fold((*unfolded)[j], MUnfolded, mg, 1, osg);
+    }
+
+    normalise_to_unity(fold0, fold1);
+
+    unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
+    fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
+    fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
+
+    unfolded->save();
+    fold0->save();
+    fold1->save();
 
     fout->Close();
 
