@@ -153,8 +153,8 @@ int congratulate(char const* config, char const* output) {
         }, hists, systs, files, base_stubs, syst_stubs);
 
         for (size_t i = 2; i < files.size(); ++i) {
-            hists[i]->rename("a_" + i);
-            systs[i]->rename("b_" + i);
+            hists[i]->rename(string(i));
+            systs[i]->rename(string(i*10));
         }
         std::cout << (*hists[2])[0]->GetName() << std::endl;
 
