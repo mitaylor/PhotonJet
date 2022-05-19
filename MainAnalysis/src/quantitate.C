@@ -191,8 +191,8 @@ int quantitate(char const* config, char const* output) {
     }, fafters, afters);
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        auto HUnfoldedBayes = (TH1F*) fafter[j]->Get("HUnfoldedBayes2");
-        auto MUnfolded = (TH2F*) fafter[j]->Get("MUnfolded2");
+        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get("HUnfoldedBayes2");
+        auto MUnfolded = (TH2F*) fafters[j]->Get("MUnfolded2");
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
