@@ -61,7 +61,7 @@ int obnubilate(char const* config, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("type", "total", labels);
+    hb->category("type", "total", legend_keys);
 
     zip([&](auto const& label, auto const& legend) {
         hb->alias(label, legend); }, legend_keys, legends);
