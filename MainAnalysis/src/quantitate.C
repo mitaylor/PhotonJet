@@ -115,9 +115,7 @@ int quantitate(char const* config, char const* output) {
     auto before_figures = conf->get<std::vector<std::string>>("before_figures");
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
 
-    // auto after = conf->get<std::vector<std::string>>("after");
-    // auto after_labels = conf->get<std::vector<std::string>>("after_labels");
-    // auto after_figures = conf->get<std::vector<std::string>>("after_figures");
+    auto afters = conf->get<std::vector<std::string>>("afters");
 
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
@@ -144,6 +142,7 @@ int quantitate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     TFile* fbefore = new TFile(before.data(), "read");
+    TFile* fafter = new TFile(after.data(), "read");
 
     /* prepare output from pre-unfolded data */
     TFile* fout = new TFile(output, "recreate");
@@ -159,35 +158,42 @@ int quantitate(char const* config, char const* output) {
     /* prepare folds from pre-unfolded data */
     zip([&](auto const& figure) {
         auto stub = "_"s + figure;
-        std::cout << stub << std::endl;
 
         auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
         auto shape = hin->shape();
 
-        std::cout << shape[0] << std::endl;
-
         auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
         auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
-
-        std::cout << side0->size() << " " << side1->size() << std::endl;
-        std::cout << (*side0)[0] << std::endl;
 
         for (int64_t i = 0; i < hin->size(); ++i) {
             (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
             (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
         }
 
-        std::cout << (*side0)[0] << " " << (*side0)[0]->GetName() << std::endl;
-
         normalise_to_unity(side0, side1);
 
-        side0->rename(tag + "_"s + before_label + stub + "_side0_fold0"s);
-        side1->rename(tag + "_"s + before_label + stub + "_side0_fold0"s);
+        side0->rename(tag + "_"s + before_label + stub + "_side0"s);
+        side1->rename(tag + "_"s + before_label + stub + "_side1"s);
 
         side0->save();
         side1->save();
 
     }, before_folds);
+
+    /* prepare the post-unfolded data */
+
+    auto unfolded = new history<TH1F>(tag + "_raw_sub_pjet_u_dr_sum0_unfolded"s, "", null<TH1F>, shape);
+    auto fold0 = new history<TH1F>(tag + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s, "", null<TH1F>, shape);
+    auto fold0 = new history<TH1F>(tag + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s, "", null<TH1F>, shape);
+
+    for 
+    fafter
+
+    TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
+   TH2F *HInputResponse      = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
+   TH1F *HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
+   TH1F *HInputResponseReco  = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
+
 
     fout->Close();
 
