@@ -59,13 +59,22 @@ int congratulate(char const* config, char const* output) {
     }, files, inputs);
 
     /* load histograms */
+    // std::vector<std::string> tags = {
+    //     "aa"s,
+    //     "pp"s,
+    //     "pp_smear_50_90"s,
+    //     "pp_smear_30_50"s,
+    //     "pp_smear_10_30"s,
+    //     "pp_smear_0_10"s
+    // };
+
     std::vector<std::string> tags = {
         "aa"s,
         "pp"s,
-        "pp_smear_50_90"s,
-        "pp_smear_30_50"s,
-        "pp_smear_10_30"s,
-        "pp_smear_0_10"s
+        "pp"s,
+        "pp"s,
+        "pp"s,
+        "pp"s
     };
 
     std::vector<std::string> base_stubs(6);
@@ -81,7 +90,8 @@ int congratulate(char const* config, char const* output) {
     hb->category("system", "pp", "aa", "ss");
 
     hb->alias("aa", "PbPb");
-    hb->alias("ss", "pp (smeared)");
+    // hb->alias("ss", "pp (smeared)");
+    hb->alias("ss", "pp");
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
         TLatex* cms = new TLatex();
@@ -115,17 +125,20 @@ int congratulate(char const* config, char const* output) {
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
     };
 
-    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+    // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+    //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
-    auto pp_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, pt_info); };
+    // auto pp_info = [&](int64_t index, history<TH1F>* h) {
+    //     stack_text(index, 0.73, 0.04, h, pt_info); };
+
+    // auto aa_info = [&](int64_t index, history<TH1F>* h) {
+    //     stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
+        stack_text(index, 0.73, 0.04, h, hf_info); };
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
