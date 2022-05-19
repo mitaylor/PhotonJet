@@ -181,6 +181,9 @@ int quantitate(char const* config, char const* output) {
 
         normalise_to_unity(side0, side1);
 
+        side0->rename(tag + "_"s + before_label + stub + "_side0_fold0"s);
+        side1->rename(tag + "_"s + before_label + stub + "_side0_fold0"s);
+
         side0->save();
         side1->save();
 
