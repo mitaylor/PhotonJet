@@ -120,22 +120,22 @@ int quantitate(char const* config, char const* output) {
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
 
-    // auto rdrg = conf->get<std::vector<float>>("drg_range");
-    // auto rptg = conf->get<std::vector<float>>("ptg_range");
+    auto rdrg = conf->get<std::vector<float>>("drg_range");
+    auto rptg = conf->get<std::vector<float>>("ptg_range");
 
     /* create intervals and multivals */
     auto idrr = new interval("#deltaj"s, rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
-    // auto idrg = new interval("#deltaj"s, rdrg);
-    // auto iptg = new interval("p_{T}^{j}"s, rptg);
+    auto idrg = new interval("#deltaj"s, rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto mr = new multival(*idrr, *iptr);
-    // auto mg = new multival(*idrg, *iptg);
+    auto mg = new multival(*idrg, *iptg);
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
     std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
-    // std::array<int64_t, 4> osg = { 0, 0, 2, 0 };
+    std::array<int64_t, 4> osg = { 0, 0, 2, 0 };
 
     /* manage memory manually */
     TH1::AddDirectory(false);
