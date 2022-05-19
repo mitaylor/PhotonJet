@@ -181,9 +181,9 @@ int quantitate(char const* config, char const* output) {
 
     /* prepare the post-unfolded data */
 
-    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, afters.size());
-    auto fold0 = new history<TH1F>("fold0", "", null<TH1F>, afters.size());
-    auto fold1 = new history<TH1F>("", "", null<TH1F>, afters.size());
+    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
+    auto fold0 = new history<TH1F>("fold0", "", null<TH1F>, (int64_t) afters.size());
+    auto fold1 = new history<TH1F>("", "", null<TH1F>, (int64_t) afters.size());
 
     std::vector<TFile*> fafters(afters.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
