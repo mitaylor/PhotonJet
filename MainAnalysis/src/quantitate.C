@@ -191,8 +191,8 @@ int quantitate(char const* config, char const* output) {
     auto fold1 = new history<TH1F>("fold1", "", null<TH1F>, (int64_t) afters.size());
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get("HUnfoldedBayes2");
-        auto MUnfolded = (TH2F*) fafters[j]->Get("MUnfolded2");
+        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get("HUnfoldedBayes1");
+        auto MUnfolded = (TH2F*) fafters[j]->Get("MUnfolded1");
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
