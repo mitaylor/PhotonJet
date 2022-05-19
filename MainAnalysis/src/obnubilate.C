@@ -128,9 +128,9 @@ int obnubilate(char const* config, char const* output) {
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
                     if (j == 3) {
-                        auto value = (*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 3);
+                        auto value = (*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 2);
                         value *= 1/3;
-                        value += (*batch)[i]->GetBinContent(j + 3);
+                        value += (*batch)[i]->GetBinContent(j + 2);
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
                 }
