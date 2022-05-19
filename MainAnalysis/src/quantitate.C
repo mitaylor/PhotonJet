@@ -195,8 +195,10 @@ int quantitate(char const* config, char const* output) {
         auto MUnfolded = (TH2F*) fafters[j]->Get("MUnfolded2");
 
         (*unfolded)[j] = HUnfoldedBayes;
-        (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
-        (*fold1)[j] = fold((*unfolded)[j], MUnfolded, mg, 1, osg);
+        // (*fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
+        // (*fold1)[j] = fold((*unfolded)[j], MUnfolded, mg, 1, osg);
+        (*fold0)[j] = fold((*unfolded)[j], nullptr, mg, 0, osg);
+        (*fold1)[j] = fold((*unfolded)[j], nullptr, mg, 1, osg);
     }
 
     normalise_to_unity(fold0, fold1);
