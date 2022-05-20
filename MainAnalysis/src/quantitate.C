@@ -263,7 +263,7 @@ int quantitate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
-        auto last = 99999999999;
+        double last = 99999999999;
 
         for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
@@ -276,10 +276,11 @@ int quantitate(char const* config, char const* output) {
                 choice[i] = j;
             }
 
-            if (top > last)  { std::cout << top << " " << last << std::endl; break; }
+            if (top > last)  { break; }
 
             last = top;
         }
+
         std::cout << std::endl;
     }
 
@@ -290,17 +291,9 @@ int quantitate(char const* config, char const* output) {
         std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
         std::string refold_name = "HRefoldedBayes" + std::to_string(choice[j]);
 
-        std::cout << unfold_name << std::endl;
-        std::cout << matrix_name << std::endl;
-        std::cout << refold_name << std::endl;
-
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
         auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
-
-        std::cout << HUnfoldedBayes->GetName() << std::endl;
-        std::cout << MUnfolded->GetName() << std::endl;
-        std::cout << HRefolded->GetName() << std::endl;
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
