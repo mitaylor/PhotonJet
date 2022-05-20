@@ -75,6 +75,13 @@ int data_iteration_study(char const* config, char const* output) {
         }
     }
 
+    for (int64_t j = 0; j < base->size(); ++j) {
+        for (size_t i = 0; i < iterations.size(); ++i) {
+            std::cout << (*chi_square)[j]->GetBinError(iterations[i] + 1) / (*chi_square)[j]->GetBinContent(iterations[i] + 1) << " ";
+        }
+        std::endl;
+    }
+
     in(output, [&]() {
         chi_square->save("test");
     });
