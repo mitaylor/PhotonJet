@@ -53,13 +53,15 @@ int data_iteration_study(char const* config, char const* output) {
     for (size_t i = 0; i < iterations.size(); ++i) {
         auto refold = new history<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
 
-        double sum = 0;
+        for (int64_t j = 0; j < base->size(); ++j) {
+            double sum = 0;
 
-        for (int64_t j = 1; j < base->GetNbinsX(); ++j) {
-            sum += std::pow(base->GetBinContent(j + 1) - refold->GetBinContent(j + 1), 2);
+            for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
+                sum += std::pow((*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
+            }
+
+            (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
         }
-
-        chi_square->SetBinContent(iterations[i] + 1, sum);
     }
 
     in(output, [&]() {
