@@ -79,7 +79,7 @@ int data_iteration_study(char const* config, char const* output) {
         for (size_t i = 0; i < iterations.size(); ++i) {
             std::cout << (*chi_square)[j]->GetBinError(iterations[i] + 1) / (*chi_square)[j]->GetBinContent(iterations[i] + 1) << " ";
         }
-        std::endl;
+        std::cout << std::endl;
     }
 
     in(output, [&]() {
