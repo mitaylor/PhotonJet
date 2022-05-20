@@ -119,8 +119,8 @@ int data_mc_comparison(char const* config) {
     auto input_truth = conf->get<std::string>("input_truth");
     auto truth_gen_iso_label = conf->get<std::string>("truth_gen_iso_label");
     auto truth_reco_iso_label = conf->get<std::string>("truth_reco_iso_label");
-    auto reco_gen_iso_label = conf->get<std::string>("reco_gen_iso_label");
-    auto reco_reco_iso_label = conf->get<std::string>("reco_reco_iso_label");
+    // auto reco_gen_iso_label = conf->get<std::string>("reco_gen_iso_label");
+    // auto reco_reco_iso_label = conf->get<std::string>("reco_reco_iso_label");
 
     auto tag = conf->get<std::string>("tag");
 
@@ -163,8 +163,8 @@ int data_mc_comparison(char const* config) {
 
     auto h_truth_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + truth_gen_iso_label);
     auto h_truth_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
-    auto h_reco_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_gen_iso_label);
-    auto h_reco_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_reco_iso_label);
+    // auto h_reco_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_gen_iso_label);
+    // auto h_reco_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_reco_iso_label);
 
     h_data_circle->apply([&](TH1* h) { for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
         h->SetBinError(i, 0); } });
@@ -175,14 +175,14 @@ int data_mc_comparison(char const* config) {
 
     auto h_truth_gen_iso = new history<TH1F>("truth_gen_iso", "", null<TH1F>, size);
     auto h_truth_reco_iso = new history<TH1F>("truth_reco_iso", "", null<TH1F>, size);
-    auto h_reco_gen_iso = new history<TH1F>("reco_gen_iso", "", null<TH1F>, size);
-    auto h_reco_reco_iso = new history<TH1F>("reco_reco_iso", "", null<TH1F>, size);
+    // auto h_reco_gen_iso = new history<TH1F>("reco_gen_iso", "", null<TH1F>, size);
+    // auto h_reco_reco_iso = new history<TH1F>("reco_reco_iso", "", null<TH1F>, size);
 
     for (int64_t i = 0; i < size; ++i) {
         (*h_truth_gen_iso)[i] = fold((*h_truth_gen_iso_full)[i], nullptr, mg, 0, osg);
         (*h_truth_reco_iso)[i] = fold((*h_truth_reco_iso_full)[i], nullptr, mg, 0, osg);
-        (*h_reco_gen_iso)[i] = fold((*h_reco_gen_iso_full)[i], nullptr, mr, 0, osr);
-        (*h_reco_reco_iso)[i] = fold((*h_reco_reco_iso_full)[i], nullptr, mr, 0, osr);
+        // (*h_reco_gen_iso)[i] = fold((*h_reco_gen_iso_full)[i], nullptr, mr, 0, osr);
+        // (*h_reco_reco_iso)[i] = fold((*h_reco_reco_iso_full)[i], nullptr, mr, 0, osr);
     }
 
     normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso, h_reco_gen_iso, h_reco_reco_iso);
@@ -200,25 +200,25 @@ int data_mc_comparison(char const* config) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco", "data_after", "qcd_after", "truth_gen", "data_circle");
+    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco_iso", "data_after", "qcd_after", "truth_gen_iso", "data_circle");
 
     hb->alias("data_before", "Data Before Unfolding");
     hb->alias("data_after", "Data After Unfolding");
-    hb->alias("qcd_before", "MC Before Unfolding");
-    hb->alias("qcd_after", "MC After Unfolding");
-    hb->alias("truth_gen", "MC Truth Gen");
-    hb->alias("truth_reco", "MC Truth Reco");
+    hb->alias("qcd_before", "Analyzed MC Before Unfolding");
+    hb->alias("qcd_after", "Analyzed MC After Unfolding");
+    hb->alias("truth_gen_iso", "MC Truth Gen Iso");
+    hb->alias("truth_reco_iso", "MC Truth Reco Iso");
     hb->alias("data_circle", "Refolded Data");
 
     /* (1) unfolded MC vs gen truth */
-    auto p1 = new paper(tag + "unfolded_mc_vs_gen", hb);
+    auto p1 = new paper(tag + "unfolded_mc_vs_truth_reco_iso", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
     p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen"); });
+    h_truth_reco_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_reco_iso"); });
     
     /* (2) unfolded data vs unfolded MC vs gen truth */
     auto p2 = new paper(tag + "after_unfolding", hb);
@@ -229,7 +229,6 @@ int data_mc_comparison(char const* config) {
 
     h_data_after->apply([&](TH1* h) { p2->add(h, "data_after"); });
     h_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen"); });
 
     /* (3) data vs MC before unfolding vs reco truth*/
     auto p3 = new paper(tag + "before_unfolding", hb);
@@ -240,9 +239,17 @@ int data_mc_comparison(char const* config) {
 
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
     h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "qcd_before"); });
-    h_truth_reco->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "truth_reco"); });
     h_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "data_circle"); });
 
+    /* (4) truth reco iso vs truth gen iso */
+    auto p4 = new paper(tag + "truth_reco_vs_gen_iso", hb);
+    p4->divide(ihf->size(), -1);
+    p4->accessory(pthf_info);
+    apply_style(p4, collisions, -2., 27.);
+    p4->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+    
+    h_truth_gen_iso->apply([&](TH1* h) { p4->add(h, "truth_gen_iso"); });
+    h_truth_reco_iso->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "truth_reco_iso"); });
 
     hb->sketch();
 
