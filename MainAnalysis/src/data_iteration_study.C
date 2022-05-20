@@ -100,7 +100,11 @@ int data_iteration_study(char const* config, char const* output) {
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
+
     chi_square->apply([&](TH1* h) { p1->add(h); });
+    
+    hb->sketch();
+    p1->draw("pdf");
 
     return 0;
 }
