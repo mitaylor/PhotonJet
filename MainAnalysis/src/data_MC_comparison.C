@@ -110,6 +110,7 @@ int data_mc_comparison(char const* config) {
     auto input_data = conf->get<std::string>("input_data");
     auto data_before_label = conf->get<std::string>("data_before_label");
     auto data_after_label = conf->get<std::string>("data_after_label");
+    auto data_circle_label = conf->get<std::string>("data_circle_label");
 
     auto input_qcd = conf->get<std::string>("input_qcd");
     auto qcd_before_label = conf->get<std::string>("qcd_before_label");
@@ -153,6 +154,7 @@ int data_mc_comparison(char const* config) {
 
     auto h_data_before = new history<TH1F>(fdata, tag + "_"s + data_before_label);
     auto h_data_after = new history<TH1F>(fdata, tag + "_"s + data_after_label);
+    auto h_data_circle = new history<TH1F>(fdata, tag + "_"s + data_circle_label);
 
     auto h_qcd_before = new history<TH1F>(fqcd, tag + "_"s + qcd_before_label);
     auto h_qcd_after = new history<TH1F>(fqcd, tag + "_"s + qcd_after_label);
@@ -171,7 +173,7 @@ int data_mc_comparison(char const* config) {
         (*h_truth_gen)[i] = fold((*h_truth_gen_full)[i], nullptr, mg, 0, osg);
         (*h_truth_reco)[i] = fold((*h_truth_reco_full)[i], nullptr, mr, 0, osr);
     }
-    
+
     normalise_to_unity(h_truth_gen, h_truth_reco);
 
     /* set up figures */
@@ -187,7 +189,7 @@ int data_mc_comparison(char const* config) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco", "data_after", "qcd_after", "truth_gen");
+    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco", "data_after", "qcd_after", "truth_gen", "data_circle");
 
     hb->alias("data_before", "Data Before Unfolding");
     hb->alias("data_after", "Data After Unfolding");
@@ -195,6 +197,7 @@ int data_mc_comparison(char const* config) {
     hb->alias("qcd_after", "MC After Unfolding");
     hb->alias("truth_gen", "MC Truth Gen");
     hb->alias("truth_reco", "MC Truth Reco");
+    hb->alias("data_circle", "Refolded Data");
 
     /* (1) unfolded MC vs gen truth */
     auto p1 = new paper(tag + "_unfolded_mc_gen_truth", hb);
@@ -227,6 +230,7 @@ int data_mc_comparison(char const* config) {
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
     h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "qcd_before"); });
     h_truth_reco->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "truth_reco"); });
+    h_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "date_circle"); });
 
 
     hb->sketch();
