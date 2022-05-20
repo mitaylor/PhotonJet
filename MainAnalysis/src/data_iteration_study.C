@@ -48,7 +48,7 @@ int data_iteration_study(char const* config, char const* output) {
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", iterations.back(), 0, iterations.back()); };
 
-    auto chi_square = new memory<TH1F>("chi_square"s, "", func, base->size());
+    auto chi_square = new history<TH1F>("chi_square"s, "", func, base->size());
 
     for (size_t i = 0; i < iterations.size(); ++i) {
         auto refold = new history<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
