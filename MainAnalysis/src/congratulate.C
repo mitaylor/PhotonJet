@@ -189,7 +189,11 @@ int congratulate(char const* config, char const* output) {
                     double val = h->GetBinContent(i);
                     // double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
-                    correction /= (*unfolded_qcd)[index]->GetBinContent(i);
+                    if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
+                        correction /= (*unfolded_qcd)[index]->GetBinContent(i);
+                    } else {
+                        correction = 1;
+                    }
                     std::cout << correction << std::endl;
                     h->SetBinContent(i, val*correction);
                     // h->SetBinError(i, err*correction);
