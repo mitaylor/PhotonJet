@@ -26,6 +26,7 @@ using namespace std::placeholders;
 int data_iteration_study(char const* config, char const* output) {
     auto conf = new configurer(config);
 
+    auto tag = conf->get<std::string>("tag");
     auto input = conf->get<std::string>("input");
 
     auto base_label = conf->get<std::string>("base_label");
@@ -70,7 +71,7 @@ int data_iteration_study(char const* config, char const* output) {
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return quantitate(argv[1], argv[2]);
+        return data_iteration_study(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
