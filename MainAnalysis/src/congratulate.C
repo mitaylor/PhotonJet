@@ -68,14 +68,14 @@ int congratulate(char const* config, char const* output) {
     std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
 
     zip([&](auto& truth_reco_iso, auto const& truth) {
-            truth_file = new TFile(truth.data(), "read");
+            auto truth_file = new TFile(truth.data(), "read");
             truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
     }, truth_reco_isos, truths);
 
     std::vector<history<TH1F>*> unfolded_qcds(6, nullptr);
 
     zip([&](auto& unfolded_qcd, auto const qcd, auto const& qcd_after_label) {
-            qcd_file = new TFile(qcd.data(), "read");
+            auto qcd_file = new TFile(qcd.data(), "read");
             unfolded_qcd = new history<TH1F>(qcd_file, qcd_after_label);
     }, unfolded_qcds, qcds, qcd_after_labels);
 
