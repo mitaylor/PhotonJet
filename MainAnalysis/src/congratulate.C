@@ -203,6 +203,11 @@ int congratulate(char const* config, char const* output) {
             //         h->SetBinError(i, err*correction);
             //     }});
 
+            hist->apply([&](TH1* h, int64_t index) {
+                for (int64_t i = 1; i < h->GetNbinsX(); ++i) {
+                    h->SetBinContent(i, 10);
+                }});
+
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });std::cout << __LINE__ << std::endl;
