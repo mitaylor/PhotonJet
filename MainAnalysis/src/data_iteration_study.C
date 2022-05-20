@@ -89,6 +89,8 @@ int data_iteration_study(char const* config, char const* output) {
     });
 
     /* set up figures */
+    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
+
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
@@ -103,7 +105,7 @@ int data_iteration_study(char const* config, char const* output) {
 
     p1->divide(mpthf->size(), -1);
     p1->accessory(pthf_info);
-    apply_style(p1);
+    apply_style(p1, collisions);
     p1->set(paper::flags::logx);
 
     chi_square->apply([&](TH1* h) { p1->add(h); });
