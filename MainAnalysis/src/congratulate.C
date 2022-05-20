@@ -284,14 +284,14 @@ int congratulate(char const* config, char const* output) {
             h->SetMarkerSize(0.60);
         };std::cout << __LINE__ << std::endl;
 
-        hb->style("pp", pp_style);
-        hb->style("aa", aa_style);
-        hb->style("ss", pp_style);
-        hb->sketch();
+        hb->style("pp", pp_style); std::cout << __LINE__ << std::endl;
+        hb->style("aa", aa_style);std::cout << __LINE__ << std::endl;
+        hb->style("ss", pp_style);std::cout << __LINE__ << std::endl;
+        hb->sketch();std::cout << __LINE__ << std::endl;
 
-        p->draw("pdf");
-        a->draw("pdf");
-        s->draw("pdf");
+        p->draw("pdf");std::cout << __LINE__ << std::endl;
+        a->draw("pdf");std::cout << __LINE__ << std::endl;
+        s->draw("pdf");std::cout << __LINE__ << std::endl;
     }, figures, xmins, xmaxs, ymins, ymaxs, oflows);std::cout << __LINE__ << std::endl;
 
     in(output, []() {});
