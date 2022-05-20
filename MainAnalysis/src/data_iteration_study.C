@@ -104,11 +104,10 @@ int data_iteration_study(char const* config, char const* output) {
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
 
-    std::cout << chi_square->size() << " " << ihf->size() << std::endl;
     p1->divide(chi_square->size(), -1);
-    p1->accessory(pthf_info);
-    apply_style(p1, collisions);
-    p1->set(paper::flags::logx);
+    // p1->accessory(pthf_info);
+    // apply_style(p1, collisions);
+    // p1->set(paper::flags::logx);
 
     chi_square->apply([&](TH1* h) { p1->add(h); });
 
