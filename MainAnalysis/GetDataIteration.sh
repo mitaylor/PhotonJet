@@ -3,7 +3,7 @@
 arithmetic() {
     tag=$1
 
-    ./bin/get_data_iteration_study configs/test/get_data_iteration/get_data_iteration_${tag}.conf \
+    ./bin/data_iteration_study configs/test/get_data_iteration/get_data_iteration_${tag}.conf \
         data/jet_20/iteration_${tag}.root
 }
 
