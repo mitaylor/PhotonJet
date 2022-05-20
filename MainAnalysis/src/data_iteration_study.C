@@ -99,7 +99,7 @@ int data_iteration_study(char const* config, char const* output) {
     auto hb = new pencil();
     auto p1 = new paper(tag + "chi_square", hb);
 
-    p1->divide(dcent->size()-1, -1);
+    p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
     chi_square->apply([&](TH1* h) { p1->add(h); });
 
