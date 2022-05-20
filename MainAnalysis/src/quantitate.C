@@ -117,6 +117,8 @@ int quantitate(char const* config, char const* output) {
 
     auto afters = conf->get<std::vector<std::string>>("afters");
 
+    auto regularization = conf->get<std::string>("regularization");
+
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
 
