@@ -158,7 +158,6 @@ TH1F* fold(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t a
     }
 
     delete [] list;
-    delete cov;
 
     hfold->Scale(1., "width");
 
