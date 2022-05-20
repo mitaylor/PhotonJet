@@ -159,6 +159,7 @@ int congratulate(char const* config, char const* output) {
             systs[i]->rename(name2);
         }
         std::cout << (*hists[2])[0]->GetName() << std::endl;
+        std::cout << (*systs[2])[0]->GetName() << std::endl;
 
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
