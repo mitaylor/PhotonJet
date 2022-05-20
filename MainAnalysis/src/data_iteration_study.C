@@ -36,22 +36,22 @@ int data_iteration_study(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* input = new TFile(input.data(), "read");
+    TFile* f = new TFile(input.data(), "read");
 
-    auto base = new history<TH1F>(input, tag + "_"s + base_label);
+    auto base = new history<TH1F>(f, tag + "_"s + base_label);
 
     /* create histograms */
     std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125,
         150, 200, 250};
 
-    auto f = [&](int64_t, std::string const& name, std::string const&) {
+    auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", iterations.back(), 0, iterations.back()); };
 
-    auto chi_square = new memory<TH1F>("chi_square"s, "", f, base->shape());
+    auto chi_square = new memory<TH1F>("chi_square"s, "", func, base->shape());
 
     for (size_t i = 0; i < iterations.size(); ++i) {
-        auto refold = new history<TH1F>(input, tag + "_"s + refold_label + std::to_string(iterations[i]));
+        auto refold = new history<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
 
         double sum = 0;
 
