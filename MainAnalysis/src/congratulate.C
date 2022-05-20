@@ -180,7 +180,7 @@ int congratulate(char const* config, char const* output) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
                     double val = h->GetBinContent(i);
-                    // double err = h->GetBinError(i);
+                    double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
                     if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
                         correction /= (*unfolded_qcd)[index]->GetBinContent(i);
@@ -189,17 +189,22 @@ int congratulate(char const* config, char const* output) {
                     }
                     std::cout << correction << std::endl;
                     h->SetBinContent(i, val*correction);
-                    // h->SetBinError(i, err*correction);
+                    h->SetBinError(i, err*correction);
                 }});
-            // syst->apply([&](TH1* h, int64_t index) {
-            //     for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-            //         double val = h->GetBinContent(i);
-            //         double err = h->GetBinError(i);
-            //         double correction = (*truth_reco_iso)[index]->GetBinContent(i);
-            //         correction /= (*unfolded_qcd)[index]->GetBinContent(i);
-            //         h->SetBinContent(i, val*correction);
-            //         h->SetBinError(i, err*correction);
-            //     }});
+            syst->apply([&](TH1* h, int64_t index) {
+                for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
+                    double val = h->GetBinContent(i);
+                    double err = h->GetBinError(i);
+                    double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+                    if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
+                        correction /= (*unfolded_qcd)[index]->GetBinContent(i);
+                    } else {
+                        correction = 1;
+                    }
+                    std::cout << correction << std::endl;
+                    h->SetBinContent(i, val*correction);
+                    h->SetBinError(i, err*correction);
+                }});
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
