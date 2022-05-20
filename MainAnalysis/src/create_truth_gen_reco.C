@@ -170,7 +170,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                 + (*p->pho_trackIsoR3PtCut20)[leading];
 
             /* isolation requirement */
-            if ((!is_gen && isolation > iso_max) { continue; }
+            if (!is_gen && isolation > iso_max) { continue; }
 
             /* photon axis */
             auto photon_eta = (*p->phoEta)[leading];
