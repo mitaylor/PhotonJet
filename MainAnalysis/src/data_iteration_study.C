@@ -101,7 +101,7 @@ int data_iteration_study(char const* config, char const* output) {
     apply_style(p1, collisions);
     p1->set(paper::flags::logx);
 
-    chi_square->apply([&](TH1* h) { h->SetMaximum(h->GetMaximum() * 1.3) });
+    chi_square->apply([&](TH1* h) { h->SetMaximum(h->GetMaximum() * 1.3); });
     chi_square->apply([&](TH1* h) { p1->add(h); });
 
     hb->sketch();
