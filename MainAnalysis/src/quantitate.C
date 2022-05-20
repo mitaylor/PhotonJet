@@ -147,10 +147,10 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
 
         auto error = 0.;
         for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j] + 1;
+            auto j_x = indices[j];
             for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k] + 1;
-                error = error + covariance(j_x, k_x);
+                auto k_x = indices[k];
+                error = error + (*covariance)(j_x, k_x);
             }
         }
 
