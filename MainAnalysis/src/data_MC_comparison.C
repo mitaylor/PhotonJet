@@ -162,6 +162,9 @@ int data_mc_comparison(char const* config) {
     auto h_truth_gen_full = new history<TH1F>(ftruth, tag + "_"s + truth_gen_label);
     auto h_truth_reco_full = new history<TH1F>(ftruth, tag + "_"s + truth_reco_label);
 
+    h_data_circle->apply([&](TH1* h) { for (int64_t i = 1; i < h->GetNbinsX(); ++i) {
+        h->SetBinError(i, 0); } });
+
     auto size = h_data_before->size();
     std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
     std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
@@ -230,7 +233,7 @@ int data_mc_comparison(char const* config) {
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
     h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "qcd_before"); });
     h_truth_reco->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "truth_reco"); });
-    h_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "date_circle"); });
+    h_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "data_circle"); });
 
 
     hb->sketch();
