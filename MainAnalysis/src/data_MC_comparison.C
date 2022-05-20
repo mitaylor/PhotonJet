@@ -185,6 +185,9 @@ int data_mc_comparison(char const* config, const char* output) {
         // (*h_reco_reco_iso)[i] = fold((*h_reco_reco_iso_full)[i], nullptr, mr, 0, osr);
     }
 
+    h_truth_gen_iso->rename(tag + "_"s + truth_gen_iso_label + "_fold0");
+    h_truth_reco_iso->rename(tag + "_"s + truth_reco_iso_label + "_fold0");
+
     // normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso, h_reco_gen_iso, h_reco_reco_iso);
     normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso);
 
