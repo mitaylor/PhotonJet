@@ -37,6 +37,8 @@ int data_iteration_study(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dcent = conf->get<std::vector<float>>("cent_diff");
 
+    for (auto temp : dcent) { std::cout << temp << std::endl; }
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
