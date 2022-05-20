@@ -35,7 +35,7 @@ int congratulate(char const* config, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto figures = conf->get<std::vector<std::string>>("figures");
 
-    auto truths = conf->get<std::string>("truths");
+    auto truths = conf->get<std::vector<std::string>>("truths");
     auto truth_gen_iso_label = conf->get<std::string>("truth_gen_iso_label");
     auto truth_reco_iso_label = conf->get<std::string>("truth_reco_iso_label");
 
