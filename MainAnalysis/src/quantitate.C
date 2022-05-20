@@ -236,7 +236,7 @@ int quantitate(char const* config, char const* output) {
         std::cout << refold_name << std::endl;
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-        auto MUnfolded = (TH2F*) fafters[j]->Get(matrix_name.data());
+        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
         auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
 
         std::cout << HUnfoldedBayes->GetName() << std::endl;
