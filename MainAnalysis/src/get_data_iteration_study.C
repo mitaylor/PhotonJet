@@ -164,6 +164,7 @@ int quantitate(char const* config, char const* output) {
         150, 200, 250};
 
     for (size_t i = 0; i < iteration.size(); ++i) {
+        std::cout << iteration[i] << std::endl;
         auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, (int64_t) afters.size());
 
         for (size_t j = 0; j < fafters.size(); ++j) {
