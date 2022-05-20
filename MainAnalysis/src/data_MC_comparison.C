@@ -92,30 +92,32 @@ int data_mc_comparison(char const* config) {
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
-    p1->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
+    p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h) { p1->stack(h, "gen_truth"); });
+    h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index, h, "gen_truth"); });
     
     /* (2) unfolded data vs unfolded MC vs gen truth */
     auto p2 = new paper(tag + "_unfolded_data_unfolded_mc_gen_truth", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
     apply_style(p2, collisions, -2., 27.);
-    p2->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
+    p2->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+
     h_data_after->apply([&](TH1* h) { p2->add(h, "data_after"); });
-    h_qcd_after->apply([&](TH1* h) { p2->stack(h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h) { p2->stack(h, "truth_gen"); });
+    h_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index, h, "qcd_after"); });
+    h_truth_gen->apply([&](TH1* , int64_t indexh) { p2->stack(index, h, "truth_gen"); });
 
     /* (3) data vs MC before unfolding vs reco truth*/
     auto p3 = new paper(tag + "_data_mc_before_unfolding", hb);
     p3->divide(ihf->size(), -1);
     p3->accessory(pthf_info);
     apply_style(p3, collisions, -2., 27.);
-    p3->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
+    p3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
-    h_qcd_before->apply([&](TH1* h) { p3->stack(h, "qcd_before"); });
-    h_truth_reco->apply([&](TH1* h) { p3->stack(h, "truth_reco"); });
+    h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index, h, "qcd_before"); });
+    h_truth_reco->apply([&](TH1* h, int64_t index) { p3->stack(index, h, "truth_reco"); });
 
 
     hb->sketch();
