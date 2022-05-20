@@ -126,9 +126,9 @@ int data_mc_comparison(char const* config) {
     return 0;
 }
 
-int data_mc_comparison(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     if (argc == 2)
-        return jubilate(argv[1]);
+        return data_mc_comparison(argv[1]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
