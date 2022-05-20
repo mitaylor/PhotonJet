@@ -258,6 +258,7 @@ int data_mc_comparison(char const* config) {
     p1->draw("pdf");
     p2->draw("pdf");
     p3->draw("pdf");
+    p4->draw("pdf");
 
     return 0;
 }
