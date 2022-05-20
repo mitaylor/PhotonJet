@@ -82,8 +82,10 @@ int create_truth_gen_reco(char const* config, char const* output) {
             mg->size(), 0, mg->size()); };
 
 
-    auto r = new history<TH1F>("r"s, "counts", fr, ihf->size());
-    auto g = new history<TH1F>("g"s, "counts", fg, ihf->size());
+    auto r_reco_iso = new history<TH1F>("r_reco_iso"s, "counts", fr, ihf->size());
+    auto g_reco_iso = new history<TH1F>("g_reco_iso"s, "counts", fg, ihf->size());
+    auto r_gen_iso = new history<TH1F>("r_gen_iso"s, "counts", fr, ihf->size());
+    auto g_gen_iso = new history<TH1F>("g_reco_iso"s, "counts", fg, ihf->size());
 
 
     std::vector<double> pass_fail_gen_reco(4,0);
@@ -258,18 +260,28 @@ int create_truth_gen_reco(char const* config, char const* output) {
                 /* isolation requirement */
                 if ((*p->mcCalIsoDR04)[gen_index] < 5) { 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*g)[k]->Fill(g_x, weights[k]*cor); }
+                        (*g_gen_iso)[k]->Fill(g_x, weights[k]*cor); }
                 }
 
-                if (isolation > iso_max) { continue; }
+                if (isolation < iso_max) { 
+                    for (int64_t k = 0; k < ihf->size(); ++k) {
+                        (*g_reco_iso)[k]->Fill(g_x, weights[k]*cor); }
+                }
 
                 if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
                     auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                    for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*r)[k]->Fill(r_x, weights[k]*cor);
+                    if ((*p->mcCalIsoDR04)[gen_index] < 5) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) {
+                            (*r_gen_iso)[k]->Fill(r_x, weights[k]*cor);
+                        }
+                    }
+                    if (isolation < iso_max < 5) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) {
+                            (*r_reco_iso)[k]->Fill(r_x, weights[k]*cor);
+                        }
                     }
                 }
             }

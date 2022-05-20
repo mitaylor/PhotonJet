@@ -203,7 +203,7 @@ int data_mc_comparison(char const* config) {
     hb->alias("data_circle", "Refolded Data");
 
     /* (1) unfolded MC vs gen truth */
-    auto p1 = new paper(tag + "_unfolded_mc_gen_truth", hb);
+    auto p1 = new paper(tag + "unfolded_mc_vs_gen", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
@@ -213,7 +213,7 @@ int data_mc_comparison(char const* config) {
     h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen"); });
     
     /* (2) unfolded data vs unfolded MC vs gen truth */
-    auto p2 = new paper(tag + "_unfolded_data_unfolded_mc_gen_truth", hb);
+    auto p2 = new paper(tag + "after_unfolding", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
     apply_style(p2, collisions, -2., 27.);
@@ -224,7 +224,7 @@ int data_mc_comparison(char const* config) {
     h_truth_gen->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen"); });
 
     /* (3) data vs MC before unfolding vs reco truth*/
-    auto p3 = new paper(tag + "_data_mc_before_unfolding", hb);
+    auto p3 = new paper(tag + "before_unfolding", hb);
     p3->divide(ihf->size(), -1);
     p3->accessory(pthf_info);
     apply_style(p3, collisions, -2., 27.);
