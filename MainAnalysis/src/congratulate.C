@@ -181,7 +181,7 @@ int congratulate(char const* config, char const* output) {
 
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
-        zip([&](auto hist, auto syst) {
+        zip([&](auto hist, auto syst, auto truth_gen_iso, auto truth_reco_iso) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
                     double val = h->GetBinContent(i);
@@ -200,7 +200,7 @@ int congratulate(char const* config, char const* output) {
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
-        }, hists, systs);
+        }, hists, systs, truth_gen_isos, truth_reco_isos);
 
         std::unordered_map<TH1*, int32_t> colours;
         hists[0]->apply([&](TH1* h) { colours[h] = 1; });
