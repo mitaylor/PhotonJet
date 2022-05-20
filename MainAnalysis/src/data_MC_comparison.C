@@ -130,20 +130,20 @@ int data_mc_comparison(char const* config) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
+    // auto rdrr = conf->get<std::vector<float>>("drr_range");
+    // auto rptr = conf->get<std::vector<float>>("ptr_range");
 
     auto rdrg = conf->get<std::vector<float>>("drg_range");
     auto rptg = conf->get<std::vector<float>>("ptg_range");
 
     /* create intervals and multivals */
-    auto idrr = new interval("#deltaj"s, rdrr);
-    auto iptr = new interval("p_{T}^{j}"s, rptr);
+    // auto idrr = new interval("#deltaj"s, rdrr);
+    // auto iptr = new interval("p_{T}^{j}"s, rptr);
 
     auto idrg = new interval("#deltaj"s, rdrg);
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
-    auto mr = new multival(*idrr, *iptr);
+    // auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
 
     auto ihf = new interval(dhf);
@@ -170,7 +170,7 @@ int data_mc_comparison(char const* config) {
         h->SetBinError(i, 0); } });
 
     auto size = h_data_before->size();
-    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
+    // std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
     std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
 
     auto h_truth_gen_iso = new history<TH1F>("truth_gen_iso", "", null<TH1F>, size);
