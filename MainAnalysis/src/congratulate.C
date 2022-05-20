@@ -178,7 +178,7 @@ int congratulate(char const* config, char const* output) {
             std::string name1 = std::to_string(i) + std::string("happy");
             std::string name2 = std::to_string(i) + std::string("sad");
             hists[i]->rename(name1);
-            systs[i]->rename(name2);std::cout << __LINE__ << std::endl;
+            systs[i]->rename(name2);
         }
 
         /* link histograms, uncertainties */
@@ -186,16 +186,17 @@ int congratulate(char const* config, char const* output) {
         zip([&](auto hist, auto syst, auto unfolded_qcd, auto truth_reco_isos) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-                    double val = h->GetBinContent(i); std::cout << __LINE__ << std::endl;
+                    double val = h->GetBinContent(i);
                     // double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
                     correction /= (*unfolded_qcd)[index]->GetBinContent(i);
+                    std::cout << correction << std::endl;
                     h->SetBinContent(i, val*correction);
                     // h->SetBinError(i, err*correction);
                 }});
             // syst->apply([&](TH1* h, int64_t index) {
             //     for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-            //         double val = h->GetBinContent(i);std::cout << __LINE__ << std::endl;
+            //         double val = h->GetBinContent(i);
             //         double err = h->GetBinError(i);
             //         double correction = (*truth_reco_iso)[index]->GetBinContent(i);
             //         correction /= (*unfolded_qcd)[index]->GetBinContent(i);
@@ -205,11 +206,11 @@ int congratulate(char const* config, char const* output) {
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
-                links[h] = (*syst)[index]; });std::cout << __LINE__ << std::endl;
-        }, hists, systs, unfolded_qcds, truth_reco_isos);std::cout << __LINE__ << std::endl;
+                links[h] = (*syst)[index]; });
+        }, hists, systs, unfolded_qcds, truth_reco_isos);
 
         std::unordered_map<TH1*, int32_t> colours;
-        hists[0]->apply([&](TH1* h) { colours[h] = 1; });std::cout << __LINE__ << std::endl;
+        hists[0]->apply([&](TH1* h) { colours[h] = 1; });
 
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
