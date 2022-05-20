@@ -44,6 +44,7 @@ int data_iteration_study(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
+    auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
     TFile* f = new TFile(input.data(), "read");
@@ -103,7 +104,7 @@ int data_iteration_study(char const* config, char const* output) {
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
 
-    p1->divide(mpthf->size(), -1);
+    p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions);
     p1->set(paper::flags::logx);
