@@ -32,9 +32,14 @@ int data_iteration_study(char const* config, char const* output) {
     auto base_label = conf->get<std::string>("base_label");
     auto refold_label = conf->get<std::string>("refold_label");
 
+    auto dpt = conf->get<float>("pt_diff");
+    auto dcent = conf->get<float>("cent_diff");
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
+
+    auto mpthf = new multival(dpt, dcent);
 
     TFile* f = new TFile(input.data(), "read");
 
@@ -55,23 +60,15 @@ int data_iteration_study(char const* config, char const* output) {
 
         for (int64_t j = 0; j < base->size(); ++j) {
             double sum = 0;
-            std::vector<double> unc;
+            double unc = 0;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
-                auto component = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
-                auto error = std::sqrt(std::pow((*refold)[j]->GetBinError(k + 1), 2) + std::pow((*base)[j]->GetBinError(k + 1), 2));
-                
-                unc.push_back(std::abs(component) * error * std::sqrt(2));
-                sum += std::pow(component, 2);
-            }
-
-            double total_error = 0;
-            for (auto error : unc) {
-                total_error += std::pow(error, 2);
+                sum += std::pow((*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
+                unc += (*refold)[j]->GetBinError(k + 1) / (*refold)[j]->GetBinContent(k + 1), 2);
             }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
-            (*chi_square)[j]->SetBinError(iterations[i] + 1, std::sqrt(total_error));
+            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
         }
     }
 
@@ -79,12 +76,29 @@ int data_iteration_study(char const* config, char const* output) {
         for (size_t i = 0; i < iterations.size(); ++i) {
             std::cout << (*chi_square)[j]->GetBinError(iterations[i] + 1) / (*chi_square)[j]->GetBinContent(iterations[i] + 1) << " ";
         }
-        std::cout << std::endl;
+        std::cout << std::endl << std::endl;
     }
 
     in(output, [&]() {
         chi_square->save("test");
     });
+
+    /* set up figures */
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%i - %i%%", dcent, true); };
+
+    auto pthf_info = [&](int64_t index) {
+        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
+
+    auto hb = new pencil();
+    auto p1 = new paper(tag + "chi_square", hb);
+
+    p1->divide(dcent->size()-1, -1);
+    p1->accessory(pthf_info);
+    chi_square->apply([&](TH1* h) { p1->add(h); });
 
     return 0;
 }
