@@ -261,13 +261,13 @@ int data_mc_comparison(char const* config, const char* output) {
     p4->draw("pdf");
 
     in(output, [&]() {
-        h_truth_gen_iso->save(),
-        h_truth_reco_iso->save(),
-        h_data_before->save(),
-        h_data_after->save(),
-        h_qcd_before->save(),
-        h_qcd_after->save(),
-        h_data_circle->save()
+        h_truth_gen_iso->save();
+        h_truth_reco_iso->save();
+        h_data_before->save();
+        h_data_after->save();
+        h_qcd_before->save();
+        h_qcd_after->save();
+        h_data_circle->save();
     });
 
     return 0;
