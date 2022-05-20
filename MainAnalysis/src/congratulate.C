@@ -36,7 +36,7 @@ int congratulate(char const* config, char const* output) {
     auto figures = conf->get<std::vector<std::string>>("figures");
 
     auto truths = conf->get<std::vector<std::string>>("truths");
-    auto truth_reco_iso_label = conf->get<std::string>("truth_reco_iso_label");
+    auto truth_reco_iso_labels = conf->get<std::vector<std::string>>("truth_reco_iso_labels");
 
     auto qcds = conf->get<std::vector<std::string>>("qcds");
     auto qcd_after_labels = conf->get<std::vector<std::string>>("qcd_after_labels");
@@ -67,10 +67,10 @@ int congratulate(char const* config, char const* output) {
 
     std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
 
-    zip([&](auto& truth_reco_iso, auto const& truth) {
+    zip([&](auto& truth_reco_iso, auto const& truth, auto const& truth_reco_iso_label) {
             auto truth_file = new TFile(truth.data(), "read");
             truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
-    }, truth_reco_isos, truths);
+    }, truth_reco_isos, truths, truth_reco_iso_labels);
 
     std::vector<history<TH1F>*> unfolded_qcds(6, nullptr);
 
