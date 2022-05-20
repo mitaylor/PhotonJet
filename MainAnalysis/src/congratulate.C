@@ -67,7 +67,7 @@ int congratulate(char const* config, char const* output) {
     std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
 
     zip([&](auto& truth_gen_iso, auto& truth_reco_iso, std::string truth) {
-            TFile* truth_file = new TFile(truth, "read");
+            TFile* truth_file = new TFile(truth.data(), "read");
             truth_gen_iso = new history<TH1F>(truth_file, truth_gen_iso_label);
             truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
     }, truth_gen_isos, truth_reco_isos, truths);
