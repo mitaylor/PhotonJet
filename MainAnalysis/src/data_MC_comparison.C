@@ -140,7 +140,7 @@ int data_mc_comparison(char const* config) {
 
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
-    
+
     auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
@@ -166,8 +166,8 @@ int data_mc_comparison(char const* config) {
     auto h_truth_reco = new history<TH1F>("reco", "", null<TH1F>, size);
 
     for (int64_t i = 0; i < size; ++i) {
-        (*fold0)[j] = fold((*unfolded)[j], nullptr, mg, 0, osg);
-        (*fold1)[j] = fold((*unfolded)[j], nullptr, mr, 1, osr);
+        (*h_truth_gen)[i] = fold((*h_truth_gen_full)[i], nullptr, mg, 0, osg);
+        (*h_truth_reco)[i] = fold((*h_truth_reco_full)[i], nullptr, mr, 1, osr);
     }
 
     normalise_to_unity(h_truth_gen, h_truth_reco);
