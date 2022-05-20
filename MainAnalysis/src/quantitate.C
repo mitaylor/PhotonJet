@@ -107,7 +107,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
 }
 
 template <std::size_t N>
-TH1F* fold(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
+TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
            std::array<int64_t, N> const& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
@@ -303,8 +303,8 @@ int quantitate(char const* config, char const* output) {
         std::cout << HRefolded->GetName() << std::endl;
 
         (*unfolded)[j] = HUnfoldedBayes;
-        (*unfolded_fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
-        (*unfolded_fold1)[j] = fold((*unfolded)[j], MUnfolded, mg, 1, osg);
+        (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
+        (*unfolded_fold1)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
 
         (*refolded)[j] = HRefolded;
         (*refolded_fold0)[j] = fold((*refolded)[j], nullptr, mr, 0, osr);
