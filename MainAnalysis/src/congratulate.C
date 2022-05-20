@@ -36,8 +36,10 @@ int congratulate(char const* config, char const* output) {
     auto figures = conf->get<std::vector<std::string>>("figures");
 
     auto truths = conf->get<std::vector<std::string>>("truths");
-    auto truth_gen_iso_label = conf->get<std::string>("truth_gen_iso_label");
     auto truth_reco_iso_label = conf->get<std::string>("truth_reco_iso_label");
+
+    auto qcds = conf->get<std::vector<std::string>>("qcds");
+    auto qcd_after_labels = conf->get<std::vector<std::string>>("qcd_after_labels");
 
     auto xmins = conf->get<std::vector<float>>("xmin");
     auto xmaxs = conf->get<std::vector<float>>("xmax");
@@ -63,19 +65,19 @@ int congratulate(char const* config, char const* output) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
 
-    std::vector<TFile*> truth_files(truths.size(), nullptr);
-
-    zip([&](auto& file, auto const& input) {
-        file = new TFile(input.data(), "read");
-    }, truth_files, truths);
-
-    std::vector<history<TH1F>*> truth_gen_isos(6, nullptr);
     std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
 
-    zip([&](auto& truth_gen_iso, auto& truth_reco_iso, auto const truth_file) {
-            truth_gen_iso = new history<TH1F>(truth_file, truth_gen_iso_label);
+    zip([&](auto& truth_reco_iso, auto const& truth) {
+            truth_file = new TFile(truth.data(), "read");
             truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
-    }, truth_gen_isos, truth_reco_isos, truth_files);
+    }, truth_reco_isos, truths);
+
+    std::vector<history<TH1F>*> unfolded_qcds(6, nullptr);
+
+    zip([&](auto& unfolded_qcd, auto const qcd, auto const& qcd_after_label) {
+            qcd_file = new TFile(qcd.data(), "read");
+            unfolded_qcd = new history<TH1F>(qcd_file, qcd_after_label);
+    }, unfolded_qcds, qcds, qcd_after_labels);
 
     /* load histograms */
     // std::vector<std::string> tags = {
@@ -181,13 +183,13 @@ int congratulate(char const* config, char const* output) {
 
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
-        zip([&](auto hist, auto syst, auto truth_gen_iso, auto truth_reco_iso) {
+        zip([&](auto hist, auto syst, auto truth_reco_iso, auto unfolded_qcd) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
                     double val = h->GetBinContent(i);
                     double err = h->GetBinError(i);
-                    double correction = (*truth_gen_iso)[index]->GetBinContent(i);
-                    correction /= (*truth_reco_iso)[index]->GetBinContent(i);
+                    double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+                    correction /= (*unfolded_qcd)[index]->GetBinContent(i);
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
@@ -195,8 +197,8 @@ int congratulate(char const* config, char const* output) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
                     double val = h->GetBinContent(i);
                     double err = h->GetBinError(i);
-                    double correction = (*truth_gen_iso)[index]->GetBinContent(i);
-                    correction /= (*truth_reco_iso)[index]->GetBinContent(i);
+                    double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+                    correction /= (*unfolded_qcd)[index]->GetBinContent(i);
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
@@ -204,7 +206,7 @@ int congratulate(char const* config, char const* output) {
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });
-        }, hists, systs, truth_gen_isos, truth_reco_isos);
+        }, hists, systs, truth_reco_isos, unfolded_qcds);
 
         std::unordered_map<TH1*, int32_t> colours;
         hists[0]->apply([&](TH1* h) { colours[h] = 1; });
