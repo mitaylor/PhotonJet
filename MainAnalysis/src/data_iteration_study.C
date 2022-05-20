@@ -171,6 +171,7 @@ int quantitate(char const* config, char const* output) {
                     auto HRefolded = (TH1F*) fafters[j]->Get(name.data());
 
                     (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
+                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 1, osr);
         }
 
         normalise_to_unity(refold0);
