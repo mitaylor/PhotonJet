@@ -185,6 +185,8 @@ int congratulate(char const* config, char const* output) {
                 double val = h->GetBinContent(i);
                 double err = links[h]->GetBinContent(i);
 
+                std::cout << x << " " << width << " " << val << " " << err << std::endl;
+
                 gr->SetPoint(0, x - (width / 2), val - err);
                 gr->SetPoint(1, x + (width / 2), val - err);
                 gr->SetPoint(2, x + (width / 2), val + err);
