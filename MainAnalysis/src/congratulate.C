@@ -163,9 +163,7 @@ int congratulate(char const* config, char const* output) {
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
             hist->apply([&](TH1* h, int64_t index) {
-                links[h] = (*syst)[index]; 
-                std::cout << links[h]->GetName() << std::endl; 
-                });
+                links[h] = (*syst)[index]; });
         }, hists, systs);
 
         std::unordered_map<TH1*, int32_t> colours;
@@ -184,8 +182,6 @@ int congratulate(char const* config, char const* output) {
                 double width = h->GetBinWidth(i);
                 double val = h->GetBinContent(i);
                 double err = links[h]->GetBinContent(i);
-
-                std::cout << x << " " << width << " " << val << " " << err << std::endl;
 
                 gr->SetPoint(0, x - (width / 2), val - err);
                 gr->SetPoint(1, x + (width / 2), val - err);

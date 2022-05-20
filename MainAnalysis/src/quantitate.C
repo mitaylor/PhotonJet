@@ -229,9 +229,13 @@ int quantitate(char const* config, char const* output) {
         std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
         std::string refold_name = "HRefoldedBayes" + std::to_string(choice[j]);
 
+        std::cout << matrix_name << std::endl;
+
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TH2F*) fafters[j]->Get(matrix_name.data());
         auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
+
+        std::cout << MUnfolded->GetName() << std::endl;
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*unfolded_fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
