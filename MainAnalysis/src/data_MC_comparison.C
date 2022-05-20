@@ -104,7 +104,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-int data_mc_comparison(char const* config) {
+int data_mc_comparison(char const* config, const char* output) {
     auto conf = new configurer(config);
 
     auto input_data = conf->get<std::string>("input_data");
@@ -260,12 +260,22 @@ int data_mc_comparison(char const* config) {
     p3->draw("pdf");
     p4->draw("pdf");
 
+    in(output, [&]() {
+        h_truth_gen_iso,
+        h_truth_reco_iso,
+        h_data_before,
+        h_data_after,
+        h_qcd_before,
+        h_qcd_after,
+        h_data_circle
+    });
+
     return 0;
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 2)
-        return data_mc_comparison(argv[1]);
+    if (argc == 3)
+        return data_mc_comparison(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
