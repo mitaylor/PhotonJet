@@ -35,6 +35,7 @@ int data_iteration_study(char const* config, char const* output) {
     auto refold_label = conf->get<std::string>("refold_label");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<float>>("cent_diff");
 
     for (auto temp : dcent) { std::cout << temp << std::endl; }
@@ -43,7 +44,7 @@ int data_iteration_study(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    auto mpthf = new multival(dpt, dcent);
+    auto mpthf = new multival(dpt, dhf);
 
     TFile* f = new TFile(input.data(), "read");
 
@@ -100,8 +101,9 @@ int data_iteration_study(char const* config, char const* output) {
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
 
-    p1->divide(chi_square->size(), -1);
+    p1->divide(mpthf->size(), -1);
     p1->accessory(pthf_info);
+    apply_style(p1);
     p1->set(paper::flags::logx);
 
     chi_square->apply([&](TH1* h) { p1->add(h); });
