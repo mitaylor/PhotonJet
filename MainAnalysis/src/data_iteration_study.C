@@ -90,7 +90,7 @@ int data_iteration_study(char const* config, char const* output) {
     });
 
     /* set up figures */
-    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s; std::cout << __LINE__ << std::endl;
+    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
@@ -99,20 +99,21 @@ int data_iteration_study(char const* config, char const* output) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };std::cout << __LINE__ << std::endl;
+        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    auto p1 = new paper(tag + "_chi_square", hb);std::cout << __LINE__ << std::endl;
+    auto p1 = new paper(tag + "_chi_square", hb);
 
-    p1->divide(ihf->size(), -1);std::cout << __LINE__ << std::endl;
-    p1->accessory(pthf_info);std::cout << __LINE__ << std::endl;
-    apply_style(p1, collisions);std::cout << __LINE__ << std::endl;
-    p1->set(paper::flags::logx);std::cout << __LINE__ << std::endl;
+    std::cout << chi_square->size() << " " << ihf->size() << std::endl;
+    p1->divide(chi_square->size(), -1);
+    p1->accessory(pthf_info);
+    apply_style(p1, collisions);
+    p1->set(paper::flags::logx);
 
-    chi_square->apply([&](TH1* h) { p1->add(h); });std::cout << __LINE__ << std::endl;
+    chi_square->apply([&](TH1* h) { p1->add(h); });
 
-    hb->sketch();std::cout << __LINE__ << std::endl;
-    p1->draw("pdf");std::cout << __LINE__ << std::endl;
+    hb->sketch();
+    p1->draw("pdf");
 
     return 0;
 }
