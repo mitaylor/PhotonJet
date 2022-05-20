@@ -205,11 +205,11 @@ int congratulate(char const* config, char const* output) {
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
-                links[h] = (*syst)[index]; });
-        }, hists, systs, truth_reco_isos, unfolded_qcds);
+                links[h] = (*syst)[index]; });std::cout << __LINE__ << std::endl;
+        }, hists, systs, truth_reco_isos, unfolded_qcds);std::cout << __LINE__ << std::endl;
 
         std::unordered_map<TH1*, int32_t> colours;
-        hists[0]->apply([&](TH1* h) { colours[h] = 1; });
+        hists[0]->apply([&](TH1* h) { colours[h] = 1; });std::cout << __LINE__ << std::endl;
 
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
