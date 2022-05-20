@@ -167,7 +167,8 @@ int quantitate(char const* config, char const* output) {
         auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, (int64_t) afters.size());
 
         for (size_t j = 0; j < fafters.size(); ++j) {
-                    auto HRefolded = (TH1F*) fafters[j]->Get("HRefoldedBayes" + std::to_string(iteration[i]));
+                    std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
+                    auto HRefolded = (TH1F*) fafters[j]->Get(name.data());
 
                     (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
                     (*refold0)[j] = fold(HRefolded, nullptr, mr, 1, osr);
