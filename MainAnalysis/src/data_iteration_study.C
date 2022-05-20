@@ -55,15 +55,18 @@ int data_iteration_study(char const* config, char const* output) {
 
         for (int64_t j = 0; j < base->size(); ++j) {
             double sum = 0;
+            double unc = 0;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
                 sum += std::pow((*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
+                unc += (*base)[j]->GetBinError(k + 1) + (*refold)[j]->GetBinError(k + 1)
             }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
+            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
         }
     }
-    
+
     in(output, [&]() {
         chi_square->save("test");
     });
