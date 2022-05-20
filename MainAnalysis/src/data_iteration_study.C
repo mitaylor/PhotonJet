@@ -34,9 +34,12 @@ int data_iteration_study(char const* config, char const* output) {
     auto base_label = conf->get<std::string>("base_label");
     auto refold_label = conf->get<std::string>("refold_label");
 
-    // auto dpt = conf->get<std::vector<float>>("pt_diff");
-    // auto dhf = conf->get<std::vector<float>>("hf_diff");
+    auto dpt = conf->get<std::vector<float>>("pt_diff");
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<float>>("cent_diff");
+
+    auto ihf = new interval(dhf);
+    auto mpthf = new multival(dpt, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -87,14 +90,14 @@ int data_iteration_study(char const* config, char const* output) {
     /* set up figures */
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
-    // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-    //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, chi_square->shape(), hf_info); };
+        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
