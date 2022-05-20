@@ -60,7 +60,7 @@ int data_iteration_study(char const* config, char const* output) {
     auto chi_square = new history<TH1F>("chi_square"s, "", func, mpthf);
 
     for (size_t i = 0; i < iterations.size(); ++i) {
-        auto refold = new history<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
+        auto refold = new memory<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
 
         for (int64_t j = 0; j < base->size(); ++j) {
             double sum = 0;
