@@ -65,7 +65,7 @@ int data_iteration_study(char const* config, char const* output) {
             double unc = 0;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
-                double diff = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
+                double diff = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
                 sum += diff * diff;
                 unc += (*refold)[j]->GetBinError(k + 1);
             }
