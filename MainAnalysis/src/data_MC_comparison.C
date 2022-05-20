@@ -19,14 +19,87 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 template <typename... T>
-void title(std::function<void(TH1*)> f, T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
-}
-
-template <typename... T>
 void normalise_to_unity(T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
+}
+
+template <typename T>
+T* null(int64_t, std::string const&, std::string const&) {
+    return nullptr;
+}
+
+TH2F* variance(TH1* flat, multival const* m) {
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
+        m->size(), 0, m->size());
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto err = flat->GetBinError(i + 1);
+        cov->SetBinContent(i + 1, i + 1, err * err);
+    }
+
+    return cov;
+}
+
+template <std::size_t N>
+TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
+           std::array<int64_t, N> const& offsets) {
+    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
+    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
+        { offsets[axis << 1], offsets[(axis << 1) + 1] });
+
+    auto shape = m->shape();
+
+    auto front = std::vector<int64_t>(m->dims(), 0);
+    auto back = std::vector<int64_t>(m->dims(), 0);
+    for (int64_t i = 0; i < m->dims(); ++i) {
+        front[i] = offsets[i << 1];
+        back[i] = shape[i] - offsets[(i << 1) + 1];
+    }
+
+    auto size = back[axis] - front[axis];
+    auto list = new std::vector<int64_t>[size];
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto indices = m->indices_for(i);
+
+        bool flag = false;
+        zip([&](int64_t index, int64_t f, int64_t b) {
+            flag = flag || index < f || index >= b;
+        }, indices, front, back);
+        if (flag) { continue; }
+
+        auto index = indices[axis] - front[axis];
+        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
+            + flat->GetBinContent(i + 1));
+
+        list[index].push_back(i);
+    }
+
+    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
+
+    for (int64_t i = 0; i < size; ++i) {
+        auto indices = list[i];
+        int64_t count = indices.size();
+
+        auto error = 0.;
+        for (int64_t j = 0; j < count; ++j) {
+            auto j_x = indices[j] + 1;
+            for (int64_t k = 0; k < count; ++k) {
+                auto k_x = indices[k] + 1;
+                error = error + cov->GetBinContent(j_x, k_x);
+            }
+        }
+
+        hfold->SetBinError(i + 1, std::sqrt(error));
+    }
+
+    delete [] list;
+    delete cov;
+
+    hfold->Scale(1., "width");
+
+    return hfold;
 }
 
 int data_mc_comparison(char const* config) {
@@ -52,7 +125,22 @@ int data_mc_comparison(char const* config) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    /* create intervals */
+    auto rdrr = conf->get<std::vector<float>>("drr_range");
+    auto rptr = conf->get<std::vector<float>>("ptr_range");
+
+    auto rdrg = conf->get<std::vector<float>>("drg_range");
+    auto rptg = conf->get<std::vector<float>>("ptg_range");
+
+    /* create intervals and multivals */
+    auto idrr = new interval("#deltaj"s, rdrr);
+    auto iptr = new interval("p_{T}^{j}"s, rptr);
+
+    auto idrg = new interval("#deltaj"s, rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
+
+    auto mr = new multival(*idrr, *iptr);
+    auto mg = new multival(*idrg, *iptg);
+    
     auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
@@ -67,8 +155,20 @@ int data_mc_comparison(char const* config) {
     auto h_qcd_before = new history<TH1F>(fqcd, tag + "_"s + qcd_before_label);
     auto h_qcd_after = new history<TH1F>(fqcd, tag + "_"s + qcd_after_label);
 
-    auto h_truth_gen = new history<TH1F>(ftruth, tag + "_"s + truth_gen_label);
-    auto h_truth_reco = new history<TH1F>(ftruth, tag + "_"s + truth_reco_label);
+    auto h_truth_gen_full = new history<TH1F>(ftruth, tag + "_"s + truth_gen_label);
+    auto h_truth_reco_full = new history<TH1F>(ftruth, tag + "_"s + truth_reco_label);
+
+    auto size = h_data_before->size();
+    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
+    std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
+
+    auto h_truth_gen = new history<TH1F>("truth", "", null<TH1F>, size);
+    auto h_truth_reco = new history<TH1F>("reco", "", null<TH1F>, size);
+
+    for (int64_t i = 0; i < size; ++i) {
+        (*fold0)[j] = fold((*unfolded)[j], nullptr, mg, 0, osg);
+        (*fold1)[j] = fold((*unfolded)[j], nullptr, mr, 1, osr);
+    }
 
     normalise_to_unity(h_truth_gen, h_truth_reco);
 
@@ -102,7 +202,7 @@ int data_mc_comparison(char const* config) {
     p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index, h, "truth_gen"); });
+    h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen"); });
     
     /* (2) unfolded data vs unfolded MC vs gen truth */
     auto p2 = new paper(tag + "_unfolded_data_unfolded_mc_gen_truth", hb);
@@ -112,8 +212,8 @@ int data_mc_comparison(char const* config) {
     p2->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
 
     h_data_after->apply([&](TH1* h) { p2->add(h, "data_after"); });
-    h_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index, h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h, int64_t index) { p2->stack(index, h, "truth_gen"); });
+    h_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "qcd_after"); });
+    h_truth_gen->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen"); });
 
     /* (3) data vs MC before unfolding vs reco truth*/
     auto p3 = new paper(tag + "_data_mc_before_unfolding", hb);
@@ -123,8 +223,8 @@ int data_mc_comparison(char const* config) {
     p3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
 
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
-    h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index, h, "qcd_before"); });
-    h_truth_reco->apply([&](TH1* h, int64_t index) { p3->stack(index, h, "truth_reco"); });
+    h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "qcd_before"); });
+    h_truth_reco->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "truth_reco"); });
 
 
     hb->sketch();
