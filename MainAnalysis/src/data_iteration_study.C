@@ -5,7 +5,6 @@
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
 #include "../git/history/include/history.h"
-#include "../git/history/include/memory.h"
 
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
@@ -35,8 +34,8 @@ int data_iteration_study(char const* config, char const* output) {
     auto base_label = conf->get<std::string>("base_label");
     auto refold_label = conf->get<std::string>("refold_label");
 
-    auto dpt = conf->get<float>("pt_diff");
-    auto dcent = conf->get<float>("cent_diff");
+    auto dpt = conf->get<std::vector<float>>("pt_diff");
+    auto dcent = conf->get<std::vector<float>>("cent_diff");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
