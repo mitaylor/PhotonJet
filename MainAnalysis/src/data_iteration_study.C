@@ -37,6 +37,8 @@ int data_iteration_study(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto label = conf->get<std::string>("label");
+
     auto mpthf = new multival(dpt, dhf);
 
     /* manage memory manually */
@@ -92,13 +94,14 @@ int data_iteration_study(char const* config, char const* output) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    auto p1 = new paper(tag + "_chi_square", hb);
+    auto p1 = new paper(label + "_chi_square", hb);
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions);
     p1->set(paper::flags::logx);
 
+    chi_square->apply([&](TH1* h) { h->SetMaximum(h->GetMaximum() * 1.3) });
     chi_square->apply([&](TH1* h) { p1->add(h); });
 
     hb->sketch();
