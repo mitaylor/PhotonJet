@@ -34,18 +34,16 @@ int data_iteration_study(char const* config, char const* output) {
     auto base_label = conf->get<std::string>("base_label");
     auto refold_label = conf->get<std::string>("refold_label");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
-    auto dhf = conf->get<std::vector<float>>("hf_diff");
-    auto dcent = conf->get<std::vector<float>>("cent_diff");
-
-    for (auto temp : dcent) { std::cout << temp << std::endl; }
+    // auto dpt = conf->get<std::vector<float>>("pt_diff");
+    // auto dhf = conf->get<std::vector<float>>("hf_diff");
+    // auto dcent = conf->get<std::vector<float>>("cent_diff");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    auto ihf = new interval(dhf);
-    auto mpthf = new multival(dpt, dhf);
+    // auto ihf = new interval(dhf);
+    // auto mpthf = new multival(dpt, dhf);
 
     TFile* f = new TFile(input.data(), "read");
 
