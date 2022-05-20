@@ -166,10 +166,6 @@ int congratulate(char const* config, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             syst = new history<TH1F>(file, syst_stub + figure);
 
-            /* scale everything by the truth gen iso vs reco iso difference */
-            hist->apply([&](TH1* h, int64_t index) {
-                links[h] = (*syst)[index]; });
-
         }, hists, systs, files, base_stubs, syst_stubs);
 
         for (size_t i = 2; i < files.size(); ++i) {
@@ -200,6 +196,10 @@ int congratulate(char const* config, char const* output) {
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
+
+            /* scale everything by the truth gen iso vs reco iso difference */
+            hist->apply([&](TH1* h, int64_t index) {
+                links[h] = (*syst)[index]; });
         }, hists, systs, truth_gen_isos, truth_reco_isos);
 
         std::unordered_map<TH1*, int32_t> colours;
