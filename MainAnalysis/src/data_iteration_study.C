@@ -75,13 +75,6 @@ int data_iteration_study(char const* config, char const* output) {
         }
     }
 
-    for (int64_t j = 0; j < base->size(); ++j) {
-        for (size_t i = 0; i < iterations.size(); ++i) {
-            std::cout << (*chi_square)[j]->GetBinError(iterations[i] + 1) / (*chi_square)[j]->GetBinContent(iterations[i] + 1) << " ";
-        }
-        std::cout << std::endl << std::endl;
-    }
-
     in(output, [&]() {
         chi_square->save("test");
     });
@@ -100,10 +93,6 @@ int data_iteration_study(char const* config, char const* output) {
 
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
-
-    auto test = chi_square->shape();
-    for (auto t : test) std::cout << t << " ";
-    std::cout << std::endl;
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
