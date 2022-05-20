@@ -89,7 +89,7 @@ int data_mc_comparison(char const* config) {
 
     /* (1) unfolded MC vs gen truth */
     auto p1 = new paper(tag + "_unfolded_mc_gen_truth", hb);
-    p1->divide(-1, ihf->size());
+    p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
     p1->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
@@ -99,7 +99,7 @@ int data_mc_comparison(char const* config) {
     
     /* (2) unfolded data vs unfolded MC vs gen truth */
     auto p2 = new paper(tag + "_unfolded_data_unfolded_mc_gen_truth", hb);
-    p2->divide(-1, ihf->size());
+    p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
     apply_style(p2, collisions, -2., 27.);
     p2->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
@@ -109,7 +109,7 @@ int data_mc_comparison(char const* config) {
 
     /* (3) data vs MC before unfolding vs reco truth*/
     auto p3 = new paper(tag + "_data_mc_before_unfolding", hb);
-    p3->divide(-1, ihf->size());
+    p3->divide(ihf->size(), -1);
     p3->accessory(pthf_info);
     apply_style(p3, collisions, -2., 27.);
     p3->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
