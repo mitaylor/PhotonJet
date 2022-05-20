@@ -96,13 +96,14 @@ int data_iteration_study(char const* config, char const* output) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    auto p1 = new paper(tag + "chi_square", hb);
+    auto p1 = new paper(tag + "_chi_square", hb);
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
+    p1->set(paper::flags::logx);
 
     chi_square->apply([&](TH1* h) { p1->add(h); });
-    
+
     hb->sketch();
     p1->draw("pdf");
 
