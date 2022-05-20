@@ -152,7 +152,7 @@ int data_mc_comparison(char const* config) {
     TFile* ftruth = new TFile(input_truth.data(), "read");
 
     auto h_data_before = new history<TH1F>(fdata, tag + "_"s + data_before_label);
-    auto h_data_after = new history<TH1F>(fdata, tag + "_"s + data_before_label);
+    auto h_data_after = new history<TH1F>(fdata, tag + "_"s + data_after_label);
 
     auto h_qcd_before = new history<TH1F>(fqcd, tag + "_"s + qcd_before_label);
     auto h_qcd_after = new history<TH1F>(fqcd, tag + "_"s + qcd_after_label);
