@@ -15,6 +15,7 @@
 
 #include "TFile.h"
 #include "TH1.h"
+#include "TH2.h"
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
