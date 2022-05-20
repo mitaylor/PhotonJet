@@ -225,9 +225,9 @@ int quantitate(char const* config, char const* output) {
 
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice);
-        std::string refold_name = "HRefoldedBayes" + std::to_string(choice);
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
+        std::string refold_name = "HRefoldedBayes" + std::to_string(choice[j]);
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TH2F*) fafters[j]->Get(matrix_name.data());
