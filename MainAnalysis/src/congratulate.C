@@ -204,7 +204,7 @@ int congratulate(char const* config, char const* output) {
             //     }});
 
             hist->apply([&](TH1* h) {
-                for (int64_t i = 1; i < h->GetNbinsX(); ++i) {
+                for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
                     h->SetBinContent(i, 10);
                 }});
 
