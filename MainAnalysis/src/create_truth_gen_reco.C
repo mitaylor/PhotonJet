@@ -67,7 +67,6 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     /* prepare histograms */
-    auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
@@ -210,9 +209,6 @@ int create_truth_gen_reco(char const* config, char const* output) {
                     weights[j] *= cor;
                 }
             }
-
-            for (int64_t j = 0; j < ihf->size(); ++j) {
-                (*n)[j]->Fill(1., weights[j]); }
 
             /* map reco jet to gen jet */
             std::unordered_map<float, int64_t> genid;
