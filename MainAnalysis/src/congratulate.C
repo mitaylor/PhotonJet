@@ -203,6 +203,9 @@ int congratulate(char const* config, char const* output) {
             //         h->SetBinError(i, err*correction);
             //     }});
 
+            truth_reco_iso = nullptr;
+            unfolded_qcd = nullptr;
+
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });std::cout << __LINE__ << std::endl;
