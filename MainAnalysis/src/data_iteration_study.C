@@ -59,7 +59,7 @@ int data_iteration_study(char const* config, char const* output) {
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
                 sum += std::pow((*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
-                unc += (*base)[j]->GetBinError(k + 1) + (*refold)[j]->GetBinError(k + 1);
+                unc += ((*base)[j]->GetBinError(k + 1) + (*refold)[j]->GetBinError(k + 1)) / 1000;
             }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
