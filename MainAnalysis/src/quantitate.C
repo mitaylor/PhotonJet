@@ -150,6 +150,9 @@ int quantitate(char const* config, char const* output) {
         fafter = new TFile(after.data(), "read");
     }, fafters, afters);
 
+    TFile fiter = new TFile(regularization.data(), "read");
+    auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);
+
     /* prepare output from pre-unfolded data */
     TFile* fout = new TFile(output, "recreate");
 
@@ -196,10 +199,39 @@ int quantitate(char const* config, char const* output) {
     auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, (int64_t) afters.size());
 
+    /* determine the number of iterations to use */
+    std::vector<int64_t> choice(chi_square->size(), 1);
+
+    for (int64_t i = 0; i < chi_square->size(); ++i) {
+        double min = 99999999999;
+        auto last = 99999999999;
+
+        for (int64_t j = 0; j < chi_square->GetNbinsX(); ++j) {
+            auto top = chi_square->GetBinValue(j + 1) + chi_square->GetBinError(j + 1);
+
+            if (top == 0) { continue; }
+
+            else if (top < min) {
+                min = top;
+                choice[i] = j;
+            }
+
+            if (top > last) break;
+
+            last = top;
+        }
+    }
+
+
+
     for (size_t j = 0; j < fafters.size(); ++j) {
-        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get("HUnfoldedBayes15");
-        auto MUnfolded = (TH2F*) fafters[j]->Get("MUnfoldedBayes15");
-        auto HRefolded = (TH1F*) fafters[j]->Get("HRefoldedBayes15");
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice);
+        std::string refold_name = "HRefoldedBayes" + std::to_string(choice);
+
+        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
+        auto MUnfolded = (TH2F*) fafters[j]->Get(matrix_name.data());
+        auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*unfolded_fold0)[j] = fold((*unfolded)[j], MUnfolded, mg, 0, osg);
