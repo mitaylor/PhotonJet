@@ -23,6 +23,12 @@ void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
+template <typename... T>
+void normalise_to_unity(T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1. / obj->Integral("width")); }), 0)... };
+}
+
 int data_mc_comparison(char const* config) {
     auto conf = new configurer(config);
 
@@ -64,6 +70,8 @@ int data_mc_comparison(char const* config) {
     auto h_truth_gen = new history<TH1F>(ftruth, tag + "_"s + truth_gen_label);
     auto h_truth_reco = new history<TH1F>(ftruth, tag + "_"s + truth_reco_label);
 
+    normalise_to_unity(h_truth_gen, h_truth_reco);
+
     /* set up figures */
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
@@ -77,8 +85,8 @@ int data_mc_comparison(char const* config) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    hb->category("type", "data_before", "data_after", "qcd_before", "qcd_after", 
-        "truth_gen", "truth_reco");
+    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco");
+    hb->category("after_unfolding", "data_after", "qcd_after", "truth_gen");
 
     hb->alias("data_before", "Data Before Unfolding");
     hb->alias("data_after", "Data After Unfolding");
@@ -95,7 +103,7 @@ int data_mc_comparison(char const* config) {
     p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index, h, "gen_truth"); });
+    h_truth_gen->apply([&](TH1* h, int64_t index) { p1->stack(index, h, "truth_gen"); });
     
     /* (2) unfolded data vs unfolded MC vs gen truth */
     auto p2 = new paper(tag + "_unfolded_data_unfolded_mc_gen_truth", hb);
