@@ -20,7 +20,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <cmath>
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
@@ -36,7 +35,7 @@ int data_iteration_study(char const* config, char const* output) {
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-    auto dcent = conf->get<std::vector<float>>("cent_diff");
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto mpthf = new multival(dpt, dhf);
 
@@ -66,7 +65,8 @@ int data_iteration_study(char const* config, char const* output) {
             double unc = 0;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
-                sum += std::pow((*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
+                double diff = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
+                sum += diff * diff;
                 unc += (*refold)[j]->GetBinError(k + 1);
             }
 
