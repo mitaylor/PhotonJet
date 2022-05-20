@@ -105,9 +105,9 @@ int data_mc_comparison(char const* config) {
     p2->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
     h_data_after->apply([&](TH1* h) { p2->add(h, "data_after"); });
     h_qcd_after->apply([&](TH1* h) { p2->stack(h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* h) { p2->stack(h, "gen_truth"); });
+    h_truth_gen->apply([&](TH1* h) { p2->stack(h, "truth_gen"); });
 
-    /* (3) data vs MC before unfolding */
+    /* (3) data vs MC before unfolding vs reco truth*/
     auto p3 = new paper(tag + "_data_mc_before_unfolding", hb);
     p3->divide(-1, ihf->size());
     p3->accessory(pthf_info);
@@ -115,6 +115,7 @@ int data_mc_comparison(char const* config) {
     p3->format(std::bind(default_formatter, _1, rdr[0], rdr[1]));
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
     h_qcd_before->apply([&](TH1* h) { p3->stack(h, "qcd_before"); });
+    h_truth_reco->apply([&](TH1* h) { p3->stack(h, "truth_reco"); });
 
 
     hb->sketch();
