@@ -105,7 +105,7 @@ int data_iteration_study(char const* config, char const* output) {
     p1->divide(chi_square->size(), -1);
     // p1->accessory(pthf_info);
     apply_style(p1, collisions);
-    // p1->set(paper::flags::logx);
+    p1->set(paper::flags::logx);
 
     chi_square->apply([&](TH1* h) { p1->add(h); });
 
