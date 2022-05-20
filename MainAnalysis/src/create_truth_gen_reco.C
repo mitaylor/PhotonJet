@@ -157,19 +157,20 @@ int create_truth_gen_reco(char const* config, char const* output) {
             if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
             /* require match to gen */
+            bool is_gen = true;
             auto gen_index = (*p->pho_genMatchedIndex)[leading];
-            if (gen_index == -1) { continue; }
+            if (gen_index == -1) { is_gen = false; }
 
             auto pid = (*p->mcPID)[gen_index];
             auto mpid = (*p->mcMomPID)[gen_index];
-            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { is_gen = false; }
 
             float isolation = (*p->pho_ecalClusterIsoR3)[leading]
                 + (*p->pho_hcalRechitIsoR3)[leading]
                 + (*p->pho_trackIsoR3PtCut20)[leading];
 
             /* isolation requirement */
-            if ((*p->mcCalIsoDR04)[gen_index] > 5 && isolation > iso_max) { continue; }
+            if ((!is_gen && isolation > iso_max) { continue; }
 
             /* photon axis */
             auto photon_eta = (*p->phoEta)[leading];
@@ -258,9 +259,11 @@ int create_truth_gen_reco(char const* config, char const* output) {
                 auto g_x = mg->index_for(v{gdr, gen_pt});
 
                 /* isolation requirement */
-                if ((*p->mcCalIsoDR04)[gen_index] < 5) { 
-                    for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*g_gen_iso)[k]->Fill(g_x, weights[k]*cor); }
+                if (is_gen) {
+                    if ((*p->mcCalIsoDR04)[gen_index] < 5) { 
+                        for (int64_t k = 0; k < ihf->size(); ++k) {
+                            (*g_gen_iso)[k]->Fill(g_x, weights[k]*cor); }
+                    }
                 }
 
                 if (isolation < iso_max) { 
@@ -273,9 +276,11 @@ int create_truth_gen_reco(char const* config, char const* output) {
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                    if ((*p->mcCalIsoDR04)[gen_index] < 5) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) {
-                            (*r_gen_iso)[k]->Fill(r_x, weights[k]*cor);
+                    if (is_gen) {
+                        if ((*p->mcCalIsoDR04)[gen_index] < 5) {
+                            for (int64_t k = 0; k < ihf->size(); ++k) {
+                                (*r_gen_iso)[k]->Fill(r_x, weights[k]*cor);
+                            }
                         }
                     }
                     if (isolation < iso_max) {

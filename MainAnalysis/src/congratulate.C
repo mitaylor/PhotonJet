@@ -34,6 +34,11 @@ int congratulate(char const* config, char const* output) {
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto figures = conf->get<std::vector<std::string>>("figures");
+
+    auto truths = conf->get<std::string>("truths");
+    auto truth_gen_iso_label = conf->get<std::string>("truth_gen_iso_label");
+    auto truth_reco_iso_label = conf->get<std::string>("truth_reco_iso_label");
+
     auto xmins = conf->get<std::vector<float>>("xmin");
     auto xmaxs = conf->get<std::vector<float>>("xmax");
     auto ymins = conf->get<std::vector<float>>("ymin");
@@ -57,6 +62,16 @@ int congratulate(char const* config, char const* output) {
     zip([&](auto& file, auto const& input) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
+
+    std::vector<history<TH1F>*> truth_gen_isos(6, nullptr);
+    std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
+
+    zip([&](auto& truth_gen_iso, auto& truth_reco_iso, auto const truth,
+            auto const& base_stub, auto const& syst_stub) {
+            TFile* truth_file = new TFile(truth.data(), "read");
+            truth_gen_iso = new history<TH1F>(truth_file, truth_gen_iso_label);
+            truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
+    }, truth_gen_isos, truth_reco_isos, truths);
 
     /* load histograms */
     // std::vector<std::string> tags = {
@@ -150,6 +165,11 @@ int congratulate(char const* config, char const* output) {
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
             syst = new history<TH1F>(file, syst_stub + figure);
+
+            /* scale everything by the truth gen iso vs reco iso difference */
+            hist->apply([&](TH1* h, int64_t index) {
+                links[h] = (*syst)[index]; });
+
         }, hists, systs, files, base_stubs, syst_stubs);
 
         for (size_t i = 2; i < files.size(); ++i) {
@@ -163,7 +183,23 @@ int congratulate(char const* config, char const* output) {
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
             hist->apply([&](TH1* h, int64_t index) {
-                links[h] = (*syst)[index]; });
+                for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
+                    double val = h->GetBinContent(i);
+                    double err = h->GetBinError(i);
+                    double correction = (*truth_gen_iso)[index]->GetBinContent(i);
+                    correction \= (*truth_reco_iso)[index]->GetBinContent(i)
+                    h->SetBinContent(i, val*correction);
+                    h->SetBinError(i, err*correction);
+                }});
+            syst->apply([&](TH1* h, int64_t index) {
+                for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
+                    double val = h->GetBinContent(i);
+                    double err = h->GetBinError(i);
+                    double correction = (*truth_gen_iso)[index]->GetBinContent(i);
+                    correction \= (*truth_reco_iso)[index]->GetBinContent(i)
+                    h->SetBinContent(i, val*correction);
+                    h->SetBinError(i, err*correction);
+                }});
         }, hists, systs);
 
         std::unordered_map<TH1*, int32_t> colours;
