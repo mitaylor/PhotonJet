@@ -38,7 +38,6 @@ int data_iteration_study(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<float>>("cent_diff");
 
-    auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
     /* manage memory manually */
