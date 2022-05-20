@@ -36,14 +36,11 @@ int data_iteration_study(char const* config, char const* output) {
 
     // auto dpt = conf->get<std::vector<float>>("pt_diff");
     // auto dhf = conf->get<std::vector<float>>("hf_diff");
-    // auto dcent = conf->get<std::vector<float>>("cent_diff");
+    auto dcent = conf->get<std::vector<float>>("cent_diff");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
-    // auto ihf = new interval(dhf);
-    // auto mpthf = new multival(dpt, dhf);
 
     TFile* f = new TFile(input.data(), "read");
 
@@ -93,17 +90,17 @@ int data_iteration_study(char const* config, char const* output) {
     // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
     //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    // std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-    //     info_text(x, pos, "%i - %i%%", dcent, true); };
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%i - %i%%", dcent, true); };
 
-    // auto pthf_info = [&](int64_t index) {
-    //     stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
+    auto pthf_info = [&](int64_t index) {
+        stack_text(index, 0.75, 0.04, chi_square->shape(), hf_info); };
 
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
 
     p1->divide(chi_square->size(), -1);
-    // p1->accessory(pthf_info);
+    p1->accessory(pthf_info);
     apply_style(p1, collisions);
     p1->set(paper::flags::logx);
 
