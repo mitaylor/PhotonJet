@@ -106,7 +106,7 @@ int data_mc_comparison(char const* config) {
 
     h_data_after->apply([&](TH1* h) { p2->add(h, "data_after"); });
     h_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index, h, "qcd_after"); });
-    h_truth_gen->apply([&](TH1* , int64_t index) { p2->stack(index, h, "truth_gen"); });
+    h_truth_gen->apply([&](TH1* h, int64_t index) { p2->stack(index, h, "truth_gen"); });
 
     /* (3) data vs MC before unfolding vs reco truth*/
     auto p3 = new paper(tag + "_data_mc_before_unfolding", hb);
