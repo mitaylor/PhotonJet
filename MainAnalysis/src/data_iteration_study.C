@@ -59,7 +59,7 @@ int data_iteration_study(char const* config, char const* output) {
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
                 auto component = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
-                auto error std::sqrt(std::pow((*refold)[j]->GetBinError(k + 1), 2) + std::pow((*base)[j]->GetBinError(k + 1), 2));
+                auto error = std::sqrt(std::pow((*refold)[j]->GetBinError(k + 1), 2) + std::pow((*base)[j]->GetBinError(k + 1), 2));
                 
                 unc.push_back(std::abs(component) * error * std::sqrt(2));
                 sum += std::pow(component, 2);
