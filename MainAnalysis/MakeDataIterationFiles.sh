@@ -3,7 +3,7 @@
 arithmetic() {
     tag=$1
 
-    ./bin/get_data_iteration_study configs/quantitate/quantitate_${tag}.conf \
+    ./bin/get_data_iteration_files configs/quantitate/quantitate_${tag}.conf \
         data/jet_20/data_iteration_${tag}.root
 }
 
