@@ -207,7 +207,7 @@ int quantitate(char const* config, char const* output) {
         auto last = 99999999999;
 
         for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
-            auto top = (*chi_square)[i]->GetBinValue(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (top == 0) { continue; }
 
