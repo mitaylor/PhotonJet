@@ -117,8 +117,10 @@ int data_mc_comparison(char const* config) {
     auto qcd_after_label = conf->get<std::string>("qcd_after_label");
 
     auto input_truth = conf->get<std::string>("input_truth");
-    auto truth_gen_label = conf->get<std::string>("truth_gen_label");
-    auto truth_reco_label = conf->get<std::string>("truth_reco_label");
+    auto truth_gen_iso_label = conf->get<std::string>("truth_gen_iso_label");
+    auto truth_reco_iso_label = conf->get<std::string>("truth_reco_iso_label");
+    auto reco_gen_iso_label = conf->get<std::string>("reco_gen_iso_label");
+    auto reco_reco_iso_label = conf->get<std::string>("reco_reco_iso_label");
 
     auto tag = conf->get<std::string>("tag");
 
@@ -159,8 +161,10 @@ int data_mc_comparison(char const* config) {
     auto h_qcd_before = new history<TH1F>(fqcd, tag + "_"s + qcd_before_label);
     auto h_qcd_after = new history<TH1F>(fqcd, tag + "_"s + qcd_after_label);
 
-    auto h_truth_gen_full = new history<TH1F>(ftruth, tag + "_"s + truth_gen_label);
-    auto h_truth_reco_full = new history<TH1F>(ftruth, tag + "_"s + truth_reco_label);
+    auto h_truth_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + truth_gen_iso_label);
+    auto h_truth_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
+    auto h_reco_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_gen_iso_label);
+    auto h_reco_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_reco_iso_label);
 
     h_data_circle->apply([&](TH1* h) { for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
         h->SetBinError(i, 0); } });
@@ -169,15 +173,19 @@ int data_mc_comparison(char const* config) {
     std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
     std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
 
-    auto h_truth_gen = new history<TH1F>("truth", "", null<TH1F>, size);
-    auto h_truth_reco = new history<TH1F>("reco", "", null<TH1F>, size);
+    auto h_truth_gen_iso = new history<TH1F>("truth_gen_iso", "", null<TH1F>, size);
+    auto h_truth_reco_iso = new history<TH1F>("truth_reco_iso", "", null<TH1F>, size);
+    auto h_reco_gen_iso = new history<TH1F>("reco_gen_iso", "", null<TH1F>, size);
+    auto h_reco_reco_iso = new history<TH1F>("reco_reco_iso", "", null<TH1F>, size);
 
     for (int64_t i = 0; i < size; ++i) {
-        (*h_truth_gen)[i] = fold((*h_truth_gen_full)[i], nullptr, mg, 0, osg);
-        (*h_truth_reco)[i] = fold((*h_truth_reco_full)[i], nullptr, mr, 0, osr);
+        (*h_truth_gen_iso)[i] = fold((*h_truth_gen_iso_full)[i], nullptr, mg, 0, osg);
+        (*h_truth_reco_iso)[i] = fold((*h_truth_reco_iso_full)[i], nullptr, mg, 0, osg);
+        (*h_reco_gen_iso)[i] = fold((*h_reco_gen_iso_full)[i], nullptr, mr, 0, osr);
+        (*h_reco_reco_iso)[i] = fold((*h_reco_reco_iso_full)[i], nullptr, mr, 0, osr);
     }
 
-    normalise_to_unity(h_truth_gen, h_truth_reco);
+    normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso, h_reco_gen_iso, h_reco_reco_iso);
 
     /* set up figures */
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
