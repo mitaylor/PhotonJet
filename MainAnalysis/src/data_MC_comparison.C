@@ -191,7 +191,6 @@ int data_mc_comparison(char const* config, const char* output) {
     // normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso, h_reco_gen_iso, h_reco_reco_iso);
     normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso);
 
-
     /* set up figures */
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 

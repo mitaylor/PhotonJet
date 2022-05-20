@@ -35,10 +35,8 @@ int congratulate(char const* config, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto figures = conf->get<std::vector<std::string>>("figures");
 
-    auto truths = conf->get<std::vector<std::string>>("truths");
+    auto corrections = conf->get<std::vector<std::string>>("corrections");
     auto truth_reco_iso_labels = conf->get<std::vector<std::string>>("truth_reco_iso_labels");
-
-    auto qcds = conf->get<std::vector<std::string>>("qcds");
     auto qcd_after_labels = conf->get<std::vector<std::string>>("qcd_after_labels");
 
     auto xmins = conf->get<std::vector<float>>("xmin");
@@ -65,19 +63,14 @@ int congratulate(char const* config, char const* output) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
 
-    std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);std::cout << __LINE__ << std::endl;
-
-    zip([&](auto& truth_reco_iso, auto const& truth, auto const& truth_reco_iso_label) {
-            auto truth_file = new TFile(truth.data(), "read");
-            truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
-    }, truth_reco_isos, truths, truth_reco_iso_labels);
-
+    std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
     std::vector<history<TH1F>*> unfolded_qcds(6, nullptr);
 
-    zip([&](auto& unfolded_qcd, auto const qcd, auto const& qcd_after_label) {
+    zip([&](auto& truth_reco_iso, auto& unfolded_qcd, auto const qcd, auto const& truth_reco_iso_label, auto const& qcd_after_label) {
             auto qcd_file = new TFile(qcd.data(), "read");
             unfolded_qcd = new history<TH1F>(qcd_file, qcd_after_label);
-    }, unfolded_qcds, qcds, qcd_after_labels);std::cout << __LINE__ << std::endl;
+            truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
+    }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);std::cout << __LINE__ << std::endl;
 
     /* load histograms */
     // std::vector<std::string> tags = {
