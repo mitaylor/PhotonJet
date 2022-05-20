@@ -232,10 +232,10 @@ int congratulate(char const* config, char const* output) {
 
                 gr->DrawClone("f");
             }
-        };
+        };std::cout << __LINE__ << std::endl;
 
         /* minor adjustments */
-        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
+        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }std::cout << __LINE__ << std::endl;
 
         /* prepare papers */
         auto p = new paper("results_pp_" + figure, hb);
@@ -244,7 +244,7 @@ int congratulate(char const* config, char const* output) {
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         // p->accessory(std::bind(pp_info, _1, hists[1]));
         p->jewellery(box);
-        p->divide(-1, 1);
+        p->divide(-1, 1);std::cout << __LINE__ << std::endl;
 
         auto a = new paper("results_aa_" + figure, hb);
         apply_style(a, "", ymin, ymax);
@@ -252,7 +252,7 @@ int congratulate(char const* config, char const* output) {
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
         a->jewellery(box);
-        a->divide(ihf->size(), -1);
+        a->divide(ihf->size(), -1);std::cout << __LINE__ << std::endl;
 
         auto s = new paper("results_ss_" + figure, hb);
         apply_style(s, "", ymin, ymax);
@@ -260,7 +260,7 @@ int congratulate(char const* config, char const* output) {
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
-        s->divide(ihf->size(), -1);
+        s->divide(ihf->size(), -1);std::cout << __LINE__ << std::endl;
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { a->add(h, "aa"); s->add(h, "aa"); });
@@ -270,19 +270,19 @@ int congratulate(char const* config, char const* output) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "ss");
             });
-        }
+        }std::cout << __LINE__ << std::endl;
 
         auto pp_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(25);
             h->SetMarkerSize(0.60);
-        };
+        };std::cout << __LINE__ << std::endl;
 
         auto aa_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
-        };
+        };std::cout << __LINE__ << std::endl;
 
         hb->style("pp", pp_style);
         hb->style("aa", aa_style);
@@ -292,7 +292,7 @@ int congratulate(char const* config, char const* output) {
         p->draw("pdf");
         a->draw("pdf");
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
+    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);std::cout << __LINE__ << std::endl;
 
     in(output, []() {});
 
