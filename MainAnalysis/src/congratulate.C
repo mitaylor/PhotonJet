@@ -65,7 +65,7 @@ int congratulate(char const* config, char const* output) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
 
-    std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
+    std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);std::cout << __LINE__ << std::endl;
 
     zip([&](auto& truth_reco_iso, auto const& truth, auto const& truth_reco_iso_label) {
             auto truth_file = new TFile(truth.data(), "read");
@@ -77,7 +77,7 @@ int congratulate(char const* config, char const* output) {
     zip([&](auto& unfolded_qcd, auto const qcd, auto const& qcd_after_label) {
             auto qcd_file = new TFile(qcd.data(), "read");
             unfolded_qcd = new history<TH1F>(qcd_file, qcd_after_label);
-    }, unfolded_qcds, qcds, qcd_after_labels);
+    }, unfolded_qcds, qcds, qcd_after_labels);std::cout << __LINE__ << std::endl;
 
     /* load histograms */
     // std::vector<std::string> tags = {
@@ -96,7 +96,7 @@ int congratulate(char const* config, char const* output) {
         "pp"s,
         "pp"s,
         "pp"s
-    };
+    };std::cout << __LINE__ << std::endl;
 
     std::vector<std::string> base_stubs(6);
     std::vector<std::string> syst_stubs(6);
@@ -104,7 +104,7 @@ int congratulate(char const* config, char const* output) {
     zip([&](auto& base, auto& syst, auto const& tag) {
         base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
         syst = tag + "_total_base_" + tag + "_nominal_s_pure_raw_sub_";
-    }, base_stubs, syst_stubs, tags);
+    }, base_stubs, syst_stubs, tags);std::cout << __LINE__ << std::endl;
 
     /* prepare plots */
     auto hb = new pencil();
@@ -112,7 +112,7 @@ int congratulate(char const* config, char const* output) {
 
     hb->alias("aa", "PbPb");
     // hb->alias("ss", "pp (smeared)");
-    hb->alias("ss", "pp");
+    hb->alias("ss", "pp");std::cout << __LINE__ << std::endl;
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
         TLatex* cms = new TLatex();
@@ -144,13 +144,13 @@ int congratulate(char const* config, char const* output) {
         info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    };
+    };std::cout << __LINE__ << std::endl;
 
     // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
     //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "%i - %i%%", dcent, true); };std::cout << __LINE__ << std::endl;
 
     // auto pp_info = [&](int64_t index, history<TH1F>* h) {
     //     stack_text(index, 0.73, 0.04, h, pt_info); };
@@ -159,7 +159,7 @@ int congratulate(char const* config, char const* output) {
     //     stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, hf_info); };
+        stack_text(index, 0.73, 0.04, h, hf_info); };std::cout << __LINE__ << std::endl;
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
@@ -172,13 +172,13 @@ int congratulate(char const* config, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             syst = new history<TH1F>(file, syst_stub + figure);
 
-        }, hists, systs, files, base_stubs, syst_stubs);
+        }, hists, systs, files, base_stubs, syst_stubs);std::cout << __LINE__ << std::endl;
 
         for (size_t i = 2; i < files.size(); ++i) {
             std::string name1 = std::to_string(i) + std::string("happy");
             std::string name2 = std::to_string(i) + std::string("sad");
             hists[i]->rename(name1);
-            systs[i]->rename(name2);
+            systs[i]->rename(name2);std::cout << __LINE__ << std::endl;
         }
 
         /* link histograms, uncertainties */
@@ -186,7 +186,7 @@ int congratulate(char const* config, char const* output) {
         zip([&](auto hist, auto syst, auto truth_reco_iso, auto unfolded_qcd) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-                    double val = h->GetBinContent(i);
+                    double val = h->GetBinContent(i); std::cout << __LINE__ << std::endl;
                     double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
                     correction /= (*unfolded_qcd)[index]->GetBinContent(i);
@@ -195,7 +195,7 @@ int congratulate(char const* config, char const* output) {
                 }});
             syst->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-                    double val = h->GetBinContent(i);
+                    double val = h->GetBinContent(i);std::cout << __LINE__ << std::endl;
                     double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
                     correction /= (*unfolded_qcd)[index]->GetBinContent(i);
