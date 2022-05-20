@@ -290,8 +290,10 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
     /* save output */
     in(output, [&]() {
-        r->save(tag);
-        g->save(tag);
+        r_reco_iso->save(tag);
+        g_reco_iso->save(tag);
+        r_gen_iso->save(tag);
+        g_gen_iso->save(tag);
     });
 
     return 0;
