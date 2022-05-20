@@ -165,7 +165,9 @@ int congratulate(char const* config, char const* output) {
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
             hist->apply([&](TH1* h, int64_t index) {
-                links[h] = (*syst)[index]; });
+                links[h] = (*syst)[index]; 
+                std::cout << h->GetName() << std::endl; 
+                });
         }, hists, systs);
 
         std::unordered_map<TH1*, int32_t> colours;
