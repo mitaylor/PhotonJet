@@ -71,9 +71,6 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto ihf = new interval(dhf);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
-    auto mcdr = new multival(rdrr, rdrg);
-    auto mcpt = new multival(rptr, rptg);
-
     auto mr = new multival(rdrr, rptr);
     auto mg = new multival(rdrg, rptg);
 
@@ -127,11 +124,6 @@ int create_truth_gen_reco(char const* config, char const* output) {
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
-
-            if (mod) {
-                if ((i + parity) % 2 == 0) { continue; }
-            }
-
             t->GetEntry(i);
 
             int64_t leading = -1;
@@ -287,7 +279,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
             }
         }
     }
-    
+
     /* save output */
     in(output, [&]() {
         r->save(tag);
