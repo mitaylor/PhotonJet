@@ -266,7 +266,7 @@ int data_mc_comparison(char const* config, const char* output) {
         h_data_before->save(),
         h_data_after->save(),
         h_qcd_before->save(),
-        h_qcd_afte->save(),
+        h_qcd_after->save(),
         h_data_circle->save()
     });
 
