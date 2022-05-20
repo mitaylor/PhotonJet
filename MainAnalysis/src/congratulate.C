@@ -158,8 +158,6 @@ int congratulate(char const* config, char const* output) {
             hists[i]->rename(name1);
             systs[i]->rename(name2);
         }
-        std::cout << (*hists[2])[0]->GetName() << std::endl;
-        std::cout << (*systs[2])[0]->GetName() << std::endl;
 
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
@@ -230,7 +228,6 @@ int congratulate(char const* config, char const* output) {
 
         for (int64_t i = 0; i < 4; ++i) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
-                std::cout << h->GetName() << std::endl; 
                 s->stack(i + index + 1, h, "ss");
             });
         }
