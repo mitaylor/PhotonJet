@@ -63,14 +63,19 @@ int congratulate(char const* config, char const* output) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
 
+    std::vector<TFile*> truth_files(truths.size(), nullptr);
+
+    zip([&](auto& file, auto const& input) {
+        file = new TFile(input.data(), "read");
+    }, truth_files, truths);
+
     std::vector<history<TH1F>*> truth_gen_isos(6, nullptr);
     std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
 
-    zip([&](auto& truth_gen_iso, auto& truth_reco_iso, auto const& truth) {
-            TFile* truth_file = new TFile(truth.data(), "read");
+    zip([&](auto& truth_gen_iso, auto& truth_reco_iso, auto const truth_file) {
             truth_gen_iso = new history<TH1F>(truth_file, truth_gen_iso_label);
             truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
-    }, truth_gen_isos, truth_reco_isos, truths);
+    }, truth_gen_isos, truth_reco_isos, truth_files);
 
     /* load histograms */
     // std::vector<std::string> tags = {
