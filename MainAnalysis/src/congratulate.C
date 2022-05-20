@@ -203,7 +203,7 @@ int congratulate(char const* config, char const* output) {
             //         h->SetBinError(i, err*correction);
             //     }});
 
-            hist->apply([&](TH1* h, int64_t index) {
+            hist->apply([&](TH1* h) {
                 for (int64_t i = 1; i < h->GetNbinsX(); ++i) {
                     h->SetBinContent(i, 10);
                 }});
