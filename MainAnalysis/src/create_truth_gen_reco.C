@@ -278,7 +278,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                             (*r_gen_iso)[k]->Fill(r_x, weights[k]*cor);
                         }
                     }
-                    if (isolation < iso_max < 5) {
+                    if (isolation < iso_max) {
                         for (int64_t k = 0; k < ihf->size(); ++k) {
                             (*r_reco_iso)[k]->Fill(r_x, weights[k]*cor);
                         }
