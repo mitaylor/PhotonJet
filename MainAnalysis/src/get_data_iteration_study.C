@@ -169,8 +169,8 @@ int quantitate(char const* config, char const* output) {
         for (size_t j = 0; j < fafters.size(); ++j) {
                     auto HRefolded = (TH1F*) fafters[j]->Get("HRefoldedBayes" + std::to_string(iteration[i]));
 
-                    (*refolded_fold0)[j] = fold((*refolded)[j], nullptr, mr, 0, osr);
-                    (*refolded_fold1)[j] = fold((*refolded)[j], nullptr, mr, 1, osr);
+                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
+                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 1, osr);
         }
 
         normalise_to_unity(refold0);
