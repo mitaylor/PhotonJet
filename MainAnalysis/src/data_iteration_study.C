@@ -55,7 +55,7 @@ int data_iteration_study(char const* config, char const* output) {
 
         for (int64_t j = 0; j < base->size(); ++j) {
             double sum = 0;
-            std::vector<double> unc = 0;
+            std::vector<double> unc;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
                 auto component = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
