@@ -85,7 +85,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto r_reco_iso = new history<TH1F>("r_reco_iso"s, "counts", fr, ihf->size());
     auto g_reco_iso = new history<TH1F>("g_reco_iso"s, "counts", fg, ihf->size());
     auto r_gen_iso = new history<TH1F>("r_gen_iso"s, "counts", fr, ihf->size());
-    auto g_gen_iso = new history<TH1F>("g_reco_iso"s, "counts", fg, ihf->size());
+    auto g_gen_iso = new history<TH1F>("g_gen_iso"s, "counts", fg, ihf->size());
 
 
     std::vector<double> pass_fail_gen_reco(4,0);
