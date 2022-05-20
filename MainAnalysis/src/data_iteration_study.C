@@ -63,10 +63,10 @@ int data_iteration_study(char const* config, char const* output) {
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
         }
     }
-
+    
     in(output, [&]() {
         chi_square->save("test");
-    }
+    });
 
     return 0;
 }
