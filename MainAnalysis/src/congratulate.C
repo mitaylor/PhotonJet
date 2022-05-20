@@ -66,8 +66,8 @@ int congratulate(char const* config, char const* output) {
     std::vector<history<TH1F>*> truth_reco_isos(6, nullptr);
     std::vector<history<TH1F>*> unfolded_qcds(6, nullptr);
 
-    zip([&](auto& truth_reco_iso, auto& unfolded_qcd, auto const qcd, auto const& truth_reco_iso_label, auto const& qcd_after_label) {
-            auto qcd_file = new TFile(qcd.data(), "read");
+    zip([&](auto& truth_reco_iso, auto& unfolded_qcd, auto const correction, auto const& truth_reco_iso_label, auto const& qcd_after_label) {
+            auto file = new TFile(correction.data(), "read");
             unfolded_qcd = new history<TH1F>(qcd_file, qcd_after_label);
             truth_reco_iso = new history<TH1F>(truth_file, truth_reco_iso_label);
     }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);std::cout << __LINE__ << std::endl;
