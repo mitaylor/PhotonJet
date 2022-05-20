@@ -95,7 +95,7 @@ int data_iteration_study(char const* config, char const* output) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, chi_square->shape(), hf_info); };
+        stack_text(index, 0.75, 0.04, (int64_t) dcent.size() - 1, hf_info); };
 
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
