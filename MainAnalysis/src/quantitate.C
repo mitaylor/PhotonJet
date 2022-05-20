@@ -150,7 +150,7 @@ int quantitate(char const* config, char const* output) {
         fafter = new TFile(after.data(), "read");
     }, fafters, afters);
 
-    TFile fiter = new TFile(regularization.data(), "read");
+    TFile* fiter = new TFile(regularization.data(), "read");
     auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);
 
     /* prepare output from pre-unfolded data */
