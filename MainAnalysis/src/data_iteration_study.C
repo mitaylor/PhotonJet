@@ -88,16 +88,16 @@ int data_iteration_study(char const* config, char const* output) {
     });
 
     /* set up figures */
-    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
+    // auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
-    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+    // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+    //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+    // std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+    //     info_text(x, pos, "%i - %i%%", dcent, true); };
 
-    auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
+    // auto pthf_info = [&](int64_t index) {
+    //     stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
