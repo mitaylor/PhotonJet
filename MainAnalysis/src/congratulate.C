@@ -196,7 +196,7 @@ int congratulate(char const* config, char const* output) {
                     double val = h->GetBinContent(i);
                     double err = h->GetBinError(i);
                     double correction = (*truth_gen_iso)[index]->GetBinContent(i);
-                    correction \= (*truth_reco_iso)[index]->GetBinContent(i)
+                    correction /= (*truth_reco_iso)[index]->GetBinContent(i)
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
