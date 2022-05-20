@@ -164,7 +164,7 @@ int congratulate(char const* config, char const* output) {
         zip([&](auto hist, auto syst) {
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; 
-                std::cout << h->GetName() << std::endl; 
+                std::cout << links[h]->GetName() << std::endl; 
                 });
         }, hists, systs);
 
