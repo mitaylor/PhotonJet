@@ -46,7 +46,7 @@ int data_iteration_study(char const* config, char const* output) {
         150, 200, 250};
 
     auto func = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", iterations.back(), 0, iterations.back()); };
+        return new TH1F(name.data(), ";iterations;", iterations.back(), 0, iterations.back()); };
 
     auto chi_square = new history<TH1F>("chi_square"s, "", func, base->size());
 
@@ -55,16 +55,23 @@ int data_iteration_study(char const* config, char const* output) {
 
         for (int64_t j = 0; j < base->size(); ++j) {
             double sum = 0;
-            double unc = 0;
+            std::vector<double> unc = 0;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
-                sum += std::pow((*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1), 2);
-                // unc += (*base)[j]->GetBinError(k + 1) + (*refold)[j]->GetBinError(k + 1);
-                unc += (*refold)[j]->GetBinError(k + 1);
+                auto component = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
+                auto error std::sqrt(std::pow((*refold)[j]->GetBinError(k + 1), 2) + std::pow((*base)[j]->GetBinError(k + 1), 2));
+                
+                unc.push_back(std::abs(component) * error * std::sqrt(2));
+                sum += std::pow(component, 2);
+            }
+
+            double total_error = 0;
+            for (auto error : unc) {
+                total_error += std::pow(error, 2);
             }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
-            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
+            (*chi_square)[j]->SetBinError(iterations[i] + 1, std::sqrt(total_error));
         }
     }
 
