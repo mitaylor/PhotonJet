@@ -34,12 +34,9 @@ int data_iteration_study(char const* config, char const* output) {
     auto base_label = conf->get<std::string>("base_label");
     auto refold_label = conf->get<std::string>("refold_label");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
-    auto dhf = conf->get<std::vector<float>>("hf_diff");
+    // auto dpt = conf->get<std::vector<float>>("pt_diff");
+    // auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<float>>("cent_diff");
-
-    auto ihf = new interval(dhf);
-    auto mpthf = new multival(dpt, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -57,10 +54,10 @@ int data_iteration_study(char const* config, char const* output) {
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 0, iterations.back()); };
 
-    auto chi_square = new history<TH1F>("chi_square"s, "", func, mpthf);
+    auto chi_square = new history<TH1F>("chi_square"s, "", func, base->size());
 
     for (size_t i = 0; i < iterations.size(); ++i) {
-        auto refold = new memory<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
+        auto refold = new history<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
 
         for (int64_t j = 0; j < base->size(); ++j) {
             double sum = 0;
@@ -94,16 +91,19 @@ int data_iteration_study(char const* config, char const* output) {
     //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        std::cout << x << std::endl;
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, mpthf, hf_info); };
+        stack_text(index, 0.75, 0.04, chi_square->shape(), hf_info); };
 
     auto hb = new pencil();
     auto p1 = new paper(tag + "_chi_square", hb);
 
-    p1->divide(ihf->size(), -1);
+    auto test = chi_square->shape();
+    for (auto t : test) std::cout << t << " ";
+    std::cout << std::endl;
+
+    p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions);
     p1->set(paper::flags::logx);
