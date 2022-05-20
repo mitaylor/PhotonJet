@@ -85,8 +85,7 @@ int data_mc_comparison(char const* config) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco");
-    hb->category("after_unfolding", "data_after", "qcd_after", "truth_gen");
+    hb->category("before_unfolding", "data_before", "qcd_before", "truth_reco", "data_after", "qcd_after", "truth_gen");
 
     hb->alias("data_before", "Data Before Unfolding");
     hb->alias("data_after", "Data After Unfolding");
