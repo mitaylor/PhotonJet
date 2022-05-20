@@ -169,11 +169,9 @@ int data_mc_comparison(char const* config) {
 
     for (int64_t i = 0; i < size; ++i) {
         (*h_truth_gen)[i] = fold((*h_truth_gen_full)[i], nullptr, mg, 0, osg);
-        (*h_truth_reco)[i] = fold((*h_truth_reco_full)[i], nullptr, mr, 1, osr);
+        (*h_truth_reco)[i] = fold((*h_truth_reco_full)[i], nullptr, mr, 0, osr);
     }
-
-    std::cout << (*h_truth_reco)[0]->GetMaximum() << " " << (*h_truth_reco)[0]->GetXaxis()->GetBinLowEdge(10) << std::endl;
-
+    
     normalise_to_unity(h_truth_gen, h_truth_reco);
 
     /* set up figures */
