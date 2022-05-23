@@ -20,90 +20,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-template <typename... T>
-void normalise_to_unity(T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1. / obj->Integral("width")); }), 0)... };
-}
-
-template <typename T>
-T* null(int64_t, std::string const&, std::string const&) {
-    return nullptr;
-}
-
-TH2F* variance(TH1* flat, multival const* m) {
-    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
-        m->size(), 0, m->size());
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto err = flat->GetBinError(i + 1);
-        cov->SetBinContent(i + 1, i + 1, err * err);
-    }
-
-    return cov;
-}
-
-template <std::size_t N>
-TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
-           std::array<int64_t, N> const& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
-    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
-        { offsets[axis << 1], offsets[(axis << 1) + 1] });
-
-    auto shape = m->shape();
-
-    auto front = std::vector<int64_t>(m->dims(), 0);
-    auto back = std::vector<int64_t>(m->dims(), 0);
-    for (int64_t i = 0; i < m->dims(); ++i) {
-        front[i] = offsets[i << 1];
-        back[i] = shape[i] - offsets[(i << 1) + 1];
-    }
-
-    auto size = back[axis] - front[axis];
-    auto list = new std::vector<int64_t>[size];
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto indices = m->indices_for(i);
-
-        bool flag = false;
-        zip([&](int64_t index, int64_t f, int64_t b) {
-            flag = flag || index < f || index >= b;
-        }, indices, front, back);
-        if (flag) { continue; }
-
-        auto index = indices[axis] - front[axis];
-        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
-            + flat->GetBinContent(i + 1));
-
-        list[index].push_back(i);
-    }
-
-    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
-
-    for (int64_t i = 0; i < size; ++i) {
-        auto indices = list[i];
-        int64_t count = indices.size();
-
-        auto error = 0.;
-        for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j] + 1;
-            for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k] + 1;
-                error = error + cov->GetBinContent(j_x, k_x);
-            }
-        }
-
-        hfold->SetBinError(i + 1, std::sqrt(error));
-    }
-
-    delete [] list;
-    delete cov;
-
-    hfold->Scale(1., "width");
-
-    return hfold;
-}
-
 int data_mc_comparison(char const* config, const char* output) {
     auto conf = new configurer(config);
 
@@ -161,35 +77,13 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_qcd_before = new history<TH1F>(fqcd, tag + "_"s + qcd_before_label);
     auto h_qcd_after = new history<TH1F>(fqcd, tag + "_"s + qcd_after_label);
 
-    auto h_truth_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + truth_gen_iso_label);
-    auto h_truth_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
+    auto h_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + truth_gen_iso_label);
+    auto h_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
     // auto h_reco_gen_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_gen_iso_label);
     // auto h_reco_reco_iso_full = new history<TH1F>(ftruth, tag + "_"s + reco_reco_iso_label);
 
     h_data_circle->apply([&](TH1* h) { for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
         h->SetBinError(i, 0); } });
-
-    auto size = h_data_before->size();
-    // std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
-    std::array<int64_t, 4> osg = { 0, 0, 3, 1 };
-
-    auto h_truth_gen_iso = new history<TH1F>("truth_gen_iso", "", null<TH1F>, size);
-    auto h_truth_reco_iso = new history<TH1F>("truth_reco_iso", "", null<TH1F>, size);
-    // auto h_reco_gen_iso = new history<TH1F>("reco_gen_iso", "", null<TH1F>, size);
-    // auto h_reco_reco_iso = new history<TH1F>("reco_reco_iso", "", null<TH1F>, size);
-
-    for (int64_t i = 0; i < size; ++i) {
-        (*h_truth_gen_iso)[i] = fold((*h_truth_gen_iso_full)[i], nullptr, mg, 0, osg);
-        (*h_truth_reco_iso)[i] = fold((*h_truth_reco_iso_full)[i], nullptr, mg, 0, osg);
-        // (*h_reco_gen_iso)[i] = fold((*h_reco_gen_iso_full)[i], nullptr, mr, 0, osr);
-        // (*h_reco_reco_iso)[i] = fold((*h_reco_reco_iso_full)[i], nullptr, mr, 0, osr);
-    }
-
-    h_truth_gen_iso->rename(tag + "_"s + truth_gen_iso_label + "_fold0");
-    h_truth_reco_iso->rename(tag + "_"s + truth_reco_iso_label + "_fold0");
-
-    // normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso, h_reco_gen_iso, h_reco_reco_iso);
-    normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso);
 
     /* set up figures */
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
