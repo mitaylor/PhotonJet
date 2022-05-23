@@ -263,7 +263,7 @@ int vacillate(char const* config, char const* output) {
                 auto gen_eta = (*p->refeta)[j];
                 auto gen_phi = (*p->refphi)[j];
 
-                if (gen_pt < rptg.front()) { continue; }
+                if (gen_pt < 0) { gen_pt = -5; }
 
                 auto reco_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
                 auto reco_eta = (*p->jteta)[j];
@@ -295,7 +295,7 @@ int vacillate(char const* config, char const* output) {
                 if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
                 else if  (jer_up && !heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]);
 
-                if (!mc) { reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt; }
+                if (!mc && gen_pt > 0) { reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt; }
 
                 /* jet energy scale uncertainty */
                 if (!jeu.empty()) {
@@ -316,9 +316,9 @@ int vacillate(char const* config, char const* output) {
                     if (cor < 1) { std::cout << "error" << std::endl; }
                 }
 
-                auto id = genid[gen_pt];
-                auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id],
-                                        gen_phi, (*p->WTAgenphi)[id]));
+                auto id = (gen_pt > 0) ? genid[gen_pt] : -1;
+                auto gdr = (gen_pt > 0) ? std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]))
+                                        : 0;
                 auto g_x = mg->index_for(v{gdr, gen_pt});
 
                 for (int64_t k = 0; k < ihf->size(); ++k) {
