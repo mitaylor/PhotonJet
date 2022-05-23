@@ -176,11 +176,17 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto r_reco_iso_matched = new history<TH1F>("r_reco_iso_matched"s, "counts", fr, ihf->size());
     auto r_reco_iso_unmatched = new history<TH1F>("r_reco_iso_unmatched"s, "counts", fr, ihf->size());
 
-    auto h_truth_gen_iso = new history<TH1F>("truth_gen_iso", "", null<TH1F>, ihf->size());
-    auto h_truth_reco_iso = new history<TH1F>("truth_reco_iso", "", null<TH1F>, ihf->size());
-    auto h_reco_gen_iso = new history<TH1F>("reco_gen_iso", "", null<TH1F>, ihf->size());
-    auto h_reco_reco_iso_matched = new history<TH1F>("reco_reco_iso_matched", "", null<TH1F>, ihf->size());
-    auto h_reco_reco_iso_unmatched = new history<TH1F>("reco_reco_iso_unmatched", "", null<TH1F>, ihf->size());
+    auto h_r_truth_gen_iso = new history<TH1F>("r_truth_gen_iso", "", null<TH1F>, ihf->size());
+    auto h_r_truth_reco_iso = new history<TH1F>("r_truth_reco_iso", "", null<TH1F>, ihf->size());
+    auto h_r_reco_gen_iso = new history<TH1F>("r_reco_gen_iso", "", null<TH1F>, ihf->size());
+    auto h_r_reco_reco_iso_matched = new history<TH1F>("r_reco_reco_iso_matched", "", null<TH1F>, ihf->size());
+    auto h_r_reco_reco_iso_unmatched = new history<TH1F>("r_reco_reco_iso_unmatched", "", null<TH1F>, ihf->size());
+
+    auto h_j_truth_gen_iso = new history<TH1F>("j_truth_gen_iso", "", null<TH1F>, ihf->size());
+    auto h_j_truth_reco_iso = new history<TH1F>("j_truth_reco_iso", "", null<TH1F>, ihf->size());
+    auto h_j_reco_gen_iso = new history<TH1F>("j_reco_gen_iso", "", null<TH1F>, ihf->size());
+    auto h_j_reco_reco_iso_matched = new history<TH1F>("j_reco_reco_iso_matched", "", null<TH1F>, ihf->size());
+    auto h_j_reco_reco_iso_unmatched = new history<TH1F>("j_reco_reco_iso_unmatched", "", null<TH1F>, ihf->size());
 
     std::vector<double> pass_fail_gen_reco(4,0);
 
@@ -392,20 +398,34 @@ int create_truth_gen_reco(char const* config, char const* output) {
     }
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
-        (*h_truth_gen_iso)[i] = fold((*g_gen_iso)[i], nullptr, mg, 0, osg);
-        (*h_truth_reco_iso)[i] = fold((*g_reco_iso)[i], nullptr, mg, 0, osg);
-        (*h_reco_gen_iso)[i] = fold((*r_gen_iso)[i], nullptr, mr, 0, osr);
-        (*h_reco_reco_iso_matched)[i] = fold((*r_reco_iso_matched)[i], nullptr, mr, 0, osr);
-        (*h_reco_reco_iso_unmatched)[i] = fold((*r_reco_iso_unmatched)[i], nullptr, mr, 0, osr);
+        (*h_r_truth_gen_iso)[i] = fold((*g_gen_iso)[i], nullptr, mg, 0, osg);
+        (*h_r_truth_reco_iso)[i] = fold((*g_reco_iso)[i], nullptr, mg, 0, osg);
+        (*h_r_reco_gen_iso)[i] = fold((*r_gen_iso)[i], nullptr, mr, 0, osr);
+        (*h_r_reco_reco_iso_matched)[i] = fold((*r_reco_iso_matched)[i], nullptr, mr, 0, osr);
+        (*h_r_reco_reco_iso_unmatched)[i] = fold((*r_reco_iso_unmatched)[i], nullptr, mr, 0, osr);
+
+        (*h_j_truth_gen_iso)[i] = fold((*g_gen_iso)[i], nullptr, mg, 1, osg);
+        (*h_j_truth_reco_iso)[i] = fold((*g_reco_iso)[i], nullptr, mg, 1, osg);
+        (*h_j_reco_gen_iso)[i] = fold((*r_gen_iso)[i], nullptr, mr, 1, osr);
+        (*h_j_reco_reco_iso_matched)[i] = fold((*r_reco_iso_matched)[i], nullptr, mr, 1, osr);
+        (*h_j_reco_reco_iso_unmatched)[i] = fold((*r_reco_iso_unmatched)[i], nullptr, mr, 1, osr);
     }
 
-    h_truth_gen_iso->rename(tag + "_truth_gen_iso_fold0");
-    h_truth_reco_iso->rename(tag + "_truth_reco_iso_fold0");
-    h_reco_gen_iso->rename(tag + "_reco_gen_iso_fold0");
-    h_reco_reco_iso_matched->rename(tag + "_reco_reco_iso_matched_fold0");
-    h_reco_reco_iso_unmatched->rename(tag + "_reco_reco_iso_unmatched_fold0");
+    h_r_truth_gen_iso->rename(tag + "_r_truth_gen_iso_fold0");
+    h_r_truth_reco_iso->rename(tag + "_r_truth_reco_iso_fold0");
+    h_r_reco_gen_iso->rename(tag + "_r_reco_gen_iso_fold0");
+    h_r_reco_reco_iso_matched->rename(tag + "_r_reco_reco_iso_matched_fold0");
+    h_r_reco_reco_iso_unmatched->rename(tag + "_r_reco_reco_iso_unmatched_fold0");
 
-    normalise_to_unity(h_truth_gen_iso, h_truth_reco_iso, h_reco_gen_iso, h_reco_reco_iso_matched, h_reco_reco_iso_unmatched);
+    h_j_truth_gen_iso->rename(tag + "_j_truth_gen_iso_fold1");
+    h_j_truth_reco_iso->rename(tag + "_j_truth_reco_iso_fold1");
+    h_j_reco_gen_iso->rename(tag + "_j_reco_gen_iso_fold1");
+    h_j_reco_reco_iso_matched->rename(tag + "_j_reco_reco_iso_matched_fold1");
+    h_j_reco_reco_iso_unmatched->rename(tag + "_j_reco_reco_iso_unmatched_fold1");
+
+    normalise_to_unity(h_r_truth_gen_iso, h_r_truth_reco_iso, h_r_reco_gen_iso, h_r_reco_reco_iso_matched, h_r_reco_reco_iso_unmatched);
+    normalise_to_unity(h_j_truth_gen_iso, h_j_truth_reco_iso, h_j_reco_gen_iso, h_j_reco_reco_iso_matched, h_j_reco_reco_iso_unmatched);
+
 
     /* save output */
     in(output, [&]() {
@@ -414,11 +434,18 @@ int create_truth_gen_reco(char const* config, char const* output) {
         r_gen_iso->save(tag);
         r_reco_iso_matched->save(tag);
         r_reco_iso_unmatched->save(tag);
-        h_truth_gen_iso->save(tag);
-        h_truth_reco_iso->save(tag);
-        h_reco_gen_iso->save(tag);
-        h_reco_reco_iso_matched->save(tag);
-        h_reco_reco_iso_unmatched->save(tag);
+        
+        h_r_truth_gen_iso->save(tag);
+        h_r_truth_reco_iso->save(tag);
+        h_r_reco_gen_iso->save(tag);
+        h_r_reco_reco_iso_matched->save(tag);
+        h_r_reco_reco_iso_unmatched->save(tag);
+
+        h_j_truth_gen_iso->save(tag);
+        h_j_truth_reco_iso->save(tag);
+        h_j_reco_gen_iso->save(tag);
+        h_j_reco_reco_iso_matched->save(tag);
+        h_j_reco_reco_iso_unmatched->save(tag);
     });
 
     return 0;
