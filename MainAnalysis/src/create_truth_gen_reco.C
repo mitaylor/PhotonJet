@@ -411,17 +411,17 @@ int create_truth_gen_reco(char const* config, char const* output) {
         (*h_j_reco_reco_iso_unmatched)[i] = fold((*r_reco_iso_unmatched)[i], nullptr, mr, 1, osr);
     }
 
-    h_r_truth_gen_iso->rename(tag + "_r_truth_gen_iso_fold0");
-    h_r_truth_reco_iso->rename(tag + "_r_truth_reco_iso_fold0");
-    h_r_reco_gen_iso->rename(tag + "_r_reco_gen_iso_fold0");
-    h_r_reco_reco_iso_matched->rename(tag + "_r_reco_reco_iso_matched_fold0");
-    h_r_reco_reco_iso_unmatched->rename(tag + "_r_reco_reco_iso_unmatched_fold0");
+    h_r_truth_gen_iso->rename("r_truth_gen_iso_fold0");
+    h_r_truth_reco_iso->rename("r_truth_reco_iso_fold0");
+    h_r_reco_gen_iso->rename("r_reco_gen_iso_fold0");
+    h_r_reco_reco_iso_matched->rename("r_reco_reco_iso_matched_fold0");
+    h_r_reco_reco_iso_unmatched->rename("r_reco_reco_iso_unmatched_fold0");
 
-    h_j_truth_gen_iso->rename(tag + "_j_truth_gen_iso_fold1");
-    h_j_truth_reco_iso->rename(tag + "_j_truth_reco_iso_fold1");
-    h_j_reco_gen_iso->rename(tag + "_j_reco_gen_iso_fold1");
-    h_j_reco_reco_iso_matched->rename(tag + "_j_reco_reco_iso_matched_fold1");
-    h_j_reco_reco_iso_unmatched->rename(tag + "_j_reco_reco_iso_unmatched_fold1");
+    h_j_truth_gen_iso->rename("j_truth_gen_iso_fold1");
+    h_j_truth_reco_iso->rename("j_truth_reco_iso_fold1");
+    h_j_reco_gen_iso->rename("j_reco_gen_iso_fold1");
+    h_j_reco_reco_iso_matched->rename("j_reco_reco_iso_matched_fold1");
+    h_j_reco_reco_iso_unmatched->rename("j_reco_reco_iso_unmatched_fold1");
 
     normalise_to_unity(h_r_truth_gen_iso, h_r_truth_reco_iso, h_r_reco_gen_iso, h_r_reco_reco_iso_matched, h_r_reco_reco_iso_unmatched);
     normalise_to_unity(h_j_truth_gen_iso, h_j_truth_reco_iso, h_j_reco_gen_iso, h_j_reco_reco_iso_matched, h_j_reco_reco_iso_unmatched);

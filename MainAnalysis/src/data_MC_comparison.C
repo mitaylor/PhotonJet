@@ -103,7 +103,7 @@ int data_mc_comparison(char const* config, const char* output) {
     h_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
     h_truth_reco_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_reco_iso"); });
     
-    /* (2) unfolded data vs unfolded MC vs gen truth */
+    /* (2) unfolded data vs unfolded MC*/
     auto p2 = new paper(tag + "_after_unfolding", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
@@ -121,7 +121,6 @@ int data_mc_comparison(char const* config, const char* output) {
     p3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
 
     h_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
-    h_qcd_before->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "qcd_before"); });
     h_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "data_circle"); });
 
     /* (4) truth reco iso vs truth gen iso */
