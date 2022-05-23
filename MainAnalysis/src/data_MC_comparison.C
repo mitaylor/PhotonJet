@@ -198,7 +198,7 @@ int data_mc_comparison(char const* config, const char* output) {
     in(output, [&]() {
         h_r_truth_gen_iso->save();
         h_r_truth_reco_iso->save();
-        h_vdata_before->save();
+        h_r_data_before->save();
         h_r_data_after->save();
         h_r_qcd_before->save();
         h_r_qcd_after->save();
