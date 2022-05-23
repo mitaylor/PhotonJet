@@ -382,12 +382,12 @@ int create_truth_gen_reco(char const* config, char const* output) {
                             }
                         }
                     }
-                    if (isolation < iso_max && gen_pt > 0) {
+                    if (isolation < iso_max && gen_pt > 10) {
                         for (int64_t k = 0; k < ihf->size(); ++k) {
                             (*r_reco_iso_matched)[k]->Fill(r_x, weights[k]*cor);
                         }
                     }
-                    if (isolation < iso_max && gen_pt < 0) {
+                    if (isolation < iso_max && gen_pt < 10) {
                         for (int64_t k = 0; k < ihf->size(); ++k) {
                             (*r_reco_iso_unmatched)[k]->Fill(r_x, weights[k]*cor);
                         }
