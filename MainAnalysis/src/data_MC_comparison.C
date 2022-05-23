@@ -158,7 +158,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto p6 = new paper(tag + "_jtpt_matched_unmatched", hb);
     p6->divide(ihf->size(), -1);
     p6->accessory(pthf_info);
-    apply_style(p6, collisions, -0.001, 0.02);
+    apply_style(p6, collisions, -0.001, 0.03);
     p6->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p6->add(h, "reco_matched"); });
@@ -178,7 +178,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto p8 = new paper(tag + "_jtpt_mc_vs_reco", hb);
     p8->divide(ihf->size(), -1);
     p8->accessory(pthf_info);
-    apply_style(p8, collisions, -0.001, 0.02);
+    apply_style(p8, collisions, -0.001, 0.03);
     p8->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p8->add(h, "reco_matched"); });
