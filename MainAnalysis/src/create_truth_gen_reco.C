@@ -359,13 +359,13 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
                 /* isolation requirement */
                 if (is_gen) {
-                    if ((*p->mcCalIsoDR04)[gen_index] < 5 && gen_pt < rptg.front()) { 
+                    if ((*p->mcCalIsoDR04)[gen_index] < 5 && gen_pt > rptg.front()) { 
                         for (int64_t k = 0; k < ihf->size(); ++k) {
                             (*g_gen_iso)[k]->Fill(g_x, weights[k]*cor); }
                     }
                 }
 
-                if (isolation < iso_max && gen_pt < rptg.front()) { 
+                if (isolation < iso_max && gen_pt > rptg.front()) { 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*g_reco_iso)[k]->Fill(g_x, weights[k]*cor); }
                 }
@@ -387,7 +387,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                             (*r_reco_iso_matched)[k]->Fill(r_x, weights[k]*cor);
                         }
                     }
-                    if (isolation < iso_max && gen_pt < 0) {
+                    if (isolation < iso_max && !is_gen) {
                         for (int64_t k = 0; k < ihf->size(); ++k) {
                             (*r_reco_iso_unmatched)[k]->Fill(r_x, weights[k]*cor);
                         }
