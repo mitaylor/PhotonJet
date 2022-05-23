@@ -1,5 +1,6 @@
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
+#include "../include/lambdas.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -9,6 +10,7 @@
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
+#include "../git/tricks-and-treats/include/zip.h"
 
 #include "../include/JetCorrector.h"
 #include "../include/JetUncertainty.h"
