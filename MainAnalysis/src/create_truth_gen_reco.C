@@ -148,6 +148,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
+            if (pho_et > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
@@ -223,7 +224,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                 auto gen_eta = (*p->refeta)[j];
                 auto gen_phi = (*p->refphi)[j];
 
-                if (gen_pt < rptg.front()) { continue; }
+                if (gen_pt < 0) { continue; } //////// 
 
                 auto reco_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
                 auto reco_eta = (*p->jteta)[j];
@@ -260,13 +261,13 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
                 /* isolation requirement */
                 if (is_gen) {
-                    if ((*p->mcCalIsoDR04)[gen_index] < 5) { 
+                    if ((*p->mcCalIsoDR04)[gen_index] < 5 && gen_pt < rptg.front()) { 
                         for (int64_t k = 0; k < ihf->size(); ++k) {
                             (*g_gen_iso)[k]->Fill(g_x, weights[k]*cor); }
                     }
                 }
 
-                if (isolation < iso_max) { 
+                if (isolation < iso_max && gen_pt < rptg.front()) { 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*g_reco_iso)[k]->Fill(g_x, weights[k]*cor); }
                 }

@@ -57,6 +57,7 @@ int vacillate(char const* config, char const* output) {
     auto no_jes = conf->get<bool>("no_jes");
     auto ele_rej = conf->get<bool>("ele_rej");
     auto jer_up = conf->get<bool>("jer_up");
+    auto mc = conf->get<bool>("mc");
 
     auto jet_eta_max = conf->get<float>("jet_eta_max");
     auto photon_pt_min = conf->get<float>("photon_pt_min");
@@ -178,6 +179,7 @@ int vacillate(char const* config, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
+            if (pho_et > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
@@ -293,7 +295,7 @@ int vacillate(char const* config, char const* output) {
                 if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
                 else if  (jer_up && !heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]);
 
-                reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt;
+                if (!mc) { reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt; }
 
                 /* jet energy scale uncertainty */
                 if (!jeu.empty()) {
