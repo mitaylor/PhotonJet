@@ -24,13 +24,14 @@ int data_mc_comparison(char const* config, const char* output) {
     auto conf = new configurer(config);
 
     auto input_data = conf->get<std::string>("input_data");
-    auto data_before_label = conf->get<std::string>("data_before_label");
-    auto data_after_label = conf->get<std::string>("data_after_label");
-    auto data_circle_label = conf->get<std::string>("data_circle_label");
+    auto r_data_before_label = conf->get<std::string>("r_data_before_label");
+    auto r_data_after_label = conf->get<std::string>("r_data_after_label");
+    auto r_data_circle_label = conf->get<std::string>("r_data_circle_label");
 
     auto input_qcd = conf->get<std::string>("input_qcd");
-    auto qcd_before_label = conf->get<std::string>("qcd_before_label");
-    auto qcd_after_label = conf->get<std::string>("qcd_after_label");
+    auto r_qcd_before_label = conf->get<std::string>("r_qcd_before_label");
+    auto j_qcd_before_label = conf->get<std::string>("j_qcd_before_label");
+    auto r_qcd_after_label = conf->get<std::string>("r_qcd_after_label");
 
     auto input_truth = conf->get<std::string>("input_truth");
     auto r_truth_gen_iso_label = conf->get<std::string>("r_truth_gen_iso_label");
@@ -58,12 +59,13 @@ int data_mc_comparison(char const* config, const char* output) {
     TFile* fqcd = new TFile(input_qcd.data(), "read");
     TFile* ftruth = new TFile(input_truth.data(), "read");
 
-    auto h_r_data_before = new history<TH1F>(fdata, tag + "_"s + data_before_label);
-    auto h_r_data_after = new history<TH1F>(fdata, tag + "_"s + data_after_label);
-    auto h_data_circle = new history<TH1F>(fdata, tag + "_"s + data_circle_label);
+    auto h_r_data_before = new history<TH1F>(fdata, tag + "_"s + r_data_before_label);
+    auto h_r_data_after = new history<TH1F>(fdata, tag + "_"s + r_data_after_label);
+    auto h_r_data_circle = new history<TH1F>(fdata, tag + "_"s + r_data_circle_label);
 
-    auto h_r_qcd_before = new history<TH1F>(fqcd, tag + "_"s + qcd_before_label);
-    auto h_r_qcd_after = new history<TH1F>(fqcd, tag + "_"s + qcd_after_label);
+    auto h_r_qcd_before = new history<TH1F>(fqcd, tag + "_"s + r_qcd_before_label);
+    auto h_j_qcd_before = new history<TH1F>(fqcd, tag + "_"s + j_qcd_before_label);
+    auto h_r_qcd_after = new history<TH1F>(fqcd, tag + "_"s + r_qcd_after_label);
 
     auto h_r_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_gen_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
@@ -180,7 +182,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p8->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p8->add(h, "reco_matched"); });
-    h_r_qcd_before->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "qcd_before"); });
+    h_j_qcd_before->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "qcd_before"); });
 
     hb->sketch();
 
