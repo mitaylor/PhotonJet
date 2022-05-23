@@ -114,7 +114,7 @@ int data_mc_comparison(char const* config, const char* output) {
     h_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "qcd_after"); });
 
     /* (3) data vs MC before unfolding vs reco truth*/
-    auto p3 = new paper(tag + "_before_unfolding", hb);
+    auto p3 = new paper(tag + "_refolding_test", hb);
     p3->divide(ihf->size(), -1);
     p3->accessory(pthf_info);
     apply_style(p3, collisions, -2., 27.);
