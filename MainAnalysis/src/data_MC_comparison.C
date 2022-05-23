@@ -171,7 +171,7 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto size = h_data_before->size();
     // std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
-    std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
+    std::array<int64_t, 4> osg = { 0, 0, 3, 1 };
 
     auto h_truth_gen_iso = new history<TH1F>("truth_gen_iso", "", null<TH1F>, size);
     auto h_truth_reco_iso = new history<TH1F>("truth_reco_iso", "", null<TH1F>, size);
