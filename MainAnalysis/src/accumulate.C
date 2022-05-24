@@ -53,6 +53,8 @@ int accumulate(char const* config, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
+    auto use_photon_60 = conf->get<bool>("use_photon_60");
+
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
@@ -116,6 +118,15 @@ int accumulate(char const* config, char const* output) {
         h = h->shrink("s", shape, std::vector<int64_t>(h->dims(), 0));
     };
 
+    auto discard_low = [](history<TH1F>*& h, int64_t axis) {
+        auto shape = h->shape();
+        shape[axis] = shape[axis] - 2;
+        std::vector<int64_t> offsets(h->dims(), 0);
+        offsets[axis] = 2;
+        
+        h = h->shrink("s", shape, offsets);
+    };
+
     discard(nevt, 0);
     discard(pjet_es_f_dphi, 0);
     discard(pjet_wta_f_dphi, 0);
@@ -124,6 +135,17 @@ int accumulate(char const* config, char const* output) {
     discard(pjet_es_u_dphi, 0);
     discard(pjet_wta_u_dphi, 0);
     discard(pjet_u_dr, 0);
+
+    if (use_photon_60) {
+        discard_low(nevt, 0);
+        discard_low(pjet_es_f_dphi, 0);
+        discard_low(pjet_wta_f_dphi, 0);
+        discard_low(pjet_f_dr, 0);
+        discard_low(pjet_f_jpt, 0);
+        discard_low(pjet_es_u_dphi, 0);
+        discard_low(pjet_wta_u_dphi, 0);
+        discard_low(pjet_u_dr, 0);
+    }
 
     /* integrate histograms */
     auto nevt_d_pt = nevt->sum(1);
