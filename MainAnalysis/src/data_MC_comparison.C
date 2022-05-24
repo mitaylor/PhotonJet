@@ -142,7 +142,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p4->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_truth_gen_iso->apply([&](TH1* h) { p4->add(h, "truth_gen_iso"); });
-    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "truth_reco_iso_matched"); });
+    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "truth_reco_iso"); });
 
     /* (5) matched vs unmatched dr */
     auto p5 = new paper(tag + "_dj_matched_unmatched", hb);
