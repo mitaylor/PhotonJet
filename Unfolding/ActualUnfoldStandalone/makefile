@@ -37,11 +37,6 @@ Execute: Unfold1D.cpp
 RunTest: Execute
 	./Execute --Input Input/PPNominal0.root --Output Output/PPNominal0.root \
 		--Prior MC --DoBayes true --DoSVD false --DoInvert true --DoTUnfold false --DoFit true
-	./Execute --Input Input/AANominal0.root --Output Output/AANominal0.root \
-		--Prior MC --DoBayes true --DoSVD false --DoInvert true --DoTUnfold false --DoFit false
-	./Execute --Input Input/AANominal1.root --Output Output/AANominal1.root \
-                --Prior MC --DoBayes true --DoSVD false --DoInvert true --DoTUnfold false --DoFit true
-	./Execute --Input Input/AANominal2.root --Output Output/AANominal2.root \
-                --Prior MC --DoBayes true --DoSVD false --DoInvert true --DoTUnfold false --DoFit true
-	./Execute --Input Input/AANominal3.root --Output Output/AANominal3.root \
-                --Prior MC --DoBayes true --DoSVD false --DoInvert true --DoTUnfold false --DoFit true
+
+RunAll: Execute
+	./RunAll.sh
