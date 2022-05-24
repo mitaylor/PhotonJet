@@ -123,7 +123,8 @@ int accumulate(char const* config, char const* output) {
         shape[axis] = shape[axis] - 2;
         std::vector<int64_t> offsets(h->dims(), 0);
         offsets[axis] = 2;
-        
+        dpt.erase(dpt.begin(), dpt.begin() + 2);
+
         h = h->shrink("s", shape, offsets);
     };
 
