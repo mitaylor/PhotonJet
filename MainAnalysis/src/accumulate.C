@@ -123,7 +123,6 @@ int accumulate(char const* config, char const* output) {
         shape[axis] = shape[axis] - 2;
         std::vector<int64_t> offsets(h->dims(), 0);
         offsets[axis] = 2;
-        dpt.erase(dpt.begin(), dpt.begin() + 2);
 
         h = h->shrink("s", shape, offsets);
     };
@@ -138,6 +137,8 @@ int accumulate(char const* config, char const* output) {
     discard(pjet_u_dr, 0);
 
     if (use_photon_60) {
+        dpt.erase(dpt.begin(), dpt.begin() + 2);
+        
         discard_low(nevt, 0);
         discard_low(pjet_es_f_dphi, 0);
         discard_low(pjet_wta_f_dphi, 0);
