@@ -35,6 +35,7 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto input_truth = conf->get<std::string>("input_truth");
     auto r_truth_gen_iso_label = conf->get<std::string>("r_truth_gen_iso_label");
+    auto j_truth_gen_iso_label = conf->get<std::string>("j_truth_gen_iso_label");
     auto r_truth_reco_iso_label = conf->get<std::string>("r_truth_reco_iso_label");
     auto r_reco_reco_iso_label_matched = conf->get<std::string>("r_reco_reco_iso_label_matched");
     auto r_reco_reco_iso_label_unmatched = conf->get<std::string>("r_reco_reco_iso_label_unmatched");
