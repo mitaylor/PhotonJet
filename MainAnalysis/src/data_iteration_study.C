@@ -59,7 +59,7 @@ int data_iteration_study(char const* config, char const* output) {
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 0, iterations.back()); };
 
-    auto chi_square = new history<TH1F>("chi_square"s, "", func, base->size());
+    auto chi_square = new history<TH1F>("chi_square"s, "", func, base0->size());
 
     for (size_t i = 0; i < iterations.size(); ++i) {
         auto refold0 = new history<TH1F>(f, tag + "_"s + base_label + "_refold0_iteration" + std::to_string(iterations[i]));
