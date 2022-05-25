@@ -145,7 +145,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_qcd_after = new history<TH1F>(fqcd, tag + "_"s + r_qcd_after_label);
     auto h_j_qcd_after = new history<TH1F>(fqcd, tag + "_"s + j_qcd_after_label);
 
-    auto h_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
+    // auto h_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
     auto h_j_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + j_truth_reco_iso_label);
 
