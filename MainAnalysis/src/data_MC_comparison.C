@@ -117,7 +117,7 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("data_circle", "Refolded Data");
     hb->alias("reco_matched", "MC Reco + Gen Matched");
     hb->alias("reco_unmatched", "MC Reco + Not Gen Matched");
-    hb->alias("matrix", "Resonse Matrix Reco");
+    hb->alias("matrix", "Response Matrix Reco");
 
     /* (1) unfolded MC vs gen truth dr */
     auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
