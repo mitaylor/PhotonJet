@@ -37,6 +37,12 @@ TH2F* variance(TH1* flat, multival const* m) {
     return cov;
 }
 
+template <typename... T>
+void normalise_to_unity(T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1. / obj->Integral("width")); }), 0)... };
+}
+
 template <std::size_t N>
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
            std::array<int64_t, N> const& offsets) {
