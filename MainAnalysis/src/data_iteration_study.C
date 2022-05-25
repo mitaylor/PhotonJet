@@ -62,7 +62,7 @@ int data_iteration_study(char const* config, char const* output) {
         auto refold = new history<TH1F>(f, tag + "_"s + refold_label + std::to_string(iterations[i]));
 
         for (int64_t j = 0; j < base->size(); ++j) {
-            if (!((*refold)[j]->GetBinError(1) < 1)) { continue; }
+            if (!((*refold)[j]->GetBinError(1) < 10) { continue; }
 
             double sum = 0;
             double unc = 0;
@@ -72,6 +72,8 @@ int data_iteration_study(char const* config, char const* output) {
                 sum += diff * diff;
                 unc += (*refold)[j]->GetBinError(k + 1);
             }
+
+            if (!(unc < 10) { continue; }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
             (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);

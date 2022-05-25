@@ -263,7 +263,6 @@ int quantitate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
-        double last = 99999999999;
 
         for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
@@ -275,10 +274,6 @@ int quantitate(char const* config, char const* output) {
                 min = top;
                 choice[i] = j;
             }
-
-            if (top > last)  { break; }
-
-            last = top;
         }
 
         std::cout << std::endl;
