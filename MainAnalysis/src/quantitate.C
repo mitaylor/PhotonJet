@@ -254,9 +254,13 @@ int quantitate(char const* config, char const* output) {
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
 
-    auto refolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
+    auto refolded = new history<TH1F>("refolded", "", null<TH1F>, (int64_t) afters.size());
     auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, (int64_t) afters.size());
+
+    auto measured = new history<TH1F>("measured", "", null<TH1F>, (int64_t) afters.size());
+    auto measured_fold0 = new history<TH1F>("measured_fold0", "", null<TH1F>, (int64_t) afters.size());
+    auto measured_fold1 = new history<TH1F>("measured_fold1", "", null<TH1F>, (int64_t) afters.size());
 
     /* determine the number of iterations to use */
     std::vector<int64_t> choice(chi_square->size(), 1);
@@ -288,6 +292,7 @@ int quantitate(char const* config, char const* output) {
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
         auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
+        auto HMeasured = (TH1F*) fafters[j]->Get("HMCMeasured");
 
         (*unfolded)[j] = HUnfoldedBayes;
         (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
@@ -296,9 +301,14 @@ int quantitate(char const* config, char const* output) {
         (*refolded)[j] = HRefolded;
         (*refolded_fold0)[j] = fold((*refolded)[j], nullptr, mr, 0, osr);
         (*refolded_fold1)[j] = fold((*refolded)[j], nullptr, mr, 1, osr);
+
+        (*measured)[j] = HMeasured;
+        (*measured_fold0)[j] = fold((*measured)[j], nullptr, mr, 0, osr);
+        (*measured_fold1)[j] = fold((*measured)[j], nullptr, mr, 1, osr);
     }
 
-    normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1);
+    normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1, 
+        measured_fold0, measured_fold1);
 
     unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
@@ -308,6 +318,10 @@ int quantitate(char const* config, char const* output) {
     refolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded_fold0"s);
     refolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded_fold1"s);
 
+    measured->rename(tag + "_r");
+    measured_fold0->rename(tag + "_r_fold0");
+    measured_fold1->rename(tag + "_r_fold1");
+
     unfolded->save();
     unfolded_fold0->save();
     unfolded_fold1->save();
@@ -315,6 +329,10 @@ int quantitate(char const* config, char const* output) {
     refolded->save();
     refolded_fold0->save();
     refolded_fold1->save();
+
+    measured->save();
+    measured_fold0->save();
+    measured_fold1->save();
 
     fout->Close();
 

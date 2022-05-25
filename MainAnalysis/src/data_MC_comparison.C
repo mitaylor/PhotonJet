@@ -36,6 +36,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto r_qcd_circle_label = conf->get<std::string>("r_qcd_circle_label");
     auto j_qcd_circle_label = conf->get<std::string>("j_qcd_circle_label");
 
+    auto r_r_label = conf->get<std::string>("r_r_label");
+    auto j_r_label = conf->get<std::string>("j_r_label");
+
     auto input_truth = conf->get<std::string>("input_truth");
     auto r_truth_gen_iso_label = conf->get<std::string>("r_truth_gen_iso_label");
     auto r_truth_reco_iso_label = conf->get<std::string>("r_truth_reco_iso_label");
@@ -74,6 +77,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_qcd_circle = new history<TH1F>(fqcd, tag + "_"s + r_qcd_circle_label);
     auto h_j_qcd_circle = new history<TH1F>(fqcd, tag + "_"s + j_qcd_circle_label);
 
+    auto h_r_r = new history<TH1F>(fqcd, tag + "_"s + r_r_label);
+    auto h_j_r = new history<TH1F>(fqcd, tag + "_"s + j_r_label);
+
     auto h_r_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_gen_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
     auto h_j_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + j_truth_reco_iso_label);
@@ -100,7 +106,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto hb = new pencil();
     hb->category("type", "data_before", "qcd_before", "truth_reco_iso", 
                  "data_after", "qcd_after", "truth_gen_iso", "data_circle",
-                 "reco_matched", "reco_unmatched");
+                 "reco_matched", "reco_unmatched", "matrix");
 
     hb->alias("data_before", "Data Before Unfolding");
     hb->alias("qcd_circle", "Analyzed MC After Refolding");
@@ -111,6 +117,7 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("data_circle", "Refolded Data");
     hb->alias("reco_matched", "MC Reco + Gen Matched");
     hb->alias("reco_unmatched", "MC Reco + Not Gen Matched");
+    hb->alias("matrix", "Resonse Matrix Reco");
 
     /* (1) unfolded MC vs gen truth dr */
     auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
@@ -181,6 +188,7 @@ int data_mc_comparison(char const* config, const char* output) {
     
     h_r_reco_reco_iso_matched->apply([&](TH1* h) { p7->add(h, "reco_matched"); });
     h_r_qcd_before->apply([&](TH1* h, int64_t index) { p7->stack(index + 1, h, "qcd_before"); });
+    h_r_r->apply([&](TH1* h, int64_t index) { p7->stack(index + 1, h, "matrix"); });
 
     /* (8) MC vs reco truth jtpt */
     auto p8 = new paper(tag + "_jtpt_mc_vs_reco", hb);
@@ -191,8 +199,9 @@ int data_mc_comparison(char const* config, const char* output) {
     
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p8->add(h, "reco_matched"); });
     h_j_qcd_before->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "qcd_before"); });
+    h_j_r->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "matrix"); });
 
-    /* (9) data vs refolded data */
+    /* (9) qcd vs refolded qcd */
     auto p9 = new paper(tag + "_dj_qcd_refolding_test", hb);
     p9->divide(ihf->size(), -1);
     p9->accessory(pthf_info);
@@ -202,7 +211,7 @@ int data_mc_comparison(char const* config, const char* output) {
     h_r_qcd_before->apply([&](TH1* h) { p9->add(h, "qcd_before"); });
     h_r_qcd_circle->apply([&](TH1* h, int64_t index) { p9->stack(index + 1, h, "qcd_circle"); });
 
-    /* (10) data vs refolded data */
+    /* (10) qcd vs refolded qcd */
     auto p10 = new paper(tag + "_jtpt_qcd_refolding_test", hb);
     p10->divide(ihf->size(), -1);
     p10->accessory(pthf_info);
