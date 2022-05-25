@@ -203,7 +203,7 @@ int data_mc_comparison(char const* config, const char* output) {
     h_r_qcd_circle->apply([&](TH1* h, int64_t index) { p9->stack(index + 1, h, "qcd_circle"); });
 
     /* (10) data vs refolded data */
-    auto p10 = new paper(tag + "_dj_qcd_refolding_test", hb);
+    auto p10 = new paper(tag + "_jtpt_qcd_refolding_test", hb);
     p10->divide(ihf->size(), -1);
     p10->accessory(pthf_info);
     apply_style(p10, collisions, -0.001, 0.04);
