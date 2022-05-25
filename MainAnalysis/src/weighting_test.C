@@ -145,7 +145,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_qcd_after = new history<TH1F>(fqcd, tag + "_"s + r_qcd_after_label);
     auto h_j_qcd_after = new history<TH1F>(fqcd, tag + "_"s + j_qcd_after_label);
 
-    // auto h_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
+    auto h_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + truth_reco_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
     auto h_j_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + j_truth_reco_iso_label);
 
@@ -159,7 +159,6 @@ int data_mc_comparison(char const* config, const char* output) {
 
         for (int64_t j = 0; j < (*h_qcd_after)[i]->GetNbinsX(); ++j) {
             int64_t index = j / idr->size() - osg[2];
-            std::cout << index << std::endl;
 
             if (index >= 0 && index < (int64_t) weights.size()) {
                 auto old = (*h_qcd_after)[i]->GetBinContent(j + 1);
@@ -228,6 +227,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p2->draw("pdf");
 
     in(output, [&]() {
+        h_qcd_after->save();
+        h_truth_reco_iso->save();
         h_j_qcd_after->save();
         h_j_truth_reco_iso->save();
         h_j_weighted_qcd_after->save();
