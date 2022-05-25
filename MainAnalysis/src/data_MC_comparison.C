@@ -33,6 +33,8 @@ int data_mc_comparison(char const* config, const char* output) {
     auto j_qcd_before_label = conf->get<std::string>("j_qcd_before_label");
     auto r_qcd_after_label = conf->get<std::string>("r_qcd_after_label");
     auto j_qcd_after_label = conf->get<std::string>("j_qcd_after_label");
+    auto r_qcd_circle_label = conf->get<std::string>("r_qcd_circle_label");
+    auto j_qcd_circle_label = conf->get<std::string>("j_qcd_circle_label");
 
     auto input_truth = conf->get<std::string>("input_truth");
     auto r_truth_gen_iso_label = conf->get<std::string>("r_truth_gen_iso_label");
@@ -69,6 +71,8 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_j_qcd_before = new history<TH1F>(fqcd, tag + "_"s + j_qcd_before_label);
     auto h_r_qcd_after = new history<TH1F>(fqcd, tag + "_"s + r_qcd_after_label);
     auto h_j_qcd_after = new history<TH1F>(fqcd, tag + "_"s + j_qcd_after_label);
+    auto h_r_qcd_circle = new history<TH1F>(fqcd, tag + "_"s + r_qcd_circle_label);
+    auto h_j_qcd_circle = new history<TH1F>(fqcd, tag + "_"s + j_qcd_circle_label);
 
     auto h_r_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_gen_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
@@ -99,7 +103,7 @@ int data_mc_comparison(char const* config, const char* output) {
                  "reco_matched", "reco_unmatched");
 
     hb->alias("data_before", "Data Before Unfolding");
-    hb->alias("data_after", "Data After Unfolding");
+    hb->alias("qcd_circle", "Analyzed MC After Refolding");
     hb->alias("qcd_before", "Analyzed MC Before Unfolding");
     hb->alias("qcd_after", "Analyzed MC After Unfolding");
     hb->alias("truth_gen_iso", "MC Truth Gen Iso");
@@ -188,6 +192,26 @@ int data_mc_comparison(char const* config, const char* output) {
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p8->add(h, "reco_matched"); });
     h_j_qcd_before->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "qcd_before"); });
 
+    /* (9) data vs refolded data */
+    auto p9 = new paper(tag + "_dj_qcd_refolding_test", hb);
+    p9->divide(ihf->size(), -1);
+    p9->accessory(pthf_info);
+    apply_style(p9, collisions, -2., 27.);
+    p9->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+
+    h_r_qcd_before->apply([&](TH1* h) { p9->add(h, "qcd_before"); });
+    h_r_qcd_circle->apply([&](TH1* h, int64_t index) { p9->stack(index + 1, h, "qcd_circle"); });
+
+    /* (10) data vs refolded data */
+    auto p10 = new paper(tag + "_dj_qcd_refolding_test", hb);
+    p10->divide(ihf->size(), -1);
+    p10->accessory(pthf_info);
+    apply_style(p10, collisions, -0.001, 0.04);
+    p10->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
+
+    h_j_qcd_before->apply([&](TH1* h) { p10->add(h, "qcd_before"); });
+    h_j_qcd_circle->apply([&](TH1* h, int64_t index) { p10->stack(index + 1, h, "qcd_circle"); });
+
     hb->sketch();
 
     p1->draw("pdf");
@@ -198,6 +222,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p6->draw("pdf");
     p7->draw("pdf");
     p8->draw("pdf");
+    p9->draw("pdf");
+    p10->draw("pdf");
 
     in(output, [&]() {
         h_r_truth_gen_iso->save();
