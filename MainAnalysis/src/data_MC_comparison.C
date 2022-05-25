@@ -32,6 +32,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto r_qcd_before_label = conf->get<std::string>("r_qcd_before_label");
     auto j_qcd_before_label = conf->get<std::string>("j_qcd_before_label");
     auto r_qcd_after_label = conf->get<std::string>("r_qcd_after_label");
+    auto j_qcd_after_label = conf->get<std::string>("j_qcd_after_label");
 
     auto input_truth = conf->get<std::string>("input_truth");
     auto r_truth_gen_iso_label = conf->get<std::string>("r_truth_gen_iso_label");
