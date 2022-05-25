@@ -129,12 +129,12 @@ int data_mc_comparison(char const* config, const char* output) {
     auto rdrg = conf->get<std::vector<float>>("drg_range");
     auto rptg = conf->get<std::vector<float>>("ptg_range");
 
+    /* create intervals and multivals */
     std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
-    auto mg = new multival(rdrg, rptg);
-
-    /* create intervals and multivals */
+    auto idr = new interval(rdrg);
     auto ihf = new interval(dhf);
+    auto mg = new multival(rdrg, rptg);
     auto mpthf = new multival(dpt, dhf);
 
     /* load history objects */
@@ -158,7 +158,7 @@ int data_mc_comparison(char const* config, const char* output) {
         }
 
         for (int64_t j = 0; j < (*h_qcd_after)[i]->GetNbinsX(); ++j) {
-            int64_t index = j / (int64_t) rdrg.size() - osg[2];
+            int64_t index = j / idr->size() - osg[2];
             std::cout << index << std::endl;
 
             if (index >= 0 && index < (int64_t) weights.size()) {
