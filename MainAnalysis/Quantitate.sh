@@ -3,6 +3,14 @@
 arithmetic() {
     tag=$1
 
+    echo ${tag}
+
+    ./bin/get_data_iteration_files configs/quantitate/quantitate_${tag}.conf \
+        data/jet_20/data_iteration_${tag}.root
+
+    ./bin/data_iteration_study configs/test/get_data_iteration/get_data_iteration_${tag}.conf \
+        data/jet_20/iteration_${tag}.root
+
     ./bin/quantitate configs/quantitate/quantitate_${tag}.conf \
         data/jet_20/quantitate_${tag}.root
 }
