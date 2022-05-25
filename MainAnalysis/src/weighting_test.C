@@ -156,8 +156,8 @@ int data_mc_comparison(char const* config, const char* output) {
             std::cout << index << std::endl;
 
             if (index >= 0 && index < (int64_t) weights.size()) {
-                auto old = (*h_qcd_after)[i]->GetBinContent(j);
-                (*h_qcd_after)[i]->SetBinContent(old * weights[index]);
+                auto old = (*h_qcd_after)[i]->GetBinContent(j + 1);
+                (*h_qcd_after)[i]->SetBinContent(j + 1, old * weights[index]);
             }
         }
     }
