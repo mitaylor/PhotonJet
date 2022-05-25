@@ -376,7 +376,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
                     if (is_gen) {
-                        if ((*p->mcCalIsoDR04)[gen_index] < 5) {
+                        if ((*p->mcCalIsoDR04)[gen_index] < 5 && gen_pt > rptg.front()) {
                             for (int64_t k = 0; k < ihf->size(); ++k) {
                                 (*r_gen_iso)[k]->Fill(r_x, weights[k]*cor);
                             }
