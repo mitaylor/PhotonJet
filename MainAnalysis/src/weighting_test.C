@@ -148,11 +148,12 @@ int data_mc_comparison(char const* config, const char* output) {
         std::vector<float> weights;
 
         for (int64_t j = 0; j < (*h_j_qcd_after)[i]->GetNbinsX(); ++j) {
-            weights.push_back(h_j_truth_reco_iso->GetBinContent(j + 1) / h_j_qcd_after->GetBinContent(j + 1));
+            weights.push_back((*h_j_truth_reco_iso)[i]->GetBinContent(j + 1) / (*h_j_qcd_after)[i]->GetBinContent(j + 1));
         }
 
         for (int64_t j = 0; j < (*h_qcd_after)[i]->GetNbinsX(); ++j) {
             int64_t index = j / (int64_t) rdrg.size() - osg[2];
+            std::cout << index << std::endl;
 
             if (index >= 0 && index < (int64_t) weights.size()) {
                 auto old = (*h_qcd_after)[i]->GetBinContent(j);
