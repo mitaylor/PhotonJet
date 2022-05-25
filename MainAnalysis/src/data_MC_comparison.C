@@ -66,9 +66,11 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_qcd_before = new history<TH1F>(fqcd, tag + "_"s + r_qcd_before_label);
     auto h_j_qcd_before = new history<TH1F>(fqcd, tag + "_"s + j_qcd_before_label);
     auto h_r_qcd_after = new history<TH1F>(fqcd, tag + "_"s + r_qcd_after_label);
+    auto h_j_qcd_after = new history<TH1F>(fqcd, tag + "_"s + j_qcd_after_label);
 
     auto h_r_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_gen_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
+    auto h_j_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + j_truth_reco_iso_label);
     auto h_r_reco_reco_iso_matched = new history<TH1F>(ftruth, tag + "_"s + r_reco_reco_iso_label_matched);
     auto h_r_reco_reco_iso_unmatched = new history<TH1F>(ftruth, tag + "_"s + r_reco_reco_iso_label_unmatched);
     auto h_j_reco_reco_iso_matched = new history<TH1F>(ftruth, tag + "_"s + j_reco_reco_iso_label_matched);
@@ -104,8 +106,8 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("reco_matched", "MC Reco + Gen Matched");
     hb->alias("reco_unmatched", "MC Reco + Not Gen Matched");
 
-    /* (1) unfolded MC vs gen truth */
-    auto p1 = new paper(tag + "_unfolded_mc_vs_truth_reco_iso", hb);
+    /* (1) unfolded MC vs gen truth dr */
+    auto p1 = new paper(tag + "_drjunfolded_mc_vs_truth_reco_iso", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
@@ -114,15 +116,15 @@ int data_mc_comparison(char const* config, const char* output) {
     h_r_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
     h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_reco_iso"); });
     
-    /* (2) unfolded data vs unfolded MC*/
-    auto p2 = new paper(tag + "_after_unfolding", hb);
+    /* (2) unfolded MC vs gen truth jtpt */
+    auto p2 = new paper(tag + "_jtpt_unfolded_mc_vs_truth_reco_iso", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
-    apply_style(p2, collisions, -2., 27.);
-    p2->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
-
-    h_r_data_after->apply([&](TH1* h) { p2->add(h, "data_after"); });
-    h_r_qcd_after->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "qcd_after"); });
+    apply_style(p2, collisions, -0.001, 0.04);
+    p2->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
+    
+    h_j_qcd_after->apply([&](TH1* h) { p2->add(h, "qcd_after"); });
+    h_j_truth_reco_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_reco_iso"); });
 
     /* (3) data vs refolded data */
     auto p3 = new paper(tag + "_refolding_test", hb);
@@ -202,6 +204,7 @@ int data_mc_comparison(char const* config, const char* output) {
         h_r_data_after->save();
         h_r_qcd_before->save();
         h_r_qcd_after->save();
+        h_j_qcd_after->save();
         h_r_data_circle->save();
         h_r_truth_gen_iso->save();
         h_r_truth_reco_iso->save();
