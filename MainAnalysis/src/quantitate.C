@@ -276,7 +276,7 @@ int quantitate(char const* config, char const* output) {
             }
         }
 
-        std::cout << std::endl;
+        std::cout << std::endl << choice[i] << std::endl;
     }
 
     for (size_t j = 0; j < fafters.size(); ++j) {
