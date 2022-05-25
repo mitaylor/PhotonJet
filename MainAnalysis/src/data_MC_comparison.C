@@ -109,7 +109,7 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("reco_unmatched", "MC Reco + Not Gen Matched");
 
     /* (1) unfolded MC vs gen truth dr */
-    auto p1 = new paper(tag + "_drjunfolded_mc_vs_truth_reco_iso", hb);
+    auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);

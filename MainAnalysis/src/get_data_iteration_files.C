@@ -149,14 +149,20 @@ int quantitate(char const* config, char const* output) {
     auto shape = hin->shape();
 
     auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
+    auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
+
     for (int64_t i = 0; i < hin->size(); ++i) {
         (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
+        (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
     }
 
-    normalise_to_unity(side0);
+    normalise_to_unity(side0, side0);
 
     side0->rename(tag + "_"s + before_label + stub + "_side0"s);
+    side1->rename(tag + "_"s + before_label + stub + "_side1"s);
+
     side0->save();
+    side1->save();
 
     /* prepare the refolded data */
     std::vector<int64_t> iteration {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -164,18 +170,23 @@ int quantitate(char const* config, char const* output) {
 
     for (size_t i = 0; i < iteration.size(); ++i) {
         auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, (int64_t) afters.size());
+        auto refold1 = new history<TH1F>("refold1", "", null<TH1F>, (int64_t) afters.size());
 
         for (size_t j = 0; j < fafters.size(); ++j) {
                     std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
                     auto HRefolded = (TH1F*) fafters[j]->Get(name.data());
 
                     (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
+                    (*refold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
         }
 
-        normalise_to_unity(refold0);
+        normalise_to_unity(refold0, refold1);
 
         refold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refold0_iteration"s + std::to_string(iteration[i]));
+        refold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refold1_iteration"s + std::to_string(iteration[i]));
+
         refold0->save();
+        refold1->save();
     }
 
     fout->Close();
