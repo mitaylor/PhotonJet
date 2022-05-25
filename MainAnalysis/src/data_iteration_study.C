@@ -73,7 +73,7 @@ int data_iteration_study(char const* config, char const* output) {
                 unc += (*refold)[j]->GetBinError(k + 1);
             }
 
-            if (!(unc < 10) { continue; }
+            if (!(unc < 10)) { continue; }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
             (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
