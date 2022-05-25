@@ -271,7 +271,7 @@ int quantitate(char const* config, char const* output) {
 
             std::cout << top << " ";
 
-            else if (top < min) {
+            if (top < min) {
                 min = top;
                 choice[i] = j;
             }
