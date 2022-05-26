@@ -128,7 +128,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr * weight);
             } else if (jet_pt > jet_pt_min) {
                 (*pjet_u_dr)[index]->Fill(-1, corr * weight);
-            } else (jet_pt > jet_pt_min) {
+            } else {
                 (*pjet_u_dr)[index]->Fill(mdr->size() + 1, corr * weight);
             }
         }, pthf_x, weights);
