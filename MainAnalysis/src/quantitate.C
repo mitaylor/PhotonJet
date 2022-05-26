@@ -196,7 +196,7 @@ int quantitate(char const* config, char const* output) {
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
     std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
-    std::array<int64_t, 4> osg = { 0, 0, 2, 1 };
+    std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
     /* manage memory manually */
     TH1::AddDirectory(false);
