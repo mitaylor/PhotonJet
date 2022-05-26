@@ -67,7 +67,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
-        if (jet_pt <= jet_pt_min) { continue; }
+        // if (jet_pt <= jet_pt_min) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= 1.6) { continue; }
@@ -99,17 +99,19 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         }
 
         /* fill histograms */
-        zip([&](auto const& index, auto const& weight) {
-            (*pjet_es_f_dphi)[index]->Fill(photon_jet_dphi, corr * weight);
-            (*pjet_wta_f_dphi)[index]->Fill(photon_wta_dphi, corr * weight);
+        if (jet_pt > 9999999) {
+            zip([&](auto const& index, auto const& weight) {
+                (*pjet_es_f_dphi)[index]->Fill(photon_jet_dphi, corr * weight);
+                (*pjet_wta_f_dphi)[index]->Fill(photon_wta_dphi, corr * weight);
 
-            if (jet_pt < 200) {
-                (*pjet_wta_u_dphi)[index]->Fill(
-                    mdphi->index_for(v{revert_pi(photon_wta_dphi), jet_pt}), corr * weight);
-                (*pjet_es_u_dphi)[index]->Fill(
-                    mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt}), corr * weight);
-            }
-        }, pthf_x, weights);
+                if (jet_pt < 200) {
+                    (*pjet_wta_u_dphi)[index]->Fill(
+                        mdphi->index_for(v{revert_pi(photon_wta_dphi), jet_pt}), corr * weight);
+                    (*pjet_es_u_dphi)[index]->Fill(
+                        mdphi->index_for(v{revert_pi(photon_jet_dphi), jet_pt}), corr * weight);
+                }
+            }, pthf_x, weights);
+        }
 
         /* require back-to-back jets */
         if (photon_jet_dphi < 0.875_pi) { continue; }
@@ -122,8 +124,12 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
             (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
             (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
 
-            if (jet_pt < 200) {
+            if (jet_pt < 200 && jet_pt > jet_pt_min) {
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr * weight);
+            } else if (jet_pt > jet_pt_min) {
+                (*pjet_u_dr)[index]->Fill(-1, corr * weight);
+            } else (jet_pt > jet_pt_min) {
+                (*pjet_u_dr)[index]->Fill(mdr->size() + 1, corr * weight);
             }
         }, pthf_x, weights);
     }
