@@ -54,6 +54,8 @@ int distillate(char const* config, char const* output) {
     auto remove = conf->get<std::vector<int64_t>>("remove");
     auto csn = conf->get<std::vector<float>>("csn");
 
+    auto smeared = conf->get<bool>("smeared");
+
     auto s_range = conf->get<std::vector<float>>("s_range");
     auto s_lines = conf->get<std::vector<float>>("s_lines");
     auto r_range = conf->get<std::vector<float>>("r_range");
@@ -147,7 +149,14 @@ int distillate(char const* config, char const* output) {
     auto resolution_function = [&](char const* label, int64_t hf_x) {
         TF1* f = new TF1(label, "sqrt([0]*[0]+[1]*[1]/x+[2]*[2]/(x*x))");
 
-        if (!heavyion || csn.empty()) {
+        if (smeared) { 
+            f->SetParameters(csn[0], csn[1], csn[2]);
+            if (hf_x > 0) {
+                f->FixParameter(0, csn[0]);
+                f->FixParameter(1, csn[1]);
+            }
+        }
+        else if (!heavyion || csn.empty()) {
             f->SetParameters(0.097, 0.6, 0.);
         } else {
             f->SetParameters(csn[0], csn[1], csn[2]);
