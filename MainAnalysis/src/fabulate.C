@@ -113,6 +113,10 @@ int fabulate(char const* config, char const* output) {
             exclusion.push_back(j);
         }
 
+        std::unordered_map<float, int64_t> genid;
+            for (int64_t j = 0; j < p->ngen; ++j)
+                genid[(*p->genpt)[j]] = j;
+
         for (int64_t j = 0; j < p->nref; ++j) {
             auto gen_pt = (*p->refpt)[j];
             if (gen_pt < pt_min) { continue; }
@@ -142,6 +146,10 @@ int fabulate(char const* config, char const* output) {
             auto dphi = revert_radian(convert_radian(reco_phi)
                 - convert_radian(gen_phi));
 
+            auto id = genid[gen_pt];
+            auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
+            auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j], reco_phi, (*p->WTAphi)[j]));
+
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
             
@@ -165,7 +173,7 @@ int fabulate(char const* config, char const* output) {
                 (*scale)[index]->Fill(reco_pt / gen_pt, weights[j]);
                 (*eta)[index]->Fill(deta, weights[j]);
                 (*phi)[index]->Fill(dphi, weights[j]);
-                (*angle)[index]->Fill(sgn(gen_phi) * (deta * deta + dphi * dphi), weights[j]);
+                (*angle)[index]->Fill(gdr-rdr);
             }
         }
     }
