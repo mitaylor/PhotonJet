@@ -46,7 +46,8 @@ float weight_for(std::vector<int32_t> const& divisions,
 }
 
 float smear(std::vector<float> const& csn, float pt) {
-    return std::sqrt((csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt));
+    auto result = (csn[0] - csn[3]) + (csn[1] - csn[4]) / pt + (csn[2] - csn[5]) / (pt * pt);
+    return result > 0 ? std::sqrt(result) : 0;
 }
 
 float get_UE(pjtree* tree_pj, float eta) {

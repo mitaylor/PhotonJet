@@ -21,8 +21,6 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    histogram ${sample}
-
     for syst in cent_down cent_up; do
         histogram ${sample}_${syst}
     done
