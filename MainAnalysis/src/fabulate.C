@@ -173,7 +173,7 @@ int fabulate(char const* config, char const* output) {
                 (*scale)[index]->Fill(reco_pt / gen_pt, weights[j]);
                 (*eta)[index]->Fill(deta, weights[j]);
                 (*phi)[index]->Fill(dphi, weights[j]);
-                (*angle)[index]->Fill(gdr-rdr);
+                (*angle)[index]->Fill(gdr-rdr, weights[j]);
             }
         }
     }
