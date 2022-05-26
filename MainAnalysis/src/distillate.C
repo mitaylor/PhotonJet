@@ -153,6 +153,7 @@ int distillate(char const* config, char const* output) {
             f->SetParameters(csn[0], csn[1], csn[2]);
             f->FixParameter(0, csn[0]);
             f->FixParameter(1, csn[1]);
+            f->FixParameter(2, csn[2]);
         }
         else if (!heavyion || csn.empty()) {
             f->SetParameters(0.097, 0.6, 0.);
