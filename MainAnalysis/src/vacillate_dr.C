@@ -110,8 +110,6 @@ int vacillate(char const* config, char const* output) {
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
 
-    std::vector<double> pass_fail_gen_reco(4,0);
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -189,24 +187,19 @@ int vacillate(char const* config, char const* output) {
             if (heavyion && in_pho_failure_region(p, leading)) { continue; }
 
             /* require match to gen */
-            auto gen_index = (*p->pho_genMatchedIndex)[leading];
-            if (gen_index == -1) { continue; }
+            // auto gen_index = (*p->pho_genMatchedIndex)[leading];
+            // if (gen_index == -1) { continue; }
 
-            auto pid = (*p->mcPID)[gen_index];
-            auto mpid = (*p->mcMomPID)[gen_index];
-            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+            // auto pid = (*p->mcPID)[gen_index];
+            // auto mpid = (*p->mcMomPID)[gen_index];
+            // if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
 
             float isolation = (*p->pho_ecalClusterIsoR3)[leading]
                 + (*p->pho_hcalRechitIsoR3)[leading]
                 + (*p->pho_trackIsoR3PtCut20)[leading];
 
-            if ((*p->mcCalIsoDR04)[gen_index] > 5 && isolation > iso_max)   { pass_fail_gen_reco[0] += p->w; }
-            else if ((*p->mcCalIsoDR04)[gen_index] > 5)                     { pass_fail_gen_reco[1] += p->w; }
-            else if (isolation > iso_max)                                   { pass_fail_gen_reco[2] += p->w; }
-            else                                                            { pass_fail_gen_reco[3] += p->w; }
-
             /* isolation requirement */
-            if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
+            // if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
             if (isolation > iso_max) { continue; }
 
             /* photon axis */
@@ -344,9 +337,6 @@ int vacillate(char const* config, char const* output) {
             }
         }
     }
-
-    std::cout << "Pass both: " << pass_fail_gen_reco[0] << "\tgen only: " << pass_fail_gen_reco[1];
-    std::cout << "\treco only: " << pass_fail_gen_reco[2] << "\tfail both: " << pass_fail_gen_reco[3] << std::endl;
 
     r->divide(*n);
     g->divide(*n);
