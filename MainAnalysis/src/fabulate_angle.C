@@ -45,7 +45,7 @@ int fabulate(char const* config, char const* output) {
     auto pt_min = conf->get<float>("pt_min");
     auto eta_max = conf->get<float>("eta_max");
 
-    auto rdr = conf->get<std::vector<float>>("dr_range");
+    auto rddr = conf->get<std::vector<float>>("ddr_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto ddr = conf->get<std::vector<float>>("dr_diff");
@@ -66,7 +66,7 @@ int fabulate(char const* config, char const* output) {
     auto idr = new interval(ddr);
     auto ihf = new interval(dhf);
 
-    auto idr = new interval("#deltar^{2}"s, rdr[0], rdr[1], rdr[2]);
+    auto iddr = new interval("#deltar^{2}"s, rddr[0], rddr[1], rddr[2]);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
     auto angle = new memory<TH1F>("angle"s, "counts", fdr, mptetahf);
 
