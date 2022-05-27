@@ -95,7 +95,7 @@ int data_mc_comparison(char const* config, const char* output) {
         h_j_qcd_after->save(tag);
         h_r_truth_reco_iso->save(tag);
         h_j_truth_reco_iso->save(tag);
-    };
+    });
 
     h_r_data_circle->apply([&](TH1* h) { for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
         h->SetBinError(i, 0); } });
