@@ -67,22 +67,22 @@ int granulate(char const* config, char const* output) {
             ref = new history<TH1F>(fref, tag + "_"s + lref + rstub);
             var = new history<TH1F>(fvar, tag + "_"s + lvar + stub);
 
-            std::cout << (*ref)[0]->GetNbinsX() << " " << (*var)[0]->GetNbinsX() << std::endl;
+            if ((*ref)[0]->GetNbinsX() == (*var)[0]->GetNbinsX()) {
+                var->apply([&](TH1* h, int64_t index) {
+                    h->Divide((*ref)[index]); });
 
-            var->apply([&](TH1* h, int64_t index) {
-                h->Divide((*ref)[index]); });
+                /* scale uncertainties */
+                if (value != 0) { var->apply([&](TH1* h) {
+                    for_contents([&](std::array<double, 1> val) -> float {
+                        return 1. + value * (val[0] - 1.); }, h); }); }
 
-            /* scale uncertainties */
-            if (value != 0) { var->apply([&](TH1* h) {
-                for_contents([&](std::array<double, 1> val) -> float {
-                    return 1. + value * (val[0] - 1.); }, h); }); }
+                /* apply uncertainty to base */
+                var->apply([&](TH1* h, int64_t index) {
+                    h->Multiply((*base)[index]); });
 
-            /* apply uncertainty to base */
-            var->apply([&](TH1* h, int64_t index) {
-                h->Multiply((*base)[index]); });
-
-            /* save histograms */
-            var->save(tag + "_mod");
+                /* save histograms */
+                var->save(tag + "_mod");
+            }
         }, references, variations, frefs, fvars, lrefs, lvars, values, use_rstubs, use_vstubs);
     }, figures);
 
