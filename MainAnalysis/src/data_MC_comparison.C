@@ -221,6 +221,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p11->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_truth_gen_iso->apply([&](TH1* h) { h->GetXaxis()->SetName("#deltaj"); });
+    h_r_truth_reco_iso->apply([&](TH1* h) { h->GetXaxis()->SetName("#deltaj"); });
     h_r_truth_gen_iso->apply([&](TH1* h) { p11->add(h, "truth_gen_iso"); });
     h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p11->stack(index + 1, h, "truth_reco_iso"); });
 
@@ -231,7 +232,8 @@ int data_mc_comparison(char const* config, const char* output) {
     apply_style(p12, collisions, -0.001, 0.04);
     p12->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
-    h_r_truth_gen_iso->apply([&](TH1* h) { h->GetXaxis()->SetName("dp_{T}^{j}"); });
+    h_j_truth_gen_iso->apply([&](TH1* h) { h->GetXaxis()->SetName("dp_{T}^{j}"); });
+    h_j_truth_reco_iso->apply([&](TH1* h) { h->GetXaxis()->SetName("dp_{T}^{j}"); });
     h_j_truth_gen_iso->apply([&](TH1* h) { p12->add(h, "truth_gen_iso"); });
     h_j_truth_reco_iso->apply([&](TH1* h, int64_t index) { p12->stack(index + 1, h, "truth_reco_iso"); });
 
