@@ -132,6 +132,8 @@ int fabulate(char const* config, char const* output) {
             auto id = genid[gen_pt];
             auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
             auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j], reco_phi, (*p->WTAphi)[j]));
+            
+            if (rdr > rddr.last()) { continue; }
 
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
