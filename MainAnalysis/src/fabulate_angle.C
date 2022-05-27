@@ -67,7 +67,7 @@ int fabulate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
 
     auto iddr = new interval("#deltar^{2}"s, rddr[0], rddr[1], rddr[2]);
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
+    auto fdr = std::bind(&interval::book<TH1F>, iddr, _1, _2, _3);
     auto angle = new memory<TH1F>("angle"s, "counts", fdr, mptetahf);
 
     /* manage memory manually */
