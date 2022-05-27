@@ -67,6 +67,8 @@ int granulate(char const* config, char const* output) {
             ref = new history<TH1F>(fref, tag + "_"s + lref + rstub);
             var = new history<TH1F>(fvar, tag + "_"s + lvar + stub);
 
+            std::cout << (*ref)[0]->GetNBinsX() << " " << (*var)[0]->GetNBinsX() << std::endl;
+
             var->apply([&](TH1* h, int64_t index) {
                 h->Divide((*ref)[index]); });
 
