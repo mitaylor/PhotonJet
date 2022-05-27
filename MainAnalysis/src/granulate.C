@@ -29,7 +29,7 @@ int granulate(char const* config, char const* output) {
     auto values = conf->get<std::vector<float>>("values");
     auto figures = conf->get<std::vector<std::string>>("figures");
 
-    auto use_stubs = conf->get<bool>("stubs");
+    auto use_stubs = conf->get<std::vector<bool>>("stubs");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -58,9 +58,9 @@ int granulate(char const* config, char const* output) {
         std::vector<history<TH1F>*> variations(vars.size(), nullptr);
 
         zip([&](auto& ref, auto& var, auto fref, auto fvar,
-                auto const& lref, auto const& lvar, auto value, auto use_stub) {
+                auto const& lref, auto const& lvar, auto value, auto& use_stub) {
             auto stubbin = use_stub ? stub : "";
-            
+
             ref = new history<TH1F>(fref, tag + "_"s + lref + stubbin);
             var = new history<TH1F>(fvar, tag + "_"s + lvar + stubbin);
 
