@@ -244,6 +244,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p8->draw("pdf");
     p9->draw("pdf");
     p10->draw("pdf");
+    p11->draw("pdf");
+    p12->draw("pdf");
 
     in(output, [&]() {
         h_r_truth_gen_iso->save();
