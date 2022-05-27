@@ -133,10 +133,9 @@ int obnubilate(char const* config, char const* output) {
                     if (percentage > max) { max = percentage; }
                 }
 
-                printf("%i: %.1f-%.1f%%\n ", (int) i, min, max);
-
-                // std::cout << i << ": " << min << "-" << max << "%" << std::endl;
+                printf("%.1f-%.1f%% ", min, max);
             }
+            std::cout << std::endl;
 
             batch->apply(square_);
 
