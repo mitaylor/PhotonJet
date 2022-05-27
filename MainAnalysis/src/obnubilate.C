@@ -122,6 +122,7 @@ int obnubilate(char const* config, char const* output) {
             batch->apply(square_);
 
             for (int64_t i = 0; i < batch->size(); ++i) {
+                std::cout << i  << ": ";
                 for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
                     if (j == 2) {
                         double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 4));
@@ -147,8 +148,11 @@ int obnubilate(char const* config, char const* output) {
                     //     value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 2));
                     //     (*batch)[i]->SetBinContent(j + 1, value);
                     // }
+                    std::cout << (*batch)[i]->GetBinContent(j + 1) / (*base)[i]->GetBinContent(j + 1) * 100 << " ";
                 }
+                std::cout << std::endl;
             }
+            std::cout << std::endl;
         }
 
         zip([&](auto const& batch, auto group) {
