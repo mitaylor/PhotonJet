@@ -119,10 +119,18 @@ int obnubilate(char const* config, char const* output) {
         for (auto const& batch : batches) {
             batch->add(*base, -1);
 
+            for (int64_t i = 0; i < batch->size(); ++i) {
+                std::cout << i  << ": ";
+                for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
+                    std::cout << std::abs((*batch)[i]->GetBinContent(j + 1) / (*base)[i]->GetBinContent(j + 1)) * 100 << " ";
+                }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
+
             batch->apply(square_);
 
             for (int64_t i = 0; i < batch->size(); ++i) {
-                std::cout << i  << ": ";
                 for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
                     if (j == 2) {
                         double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 4));
@@ -148,11 +156,8 @@ int obnubilate(char const* config, char const* output) {
                     //     value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 2));
                     //     (*batch)[i]->SetBinContent(j + 1, value);
                     // }
-                    std::cout << std::abs((*batch)[i]->GetBinContent(j + 1) / (*base)[i]->GetBinContent(j + 1)) * 100 << " ";
                 }
-                std::cout << std::endl;
             }
-            std::cout << std::endl;
         }
 
         zip([&](auto const& batch, auto group) {
