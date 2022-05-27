@@ -120,13 +120,21 @@ int obnubilate(char const* config, char const* output) {
             batch->add(*base, -1);
 
             for (int64_t i = 0; i < batch->size(); ++i) {
-                std::cout << i  << ": ";
-                for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
-                    std::cout << std::abs((*batch)[i]->GetBinContent(j + 1) / (*base)[i]->GetBinContent(j + 1)) * 100 << " ";
+                std::vector<float> percentages;
+
+                for (int64_t j = 0; j < (*batch)[i]->GetNbinsX() - 2; ++j) {
+                    percentages.push_back(std::abs((*batch)[i]->GetBinContent(j + 1) / (*base)[i]->GetBinContent(j + 1)) * 100);
                 }
-                std::cout << std::endl;
+
+                float min = 10000;
+                float max = 0;
+                for (auto percentage : percentages) {
+                    if (percentage < min) { min = percentage; }
+                    if (percentage > max) { max = percentage; }
+                }
+
+                std::cout << i << ": " << min << "-" << max << "%" << std::endl;
             }
-            std::cout << std::endl;
 
             batch->apply(square_);
 
