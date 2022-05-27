@@ -3,10 +3,11 @@
 histogram() {
     tag=$1
 
-    echo "nohup ./bin/vacillate_dr configs/vacillate_dr/new/pho_60/vacillate_${tag}.conf data/pho_60/vacillate_${tag}.root > log/vacillate_pho_60_${tag}_jet_20_log.txt 2>&1 &"
+    echo "nohup ./bin/vacillate_dr configs/vacillate_dr/new/jet_20_small/vacillate_${tag}.conf data/jet_20/vacillate_${tag}.root > log/vacillate_small_${tag}_jet_20_log.txt 2>&1 &"
 }
 
-samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90 pp aa)
+# samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90 pp aa)
+samples=(aa)
 
 for sample in ${samples[@]}; do
     histogram ${sample}
@@ -16,13 +17,13 @@ for sample in ${samples[@]}; do
     done
 done
 
-samples=(pp)
+# samples=(pp)
 
-for sample in ${samples[@]}; do
-    for syst in front back; do
-        histogram ${sample}_${syst}
-    done
-done
+# for sample in ${samples[@]}; do
+#     for syst in front back; do
+#         histogram ${sample}_${syst}
+#     done
+# done
 
 samples=(aa)
 

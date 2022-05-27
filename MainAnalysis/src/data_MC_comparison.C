@@ -121,25 +121,25 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("reco_unmatched", "MC Reco + Not Gen Matched");
     hb->alias("matrix", "Response Matrix Reco");
 
-    /* (1) unfolded MC vs gen truth dr */
-    auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth", hb);
+    /* (1) unfolded MC vs reco truth dr */
+    auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
     p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_r_truth_gen_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen_iso"); });
+    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_reco_iso"); });
     
-    /* (2) unfolded MC vs gen truth jtpt */
-    auto p2 = new paper(tag + "_jtpt_unfolded_mc_vs_truth", hb);
+    /* (2) unfolded MC vs reco truth jtpt */
+    auto p2 = new paper(tag + "_jtpt_unfolded_mc_vs_truth_reco_iso", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
     apply_style(p2, collisions, -0.001, 0.04);
     p2->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_qcd_after->apply([&](TH1* h) { p2->add(h, "qcd_after"); });
-    h_j_truth_gen_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen_iso"); });
+    h_j_truth_reco_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_reco_iso"); });
 
     /* (3) data vs refolded data */
     auto p3 = new paper(tag + "_refolding_test", hb);
