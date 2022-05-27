@@ -43,6 +43,7 @@ int fabulate(char const* config, char const* output) {
     auto rho_label = conf->get<std::string>("rho_label");
 
     auto pt_min = conf->get<float>("pt_min");
+    auto eta_max = conf->get<float>("eta_max");
 
     auto rdr = conf->get<std::vector<float>>("dr_range");
 
@@ -149,7 +150,7 @@ int fabulate(char const* config, char const* output) {
             /* fill histograms */
             for (int64_t j = 0; j < ihf->size(); ++j) {
                 auto pt_x = ipt->index_for(reco_pt);
-                auto dr_x = idr->index_for(ddr);
+                auto dr_x = idr->index_for(rdr);
                 auto index = mptetahf->index_for(x{pt_x, dr_x, j});
 
                 (*angle)[index]->Fill(gdr-rdr, weights[j]);
