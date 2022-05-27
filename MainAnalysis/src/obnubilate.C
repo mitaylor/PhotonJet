@@ -141,12 +141,12 @@ int obnubilate(char const* config, char const* output) {
                         value += std::min((*batch)[i]->GetBinContent(j - 2), (*batch)[i]->GetBinContent(j + 2));
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
-                    if (j == 6) {
-                        double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 2));
-                        value = value * 1 / 2;
-                        value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 2));
-                        (*batch)[i]->SetBinContent(j + 1, value);
-                    }
+                    // if (j == 6) {
+                    //     double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 2));
+                    //     value = value * 1 / 2;
+                    //     value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 2));
+                    //     (*batch)[i]->SetBinContent(j + 1, value);
+                    // }
                 }
             }
         }
