@@ -2,7 +2,7 @@
 
 # AANominal: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -13,7 +13,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AANominal0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -24,7 +24,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AANominal1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -35,7 +35,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AANominal2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -48,7 +48,7 @@
 
 # AAWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_wo_ele_rej.root \
-    --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_wo_ele_rej_s_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_wo_ele_rej.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -59,7 +59,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAWithoutEleRej0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_wo_ele_rej.root \
-    --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_wo_ele_rej_s_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_wo_ele_rej.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -70,7 +70,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAWithoutEleRej1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_wo_ele_rej.root \
-    --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_wo_ele_rej_s_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_wo_ele_rej.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -81,7 +81,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAWithoutEleRej2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_wo_ele_rej.root \
-    --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_wo_ele_rej_s_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_wo_ele_rej.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -94,7 +94,7 @@
 
 # AATightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_tight_purity.root \
-    --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_tight_purity_s_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -105,7 +105,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AATightPurity0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_tight_purity.root \
-    --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_tight_purity_s_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -116,7 +116,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AATightPurity1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_tight_purity.root \
-    --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_tight_purity_s_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -127,7 +127,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AATightPurity2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_tight_purity.root \
-    --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_tight_purity_s_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -140,7 +140,7 @@
 
 # AALoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_loose_purity.root \
-    --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_loose_purity_s_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -151,7 +151,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AALoosePurity0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_loose_purity.root \
-    --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_loose_purity_s_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -162,7 +162,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AALoosePurity1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_loose_purity.root \
-    --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_loose_purity_s_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -173,7 +173,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AALoosePurity2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_loose_purity.root \
-    --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_loose_purity_s_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -186,7 +186,7 @@
 
 # AAQCD: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd.root \
-    --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_qcd_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -197,7 +197,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCD0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd.root \
-    --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_qcd_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -208,7 +208,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCD1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd.root \
-    --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_qcd_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -219,7 +219,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCD2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd.root \
-    --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_qcd_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -232,7 +232,7 @@
 
 # AAQCDGenIso: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd_gen_iso.root \
-    --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_qcd_gen_iso_s_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd_gen_iso.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -243,7 +243,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCDGenIso0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd_gen_iso.root \
-    --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_qcd_gen_iso_s_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd_gen_iso.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -254,7 +254,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCDGenIso1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd_gen_iso.root \
-    --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_qcd_gen_iso_s_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd_gen_iso.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -265,7 +265,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCDGenIso2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_qcd_gen_iso.root \
-    --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_qcd_gen_iso_s_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_qcd_gen_iso.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -278,7 +278,7 @@
 
 # AAJEUUp: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_up.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -289,7 +289,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJEUUp0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_up.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -300,7 +300,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJEUUp1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_up.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -311,7 +311,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJEUUp2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_up.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -324,7 +324,7 @@
 
 # AAJEUDown: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_down.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -335,7 +335,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJEUDown0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_down.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -346,7 +346,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJEUDown1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_down.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -357,7 +357,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJEUDown2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jeu_down.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -370,7 +370,7 @@
 
 # AAJERUp: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jer_up.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -381,7 +381,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJERUp0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jer_up.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -392,7 +392,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJERUp1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jer_up.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -403,7 +403,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJERUp2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa.root \
-    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_jer_up.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -416,7 +416,7 @@
 
 # AACentUp: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_up.root \
-    --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_cent_up_s_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_up.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -427,7 +427,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AACentUp0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_up.root \
-    --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_cent_up_s_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_up.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -438,7 +438,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AACentUp1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_up.root \
-    --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_cent_up_s_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_up.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -449,7 +449,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AACentUp2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_up.root \
-    --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_cent_up_s_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_up.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -462,7 +462,7 @@
 
 # AACentDown: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_down.root \
-    --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram aa_cent_down_s_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_down.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
@@ -473,7 +473,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AACentDown0.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_down.root \
-    --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_1 \
+    --DataHistogram aa_cent_down_s_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_down.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
@@ -484,7 +484,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AACentDown1.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_down.root \
-    --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_2 \
+    --DataHistogram aa_cent_down_s_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_down.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
@@ -495,7 +495,7 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AACentDown2.root
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_aa_cent_down.root \
-    --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_3 \
+    --DataHistogram aa_cent_down_s_s_pure_cent_down_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_aa_cent_down.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
@@ -508,7 +508,7 @@
 
 # PPNominal: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp.root \
-    --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -521,7 +521,7 @@
 
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp_wo_ele_rej.root \
-    --DataHistogram pp_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_wo_ele_rej_s_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp_wo_ele_rej.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -534,7 +534,7 @@
 
 # PPTightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp_tight_purity.root \
-    --DataHistogram pp_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_tight_purity_s_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -547,7 +547,7 @@
 
 # PPLoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp_loose_purity.root \
-    --DataHistogram pp_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_loose_purity_s_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -560,7 +560,7 @@
 
 # PPQCD: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp_qcd.root \
-    --DataHistogram pp_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_qcd_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -573,7 +573,7 @@
 
 # PPQCDGenIso: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp_qcd_gen_iso.root \
-    --DataHistogram pp_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_qcd_gen_iso_s_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp_qcd_gen_iso.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -586,7 +586,7 @@
 
 # PPJEUUp: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp.root \
-    --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp_jeu_up.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -599,7 +599,7 @@
 
 # PPJEUDown: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp.root \
-    --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp_jeu_down.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
@@ -612,7 +612,7 @@
 
 # PPJERUp: Execute
 ./Execute --Data ../../MainAnalysis/data/pho_60/accumulate_pp.root \
-    --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --DataHistogram pp_nominal_s_s_pure_raw_sub_pjet_u_dr_sum0_0 \
     --Response ../../MainAnalysis/data/pho_60/vacillate_pp_jer_up.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
