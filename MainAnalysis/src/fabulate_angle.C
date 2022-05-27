@@ -54,31 +54,31 @@ int fabulate(char const* config, char const* output) {
     /* load centrality weighting for MC */
     TFile* frho;
     history<TH1F>* rho_weighting = nullptr;
-
+    std::cout << __LINE__ << std::endl;
     if (!rho.empty()) {
         frho = new TFile(rho.data(), "read");
         rho_weighting = new history<TH1F>(frho, rho_label);
-    }
+    }std::cout << __LINE__ << std::endl;
 
     /* prepare histograms */
-    auto mptetahf = new multival(dpt, ddr, dhf);
-    auto ipt = new interval(dpt);
-    auto idr = new interval(ddr);
-    auto ihf = new interval(dhf);
+    auto mptetahf = new multival(dpt, ddr, dhf);std::cout << __LINE__ << std::endl;
+    auto ipt = new interval(dpt);std::cout << __LINE__ << std::endl;
+    auto idr = new interval(ddr);std::cout << __LINE__ << std::endl;
+    auto ihf = new interval(dhf);std::cout << __LINE__ << std::endl;
 
-    auto iddr = new interval("#deltar^{2}"s, rddr[0], rddr[1], rddr[2]);
-    auto fdr = std::bind(&interval::book<TH1F>, iddr, _1, _2, _3);
-    auto angle = new memory<TH1F>("angle"s, "counts", fdr, mptetahf);
+    auto iddr = new interval("#deltar^{2}"s, rddr[0], rddr[1], rddr[2]);std::cout << __LINE__ << std::endl;
+    auto fdr = std::bind(&interval::book<TH1F>, iddr, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto angle = new memory<TH1F>("angle"s, "counts", fdr, mptetahf);std::cout << __LINE__ << std::endl;
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* load input */
-    TFile* f = new TFile(input.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion });
-
+    TFile* f = new TFile(input.data(), "read");std::cout << __LINE__ << std::endl;
+    TTree* t = (TTree*)f->Get("pj");std::cout << __LINE__ << std::endl;
+    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion });std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
     /* fill histograms */
     auto nentries = static_cast<int64_t>(t->GetEntries());
     for (int64_t i = 0; i < nentries; ++i) {
