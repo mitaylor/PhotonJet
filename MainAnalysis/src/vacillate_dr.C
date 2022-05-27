@@ -56,6 +56,7 @@ int vacillate(char const* config, char const* output) {
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
     auto ele_rej = conf->get<bool>("ele_rej");
+    auto gen_iso = conf->get<bool>("gen_iso");
     auto jer_up = conf->get<bool>("jer_up");
     auto mc = conf->get<bool>("mc");
 
@@ -185,22 +186,20 @@ int vacillate(char const* config, char const* output) {
 
             /* hem failure region exclusion */
             if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+            
+            if (gen_iso) {
+                auto gen_index = (*p->pho_genMatchedIndex)[leading];
+                if (gen_index == -1) { continue; }
 
-            /* require match to gen */
-            // auto gen_index = (*p->pho_genMatchedIndex)[leading];
-            // if (gen_index == -1) { continue; }
+                float isolation = (*p->mcCalIsoDR04)[gen_index];
+                if (isolation > 5) { continue; }
+            } else {
+                float isolation = (*p->pho_ecalClusterIsoR3)[leading]
+                    + (*p->pho_hcalRechitIsoR3)[leading]
+                    + (*p->pho_trackIsoR3PtCut20)[leading];
 
-            // auto pid = (*p->mcPID)[gen_index];
-            // auto mpid = (*p->mcMomPID)[gen_index];
-            // if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
-
-            float isolation = (*p->pho_ecalClusterIsoR3)[leading]
-                + (*p->pho_hcalRechitIsoR3)[leading]
-                + (*p->pho_trackIsoR3PtCut20)[leading];
-
-            /* isolation requirement */
-            // if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
-            if (isolation > iso_max) { continue; }
+                if (isolation > iso_max) { continue; }
+            }
 
             /* photon axis */
             auto photon_eta = (*p->phoEta)[leading];
