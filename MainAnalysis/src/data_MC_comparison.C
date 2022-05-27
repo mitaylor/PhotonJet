@@ -90,6 +90,28 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_j_reco_reco_iso_matched = new history<TH1F>(ftruth, tag + "_"s + j_reco_reco_iso_label_matched);
     auto h_j_reco_reco_iso_unmatched = new history<TH1F>(ftruth, tag + "_"s + j_reco_reco_iso_label_unmatched);
 
+    in(output, [&]() {
+        h_r_data_before->save(tag);
+        h_r_data_after->save(tag);
+        h_r_data_circle->save(tag);
+
+        h_r_qcd_before->save(tag);
+        h_j_qcd_before->save(tag);
+        h_r_qcd_after->save(tag);
+        h_j_qcd_after->save(tag);
+        h_r_qcd_circle->save(tag);
+        h_j_qcd_circle->save(tag);
+
+        h_r_truth_gen_iso->save(tag);
+        h_j_truth_gen_iso->save(tag);
+        h_r_truth_reco_iso->save(tag);
+        h_j_truth_reco_iso->save(tag);
+        h_r_reco_reco_iso_matched->save(tag);
+        h_r_reco_reco_iso_unmatched->save(tag);
+        h_j_reco_reco_iso_matched->save(tag);
+        h_j_reco_reco_iso_unmatched->save(tag);
+    });
+
     h_r_data_circle->apply([&](TH1* h) { for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
         h->SetBinError(i, 0); } });
 
@@ -250,28 +272,6 @@ int data_mc_comparison(char const* config, const char* output) {
     p10->draw("pdf");
     p11->draw("pdf");
     p12->draw("pdf");
-
-    in(output, [&]() {
-        h_r_data_before->save(tag);
-        h_r_data_after->save(tag);
-        h_r_data_circle->save(tag);
-
-        h_r_qcd_before->save(tag);
-        h_j_qcd_before->save(tag);
-        h_r_qcd_after->save(tag);
-        h_j_qcd_after->save(tag);
-        h_r_qcd_circle->save(tag);
-        h_j_qcd_circle->save(tag);
-
-        h_r_truth_gen_iso->save(tag);
-        h_j_truth_gen_iso->save(tag);
-        h_r_truth_reco_iso->save(tag);
-        h_j_truth_reco_iso->save(tag);
-        h_r_reco_reco_iso_matched->save(tag);
-        h_r_reco_reco_iso_unmatched->save(tag);
-        h_j_reco_reco_iso_matched->save(tag);
-        h_j_reco_reco_iso_unmatched->save(tag);
-    });
 
     return 0;
 }
