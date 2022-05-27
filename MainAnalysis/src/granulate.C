@@ -29,7 +29,8 @@ int granulate(char const* config, char const* output) {
     auto values = conf->get<std::vector<float>>("values");
     auto figures = conf->get<std::vector<std::string>>("figures");
 
-    auto use_stubs = conf->get<std::vector<bool>>("stubs");
+    auto use_rstubs = conf->get<std::vector<bool>>("ref_stubs");
+    auto use_vstubs = conf->get<std::vector<bool>>("var_stubs");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -58,11 +59,13 @@ int granulate(char const* config, char const* output) {
         std::vector<history<TH1F>*> variations(vars.size(), nullptr);
 
         zip([&](auto& ref, auto& var, auto fref, auto fvar,
-                auto const& lref, auto const& lvar, auto value, auto use_stub) {
-            auto stubbin = use_stub ? stub : "";
+                auto const& lref, auto const& lvar, auto value, 
+                auto use_rstub, auto use_vstub) {
+            auto rstub = use_rstub ? stub : "";
+            auto vstub = use_vstub ? stub : "";
 
-            ref = new history<TH1F>(fref, tag + "_"s + lref + stubbin);
-            var = new history<TH1F>(fvar, tag + "_"s + lvar + stubbin);
+            ref = new history<TH1F>(fref, tag + "_"s + lref + rstub);
+            var = new history<TH1F>(fvar, tag + "_"s + lvar + stub);
 
             var->apply([&](TH1* h, int64_t index) {
                 h->Divide((*ref)[index]); });
@@ -78,7 +81,7 @@ int granulate(char const* config, char const* output) {
 
             /* save histograms */
             var->save(tag + "_mod");
-        }, references, variations, frefs, fvars, lrefs, lvars, values, use_stubs);
+        }, references, variations, frefs, fvars, lrefs, lvars, values, use_rstubs, use_vstubs);
     }, figures);
 
     fout->Close();
