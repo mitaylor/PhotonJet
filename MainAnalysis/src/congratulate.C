@@ -70,7 +70,7 @@ int congratulate(char const* config, char const* output) {
             auto file = new TFile(correction.data(), "read");
             unfolded_qcd = new history<TH1F>(file, qcd_after_label);
             truth_reco_iso = new history<TH1F>(file, truth_reco_iso_label);
-    }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);std::cout << __LINE__ << std::endl;
+    }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);
 
     /* load histograms */
     // std::vector<std::string> tags = {

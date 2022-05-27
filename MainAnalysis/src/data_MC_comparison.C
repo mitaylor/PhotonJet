@@ -252,20 +252,25 @@ int data_mc_comparison(char const* config, const char* output) {
     p12->draw("pdf");
 
     in(output, [&]() {
-        h_r_truth_gen_iso->save();
-        h_r_truth_reco_iso->save();
-        h_r_data_before->save();
-        h_r_data_after->save();
-        h_r_qcd_before->save();
-        h_r_qcd_after->save();
-        h_j_qcd_after->save();
-        h_r_data_circle->save();
-        h_r_truth_gen_iso->save();
-        h_r_truth_reco_iso->save();
-        h_r_reco_reco_iso_matched->save();
-        h_r_reco_reco_iso_unmatched->save();
-        h_j_reco_reco_iso_matched->save();
-        h_j_reco_reco_iso_unmatched->save();
+        h_r_data_before->save(tag);
+        h_r_data_after->save(tag);
+        h_r_data_circle->save(tag);
+
+        h_r_qcd_before->save(tag);
+        h_j_qcd_before->save(tag);
+        h_r_qcd_after->save(tag);
+        h_j_qcd_after->save(tag);
+        h_r_qcd_circle->save(tag);
+        h_j_qcd_circle->save(tag);
+
+        h_r_truth_gen_iso->save(tag);
+        h_j_truth_gen_iso->save(tag);
+        h_r_truth_reco_iso->save(tag);
+        h_j_truth_reco_iso->save(tag);
+        h_r_reco_reco_iso_matched->save(tag);
+        h_r_reco_reco_iso_unmatched->save(tag);
+        h_j_reco_reco_iso_matched->save(tag);
+        h_j_reco_reco_iso_unmatched->save(tag);
     });
 
     return 0;
