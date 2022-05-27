@@ -41,6 +41,7 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto input_truth = conf->get<std::string>("input_truth");
     auto r_truth_gen_iso_label = conf->get<std::string>("r_truth_gen_iso_label");
+    auto j_truth_gen_iso_label = conf->get<std::string>("j_truth_gen_iso_label");
     auto r_truth_reco_iso_label = conf->get<std::string>("r_truth_reco_iso_label");
     auto j_truth_reco_iso_label = conf->get<std::string>("j_truth_reco_iso_label");
     auto r_reco_reco_iso_label_matched = conf->get<std::string>("r_reco_reco_iso_label_matched");
@@ -81,6 +82,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_j_r = new history<TH1F>(fqcd, tag + "_"s + j_r_label);
 
     auto h_r_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_gen_iso_label);
+    auto h_j_truth_gen_iso = new history<TH1F>(ftruth, tag + "_"s + j_truth_gen_iso_label);
     auto h_r_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + r_truth_reco_iso_label);
     auto h_j_truth_reco_iso = new history<TH1F>(ftruth, tag + "_"s + j_truth_reco_iso_label);
     auto h_r_reco_reco_iso_matched = new history<TH1F>(ftruth, tag + "_"s + r_reco_reco_iso_label_matched);
@@ -120,24 +122,24 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("matrix", "Response Matrix Reco");
 
     /* (1) unfolded MC vs gen truth dr */
-    auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
+    auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(pthf_info);
     apply_style(p1, collisions, -2., 27.);
     p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_reco_iso"); });
+    h_r_truth_gen_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen_iso"); });
     
     /* (2) unfolded MC vs gen truth jtpt */
-    auto p2 = new paper(tag + "_jtpt_unfolded_mc_vs_truth_reco_iso", hb);
+    auto p2 = new paper(tag + "_jtpt_unfolded_mc_vs_truth", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(pthf_info);
     apply_style(p2, collisions, -0.001, 0.04);
     p2->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_qcd_after->apply([&](TH1* h) { p2->add(h, "qcd_after"); });
-    h_j_truth_reco_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_reco_iso"); });
+    h_j_truth_gen_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen_iso"); });
 
     /* (3) data vs refolded data */
     auto p3 = new paper(tag + "_refolding_test", hb);
@@ -148,16 +150,6 @@ int data_mc_comparison(char const* config, const char* output) {
 
     h_r_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
     h_r_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "data_circle"); });
-
-    /* (4) truth reco iso vs truth gen iso */
-    auto p4 = new paper(tag + "_reco_vs_gen_iso_truth", hb);
-    p4->divide(ihf->size(), -1);
-    p4->accessory(pthf_info);
-    apply_style(p4, collisions, -2., 27.);
-    p4->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
-    
-    h_r_truth_gen_iso->apply([&](TH1* h) { p4->add(h, "truth_gen_iso"); });
-    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "truth_reco_iso"); });
 
     /* (5) matched vs unmatched dr */
     auto p5 = new paper(tag + "_dj_matched_unmatched", hb);
@@ -221,12 +213,31 @@ int data_mc_comparison(char const* config, const char* output) {
     h_j_qcd_before->apply([&](TH1* h) { p10->add(h, "qcd_before"); });
     h_j_qcd_circle->apply([&](TH1* h, int64_t index) { p10->stack(index + 1, h, "qcd_circle"); });
 
+    /* (11) truth reco iso vs truth gen iso */
+    auto p11 = new paper(tag + "_dj_reco_iso_vs_gen_iso", hb);
+    p11->divide(ihf->size(), -1);
+    p11->accessory(pthf_info);
+    apply_style(p11, collisions, -2., 27.);
+    p11->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+    
+    h_r_truth_gen_iso->apply([&](TH1* h) { p11->add(h, "truth_gen_iso"); });
+    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p11->stack(index + 1, h, "truth_reco_iso"); });
+
+    /* (12) truth reco iso vs truth gen iso */
+    auto p12 = new paper(tag + "_jtpt_reco_iso_vs_gen_iso", hb);
+    p12->divide(ihf->size(), -1);
+    p12->accessory(pthf_info);
+    apply_style(p12, collisions, -0.001, 0.04);
+    p12->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
+    
+    h_j_truth_gen_iso->apply([&](TH1* h) { p12->add(h, "truth_gen_iso"); });
+    h_j_truth_reco_iso->apply([&](TH1* h, int64_t index) { p12->stack(index + 1, h, "truth_reco_iso"); });
+
     hb->sketch();
 
     p1->draw("pdf");
     p2->draw("pdf");
     p3->draw("pdf");
-    p4->draw("pdf");
     p5->draw("pdf");
     p6->draw("pdf");
     p7->draw("pdf");
