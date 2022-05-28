@@ -78,6 +78,7 @@ int distillate(char const* config, char const* output) {
     auto drhf_shape = x{ iddr->size(), idhf->size() };
 
     auto incl = new interval(""s, 1, 0., 1.);
+    auto infit = new interval(""s, 3, 0., 3.);
     auto ipt = new interval("jet p_{T}"s, rpt);
     auto idr = new interval("reco #deltaj"s, rdr);
 
@@ -93,6 +94,7 @@ int distillate(char const* config, char const* output) {
 
     auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);
     auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);
+    auto r_f_pt_fits = new history<TH1F>("r_f_pt_fits"s, title.data(), infit, drhf_shape);
 
     /* differential in pt, hf */
     auto obj_dpthf = obj->sum(1);
@@ -155,17 +157,8 @@ int distillate(char const* config, char const* output) {
             f->FixParameter(1, csn[1]);
             f->FixParameter(2, csn[2]);
         }
-        else if (!heavyion || csn.empty()) {
+        else if (csn.empty()) {
             f->SetParameters(0.097, 0.6, 0.);
-        } else {
-            f->SetParameters(csn[0], csn[1], csn[2]);
-            if (hf_x > 0) {
-                f->FixParameter(0, csn[0]);
-                f->FixParameter(1, csn[1]);
-            }
-            // if (hf_x == 0) {
-            //     f->FixParameter(2, 0);
-            // }
         }
 
         return f;
@@ -403,8 +396,9 @@ int distillate(char const* config, char const* output) {
         auto f = resolution_function(label.data(), index);
         h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
-        csn[1] = f->GetParameter(1);
-        csn[2] = f->GetParameter(2);
+        (*r_f_pt_fit)[index]->SetBinContent(1, f->GetParameter(0));
+        (*r_f_pt_fit)[index]->SetBinContent(2, f->GetParameter(1));
+        (*r_f_pt_fit)[index]->SetBinContent(3, f->GetParameter(2));
 
         auto dr_x = r_f_pt->indices_for(index)[0];
         c9[dr_x]->add(h, "mc");
@@ -427,6 +421,7 @@ int distillate(char const* config, char const* output) {
         r->save(tag_object);
         s_f_pt->save(tag_object);
         r_f_pt->save(tag_object);
+        r_f_pt_fit->save(tag_object);
 
         s_dpthf->save(tag_object);
         r_dpthf->save(tag_object);
