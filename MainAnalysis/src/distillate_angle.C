@@ -39,7 +39,6 @@ int distillate(char const* config, char const* output) {
     auto pdf = conf->get<std::string>("pdf");
     auto value = conf->get<std::vector<double>>("value");
 
-    auto heavyion = conf->get<bool>("heavyion");
     auto fit = conf->get<bool>("fit");
     auto func = conf->get<std::string>("func");
 
@@ -78,11 +77,12 @@ int distillate(char const* config, char const* output) {
     auto drhf_shape = x{ iddr->size(), idhf->size() };
 
     auto incl = new interval(""s, 1, 0., 1.);
-    auto infit = new interval(""s, 3, 0., 3.);
+    auto ifit = new interval(""s, 3, 0., 3.);
     auto ipt = new interval("jet p_{T}"s, rpt);
     auto idr = new interval("reco #deltaj"s, rdr);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+    auto fifit = std::bind(&interval::book<TH1F>, ifit, _1, _2, _3);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
 
@@ -94,7 +94,7 @@ int distillate(char const* config, char const* output) {
 
     auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);
     auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);
-    auto r_f_pt_fits = new history<TH1F>("r_f_pt_fits"s, title.data(), infit, drhf_shape);
+    auto r_f_pt_fits = new history<TH1F>("r_f_pt_fits"s, "", fifit, drhf_shape);
 
     /* differential in pt, hf */
     auto obj_dpthf = obj->sum(1);
