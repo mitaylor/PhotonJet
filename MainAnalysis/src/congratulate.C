@@ -33,6 +33,7 @@ int congratulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
+    auto tags = conf->get<std::vector<std::string>>("tags");
     auto figures = conf->get<std::vector<std::string>>("figures");
 
     auto corrections = conf->get<std::vector<std::string>>("corrections");
@@ -73,23 +74,7 @@ int congratulate(char const* config, char const* output) {
     }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);
 
     /* load histograms */
-    // std::vector<std::string> tags = {
-    //     "aa"s,
-    //     "pp"s,
-    //     "pp_smear_50_90"s,
-    //     "pp_smear_30_50"s,
-    //     "pp_smear_10_30"s,
-    //     "pp_smear_0_10"s
-    // };
-
-    std::vector<std::string> tags = {
-        "aa"s,
-        "pp"s,
-        "pp"s,
-        "pp"s,
-        "pp"s,
-        "pp"s
-    };std::cout << __LINE__ << std::endl;
+    std::cout << __LINE__ << std::endl;
 
     std::vector<std::string> base_stubs(6);
     std::vector<std::string> syst_stubs(6);
