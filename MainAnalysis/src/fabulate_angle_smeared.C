@@ -172,6 +172,7 @@ int fabulate(char const* config, char const* output) {
                 auto change = rng->Gaus(0, res_diff);
                 // auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
                 // auto adj = rdr + change * sign;
+                auto adj = rdr + change;
 
                 if (ddr.front()< adj && adj < ddr.back()) rdr = adj;
             }
