@@ -17,6 +17,7 @@
 #include "TRandom3.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TRandom3.h"
 #include "TTree.h"
 
 #include <string>
@@ -30,6 +31,10 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
 
     return deta * deta + dphi * dphi;
+}
+
+float res(float c, float s, float n, float pt) {
+    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
 }
 
 int vacillate(char const* config, char const* output) {
@@ -48,6 +53,12 @@ int vacillate(char const* config, char const* output) {
     auto jersf = conf->get<std::string>("jersf");
     auto jeu = conf->get<std::string>("jeu");
     auto direction = conf->get<bool>("direction");
+
+    auto smear = conf->get<bool>("smear");
+    auto smear_input_aa = conf->get<std::string>("smear_input_aa");
+    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
+    auto smear_tag = conf->get<std::string>("smear_tag");
+    auto cent = conf->get<int64_t>("cent");
 
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
@@ -79,6 +90,7 @@ int vacillate(char const* config, char const* output) {
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
+    auto idr = new interval("#deltaj"s, rdrr);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
     auto mcdr = new multival(rdrr, rdrg);
@@ -139,6 +151,21 @@ int vacillate(char const* config, char const* output) {
     auto JERSF = new SingleJetCorrector(jersf);
     auto JEU = new JetUncertainty(jeu);
 
+    /* load the smearing information */
+    TFile* fsmear_aa;
+    TFile* fsmear_pp;
+    history<TH1F>* smear_fits_aa = nullptr;
+    history<TH1F>* smear_fits_pp = nullptr;
+
+    if (smear) {
+        fsmear_aa = new TFile(smear_input_aa.data(), "read");
+        fsmear_pp = new TFile(smear_input_pp.data(), "read");
+        smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
+        smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_" + smear_tag);
+    }
+
+    auto rng = new TRandom3(144);
+
     /* load input */
     for (auto const& input : inputs) {
         TFile* f = new TFile(input.data(), "read");
@@ -186,7 +213,7 @@ int vacillate(char const* config, char const* output) {
 
             /* hem failure region exclusion */
             if (heavyion && in_pho_failure_region(p, leading)) { continue; }
-            
+
             if (gen_iso) {
                 auto gen_index = (*p->pho_genMatchedIndex)[leading];
                 if (gen_index == -1) { continue; }
@@ -319,6 +346,28 @@ int vacillate(char const* config, char const* output) {
                     auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
+
+                    if (smear) {
+                        auto dr_x = idr->index_for(rdr);
+
+                        auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
+                        auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
+                        auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
+
+                        auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
+                        auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
+                        auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
+
+                        auto res_diff = res(aa_c, aa_s, aa_n, jet_pt) - res(pp_c, pp_s, pp_n, jet_pt);
+
+                        if (res_diff > 0) {
+                            auto change = rng->Exp(res(aa_c, aa_s, aa_n, jet_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, jet_pt));
+                            auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
+                            auto adj = rdr + change * sign / 2;
+
+                            if (0 < adj && adj < 0.3) rdr = adj;
+                        }
+                    }
 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*r)[k]->Fill(r_x, weights[k]*cor);
