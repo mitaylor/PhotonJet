@@ -167,7 +167,7 @@ int fabulate(char const* config, char const* output) {
 
             // auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
 
-            if (res_diff > 0) {
+            // if (res_diff > 0) {
                 auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
                 // auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
                 // auto adj = rdr + change * sign;
@@ -176,7 +176,7 @@ int fabulate(char const* config, char const* output) {
                 std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
 
                 if (ddr.front()< adj && adj < ddr.back()) rdr = adj;
-            }
+            // }
 
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
