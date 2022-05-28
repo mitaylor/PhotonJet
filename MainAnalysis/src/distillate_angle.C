@@ -91,13 +91,13 @@ int distillate(char const* config, char const* output) {
     auto s = new history<TH1F>("s"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
     auto r = new history<TH1F>("r"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
 
-    auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);
-    auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);
+    auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);std::cout << __LINE__ << std::endl;
+    auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);std::cout << __LINE__ << std::endl;
 
     /* differential in pt, hf */
-    auto obj_dpthf = obj->sum(1);
+    auto obj_dpthf = obj->sum(1);std::cout << __LINE__ << std::endl;
 
-    auto s_dpthf = new history<TH1F>("s_dpthf", "", fincl, pthf_shape);
+    auto s_dpthf = new history<TH1F>("s_dpthf", "", fincl, pthf_shape);std::cout << __LINE__ << std::endl;
     auto r_dpthf = new history<TH1F>("r_dpthf", "", fincl, pthf_shape);std::cout << __LINE__ << std::endl;
 
     auto s_dhf_f_pt = new history<TH1F>("s_dhf_f_pt"s,
