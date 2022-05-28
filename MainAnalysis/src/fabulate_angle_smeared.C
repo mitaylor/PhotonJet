@@ -29,7 +29,7 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
 }
 
 float res(float c, float s, float n, float pt) {
-    return result = std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
 }
 
 template <typename T>
@@ -165,7 +165,7 @@ int fabulate(char const* config, char const* output) {
             auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
             auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
 
-            auto res_diff = res(aa_c, aa_s, aa_n) - res(pp_c, pp_s, pp_n);
+            auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
 
             if (res_diff > 0) {
                 auto change = rng->Exp(res_diff);
