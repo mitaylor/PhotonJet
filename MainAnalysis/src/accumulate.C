@@ -60,7 +60,7 @@ int accumulate(char const* config, char const* output) {
     auto rdr = conf->get<std::vector<float>>("dr_range");
 
     auto rrdr = conf->get<std::vector<float>>("rdr_range");
-    auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
+    // auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
     auto rrpt = conf->get<std::vector<float>>("rpt_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
@@ -74,7 +74,7 @@ int accumulate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
 
     auto mdr = new multival(rrdr, rrpt);
-    auto mdphi = new multival(rrdphi, rrpt);
+    // auto mdphi = new multival(rrdphi, rrpt);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
