@@ -279,38 +279,38 @@ int accumulate(char const* config, char const* output) {
     auto texts = std::vector<std::function<void(int64_t)>> {
         pthf_info, std::bind(pt_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
 
-    std::vector<paper*> c1(3, nullptr);
+    // std::vector<paper*> c1(3, nullptr);
     std::vector<paper*> c2(3, nullptr);
     std::vector<paper*> c3(3, nullptr);
-    std::vector<paper*> c4(3, nullptr);
+    // std::vector<paper*> c4(3, nullptr);
     std::vector<paper*> c5(3, nullptr);
     std::vector<paper*> c6(3, nullptr);
 
-    zip([&](paper*& c, int64_t rows, std::string const& suffix,
-            std::function<void(int64_t)> text) {
-        c = new paper(tag + "_dphi_" + suffix, hb);
-        c->divide(-1, rows);
-        c->accessory(text);
+    // zip([&](paper*& c, int64_t rows, std::string const& suffix,
+    //         std::function<void(int64_t)> text) {
+    //     c = new paper(tag + "_dphi_" + suffix, hb);
+    //     c->divide(-1, rows);
+    //     c->accessory(text);
 
-        apply_style(c, collisions, -0.04, 0.24);
-        c->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
-        c->jewellery(redraw_dphi_axis);
-    }, c1, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+    //     apply_style(c, collisions, -0.04, 0.24);
+    //     c->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
+    //     c->jewellery(redraw_dphi_axis);
+    // }, c1, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
-    nevt->apply([&](TH1*, int64_t index) {
-        c1[0]->add((*pjet_es_f_dphi)[index], system, "es");
-        c1[0]->stack((*pjet_wta_f_dphi)[index], system, "wta");
-    });
+    // nevt->apply([&](TH1*, int64_t index) {
+    //     c1[0]->add((*pjet_es_f_dphi)[index], system, "es");
+    //     c1[0]->stack((*pjet_wta_f_dphi)[index], system, "wta");
+    // });
 
-    nevt_d_pt->apply([&](TH1*, int64_t index) {
-        c1[1]->add((*pjet_es_f_dphi_d_pt)[index], system, "es");
-        c1[1]->stack((*pjet_wta_f_dphi_d_pt)[index], system, "wta");
-    });
+    // nevt_d_pt->apply([&](TH1*, int64_t index) {
+    //     c1[1]->add((*pjet_es_f_dphi_d_pt)[index], system, "es");
+    //     c1[1]->stack((*pjet_wta_f_dphi_d_pt)[index], system, "wta");
+    // });
 
-    nevt_d_hf->apply([&](TH1*, int64_t index) {
-        c1[2]->add((*pjet_es_f_dphi_d_hf)[index], system, "es");
-        c1[2]->stack((*pjet_wta_f_dphi_d_hf)[index], system, "wta");
-    });
+    // nevt_d_hf->apply([&](TH1*, int64_t index) {
+    //     c1[2]->add((*pjet_es_f_dphi_d_hf)[index], system, "es");
+    //     c1[2]->stack((*pjet_wta_f_dphi_d_hf)[index], system, "wta");
+    // });
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -340,30 +340,30 @@ int accumulate(char const* config, char const* output) {
     pjet_f_jpt_d_pt->apply([&](TH1* h) { c3[1]->add(h, system); });
     pjet_f_jpt_d_hf->apply([&](TH1* h) { c3[2]->add(h, system); });
 
-    zip([&](paper*& c, int64_t rows, std::string const& suffix,
-            std::function<void(int64_t)> text) {
-        c = new paper(tag + "_u_dphi_" + suffix, hb);
-        c->divide(-1, rows);
-        c->accessory(text);
+    // zip([&](paper*& c, int64_t rows, std::string const& suffix,
+    //         std::function<void(int64_t)> text) {
+    //     c = new paper(tag + "_u_dphi_" + suffix, hb);
+    //     c->divide(-1, rows);
+    //     c->accessory(text);
 
-        apply_style(c, collisions, -0.03, 0.15);
-        c->accessory(std::bind(line_at, _1, 0.f, 0, mdphi->size()));
-    }, c4, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+    //     apply_style(c, collisions, -0.03, 0.15);
+    //     c->accessory(std::bind(line_at, _1, 0.f, 0, mdphi->size()));
+    // }, c4, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
-    nevt->apply([&](TH1*, int64_t index) {
-        c4[0]->add((*pjet_es_u_dphi)[index], system, "es");
-        c4[0]->stack((*pjet_wta_u_dphi)[index], system, "wta");
-    });
+    // nevt->apply([&](TH1*, int64_t index) {
+    //     c4[0]->add((*pjet_es_u_dphi)[index], system, "es");
+    //     c4[0]->stack((*pjet_wta_u_dphi)[index], system, "wta");
+    // });
 
-    nevt_d_pt->apply([&](TH1*, int64_t index) {
-        c4[1]->add((*pjet_es_u_dphi_d_pt)[index], system, "es");
-        c4[1]->stack((*pjet_wta_u_dphi_d_pt)[index], system, "wta");
-    });
+    // nevt_d_pt->apply([&](TH1*, int64_t index) {
+    //     c4[1]->add((*pjet_es_u_dphi_d_pt)[index], system, "es");
+    //     c4[1]->stack((*pjet_wta_u_dphi_d_pt)[index], system, "wta");
+    // });
 
-    nevt_d_hf->apply([&](TH1*, int64_t index) {
-        c4[2]->add((*pjet_es_u_dphi_d_hf)[index], system, "es");
-        c4[2]->stack((*pjet_wta_u_dphi_d_hf)[index], system, "wta");
-    });
+    // nevt_d_hf->apply([&](TH1*, int64_t index) {
+    //     c4[2]->add((*pjet_es_u_dphi_d_hf)[index], system, "es");
+    //     c4[2]->stack((*pjet_wta_u_dphi_d_hf)[index], system, "wta");
+    // });
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -382,7 +382,7 @@ int accumulate(char const* config, char const* output) {
     hb->set_binary("system");
     hb->sketch();
 
-    for (auto const& c : { c1, c2, c3, c4, c5 })
+    for (auto const& c : { c2, c3, c5 })
         for (auto p : c) { p->draw("pdf"); }
 
     return 0;
