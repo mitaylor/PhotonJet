@@ -396,9 +396,9 @@ int distillate(char const* config, char const* output) {
         auto f = resolution_function(label.data());
         h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
-        (*r_f_pt_fit)[index]->SetBinContent(1, f->GetParameter(0));
-        (*r_f_pt_fit)[index]->SetBinContent(2, f->GetParameter(1));
-        (*r_f_pt_fit)[index]->SetBinContent(3, f->GetParameter(2));
+        (*r_f_pt_fits)[index]->SetBinContent(1, f->GetParameter(0));
+        (*r_f_pt_fits)[index]->SetBinContent(2, f->GetParameter(1));
+        (*r_f_pt_fits)[index]->SetBinContent(3, f->GetParameter(2));
 
         auto dr_x = r_f_pt->indices_for(index)[0];
         c9[dr_x]->add(h, "mc");
