@@ -81,14 +81,14 @@ int distillate(char const* config, char const* output) {
     auto ipt = new interval("jet p_{T}"s, rpt);
     auto idr = new interval("reco #deltaj"s, rdr);std::cout << __LINE__ << std::endl;
 
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
+    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);std::cout << __LINE__ << std::endl;
 
-    auto title = "#sigma("s + label + ")";
+    auto title = "#sigma("s + label + ")";std::cout << __LINE__ << std::endl;
 
     /* fully differential (pt, dr, hf) */
-    auto s = new history<TH1F>("s"s, "", fincl, obj->shape());
+    auto s = new history<TH1F>("s"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
     auto r = new history<TH1F>("r"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
 
     auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);
