@@ -49,7 +49,7 @@ void scale_ia_bin_width(T*... args) {
 
 void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, float pho_cor,
                float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
-               float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi, interval* idr,
+               float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi, interval* idr, TRandom3* rng,
                bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
@@ -478,7 +478,7 @@ int populate(char const* config, char const* output) {
 
         fill_axes(pjt, pthf_x, weights, pho_cor,
                   photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                  jet_pt_min, mdphi, mdr, idphi, idr,
+                  jet_pt_min, mdphi, mdr, idphi, idr, rng,
                   smear, smear_fits_aa, smear_fits_pp, cent, nevt,
                   pjet_es_f_dphi, pjet_wta_f_dphi, 
                   pjet_f_dr, pjet_f_jpt,
@@ -495,7 +495,7 @@ int populate(char const* config, char const* output) {
 
             fill_axes(pjtm, pthf_x, weights, pho_cor,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                      jet_pt_min, mdphi, mdr, idphi, idr, 
+                      jet_pt_min, mdphi, mdr, idphi, idr, rng,
                       smear, smear_fits_aa, smear_fits_pp, cent, nmix,
                       mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                       mix_pjet_f_dr, mix_pjet_f_jpt,
