@@ -141,11 +141,8 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
 
             if (res_diff > 0) {
                 auto change = rng->Exp(res(aa_c, aa_s, aa_n, jet_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, jet_pt));
-                // auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
-                // auto adj = rdr + change * sign;
-                auto adj = jt_dr + change/2;
-
-                // std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
+                auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
+                auto adj = jt_dr + change * sign / 2;
 
                 if (0 < adj && adj < 0.3) jt_dr = adj;
             }
