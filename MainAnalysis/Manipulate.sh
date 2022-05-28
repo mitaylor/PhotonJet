@@ -22,8 +22,8 @@ systematic() {
     arithmetic ${sample}_${syst}
 }
 
-# samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
-samples=(pp aa)
+samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+# samples=(pp aa)
 
 for sample in ${samples[@]}; do
     nominal $sample
