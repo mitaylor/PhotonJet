@@ -71,7 +71,7 @@ int distillate(char const* config, char const* output) {
     /* prepare histograms */
     auto idpt = new interval(dpt);
     auto iddr = new interval(ddr);
-    auto idhf = new interval(dhf); std::cout << __LINE__ << std::endl;
+    auto idhf = new interval(dhf);
 
     auto hf_shape = x{ idhf->size() };
     auto pthf_shape = x{ idpt->size(), idhf->size() };
@@ -79,7 +79,7 @@ int distillate(char const* config, char const* output) {
 
     auto incl = new interval(""s, 1, 0., 1.);
     auto ipt = new interval("jet p_{T}"s, rpt);
-    auto idr = new interval("reco #deltaj"s, rdr);std::cout << __LINE__ << std::endl;
+    auto idr = new interval("reco #deltaj"s, rdr);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
@@ -89,7 +89,7 @@ int distillate(char const* config, char const* output) {
 
     /* fully differential (pt, dr, hf) */
     auto s = new history<TH1F>("s"s, "", fincl, obj->shape());
-    auto r = new history<TH1F>("r"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
+    auto r = new history<TH1F>("r"s, "", fincl, obj->shape());
 
     auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);
     auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);
@@ -98,24 +98,24 @@ int distillate(char const* config, char const* output) {
     auto obj_dpthf = obj->sum(1);
 
     auto s_dpthf = new history<TH1F>("s_dpthf", "", fincl, pthf_shape);
-    auto r_dpthf = new history<TH1F>("r_dpthf", "", fincl, pthf_shape);std::cout << __LINE__ << std::endl;
+    auto r_dpthf = new history<TH1F>("r_dpthf", "", fincl, pthf_shape);
 
     auto s_dhf_f_pt = new history<TH1F>("s_dhf_f_pt"s,
         label.data(), fpt, hf_shape);
     auto r_dhf_f_pt = new history<TH1F>("r_dhf_f_pt"s,
-        title.data(), fpt, hf_shape);std::cout << __LINE__ << std::endl;
+        title.data(), fpt, hf_shape);
 
     /* differential in dr, hf */
     auto resize = x{ idpt->size() - 1, iddr->size(), idhf->size() };
     auto obj_ddrhf = obj->shrink("valid", resize, remove)->sum(0);
 
     auto s_ddrhf = new history<TH1F>("s_ddrhf", "", fincl, drhf_shape);
-    auto r_ddrhf = new history<TH1F>("r_ddrhf", "", fincl, drhf_shape);std::cout << __LINE__ << std::endl;
+    auto r_ddrhf = new history<TH1F>("r_ddrhf", "", fincl, drhf_shape);
 
     auto s_dhf_f_dr = new history<TH1F>("s_dhf_f_dr"s,
         label.data(), fdr, hf_shape);
     auto r_dhf_f_dr = new history<TH1F>("r_dhf_f_dr"s,
-        title.data(), fdr, hf_shape);std::cout << __LINE__ << std::endl;
+        title.data(), fdr, hf_shape);
 
     /* load fitting parameters */
     auto fl = new std::vector<float>*[idhf->size()];
@@ -124,13 +124,13 @@ int distillate(char const* config, char const* output) {
     auto flp = new std::vector<float>[idhf->size()];
     auto fhp = new std::vector<float>[idhf->size()];
     auto fle = new std::vector<float>[idhf->size()];
-    auto fhe = new std::vector<float>[idhf->size()];std::cout << __LINE__ << std::endl;
+    auto fhe = new std::vector<float>[idhf->size()];
 
     for (int64_t i = 0; i < idhf->size(); ++i) {
         auto hf_str = std::to_string(i);
 
         fl[i] = new std::vector<float>[iddr->size()];
-        fh[i] = new std::vector<float>[iddr->size()];std::cout << __LINE__ << std::endl;
+        fh[i] = new std::vector<float>[iddr->size()];
 
         for (int64_t j = 0; j < iddr->size(); ++j) {
             auto dr_str = std::to_string(j);
@@ -143,11 +143,11 @@ int distillate(char const* config, char const* output) {
         flp[i] = conf->get<std::vector<float>>("flp_"s + hf_str);
         fhp[i] = conf->get<std::vector<float>>("fhp_"s + hf_str);
         fle[i] = conf->get<std::vector<float>>("fle_"s + hf_str);
-        fhe[i] = conf->get<std::vector<float>>("fhe_"s + hf_str);std::cout << __LINE__ << std::endl;
+        fhe[i] = conf->get<std::vector<float>>("fhe_"s + hf_str);
     }
 
     auto resolution_function = [&](char const* label, int64_t hf_x) {
-        TF1* f = new TF1(label, "sqrt([0]*[0]+[1]*[1]/x+[2]*[2]/(x*x))");std::cout << __LINE__ << std::endl;
+        TF1* f = new TF1(label, "sqrt([0]*[0]+[1]*[1]/x+[2]*[2]/(x*x))");
 
         if (smeared) { 
             f->SetParameters(csn[0], csn[1], csn[2]);
@@ -171,7 +171,7 @@ int distillate(char const* config, char const* output) {
         return f;
     };
 
-    /* info text */std::cout << __LINE__ << std::endl;
+    /* info text */
     std::function<void(int64_t, float)> dr_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.1f < #deltaj < %.1f", ddr, false); };
 
@@ -196,7 +196,7 @@ int distillate(char const* config, char const* output) {
             l->Draw();
         }
     };
-std::cout << __LINE__ << std::endl;
+
     auto tag_object = tag + "_" + object;
     auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";
 
@@ -210,7 +210,7 @@ std::cout << __LINE__ << std::endl;
     apply_style(c1, system_info);
     c1->accessory(pthf_info);
     c1->divide(idpt->size(), -1);
-std::cout << __LINE__ << std::endl;
+
     /* fit obj and resolution */
     obj_dpthf->apply([&](TH1* h, int64_t index) {
         auto indices = obj_dpthf->indices_for(index);
@@ -243,7 +243,7 @@ std::cout << __LINE__ << std::endl;
     c2->accessory(guide_lines);
     c2->divide(idhf->size(), -1);
     c2->set(paper::flags::logx);
-std::cout << __LINE__ << std::endl;
+
     s_dhf_f_pt->apply([&](TH1* h, int64_t index) {
         h->SetAxisRange(s_range[0], s_range[1], "Y");
 
@@ -278,7 +278,7 @@ std::cout << __LINE__ << std::endl;
 
         c3->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     auto c4 = new paper(tag_object + "_ddrhf_sr_fits", hb);
     apply_style(c4, system_info);
     c4->accessory(drhf_info);
@@ -309,7 +309,7 @@ std::cout << __LINE__ << std::endl;
 
         c4->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     auto c5 = new paper(tag_object + "_dhf_f_dr_s", hb);
     apply_style(c5, system_info);
     c5->accessory(std::bind(hf_info, _1, 0.75));
