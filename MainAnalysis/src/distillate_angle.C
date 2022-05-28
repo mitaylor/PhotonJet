@@ -81,23 +81,23 @@ int distillate(char const* config, char const* output) {
     auto ipt = new interval("jet p_{T}"s, rpt);
     auto idr = new interval("reco #deltaj"s, rdr);std::cout << __LINE__ << std::endl;
 
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);std::cout << __LINE__ << std::endl;
-    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);std::cout << __LINE__ << std::endl;
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
+    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
 
-    auto title = "#sigma("s + label + ")";std::cout << __LINE__ << std::endl;
+    auto title = "#sigma("s + label + ")";
 
     /* fully differential (pt, dr, hf) */
-    auto s = new history<TH1F>("s"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
+    auto s = new history<TH1F>("s"s, "", fincl, obj->shape());
     auto r = new history<TH1F>("r"s, "", fincl, obj->shape());std::cout << __LINE__ << std::endl;
 
-    auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);std::cout << __LINE__ << std::endl;
-    auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);std::cout << __LINE__ << std::endl;
+    auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, drhf_shape);
+    auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, drhf_shape);
 
     /* differential in pt, hf */
-    auto obj_dpthf = obj->sum(1);std::cout << __LINE__ << std::endl;
+    auto obj_dpthf = obj->sum(1);
 
-    auto s_dpthf = new history<TH1F>("s_dpthf", "", fincl, pthf_shape);std::cout << __LINE__ << std::endl;
+    auto s_dpthf = new history<TH1F>("s_dpthf", "", fincl, pthf_shape);
     auto r_dpthf = new history<TH1F>("r_dpthf", "", fincl, pthf_shape);std::cout << __LINE__ << std::endl;
 
     auto s_dhf_f_pt = new history<TH1F>("s_dhf_f_pt"s,
@@ -354,7 +354,7 @@ std::cout << __LINE__ << std::endl;
         c9[i]->divide(idhf->size(), -1);
         c9[i]->set(paper::flags::logx);
     }
-std::cout << __LINE__ << std::endl;
+
     /* fit mean and resolution */
     obj->apply([&](TH1* h, int64_t index) {
         auto indices = obj->indices_for(index);
@@ -382,7 +382,7 @@ std::cout << __LINE__ << std::endl;
 
         c7[dr_x]->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     s_f_pt->apply([&](TH1* h, int64_t index) {
         h->SetAxisRange(s_range[0], s_range[1], "Y");
 
@@ -411,7 +411,7 @@ std::cout << __LINE__ << std::endl;
     });
 
     hb->sketch();
-std::cout << __LINE__ << std::endl;
+
     for (auto const& p : { c1, c2, c3, c4, c5, c6 })
         p->draw("pdf");
     for (auto const& c : { c7, c8, c9 })
