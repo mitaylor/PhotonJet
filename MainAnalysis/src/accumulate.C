@@ -251,8 +251,8 @@ int accumulate(char const* config, char const* output) {
     printf("painting..\n");
 
     // auto redraw_dphi_axis = [&](TH1* h, int64_t) {
-        transform_axis(h, [](int64_t val) -> float {
-            return std::abs(revert_radian(val)); }); };
+        // transform_axis(h, [](int64_t val) -> float {
+        //     return std::abs(revert_radian(val)); }); };
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
