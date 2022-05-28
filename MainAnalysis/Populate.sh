@@ -8,7 +8,7 @@ histogram() {
 }
 
 # samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90 aa)
-samples=(pp aa)
+samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
 
 for sample in ${samples[@]}; do
     histogram ${sample}
@@ -18,10 +18,10 @@ for sample in ${samples[@]}; do
     done
 done
 
-samples=(aa)
+# samples=(aa)
 
-for sample in ${samples[@]}; do
-    for syst in cent_down cent_up; do
-        histogram ${sample}_${syst}
-    done
-done
+# for sample in ${samples[@]}; do
+#     for syst in cent_down cent_up; do
+#         histogram ${sample}_${syst}
+#     done
+# done
