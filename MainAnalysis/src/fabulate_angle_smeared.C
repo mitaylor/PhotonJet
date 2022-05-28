@@ -168,7 +168,7 @@ int fabulate(char const* config, char const* output) {
             auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
 
             if (res_diff > 0) {
-                auto change = rng->Exp(res_diff);
+                auto change = rng->Gaus(res_diff);
                 auto sign = (rng->Integer(2) == 0) ? -1 : 1;
                 
                 auto adj = rdr + change * sign;
