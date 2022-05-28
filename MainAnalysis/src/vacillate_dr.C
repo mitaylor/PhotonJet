@@ -358,10 +358,10 @@ int vacillate(char const* config, char const* output) {
                         auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
                         auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
 
-                        auto res_diff = res(aa_c, aa_s, aa_n, jet_pt) - res(pp_c, pp_s, pp_n, jet_pt);
+                        auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
 
                         if (res_diff > 0) {
-                            auto change = rng->Exp(res(aa_c, aa_s, aa_n, jet_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, jet_pt));
+                            auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
                             auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
                             auto adj = rdr + change * sign / 2;
 
