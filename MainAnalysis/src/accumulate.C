@@ -81,7 +81,7 @@ int accumulate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* open input files */
-    TFile* f = new TFile(input.data(), "read");
+    TFile* f = new TFile(input.data(), "read"); std::cout << __LINE__ << std::endl;
 
     /* load histograms */
     auto nevt = new history<TH1F>(f, label + "_raw_nevt"s);
@@ -89,7 +89,7 @@ int accumulate(char const* config, char const* output) {
     auto pjet_es_f_dphi = new history<TH1F>(
         f, label + "_raw_sub_pjet_es_f_dphi"s);
     auto pjet_wta_f_dphi = new history<TH1F>(
-        f, label + "_raw_sub_pjet_wta_f_dphi"s);
+        f, label + "_raw_sub_pjet_wta_f_dphi"s); std::cout << __LINE__ << std::endl;
     auto pjet_f_dr = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_dr"s);
     auto pjet_f_jpt = new history<TH1F>(
@@ -98,25 +98,25 @@ int accumulate(char const* config, char const* output) {
     auto pjet_es_u_dphi = new history<TH1F>(
         f, label + "_raw_sub_pjet_es_u_dphi"s);
     auto pjet_wta_u_dphi = new history<TH1F>(
-        f, label + "_raw_sub_pjet_wta_u_dphi"s);
+        f, label + "_raw_sub_pjet_wta_u_dphi"s); std::cout << __LINE__ << std::endl;
     auto pjet_u_dr = new history<TH1F>(
         f, label + "_raw_sub_pjet_u_dr"s);
 
     /* rescale by number of signal photons (events) */
     pjet_es_f_dphi->multiply(*nevt);
     pjet_wta_f_dphi->multiply(*nevt);
-    pjet_f_dr->multiply(*nevt);
+    pjet_f_dr->multiply(*nevt); std::cout << __LINE__ << std::endl;
     pjet_f_jpt->multiply(*nevt);
     pjet_es_u_dphi->multiply(*nevt);
     pjet_wta_u_dphi->multiply(*nevt);
-    pjet_u_dr->multiply(*nevt);
+    pjet_u_dr->multiply(*nevt); std::cout << __LINE__ << std::endl;
 
     /* discard overflow photon pt bin */
     auto discard = [](history<TH1F>*& h, int64_t axis) {
         auto shape = h->shape();
         shape[axis] = shape[axis] - 1;
         h = h->shrink("s", shape, std::vector<int64_t>(h->dims(), 0));
-    };
+    }; std::cout << __LINE__ << std::endl;
 
     auto discard_low = [](history<TH1F>*& h, int64_t axis) {
         auto shape = h->shape();
@@ -125,7 +125,7 @@ int accumulate(char const* config, char const* output) {
         offsets[axis] = 2;
 
         h = h->shrink("s", shape, offsets);
-    };
+    }; std::cout << __LINE__ << std::endl;
 
     discard(nevt, 0);
     discard(pjet_es_f_dphi, 0);
@@ -134,7 +134,7 @@ int accumulate(char const* config, char const* output) {
     discard(pjet_f_jpt, 0);
     discard(pjet_es_u_dphi, 0);
     discard(pjet_wta_u_dphi, 0);
-    discard(pjet_u_dr, 0);
+    discard(pjet_u_dr, 0); std::cout << __LINE__ << std::endl;
 
     if (use_photon_60) {
         dpt.erase(dpt.begin(), dpt.begin() + 2);
@@ -147,12 +147,12 @@ int accumulate(char const* config, char const* output) {
         discard_low(pjet_es_u_dphi, 0);
         discard_low(pjet_wta_u_dphi, 0);
         discard_low(pjet_u_dr, 0);
-    }
+    } std::cout << __LINE__ << std::endl;
 
     /* integrate histograms */
     auto nevt_d_pt = nevt->sum(1);
     auto nevt_d_hf = nevt->sum(0);
-
+ std::cout << __LINE__ << std::endl;
     auto pjet_es_f_dphi_d_pt = pjet_es_f_dphi->sum(1);
     auto pjet_es_f_dphi_d_hf = pjet_es_f_dphi->sum(0);
     auto pjet_wta_f_dphi_d_pt = pjet_wta_f_dphi->sum(1);
@@ -176,7 +176,7 @@ int accumulate(char const* config, char const* output) {
     pjet_es_u_dphi->divide(*nevt);
     pjet_wta_u_dphi->divide(*nevt);
     pjet_u_dr->divide(*nevt);
-
+ std::cout << __LINE__ << std::endl;
     pjet_es_f_dphi_d_pt->divide(*nevt_d_pt);
     pjet_es_f_dphi_d_hf->divide(*nevt_d_hf);
     pjet_wta_f_dphi_d_pt->divide(*nevt_d_pt);
@@ -191,7 +191,7 @@ int accumulate(char const* config, char const* output) {
     pjet_wta_u_dphi_d_hf->divide(*nevt_d_hf);
     pjet_u_dr_d_pt->divide(*nevt_d_pt);
     pjet_u_dr_d_hf->divide(*nevt_d_hf);
-
+ std::cout << __LINE__ << std::endl;
     /* normalise to unity */
     normalise_to_unity(
         pjet_f_dr,
@@ -218,7 +218,7 @@ int accumulate(char const* config, char const* output) {
         pjet_es_f_dphi_d_hf,
         pjet_wta_f_dphi_d_pt,
         pjet_wta_f_dphi_d_hf);
-
+ std::cout << __LINE__ << std::endl;
     /* save histograms */
     in(output, [&]() {
         nevt->save(tag);
@@ -246,7 +246,7 @@ int accumulate(char const* config, char const* output) {
         pjet_u_dr_d_pt->save(tag);
         pjet_u_dr_d_hf->save(tag);
     });
-
+ std::cout << __LINE__ << std::endl;
     /* draw plots */
     printf("painting..\n");
 
@@ -278,7 +278,7 @@ int accumulate(char const* config, char const* output) {
     auto suffixes = { "d_pthf"s, "d_pt"s, "d_hf"s };
     auto texts = std::vector<std::function<void(int64_t)>> {
         pthf_info, std::bind(pt_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
-
+ std::cout << __LINE__ << std::endl;
     std::vector<paper*> c1(3, nullptr);
     std::vector<paper*> c2(3, nullptr);
     std::vector<paper*> c3(3, nullptr);
@@ -311,7 +311,7 @@ int accumulate(char const* config, char const* output) {
         c1[2]->add((*pjet_es_f_dphi_d_hf)[index], system, "es");
         c1[2]->stack((*pjet_wta_f_dphi_d_hf)[index], system, "wta");
     });
-
+ std::cout << __LINE__ << std::endl;
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
         c = new paper(tag + "_dr_" + suffix, hb);
@@ -335,7 +335,7 @@ int accumulate(char const* config, char const* output) {
         apply_style(c, collisions, -0.001, 0.02);
         c->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     }, c3, x{ ihf->size(), 1L, 1L }, suffixes, texts);
-
+ std::cout << __LINE__ << std::endl;
     pjet_f_jpt->apply([&](TH1* h) { c3[0]->add(h, system); });
     pjet_f_jpt_d_pt->apply([&](TH1* h) { c3[1]->add(h, system); });
     pjet_f_jpt_d_hf->apply([&](TH1* h) { c3[2]->add(h, system); });
@@ -364,7 +364,7 @@ int accumulate(char const* config, char const* output) {
         c4[2]->add((*pjet_es_u_dphi_d_hf)[index], system, "es");
         c4[2]->stack((*pjet_wta_u_dphi_d_hf)[index], system, "wta");
     });
-
+ std::cout << __LINE__ << std::endl;
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
         c = new paper(tag + "_u_dr_" + suffix, hb);
@@ -378,7 +378,7 @@ int accumulate(char const* config, char const* output) {
     pjet_u_dr->apply([&](TH1* h) { c5[0]->add(h, system); });
     pjet_u_dr_d_pt->apply([&](TH1* h) { c5[1]->add(h, system); });
     pjet_u_dr_d_hf->apply([&](TH1* h) { c5[2]->add(h, system); });
-
+ std::cout << __LINE__ << std::endl;
     hb->set_binary("system");
     hb->sketch();
 
