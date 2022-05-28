@@ -167,12 +167,13 @@ int fabulate(char const* config, char const* output) {
 
             auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
 
-            std::cout << dr_x << " " << reco_pt << " " << res_diff << std::endl;
             if (res_diff > 0) {
                 auto change = rng->Gaus(0, res_diff);
                 // auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
                 // auto adj = rdr + change * sign;
                 auto adj = rdr + change;
+
+                std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
 
                 if (ddr.front()< adj && adj < ddr.back()) rdr = adj;
             }
