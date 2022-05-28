@@ -47,6 +47,10 @@ void scale_ia_bin_width(T*... args) {
     }), 0)... };
 }
 
+float res(float c, float s, float n, float pt) {
+    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+}
+
 void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, float pho_cor,
                float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
                float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi, interval* idr, TRandom3* rng,
