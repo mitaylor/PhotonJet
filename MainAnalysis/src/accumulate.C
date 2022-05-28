@@ -250,7 +250,7 @@ int accumulate(char const* config, char const* output) {
     /* draw plots */
     printf("painting..\n");
 
-    auto redraw_dphi_axis = [&](TH1* h, int64_t) {
+    // auto redraw_dphi_axis = [&](TH1* h, int64_t) {
         transform_axis(h, [](int64_t val) -> float {
             return std::abs(revert_radian(val)); }); };
 
