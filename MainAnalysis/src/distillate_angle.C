@@ -421,7 +421,7 @@ int distillate(char const* config, char const* output) {
         r->save(tag_object);
         s_f_pt->save(tag_object);
         r_f_pt->save(tag_object);
-        r_f_pt_fit->save(tag_object);
+        r_f_pt_fits->save(tag_object);
 
         s_dpthf->save(tag_object);
         r_dpthf->save(tag_object);
