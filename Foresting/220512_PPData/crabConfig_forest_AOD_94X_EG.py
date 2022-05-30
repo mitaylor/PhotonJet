@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/PhotonJet'
 DatasetName = '/HighEGJet/Run2017G-17Nov2017-v2/AOD'
-Tag = '20220512PPEG'
+Tag = '20220512JECV6PPEG'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
