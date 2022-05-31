@@ -43,8 +43,8 @@ int congratulate(char const* config, char const* output) {
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto ddr = conf->get<std::vector<float>>("dr_diff");
 
-    // auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
+    auto idr = new interval(ddr);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -89,11 +89,15 @@ int congratulate(char const* config, char const* output) {
     s->divide(-1, ihf->size());
 
     /* draw histograms with uncertainties */
-    hists[0]->apply([&](TH1* h) { s->add(h, "aa"); });
+    hists[0]->apply([&](TH1* h, int64_t index) { if (index < idr->index_for(0.2)) {
+        s->add(h, "aa"); }
+    });
 
     for (int64_t i = 0; i < 4; ++i) {
         hists[i + 2]->apply([&](TH1* h, int64_t index) {
-            s->stack(i + index + 1, h, "ss");
+            if (index < idr->index_for(0.2)) {
+                s->stack(i * idr->size() + index + 1, h, "ss");
+            }
         });
     }
 
