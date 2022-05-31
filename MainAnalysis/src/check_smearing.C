@@ -74,7 +74,7 @@ int congratulate(char const* config, char const* output) {
     hb->alias("ss", "pp (smeared)");
 
     std::function<void(int64_t, float)> dr_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < #deltaj < %.0f", ddr, false); };
+        info_text(x, pos, "%.2f < #deltaj < %.2f", ddr, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
