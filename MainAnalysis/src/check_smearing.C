@@ -46,12 +46,12 @@ int congratulate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
     auto idr = new interval(ddr);
 
-    auto mdrhf = new multival(ddr, dhf);
-    auto mdrhf_short = new multival(ddr_short, dhf);
-
     std::vector<float>::const_iterator first = ddr.begin();
     std::vector<float>::const_iterator last = ddr.begin() + idr->index_for(0.2) + 2;
     std::vector<float> ddr_short(first, last);
+
+    auto mdrhf = new multival(ddr, dhf);
+    auto mdrhf_short = new multival(ddr_short, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
