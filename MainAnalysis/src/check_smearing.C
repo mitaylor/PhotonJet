@@ -48,6 +48,8 @@ int congratulate(char const* config, char const* output) {
 
     auto mdrhf = new multival(*idr, *ihf);
 
+    auto ddr_short(ddr.begin(), ddr.begin() + idr->index_for(0.2));
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -74,7 +76,7 @@ int congratulate(char const* config, char const* output) {
     hb->alias("ss", "pp (smeared)");
 
     std::function<void(int64_t, float)> dr_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.2f < #deltaj < %.2f", ddr, false); };
+        info_text(x, pos, "%.2f < #deltaj < %.2f", ddr_short, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
