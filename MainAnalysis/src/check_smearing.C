@@ -99,7 +99,6 @@ int congratulate(char const* config, char const* output) {
     hists[0]->apply([&](TH1* h, int64_t index) {
         auto indices = mdrhf->indices_for(index);
         if (indices[0] <= idr->index_for(0.2)) {
-            std::cout << indices[0] << " " << indices[1] << std::endl;
             s->add(h, "aa");
         }
     });
