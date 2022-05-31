@@ -94,7 +94,7 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     hists[0]->apply([&](TH1* h, int64_t index) {
         auto indices = mdrhf->indices_for(index);
-        if (indices[0] < idr->index_for(0.2)) {
+        if (indices[0] <= idr->index_for(0.2)) {
             std::cout << indices[0] << " " << indices[1] << std::endl;
             s->add(h, "aa");
         }
@@ -102,7 +102,7 @@ int congratulate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < 4; ++i) {
         hists[i + 2]->apply([&](TH1* h, int64_t index) {
-            if (index < idr->index_for(0.2)) {
+            if (index <= idr->index_for(0.2)) {
                 s->stack(i * width + index + 1, h, "ss");
             }
         });
