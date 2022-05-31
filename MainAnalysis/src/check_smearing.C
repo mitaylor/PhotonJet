@@ -46,7 +46,7 @@ int congratulate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
     auto idr = new interval(ddr);
 
-    auto mdrhf = new multival(*ihf, *idr);
+    auto mdrhf = new multival(*idr, *ihf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
