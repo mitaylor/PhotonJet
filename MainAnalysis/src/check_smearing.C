@@ -46,6 +46,8 @@ int congratulate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
     auto idr = new interval(ddr);
 
+    auto mdrhf = multival(*ihf, *idr);
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -89,8 +91,11 @@ int congratulate(char const* config, char const* output) {
     s->divide(-1, ihf->size());
 
     /* draw histograms with uncertainties */
-    hists[0]->apply([&](TH1* h, int64_t index) { if (index < idr->index_for(0.2)) {
-        s->add(h, "aa"); }
+    hists[0]->apply([&](TH1* h, int64_t index) {
+        auto indices = mdrhf->indices_for(index);
+        if (indices[0] < idr->index_for(0.2)) {
+            s->add(h, "aa");
+        }
     });
 
     for (int64_t i = 0; i < 4; ++i) {
