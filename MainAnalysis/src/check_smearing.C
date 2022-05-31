@@ -61,7 +61,7 @@ int congratulate(char const* config, char const* output) {
 
     zip([&](auto& hist, auto const file, auto const& tag, auto const& new_tag) {
         hist = new history<TH1F>(file, tag + "_angle_r_f_pt");
-        hist->rename(new_tag + "_angle_r_f_pt")
+        hist->rename(new_tag + "_angle_r_f_pt");
     }, hists, files, tags, new_tags);
 
     /* prepare plots */
@@ -83,7 +83,7 @@ int congratulate(char const* config, char const* output) {
     auto texts = std::vector<std::function<void(int64_t)>> {
         drhf_info, std::bind(dr_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
 
-    auto collisions = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
     /* prepare paper */
     auto s = new paper("smeared_pp_dj_resolution", hb);
