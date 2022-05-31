@@ -80,15 +80,11 @@ int congratulate(char const* config, char const* output) {
     auto drhf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, hists[0], dr_info, hf_info); };
 
-    auto texts = std::vector<std::function<void(int64_t)>> {
-        drhf_info, std::bind(dr_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
-
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
     /* prepare paper */
     auto s = new paper("smeared_pp_dj_resolution", hb);
     apply_style(s, collisions, ymin, ymax);
-    s->accessory(text);
     c1->accessory(drhf_info);
     s->divide(-1, ihf->size);
 
@@ -116,7 +112,7 @@ int congratulate(char const* config, char const* output) {
     hb->style("pp", pp_style);
     hb->style("aa", aa_style);
     hb->style("ss", pp_style);
-    hb->sketch()
+    hb->sketch();
 
     s->draw("pdf");
 
