@@ -47,7 +47,7 @@ int congratulate(char const* config, char const* output) {
     auto idr = new interval(ddr);
 
     auto mdrhf = new multival(ddr, dhf);
-    auto mdrhf = new multival(ddr_short, dhf);
+    auto mdrhf_short = new multival(ddr_short, dhf);
 
     std::vector<float>::const_iterator first = ddr.begin();
     std::vector<float>::const_iterator last = ddr.begin() + idr->index_for(0.2) + 2;
