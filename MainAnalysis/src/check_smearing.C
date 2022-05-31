@@ -57,6 +57,12 @@ int congratulate(char const* config, char const* output) {
     }, files, inputs);
 
     /* load histograms */
+    std::vector<history<TH1F>*> hists(6, nullptr);
+
+    zip([&](auto& hist, auto const file, auto const& tag, auto const& new_tag) {
+        hist = new history<TH1F>(file, tag + "_angle_r_f_pt");
+        hist->rename(new_tag + "_angle_r_f_pt")
+    }, hists, files, tags, new_tags);
 
     /* prepare plots */
     auto hb = new pencil();
@@ -71,26 +77,19 @@ int congratulate(char const* config, char const* output) {
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
 
-    auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, nevt, dr_info, hf_info); };
+    auto drhf_info = [&](int64_t index) {
+        stack_text(index, 0.75, 0.04, hists[0], dr_info, hf_info); };
 
     auto texts = std::vector<std::function<void(int64_t)>> {
-        pthf_info, std::bind(pt_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
+        drhf_info, std::bind(dr_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
 
     auto collisions = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
-
-    /* get histograms */
-    std::vector<history<TH1F>*> hists(6, nullptr);
-
-    zip([&](auto& hist, auto const file, auto const& tag, auto const& new_tag) {
-        hist = new history<TH1F>(file, tag + "_angle_r_f_pt");
-        hist->rename(new_tag + "_angle_r_f_pt")
-    }, hists, files, tags, new_tags);
 
     /* prepare paper */
     auto s = new paper("smeared_pp_dj_resolution", hb);
     apply_style(s, collisions, ymin, ymax);
     s->accessory(text);
+    c1->accessory(drhf_info);
     s->divide(-1, ihf->size);
 
     /* draw histograms with uncertainties */
