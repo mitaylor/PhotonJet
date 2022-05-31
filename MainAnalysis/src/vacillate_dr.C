@@ -60,6 +60,8 @@ int vacillate(char const* config, char const* output) {
     auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
 
+    auto dr_diff = conf->get<std::vector<float>>("dr_diff");
+
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
@@ -90,7 +92,7 @@ int vacillate(char const* config, char const* output) {
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
-    auto idr = new interval("#deltaj"s, rdrr);
+    auto isdr = new interval("#deltaj"s, dr_diff);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
     auto mcdr = new multival(rdrr, rdrg);
@@ -348,7 +350,7 @@ int vacillate(char const* config, char const* output) {
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
                     if (smear) {
-                        auto dr_x = idr->index_for(rdr);
+                        auto dr_x = isdr->index_for(rdr);
 
                         auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
                         auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);

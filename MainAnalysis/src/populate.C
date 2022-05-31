@@ -213,7 +213,7 @@ int populate(char const* config, char const* output) {
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
-    auto rdr = conf->get<std::vector<float>>("dr_range");
+    auto rdr = conf->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram and also the smearing application
 
     auto rrdr = conf->get<std::vector<float>>("rdr_range");
     auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
