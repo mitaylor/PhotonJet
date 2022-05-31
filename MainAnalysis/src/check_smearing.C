@@ -88,7 +88,7 @@ int congratulate(char const* config, char const* output) {
     auto s = new paper("smeared_pp_dj_resolution", hb);
     apply_style(s, collisions, ymin, ymax);
     s->accessory(drhf_info);
-    s->divide(-1, ihf->size());
+    s->divide(idr->size(), -1);
 
     /* draw histograms with uncertainties */
     hists[0]->apply([&](TH1* h, int64_t index) {
