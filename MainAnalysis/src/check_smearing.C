@@ -85,10 +85,11 @@ int congratulate(char const* config, char const* output) {
     auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
 
     /* prepare paper */
+    auto width = idr->index_for(0.2) + 1;
     auto s = new paper("smeared_pp_dj_resolution", hb);
     apply_style(s, collisions, ymin, ymax);
     s->accessory(drhf_info);
-    s->divide(idr->size(), -1);
+    s->divide(width, -1);
 
     /* draw histograms with uncertainties */
     hists[0]->apply([&](TH1* h, int64_t index) {
@@ -102,7 +103,7 @@ int congratulate(char const* config, char const* output) {
     for (int64_t i = 0; i < 4; ++i) {
         hists[i + 2]->apply([&](TH1* h, int64_t index) {
             if (index < idr->index_for(0.2)) {
-                s->stack(i * idr->size() + index + 1, h, "ss");
+                s->stack(i * width + index + 1, h, "ss");
             }
         });
     }
