@@ -49,7 +49,7 @@ int congratulate(char const* config, char const* output) {
     auto mdrhf = new multival(*idr, *ihf);
 
     std::vector<float>::const_iterator first = ddr.begin();
-    std::vector<float>::const_iterator last = ddr.begin() + idr->index_for(0.2) + 2;
+    std::vector<float>::const_iterator last = ddr.begin() + idr->index_for(0.2) + 1;
     std::vector<float> ddr_short(first, last);
 
     /* manage memory manually */
