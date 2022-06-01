@@ -72,12 +72,16 @@ int data_mc_comparison(char const* config, const char* output) {
 
                 float scale = 1.0 - (double) k / (double) idr->size() * 2.0;
 
-                (*h_truth_up)[i]->SetBinContent(bin + 1, center + error * scale);
-                (*h_truth_down)[i]->SetBinContent(bin + 1, center - error * scale);
+                auto center_up = center + error * scale;
+                auto center_down = center - error * scale;
+
+                if (center_up > 0)      (*h_truth_up)[i]->SetBinContent(bin + 1, center_up);
+                else                    (*h_truth_up)[i]->SetBinContent(bin + 1, 0);
+                if (center_down > 0)    (*h_truth_down)[i]->SetBinContent(bin + 1, center_down);
+                else                    (*h_truth_down)[i]->SetBinContent(bin + 1, 0);
             }
         }
     }
-
 
     in(output, [&]() {
         h_truth_up->save();
