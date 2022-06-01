@@ -173,6 +173,8 @@ int quantitate(char const* config, char const* output) {
     auto before_label = conf->get<std::string>("before_label");
     auto before_figures = conf->get<std::vector<std::string>>("before_figures");
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
+    
+    auto set = conf->get<std::vector<float>>("set");
 
     auto afters = conf->get<std::vector<std::string>>("afters");
 
@@ -280,6 +282,8 @@ int quantitate(char const* config, char const* output) {
                 choice[i] = j;
             }
         }
+
+        if (set.size() == choice.size()) { choice[i] = set[i]; }
 
         std::cout << std::endl << choice[i] << std::endl;
     }
