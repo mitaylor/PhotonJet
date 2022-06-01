@@ -36,14 +36,14 @@ int data_mc_comparison(char const* config, const char* output) {
     auto tag = conf->get<std::string>("tag");
 
     auto rdr = conf->get<std::vector<float>>("drg_range");
-    auto rpt = conf->get<std::vector<float>>("ptg_range");
+    auto rpt = conf->get<std::vector<float>>("ptg_range");std::cout << __LINE__ << std::endl;
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     /* create intervals and multivals */
-    auto ipt= new interval(rpt);
+    auto ipt= new interval(rpt);std::cout << __LINE__ << std::endl;
     auto idr = new interval(rdr);
     auto mg = new multival(rdr, rpt);
 
@@ -51,16 +51,16 @@ int data_mc_comparison(char const* config, const char* output) {
     // auto mpthf = new multival(dpt, dhf);
 
     /* load history objects */
-    TFile* fdata = new TFile(input_data.data(), "read");
-    TFile* ftruth = new TFile(input_truth.data(), "read");
+    TFile* fdata = new TFile(input_data.data(), "read");std::cout << __LINE__ << std::endl;
+    TFile* ftruth = new TFile(input_truth.data(), "read");std::cout << __LINE__ << std::endl;
 
     auto h_data = new history<TH1F>(fdata, tag + "_"s + data_label);
     auto h_truth_g = new history<TH1F>(ftruth, tag + "_"s + truth_label_g);
     auto h_truth_r = new history<TH1F>(ftruth, tag + "_"s + truth_label_r);
-    auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);
+    auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);std::cout << __LINE__ << std::endl;
 
     if (h_data->size() != h_truth_g->size()) {
-        std::cout << "Size mismatch" << std::endl;
+        std::cout << "Size mismatch" << std::endl;std::cout << __LINE__ << std::endl;
         return -1;
     }
 
@@ -73,18 +73,18 @@ int data_mc_comparison(char const* config, const char* output) {
                 auto center = (*h_truth_g)[i]->GetBinContent(bin + 1);
                 auto error = (*h_data)[i]->GetBinError(bin + 1);
 
-                float scale = 1.0 - (double) k / (double) idr->size() * 2.0;
+                float scale = 1.0 - (double) k / (double) idr->size() * 2.0;std::cout << __LINE__ << std::endl;
 
                 auto new_center = (direction) ? center + error * scale : center - error * scale;
 
-                if (new_center > 0) (*h_truth_g)[i]->SetBinContent(bin + 1, new_center);
+                if (new_center > 0) (*h_truth_g)[i]->SetBinContent(bin + 1, new_center);std::cout << __LINE__ << std::endl;
                 else                (*h_truth_g)[i]->SetBinContent(bin + 1, 0);
             }
         }
     }
 
     in(output, [&]() {
-        h_truth_g->save();
+        h_truth_g->save();std::cout << __LINE__ << std::endl;
         h_truth_r->save();
         h_truth_c->save();
     });
