@@ -350,6 +350,7 @@ int vacillate(char const* config, char const* output) {
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
                     if (smear) {
+                        if (rdr > 0.3) { continue; }
                         auto dr_x = isdr->index_for(rdr);
 
                         auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);

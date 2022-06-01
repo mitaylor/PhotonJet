@@ -126,6 +126,8 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
         double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
+        if (jt_dr > 0.3) { continue; }
+
         if (smear) {
             auto dr_x = idr->index_for(jt_dr);
 
