@@ -228,7 +228,7 @@ int congratulate(char const* config, char const* output) {
         if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }std::cout << __LINE__ << std::endl;
 
         /* prepare papers */
-        auto p = new paper(prefix + "results_pp_" + figure, hb);
+        auto p = new paper(prefix + "_results_pp_" + figure, hb);
         apply_style(p, "", ymin, ymax);
         p->decorate(std::bind(decorator, "pp 300 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
@@ -236,7 +236,7 @@ int congratulate(char const* config, char const* output) {
         p->jewellery(box);
         p->divide(-1, 1);std::cout << __LINE__ << std::endl;
 
-        auto a = new paper(prefix+ "results_aa_" + figure, hb);
+        auto a = new paper(prefix+ "_results_aa_" + figure, hb);
         apply_style(a, "", ymin, ymax);
         a->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
@@ -244,7 +244,7 @@ int congratulate(char const* config, char const* output) {
         a->jewellery(box);
         a->divide(ihf->size(), -1);std::cout << __LINE__ << std::endl;
 
-        auto s = new paper(prefix + "results_ss_" + figure, hb);
+        auto s = new paper(prefix + "_results_ss_" + figure, hb);
         apply_style(s, "", ymin, ymax);
         s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
