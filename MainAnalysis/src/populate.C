@@ -144,7 +144,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
                 auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
                 auto adj = jt_dr + change * sign / 2;
 
-                if (0 < adj && adj < 0.2) jt_dr = adj;
+                if (0 < adj && adj < 0.2 && jt_dr < 0.2) jt_dr = adj;
             }
         }
 

@@ -174,7 +174,7 @@ int fabulate(char const* config, char const* output) {
 
                 // std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
 
-                if (0 < adj && adj < 0.2) rdr = adj;
+                if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
             }
 
             auto weight = p->w;

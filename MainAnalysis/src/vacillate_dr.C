@@ -367,7 +367,7 @@ int vacillate(char const* config, char const* output) {
                             auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
                             auto adj = rdr + change * sign / 2;
 
-                            if (0 < adj && adj < 0.2) rdr = adj;
+                            if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
                         }
                     }
 
