@@ -76,15 +76,13 @@ int congratulate(char const* config, char const* output) {
     }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);
 
     /* load histograms */
-    std::cout << __LINE__ << std::endl;
-
     std::vector<std::string> base_stubs(6);
     std::vector<std::string> syst_stubs(6);
 
     zip([&](auto& base, auto& syst, auto const& tag) {
         base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
         syst = tag + "_total_base_" + tag + "_nominal_s_pure_raw_sub_";
-    }, base_stubs, syst_stubs, tags);std::cout << __LINE__ << std::endl;
+    }, base_stubs, syst_stubs, tags);
 
     /* prepare plots */
     auto hb = new pencil();
@@ -92,7 +90,7 @@ int congratulate(char const* config, char const* output) {
 
     hb->alias("aa", "PbPb");
     if (smeared) hb->alias("ss", "pp (smeared)");
-    hb->alias("ss", "pp");std::cout << __LINE__ << std::endl;
+    hb->alias("ss", "pp");
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
         TLatex* cms = new TLatex();
@@ -124,13 +122,13 @@ int congratulate(char const* config, char const* output) {
         info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    };std::cout << __LINE__ << std::endl;
+    };
 
     // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
     //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };std::cout << __LINE__ << std::endl;
+        info_text(x, pos, "%i - %i%%", dcent, true); };
 
     // auto pp_info = [&](int64_t index, history<TH1F>* h) {
     //     stack_text(index, 0.73, 0.04, h, pt_info); };
@@ -139,7 +137,7 @@ int congratulate(char const* config, char const* output) {
     //     stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, hf_info); };std::cout << __LINE__ << std::endl;
+        stack_text(index, 0.73, 0.04, h, hf_info); };
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
@@ -152,7 +150,7 @@ int congratulate(char const* config, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             syst = new history<TH1F>(file, syst_stub + figure);
 
-        }, hists, systs, files, base_stubs, syst_stubs);std::cout << __LINE__ << std::endl;
+        }, hists, systs, files, base_stubs, syst_stubs);
 
         for (size_t i = 2; i < files.size(); ++i) {
             std::string name1 = std::to_string(i) + std::string("happy");
@@ -169,12 +167,13 @@ int congratulate(char const* config, char const* output) {
                     double val = h->GetBinContent(i);
                     double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+
                     if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
                         correction /= (*unfolded_qcd)[index]->GetBinContent(i);
                     } else {
                         correction = 1;
                     }
-                    std::cout << correction << std::endl;
+ 
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
@@ -183,12 +182,13 @@ int congratulate(char const* config, char const* output) {
                     double val = h->GetBinContent(i);
                     double err = h->GetBinError(i);
                     double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+
                     if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
                         correction /= (*unfolded_qcd)[index]->GetBinContent(i);
                     } else {
                         correction = 1;
                     }
-                    std::cout << correction << std::endl;
+
                     h->SetBinContent(i, val*correction);
                     h->SetBinError(i, err*correction);
                 }});
@@ -222,10 +222,10 @@ int congratulate(char const* config, char const* output) {
 
                 gr->DrawClone("f");
             }
-        };std::cout << __LINE__ << std::endl;
+        };
 
         /* minor adjustments */
-        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }std::cout << __LINE__ << std::endl;
+        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
 
         /* prepare papers */
         auto p = new paper(prefix + "_results_pp_" + figure, hb);
@@ -234,7 +234,7 @@ int congratulate(char const* config, char const* output) {
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         // p->accessory(std::bind(pp_info, _1, hists[1]));
         p->jewellery(box);
-        p->divide(-1, 1);std::cout << __LINE__ << std::endl;
+        p->divide(-1, 1);
 
         auto a = new paper(prefix+ "_results_aa_" + figure, hb);
         apply_style(a, "", ymin, ymax);
@@ -242,7 +242,7 @@ int congratulate(char const* config, char const* output) {
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
         a->jewellery(box);
-        a->divide(ihf->size(), -1);std::cout << __LINE__ << std::endl;
+        a->divide(ihf->size(), -1);
 
         auto s = new paper(prefix + "_results_ss_" + figure, hb);
         apply_style(s, "", ymin, ymax);
@@ -250,7 +250,7 @@ int congratulate(char const* config, char const* output) {
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
-        s->divide(ihf->size(), -1);std::cout << __LINE__ << std::endl;
+        s->divide(ihf->size(), -1);
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { a->add(h, "aa"); s->add(h, "aa"); });
@@ -260,29 +260,29 @@ int congratulate(char const* config, char const* output) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "ss");
             });
-        }std::cout << __LINE__ << std::endl;
+        }
 
         auto pp_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(25);
             h->SetMarkerSize(0.60);
-        };std::cout << __LINE__ << std::endl;
+        };
 
         auto aa_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
-        };std::cout << __LINE__ << std::endl;
+        };
 
-        hb->style("pp", pp_style); std::cout << __LINE__ << std::endl;
-        hb->style("aa", aa_style);std::cout << __LINE__ << std::endl;
-        hb->style("ss", pp_style);std::cout << __LINE__ << std::endl;
-        hb->sketch();std::cout << __LINE__ << std::endl;
+        hb->style("pp", pp_style);
+        hb->style("aa", aa_style);
+        hb->style("ss", pp_style);
+        hb->sketch();
 
-        p->draw("pdf");std::cout << __LINE__ << std::endl;
-        a->draw("pdf");std::cout << __LINE__ << std::endl;
-        s->draw("pdf");std::cout << __LINE__ << std::endl;
-    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);std::cout << __LINE__ << std::endl;
+        p->draw("pdf");
+        a->draw("pdf");
+        s->draw("pdf");
+    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
 
     in(output, []() {});
 
