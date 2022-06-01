@@ -43,8 +43,8 @@ int data_mc_comparison(char const* config, const char* output) {
     auto idr = new interval(rdr);
     auto mg = new multival(rdr, rpt);
 
-    auto ihf = new interval(dhf);
-    auto mpthf = new multival(dpt, dhf);
+    // auto ihf = new interval(dhf);
+    // auto mpthf = new multival(dpt, dhf);
 
     /* load history objects */
     TFile* fdata = new TFile(input_data.data(), "read");
@@ -53,8 +53,8 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_data = new history<TH1F>(fdata, tag + "_"s + data_label);
     auto h_truth = new history<TH1F>(ftruth, tag + "_"s + truth_label);
 
-    auto h_truth_up = new history<TH1F>(h_truth, "up");
-    auto h_truth_down = new history<TH1F>(h_truth, "down");
+    auto h_truth_up = new history<TH1F>(*h_truth, "up"s);
+    auto h_truth_down = new history<TH1F>(*h_truth, "down"s);
 
     if (hdata->size() != htruth->size()) {
         std::cout << "Size mismatch" << std::endl;
