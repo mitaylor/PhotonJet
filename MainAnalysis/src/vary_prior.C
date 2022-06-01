@@ -56,9 +56,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_truth_up = new history<TH1F>(*h_truth, "up"s);
     auto h_truth_down = new history<TH1F>(*h_truth, "down"s);
 
-    if (hdata->size() != htruth->size()) {
+    if (h_data->size() != h_truth->size()) {
         std::cout << "Size mismatch" << std::endl;
-        return;
+        return -1;
     }
 
     auto size = h_data->size();
@@ -72,8 +72,8 @@ int data_mc_comparison(char const* config, const char* output) {
 
                 float scale = 1.0 - (double) k / (double) idr->size() * 2.0;
 
-                (*h_truth_up)->SetBinContent(center + error * scale);
-                (*h_truth_down)->SetBinContent(center - error * scale);
+                (*h_truth_up)[i]->SetBinContent(center + error * scale);
+                (*h_truth_down)[i]->SetBinContent(center - error * scale);
             }
         }
     }
