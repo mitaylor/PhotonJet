@@ -414,6 +414,98 @@
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAJERUp3.root
 
+# AAPriorUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_up.root \
+    --ResponseHistogram aa_c_0 \
+    --ResponseTruth aa_g_0 \
+    --ResponseReco aa_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorUp0.root
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_up.root \
+    --ResponseHistogram aa_c_1 \
+    --ResponseTruth aa_g_1 \
+    --ResponseReco aa_r_1 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorUp1.root
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_up.root \
+    --ResponseHistogram aa_c_2 \
+    --ResponseTruth aa_g_2 \
+    --ResponseReco aa_r_2 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorUp2.root
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_up.root \
+    --ResponseHistogram aa_c_3 \
+    --ResponseTruth aa_g_3 \
+    --ResponseReco aa_r_3 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorUp3.root
+
+# AAPriorDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_down.root \
+    --ResponseHistogram aa_c_0 \
+    --ResponseTruth aa_g_0 \
+    --ResponseReco aa_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorDown0.root
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_down.root \
+    --ResponseHistogram aa_c_1 \
+    --ResponseTruth aa_g_1 \
+    --ResponseReco aa_r_1 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorDown1.root
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_down.root \
+    --ResponseHistogram aa_c_2 \
+    --ResponseTruth aa_g_2 \
+    --ResponseReco aa_r_2 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorDown2.root
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa.root \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_aa_prior_down.root \
+    --ResponseHistogram aa_c_3 \
+    --ResponseTruth aa_g_3 \
+    --ResponseReco aa_r_3 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/AAPriorDown3.root
+
 # AACentUp: Execute
 ./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_aa_cent_up.root \
     --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_sum0_0 \
@@ -622,3 +714,601 @@
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/PPJERUp0.root
+
+# PPPriorUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp.root \
+    --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_prior_up.root \
+    --ResponseHistogram pp_c_0 \
+    --ResponseTruth pp_g_0 \
+    --ResponseReco pp_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPPriorUp0.root
+
+# PPPriorDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp.root \
+    --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_prior_down.root \
+    --ResponseHistogram pp_c_0 \
+    --ResponseTruth pp_g_0 \
+    --ResponseReco pp_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPPriorDown0.root
+
+# PPNominal: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90Nominal0.root
+
+# PPWithoutEleRej: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90_wo_ele_rej.root \
+    --DataHistogram pp_smear_50_90_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_wo_ele_rej.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90WithoutEleRej0.root
+
+# PPTightPurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90_tight_purity.root \
+    --DataHistogram pp_smear_50_90_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90TightPurity0.root
+
+# PPLoosePurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90_loose_purity.root \
+    --DataHistogram pp_smear_50_90_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90LoosePurity0.root
+
+# PPQCD: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90_qcd.root \
+    --DataHistogram pp_smear_50_90_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_qcd.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90QCD0.root
+
+# PPQCDGenIso: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90_qcd_gen_iso.root \
+    --DataHistogram pp_smear_50_90_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_qcd_gen_iso.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90QCDGenIso0.root
+
+# PPJEUUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_jeu_up.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90JEUUp0.root
+
+# PPJEUDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_jeu_down.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90JEUDown0.root
+
+# PPJERUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_jer_up.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90JERUp0.root
+
+# PPPriorUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_prior_up.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90PriorUp0.root
+
+# PPPriorDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_50_90_prior_down.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear90PriorDown0.root
+
+    # PPNominal: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50Nominal0.root
+
+# PPWithoutEleRej: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50_wo_ele_rej.root \
+    --DataHistogram pp_smear_30_50_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_wo_ele_rej.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50WithoutEleRej0.root
+
+# PPTightPurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50_tight_purity.root \
+    --DataHistogram pp_smear_30_50_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50TightPurity0.root
+
+# PPLoosePurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50_loose_purity.root \
+    --DataHistogram pp_smear_30_50_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50LoosePurity0.root
+
+# PPQCD: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50_qcd.root \
+    --DataHistogram pp_smear_30_50_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_qcd.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50QCD0.root
+
+# PPQCDGenIso: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50_qcd_gen_iso.root \
+    --DataHistogram pp_smear_30_50_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_qcd_gen_iso.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50QCDGenIso0.root
+
+# PPJEUUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_jeu_up.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50JEUUp0.root
+
+# PPJEUDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_jeu_down.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50JEUDown0.root
+
+# PPJERUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_jer_up.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50JERUp0.root
+
+# PPPriorUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_prior_up.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50PriorUp0.root
+
+# PPPriorDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_30_50_prior_down.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear50PriorDown0.root
+
+# PPNominal: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30Nominal0.root
+
+# PPWithoutEleRej: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30_wo_ele_rej.root \
+    --DataHistogram pp_smear_10_30_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_wo_ele_rej.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30WithoutEleRej0.root
+
+# PPTightPurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30_tight_purity.root \
+    --DataHistogram pp_smear_10_30_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30TightPurity0.root
+
+# PPLoosePurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30_loose_purity.root \
+    --DataHistogram pp_smear_10_30_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30LoosePurity0.root
+
+# PPQCD: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30_qcd.root \
+    --DataHistogram pp_smear_10_30_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_qcd.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30QCD0.root
+
+# PPQCDGenIso: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30_qcd_gen_iso.root \
+    --DataHistogram pp_smear_10_30_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_qcd_gen_iso.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30QCDGenIso0.root
+
+# PPJEUUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_jeu_up.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30JEUUp0.root
+
+# PPJEUDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_jeu_down.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30JEUDown0.root
+
+# PPJERUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_jer_up.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30JERUp0.root
+
+# PPPriorUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_prior_up.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30PriorUp0.root
+
+# PPPriorDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_10_30_prior_down.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear30PriorDown0.root
+
+# PPNominal: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10Nominal0.root
+
+# PPWithoutEleRej: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10_wo_ele_rej.root \
+    --DataHistogram pp_smear_0_10_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_wo_ele_rej.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10WithoutEleRej0.root
+
+# PPTightPurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10_tight_purity.root \
+    --DataHistogram pp_smear_0_10_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10TightPurity0.root
+
+# PPLoosePurity: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10_loose_purity.root \
+    --DataHistogram pp_smear_0_10_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10LoosePurity0.root
+
+# PPQCD: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10_qcd.root \
+    --DataHistogram pp_smear_0_10_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_qcd.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10QCD0.root
+
+# PPQCDGenIso: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10_qcd_gen_iso.root \
+    --DataHistogram pp_smear_0_10_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_qcd_gen_iso.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10QCDGenIso0.root
+
+# PPJEUUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_jeu_up.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10JEUUp0.root
+
+# PPJEUDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_jeu_down.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10JEUDown0.root
+
+# PPJERUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_jer_up.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10JERUp0.root
+
+# PPPriorUp: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_prior_up.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10PriorUp0.root
+
+# PPPriorDown: Execute
+./Execute --Data ../../MainAnalysis/data/jet_20/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_nominal_s_pure_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/jet_20/vacillate_pp_smear_0_10_prior_down.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200,250 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/PPSmear10PriorDown0.root

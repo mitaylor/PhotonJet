@@ -52,15 +52,15 @@ int data_mc_comparison(char const* config, const char* output) {
 
     /* load history objects */
     TFile* fdata = new TFile(input_data.data(), "read");
-    TFile* ftruth = new TFile(input_truth.data(), "read");std::cout << __LINE__ << std::endl;
+    TFile* ftruth = new TFile(input_truth.data(), "read");
 
     auto h_data = new history<TH1F>(fdata, tag + "_"s + data_label);
     auto h_truth_g = new history<TH1F>(ftruth, tag + "_"s + truth_label_g);
     auto h_truth_r = new history<TH1F>(ftruth, tag + "_"s + truth_label_r);
-    auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);std::cout << __LINE__ << std::endl;
+    auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);
 
     if (h_data->size() != h_truth_g->size()) {
-        std::cout << "Size mismatch" << std::endl;std::cout << __LINE__ << std::endl;
+        std::cout << "Size mismatch" << std::endl;
         return -1;
     }
 
@@ -73,7 +73,7 @@ int data_mc_comparison(char const* config, const char* output) {
                 auto center = (*h_truth_g)[i]->GetBinContent(bin + 1);
                 auto error = (*h_data)[i]->GetBinError(bin + 1);
 
-                float scale = 1.0 - (double) k / (double) idr->size() * 2.0;std::cout << __LINE__ << std::endl;
+                float scale = 1.0 - (double) k / (double) idr->size() * 2.0;
 
                 auto new_center = (direction) ? center + error * scale : center - error * scale;
 
