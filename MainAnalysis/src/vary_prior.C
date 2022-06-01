@@ -36,14 +36,14 @@ int data_mc_comparison(char const* config, const char* output) {
     auto tag = conf->get<std::string>("tag");
 
     auto rdr = conf->get<std::vector<float>>("drg_range");
-    auto rpt = conf->get<std::vector<float>>("ptg_range");std::cout << __LINE__ << std::endl;
+    auto rpt = conf->get<std::vector<float>>("ptg_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     /* create intervals and multivals */
-    auto ipt= new interval(rpt);std::cout << __LINE__ << std::endl;
+    auto ipt= new interval(rpt);
     auto idr = new interval(rdr);
     auto mg = new multival(rdr, rpt);
 
@@ -51,7 +51,7 @@ int data_mc_comparison(char const* config, const char* output) {
     // auto mpthf = new multival(dpt, dhf);
 
     /* load history objects */
-    TFile* fdata = new TFile(input_data.data(), "read");std::cout << __LINE__ << std::endl;
+    TFile* fdata = new TFile(input_data.data(), "read");
     TFile* ftruth = new TFile(input_truth.data(), "read");std::cout << __LINE__ << std::endl;
 
     auto h_data = new history<TH1F>(fdata, tag + "_"s + data_label);
@@ -77,14 +77,14 @@ int data_mc_comparison(char const* config, const char* output) {
 
                 auto new_center = (direction) ? center + error * scale : center - error * scale;
 
-                if (new_center > 0) (*h_truth_g)[i]->SetBinContent(bin + 1, new_center);std::cout << __LINE__ << std::endl;
+                if (new_center > 0) (*h_truth_g)[i]->SetBinContent(bin + 1, new_center);
                 else                (*h_truth_g)[i]->SetBinContent(bin + 1, 0);
             }
         }
     }
 
     in(output, [&]() {
-        h_truth_g->save();std::cout << __LINE__ << std::endl;
+        h_truth_g->save();
         h_truth_r->save();
         h_truth_c->save();
     });
