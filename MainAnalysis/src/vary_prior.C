@@ -27,7 +27,11 @@ int data_mc_comparison(char const* config, const char* output) {
     auto data_label = conf->get<std::string>("data_label");
 
     auto input_truth = conf->get<std::string>("input_truth");
-    auto truth_label = conf->get<std::string>("truth_label");
+    auto truth_label_g = conf->get<std::string>("truth_label_g");
+    auto truth_label_r = conf->get<std::string>("truth_label_r");
+    auto truth_label_c = conf->get<std::string>("truth_label_c");
+
+    auto direction = conf->get<bool>("direction");
 
     auto tag = conf->get<std::string>("tag");
 
@@ -51,12 +55,11 @@ int data_mc_comparison(char const* config, const char* output) {
     TFile* ftruth = new TFile(input_truth.data(), "read");
 
     auto h_data = new history<TH1F>(fdata, tag + "_"s + data_label);
-    auto h_truth = new history<TH1F>(ftruth, tag + "_"s + truth_label);
+    auto h_truth_g = new history<TH1F>(ftruth, tag + "_"s + truth_label_g);
+    auto h_truth_r = new history<TH1F>(ftruth, tag + "_"s + truth_label_r);
+    auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);
 
-    auto h_truth_up = new history<TH1F>(*h_truth, "up"s);
-    auto h_truth_down = new history<TH1F>(*h_truth, "down"s);
-
-    if (h_data->size() != h_truth->size()) {
+    if (h_data->size() != h_truth_g->size()) {
         std::cout << "Size mismatch" << std::endl;
         return -1;
     }
@@ -67,27 +70,23 @@ int data_mc_comparison(char const* config, const char* output) {
         for (int64_t j = 0; j < ipt->size(); ++j) {
             for (int64_t k = 0; k < idr->size(); ++k) {
                 auto bin = mg->index_for(x{k, j});
-                auto center = (*h_truth)[i]->GetBinContent(bin + 1);
+                auto center = (*h_truth_g)[i]->GetBinContent(bin + 1);
                 auto error = (*h_data)[i]->GetBinError(bin + 1);
 
                 float scale = 1.0 - (double) k / (double) idr->size() * 2.0;
 
-                auto center_up = center + error * scale;
-                auto center_down = center - error * scale;
+                auto new_center = (direction) ? center + error * scale : center - error * scale;
 
-                if (center_up > 0)      (*h_truth_up)[i]->SetBinContent(bin + 1, center_up);
-                else                    (*h_truth_up)[i]->SetBinContent(bin + 1, 0);
-                if (center_down > 0)    (*h_truth_down)[i]->SetBinContent(bin + 1, center_down);
-                else                    (*h_truth_down)[i]->SetBinContent(bin + 1, 0);
+                if (new_center > 0) (*h_truth_g)[i]->SetBinContent(bin + 1, new_center);
+                else                (*h_truth_g)[i]->SetBinContent(bin + 1, 0);
             }
         }
     }
 
     in(output, [&]() {
-        h_truth_up->save();
-        h_truth_down->save();
-        h_truth->save();
-        h_data->save();
+        h_truth_g->save();
+        h_truth_r->save();
+        h_truth_c->save();
     });
 
     // /* set up figures */
