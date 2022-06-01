@@ -12,7 +12,7 @@ samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
 for sample in ${samples[@]}; do
     histogram ${sample}
 
-    for syst in wo_ele_rej jeu_up jeu_down jer_up qcd qcd_gen_iso; do
+    for syst in qcd qcd_gen_iso; do
         histogram ${sample}_${syst}
     done
 done

@@ -36,6 +36,8 @@ int congratulate(char const* config, char const* output) {
     auto tags = conf->get<std::vector<std::string>>("tags");
     auto figures = conf->get<std::vector<std::string>>("figures");
 
+    auto smeared = conf->get<bool>("smeared");
+
     auto corrections = conf->get<std::vector<std::string>>("corrections");
     auto truth_reco_iso_labels = conf->get<std::vector<std::string>>("truth_reco_iso_labels");
     auto qcd_after_labels = conf->get<std::vector<std::string>>("qcd_after_labels");
@@ -48,7 +50,6 @@ int congratulate(char const* config, char const* output) {
 
     // auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     // auto ipt = new interval(dpt);
@@ -89,7 +90,7 @@ int congratulate(char const* config, char const* output) {
     hb->category("system", "pp", "aa", "ss");
 
     hb->alias("aa", "PbPb");
-    // hb->alias("ss", "pp (smeared)");
+    if (smeared) hb->alias("ss", "pp (smeared)");
     hb->alias("ss", "pp");std::cout << __LINE__ << std::endl;
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
@@ -228,7 +229,7 @@ int congratulate(char const* config, char const* output) {
         /* prepare papers */
         auto p = new paper("results_pp_" + figure, hb);
         apply_style(p, "", ymin, ymax);
-        p->decorate(std::bind(decorator, "pp 320 pb^{-1}"));
+        p->decorate(std::bind(decorator, "pp 300 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         // p->accessory(std::bind(pp_info, _1, hists[1]));
         p->jewellery(box);
@@ -244,7 +245,7 @@ int congratulate(char const* config, char const* output) {
 
         auto s = new paper("results_ss_" + figure, hb);
         apply_style(s, "", ymin, ymax);
-        s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 320 pb^{-1}"));
+        s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
