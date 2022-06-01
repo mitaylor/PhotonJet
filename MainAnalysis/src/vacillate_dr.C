@@ -218,11 +218,10 @@ int vacillate(char const* config, char const* output) {
 
             auto gen_index = (*p->pho_genMatchedIndex)[leading];
             if (gen_index == -1) { continue; }
-
-            float isolation = (*p->mcCalIsoDR04)[gen_index];
-            if (isolation > 5) { continue; }
             
-            if (!gen_iso)
+            if ((*p->mcCalIsoDR04)[gen_index]> 5) { continue; }
+
+            if (!gen_iso) {
                 float isolation = (*p->pho_ecalClusterIsoR3)[leading]
                     + (*p->pho_hcalRechitIsoR3)[leading]
                     + (*p->pho_trackIsoR3PtCut20)[leading];
