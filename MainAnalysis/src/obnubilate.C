@@ -34,6 +34,7 @@ int obnubilate(char const* config, char const* output) {
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto labels = conf->get<std::vector<std::string>>("labels");
+    auto plots = conf->get<std::vector<int64_t>>("plots");
     auto legends = conf->get<std::vector<std::string>>("legends");
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
     auto figures = conf->get<std::vector<std::string>>("figures");
@@ -66,8 +67,6 @@ int obnubilate(char const* config, char const* output) {
     zip([&](auto const& label, auto const& legend) {
         hb->alias(label, legend); }, legend_keys, legends);
 
-    auto cs = std::vector<paper*>(figures.size(), nullptr);
-
     /* lambdas */
     std::function<void(TH1*)> square_ = [](TH1* h) {
         for_contents([](std::array<double, 1> v) {
@@ -96,13 +95,18 @@ int obnubilate(char const* config, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     /* calculate variations */
-    zip([&](auto const& figure, auto cols, auto range, auto& c) {
+    zip([&](auto const& figure, auto cols, auto range) {
         auto stub = "_"s + figure;
 
-        c = new paper(tag + "_var"s + stub, hb);
-        apply_style(c, system + " #sqrt{s_{NN}} = 5.02 TeV",
+        auto c1 = new paper(tag + "_var"s + stub, hb);
+        apply_style(c1, system + " #sqrt{s_{NN}} = 5.02 TeV",
             std::bind(shader, _1, range));
-        c->divide(cols, -1);
+        c1->divide(cols, -1);
+
+        auto c2 = new paper(tag + "_var_unfolding"s + stub, hb);
+        apply_style(c2, system + " #sqrt{s_{NN}} = 5.02 TeV",
+            std::bind(shader, _1, range));
+        c2->divide(cols, -1);
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
 
@@ -159,12 +163,6 @@ int obnubilate(char const* config, char const* output) {
                         value += std::min((*batch)[i]->GetBinContent(j - 2), (*batch)[i]->GetBinContent(j + 2));
                         (*batch)[i]->SetBinContent(j + 1, value);
                     }
-                    // if (j == 6) {
-                    //     double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 2));
-                    //     value = value * 1 / 2;
-                    //     value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 2));
-                    //     (*batch)[i]->SetBinContent(j + 1, value);
-                    // }
                 }
             }
         }
@@ -188,16 +186,28 @@ int obnubilate(char const* config, char const* output) {
         total->apply(sqrt_);
 
         /* add plots */
-        auto style = [&](TH1* h) { c->adjust(h, "hist", "f"); };
+        auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
+        auto style2 = [&](TH1* h) { c2->adjust(h, "hist", "f"); };
 
-        total->apply([&](TH1* h) { c->add(h, "total"); style(h); });
-        zip([&](auto& batch, auto const& label) {
-            batch->apply([&](TH1* h, int64_t index) {
-                c->stack(index + 1, h, label); style(h);
-            });
+        total->apply([&](TH1* h) { 
+            c1->add(h, "total"); style1(h); 
+            c2->add(h, "total"); style2(h); 
+        });
+
+        zip([&](auto& batch, auto const& label, auto const& plot) {
+            if (plot == 1) {
+                batch->apply([&](TH1* h, int64_t index) {
+                    c1->stack(index + 1, h, label); style1(h);
+                });
+            }
+            else {
+                batch->apply([&](TH1* h, int64_t index) {
+                    c2->stack(index + 1, h, label); style2(h);
+                });
+            }
 
             batch->save(tag);
-        }, batches, legend_keys);
+        }, batches, legend_keys, plots);
 
         /* add info text */
         if (info == "pt") { c->accessory(std::bind(pt_info, _1, 0.75)); }
@@ -210,12 +220,12 @@ int obnubilate(char const* config, char const* output) {
 
         base->save(tag);
         total->save(tag);
-    }, figures, columns, ranges, cs);
 
-    /* draw plots */
-    hb->sketch();
-    for (auto c : cs)
-        c->draw("pdf");
+        hb->sketch();
+
+        c1->draw("pdf");
+        c2->draw("pdf");
+    }, figures, columns, ranges);
 
     fout->Close();
 
