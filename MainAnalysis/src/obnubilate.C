@@ -210,9 +210,18 @@ int obnubilate(char const* config, char const* output) {
         }, batches, legend_keys, plots);
 
         /* add info text */
-        if (info == "pt") { c->accessory(std::bind(pt_info, _1, 0.75)); }
-        if (info == "hf") { c->accessory(std::bind(hf_info, _1, 0.75)); }
-        if (info == "pthf") { c->accessory(std::bind(pthf_info, _1, base)); }
+        if (info == "pt") { 
+            c1->accessory(std::bind(pt_info, _1, 0.75)); 
+            c2->accessory(std::bind(pt_info, _1, 0.75)); 
+        }
+        if (info == "hf") { 
+            c1->accessory(std::bind(hf_info, _1, 0.75)); 
+            c2->accessory(std::bind(hf_info, _1, 0.75)); 
+        }
+        if (info == "pthf") { 
+            c1->accessory(std::bind(pthf_info, _1, base)); 
+            c2->accessory(std::bind(pthf_info, _1, base)); 
+        }
 
         /* save histograms */
         for (auto const& set : sets)
