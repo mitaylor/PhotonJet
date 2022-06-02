@@ -44,7 +44,6 @@ TH2F* variance(TH1* flat, multival const* m) {
     return cov;
 }
 
-template <std::size_t N>
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
            std::vector<int64_t>& offsets, bool fine) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
