@@ -47,7 +47,7 @@ TH2F* variance(TH1* flat, multival const* m) {
 
 template <std::size_t N>
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets, bool fine) {
+           std::array<int64_t, N> const& offsets, bool fine) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
@@ -109,7 +109,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
 
 template <std::size_t N>
 TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets, bool fine) {
+           std::array<int64_t, N> const& offsets, bool fine) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
@@ -200,8 +200,8 @@ int quantitate(char const* config, char const* output) {
     auto mg = new multival(*idrg, *iptg);
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
-    std::vector<int64_t> osr{ 0, 0, 1, 3 };
-    std::vector<int64_t> osg{ 0, 0, 1, 1 };
+    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
+    std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
     if (fine) {
         for (auto os : osr) os *= 2;
