@@ -29,8 +29,6 @@ int vary_response_matrix(char const* config, const char* output) {
     auto truth_label_r = conf->get<std::string>("truth_label_r");
     auto truth_label_c = conf->get<std::string>("truth_label_c");
 
-    auto direction = conf->get<bool>("direction");
-
     auto tag = conf->get<std::string>("tag");
 
     auto rdr = conf->get<std::vector<float>>("drg_range");
@@ -41,9 +39,9 @@ int vary_response_matrix(char const* config, const char* output) {
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     /* create intervals and multivals */
-    auto ipt= new interval(rpt);
-    auto idr = new interval(rdr);
-    auto mg = new multival(rdr, rpt);
+    // auto ipt= new interval(rpt);
+    // auto idr = new interval(rdr);
+    // auto mg = new multival(rdr, rpt);
 
     // auto ihf = new interval(dhf);
     // auto mpthf = new multival(dpt, dhf);
