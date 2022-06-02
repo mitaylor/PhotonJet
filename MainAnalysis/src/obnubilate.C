@@ -34,7 +34,7 @@ int obnubilate(char const* config, char const* output) {
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto labels = conf->get<std::vector<std::string>>("labels");
-    auto plots = conf->get<std::vector<int64_t>>("plots");
+    auto plots = conf->get<std::vector<int32_t>>("plots");
     auto legends = conf->get<std::vector<std::string>>("legends");
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
     auto figures = conf->get<std::vector<std::string>>("figures");
