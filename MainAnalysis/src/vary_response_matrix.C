@@ -66,8 +66,8 @@ int vary_response_matrix(char const* config, const char* output) {
                 if (center == 0) { continue; }
                 auto new_center = center + rng->Gaus(0, error);
 
-                if (new_center > 0) (*h_truth_g)[i]->SetBinContent(j + 1, k + 1, new_center);
-                else                (*h_truth_g)[i]->SetBinContent(j + 1, k + 1, 0);
+                if (new_center > 0) (*h_truth_c)[i]->SetBinContent(j + 1, k + 1, new_center);
+                else                (*h_truth_c)[i]->SetBinContent(j + 1, k + 1, 0);
             }
         }
     }
