@@ -46,7 +46,7 @@ TH2F* variance(TH1* flat, multival const* m) {
 
 template <std::size_t N>
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
-           std::array<int64_t, N> const& offsets) {
+           std::vector<int64_t>& offsets, bool fine) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
@@ -100,6 +100,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     delete [] list;
     delete cov;
 
+    if (fine) hfold->Rebin();
     hfold->Scale(1., "width");
 
     return hfold;
@@ -114,6 +115,8 @@ int quantitate(char const* config, char const* output) {
     auto before_label = conf->get<std::string>("before_label");
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
 
+    auto fine = conf->get<bool>("fine");
+
     auto afters = conf->get<std::vector<std::string>>("afters");
 
     auto rdrr = conf->get<std::vector<float>>("drr_range");
@@ -126,7 +129,11 @@ int quantitate(char const* config, char const* output) {
     auto mr = new multival(*idrr, *iptr);
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
-    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
+    std::vector<int64_t> osr{ 0, 0, 1, 3 };
+
+    if (fine) {
+        for (auto os : osr) os *= 2;
+    }
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -152,8 +159,8 @@ int quantitate(char const* config, char const* output) {
     auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
 
     for (int64_t i = 0; i < hin->size(); ++i) {
-        (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
-        (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
+        (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr, fine);
+        (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr, fine);
     }
 
     normalise_to_unity(side0, side0);
@@ -176,8 +183,8 @@ int quantitate(char const* config, char const* output) {
                     std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
                     auto HRefolded = (TH1F*) fafters[j]->Get(name.data());
 
-                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
-                    (*refold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
+                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr, fine);
+                    (*refold1)[j] = fold(HRefolded, nullptr, mr, 1, osr, fine);
         }
 
         normalise_to_unity(refold0, refold1);
