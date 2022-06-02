@@ -61,11 +61,10 @@ int vary_response_matrix(char const* config, const char* output) {
         for (int64_t j = 0; j < (*h_truth_c)[i]->GetNbinsX(); ++j) {
             for (int64_t k = 0; k < (*h_truth_c)[i]->GetNbinsY(); ++k) {
                 auto center = (*h_truth_c)[i]->GetBinContent(j + 1, k + 1);
-                // auto error = (*h_truth_c)[i]->GetBinError(j + 1, k + 1);
+                auto error = (*h_truth_c)[i]->GetBinError(j + 1, k + 1);
 
                 if (center == 0) { continue; }
-                // auto new_center = center + rng->Gaus(0, error);
-                auto new_center = center + rng->PoissonD(center);
+                auto new_center = center + rng->Gaus(0, error/2);
 
                 if (new_center > 0) (*h_truth_c)[i]->SetBinContent(j + 1, k + 1, new_center);
                 else                (*h_truth_c)[i]->SetBinContent(j + 1, k + 1, 0);
