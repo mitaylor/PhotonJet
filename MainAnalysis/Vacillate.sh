@@ -7,7 +7,7 @@ histogram() {
 }
 
 # samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90 pp aa)
-samples=(pp aapp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
 
 for sample in ${samples[@]}; do
     histogram ${sample}
