@@ -205,7 +205,7 @@ int ratio(char const* config, char const* output) {
 
                 auto ratio = aa_val / pp_val;
 
-                std::cout << ratio << std::endl;
+                std::cout << ratio << << " " << aa_val << " " << pp_val << std::endl;
 
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
                 aa_syst_err /= pp_val;
