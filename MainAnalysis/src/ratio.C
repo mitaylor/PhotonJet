@@ -187,7 +187,7 @@ int ratio(char const* config, char const* output) {
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            for (int64_t j = 1; j <= (*hists[0])[i]->GetNbinsX(); ++j) {
+            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[1])[0];
 
@@ -211,7 +211,7 @@ int ratio(char const* config, char const* output) {
             }
         }
 
-        for (int64_t j = 1; j <= (*hists[0])[i]->GetNbinsX(); ++j) {
+        for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
             auto pp_hist = (*hists[1])[0];
             double pp_val = pp_hist->GetBinContent(j);
             double pp_syst_err = links[pp_hist]->GetBinContent(j);
