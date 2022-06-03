@@ -198,8 +198,8 @@ int ratio(char const* config, char const* output) {
                 auto aa_syst_err_scale = aa_syst_err/aa_val;
 
                 double pp_val = pp_hist->GetBinContent(j);
-                double pp_err = pp_hist->GetBinError(j);
-                double pp_syst_err = links[pp_hist]->GetBinContent(j);
+                double pp_err = pp_hist->GetBinError(j);std::cout << __LINE__ << std::endl;
+                double pp_syst_err = links[pp_hist]->GetBinContent(j);std::cout << __LINE__ << std::endl;
                 auto pp_err_scale = pp_err/pp_val;
                 auto pp_syst_err_scale = pp_syst_err/pp_val;
 
