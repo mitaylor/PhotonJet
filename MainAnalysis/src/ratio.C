@@ -118,7 +118,7 @@ int ratio(char const* config, char const* output) {
         info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    };
+    };std::cout << __LINE__ << std::endl;
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
@@ -128,7 +128,7 @@ int ratio(char const* config, char const* output) {
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
-        /* get histograms */
+        /* get histograms */std::cout << __LINE__ << std::endl;
         std::vector<history<TH1F>*> hists(2, nullptr);
         std::vector<history<TH1F>*> systs(2, nullptr);
 
@@ -137,9 +137,9 @@ int ratio(char const* config, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             syst = new history<TH1F>(file, syst_stub + figure);
 
-        }, hists, systs, files, base_stubs, syst_stubs);
+        }, hists, systs, files, base_stubs, syst_stubs);std::cout << __LINE__ << std::endl;
 
-        for (size_t i = 2; i < files.size(); ++i) {
+        for (size_t i = 2; i < files.size(); ++i) {std::cout << __LINE__ << std::endl;
             std::string name1 = std::to_string(i) + std::string("happy");
             std::string name2 = std::to_string(i) + std::string("sad");
             hists[i]->rename(name1);
@@ -147,7 +147,7 @@ int ratio(char const* config, char const* output) {
         }
 
         /* link histograms, uncertainties */
-        std::unordered_map<TH1*, TH1*> links;
+        std::unordered_map<TH1*, TH1*> links;std::cout << __LINE__ << std::endl;
         zip([&](auto hist, auto syst, auto unfolded_qcd, auto truth_reco_iso) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
@@ -177,13 +177,13 @@ int ratio(char const* config, char const* output) {
                     }
 
                     h->SetBinContent(i, val*correction);
-                    h->SetBinError(i, err*correction);
+                    h->SetBinError(i, err*correction);std::cout << __LINE__ << std::endl;
                 }});
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });
-        }, hists, systs, unfolded_qcds, truth_reco_isos);
+        }, hists, systs, unfolded_qcds, truth_reco_isos);std::cout << __LINE__ << std::endl;
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
