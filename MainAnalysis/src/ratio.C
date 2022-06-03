@@ -189,7 +189,7 @@ int ratio(char const* config, char const* output) {
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
             for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
                 auto aa_hist = (*hists[0])[i];
-                auto pp_hist = (*hists[1])[0];
+                auto pp_hist = (*hists[i+1])[0];
 
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
@@ -211,16 +211,18 @@ int ratio(char const* config, char const* output) {
             }
         }
 
-        for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
-            auto pp_hist = (*hists[1])[0];
-            double pp_val = pp_hist->GetBinContent(j);
-            double pp_syst_err = links[pp_hist]->GetBinContent(j);
+        for (int64_t i = 0; i < hists[0]->size(); ++i) {
+            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
+                auto pp_hist = (*hists[i+1])[0];
+                double pp_val = pp_hist->GetBinContent(j);
+                double pp_syst_err = links[pp_hist]->GetBinContent(j);
 
-            pp_syst_err /= pp_val;
+                pp_syst_err /= pp_val;
 
-            links[pp_hist]->SetBinContent(j, pp_syst_err);
-            pp_hist->SetBinContent(j, 1);
-            pp_hist->SetBinError(j, 0);
+                links[pp_hist]->SetBinContent(j, pp_syst_err);
+                pp_hist->SetBinContent(j, 1);
+                pp_hist->SetBinError(j, 0);
+            }
         }
 
         std::unordered_map<TH1*, int32_t> colours;
@@ -263,9 +265,11 @@ int ratio(char const* config, char const* output) {
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { s->add(h, "aa"); });
-        hists[1]->apply([&](TH1* h, int64_t index) {
-            s->stack(index + 1, h, "pp"); }
-        );
+        for (int64_t i = 0; i < 4; ++i) {
+            hists[i + 1]->apply([&](TH1* h, int64_t index) {
+                s->stack(i + index + 1, h, "ss");
+            });
+        }
 
         auto pp_style = [](TH1* h) {
             h->SetLineColor(1);
