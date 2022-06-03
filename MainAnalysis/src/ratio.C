@@ -260,7 +260,8 @@ int ratio(char const* config, char const* output) {
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { s->add(h, "aa"); });
         hists[1]->apply([&](TH1* h, int64_t index) {
-                s->stack(i + index + 1, h, "pp"););
+            s->stack(index + 1, h, "pp"); }
+        );
 
         auto pp_style = [](TH1* h) {
             h->SetLineColor(1);
