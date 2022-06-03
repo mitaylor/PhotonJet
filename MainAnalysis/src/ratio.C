@@ -64,8 +64,8 @@ int ratio(char const* config, char const* output) {
         file = new TFile(input.data(), "read");
     }, files, inputs);
 
-    std::vector<history<TH1F>*> truth_reco_isos(2, nullptr);
-    std::vector<history<TH1F>*> unfolded_qcds(2, nullptr);
+    std::vector<history<TH1F>*> truth_reco_isos(5, nullptr);
+    std::vector<history<TH1F>*> unfolded_qcds(5, nullptr);
 
     zip([&](auto& truth_reco_iso, auto& unfolded_qcd, auto const correction, auto const& truth_reco_iso_label, auto const& qcd_after_label) {
             auto file = new TFile(correction.data(), "read");
@@ -74,8 +74,8 @@ int ratio(char const* config, char const* output) {
     }, truth_reco_isos, unfolded_qcds, corrections, truth_reco_iso_labels, qcd_after_labels);
 
     /* load histograms */
-    std::vector<std::string> base_stubs(2);
-    std::vector<std::string> syst_stubs(2);
+    std::vector<std::string> base_stubs(5);
+    std::vector<std::string> syst_stubs(5);
 
     zip([&](auto& base, auto& syst, auto const& tag) {
         base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
@@ -129,8 +129,8 @@ int ratio(char const* config, char const* output) {
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
         /* get histograms */std::cout << __LINE__ << std::endl;
-        std::vector<history<TH1F>*> hists(2, nullptr);
-        std::vector<history<TH1F>*> systs(2, nullptr);
+        std::vector<history<TH1F>*> hists(5, nullptr);
+        std::vector<history<TH1F>*> systs(5, nullptr);
 
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
