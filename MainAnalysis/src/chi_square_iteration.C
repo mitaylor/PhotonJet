@@ -65,7 +65,7 @@ int data_iteration_study(char const* config, char const* output) {
         auto refold0 = new history<TH1F>(f, tag + "_"s + base_label + "_refold0_iteration" + std::to_string(iterations[i]));
         auto refold1 = new history<TH1F>(f, tag + "_"s + base_label + "_refold1_iteration" + std::to_string(iterations[i]));
 
-        for (int64_t j = 0; j < base0->size(); ++j) {
+        for (int64_t j = 0; j < base1->size(); ++j) {
             if (!((*refold0)[j]->GetBinError(1) < 10)) { continue; }
             if (!((*refold1)[j]->GetBinError(1) < 10)) { continue; }
 
