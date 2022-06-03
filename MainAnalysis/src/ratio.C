@@ -187,19 +187,19 @@ int ratio(char const* config, char const* output) {
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            for (int64_t j = 1; j <= (*hists[0])[i]->GetNbinsX(); ++j) { std::cout << j << std::endl;
+            for (int64_t j = 1; j <= (*hists[0])[i]->GetNbinsX(); ++j) {
                 auto aa_hist = (*hists[0])[i];
-                auto pp_hist = (*hists[1])[i];
+                auto pp_hist = (*hists[1])[0];
 
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
-                double aa_syst_err = links[aa_hist]->GetBinContent(j);std::cout << __LINE__ << std::endl;
-                auto aa_err_scale = aa_err/aa_val;std::cout << __LINE__ << std::endl;
-                auto aa_syst_err_scale = aa_syst_err/aa_val;std::cout << __LINE__ << std::endl;
+                double aa_syst_err = links[aa_hist]->GetBinContent(j);
+                auto aa_err_scale = aa_err/aa_val;
+                auto aa_syst_err_scale = aa_syst_err/aa_val;
 
-                double pp_val = pp_hist->GetBinContent(j);std::cout << __LINE__ << std::endl;
-                double pp_err = pp_hist->GetBinError(j);std::cout << __LINE__ << std::endl;
-                double pp_syst_err = links[pp_hist]->GetBinContent(j);std::cout << __LINE__ << std::endl;
+                double pp_val = pp_hist->GetBinContent(j);
+                double pp_err = pp_hist->GetBinError(j);
+                double pp_syst_err = links[pp_hist]->GetBinContent(j);
                 auto pp_err_scale = pp_err/pp_val;
                 auto pp_syst_err_scale = pp_syst_err/pp_val;
 
