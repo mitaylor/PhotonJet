@@ -210,10 +210,10 @@ int ratio(char const* config, char const* output) {
                 std::cout << ratio << std::endl;
 
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
-                aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
+                aa_syst_err /= pp_val;
 
                 pp_err = std::sqrt(2 * pp_err_scale * pp_err_scale);
-                pp_syst_err = std::sqrt(2 * pp_syst_err_scale * pp_syst_err_scale);
+                pp_syst_err /= pp_val;
 
                 aa_hist->SetBinContent(j, ratio);
                 aa_hist->SetBinError(j, aa_err);
