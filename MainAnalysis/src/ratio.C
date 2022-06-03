@@ -249,7 +249,7 @@ int ratio(char const* config, char const* output) {
         if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
 
         /* prepare papers */
-        auto s = new paper(prefix + "_results_ss_" + figure, hb);
+        auto s = new paper(prefix + "_ratio" + figure, hb);
         apply_style(s, "", ymin, ymax);
         s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
