@@ -118,7 +118,7 @@ int ratio(char const* config, char const* output) {
         info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    };std::cout << __LINE__ << std::endl;
+    }; 
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%i - %i%%", dcent, true); };
@@ -128,7 +128,7 @@ int ratio(char const* config, char const* output) {
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
-        /* get histograms */std::cout << __LINE__ << std::endl;
+        /* get histograms */ 
         std::vector<history<TH1F>*> hists(5, nullptr);
         std::vector<history<TH1F>*> systs(5, nullptr);
 
@@ -137,9 +137,9 @@ int ratio(char const* config, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             syst = new history<TH1F>(file, syst_stub + figure);
 
-        }, hists, systs, files, base_stubs, syst_stubs);std::cout << __LINE__ << std::endl;
+        }, hists, systs, files, base_stubs, syst_stubs); 
 
-        for (size_t i = 2; i < files.size(); ++i) {std::cout << __LINE__ << std::endl;
+        for (size_t i = 2; i < files.size(); ++i) { 
             std::string name1 = std::to_string(i) + std::string("happy");
             std::string name2 = std::to_string(i) + std::string("sad");
             hists[i]->rename(name1);
@@ -147,7 +147,7 @@ int ratio(char const* config, char const* output) {
         }
 
         /* link histograms, uncertainties */
-        std::unordered_map<TH1*, TH1*> links;std::cout << __LINE__ << std::endl;
+        std::unordered_map<TH1*, TH1*> links; 
         zip([&](auto hist, auto syst, auto unfolded_qcd, auto truth_reco_iso) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
@@ -177,17 +177,17 @@ int ratio(char const* config, char const* output) {
                     }
 
                     h->SetBinContent(i, val*correction);
-                    h->SetBinError(i, err*correction);std::cout << __LINE__ << std::endl;
+                    h->SetBinError(i, err*correction); 
                 }});
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });
-        }, hists, systs, unfolded_qcds, truth_reco_isos);std::cout << __LINE__ << std::endl;
+        }, hists, systs, unfolded_qcds, truth_reco_isos); 
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) { std::cout << __LINE__ << std::endl;
+            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {  
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[i+1])[0];
 
@@ -221,14 +221,14 @@ int ratio(char const* config, char const* output) {
 
                 links[pp_hist]->SetBinContent(j, pp_syst_err);
                 pp_hist->SetBinContent(j, 1);
-                pp_hist->SetBinError(j, 0);
+                pp_hist->SetBinError(j, 0.00001);
             }
-        }std::cout << __LINE__ << std::endl;
+        } 
 
-        std::unordered_map<TH1*, int32_t> colours;std::cout << __LINE__ << std::endl;
+        std::unordered_map<TH1*, int32_t> colours; 
         hists[0]->apply([&](TH1* h) { colours[h] = 1; });
 
-        /* uncertainty box */std::cout << __LINE__ << std::endl;
+        /* uncertainty box */ 
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
             gr->SetFillStyle(1001);
@@ -264,7 +264,10 @@ int ratio(char const* config, char const* output) {
         s->divide(ihf->size(), -1);
 
         /* draw histograms with uncertainties */
-        hists[0]->apply([&](TH1* h) { s->add(h, "aa"); });
+        hists[0]->apply([&](TH1* h) { 
+            h->GetXaxis()->SetRangeUser(xmin, xmax);
+            s->add(h, "aa"); 
+        });
         for (int64_t i = 0; i < 4; ++i) {
             hists[i + 1]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "pp");
