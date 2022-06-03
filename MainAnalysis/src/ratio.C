@@ -267,7 +267,7 @@ int ratio(char const* config, char const* output) {
         hists[0]->apply([&](TH1* h) { s->add(h, "aa"); });
         for (int64_t i = 0; i < 4; ++i) {
             hists[i + 1]->apply([&](TH1* h, int64_t index) {
-                s->stack(i + index + 1, h, "ss");
+                s->stack(i + index + 1, h, "pp");
             });
         }
 
