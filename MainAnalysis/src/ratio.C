@@ -197,13 +197,11 @@ int ratio(char const* config, char const* output) {
                 double aa_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
                 auto aa_err_scale = aa_err/aa_val;
-                auto aa_syst_err_scale = aa_syst_err/aa_val;
 
                 double pp_val = pp_hist->GetBinContent(j);
                 double pp_err = pp_hist->GetBinError(j);
                 double pp_syst_err = links[pp_hist]->GetBinContent(j);
                 auto pp_err_scale = pp_err/pp_val;
-                auto pp_syst_err_scale = pp_syst_err/pp_val;
 
                 auto ratio = aa_val / pp_val;
 
