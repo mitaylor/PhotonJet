@@ -287,7 +287,7 @@ int ratio(char const* config, char const* output) {
     return 0;
 }
 
-int ratio(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     if (argc == 3)
         return ratio(argv[1], argv[2]);
 
