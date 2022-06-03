@@ -289,7 +289,7 @@ int ratio(char const* config, char const* output) {
 
 int ratio(int argc, char* argv[]) {
     if (argc == 3)
-        return congratulate(argv[1], argv[2]);
+        return ratio(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
