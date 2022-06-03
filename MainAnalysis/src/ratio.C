@@ -191,8 +191,6 @@ int ratio(char const* config, char const* output) {
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[1])[0];
 
-                std::cout << i << std::endl;
-
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
@@ -200,25 +198,29 @@ int ratio(char const* config, char const* output) {
 
                 double pp_val = pp_hist->GetBinContent(j);
                 double pp_err = pp_hist->GetBinError(j);
-                double pp_syst_err = links[pp_hist]->GetBinContent(j);
                 auto pp_err_scale = pp_err/pp_val;
 
                 auto ratio = aa_val / pp_val;
 
-                std::cout << ratio << " " << aa_val << " " << pp_val << std::endl;
-
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
                 aa_syst_err /= pp_val;
 
-                pp_err = std::sqrt(2 * pp_err_scale * pp_err_scale);
-                pp_syst_err /= pp_val;
-
+                links[aa_hist]->SetBinContent(j, aa_syst_err);
                 aa_hist->SetBinContent(j, ratio);
                 aa_hist->SetBinError(j, aa_err);
-
-                pp_hist->SetBinContent(j, 1);
-                pp_hist->SetBinError(j, 0);
             }
+        }
+
+        for (int64_t j = 1; j <= (*hists[0])[i]->GetNbinsX(); ++j) {
+            auto pp_hist = (*hists[1])[0];
+            double pp_val = pp_hist->GetBinContent(j);
+            double pp_syst_err = links[pp_hist]->GetBinContent(j);
+
+            pp_syst_err /= pp_val;
+
+            links[pp_hist]->SetBinContent(j, pp_syst_err);
+            pp_hist->SetBinContent(j, 1);
+            pp_hist->SetBinError(j, 0);
         }
 
         std::unordered_map<TH1*, int32_t> colours;
