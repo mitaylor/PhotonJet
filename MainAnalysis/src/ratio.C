@@ -191,6 +191,8 @@ int ratio(char const* config, char const* output) {
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[1])[0];
 
+                std::cout << i << std::endl;
+
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
@@ -205,6 +207,8 @@ int ratio(char const* config, char const* output) {
 
                 auto ratio = aa_val / pp_val;
 
+                std::cout << ratio << std::endl;
+
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
                 aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
 
@@ -215,7 +219,7 @@ int ratio(char const* config, char const* output) {
                 aa_hist->SetBinError(j, aa_err);
 
                 pp_hist->SetBinContent(j, 1);
-                pp_hist->SetBinError(j, pp_err);
+                pp_hist->SetBinError(j, 0);
             }
         }
 
