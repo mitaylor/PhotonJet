@@ -187,7 +187,7 @@ int ratio(char const* config, char const* output) {
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
+            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) { std::cout << __LINE__ << std::endl;
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[i+1])[0];
 
@@ -223,12 +223,12 @@ int ratio(char const* config, char const* output) {
                 pp_hist->SetBinContent(j, 1);
                 pp_hist->SetBinError(j, 0);
             }
-        }
+        }std::cout << __LINE__ << std::endl;
 
-        std::unordered_map<TH1*, int32_t> colours;
+        std::unordered_map<TH1*, int32_t> colours;std::cout << __LINE__ << std::endl;
         hists[0]->apply([&](TH1* h) { colours[h] = 1; });
 
-        /* uncertainty box */
+        /* uncertainty box */std::cout << __LINE__ << std::endl;
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
             gr->SetFillStyle(1001);
