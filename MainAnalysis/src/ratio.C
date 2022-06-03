@@ -188,12 +188,12 @@ int ratio(char const* config, char const* output) {
         /* take the ratio */std::cout << __LINE__ << std::endl;
         for (int64_t i = 0; i < hists[0]->size(); ++i) {std::cout << __LINE__ << std::endl;
             for (int64_t j = 1; j <= (*hists[0])[i]->GetNbinsX(); ++j) {std::cout << __LINE__ << std::endl;
-                auto aa_hist = (*hists[0])[i];
-                auto pp_hist = (*hists[1])[i];
+                auto aa_hist = (*hists[0])[i];std::cout << __LINE__ << std::endl;
+                auto pp_hist = (*hists[1])[i];std::cout << __LINE__ << std::endl;
 
                 double aa_val = aa_hist->GetBinContent(j);
-                double aa_err = aa_hist->GetBinError(j);
-                double aa_syst_err = links[aa_hist]->GetBinContent(j);
+                double aa_err = aa_hist->GetBinError(j);std::cout << __LINE__ << std::endl;
+                double aa_syst_err = links[aa_hist]->GetBinContent(j);std::cout << __LINE__ << std::endl;
                 auto aa_err_scale = aa_err/aa_val;
                 auto aa_syst_err_scale = aa_syst_err/aa_val;
 
