@@ -46,6 +46,7 @@ int estimate_hf(char const* config, char const* output) {
     auto const hovere_max = conf->get<float>("hovere_max");
     auto const see_min = conf->get<float>("see_min");
     auto const see_max = conf->get<float>("see_max");
+    auto const iso_max = conf->get<float>("iso_max");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
@@ -72,7 +73,7 @@ int estimate_hf(char const* config, char const* output) {
     if (entries) { mod = nentries / entries; }
     if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
 
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % mod != 0) { continue; }
 
@@ -141,8 +142,6 @@ int estimate_hf(char const* config, char const* output) {
         auto pt_x = ipt->index_for(leading_pt);
 
         (*hf)[pt_x]->Fill(pjt->hiHF);
-
-        tentries++;
     }
 
     /* save histograms */
