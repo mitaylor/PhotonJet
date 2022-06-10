@@ -24,7 +24,9 @@ process.HiForest.HiForestVersion = cms.string(version)
 # Input source
 #####################################################################################
 
-process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring())
+process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(
+    '/store/data/Run2017G/HighEGJet/AOD/17Nov2017-v2/100000/003D3196-4828-E811-863E-0019B9CB01A5.root'
+))
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
@@ -80,7 +82,7 @@ process.ak3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 ############################
 process.load('HeavyIonsAnalysis.EventAnalysis.hievtanalyzer_data_cfi')
 process.hiEvtAnalyzer.Vertex = cms.InputTag("offlinePrimaryVertices")
-process.hiEvtAnalyzer.doCentrality = cms.bool(False)
+process.hiEvtAnalyzer.doCentrality = cms.bool(True)
 process.hiEvtAnalyzer.doEvtPlane = cms.bool(False)
 
 process.load('HeavyIonsAnalysis.EventAnalysis.hltanalysis_cff')
