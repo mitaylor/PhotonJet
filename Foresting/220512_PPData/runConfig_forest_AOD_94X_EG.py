@@ -46,6 +46,23 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v6', '')
 process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
 
+centralityTag = "CentralityTable_HFtowers200_DataPbPb_periHYDJETshape_run2v1031x02_offline"
+process.HiForestInfo.info.append(centralityTag)
+
+print('\n')
+print('\033[31m~*~ CENTRALITY TABLE FOR 2018 PBPB DATA ~*~\033[0m')
+print('\033[36m~*~ TAG: ' + centralityTag + ' ~*~\033[0m')
+print('\n')
+process.GlobalTag.snapshotTime = cms.string("9999-12-31 23:59:59.000")
+process.GlobalTag.toGet.extend([
+    cms.PSet(
+        record = cms.string("HeavyIonRcd"),
+        tag = cms.string(centralityTag),
+        label = cms.untracked.string("HFtowers"),
+        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
+        ),
+    ])
+
 process.GlobalTag.toGet.extend([
     cms.PSet(record = cms.string("BTagTrackProbability3DRcd"),
              tag = cms.string("JPcalib_Data94X_2017pp_v2"),
