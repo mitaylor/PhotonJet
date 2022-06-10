@@ -62,8 +62,6 @@ process.GlobalTag.toGet.extend([
         ),
     ])
 
-process.load('RecoLocalCalo.HcalRecProducers.HcalHitReconstructor_hf_cfi')
-
 process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
 process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
 process.centralityBin.Centrality = cms.InputTag("hiCentrality")
@@ -169,9 +167,8 @@ process.ana_step = cms.Path(
     process.hltanalysis *
     process.hltobject *
     # process.l1object +
-    process.hfreco +
-    process.hiCentrality +
-    process.centralityBin +
+    process.hiCentrality *
+    process.centralityBin *
     process.hiEvtAnalyzer *
     process.jetSequence +
     # Should be added in the path for VID module
