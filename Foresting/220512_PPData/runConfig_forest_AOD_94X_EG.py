@@ -62,7 +62,7 @@ process.GlobalTag.toGet.extend([
         ),
     ])
 
-provess.load('RecoLocalCalo.HcalRecProducers.HcalHitReconstructor_hf_cfi')
+process.load('RecoLocalCalo.HcalRecProducers.HcalHitReconstructor_hf_cfi')
 
 process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
 process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
