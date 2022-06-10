@@ -47,7 +47,6 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v6',
 process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
 
 centralityTag = "CentralityTable_HFtowers200_DataPbPb_periHYDJETshape_run2v1031x02_offline"
-process.HiForestInfo.info.append(centralityTag)
 
 print('\n')
 print('\033[31m~*~ CENTRALITY TABLE FOR 2018 PBPB DATA ~*~\033[0m')
