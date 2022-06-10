@@ -62,6 +62,10 @@ process.GlobalTag.toGet.extend([
         ),
     ])
 
+process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
+process.centralityBin.Centrality = cms.InputTag("hiCentrality")
+process.centralityBin.centralityVariable = cms.string("HFtowers")
+
 process.GlobalTag.toGet.extend([
     cms.PSet(record = cms.string("BTagTrackProbability3DRcd"),
              tag = cms.string("JPcalib_Data94X_2017pp_v2"),
@@ -162,6 +166,7 @@ process.ana_step = cms.Path(
     process.hltanalysis *
     process.hltobject *
     # process.l1object +
+    process.centralityBin +
     process.hiEvtAnalyzer *
     process.jetSequence +
     # Should be added in the path for VID module
