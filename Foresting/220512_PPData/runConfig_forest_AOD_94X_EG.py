@@ -62,6 +62,7 @@ process.GlobalTag.toGet.extend([
         ),
     ])
 
+process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
 process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
 process.centralityBin.Centrality = cms.InputTag("hiCentrality")
 process.centralityBin.centralityVariable = cms.string("HFtowers")
@@ -166,6 +167,7 @@ process.ana_step = cms.Path(
     process.hltanalysis *
     process.hltobject *
     # process.l1object +
+    process.hiCentrality +
     process.centralityBin +
     process.hiEvtAnalyzer *
     process.jetSequence +
