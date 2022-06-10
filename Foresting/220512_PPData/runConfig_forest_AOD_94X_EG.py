@@ -63,6 +63,7 @@ process.GlobalTag.toGet.extend([
     ])
 
 process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
+process.hiCentrality.produceHFhits = False
 process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
 process.centralityBin.Centrality = cms.InputTag("hiCentrality")
 process.centralityBin.centralityVariable = cms.string("HFtowers")
