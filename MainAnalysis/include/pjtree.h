@@ -163,7 +163,7 @@ class pjtree {
     }
 
     void copy(event* tevt, eggen* tegg, photons* tpho, electrons* tele,
-              jets* tjet, triggers* thlt, evtrho* trho) {
+              jets* tjet, triggers* thlt, evtrho* trho, pfcand* tpf) {
         if (_flags[tt::evt]) {
             B_VAL_EVT_RECO(COPYVAL, tevt)
 
@@ -213,7 +213,7 @@ class pjtree {
         }
 
         if (_flags[tt::pf]) {
-            B_VEC_PF_RECO(COPYOBJ, tpho)
+            B_VEC_PF_RECO(COPYOBJ, tpf)
         }
     }
 
