@@ -73,7 +73,7 @@ int populate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, false, t, { 1, 1, 1, 1, 1, 0, 0 });
+    auto pjt = new pjtree(false, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 0 });
 
     printf("iterate..\n");
 

@@ -9,6 +9,7 @@
 #include "../git/foliage/include/photons.h"
 #include "../git/foliage/include/triggers.h"
 #include "../git/foliage/include/evtrho.h"
+#include "../git/foliage/include/pfcand.h"
 
 #include "../git/history/include/interval.h"
 #include "../git/history/include/history.h"
@@ -131,6 +132,7 @@ int regulate(char const* config, char const* output) {
     auto chain_jet = forest->attach((jet_dir + "/t").data(), !jet_dir.empty());
     auto chain_hlt = forest->attach("hltanalysis/HltTree", hlt_branches);
     auto chain_rho = forest->attach(rho_dir + "/t", heavyion);
+    auto chain_pf = forest->attach("pfcandAnalyzer/pfTree", true);
 
     (*forest)();
 
@@ -142,8 +144,9 @@ int regulate(char const* config, char const* output) {
     auto tjet = harvest<jets>(chain_jet, mc_branches, array_size);
     auto thlt = harvest<triggers>(chain_hlt, paths);
     auto trho = harvest<evtrho>(chain_rho);
+    auto tpf = harvest<pfcand>(chain_pf);
 
-    std::array<bool, tt::ntt> flags = { tevt, tegg, tpho, tele, tjet, thlt, trho };
+    std::array<bool, tt::ntt> flags = { tevt, tegg, tpho, tele, tjet, thlt, trho, tpf };
     std::transform(flags.begin(), flags.end(), active.begin(), flags.begin(),
                    [](bool a, bool b) -> bool { return a && b; });
 
@@ -228,7 +231,7 @@ int regulate(char const* config, char const* output) {
             if (!pass_skim && paths_only) { continue; }
         }
 
-        tree_pj->copy(tevt, tegg, tpho, tele, tjet, thlt, trho);
+        tree_pj->copy(tevt, tegg, tpho, tele, tjet, thlt, trho, tpf);
 
         if (!heavyion) {
             tree_pj->hiBin = 0;

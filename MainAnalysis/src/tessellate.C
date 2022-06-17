@@ -285,11 +285,11 @@ int tessellate(char const* config, char const* output) {
     /* load inputs */
     TFile* fd = new TFile(data.data(), "read");
     TTree* td = (TTree*)fd->Get("pj");
-    auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion});
+    auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0});
 
     TFile* fs = new TFile(signal.data(), "read");
     TTree* ts = (TTree*)fs->Get("pj");
-    auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion});
+    auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0});
 
     fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
               pt_min, eta_max, hovere_max, hf_min, hf_max, iso_max, 
