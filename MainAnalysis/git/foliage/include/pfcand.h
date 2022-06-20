@@ -9,7 +9,7 @@
 #include <vector>
 
 #define B_VEC_PF_RECO(ACTION, ...)                                         \
-    ACTION(sv<float>,       pfId,                       ## __VA_ARGS__)    \
+    ACTION(sv<int>,         pfId,                       ## __VA_ARGS__)    \
     ACTION(sv<float>,       pfPt,                       ## __VA_ARGS__)    \
 
 class pfcand : tree {
