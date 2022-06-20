@@ -30,6 +30,7 @@ int estimate_hf(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
+    auto input_pf = conf->get<std::string>("input_pf");
     
     auto entries = conf->get<int64_t>("entries");
     auto frequency = conf->get<int64_t>("frequency");
@@ -52,7 +53,7 @@ int estimate_hf(char const* config, char const* output) {
 
     /* create histograms */
     auto ipt = new interval(dpt);
-    auto ihf = new interval("hiHF"s, 50, 0, 500);
+    auto ihf = new interval("Estimated HF"s, 50, 0, 500);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
@@ -66,6 +67,10 @@ int estimate_hf(char const* config, char const* output) {
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0 });
 
+    TFile* f_pf = new TFile(input_pf.data(), "read");
+    TTree* t_pf = (TTree*)f_pf->Get("pj");
+    auto pjt_pf = new pjtree(false, false, false, t_pf, { 0, 0, 0, 0, 0, 0, 0, 1 });
+
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
@@ -78,6 +83,7 @@ int estimate_hf(char const* config, char const* output) {
         if (i % mod != 0) { continue; }
 
         t->GetEntry(i);
+        t_pf->GetEntry(i);
 
         if (std::abs(pjt->vz) > 15) { continue; }
 
@@ -141,7 +147,13 @@ int estimate_hf(char const* config, char const* output) {
 
         auto pt_x = ipt->index_for(leading_pt);
 
-        (*hf)[pt_x]->Fill(pjt->hiHF);
+        float pf_sum = 0;
+
+        for (size_t j = 0; j < pjt_pf->pfPt->size(); ++j) {
+            pf_sum += (*pjt_pf->pfId)[j] >= 6 ? (*pjt_pf->pfPt)[j] : 0;
+        }
+
+        (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);
     }
 
     /* save histograms */
