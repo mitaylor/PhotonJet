@@ -152,7 +152,7 @@ int estimate_hf(char const* config, char const* output) {
         std::cout << "size: " << pjt_pf->pfPt->size() << std::endl;
 
         for (size_t j = 0; j < pjt_pf->pfPt->size(); ++j) {
-            std::cout << "  " << (*pjt_pf->pfPt)[j] << " ";
+            std::cout << "  " << (*pjt_pf->pfId)[j] << " ";
             pf_sum += (*pjt_pf->pfId)[j] >= 6 ? (*pjt_pf->pfPt)[j] : 0;
         }
 
