@@ -149,11 +149,11 @@ int estimate_hf(char const* config, char const* output) {
 
         float pf_sum = 0;
 
+        std::cout << pjt_pf->pfPt->size() << std::endl;
+
         for (size_t j = 0; j < pjt_pf->pfPt->size(); ++j) {
             pf_sum += (*pjt_pf->pfId)[j] >= 6 ? (*pjt_pf->pfPt)[j] : 0;
         }
-        
-        std::cout << pf_sum << std::endl;
 
         (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);
     }
