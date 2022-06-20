@@ -53,7 +53,7 @@ int estimate_hf(char const* config, char const* output) {
 
     /* create histograms */
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, 500);
+    auto ihf = new interval("Estimated HF"s, 50, 0, 30);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
@@ -152,6 +152,8 @@ int estimate_hf(char const* config, char const* output) {
         for (size_t j = 0; j < pjt_pf->pfPt->size(); ++j) {
             pf_sum += (*pjt_pf->pfId)[j] >= 6 ? (*pjt_pf->pfPt)[j] : 0;
         }
+        
+        std::cout << pf_sum << std::endl;
 
         (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);
     }
