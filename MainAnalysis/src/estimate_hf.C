@@ -187,10 +187,10 @@ int estimate_hf(char const* config, char const* output) {
     c1->accessory(pt_info);
     c1->accessory(mean_info);
 
-    c1->divide(ipt->size(), -1);
+    c1->divide(ipt->size() - 1, -1);
     // c1->set(paper::flags::logy);
 
-    for (int64_t j = 0; j < ipt->size(); ++j) {
+    for (int64_t j = 0; j < ipt->size() - 1; ++j) {
         c1->add((*hf)[j], type);
     }
 
