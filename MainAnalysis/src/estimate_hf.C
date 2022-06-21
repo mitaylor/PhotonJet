@@ -61,7 +61,7 @@ int estimate_hf(char const* config, char const* output) {
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
-    
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -82,7 +82,7 @@ int estimate_hf(char const* config, char const* output) {
     if (entries) { mod = nentries / entries; }
     if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
 
-    for (int64_t i = 0; i < 100; ++i) {
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % mod != 0) { continue; }
 
