@@ -39,6 +39,7 @@ int estimate_hf(char const* config, char const* output) {
     auto entries = conf->get<int64_t>("entries");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
+    auto type = conf->get<std::string>("type");
 
     /* options */
     auto heavyion = conf->get<bool>("heavyion");
@@ -193,7 +194,7 @@ int estimate_hf(char const* config, char const* output) {
     // c1->set(paper::flags::logy);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c1->add((*hf)[j], "MC");
+        c1->add((*hf)[j], type);
     }
 
     hb->sketch();
