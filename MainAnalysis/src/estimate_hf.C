@@ -184,7 +184,10 @@ int estimate_hf(char const* config, char const* output) {
     
     auto c1 = new paper(tag + "_estimated_hf", hb);
     apply_style(c1, "pp #sqrt{s} = 5.02 TeV"s);
+    
     c1->accessory(pt_info);
+    c1->accessory(mean_info);
+
     c1->divide(ipt->size(), -1);
     // c1->set(paper::flags::logy);
 
