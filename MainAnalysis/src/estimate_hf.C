@@ -62,6 +62,8 @@ int estimate_hf(char const* config, char const* output) {
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
 
+    std::cout << ipt->size() << std::endl;
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
