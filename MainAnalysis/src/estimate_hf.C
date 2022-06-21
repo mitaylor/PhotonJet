@@ -167,37 +167,38 @@ int estimate_hf(char const* config, char const* output) {
     });
 
     auto pt_info = [&](int64_t index) {
+        std::cout << __LINE__ << std::endl;
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     auto mean_info = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f",
             (*hf)[index]->GetMean(1));
-
+        std::cout << __LINE__ << std::endl;
         TLatex* text = new TLatex();
         text->SetTextFont(43);
         text->SetTextSize(12);
-        text->DrawLatexNDC(0.54, 0.56, buffer);
+        text->DrawLatexNDC(0.54, 0.56, buffer);std::cout << __LINE__ << std::endl;
     };
 
     auto hb = new pencil();
-    hb->category("type", "Data", "MC");
+    hb->category("type", "Data", "MC");std::cout << __LINE__ << std::endl;
     
     auto c1 = new paper(tag + "_estimated_hf", hb);
-    apply_style(c1, "pp #sqrt{s} = 5.02 TeV"s);
+    apply_style(c1, "pp #sqrt{s} = 5.02 TeV"s);std::cout << __LINE__ << std::endl;
 
-    c1->accessory(pt_info);
-    c1->accessory(mean_info);
+    c1->accessory(pt_info);std::cout << __LINE__ << std::endl;
+    c1->accessory(mean_info);std::cout << __LINE__ << std::endl;
 
-    c1->divide(ipt->size(), -1);
+    c1->divide(ipt->size(), -1);std::cout << __LINE__ << std::endl;
     // c1->set(paper::flags::logy);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c1->add((*hf)[j], "MC");
+        c1->add((*hf)[j], "MC");std::cout << __LINE__ << std::endl;
     }
 
-    hb->sketch();
-    c1->draw("pdf");
+    hb->sketch();std::cout << __LINE__ << std::endl;
+    c1->draw("pdf");std::cout << __LINE__ << std::endl;
 
     printf("destroying objects..\n");
 
