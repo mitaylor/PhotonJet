@@ -17,6 +17,7 @@
 
 #include "TFile.h"
 #include "TTree.h"
+#include "TLatex.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TRandom3.h"
@@ -81,7 +82,7 @@ int estimate_hf(char const* config, char const* output) {
     if (entries) { mod = nentries / entries; }
     if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
 
-    for (int64_t i = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < 100; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % mod != 0) { continue; }
 
@@ -184,7 +185,7 @@ int estimate_hf(char const* config, char const* output) {
     
     auto c1 = new paper(tag + "_estimated_hf", hb);
     apply_style(c1, "pp #sqrt{s} = 5.02 TeV"s);
-    
+
     c1->accessory(pt_info);
     c1->accessory(mean_info);
 
