@@ -50,8 +50,6 @@ int estimate_hf(char const* config, char const* output) {
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
     auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
@@ -114,8 +112,7 @@ int estimate_hf(char const* config, char const* output) {
         /* require leading photon */
         if (leading < 0) { continue; }
 
-        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
-                || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
+        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.02)
             continue;
 
         /* isolation requirement */
