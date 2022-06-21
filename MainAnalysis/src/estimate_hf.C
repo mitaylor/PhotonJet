@@ -61,9 +61,7 @@ int estimate_hf(char const* config, char const* output) {
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
-
-    std::cout << ipt->size() << std::endl;
-
+    
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -169,15 +167,13 @@ int estimate_hf(char const* config, char const* output) {
     });
 
     auto pt_info = [&](int64_t index) {
-        std::cout << __LINE__ << std::endl;
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     auto mean_info = [&](int64_t index) {
-        std::cout << index << std::endl;
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f",
-            (*hf)[index]->GetMean(1));
-        std::cout << __LINE__ << std::endl;
+            (*hf)[index - 1]->GetMean(1));
+
         TLatex* text = new TLatex();
         text->SetTextFont(43);
         text->SetTextSize(12);
@@ -197,11 +193,11 @@ int estimate_hf(char const* config, char const* output) {
     // c1->set(paper::flags::logy);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c1->add((*hf)[j], "MC");std::cout << __LINE__ << std::endl;
+        c1->add((*hf)[j], "MC");
     }
 
-    hb->sketch();std::cout << __LINE__ << std::endl;
-    c1->draw("pdf");std::cout << __LINE__ << std::endl;
+    hb->sketch();
+    c1->draw("pdf");
 
     printf("destroying objects..\n");
 
