@@ -53,7 +53,7 @@ int estimate_hf(char const* config, char const* output) {
 
     /* create histograms */
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, 30);
+    auto ihf = new interval("Estimated HF"s, 100, 0, 500);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
