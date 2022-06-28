@@ -63,7 +63,7 @@ auto default_decorator = [](std::string const& system) {
     lwip->SetTextFont(52);
     lwip->SetTextSize(0.032);
     lwip->SetTextAlign(13);
-    lwip->DrawLatexNDC(0.135, 0.83, "Work-in-progress");
+    lwip->DrawLatexNDC(0.135, 0.83, "Preliminary");
 
     TLatex* info = new TLatex();
     info->SetTextFont(42);

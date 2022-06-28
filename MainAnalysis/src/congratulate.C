@@ -103,7 +103,7 @@ int congratulate(char const* config, char const* output) {
         prel->SetTextFont(52);
         prel->SetTextSize(0.056);
         prel->SetTextAlign(13);
-        prel->DrawLatexNDC(0.135, 0.80, "Unofficial");
+        prel->DrawLatexNDC(0.135, 0.80, "Preliminary");
 
         TLatex* com = new TLatex();
         com->SetTextFont(42);
