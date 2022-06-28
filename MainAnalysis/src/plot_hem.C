@@ -56,15 +56,15 @@ int populate(char const* config, char const* output) {
 
     /* create histograms */
 
-    auto photonEtaPhi = new TH2F("photon_eta_phi_nosel","Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel","Selected Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","Selected Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto photonEtaPhi = new TH2F("photon_eta_phi_nosel","Photon #eta-#phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel","Selected Photon #eta-#phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","Jet #eta-#phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","Selected Jet #eta-#phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
-    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","Selected Photon Eta Phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","Selected Jet Eta Phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","Photon #eta-#phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","Selected Photon #eta-#phi Distibution, with Exclusions",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","Jet #eta-#phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","Selected Jet #eta-#phi Distibution, with Exclusions",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -189,19 +189,19 @@ int populate(char const* config, char const* output) {
 
     auto c1 = new paper(tag + "_photon_distribution", hb);
     apply_style(c1, tag);
-    c1->divide(4, -1);
+    c1->divide(2, -1);
 
-    photonEtaPhi->Scale(1/photonEtaPhi->Integral());
-    photonEtaPhi->SetMinimum(0);
-    photonEtaPhi->SetMaximum(0.00025);
-    c1->add(photonEtaPhi);
-    c1->adjust(photonEtaPhi, "colz", "");
+    // photonEtaPhi->Scale(1/photonEtaPhi->Integral());
+    // photonEtaPhi->SetMinimum(0);
+    // photonEtaPhi->SetMaximum(0.00025);
+    // c1->add(photonEtaPhi);
+    // c1->adjust(photonEtaPhi, "colz", "");
 
-    photonEtaPhiEx->Scale(1/photonEtaPhiEx->Integral());
-    photonEtaPhiEx->SetMinimum(0);
-    photonEtaPhiEx->SetMaximum(0.00025);
-    c1->add(photonEtaPhiEx);
-    c1->adjust(photonEtaPhiEx, "colz", "");
+    // photonEtaPhiEx->Scale(1/photonEtaPhiEx->Integral());
+    // photonEtaPhiEx->SetMinimum(0);
+    // photonEtaPhiEx->SetMaximum(0.00025);
+    // c1->add(photonEtaPhiEx);
+    // c1->adjust(photonEtaPhiEx, "colz", "");
 
     photonSelectedEtaPhi->Scale(1/photonSelectedEtaPhi->Integral());
     photonSelectedEtaPhi->SetMinimum(0);
@@ -218,19 +218,19 @@ int populate(char const* config, char const* output) {
 
     auto c2 = new paper(tag + "_jet_distribution", hb);
     apply_style(c2, tag);
-    c2->divide(4, -1);
+    c2->divide(2, -1);
 
-    jetEtaPhi->Scale(1/jetEtaPhi->Integral());
-    jetEtaPhi->SetMinimum(0);
-    jetEtaPhi->SetMaximum(0.00025);
-    c2->add(jetEtaPhi);
-    c2->adjust(jetEtaPhi, "colz", "");
+    // jetEtaPhi->Scale(1/jetEtaPhi->Integral());
+    // jetEtaPhi->SetMinimum(0);
+    // jetEtaPhi->SetMaximum(0.00025);
+    // c2->add(jetEtaPhi);
+    // c2->adjust(jetEtaPhi, "colz", "");
 
-    jetEtaPhiEx->Scale(1/jetEtaPhiEx->Integral());
-    jetEtaPhiEx->SetMinimum(0);
-    jetEtaPhiEx->SetMaximum(0.00025);
-    c2->add(jetEtaPhiEx);
-    c2->adjust(jetEtaPhiEx, "colz", "");
+    // jetEtaPhiEx->Scale(1/jetEtaPhiEx->Integral());
+    // jetEtaPhiEx->SetMinimum(0);
+    // jetEtaPhiEx->SetMaximum(0.00025);
+    // c2->add(jetEtaPhiEx);
+    // c2->adjust(jetEtaPhiEx, "colz", "");
 
     jetSelectedEtaPhi->Scale(1/jetSelectedEtaPhi->Integral());
     jetSelectedEtaPhi->SetMinimum(0);
