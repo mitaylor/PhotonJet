@@ -52,7 +52,29 @@ auto default_formatter = [](TH1* obj, double min, double max) {
     obj->SetAxisRange(min, max, "Y");
 };
 
-auto default_decorator = [](std::string const& system) {
+auto default_decorator = [](std::string const& system, bool label = false) {
+    TLatex* cms = new TLatex();
+    cms->SetTextFont(62);
+    cms->SetTextSize(0.048);
+    cms->SetTextAlign(13);
+    cms->DrawLatexNDC(0.135, 0.87, "CMS");
+
+    if (!label) {
+        TLatex* lwip = new TLatex();
+        lwip->SetTextFont(52);
+        lwip->SetTextSize(0.032);
+        lwip->SetTextAlign(13);
+        lwip->DrawLatexNDC(0.135, 0.83, "Preliminary");
+    }
+
+    TLatex* info = new TLatex();
+    info->SetTextFont(42);
+    info->SetTextSize(0.032);
+    info->SetTextAlign(31);
+    info->DrawLatexNDC(0.89, 0.92, system.data());
+};
+
+auto default_decorator_sim = [](std::string const& system) {
     TLatex* cms = new TLatex();
     cms->SetTextFont(62);
     cms->SetTextSize(0.048);
@@ -63,7 +85,7 @@ auto default_decorator = [](std::string const& system) {
     lwip->SetTextFont(52);
     lwip->SetTextSize(0.032);
     lwip->SetTextAlign(13);
-    lwip->DrawLatexNDC(0.135, 0.83, "Preliminary");
+    lwip->DrawLatexNDC(0.135, 0.83, "Simulation");
 
     TLatex* info = new TLatex();
     info->SetTextFont(42);
@@ -90,26 +112,49 @@ auto line_at = [&](int64_t, float val, float low, float high) {
 };
 
 template <typename T, typename U>
-void apply_style(T p, std::string const& text, U formatter) {
+void apply_style(T p, std::string const& text, U formatter, bool label = false) {
     using namespace std::placeholders;
 
     p->format(formatter);
     p->format(graph_formatter);
-    p->decorate(std::bind(default_decorator, text));
+    p->decorate(std::bind(default_decorator, text, label));
+    p->legend(std::bind(coordinates, 0.45, 0.9, 0.87, 0.04));
+    p->style(std::bind(default_legend_style, _1, 43, 12));
+}
+
+template <typename T, typename U>
+void apply_style_sim(T p, std::string const& text, U formatter) {
+    using namespace std::placeholders;
+
+    p->format(formatter);
+    p->format(graph_formatter);
+    p->decorate(std::bind(default_decorator_sim, text));
     p->legend(std::bind(coordinates, 0.45, 0.9, 0.87, 0.04));
     p->style(std::bind(default_legend_style, _1, 43, 12));
 }
 
 template <typename T>
-void apply_style(T p, std::string const& text, double min, double max) {
+void apply_style(T p, std::string const& text, double min, double max, bool label = false) {
     using namespace std::placeholders;
 
-    apply_style(p, text, std::bind(default_formatter, _1, min, max));
+    apply_style(p, text, std::bind(default_formatter, _1, min, max), label);
 }
 
 template <typename T>
-void apply_style(T p, std::string const& text) {
-    apply_style(p, text, hist_formatter);
+void apply_style_sim(T p, std::string const& text, double min, double max) {
+    using namespace std::placeholders;
+
+    apply_style_sim(p, text, std::bind(default_formatter, _1, min, max));
+}
+
+template <typename T>
+void apply_style(T p, std::string const& text, bool label = false) {
+    apply_style(p, text, hist_formatter, label);
+}
+
+template <typename T>
+void apply_style_sim(T p, std::string const& text) {
+    apply_style_sim(p, text, hist_formatter);
 }
 
 template <typename T>

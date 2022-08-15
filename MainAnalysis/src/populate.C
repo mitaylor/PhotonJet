@@ -188,6 +188,9 @@ int populate(char const* config, char const* output) {
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
 
     auto entries = conf->get<int64_t>("entries");
+    auto mod = conf->get<bool>("mod");
+    auto parity = conf->get<bool>("parity");
+
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
@@ -211,7 +214,6 @@ int populate(char const* config, char const* output) {
     auto const gen_iso_max = conf->get<float>("gen_iso_max");
     auto const jet_pt_min = conf->get<float>("jet_pt_min");
     auto const hf_threshold = conf->get<float>("hf_threshold");
-    auto use_rho = conf->get<bool>("use_rho");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -342,9 +344,10 @@ int populate(char const* config, char const* output) {
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    int64_t mod = 1;
-    if (entries) { mod = nentries / entries; }
-    if (mod !=1) { std::cout << "mod: " << mod << std::endl; }
+    int64_t modulo = 1;
+    if (mod) modulo = 2;
+    if (entries) { modulo = nentries / entries; }
+    if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
     
@@ -357,14 +360,14 @@ int populate(char const* config, char const* output) {
         if (i % frequency == 0) { 
             if (tentries != 0) {
                 duration = clock() - time;
-                std::cout << "Time per " << frequency/mod << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                std::cout << "Time per " << frequency/modulo << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
                 std::cout << "Entries: " << tentries << std::endl;
                 tentries = 0;
                 time = clock();
             }
         }
 
-        if (i % mod != 0) { continue; }
+        if ((i + parity) % modulo != 0) { continue; }
 
         t->GetEntry(i);
 
@@ -493,8 +496,7 @@ int populate(char const* config, char const* output) {
             tm->GetEntry(m);
 
             /* hf within +/- 10% */
-            if (!use_rho && std::abs(pjtm->hiHF / pjt->hiHF - 1.) > hf_threshold) { continue; }
-            if (use_rho && std::abs(pjtm->rho / pjt->rho - 1.) > hf_threshold) { continue; }
+            if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > hf_threshold) { continue; }
 
             fill_axes(pjtm, pthf_x, weights, pho_cor,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,

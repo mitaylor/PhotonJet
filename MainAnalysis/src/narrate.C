@@ -40,6 +40,8 @@ int narrate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto paper = conf->get<bool>("paper");
+
     TH1::SetDefaultSumw2();
     
     auto ihf = new interval(dhf);
@@ -136,14 +138,14 @@ int narrate(char const* config, char const* output) {
 
     /* draw rho distributions */
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "%i - %i%%", dcent, true); };
+        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
         auto hb = new pencil();
         hb->category("type", "Data", "MC");
         
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
-        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
+        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, paper);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
@@ -166,7 +168,7 @@ int narrate(char const* config, char const* output) {
         hb->category("type", "Data/MC");
         
         auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
-        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s);
+        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, paper);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
