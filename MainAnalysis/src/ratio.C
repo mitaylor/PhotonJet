@@ -259,7 +259,7 @@ int ratio(char const* config, char const* output) {
 
         /* prepare papers */
         auto s = new paper(prefix + "_ratio_" + figure, hb);
-        apply_style(s, "", ymin, ymax);
+        apply_style(s, "", ymin, ymax, false);
         s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
