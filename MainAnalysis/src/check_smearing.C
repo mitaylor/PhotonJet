@@ -92,7 +92,7 @@ int congratulate(char const* config, char const* output) {
     /* prepare paper */
     auto width = idr->index_for(0.2) + 1;
     auto s = new paper("smeared_pp_dj_resolution", hb);
-    apply_style(s, collisions, ymin, ymax);
+    apply_style(s, collisions, ymin, ymax, false);
     s->accessory(drhf_info);
     s->divide(width, ihf->size());
 
