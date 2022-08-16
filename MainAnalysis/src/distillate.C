@@ -146,7 +146,7 @@ int distillate(char const* config, char const* output) {
         fhe[i] = conf->get<std::vector<float>>("fhe_"s + hf_str);
     }
 
-    auto resolution_function = [&](char const* label, int64_t hf_x) {
+    auto resolution_function = [&](char const* label) {
         TF1* f = new TF1(label, "sqrt([0]*[0]+[1]*[1]/x+[2]*[2]/(x*x))");
 
         if (smeared) { 
@@ -259,7 +259,7 @@ int distillate(char const* config, char const* output) {
         h->SetAxisRange(r_range[0], r_range[1], "Y");
 
         auto label = "f_r_dhf_f_pt_"s + std::to_string(index);
-        auto f = resolution_function(label.data(), index);
+        auto f = resolution_function(label.data());
         h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
         csn[0] = f->GetParameter(0);
@@ -393,7 +393,7 @@ int distillate(char const* config, char const* output) {
         h->SetAxisRange(r_range[0], r_range[1], "Y");
 
         auto label = "f_r_f_pt_"s + std::to_string(index);
-        auto f = resolution_function(label.data(), index);
+        auto f = resolution_function(label.data());
         h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
         csn[1] = f->GetParameter(1);
