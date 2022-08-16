@@ -52,14 +52,14 @@ auto default_formatter = [](TH1* obj, double min, double max) {
     obj->SetAxisRange(min, max, "Y");
 };
 
-auto default_decorator = [](std::string const& system, bool label = false) {
+auto default_decorator = [](std::string const& system, bool nolabel = false) {
     TLatex* cms = new TLatex();
     cms->SetTextFont(62);
     cms->SetTextSize(0.048);
     cms->SetTextAlign(13);
     cms->DrawLatexNDC(0.135, 0.87, "CMS");
 
-    if (!label) {
+    if (!nolabel) {
         TLatex* lwip = new TLatex();
         lwip->SetTextFont(52);
         lwip->SetTextSize(0.032);
@@ -112,12 +112,12 @@ auto line_at = [&](int64_t, float val, float low, float high) {
 };
 
 template <typename T, typename U>
-void apply_style(T p, std::string const& text, U formatter, bool label = false) {
+void apply_style(T p, std::string const& text, U formatter, bool nolabel = false) {
     using namespace std::placeholders;
 
     p->format(formatter);
     p->format(graph_formatter);
-    p->decorate(std::bind(default_decorator, text, label));
+    p->decorate(std::bind(default_decorator, text, nolabel));
     p->legend(std::bind(coordinates, 0.45, 0.9, 0.87, 0.04));
     p->style(std::bind(default_legend_style, _1, 43, 12));
 }
@@ -134,10 +134,10 @@ void apply_style_sim(T p, std::string const& text, U formatter) {
 }
 
 template <typename T>
-void apply_style(T p, std::string const& text, double min, double max, bool label = false) {
+void apply_style(T p, std::string const& text, double min, double max, bool nolabel = false) {
     using namespace std::placeholders;
 
-    apply_style(p, text, std::bind(default_formatter, _1, min, max), label);
+    apply_style(p, text, std::bind(default_formatter, _1, min, max), nolabel);
 }
 
 template <typename T>
@@ -148,8 +148,8 @@ void apply_style_sim(T p, std::string const& text, double min, double max) {
 }
 
 template <typename T>
-void apply_style(T p, std::string const& text, bool label = false) {
-    apply_style(p, text, hist_formatter, label);
+void apply_style(T p, std::string const& text, bool nolabel = false) {
+    apply_style(p, text, hist_formatter, nolabel);
 }
 
 template <typename T>
