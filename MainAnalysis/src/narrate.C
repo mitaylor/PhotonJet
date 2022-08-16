@@ -40,7 +40,7 @@ int narrate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto paper = conf->get<bool>("paper");
+    auto is_paper = conf->get<bool>("paper");
 
     TH1::SetDefaultSumw2();
     
@@ -145,7 +145,7 @@ int narrate(char const* config, char const* output) {
         hb->category("type", "Data", "MC");
         
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
-        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, paper);
+        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, is_paper);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
@@ -168,7 +168,7 @@ int narrate(char const* config, char const* output) {
         hb->category("type", "Data/MC");
         
         auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
-        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, paper);
+        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, is_paper);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
