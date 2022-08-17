@@ -142,7 +142,7 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
             apply(_dl);
         }
 
-        if (index == _columns) {
+        if (index == _cols) {
             apply(_dr);
         }
 
