@@ -138,13 +138,13 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
         apply(_f, obj);
         apply(_g, obj);
 
-        if (index == 1) {
-            apply(_dl);
-        }
+        // if (index == 1) {
+        //     apply(_dl);
+        // }
 
-        if (index == _cols) {
-            apply(_dr);
-        }
+        // if (index == _cols) {
+        //     apply(_dr);
+        // }
 
         auto it = dopts.find(obj);
         auto opt = (it != dopts.end()) ? it->second : "pe"s;
