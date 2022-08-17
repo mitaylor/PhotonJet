@@ -128,7 +128,7 @@ int emulate(char const* config, char const* output) {
     hb->category("system", "data", "mc");
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    auto cms = "#scale[1.4]{#bf{CMS}} #scale[1.2]{#it{Preliminary}}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     auto ratio_style = [&](TH1* h, int64_t index) {
         if (index == 3) {
