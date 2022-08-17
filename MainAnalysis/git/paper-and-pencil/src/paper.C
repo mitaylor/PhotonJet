@@ -60,7 +60,7 @@ void paper::draw(std::string const& ext) {
         double pad_size = 400;
         double padding = 50;
         double width = pad_size * _cols + padding;
-        double height = pad_size * _rows + padding;
+        double height = pad_size * _rows;
 
         canvas = new TCanvas(_tag.data(), "", width, height);
 
@@ -72,7 +72,7 @@ void paper::draw(std::string const& ext) {
             auto ix = (i - 1) % _cols;
             auto iy = _rows - (i - 1) / _cols;
 
-            auto pad = new TPad("P1", "", base + dx * ix, base + dy * (iy - 1), base + dx * (ix + 1), base + dy * iy, 0);
+            auto pad = new TPad("P1", "", base + dx * ix, dy * (iy - 1), base + dx * (ix + 1), dy * iy, 0);
             pad->Draw();
             pads.push_back(pad);
         }
