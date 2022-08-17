@@ -79,6 +79,7 @@ void paper::draw(std::string const& ext) {
 
         for (int64_t i = 1; i <= _size; ++i) {
             // canvas->cd(i);
+            pads[i-1]->Draw();
             pads[i-1]->cd();
             auto associates = associated(i);
             draw_pad(associates, i);
