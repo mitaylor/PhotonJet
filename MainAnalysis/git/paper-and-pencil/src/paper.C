@@ -139,11 +139,11 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
         apply(_g, obj);
 
         // if (index == 1) {
-        //     apply(_dl);
+            apply(_dl);
         // }
 
         // if (index == _cols) {
-        //     apply(_dr);
+            apply(_dr);
         // }
 
         auto it = dopts.find(obj);
