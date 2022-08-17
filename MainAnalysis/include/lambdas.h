@@ -91,8 +91,8 @@ void apply_style(T p, std::string const& text_left, std::string const& text_righ
 
     p->format(formatter);
     p->format(graph_formatter);
-    p->decorate_left(std::bind(default_decorator_left, text));
-    p->decorate_right(std::bind(default_decorator_right, text));
+    p->decorate_left(std::bind(default_decorator_left, text_left));
+    p->decorate_right(std::bind(default_decorator_right, text_right));
     p->legend(std::bind(coordinates, 0.45, 0.9, 0.87, 0.04));
     p->style(std::bind(default_legend_style, _1, 43, 12));
 }
