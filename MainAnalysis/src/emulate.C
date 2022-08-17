@@ -93,7 +93,7 @@ int emulate(char const* config, char const* output) {
     auto ivz = new interval("v_{z}"s, rvz[0], rvz[1], rvz[2]);
     auto fvz = std::bind(&interval::book<TH1F>, ivz, _1, _2, _3);
 
-    auto vz = new history<TH1F>("vz"s, "", fvz, 3L);
+    auto vz = new history<TH1F>("vz"s, "vz (cm)"s, fvz, 3L);
 
     TChain* tdata = new TChain("pj");
     tdata->Add(data.data());
