@@ -185,6 +185,11 @@ int narrate(char const* config, char const* output) {
     }
 
     /* draw rho distributions */
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
+    cms += "\t\t #scale[0.8]{p_{T}^{#gamma} > 40 GeV}"
+
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
@@ -193,7 +198,7 @@ int narrate(char const* config, char const* output) {
         hb->category("type", "Data", "MC");
         
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
-        apply_style(c1, system + " #sqrt{s} = 5.02 TeV, 1.6 nb^{-1}"s, is_paper);
+        apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
@@ -216,7 +221,7 @@ int narrate(char const* config, char const* output) {
         hb->category("type", "Data/MC");
         
         auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
-        apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, is_paper);
+        apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size(), -1);
         c1->set(paper::flags::logy);
