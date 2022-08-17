@@ -73,13 +73,13 @@ void paper::draw(std::string const& ext) {
             auto iy = _rows - (i - 1) / _cols;
 
             auto pad = new TPad("P1", "", base + dx * ix, base + dy * (iy - 1), base + dx * (ix + 1), base + dy * iy, 0);
+            pad->Draw();
             pads.push_back(pad);
         }
         // canvas->Divide(_cols, _rows, 0.01 / _cols, 0.01 / _rows);
 
         for (int64_t i = 1; i <= _size; ++i) {
             // canvas->cd(i);
-            pads[i-1]->Draw();
             pads[i-1]->cd();
             auto associates = associated(i);
             draw_pad(associates, i);
