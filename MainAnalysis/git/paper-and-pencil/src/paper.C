@@ -58,9 +58,9 @@ void paper::draw(std::string const& ext) {
         layout();
 
         double pad_size = 400;
-        double padding = 100;
+        double padding = 50;
         double width = pad_size * _cols + padding;
-        double height = pad_size * _rows + padding * 2;
+        double height = pad_size * _rows + padding;
 
         canvas = new TCanvas(_tag.data(), "", width, height);
 
