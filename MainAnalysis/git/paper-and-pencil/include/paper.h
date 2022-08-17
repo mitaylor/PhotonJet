@@ -119,6 +119,8 @@ class paper {
 
     uint64_t _flags = 0;
 
+    std::vector<TPad*> pads;
+
     std::vector<TObject*> order;
     std::map<TObject*, int64_t> objects;
 

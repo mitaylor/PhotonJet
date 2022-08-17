@@ -57,11 +57,29 @@ void paper::draw(std::string const& ext) {
 
         layout();
 
-        canvas = new TCanvas(_tag.data(), "", 400 * _cols, 400 * _rows);
-        canvas->Divide(_cols, _rows, 0, 0);
+        double pad_size = 400;
+        double padding = 100;
+        double width = pad_size * _cols + padding;
+        double height = pad_size * _rows + padding * 2;
+
+        canvas = new TCanvas(_tag.data(), "", width, height);
+
+        auto base = padding / width;
+        auto dx = pad_size / width;
+        auto dy = pad_size / height;
 
         for (int64_t i = 1; i <= _size; ++i) {
-            canvas->cd(i);
+            auto ix = (i - 1) % _cols;
+            auto iy = _rows - (i - 1) / _cols;
+
+            auto pad = new TPad("P1", "", base + dx * ix, base + dy * (iy - 1), base + dx * (ix + 1), base + dy * iy, 0);
+            pads.push_back(pad);
+        }
+        // canvas->Divide(_cols, _rows, 0.01 / _cols, 0.01 / _rows);
+
+        for (int64_t i = 1; i <= _size; ++i) {
+            // canvas->cd(i);
+            pad[i-1]->cd();
             auto associates = associated(i);
             draw_pad(associates, i);
             draw_legend(associates, description);
