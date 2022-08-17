@@ -56,8 +56,7 @@ int narrate(char const* config, char const* output) {
     auto rho_ratio = new history<TH1F>("rho_ratio"s, "", frho, dim_1_size, dim_2_size);
 
 
-    TFile* f = new TFile(data.data(), "read")g++ -O2 -Wall -Werror -Wextra `root-config --cflags --libs` -MMD -MF ./build/narrate_selected.d src/narrate_selected.C -o bin/narrate_selected \
-	-lconf -L./git/config/lib -lfoliage -L./git/foliage/lib -lhist -L./git/history/lib -lpp -L./git/paper-and-pencil/lib -ltt -L./git/tricks-and-treats/lib -lEG -lUnfold -lTMVA;
+    TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0 });
 
