@@ -56,7 +56,7 @@ auto default_decorator_left = [](std::string const& text) {
     TLatex* cms = new TLatex();
     cms->SetTextFont(42);
     cms->SetTextSize(0.032);
-    cms->SetTextAlign(13);
+    cms->SetTextAlign(11);
     cms->DrawLatexNDC(0.11, 0.92, text.data());
 };
 
