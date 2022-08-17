@@ -45,7 +45,7 @@ int narrate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
     
     auto ihf = new interval(dhf);
-    auto irho = new interval("rho"s, rho_range[0], rho_range[1], rho_range[2]);
+    auto irho = new interval("#rho"s, rho_range[0], rho_range[1], rho_range[2]);
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
@@ -56,7 +56,8 @@ int narrate(char const* config, char const* output) {
     auto rho_ratio = new history<TH1F>("rho_ratio"s, "", frho, dim_1_size, dim_2_size);
 
 
-    TFile* f = new TFile(data.data(), "read");
+    TFile* f = new TFile(data.data(), "read")g++ -O2 -Wall -Werror -Wextra `root-config --cflags --libs` -MMD -MF ./build/narrate_selected.d src/narrate_selected.C -o bin/narrate_selected \
+	-lconf -L./git/config/lib -lfoliage -L./git/foliage/lib -lhist -L./git/history/lib -lpp -L./git/paper-and-pencil/lib -ltt -L./git/tricks-and-treats/lib -lEG -lUnfold -lTMVA;
     TTree* t = (TTree*)f->Get("pj");
     auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0 });
 
@@ -188,7 +189,7 @@ int narrate(char const* config, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "\t\t #scale[0.8]{p_{T}^{#gamma} > 40 GeV}"
+    cms += "\t\t #scale[0.8]{p_{T}^{#gamma} > 40 GeV}";
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
