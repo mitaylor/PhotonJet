@@ -138,17 +138,17 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
         apply(_f, obj);
         apply(_g, obj);
 
-        // if (index == 1) {
-            apply(_dl);
-        // }
-
-        // if (index == _cols) {
-            apply(_dr);
-        // }
-
         auto it = dopts.find(obj);
         auto opt = (it != dopts.end()) ? it->second : "pe"s;
         obj->Draw(("same "s + opt).data());
+
+        if (index == 1) {
+            apply(_dl);
+        }
+
+        if (index == _cols) {
+            apply(_dr);
+        }
 
         for (auto const& o : _o)
             apply(o);
