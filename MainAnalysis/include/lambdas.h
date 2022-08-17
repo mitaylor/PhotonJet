@@ -111,9 +111,8 @@ void apply_style(T p, std::string const& text_left, std::string const& text_righ
 
 template <typename T>
 void apply_style(T p) {
-    string text_left = "#scale[1.2]{#bf{CMS}} #scale[1]{#it{Preliminary}}";
-    string text_right = "#sqrt{s_{NN}} = 5.02 TeV";
-    apply_style(p, text_left, text_right, hist_formatter);
+    apply_style(p, "#scale[1.2]{#bf{CMS}} #scale[1]{#it{Preliminary}}", 
+        "#sqrt{s_{NN}} = 5.02 TeV", hist_formatter);
 }
 
 template <typename T>
