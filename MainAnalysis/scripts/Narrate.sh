@@ -3,7 +3,7 @@
 histogram() {
     tag=$1
 
-    ./bin/narrate configs/narrate/preapproval/narrate_${tag}.conf data/preapproval/narrate_${tag}.root > log/narrate_${tag}.txt
+    ./bin/narrate configs/narrate/preapproval/narrate_${tag}.conf data/preapproval/narrate_${tag}.root
 }
 
 samples=(aa paper_aa aa_extra paper_aa_extra)
