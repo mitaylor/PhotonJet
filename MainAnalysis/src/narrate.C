@@ -151,7 +151,7 @@ int narrate(char const* config, char const* output) {
         auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
-        c1->divide(ihf->size(), -1);
+        c1->divide(ihf->size()/2, -1);
         c1->set(paper::flags::logy);
 
         for (size_t j = 0; j < dhf.size()-1; ++j) {
@@ -174,7 +174,7 @@ int narrate(char const* config, char const* output) {
         auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
-        c1->divide(ihf->size(), -1);
+        c1->divide(ihf->size()/2, -1);
         c1->set(paper::flags::logy);
 
         for (size_t j = 0; j < dhf.size()-1; ++j) {
