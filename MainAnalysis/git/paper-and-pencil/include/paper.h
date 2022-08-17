@@ -73,7 +73,8 @@ class paper {
     void adjust(TObject* const object, std::string const& dopt,
                 std::string const& lopt);
 
-    void decorate(std::function<void()> d)                { _d = d; }
+    void decorate_left(std::function<void()> dl)          { _dl = dl; }
+    void decorate_right(std::function<void()> dr)         { _dr = dr; }
     void format(std::function<void(TH1*)> f)              { _f = f; }
     void format(std::function<void(TGraph*)> g)           { _g = g; }
     void legend(std::function<std::array<float, 4>()> l)  { _l = l; }
@@ -124,7 +125,8 @@ class paper {
     std::unordered_map<TObject*, std::string> dopts;
     std::unordered_map<TObject*, std::string> lopts;
 
-    std::function<void()> _d;
+    std::function<void()> _dr;
+    std::function<void()> _dl;
     std::function<void(TH1*)> _f;
     std::function<void(TGraph*)> _g;
     std::function<std::array<float, 4>()> _l;

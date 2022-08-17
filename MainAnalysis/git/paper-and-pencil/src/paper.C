@@ -59,8 +59,6 @@ void paper::draw(std::string const& ext) {
 
         canvas = new TCanvas(_tag.data(), "", 400 * _cols, 400 * _rows);
         canvas->Divide(_cols, _rows, 0.01 / _cols, 0.01 / _rows);
-        canvas->cd(0);
-        apply(_d);
 
         for (int64_t i = 1; i <= _size; ++i) {
             canvas->cd(i);
@@ -79,7 +77,6 @@ void paper::split(std::string const& ext) const {
 
     for (int64_t i = 1; i <= _size; ++i) {
         TCanvas* c = new TCanvas(std::to_string(i).data(), "", 400, 400);
-        apply(_d);
 
         auto associates = associated(i);
         draw_pad(associates, i);
@@ -140,6 +137,14 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
     for (auto const& obj : associates) {
         apply(_f, obj);
         apply(_g, obj);
+
+        if (index == 1) {
+            apply(_dl);
+        }
+
+        if (index == _columns) {
+            apply(_dr);
+        }
 
         auto it = dopts.find(obj);
         auto opt = (it != dopts.end()) ? it->second : "pe"s;

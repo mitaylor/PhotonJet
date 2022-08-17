@@ -52,46 +52,20 @@ auto default_formatter = [](TH1* obj, double min, double max) {
     obj->SetAxisRange(min, max, "Y");
 };
 
-auto default_decorator = [](std::string const& system, bool nolabel = false) {
+auto default_decorator_left = [](std::string const& text) {
     TLatex* cms = new TLatex();
     cms->SetTextFont(62);
     cms->SetTextSize(0.048);
     cms->SetTextAlign(13);
-    cms->DrawLatexNDC(0.135, 0.87, "CMS");
-
-    if (!nolabel) {
-        TLatex* lwip = new TLatex();
-        lwip->SetTextFont(52);
-        lwip->SetTextSize(0.032);
-        lwip->SetTextAlign(13);
-        lwip->DrawLatexNDC(0.135, 0.83, "Preliminary");
-    }
-
-    TLatex* info = new TLatex();
-    info->SetTextFont(42);
-    info->SetTextSize(0.032);
-    info->SetTextAlign(31);
-    info->DrawLatexNDC(0.89, 0.92, system.data());
+    cms->DrawLatexNDC(0.11, 0.92, text.data());
 };
 
-auto default_decorator_sim = [](std::string const& system) {
-    TLatex* cms = new TLatex();
-    cms->SetTextFont(62);
-    cms->SetTextSize(0.048);
-    cms->SetTextAlign(13);
-    cms->DrawLatexNDC(0.135, 0.87, "CMS");
-
-    TLatex* lwip = new TLatex();
-    lwip->SetTextFont(52);
-    lwip->SetTextSize(0.032);
-    lwip->SetTextAlign(13);
-    lwip->DrawLatexNDC(0.135, 0.83, "Simulation");
-
+auto default_decorator_right = [](std::string const& text) {
     TLatex* info = new TLatex();
     info->SetTextFont(42);
     info->SetTextSize(0.032);
     info->SetTextAlign(31);
-    info->DrawLatexNDC(0.89, 0.92, system.data());
+    info->DrawLatexNDC(0.89, 0.92, text.data());
 };
 
 auto coordinates = [](float x0, float x1, float y1, float dy) {
@@ -112,49 +86,34 @@ auto line_at = [&](int64_t, float val, float low, float high) {
 };
 
 template <typename T, typename U>
-void apply_style(T p, std::string const& text, U formatter, bool nolabel = false) {
+void apply_style(T p, std::string const& text_left, std::string const& text_right, U formatter) {
     using namespace std::placeholders;
 
     p->format(formatter);
     p->format(graph_formatter);
-    p->decorate(std::bind(default_decorator, text, nolabel));
-    p->legend(std::bind(coordinates, 0.45, 0.9, 0.87, 0.04));
-    p->style(std::bind(default_legend_style, _1, 43, 12));
-}
-
-template <typename T, typename U>
-void apply_style_sim(T p, std::string const& text, U formatter) {
-    using namespace std::placeholders;
-
-    p->format(formatter);
-    p->format(graph_formatter);
-    p->decorate(std::bind(default_decorator_sim, text));
+    p->decorate_left(std::bind(default_decorator_left, text));
+    p->decorate_right(std::bind(default_decorator_right, text));
     p->legend(std::bind(coordinates, 0.45, 0.9, 0.87, 0.04));
     p->style(std::bind(default_legend_style, _1, 43, 12));
 }
 
 template <typename T>
-void apply_style(T p, std::string const& text, double min, double max, bool nolabel = false) {
+void apply_style(T p, std::string const& text_left, std::string const& text_right, double min, double max) {
     using namespace std::placeholders;
 
-    apply_style(p, text, std::bind(default_formatter, _1, min, max), nolabel);
+    apply_style(p, text_left, text_right, std::bind(default_formatter, _1, min, max));
 }
 
 template <typename T>
-void apply_style_sim(T p, std::string const& text, double min, double max) {
-    using namespace std::placeholders;
-
-    apply_style_sim(p, text, std::bind(default_formatter, _1, min, max));
+void apply_style(T p, std::string const& text_left, std::string const& text_right) {
+    apply_style(p, text_left, text_right, hist_formatter);
 }
 
 template <typename T>
-void apply_style(T p, std::string const& text, bool nolabel = false) {
-    apply_style(p, text, hist_formatter, nolabel);
-}
-
-template <typename T>
-void apply_style_sim(T p, std::string const& text) {
-    apply_style_sim(p, text, hist_formatter);
+void apply_style(T p) {
+    string text_left = "#scale[1.2]{#bf{CMS}} #scale[1]{#it{Preliminary}}";
+    string text_right = "#sqrt{s_{NN}} = 5.02 TeV";
+    apply_style(p, text_left, text_right, hist_formatter);
 }
 
 template <typename T>

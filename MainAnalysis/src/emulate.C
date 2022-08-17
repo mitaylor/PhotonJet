@@ -127,7 +127,8 @@ int emulate(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("system", "data", "mc");
 
-    auto system_tag = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto cms = "#scale[1.2]{#bf{CMS}} #scale[1]{#it{Preliminary}}"s;
 
     auto ratio_style = [&](TH1* h, int64_t index) {
         if (index == 3) {
@@ -137,7 +138,7 @@ int emulate(char const* config, char const* output) {
     };
 
     auto c1 = new paper(tag + "_vz", hb);
-    apply_style(c1, system_tag, 0., 0.04);
+    apply_style(c1, cms, system_tag, 0., 0.04);
     c1->jewellery(ratio_style);
     c1->divide(3, -1);
 
