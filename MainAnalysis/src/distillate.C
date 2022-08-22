@@ -165,6 +165,11 @@ int distillate(char const* config, char const* output) {
     };
 
     /* info text */
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Simulation}}"s;
+    cms += "\t\t #scale[0.8]{p_{T}^{#gamma} > 40 GeV}";
+
     std::function<void(int64_t, float)> eta_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.1f < #eta < %.1f", deta, false); };
 
@@ -172,7 +177,7 @@ int distillate(char const* config, char const* output) {
         info_text(x, pos, "%.0f < p_{T}^{jet} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, obj_dpthf, pt_info, hf_info); };
@@ -200,7 +205,7 @@ int distillate(char const* config, char const* output) {
     hb->alias("mc", "AllQCDPhoton");
 
     auto c1 = new paper(tag_object + "_dpthf_sr_fits", hb);
-    apply_style(c1, system_info);
+    apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->divide(idpt->size(), -1);
 
@@ -231,7 +236,7 @@ int distillate(char const* config, char const* output) {
     });
 
     auto c2 = new paper(tag_object + "_dhf_f_pt_s", hb);
-    apply_style(c2, system_info);
+    apply_style(c2, cms, system_tag);
     c2->accessory(std::bind(hf_info, _1, 0.75));
     c2->accessory(guide_lines);
     c2->divide(idhf->size(), -1);
@@ -250,7 +255,7 @@ int distillate(char const* config, char const* output) {
     });
 
     auto c3 = new paper(tag_object + "_dhf_f_pt_r", hb);
-    apply_style(c3, system_info);
+    apply_style(c3, cms, system_tag);
     c3->accessory(std::bind(hf_info, _1, 0.75));
     c3->divide(idhf->size(), -1);
     c3->set(paper::flags::logx);
@@ -273,7 +278,7 @@ int distillate(char const* config, char const* output) {
     });
 
     auto c4 = new paper(tag_object + "_detahf_sr_fits", hb);
-    apply_style(c4, system_info);
+    apply_style(c4, cms, system_tag);
     c4->accessory(etahf_info);
     c4->divide(ideta->size(), -1);
 
@@ -304,7 +309,7 @@ int distillate(char const* config, char const* output) {
     });
 
     auto c5 = new paper(tag_object + "_dhf_f_eta_s", hb);
-    apply_style(c5, system_info);
+    apply_style(c5, cms, system_tag);
     c5->accessory(std::bind(hf_info, _1, 0.75));
     c5->divide(idhf->size(), -1);
 
@@ -313,7 +318,7 @@ int distillate(char const* config, char const* output) {
         c5->add(h, "mc"); });
 
     auto c6 = new paper(tag_object + "_dhf_f_eta_r", hb);
-    apply_style(c6, system_info);
+    apply_style(c6, cms, system_tag);
     c6->accessory(std::bind(hf_info, _1, 0.75));
     c6->divide(idhf->size(), -1);
 
@@ -327,13 +332,13 @@ int distillate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < ideta->size(); ++i) {
         c7[i] = new paper(tag_object + "_sr_fits_s" + std::to_string(i), hb);
-        apply_style(c7[i], system_info);
+        apply_style(c7[i], cms, system_tag);
         c7[i]->accessory(pthf_info);
         c7[i]->ornaments(std::bind(eta_info, i + 1, 0.67));
         c7[i]->divide(idpt->size(), -1);
 
         c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
-        apply_style(c8[i], system_info);
+        apply_style(c8[i], cms, system_tag);
         c8[i]->accessory(std::bind(hf_info, _1, 0.75));
         c8[i]->accessory(guide_lines);
         c8[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
@@ -341,7 +346,7 @@ int distillate(char const* config, char const* output) {
         c8[i]->set(paper::flags::logx);
 
         c9[i] = new paper(tag_object + "_f_pt_r_s" + std::to_string(i), hb);
-        apply_style(c9[i], system_info);
+        apply_style(c9[i], cms, system_tag);
         c9[i]->accessory(std::bind(hf_info, _1, 0.75));
         c9[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
         c9[i]->divide(idhf->size(), -1);
