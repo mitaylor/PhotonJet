@@ -213,7 +213,9 @@ int populate(char const* config, char const* output) {
     auto const iso_max = conf->get<float>("iso_max");
     auto const gen_iso_max = conf->get<float>("gen_iso_max");
     auto const jet_pt_min = conf->get<float>("jet_pt_min");
+
     auto const hf_threshold = conf->get<float>("hf_threshold");
+    auto hf_sub = conf->get<bool>("hf_sub");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -496,7 +498,10 @@ int populate(char const* config, char const* output) {
             tm->GetEntry(m);
 
             /* hf within +/- 10% */
-            if (std::abs(pjtm->hiHF / pjt->hiHF - 1.) > hf_threshold) { continue; }
+            if (hf_sub) {
+                hf = (hf > 58) ? hf - 58 : 0;
+            }
+            if (std::abs(pjtm->hiHF / hf - 1.) > hf_threshold) { continue; }
 
             fill_axes(pjtm, pthf_x, weights, pho_cor,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,
