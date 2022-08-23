@@ -167,6 +167,7 @@ int estimate_hf(char const* config, char const* output) {
         for (int64_t k = 0; k < (*hf)[j]->GetNbinsX(); ++k) {
             sum += (*hf)[j]->GetBinContent(k+1) / (*hf)[j]->Integral();
             (*percentile)[j]->SetBinContent(k+1, sum);
+            (*percentile)[j]->SetBinError(k+1, 0);
         }
     }
 
