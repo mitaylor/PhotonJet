@@ -57,7 +57,7 @@ auto default_decorator_left = [](std::string const& text) {
     cms->SetTextFont(42);
     cms->SetTextSize(0.032);
     cms->SetTextAlign(11);
-    cms->DrawLatexNDC(0, 0, text.data());
+    cms->DrawLatexNDC(0, 0.1, text.data());
 };
 
 auto default_decorator_right = [](std::string const& text) {
@@ -65,7 +65,7 @@ auto default_decorator_right = [](std::string const& text) {
     info->SetTextFont(42);
     info->SetTextSize(0.032);
     info->SetTextAlign(31);
-    info->DrawLatexNDC(1, 0, text.data());
+    info->DrawLatexNDC(1, 0.1, text.data());
 };
 
 auto coordinates = [](float x0, float x1, float y1, float dy) {

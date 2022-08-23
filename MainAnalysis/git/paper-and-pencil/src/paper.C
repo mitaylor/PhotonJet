@@ -94,6 +94,8 @@ void paper::draw(std::string const& ext) {
         heading.SetFillStyle(4000);
         heading.Draw();
         heading.cd();
+        apply(_dl);
+        apply(_dr);
     }
 
     canvas->SaveAs((_tag + "."s + ext).data());
@@ -170,13 +172,13 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
         auto opt = (it != dopts.end()) ? it->second : "pe"s;
         obj->Draw(("same "s + opt).data());
 
-        if (index == 1) {
-            apply(_dl);
-        }
+        // if (index == 1) {
+        //     apply(_dl);
+        // }
 
-        if (index == _cols) {
-            apply(_dr);
-        }
+        // if (index == _cols) {
+        //     apply(_dr);
+        // }
 
         for (auto const& o : _o)
             apply(o);
