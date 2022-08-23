@@ -55,7 +55,7 @@ auto default_formatter = [](TH1* obj, double min, double max) {
 auto default_decorator_left = [](std::string const& text) {
     TLatex* cms = new TLatex();
     cms->SetTextFont(42);
-    cms->SetTextSize(0.032);
+    cms->SetTextSize(0.9);
     cms->SetTextAlign(11);
     cms->DrawLatexNDC(0, 0.1, text.data());
 };
@@ -63,7 +63,7 @@ auto default_decorator_left = [](std::string const& text) {
 auto default_decorator_right = [](std::string const& text) {
     TLatex* info = new TLatex();
     info->SetTextFont(42);
-    info->SetTextSize(0.032);
+    info->SetTextSize(0.9);
     info->SetTextAlign(31);
     info->DrawLatexNDC(1, 0.1, text.data());
 };
