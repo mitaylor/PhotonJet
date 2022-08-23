@@ -73,6 +73,7 @@ void paper::draw(std::string const& ext) {
             auto iy = _rows - (i - 1) / _cols;
 
             auto pad = new TPad("P1", "", base + dx * ix, dy * (iy - 1), base + dx * (ix + 1), dy * iy, 0);
+            pad->SetLeftMargin(0.15);
             pad->Draw();
             pads.push_back(pad);
         }
