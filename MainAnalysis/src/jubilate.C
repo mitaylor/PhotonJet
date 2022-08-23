@@ -129,24 +129,27 @@ int jubilate(char const* config, char const* output) {
 
     hb->set_binary("type");
 
-    auto collisions = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+    cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6, ";
+    cms += "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
 
     auto c1 = new paper(tag + "_mixing_dphi_es_d_pthf", hb);
-    apply_style(c1, collisions, -0.3, 3, false);
+    apply_style(c1, cms, system_tag, -0.3, 3, false);
     c1->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
     c1->accessory(pthf_info);
     c1->jewellery(redraw_dphi_axis);
     c1->divide(-1 , ihf->size());
 
     auto c2 = new paper(tag + "_mixing_dphi_wta_d_pthf", hb);
-    apply_style(c2, collisions, -0.3, 3, false);
+    apply_style(c2, cms, system_tag, -0.3, 3, false);
     c2->accessory(std::bind(line_at, _1, 0.f, rdphi[0], rdphi[1]));
     c2->accessory(pthf_info);
     c2->jewellery(redraw_dphi_axis);
     c2->divide(-1 , ihf->size());
 
     auto c3 = new paper(tag + "_mixing_dr_d_pthf", hb);
-    apply_style(c3, collisions, -1., 24., false);
+    apply_style(c3, cms, system_tag, -1., 24., false);
     c3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     c3->accessory(pthf_info);
     c3->divide(-1 , ihf->size());
