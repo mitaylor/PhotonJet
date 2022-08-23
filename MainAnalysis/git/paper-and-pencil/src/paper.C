@@ -89,9 +89,9 @@ void paper::draw(std::string const& ext) {
         }
 
         canvas->cd();
-        auto ledge = base + 0.15 * dx; cout << ledge << endl;
-        auto redge = 1 - 0.1 * dx; cout << redge << endl;
-        auto bedge = dy * _rows; cout << bedge << endl;
+        auto ledge = base + 0.15 * dx; std::cout << ledge << std::endl;
+        auto redge = 1 - 0.1 * dx; std::cout << redge << std::endl;
+        auto bedge = dy * _rows; std::cout << bedge << std::endl;
         auto heading = new TPad("P0","",ledge,bedge,redge,1);
         heading->SetFillStyle(4000);
         heading->Draw();
