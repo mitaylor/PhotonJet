@@ -60,6 +60,7 @@ int estimate_hf(char const* config, char const* output) {
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
+    auto percentile = new history<TH1F>("percentile"s, "", fhf, ipt->size());
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -159,9 +160,20 @@ int estimate_hf(char const* config, char const* output) {
         (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);
     }
 
+    /* calculate percentile */
+    for (int64_t j = 0; j < ipt->size() - 1; ++j) {
+        double sum = 0;
+
+        for (int64_t k = 0; k < (*hf)[j]->GetNbinsX(); ++k) {
+            sum += (*hf)[j]->GetBinContent(k+1) / (*hf)[j]->Integral();
+            (*percentile)[j]->SetBinContent(k+1, sum);
+        }
+    }
+
     /* save histograms */
     in(output, [&]() {
         hf->save(tag);
+        percentile->save(tag);
     });
 
     auto pt_info = [&](int64_t index) {
@@ -182,7 +194,7 @@ int estimate_hf(char const* config, char const* output) {
     hb->category("type", "Data", "MC");
     
     auto c1 = new paper(tag + "_estimated_hf", hb);
-    apply_style(c1, "pp #sqrt{s} = 5.02 TeV"s);
+    apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
     c1->accessory(mean_info);
@@ -196,6 +208,22 @@ int estimate_hf(char const* config, char const* output) {
 
     hb->sketch();
     c1->draw("pdf");
+
+    auto c2 = new paper(tag + "_estimated_hf_percentile", hb);
+    apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
+
+    c2->accessory(pt_info);
+    c2->accessory(mean_info);
+
+    c2->divide(ipt->size() - 1, -1);
+    // c2->set(paper::flags::logy);
+
+    for (int64_t j = 0; j < ipt->size() - 1; ++j) {
+        c2->add((*percentile)[j], type);
+    }
+
+    hb->sketch();
+    c2->draw("pdf");
 
     printf("destroying objects..\n");
 

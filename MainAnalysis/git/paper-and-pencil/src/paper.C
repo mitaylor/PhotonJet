@@ -88,10 +88,7 @@ void paper::draw(std::string const& ext) {
         }
 
         canvas->cd();
-        auto ledge = base + 0.11 * dx;
-        auto redge = 1 - 0.1 * dx;
-        auto bedge = 1 - 0.1 * dy;
-        auto heading = new TPad("P0","",ledge,bedge,redge,1);
+        auto heading = new TPad("P0", "", base + 0.11 * dx, 1 - 0.1 * dx, 1 - 0.1 * dy, 1);
         heading->SetFillStyle(4000);
         heading->Draw();
         heading->cd();
