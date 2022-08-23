@@ -72,6 +72,7 @@ int distillate(char const* config, char const* output) {
     auto iddr = new interval(ddr);
     auto idhf = new interval(dhf);
 
+    auto plot_size = idhf->size() > 1 ? idhf->size()/2 : 1;
     auto hf_shape = x{ idhf->size() };
     auto pthf_shape = x{ idpt->size(), idhf->size() };
     auto drhf_shape = x{ iddr->size(), idhf->size() };
@@ -168,7 +169,7 @@ int distillate(char const* config, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Simulation}}"s;
-    cms += "\t\t #scale[0.8]{p_{T}^{#gamma} > 40 GeV}";
+    cms += "\t\t #scale[0.8]{anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6}";
 
     std::function<void(int64_t, float)> dr_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.1f < #deltaj < %.1f", ddr, false); };
@@ -207,7 +208,7 @@ int distillate(char const* config, char const* output) {
     auto c1 = new paper(tag_object + "_dpthf_sr_fits", hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
-    c1->divide(idpt->size(), -1);
+    c1->divide(plot_size, -1);
 
     /* fit obj and resolution */
     obj_dpthf->apply([&](TH1* h, int64_t index) {
@@ -239,7 +240,7 @@ int distillate(char const* config, char const* output) {
     apply_style(c2, cms, system_tag);
     c2->accessory(std::bind(hf_info, _1, 0.75));
     c2->accessory(guide_lines);
-    c2->divide(idhf->size(), -1);
+    c2->divide(plot_size, -1);
     c2->set(paper::flags::logx);
 
     s_dhf_f_pt->apply([&](TH1* h, int64_t index) {
@@ -257,7 +258,7 @@ int distillate(char const* config, char const* output) {
     auto c3 = new paper(tag_object + "_dhf_f_pt_r", hb);
     apply_style(c3, cms, system_tag);
     c3->accessory(std::bind(hf_info, _1, 0.75));
-    c3->divide(idhf->size(), -1);
+    c3->divide(plot_size, -1);
     c3->set(paper::flags::logx);
 
     r_dhf_f_pt->apply([&](TH1* h, int64_t index) {
@@ -280,7 +281,7 @@ int distillate(char const* config, char const* output) {
     auto c4 = new paper(tag_object + "_ddrhf_sr_fits", hb);
     apply_style(c4, cms, system_tag);
     c4->accessory(drhf_info);
-    c4->divide(iddr->size(), -1);
+    c4->divide(plot_size, -1);
 
     /* fit mean and resolution */
     obj_ddrhf->apply([&](TH1* h, int64_t index) {
@@ -311,7 +312,7 @@ int distillate(char const* config, char const* output) {
     auto c5 = new paper(tag_object + "_dhf_f_dr_s", hb);
     apply_style(c5, cms, system_tag);
     c5->accessory(std::bind(hf_info, _1, 0.75));
-    c5->divide(idhf->size(), -1);
+    c5->divide(plot_size, -1);
 
     s_dhf_f_dr->apply([&](TH1* h) {
         h->SetAxisRange(s_range[0], s_range[1], "Y");
@@ -320,7 +321,7 @@ int distillate(char const* config, char const* output) {
     auto c6 = new paper(tag_object + "_dhf_f_dr_r", hb);
     apply_style(c6, cms, system_tag);
     c6->accessory(std::bind(hf_info, _1, 0.75));
-    c6->divide(idhf->size(), -1);
+    c6->divide(plot_size, -1);
 
     r_dhf_f_dr->apply([&](TH1* h) {
         h->SetAxisRange(r_range[0], r_range[1], "Y");
@@ -335,21 +336,21 @@ int distillate(char const* config, char const* output) {
         apply_style(c7[i], cms, system_tag);
         c7[i]->accessory(pthf_info);
         c7[i]->ornaments(std::bind(dr_info, i + 1, 0.67));
-        c7[i]->divide(idpt->size(), -1);
+        c7[i]->divide(plot_size, -1);
 
         c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
         apply_style(c8[i], cms, system_tag);
         c8[i]->accessory(std::bind(hf_info, _1, 0.75));
         c8[i]->accessory(guide_lines);
         c8[i]->ornaments(std::bind(dr_info, i + 1, 0.71));
-        c8[i]->divide(idhf->size(), -1);
+        c8[i]->divide(plot_size, -1);
         c8[i]->set(paper::flags::logx);
 
         c9[i] = new paper(tag_object + "_f_pt_r_s" + std::to_string(i), hb);
         apply_style(c9[i], cms, system_tag);
         c9[i]->accessory(std::bind(hf_info, _1, 0.75));
         c9[i]->ornaments(std::bind(dr_info, i + 1, 0.71));
-        c9[i]->divide(idhf->size(), -1);
+        c9[i]->divide(plot_size, -1);
         c9[i]->set(paper::flags::logx);
     }
 
