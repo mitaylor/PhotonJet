@@ -87,6 +87,7 @@ void paper::draw(std::string const& ext) {
             draw_legend(associates, description);
         }
 
+        canvas->cd();
         auto ledge = base + 0.15 * dx;
         auto redge = 1 - 0.1 * dx;
         auto bedge = dy * _rows;
