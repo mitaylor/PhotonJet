@@ -168,7 +168,7 @@ int distillate(char const* config, char const* output) {
     /* info text */
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
-    cms += "\t\t #scale[0.8]{anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6}";
+    cms += "         anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6";
 
     std::function<void(int64_t, float)> eta_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.1f < #eta < %.1f", deta, false); };
