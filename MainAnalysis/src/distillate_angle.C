@@ -171,7 +171,7 @@ int distillate(char const* config, char const* output) {
     cms += "         anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6";
 
     std::function<void(int64_t, float)> dr_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.1f < #deltaj < %.1f", ddr, false); };
+        info_text(x, pos, "%.2f < #deltaj < %.2f", ddr, false); };
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{jet} < %.0f", dpt, false); };
