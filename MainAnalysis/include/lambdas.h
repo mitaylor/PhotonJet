@@ -55,17 +55,17 @@ auto default_formatter = [](TH1* obj, double min, double max) {
 auto default_decorator_left = [](std::string const& text) {
     TLatex* cms = new TLatex();
     cms->SetTextFont(42);
-    cms->SetTextSize(0.6);
+    cms->SetTextSize(0.5);
     cms->SetTextAlign(11);
-    cms->DrawLatexNDC(0, 0.1, text.data());
+    cms->DrawLatexNDC(0, 0.2, text.data());
 };
 
 auto default_decorator_right = [](std::string const& text) {
     TLatex* info = new TLatex();
     info->SetTextFont(42);
-    info->SetTextSize(0.6);
+    info->SetTextSize(0.5);
     info->SetTextAlign(31);
-    info->DrawLatexNDC(1, 0.1, text.data());
+    info->DrawLatexNDC(1, 0.2, text.data());
 };
 
 auto coordinates = [](float x0, float x1, float y1, float dy) {
