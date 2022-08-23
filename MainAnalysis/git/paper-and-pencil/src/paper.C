@@ -2,6 +2,7 @@
 #include "../include/pencil.h"
 
 #include <cmath>
+#include <iostream>
 
 using namespace std::literals::string_literals;
 
@@ -73,7 +74,7 @@ void paper::draw(std::string const& ext) {
             auto iy = _rows - (i - 1) / _cols;
 
             auto pad = new TPad("P1", "", base + dx * ix, dy * (iy - 1), base + dx * (ix + 1), dy * iy, 0);
-            pad->SetLeftMargin(0.15);
+            pad->SetLeftMargin(0.11);
             pad->Draw();
             pads.push_back(pad);
         }
@@ -88,9 +89,9 @@ void paper::draw(std::string const& ext) {
         }
 
         canvas->cd();
-        auto ledge = base + 0.15 * dx;
-        auto redge = 1 - 0.1 * dx;
-        auto bedge = dy * _rows;
+        auto ledge = base + 0.15 * dx; cout << ledge << endl;
+        auto redge = 1 - 0.1 * dx; cout << redge << endl;
+        auto bedge = dy * _rows; cout << bedge << endl;
         auto heading = new TPad("P0","",ledge,bedge,redge,1);
         heading->SetFillStyle(4000);
         heading->Draw();
