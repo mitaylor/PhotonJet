@@ -498,9 +498,10 @@ int populate(char const* config, char const* output) {
             tm->GetEntry(m);
 
             /* hf within +/- 10% */
-            if (hf_sub) {
-                hf = (hf > 58) ? hf - 58 : 0;
+            if (hf_sub && hf > 100) {
+                hf -= 58;
             }
+
             if (std::abs(pjtm->hiHF / hf - 1.) > hf_threshold) { continue; }
 
             fill_axes(pjtm, pthf_x, weights, pho_cor,
