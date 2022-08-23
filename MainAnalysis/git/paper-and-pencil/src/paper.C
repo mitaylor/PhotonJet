@@ -92,9 +92,9 @@ void paper::draw(std::string const& ext) {
         auto redge = 1 - 0.1 * dx;
         auto bedge = dy * _rows;
         auto heading = new TPad("P0","",ledge,bedge,redge,1);
-        heading.SetFillStyle(4000);
-        heading.Draw();
-        heading.cd();
+        heading->SetFillStyle(4000);
+        heading->Draw();
+        heading->cd();
         apply(_dl);
         apply(_dr);
     }
