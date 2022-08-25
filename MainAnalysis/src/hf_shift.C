@@ -5,6 +5,7 @@
 #include "../git/config/include/configurer.h"
 
 #include "../git/history/include/interval.h"
+#include "../git/history/include/multival.h"
 #include "../git/history/include/history.h"
 
 #include "../git/paper-and-pencil/include/paper.h"
@@ -14,6 +15,7 @@
 
 #include "TFile.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TLatex.h"
 
 #include <string>
