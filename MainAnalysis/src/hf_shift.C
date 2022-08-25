@@ -60,6 +60,7 @@ int hf_shift(char const* config, char const* output) {
     auto mb_pjt = new pjtree(false, false, false, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
 
     std::cout << static_cast<int64_t>(mb_t->GetEntries()) << std::endl;
+    mb_t->GetEntry(1);
     int64_t nentries = 10000;
 
     for (int64_t i = 0; i < nentries; ++i) {
@@ -124,7 +125,7 @@ int hf_shift(char const* config, char const* output) {
     }
 
     for (int64_t i = 0; i < nentries; ++i) {
-        // if (i % 100000 == 0)
+        if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
  std::cout << __LINE__ << std::endl;
         mb_t->GetEntry(i); std::cout << __LINE__ << std::endl;
