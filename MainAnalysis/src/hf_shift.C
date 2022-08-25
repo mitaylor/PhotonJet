@@ -59,7 +59,7 @@ int hf_shift(char const* config, char const* output) {
     TTree* mb_t = (TTree*) mb_f->Get("pj");
     auto mb_pjt = new pjtree(false, false, false, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
 
-    // int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    std::cout << static_cast<int64_t>(mb_t->GetEntries()) << std::endl;
     int64_t nentries = 10000;
 
     for (int64_t i = 0; i < nentries; ++i) {
