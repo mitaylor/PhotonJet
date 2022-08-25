@@ -126,7 +126,7 @@ int hf_shift(char const* config, char const* output) {
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
-
+ std::cout << __LINE__ << std::endl;
         mb_t->GetEntry(i); std::cout << __LINE__ << std::endl;
 
         int64_t leading = -1;
