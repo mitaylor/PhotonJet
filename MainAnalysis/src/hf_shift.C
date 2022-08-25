@@ -183,31 +183,31 @@ int hf_shift(char const* config, char const* output) {
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
         (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
-
+    std::cout << __LINE__ << std::endl;
     /* draw rho distributions */
-    auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; std::cout << __LINE__ << std::endl;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
     // cms += "         p_{T}^{#gamma} > 40 GeV";
-
+ std::cout << __LINE__ << std::endl;
     auto hb = new pencil();
-    hb->category("type", "Pythia+Hydjet", "Hydjet");
+    hb->category("type", "Pythia+Hydjet", "Hydjet"); std::cout << __LINE__ << std::endl;
     
-    auto c1 = new paper("pythia_hydjet_rho_v_hf", hb);
+    auto c1 = new paper("pythia_hydjet_rho_v_hf", hb); std::cout << __LINE__ << std::endl;
     apply_style(c1, cms, system_tag);
     // c1->set(paper::flags::logy);
     c1->add((*hp_rh)[0], "Pythia+Hydjet");
     c1->adjust((*hp_rh)[0], "colz", "");
 
-    auto c2 = new paper("hydjet_rho_v_hf", hb);
+    auto c2 = new paper("hydjet_rho_v_hf", hb); std::cout << __LINE__ << std::endl;
     apply_style(c2, cms, system_tag);
     // c2->set(paper::flags::logy);
     c2->add((*mb_rh)[0], "Hydjet");
     c2->adjust((*mb_rh)[0], "colz", "");
-
-    hb->sketch();
-    c1->draw("pdf");
-    c2->draw("pdf");
-
+ std::cout << __LINE__ << std::endl;
+    hb->sketch(); std::cout << __LINE__ << std::endl;
+    c1->draw("pdf"); std::cout << __LINE__ << std::endl;
+    c2->draw("pdf"); std::cout << __LINE__ << std::endl;
+ std::cout << __LINE__ << std::endl;
     /* save output */
     in(output, [&]() {
         mb_rh->save();
