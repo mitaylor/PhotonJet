@@ -120,7 +120,7 @@ int hf_shift(char const* config, char const* output) {
         if (electron) { continue; }
 
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
-        hp_rh[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
+        (*hp_rh)[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
     }
 
     for (int64_t i = 0; i < nentries; ++i) {
@@ -181,7 +181,7 @@ int hf_shift(char const* config, char const* output) {
         if (electron) { continue; }
 
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
-        mb_rh[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
+        (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
 
     /* draw rho distributions */
