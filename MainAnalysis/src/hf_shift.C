@@ -127,7 +127,7 @@ int hf_shift(char const* config, char const* output) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
-        mb_t->GetEntry(i);
+        mb_t->GetEntry(i); std::cout << __LINE__ << std::endl;
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -154,7 +154,7 @@ int hf_shift(char const* config, char const* output) {
         float isolation = (*mb_pjt->pho_ecalClusterIsoR3)[leading]
             + (*mb_pjt->pho_hcalRechitIsoR3)[leading]
             + (*mb_pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
+        if (isolation > iso_max) { continue; } std::cout << __LINE__ << std::endl;
 
         /* leading photon axis */
         auto photon_eta = (*mb_pjt->phoEta)[leading];
@@ -166,7 +166,7 @@ int hf_shift(char const* config, char const* output) {
             if (std::abs((*mb_pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
             auto deta = photon_eta - (*mb_pjt->eleEta)[j];
-            if (deta > 0.1) { continue; }
+            if (deta > 0.1) { continue; } std::cout << __LINE__ << std::endl;
 
             auto ele_phi = convert_radian((*mb_pjt->elePhi)[j]);
             auto dphi = revert_radian(photon_phi - ele_phi);
@@ -179,7 +179,7 @@ int hf_shift(char const* config, char const* output) {
         }
 
         if (electron) { continue; }
-
+ std::cout << __LINE__ << std::endl;
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
         (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
