@@ -12,6 +12,7 @@
 #include "../git/paper-and-pencil/include/pencil.h"
 
 #include "../git/tricks-and-treats/include/trunk.h"
+#include "../git/tricks-and-treats/include/overflow_angles.h"
 
 #include "TFile.h"
 #include "TH1F.h"
@@ -76,8 +77,7 @@ int hf_shift(char const* config, char const* output) {
             if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
             auto pho_et = (*hp_pjt->phoEt)[j];
-            if (heavyion && apply_er) pho_et = (*hp_pjt->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*hp_pjt->phoEtEr)[j];
+            if (apply_er) pho_et = (*hp_pjt->phoEtErNew)[j];
 
             if (pho_et < photon_pt_min) { continue; }
 
@@ -119,7 +119,7 @@ int hf_shift(char const* config, char const* output) {
 
         if (electron) { continue; }
 
-        auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
+        auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
         hp_rh[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
     }
 
@@ -138,8 +138,7 @@ int hf_shift(char const* config, char const* output) {
             if ((*mb_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
             auto pho_et = (*mb_pjt->phoEt)[j];
-            if (heavyion && apply_er) pho_et = (*mb_pjt->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*mb_pjt->phoEtEr)[j];
+            if (apply_er) pho_et = (*mb_pjt->phoEtErNew)[j];
 
             if (pho_et < photon_pt_min) { continue; }
 
@@ -181,7 +180,7 @@ int hf_shift(char const* config, char const* output) {
 
         if (electron) { continue; }
 
-        auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
+        auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
         mb_rh[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
 
