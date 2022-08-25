@@ -164,7 +164,7 @@ int hf_shift(char const* config, char const* output) {
     auto c3 = new paper("comp_rho_v_hf", hb);
     apply_style(c3, cms, system_tag);
     c3->add((*mb_rh_p)[0], "Hydjet");
-    c3->stack((*hp_rh_p)[0], "Hydjet");
+    c3->stack((*hp_rh_p)[0], "Pythia+Hydjet");
 
     hb->sketch();
     c1->draw("pdf");
