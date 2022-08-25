@@ -129,58 +129,6 @@ int hf_shift(char const* config, char const* output) {
             printf("entry: %li/%li\n", i, nentries);
 
         mb_t->GetEntry(i);
-
-        int64_t leading = -1;
-        float leading_pt = 0;
-        bool apply_er = 1;
-        for (int64_t j = 0; j < mb_pjt->nPho; ++j) {
-            if ((*mb_pjt->phoEt)[j] <= 30) { continue; }
-            if (std::abs((*mb_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*mb_pjt->phoHoverE)[j] > hovere_max) { continue; }
-
-            auto pho_et = (*mb_pjt->phoEt)[j];
-            if (apply_er) pho_et = (*mb_pjt->phoEtErNew)[j];
-
-            if (pho_et < photon_pt_min) { continue; }
-
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
-            }
-        }
-
-        if (leading < 0) { continue; }
-        if ((*mb_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
-
-        float isolation = (*mb_pjt->pho_ecalClusterIsoR3)[leading]
-            + (*mb_pjt->pho_hcalRechitIsoR3)[leading]
-            + (*mb_pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
-
-        /* leading photon axis */
-        auto photon_eta = (*mb_pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*mb_pjt->phoPhi)[leading]);
-
-        /* electron rejection */
-        bool electron = false;
-        for (int64_t j = 0; j < mb_pjt->nEle; ++j) {
-            if (std::abs((*mb_pjt->eleSCEta)[j]) > 1.4442) { continue; }
-
-            auto deta = photon_eta - (*mb_pjt->eleEta)[j];
-            if (deta > 0.1) { continue; }
-
-            auto ele_phi = convert_radian((*mb_pjt->elePhi)[j]);
-            auto dphi = revert_radian(photon_phi - ele_phi);
-            auto dr2 = deta * deta + dphi * dphi;
-
-            if (dr2 < 0.01 && passes_electron_id<
-                        det::barrel, wp::loose, pjtree
-                    >(mb_pjt, j, true)) {
-                electron = true; break; }
-        }
-
-        if (electron) { continue; }
-
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
         (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
