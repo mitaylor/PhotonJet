@@ -49,7 +49,7 @@ int hf_shift(char const* config, char const* output) {
 
     auto frh = std::bind(&multival::book<TH2F>, mrh, _1, _2, _3);
     auto frhp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), ";#rho;HF Energy"s, 100, 0, 400, 0, 7000); };
+        return new TProfile(name.data(), ";#rho;HF Energy", 100, 0, 400, 0, 7000); };
 
     auto hp_rh = new history<TH2F>("hp_rh"s, "Pythia+Hydjet", frh, 1);
     auto mb_rh = new history<TH2F>("mb_rh"s, "Hydjet", frh, 1);
