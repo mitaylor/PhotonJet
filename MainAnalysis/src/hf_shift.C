@@ -17,6 +17,7 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TProfile.h"
 #include "TLatex.h"
 
 #include <string>
@@ -47,9 +48,14 @@ int hf_shift(char const* config, char const* output) {
     auto mrh = new multival(*irho, *ihf);
 
     auto frh = std::bind(&multival::book<TH2F>, mrh, _1, _2, _3);
+    auto frhp = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), ";#rho;HF Energy"s, 100, 0, 400, 0, 7000); };
 
     auto hp_rh = new history<TH2F>("hp_rh"s, "Pythia+Hydjet", frh, 1);
     auto mb_rh = new history<TH2F>("mb_rh"s, "Hydjet", frh, 1);
+
+    auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
+    auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
 
     TFile* hp_f = new TFile(hp_input.data(), "read");
     TTree* hp_t = (TTree*) hp_f->Get("pj");
@@ -120,6 +126,7 @@ int hf_shift(char const* config, char const* output) {
 
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
         (*hp_rh)[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
+        (*hp_rh_p)[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
     }
 
     nentries = static_cast<int64_t>(mb_t->GetEntries());
@@ -131,11 +138,12 @@ int hf_shift(char const* config, char const* output) {
         mb_t->GetEntry(i);
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
         (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
+        (*mb_rh_p)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
 
     /* draw rho distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
-    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
     // cms += "         p_{T}^{#gamma} > 40 GeV";
 
     auto hb = new pencil();
@@ -153,14 +161,22 @@ int hf_shift(char const* config, char const* output) {
     c2->add((*mb_rh)[0], "Hydjet");
     c2->adjust((*mb_rh)[0], "col", "");
 
+    auto c3 = new paper("comp_rho_v_hf", hb);
+    apply_style(c3, cms, system_tag);
+    c3->add((*mb_rh+p)[0], "Hydjet");
+    c3->stack((*hp_rh_p)[0], "Hydjet");
+
     hb->sketch();
     c1->draw("pdf");
     c2->draw("pdf");
+    c3->draw("pdf");
 
     /* save output */
     in(output, [&]() {
         mb_rh->save();
         hp_rh->save();
+        mb_rh_p->save)();
+        hp_rh_p->save();
     });
 
     return 0;
