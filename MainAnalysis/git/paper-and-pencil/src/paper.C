@@ -188,6 +188,7 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
 
     if (_flags & flags::logx) { gPad->SetLogx(); }
     if (_flags & flags::logy) { gPad->SetLogy(); }
+    if (_flags & flags::logz) { gPad->SetLogz(); }
 }
 
 void paper::draw_legend(auto const& associates,

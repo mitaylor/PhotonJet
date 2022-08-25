@@ -143,13 +143,13 @@ int hf_shift(char const* config, char const* output) {
     
     auto c1 = new paper("pythia_hydjet_rho_v_hf", hb); 
     apply_style(c1, cms, system_tag);
-    // c1->set(paper::flags::logy);
+    c1->set(paper::flags::logz);
     c1->add((*hp_rh)[0], "Pythia+Hydjet");
     c1->adjust((*hp_rh)[0], "colz", "");
 
     auto c2 = new paper("hydjet_rho_v_hf", hb);
     apply_style(c2, cms, system_tag);
-    // c2->set(paper::flags::logy);
+    c2->set(paper::flags::logz);
     c2->add((*mb_rh)[0], "Hydjet");
     c2->adjust((*mb_rh)[0], "colz", "");
 
