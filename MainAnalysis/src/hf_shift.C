@@ -59,9 +59,7 @@ int hf_shift(char const* config, char const* output) {
     TTree* mb_t = (TTree*) mb_f->Get("pj");
     auto mb_pjt = new pjtree(false, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
 
-    std::cout << static_cast<int64_t>(mb_t->GetEntries()) << std::endl;
-    mb_t->GetEntry(1);
-    int64_t nentries = 10000;
+    int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
@@ -124,11 +122,13 @@ int hf_shift(char const* config, char const* output) {
         (*hp_rh)[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
     }
 
+    nentries = static_cast<int64_t>(mb_t->GetEntries());
+
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
- std::cout << __LINE__ << std::endl;
-        mb_t->GetEntry(i); std::cout << __LINE__ << std::endl;
+
+        mb_t->GetEntry(i);
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -155,7 +155,7 @@ int hf_shift(char const* config, char const* output) {
         float isolation = (*mb_pjt->pho_ecalClusterIsoR3)[leading]
             + (*mb_pjt->pho_hcalRechitIsoR3)[leading]
             + (*mb_pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; } std::cout << __LINE__ << std::endl;
+        if (isolation > iso_max) { continue; }
 
         /* leading photon axis */
         auto photon_eta = (*mb_pjt->phoEta)[leading];
@@ -167,7 +167,7 @@ int hf_shift(char const* config, char const* output) {
             if (std::abs((*mb_pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
             auto deta = photon_eta - (*mb_pjt->eleEta)[j];
-            if (deta > 0.1) { continue; } std::cout << __LINE__ << std::endl;
+            if (deta > 0.1) { continue; }
 
             auto ele_phi = convert_radian((*mb_pjt->elePhi)[j]);
             auto dphi = revert_radian(photon_phi - ele_phi);
@@ -180,35 +180,35 @@ int hf_shift(char const* config, char const* output) {
         }
 
         if (electron) { continue; }
- std::cout << __LINE__ << std::endl;
+
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
         (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
     }
-    std::cout << __LINE__ << std::endl;
+
     /* draw rho distributions */
-    auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; std::cout << __LINE__ << std::endl;
+    auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
     // cms += "         p_{T}^{#gamma} > 40 GeV";
- std::cout << __LINE__ << std::endl;
+
     auto hb = new pencil();
-    hb->category("type", "Pythia+Hydjet", "Hydjet"); std::cout << __LINE__ << std::endl;
+    hb->category("type", "Pythia+Hydjet", "Hydjet"); 
     
-    auto c1 = new paper("pythia_hydjet_rho_v_hf", hb); std::cout << __LINE__ << std::endl;
+    auto c1 = new paper("pythia_hydjet_rho_v_hf", hb); 
     apply_style(c1, cms, system_tag);
     // c1->set(paper::flags::logy);
     c1->add((*hp_rh)[0], "Pythia+Hydjet");
     c1->adjust((*hp_rh)[0], "colz", "");
 
-    auto c2 = new paper("hydjet_rho_v_hf", hb); std::cout << __LINE__ << std::endl;
+    auto c2 = new paper("hydjet_rho_v_hf", hb);
     apply_style(c2, cms, system_tag);
     // c2->set(paper::flags::logy);
     c2->add((*mb_rh)[0], "Hydjet");
     c2->adjust((*mb_rh)[0], "colz", "");
- std::cout << __LINE__ << std::endl;
-    hb->sketch(); std::cout << __LINE__ << std::endl;
-    c1->draw("pdf"); std::cout << __LINE__ << std::endl;
-    c2->draw("pdf"); std::cout << __LINE__ << std::endl;
- std::cout << __LINE__ << std::endl;
+
+    hb->sketch();
+    c1->draw("pdf");
+    c2->draw("pdf");
+
     /* save output */
     in(output, [&]() {
         mb_rh->save();
