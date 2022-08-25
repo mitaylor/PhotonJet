@@ -57,7 +57,7 @@ int hf_shift(char const* config, char const* output) {
 
     TFile* mb_f = new TFile(mb_input.data(), "read");
     TTree* mb_t = (TTree*) mb_f->Get("pj");
-    auto mb_pjt = new pjtree(false, false, false, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
+    auto mb_pjt = new pjtree(false, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
 
     std::cout << static_cast<int64_t>(mb_t->GetEntries()) << std::endl;
     mb_t->GetEntry(1);
