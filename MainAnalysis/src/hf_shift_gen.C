@@ -36,18 +36,11 @@ int hf_shift(char const* config, char const* output) {
     auto hp_input = conf->get<std::string>("hp_input");
     auto mb_input = conf->get<std::string>("mb_input");
 
-    // auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    // auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
-
-    // auto const hovere_max = conf->get<float>("hovere_max");
-    // auto const see_max = conf->get<float>("see_max");
-    // auto const iso_max = conf->get<float>("iso_max");
-
     TH1::SetDefaultSumw2();
     
     auto irho = new interval("#rho"s, 100, 0, 400);
-    auto ihf = new interval("HF Energy"s, 150, 0, 6000);
-    auto imul = new interval("multiplicity"s, 150, 0, 22000);
+    auto ihf = new interval("HF Energy"s, 100, 0, 6000);
+    auto imul = new interval("multiplicity"s, 100, 0, 22000);
 
     auto mmh = new multival(*imul, *ihf);
     auto mhm = new multival(*ihf, *imul);
@@ -104,12 +97,6 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho("EventTree", mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
-    // int64_t i = 0;
-
-    // while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
-    //     if (i % 10000 == 0)
-    //         printf("entry: %li\n", i);
-
     auto nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
 
     for (int64_t i = 0; i < nentries; ++i) {
@@ -117,57 +104,6 @@ int hf_shift(char const* config, char const* output) {
             printf("entry: %li/%li\n", i, nentries);
 
         hp_gen.Next(); hp_evt.Next(); hp_pho.Next();
-
-        // int64_t leading = -1;
-        // float leading_pt = 0;
-        // bool apply_er = 1;
-        // for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
-        //     if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
-        //     if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-        //     if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
-
-        //     auto pho_et = (*hp_pjt->phoEt)[j];
-        //     if (apply_er) pho_et = (*hp_pjt->phoEtErNew)[j];
-
-        //     if (pho_et < photon_pt_min) { continue; }
-
-        //     if (pho_et > leading_pt) {
-        //         leading = j;
-        //         leading_pt = pho_et;
-        //     }
-        // }
-
-        // if (leading < 0) { continue; }
-        // if ((*hp_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
-
-        // float isolation = (*hp_pjt->pho_ecalClusterIsoR3)[leading]
-        //     + (*hp_pjt->pho_hcalRechitIsoR3)[leading]
-        //     + (*hp_pjt->pho_trackIsoR3PtCut20)[leading];
-        // if (isolation > iso_max) { continue; }
-
-        // /* leading photon axis */
-        // auto photon_eta = (*hp_pjt->phoEta)[leading];
-        // auto photon_phi = convert_radian((*hp_pjt->phoPhi)[leading]);
-
-        // /* electron rejection */
-        // bool electron = false;
-        // for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
-        //     if (std::abs((*hp_pjt->eleSCEta)[j]) > 1.4442) { continue; }
-
-        //     auto deta = photon_eta - (*hp_pjt->eleEta)[j];
-        //     if (deta > 0.1) { continue; }
-
-        //     auto ele_phi = convert_radian((*hp_pjt->elePhi)[j]);
-        //     auto dphi = revert_radian(photon_phi - ele_phi);
-        //     auto dr2 = deta * deta + dphi * dphi;
-
-        //     if (dr2 < 0.01 && passes_electron_id<
-        //                 det::barrel, wp::loose, pjtree
-        //             >(hp_pjt, j, true)) {
-        //         electron = true; break; }
-        // }
-
-        // if (electron) { continue; }
 
         double hp_subid_weight = 0;
         for (int64_t j = 0; j < *hp_mult; ++j) {
@@ -181,11 +117,6 @@ int hf_shift(char const* config, char const* output) {
 
         ++i;
     }
-
-    // i = 0;
-    // while (mb_gen.Next() && mb_evt.Next() && mb_pho.Next()) {
-    //     if (i % 100000 == 0)
-    //         printf("entry: %li\n", i);
 
     nentries = static_cast<int64_t>(mb_evt.GetEntries(1));
 
