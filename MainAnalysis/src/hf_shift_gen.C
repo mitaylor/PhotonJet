@@ -79,7 +79,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReaderValue<std::vector<int>> hp_subid(hp_gen, "sube");
     TTreeReaderValue<int> hp_mult(hp_gen, "mult");
 
-    TDirectory* hp_evt_dir = hp_f->GetDirectory("hiEvtAnalylzer");
+    TDirectory* hp_evt_dir = hp_f->GetDirectory("hiEvtAnalyzer");
     TTreeReader hp_evt("HiTree", hp_evt_dir);
     TTreeReaderValue<int> hp_hf(hp_evt, "hiHF");
     TTreeReaderValue<int> hp_weight(hp_evt, "weight");
@@ -95,7 +95,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReaderValue<std::vector<int>> mb_subid(mb_gen, "sube");
     TTreeReaderValue<int> mb_mult(mb_gen, "mult");
 
-    TDirectory* mb_evt_dir = mb_f->GetDirectory("hiEvtAnalylzer");
+    TDirectory* mb_evt_dir = mb_f->GetDirectory("hiEvtAnalyzer");
     TTreeReader mb_evt("HiTree", mb_evt_dir);
     TTreeReaderValue<int> mb_hf(mb_evt, "hiHF");
     TTreeReaderValue<int> mb_weight(mb_evt, "weight");
