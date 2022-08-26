@@ -184,12 +184,12 @@ int hf_shift(char const* config, char const* output) {
     diff_hm_p->Add((*mb_hm_p)[0], -1);
     diff_rm_p->Add((*mb_rm_p)[0], -1);
 
-    diff_mh_p->SetMaximum(500);
-    diff_mh_p->SetMinimum(-500);
-    diff_hm_p->SetMaximum(500);
-    diff_hm_p->SetMinimum(-500);
-    diff_rm_p->SetMaximum(20);
-    diff_rm_p->SetMinimum(-20);
+    diff_mh_p->SetMaximum(1000);
+    diff_mh_p->SetMinimum(-1000);
+    diff_hm_p->SetMaximum(1000);
+    diff_hm_p->SetMinimum(-1000);
+    diff_rm_p->SetMaximum(40);
+    diff_rm_p->SetMinimum(-40);
 
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
