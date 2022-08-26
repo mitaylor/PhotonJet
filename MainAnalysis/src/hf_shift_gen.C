@@ -104,7 +104,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho("EventTree", mb_pho_dir);
     TTreeReaderValue<int> mb_rho(mb_pho, "rho");
 
-    int64_t nentries = static_cast<int64_t>(hp_evt.GetEntries());
+    int64_t nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
@@ -174,7 +174,7 @@ int hf_shift(char const* config, char const* output) {
         (*hp_rm)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
     }
 
-    nentries = static_cast<int64_t>(mb_evt.GetEntries());
+    nentries = static_cast<int64_t>(mb_evt.GetEntries(1));
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
