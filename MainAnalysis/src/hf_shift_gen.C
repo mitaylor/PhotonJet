@@ -58,7 +58,7 @@ int hf_shift(char const* config, char const* output) {
     auto frm = std::bind(&multival::book<TH2F>, mrm, _1, _2, _3); // rho:multiplicity (scaled by subid)
 
     auto hp_mh = new history<TH2F>("hp_mh"s, "Pythia+Hydjet", fmh, 1);
-    auto mb_mh = new history<TH2F>("mb_mh"s, "Hydjet", fm,h 1);
+    auto mb_mh = new history<TH2F>("mb_mh"s, "Hydjet", fmh 1);
 
     auto hp_hm = new history<TH2F>("hp_hm"s, "Pythia+Hydjet", fhm, 1);
     auto mb_hm = new history<TH2F>("mb_hm"s, "Hydjet", fhm, 1);
