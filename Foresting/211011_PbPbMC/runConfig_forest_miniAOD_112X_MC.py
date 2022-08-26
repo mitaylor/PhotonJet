@@ -26,7 +26,7 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 112X, mc")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/m/mnguyen/public/integration/CMSSW_11_2_4_patch4/src/step3_inMINIAODSIM.root'
+        '/store/himc/HINPbPbSpring21MiniAOD/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/MINIAODSIM/mva98_112X_upgrade2018_realistic_HI_v9-v1/110000/02c2604a-47d1-413b-aedf-521094d68612.root'
     ),
 )
 
