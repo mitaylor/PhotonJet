@@ -30,10 +30,16 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+void FillChain(TChain* chain, vector<string>& files) {
+    for (auto file : files) {
+        chain->Add(file.c_str());
+    }
+}
+
 int hf_shift(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto hp_input = conf->get<std::string>("hp_input");
+    auto hp_input = conf->get<std::vector<std::string>>("hp_input");
     auto mb_input = conf->get<std::string>("mb_input");
 
     TH1::SetDefaultSumw2();
@@ -65,42 +71,46 @@ int hf_shift(char const* config, char const* output) {
     // auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
     // auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
 
-    TFile* hp_f = new TFile(hp_input.data(), "read");
-
-    TDirectory* hp_gen_dir = hp_f->GetDirectory("HiGenParticleAna");
+    auto hp_gen_dir = new TChain("HiGenParticleAna");
+    FillChain(hp_gen_dir, hp_input);
     TTreeReader hp_gen("hi", hp_gen_dir);
     TTreeReaderValue<std::vector<int>> hp_subid(hp_gen, "sube");
     TTreeReaderValue<int> hp_mult(hp_gen, "mult");
 
-    TDirectory* hp_evt_dir = hp_f->GetDirectory("hiEvtAnalyzer");
+    auto hp_evt_dir = new TChain("hiEvtAnalyzer");
+    FillChain(hp_evt_dir, hp_input);
     TTreeReader hp_evt("HiTree", hp_evt_dir);
     TTreeReaderValue<float> hp_hf(hp_evt, "hiHF");
     TTreeReaderValue<float> hp_weight(hp_evt, "weight");
 
-    TDirectory* hp_pho_dir = hp_f->GetDirectory("ggHiNtuplizer");
+    auto hp_pho_dir = new TChain("ggHiNtuplizer");
+    FillChain(hp_pho_dir, hp_input);
     TTreeReader hp_pho("EventTree", hp_pho_dir);
     TTreeReaderValue<float> hp_rho(hp_pho, "rho");
 
     TFile* mb_f = new TFile(mb_input.data(), "read");
 
-    TDirectory* mb_gen_dir = mb_f->GetDirectory("HiGenParticleAna");
+    auto mb_gen_dir = new TChain("HiGenParticleAna");
+    FillChain(mb_gen_dir, hp_input);
     TTreeReader mb_gen("hi", mb_gen_dir);
     TTreeReaderValue<std::vector<int>> mb_subid(mb_gen, "sube");
     TTreeReaderValue<int> mb_mult(mb_gen, "mult");
 
-    TDirectory* mb_evt_dir = mb_f->GetDirectory("hiEvtAnalyzer");
+    auto mb_evt_dir = new TChain("hiEvtAnalyzer");
+    FillChain(mb_evt_dir, hp_input);
     TTreeReader mb_evt("HiTree", mb_evt_dir);
     TTreeReaderValue<float> mb_hf(mb_evt, "hiHF");
     TTreeReaderValue<float> mb_weight(mb_evt, "weight");
 
-    TDirectory* mb_pho_dir = mb_f->GetDirectory("ggHiNtuplizer");
+    auto mb_pho_dir = new TChain("ggHiNtuplizer");
+    FillChain(mb_pho_dir, hp_input);
     TTreeReader mb_pho("EventTree", mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
     auto nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
 
     for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0)
+        if (i % 10000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
         hp_gen.Next(); hp_evt.Next(); hp_pho.Next();
@@ -121,7 +131,7 @@ int hf_shift(char const* config, char const* output) {
     nentries = static_cast<int64_t>(mb_evt.GetEntries(1));
 
     for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0)
+        if (i % 10000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
         mb_gen.Next(); mb_evt.Next(); mb_pho.Next();
