@@ -87,9 +87,7 @@ int hf_shift(char const* config, char const* output) {
     FillChain(hp_pho_dir, hp_input);
     TTreeReader hp_pho("EventTree", hp_pho_dir);
     TTreeReaderValue<float> hp_rho(hp_pho, "rho");
-
-    TFile* mb_f = new TFile(mb_input.data(), "read");
-
+    
     auto mb_gen_dir = new TChain("HiGenParticleAna");
     FillChain(mb_gen_dir, hp_input);
     TTreeReader mb_gen("hi", mb_gen_dir);
