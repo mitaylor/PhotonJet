@@ -224,8 +224,16 @@ int hf_shift(char const* config, char const* output) {
     c9->add((*mb_rm_p)[0], "Hydjet");
     c9->stack((*hp_rm_p)[0], "Pythia+Hydjet");
 
-    auto style = [](TH1* h) {
-        h->SetMarkerSize(0.10);
+    auto hp_style = [](TH1* h) {
+        h->SetMarkerStyle(34);
+        h->SetMarkerColor(95);
+        h->SetMarkerSize(0.60);
+    };
+
+    auto mb_style = [](TH1* h) {
+        h->SetMarkerStyle(34);
+        h->SetMarkerColor(51);
+        h->SetMarkerSize(0.60);
     };
 
     hb->style("Hydjet", style);

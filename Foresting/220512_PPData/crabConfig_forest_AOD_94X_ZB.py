@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/PhotonJet'
 DatasetName = '/ZeroBias/Run2017G-17Nov2017-v1/AOD'
-Tag = '20220607PPZB'
+Tag = '20220825PPZB'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
