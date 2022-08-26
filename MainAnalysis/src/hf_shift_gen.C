@@ -104,11 +104,11 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho("EventTree", mb_pho_dir);
     TTreeReaderValue<int> mb_rho(mb_pho, "rho");
 
-    int i = 0;
+    int64_t i = 0;
 
     while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
         if (i % 100000 == 0)
-            printf("entry: %i/%i\n", i, hp_evt.GetEntries(1));
+            printf("entry: %li/%li\n", i, hp_evt.GetEntries(1));
 
         // int64_t leading = -1;
         // float leading_pt = 0;
