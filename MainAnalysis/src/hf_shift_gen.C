@@ -40,7 +40,7 @@ int hf_shift(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto hp_input = conf->get<std::vector<std::string>>("hp_input");
-    auto mb_input = conf->get<std::string>("mb_input");
+    auto mb_input = conf->get<std::vector<std::string>>("mb_input");
 
     TH1::SetDefaultSumw2();
     
