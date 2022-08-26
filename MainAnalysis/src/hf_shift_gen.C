@@ -104,13 +104,9 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho("EventTree", mb_pho_dir);
     TTreeReaderValue<int> mb_rho(mb_pho, "rho");
 
-    int64_t nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
-
-    for (int64_t i = 0; i < nentries; ++i) {
+    while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
         if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, nentries);
-
-        hp_gen.Next(); hp_evt.Next(); hp_pho.Next();
+            printf("entry: %li/%li\n", i, hp_evt.GetEntries(1));
 
         // int64_t leading = -1;
         // float leading_pt = 0;
@@ -174,13 +170,9 @@ int hf_shift(char const* config, char const* output) {
         (*hp_rm)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
     }
 
-    nentries = static_cast<int64_t>(mb_evt.GetEntries(1));
-
-    for (int64_t i = 0; i < nentries; ++i) {
+    while (mb_gen.Next() && mb_evt.Next() && mb_pho.Next()) {
         if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, nentries);
-
-        mb_gen.Next(); mb_evt.Next(); mb_pho.Next();
+            printf("entry: %li/%li\n", i, mb_evt.GetEntries(1));
 
         double mb_subid_weight = 0;
         for (int64_t j = 0; j < *mb_mult; ++j) {
