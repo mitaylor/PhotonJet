@@ -104,6 +104,8 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho("EventTree", mb_pho_dir);
     TTreeReaderValue<int> mb_rho(mb_pho, "rho");
 
+    int i = 0;
+
     while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, hp_evt.GetEntries(1));
@@ -168,8 +170,11 @@ int hf_shift(char const* config, char const* output) {
         (*hp_mh)[0]->Fill(*hp_mult, *hp_hf, *hp_weight);
         (*hp_hm)[0]->Fill(*hp_hf, (*hp_mult) * hp_subid_weight, *hp_weight);
         (*hp_rm)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
+
+        ++i;
     }
 
+    i = 0;
     while (mb_gen.Next() && mb_evt.Next() && mb_pho.Next()) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, mb_evt.GetEntries(1));
@@ -183,6 +188,8 @@ int hf_shift(char const* config, char const* output) {
         (*mb_mh)[0]->Fill(*mb_mult, *mb_hf, *mb_weight);
         (*mb_hm)[0]->Fill(*mb_hf, (*mb_mult) * mb_subid_weight, *mb_weight);
         (*mb_rm)[0]->Fill(*mb_rho, (*mb_mult) * mb_subid_weight, *mb_weight);
+
+        ++i;
     }
 
     /* draw rho distributions */
