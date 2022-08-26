@@ -252,10 +252,12 @@ int hf_shift(char const* config, char const* output) {
 
     /* save output */
     in(output, [&]() {
-        mb_rh->save();
-        hp_rh->save();
-        mb_rh_p->save();
-        hp_rh_p->save();
+        hp_mh->save();
+        hp_hm->save();
+        hp_rm->save();
+        mb_mh->save();
+        mb_hm->save();
+        mb_rm->save();
     });
 
     return 0;
