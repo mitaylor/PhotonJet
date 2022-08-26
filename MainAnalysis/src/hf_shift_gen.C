@@ -166,9 +166,9 @@ int hf_shift(char const* config, char const* output) {
     }
 
     /* subtract distributions */
-    auto diff_mh_p = new TH1F(*(*hp_mh_p)[0]);
-    auto diff_hm_p = new TH1F(*(*hp_hm_p)[0]);
-    auto diff_rm_p = new TH1F(*(*hp_rm_p)[0]);
+    auto diff_mh_p = (TH1*) (*hp_mh_p)[0]->Clone();
+    auto diff_hm_p = (TH1*) (*hp_hm_p)[0]->Clone();
+    auto diff_rm_p = (TH1*) (*hp_rm_p)[0]->Clone();
 
     diff_mh_p->SetNameTitle("diff_mh_p", ";;Orange - Purple");
     diff_hm_p->SetNameTitle("diff_hm_p", ";;Orange - Purple");
