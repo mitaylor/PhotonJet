@@ -452,8 +452,8 @@ int populate(char const* config, char const* output) {
 
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
-        if (hf_sub && hf > 100) {
-                hf -= 58;
+        if (hf_sub) {
+            hf -= 58;
         }
 
         std::vector<int64_t> pthf_x;
@@ -501,7 +501,10 @@ int populate(char const* config, char const* output) {
             tm->GetEntry(m);
 
             /* hf within +/- 10% */
-            if (std::abs(pjtm->hiHF / hf - 1.) > hf_threshold) { continue; }
+            if (hf < 58) {
+                if (pjtm->hiHF > 58) { continue; }
+            }
+            else if (std::abs(pjtm->hiHF / hf - 1.) > hf_threshold) { continue; }
 
             fill_axes(pjtm, pthf_x, weights, pho_cor,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,

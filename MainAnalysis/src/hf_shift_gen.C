@@ -22,6 +22,7 @@
 #include "TH2F.h"
 #include "TProfile.h"
 #include "TLatex.h"
+#include "TGaxis.h"
 
 #include <string>
 #include <vector>
@@ -43,6 +44,7 @@ int hf_shift(char const* config, char const* output) {
     auto mb_input = conf->get<std::vector<std::string>>("mb_input");
 
     TH1::SetDefaultSumw2();
+    TGaxis::SetMaxDigits(2);
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 100, 0, 7000);
@@ -181,6 +183,13 @@ int hf_shift(char const* config, char const* output) {
     diff_mh_p->Add((*mb_mh_p)[0], -1);
     diff_hm_p->Add((*mb_hm_p)[0], -1);
     diff_rm_p->Add((*mb_rm_p)[0], -1);
+
+    diff_mh_p->SetMaximum(500);
+    diff_mh_p->SetMinimum(-500);
+    diff_hm_p->SetMaximum(500);
+    diff_hm_p->SetMinimum(-500);
+    diff_rm_p->SetMaximum(20);
+    diff_rm_p->SetMinimum(-20);
 
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
