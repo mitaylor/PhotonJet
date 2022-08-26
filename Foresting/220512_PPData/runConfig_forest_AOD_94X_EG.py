@@ -24,9 +24,7 @@ process.HiForest.HiForestVersion = cms.string(version)
 # Input source
 #####################################################################################
 
-process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(
-    '/store/data/Run2017G/HighEGJet/AOD/17Nov2017-v2/100000/003D3196-4828-E811-863E-0019B9CB01A5.root'
-))
+process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring())
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
@@ -45,28 +43,6 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v6', '')
 process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
-
-centralityTag = "CentralityTable_HFtowers200_DataPbPb_periHYDJETshape_run2v1031x02_offline"
-
-print('\n')
-print('\033[31m~*~ CENTRALITY TABLE FOR 2018 PBPB DATA ~*~\033[0m')
-print('\033[36m~*~ TAG: ' + centralityTag + ' ~*~\033[0m')
-print('\n')
-process.GlobalTag.snapshotTime = cms.string("9999-12-31 23:59:59.000")
-process.GlobalTag.toGet.extend([
-    cms.PSet(
-        record = cms.string("HeavyIonRcd"),
-        tag = cms.string(centralityTag),
-        label = cms.untracked.string("HFtowers"),
-        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
-        ),
-    ])
-
-process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
-process.hiCentrality.produceHFhits = False
-process.load("RecoHI.HiCentralityAlgos.CentralityBin_cfi")
-process.centralityBin.Centrality = cms.InputTag("hiCentrality")
-process.centralityBin.centralityVariable = cms.string("HFtowers")
 
 process.GlobalTag.toGet.extend([
     cms.PSet(record = cms.string("BTagTrackProbability3DRcd"),
@@ -104,7 +80,7 @@ process.ak3PFJetAnalyzer.doWTARecluster = cms.untracked.bool(True)
 ############################
 process.load('HeavyIonsAnalysis.EventAnalysis.hievtanalyzer_data_cfi')
 process.hiEvtAnalyzer.Vertex = cms.InputTag("offlinePrimaryVertices")
-process.hiEvtAnalyzer.doCentrality = cms.bool(True)
+process.hiEvtAnalyzer.doCentrality = cms.bool(False)
 process.hiEvtAnalyzer.doEvtPlane = cms.bool(False)
 
 process.load('HeavyIonsAnalysis.EventAnalysis.hltanalysis_cff')
@@ -168,8 +144,6 @@ process.ana_step = cms.Path(
     process.hltanalysis *
     process.hltobject *
     # process.l1object +
-    process.hiCentrality *
-    process.centralityBin *
     process.hiEvtAnalyzer *
     process.jetSequence +
     # Should be added in the path for VID module
