@@ -72,8 +72,14 @@ int hf_shift(char const* config, char const* output) {
     auto frmp = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";#rho;Multiplicity (UE);"s + label).data(), 100, 0, 400, 0, 7000, "LE"); };
 
-    auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
-    auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
+    auto hp_mh_p = new history<TProfile>("hp_mh_p"s, "Pythia+Hydjet", fmhp, 1);
+    auto mb_mh_p = new history<TProfile>("mb_mh_p"s, "Hydjet", fmhp, 1);
+
+    auto hp_hm_p = new history<TProfile>("hp_hm_p"s, "Pythia+Hydjet", fhmp, 1);
+    auto mb_hm_p = new history<TProfile>("mb_hm_p"s, "Hydjet", fhmp, 1);
+
+    auto hp_rm_p = new history<TProfile>("hp_rm_p"s, "Pythia+Hydjet", frmp, 1);
+    auto mb_rm_p = new history<TProfile>("mb_rm_p"s, "Hydjet", frmp, 1);
 
     auto hp_gen_dir = new TChain("HiGenParticleAna/hi");
     FillChain(hp_gen_dir, hp_input);
@@ -127,6 +133,10 @@ int hf_shift(char const* config, char const* output) {
         (*hp_hm)[0]->Fill(*hp_hf, (*hp_mult) * hp_subid_weight, *hp_weight);
         (*hp_rm)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
 
+        (*hp_mh_p)[0]->Fill(*hp_mult, *hp_hf, *hp_weight);
+        (*hp_hm_p)[0]->Fill(*hp_hf, (*hp_mult) * hp_subid_weight, *hp_weight);
+        (*hp_rm_p)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
+
         ++i;
     }
 
@@ -147,6 +157,10 @@ int hf_shift(char const* config, char const* output) {
         (*mb_mh)[0]->Fill(*mb_mult, *mb_hf, *mb_weight);
         (*mb_hm)[0]->Fill(*mb_hf, (*mb_mult) * mb_subid_weight, *mb_weight);
         (*mb_rm)[0]->Fill(*mb_rho, (*mb_mult) * mb_subid_weight, *mb_weight);
+
+        (*mb_mh_p)[0]->Fill(*mb_mult, *mb_hf, *mb_weight);
+        (*mb_hm_p)[0]->Fill(*mb_hf, (*mb_mult) * mb_subid_weight, *mb_weight);
+        (*mb_rm_p)[0]->Fill(*mb_rho, (*mb_mult) * mb_subid_weight, *mb_weight);
 
         ++i;
     }
@@ -195,10 +209,27 @@ int hf_shift(char const* config, char const* output) {
     c6->add((*mb_rm)[0], "Hydjet");
     c6->adjust((*mb_rm)[0], "col", "");
 
-    // auto c3 = new paper("comp_rho_v_hf", hb);
-    // apply_style(c3, cms, system_tag);
-    // c3->add((*mb_rh_p)[0], "Hydjet");
-    // c3->stack((*hp_rh_p)[0], "Pythia+Hydjet");
+    auto c7 = new paper("comp_mult_v_hf", hb);
+    apply_style(c7, cms, system_tag);
+    c7->add((*mb_mh_p)[0], "Hydjet");
+    c7->stack((*hp_mh_p)[0], "Pythia+Hydjet");
+
+    auto c8 = new paper("comp_hf_v_scaled_mult", hb);
+    apply_style(c8, cms, system_tag);
+    c8->add((*mb_hm_p)[0], "Hydjet");
+    c8->stack((*hp_hm_p)[0], "Pythia+Hydjet");
+
+    auto c9 = new paper("comp_rho_v_scaled_mult", hb);
+    apply_style(c9, cms, system_tag);
+    c9->add((*mb_rm_p)[0], "Hydjet");
+    c9->stack((*hp_rm_p)[0], "Pythia+Hydjet");
+
+    auto style = [](TH1* h) {
+        h->SetMarkerSize(0.10);
+    };
+
+    hb->style("Hydjet", style);
+    hb->style("Pythia+Hydjet", style);
 
     hb->sketch();
     c1->draw("pdf");
