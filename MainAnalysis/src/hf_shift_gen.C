@@ -44,7 +44,7 @@ int hf_shift(char const* config, char const* output) {
     auto mb_input = conf->get<std::vector<std::string>>("mb_input");
 
     TH1::SetDefaultSumw2();
-    TGaxis::SetMaxDigits(2);
+    TGaxis::SetMaxDigits(3);
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 100, 0, 7000);

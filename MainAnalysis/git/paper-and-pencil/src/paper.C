@@ -88,7 +88,7 @@ void paper::draw(std::string const& ext) {
         }
 
         canvas->cd();
-        auto heading = new TPad("P0", "", base + 0.11 * dx, 1 - 0.1 * dx, 1 - 0.1 * dy, 1);
+        auto heading = new TPad("P0", "", base + 0.11 * dx, 1 - 0.1 * dy, 1 - 0.1 * dx, 1, 0);
         heading->SetFillStyle(4000);
         heading->Draw();
         heading->cd();
