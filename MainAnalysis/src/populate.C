@@ -216,6 +216,7 @@ int populate(char const* config, char const* output) {
 
     auto const hf_threshold = conf->get<float>("hf_threshold");
     auto hf_sub = conf->get<bool>("hf_sub");
+    auto hf_reclassify = conf->get<bool>("hf_reclassify");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -454,6 +455,9 @@ int populate(char const* config, char const* output) {
         auto hf_x = ihf->index_for(hf);
         if (hf_sub) {
             hf -= 58;
+        }
+        if (hf_reclassify) {
+            if (hf > dhf.front()) hf_x = ihf->index_for(hf);
         }
 
         std::vector<int64_t> pthf_x;
