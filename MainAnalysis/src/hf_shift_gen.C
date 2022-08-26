@@ -49,7 +49,7 @@ int hf_shift(char const* config, char const* output) {
     auto ihf = new interval("HF Energy"s, 150, 0, 6000);
     auto imul = new interval("multiplicity"s, 150, 0, 22000);
 
-    auto mmh = new multival(*imult, *ihf);
+    auto mmh = new multival(*imul, *ihf);
     auto mhm = new multival(*ihf, *imul);
     auto mrm = new multival(*irho, *imul);
 
