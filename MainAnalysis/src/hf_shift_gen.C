@@ -68,9 +68,9 @@ int hf_shift(char const* config, char const* output) {
     auto fmhp = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";Multiplicity;HF Energy;"s + label).data(), 100, 0, 22000, 0, 7000, "LE"); };
     auto fhmp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";HF Energy;Multiplicity (UE);"s + label).data(), 100, 0, 7000, 0, 22000, "LE"); };
+        return new TProfile(name.data(), (";Multiplicity (UE);HF Energy;"s + label).data(), 100, 0, 22000, 0, 7000, "LE"); };
     auto frmp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";#rho;Multiplicity (UE);"s + label).data(), 100, 0, 400, 0, 22000, "LE"); };
+        return new TProfile(name.data(), (";Multiplicity (UE);#rho;"s + label).data(), 100, 0, 22000, 0, 400, "LE"); };
 
     auto hp_mh_p = new history<TProfile>("hp_mh_p"s, "Pythia+Hydjet", fmhp, 1);
     auto mb_mh_p = new history<TProfile>("mb_mh_p"s, "Hydjet", fmhp, 1);
@@ -134,8 +134,8 @@ int hf_shift(char const* config, char const* output) {
         (*hp_rm)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
 
         (*hp_mh_p)[0]->Fill(*hp_mult, *hp_hf, *hp_weight);
-        (*hp_hm_p)[0]->Fill(*hp_hf, (*hp_mult) * hp_subid_weight, *hp_weight);
-        (*hp_rm_p)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
+        (*hp_hm_p)[0]->Fill((*hp_mult) * hp_subid_weight, *hp_hf, *hp_weight);
+        (*hp_rm_p)[0]->Fill((*hp_mult) * hp_subid_weight, *hp_rho, *hp_weight);
 
         ++i;
     }
@@ -159,13 +159,30 @@ int hf_shift(char const* config, char const* output) {
         (*mb_rm)[0]->Fill(*mb_rho, (*mb_mult) * mb_subid_weight, *mb_weight);
 
         (*mb_mh_p)[0]->Fill(*mb_mult, *mb_hf, *mb_weight);
-        (*mb_hm_p)[0]->Fill(*mb_hf, (*mb_mult) * mb_subid_weight, *mb_weight);
-        (*mb_rm_p)[0]->Fill(*mb_rho, (*mb_mult) * mb_subid_weight, *mb_weight);
+        (*mb_hm_p)[0]->Fill((*mb_mult) * mb_subid_weight, *mb_hf, *mb_weight);
+        (*mb_rm_p)[0]->Fill((*mb_mult) * mb_subid_weight, *mb_rho, *mb_weight);
 
         ++i;
     }
 
-    /* draw rho distributions */
+    /* subtract distributions */
+    auto diff_mh_p = new TH1F(*(*hp_mh_p)[0]);
+    auto diff_hm_p = new TH1F(*(*hp_hm_p)[0]);
+    auto diff_rm_p = new TH1F(*(*hp_rm_p)[0]);
+
+    diff_mh_p->SetNameTitle("diff_mh_p", ";;Orange - Purple");
+    diff_hm_p->SetNameTitle("diff_hm_p", ";;Orange - Purple");
+    diff_rm_p->SetNameTitle("diff_rm_p", ";;Orange - Purple");
+
+    if (!(diff_mh_p->GetSumw2N() > 0)) diff_mh_p->Sumw2(true);
+    if (!(diff_hm_p->GetSumw2N() > 0)) diff_hm_p->Sumw2(true);
+    if (!(diff_rm_p->GetSumw2N() > 0)) diff_rm_p->Sumw2(true);
+
+    diff_mh_p->Add((*mb_mh_p)[0], -1);
+    diff_hm_p->Add((*mb_hm_p)[0], -1);
+    diff_rm_p->Add((*mb_rm_p)[0], -1);
+
+    /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
     // cms += "         p_{T}^{#gamma} > 40 GeV";
@@ -210,19 +227,25 @@ int hf_shift(char const* config, char const* output) {
     c6->adjust((*mb_rm)[0], "col", "");
 
     auto c7 = new paper("comp_mult_v_hf", hb);
+    c7->divide(1, -1);
     apply_style(c7, cms, system_tag);
     c7->add((*mb_mh_p)[0], "Hydjet");
     c7->stack((*hp_mh_p)[0], "Pythia+Hydjet");
+    c7->add(diff_mh_p);
 
     auto c8 = new paper("comp_hf_v_scaled_mult", hb);
+    c8->divide(1, -1);
     apply_style(c8, cms, system_tag);
     c8->add((*mb_hm_p)[0], "Hydjet");
     c8->stack((*hp_hm_p)[0], "Pythia+Hydjet");
+    c8->add(diff_hm_p);
 
     auto c9 = new paper("comp_rho_v_scaled_mult", hb);
+    c9->divide(1, -1);
     apply_style(c9, cms, system_tag);
     c9->add((*mb_rm_p)[0], "Hydjet");
     c9->stack((*hp_rm_p)[0], "Pythia+Hydjet");
+    c9->add(diff_rm_p);
 
     auto hp_style = [](TH1* h) {
         h->SetMarkerStyle(34);
