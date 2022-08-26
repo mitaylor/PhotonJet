@@ -14,7 +14,7 @@
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 
-#include "TFile.h"
+#include "TChain.h"
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
 #include "TDirectory.h"
