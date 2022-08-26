@@ -23,8 +23,6 @@
 #include "TProfile.h"
 #include "TLatex.h"
 
-#include ""
-
 #include <string>
 #include <vector>
 #include <iostream>
@@ -49,7 +47,7 @@ int hf_shift(char const* config, char const* output) {
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 150, 0, 6000);
-    auto imul = new interval("multiplicity"s, 150, 0, 22000)
+    auto imul = new interval("multiplicity"s, 150, 0, 22000);
 
     auto mmh = new multival(*imult, *ihf);
     auto mhm = new multival(*ihf, *imul);
