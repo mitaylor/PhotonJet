@@ -81,12 +81,12 @@ int hf_shift(char const* config, char const* output) {
 
     TDirectory* hp_evt_dir = hp_f->GetDirectory("hiEvtAnalyzer");
     TTreeReader hp_evt("HiTree", hp_evt_dir);
-    TTreeReaderValue<int> hp_hf(hp_evt, "hiHF");
-    TTreeReaderValue<int> hp_weight(hp_evt, "weight");
+    TTreeReaderValue<float> hp_hf(hp_evt, "hiHF");
+    TTreeReaderValue<float> hp_weight(hp_evt, "weight");
 
     TDirectory* hp_pho_dir = hp_f->GetDirectory("ggHiNtuplizer");
     TTreeReader hp_pho("EventTree", hp_pho_dir);
-    TTreeReaderValue<int> hp_rho(hp_pho, "rho");
+    TTreeReaderValue<float> hp_rho(hp_pho, "rho");
 
     TFile* mb_f = new TFile(mb_input.data(), "read");
 
@@ -97,18 +97,26 @@ int hf_shift(char const* config, char const* output) {
 
     TDirectory* mb_evt_dir = mb_f->GetDirectory("hiEvtAnalyzer");
     TTreeReader mb_evt("HiTree", mb_evt_dir);
-    TTreeReaderValue<int> mb_hf(mb_evt, "hiHF");
-    TTreeReaderValue<int> mb_weight(mb_evt, "weight");
+    TTreeReaderValue<float> mb_hf(mb_evt, "hiHF");
+    TTreeReaderValue<float> mb_weight(mb_evt, "weight");
 
     TDirectory* mb_pho_dir = mb_f->GetDirectory("ggHiNtuplizer");
     TTreeReader mb_pho("EventTree", mb_pho_dir);
-    TTreeReaderValue<int> mb_rho(mb_pho, "rho");
+    TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
-    int64_t i = 0;
+    // int64_t i = 0;
 
-    while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
-        if (i % 10000 == 0)
-            printf("entry: %li\n", i);
+    // while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
+    //     if (i % 10000 == 0)
+    //         printf("entry: %li\n", i);
+
+    auto nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
+
+    for (int64_t i = 0; i < nentries; ++i) {
+        if (i % 100000 == 0)
+            printf("entry: %li/%li\n", i, nentries);
+
+        hp_gen.Next(); hp_evt.Next(); hp_pho.Next();
 
         // int64_t leading = -1;
         // float leading_pt = 0;
@@ -174,10 +182,18 @@ int hf_shift(char const* config, char const* output) {
         ++i;
     }
 
-    i = 0;
-    while (mb_gen.Next() && mb_evt.Next() && mb_pho.Next()) {
+    // i = 0;
+    // while (mb_gen.Next() && mb_evt.Next() && mb_pho.Next()) {
+    //     if (i % 100000 == 0)
+    //         printf("entry: %li\n", i);
+
+    nentries = static_cast<int64_t>(mb_evt.GetEntries(1));
+
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
-            printf("entry: %li\n", i);
+            printf("entry: %li/%li\n", i, nentries);
+
+        mb_gen.Next(); mb_evt.Next(); mb_pho.Next();
 
         double mb_subid_weight = 0;
         for (int64_t j = 0; j < *mb_mult; ++j) {
