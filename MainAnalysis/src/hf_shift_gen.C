@@ -30,7 +30,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void FillChain(TChain* chain, std::vector<string>& files) {
+void FillChain(TChain* chain, std::vector<std::string>& files) {
     for (auto file : files) {
         chain->Add(file.c_str());
     }
