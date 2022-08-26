@@ -45,8 +45,8 @@ int hf_shift(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
     
     auto irho = new interval("#rho"s, 100, 0, 400);
-    auto ihf = new interval("HF Energy"s, 100, 0, 6000);
-    auto imul = new interval("multiplicity"s, 100, 0, 22000);
+    auto ihf = new interval("HF Energy"s, 100, 0, 7000);
+    auto imul = new interval("Multiplicity"s, 100, 0, 22000);
 
     auto mmh = new multival(*imul, *ihf);
     auto mhm = new multival(*ihf, *imul);
@@ -65,11 +65,15 @@ int hf_shift(char const* config, char const* output) {
     auto hp_rm = new history<TH2F>("hp_rm"s, "Pythia+Hydjet", frm, 1);
     auto mb_rm = new history<TH2F>("mb_rm"s, "Hydjet", frm, 1);
 
-    // auto frhp = [&](int64_t, std::string const& name, std::string const& label) {
-        // return new TProfile(name.data(), (";#rho;HF Energy;"s + label).data(), 100, 0, 400, 0, 7000, "LE"); };
+    auto fmhp = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";Multiplicity;HF Energy;"s + label).data(), 100, 0, 22000, 0, 7000, "LE"); };
+    auto fhmp = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";HF Energy;Multiplicity (UE);"s + label).data(), 100, 0, 400, 0, 7000, "LE"); };
+    auto frmp = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";#rho;Multiplicity (UE);"s + label).data(), 100, 0, 400, 0, 7000, "LE"); };
 
-    // auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
-    // auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
+    auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
+    auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
 
     auto hp_gen_dir = new TChain("HiGenParticleAna/hi");
     FillChain(hp_gen_dir, hp_input);
@@ -89,23 +93,23 @@ int hf_shift(char const* config, char const* output) {
     TTreeReaderValue<float> hp_rho(hp_pho, "rho");
 
     auto mb_gen_dir = new TChain("HiGenParticleAna/hi");
-    FillChain(mb_gen_dir, hp_input);
+    FillChain(mb_gen_dir, mb_input);
     TTreeReader mb_gen(mb_gen_dir);
     TTreeReaderValue<std::vector<int>> mb_subid(mb_gen, "sube");
     TTreeReaderValue<int> mb_mult(mb_gen, "mult");
 
     auto mb_evt_dir = new TChain("hiEvtAnalyzer/HiTree");
-    FillChain(mb_evt_dir, hp_input);
+    FillChain(mb_evt_dir, mb_input);
     TTreeReader mb_evt(mb_evt_dir);
     TTreeReaderValue<float> mb_hf(mb_evt, "hiHF");
     TTreeReaderValue<float> mb_weight(mb_evt, "weight");
 
     auto mb_pho_dir = new TChain("ggHiNtuplizer/EventTree");
-    FillChain(mb_pho_dir, hp_input);
+    FillChain(mb_pho_dir, mb_input);
     TTreeReader mb_pho(mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
-    auto nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
+    auto nentries = static_cast<int64_t>(hp_gen_dir->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 10000 == 0)
@@ -126,7 +130,7 @@ int hf_shift(char const* config, char const* output) {
         ++i;
     }
 
-    nentries = static_cast<int64_t>(mb_evt.GetEntries(1));
+    nentries = static_cast<int64_t>(mb_gen_dir->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 10000 == 0)
