@@ -71,38 +71,38 @@ int hf_shift(char const* config, char const* output) {
     // auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
     // auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
 
-    auto hp_gen_dir = new TChain("HiGenParticleAna");
+    auto hp_gen_dir = new TChain("HiGenParticleAna/hi");
     FillChain(hp_gen_dir, hp_input);
-    TTreeReader hp_gen("hi", hp_gen_dir);
+    TTreeReader hp_gen(hp_gen_dir);
     TTreeReaderValue<std::vector<int>> hp_subid(hp_gen, "sube");
     TTreeReaderValue<int> hp_mult(hp_gen, "mult");
 
-    auto hp_evt_dir = new TChain("hiEvtAnalyzer");
+    auto hp_evt_dir = new TChain("hiEvtAnalyzer/HiTree");
     FillChain(hp_evt_dir, hp_input);
-    TTreeReader hp_evt("HiTree", hp_evt_dir);
+    TTreeReader hp_evt(hp_evt_dir);
     TTreeReaderValue<float> hp_hf(hp_evt, "hiHF");
     TTreeReaderValue<float> hp_weight(hp_evt, "weight");
 
-    auto hp_pho_dir = new TChain("ggHiNtuplizer");
+    auto hp_pho_dir = new TChain("ggHiNtuplizer/EventTree");
     FillChain(hp_pho_dir, hp_input);
-    TTreeReader hp_pho("EventTree", hp_pho_dir);
+    TTreeReader hp_pho(hp_pho_dir);
     TTreeReaderValue<float> hp_rho(hp_pho, "rho");
 
-    auto mb_gen_dir = new TChain("HiGenParticleAna");
+    auto mb_gen_dir = new TChain("HiGenParticleAna/hi");
     FillChain(mb_gen_dir, hp_input);
-    TTreeReader mb_gen("hi", mb_gen_dir);
+    TTreeReader mb_gen(mb_gen_dir);
     TTreeReaderValue<std::vector<int>> mb_subid(mb_gen, "sube");
     TTreeReaderValue<int> mb_mult(mb_gen, "mult");
 
-    auto mb_evt_dir = new TChain("hiEvtAnalyzer");
+    auto mb_evt_dir = new TChain("hiEvtAnalyzer/HiTree");
     FillChain(mb_evt_dir, hp_input);
-    TTreeReader mb_evt("HiTree", mb_evt_dir);
+    TTreeReader mb_evt(mb_evt_dir);
     TTreeReaderValue<float> mb_hf(mb_evt, "hiHF");
     TTreeReaderValue<float> mb_weight(mb_evt, "weight");
 
-    auto mb_pho_dir = new TChain("ggHiNtuplizer");
+    auto mb_pho_dir = new TChain("ggHiNtuplizer/EventTree");
     FillChain(mb_pho_dir, hp_input);
-    TTreeReader mb_pho("EventTree", mb_pho_dir);
+    TTreeReader mb_pho(mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
     auto nentries = static_cast<int64_t>(hp_evt.GetEntries(1));
