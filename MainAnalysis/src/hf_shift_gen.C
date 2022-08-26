@@ -107,8 +107,8 @@ int hf_shift(char const* config, char const* output) {
     int64_t i = 0;
 
     while (hp_gen.Next() && hp_evt.Next() && hp_pho.Next()) {
-        if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, hp_evt.GetEntries(1));
+        if (i % 10000 == 0)
+            printf("entry: %li\n", i);
 
         // int64_t leading = -1;
         // float leading_pt = 0;
@@ -177,7 +177,7 @@ int hf_shift(char const* config, char const* output) {
     i = 0;
     while (mb_gen.Next() && mb_evt.Next() && mb_pho.Next()) {
         if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, mb_evt.GetEntries(1));
+            printf("entry: %li\n", i);
 
         double mb_subid_weight = 0;
         for (int64_t j = 0; j < *mb_mult; ++j) {
