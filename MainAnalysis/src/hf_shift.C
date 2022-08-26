@@ -167,8 +167,6 @@ int hf_shift(char const* config, char const* output) {
     (*hp_rh_p)[0]->SetMarkerSize(0.1);
     c3->add((*mb_rh_p)[0], "Hydjet");
     c3->stack((*hp_rh_p)[0], "Pythia+Hydjet");
-    c3->adjust((*mb_rh_p)[0], "LE", "");
-    c3->adjust((*hp_rh_p)[0], "LE", "");
 
     hb->sketch();
     c1->draw("pdf");

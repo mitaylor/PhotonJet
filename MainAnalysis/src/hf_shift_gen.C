@@ -33,112 +33,161 @@ int hf_shift(char const* config, char const* output) {
     auto hp_input = conf->get<std::string>("hp_input");
     auto mb_input = conf->get<std::string>("mb_input");
 
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
+    // auto const photon_pt_min = conf->get<float>("photon_pt_min");
+    // auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
 
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
+    // auto const hovere_max = conf->get<float>("hovere_max");
+    // auto const see_max = conf->get<float>("see_max");
+    // auto const iso_max = conf->get<float>("iso_max");
 
     TH1::SetDefaultSumw2();
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 150, 0, 6000);
+    auto imul = new interval("multiplicity"s, 150, 0, 22000)
 
-    auto mrh = new multival(*irho, *ihf);
+    auto mmh = new multival(*imult, *ihf);
+    auto mhm = new multival(*ihf, *imul);
+    auto mrm = new multival(*irho, *imul);
 
-    auto frh = std::bind(&multival::book<TH2F>, mrh, _1, _2, _3);
-    auto frhp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";#rho;HF Energy;"s + label).data(), 100, 0, 400, 0, 7000, "LE"); };
+    auto fmh = std::bind(&multival::book<TH2F>, mmh, _1, _2, _3); // multiplicity:hf
+    auto fhm = std::bind(&multival::book<TH2F>, mhm, _1, _2, _3); // hf:multiplicity (scaled by subid)
+    auto frm = std::bind(&multival::book<TH2F>, mrm, _1, _2, _3); // rho:multiplicity (scaled by subid)
 
-    auto hp_rh = new history<TH2F>("hp_rh"s, "Pythia+Hydjet", frh, 1);
-    auto mb_rh = new history<TH2F>("mb_rh"s, "Hydjet", frh, 1);
+    auto hp_mh = new history<TH2F>("hp_mh"s, "Pythia+Hydjet", fmh, 1);
+    auto mb_mh = new history<TH2F>("mb_mh"s, "Hydjet", fm,h 1);
 
-    auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
-    auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
+    auto hp_hm = new history<TH2F>("hp_hm"s, "Pythia+Hydjet", fhm, 1);
+    auto mb_hm = new history<TH2F>("mb_hm"s, "Hydjet", fhm, 1);
+
+    auto hp_rm = new history<TH2F>("hp_rm"s, "Pythia+Hydjet", frm, 1);
+    auto mb_rm = new history<TH2F>("mb_rm"s, "Hydjet", frm, 1);
+
+    // auto frhp = [&](int64_t, std::string const& name, std::string const& label) {
+        // return new TProfile(name.data(), (";#rho;HF Energy;"s + label).data(), 100, 0, 400, 0, 7000, "LE"); };
+
+    // auto hp_rh_p = new history<TProfile>("hp_rh_p"s, "Pythia+Hydjet", frhp, 1);
+    // auto mb_rh_p = new history<TProfile>("mb_rh_p"s, "Hydjet", frhp, 1);
 
     TFile* hp_f = new TFile(hp_input.data(), "read");
-    TTree* hp_t = (TTree*) hp_f->Get("pj");
-    auto hp_pjt = new pjtree(false, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
+
+    TDirectory* hp_gen_dir = hp_f->GetDirectory("HiGenParticleAna");
+    TTreeReader hp_gen("hi", hp_gen_dir);
+    TTreeReaderValue<std::vector<int>> hp_subid(hp_gen, "sube");
+    TTreeReaderValue<int> hp_mult(hp_gen, "mult");
+
+    TDirectory* hp_evt_dir = hp_f->GetDirectory("hiEvtAnalylzer");
+    TTreeReader hp_evt("HiTree", hp_evt_dir);
+    TTreeReaderValue<int> hp_hf(hp_evt, "hiHF");
+    TTreeReaderValue<int> hp_weight(hp_evt, "weight");
+
+    TDirectory* hp_pho_dir = hp_f->GetDirectory("ggHiNtuplizer");
+    TTreeReader hp_pho("EventTree", hp_pho_dir);
+    TTreeReaderValue<int> hp_rho(hp_pho, "rho");
 
     TFile* mb_f = new TFile(mb_input.data(), "read");
-    TTree* mb_t = (TTree*) mb_f->Get("pj");
-    auto mb_pjt = new pjtree(false, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0 });
 
-    int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
+    TDirectory* mb_gen_dir = mb_f->GetDirectory("HiGenParticleAna");
+    TTreeReader mb_gen("hi", mb_gen_dir);
+    TTreeReaderValue<std::vector<int>> mb_subid(mb_gen, "sube");
+    TTreeReaderValue<int> mb_mult(mb_gen, "mult");
+
+    TDirectory* mb_evt_dir = mb_f->GetDirectory("hiEvtAnalylzer");
+    TTreeReader mb_evt("HiTree", mb_evt_dir);
+    TTreeReaderValue<int> mb_hf(mb_evt, "hiHF");
+    TTreeReaderValue<int> mb_weight(mb_evt, "weight");
+
+    TDirectory* mb_pho_dir = mb_f->GetDirectory("ggHiNtuplizer");
+    TTreeReader mb_pho("EventTree", mb_pho_dir);
+    TTreeReaderValue<int> mb_rho(mb_pho, "rho");
+
+    int64_t nentries = static_cast<int64_t>(hp_evt->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
-        hp_t->GetEntry(i);
+        hp_gen.Next(); hp_evt.Next(); hp_pho.Next();
 
-        int64_t leading = -1;
-        float leading_pt = 0;
-        bool apply_er = 1;
-        for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
-            if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
-            if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
+        // int64_t leading = -1;
+        // float leading_pt = 0;
+        // bool apply_er = 1;
+        // for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
+        //     if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
+        //     if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+        //     if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-            auto pho_et = (*hp_pjt->phoEt)[j];
-            if (apply_er) pho_et = (*hp_pjt->phoEtErNew)[j];
+        //     auto pho_et = (*hp_pjt->phoEt)[j];
+        //     if (apply_er) pho_et = (*hp_pjt->phoEtErNew)[j];
 
-            if (pho_et < photon_pt_min) { continue; }
+        //     if (pho_et < photon_pt_min) { continue; }
 
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
-            }
+        //     if (pho_et > leading_pt) {
+        //         leading = j;
+        //         leading_pt = pho_et;
+        //     }
+        // }
+
+        // if (leading < 0) { continue; }
+        // if ((*hp_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
+
+        // float isolation = (*hp_pjt->pho_ecalClusterIsoR3)[leading]
+        //     + (*hp_pjt->pho_hcalRechitIsoR3)[leading]
+        //     + (*hp_pjt->pho_trackIsoR3PtCut20)[leading];
+        // if (isolation > iso_max) { continue; }
+
+        // /* leading photon axis */
+        // auto photon_eta = (*hp_pjt->phoEta)[leading];
+        // auto photon_phi = convert_radian((*hp_pjt->phoPhi)[leading]);
+
+        // /* electron rejection */
+        // bool electron = false;
+        // for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
+        //     if (std::abs((*hp_pjt->eleSCEta)[j]) > 1.4442) { continue; }
+
+        //     auto deta = photon_eta - (*hp_pjt->eleEta)[j];
+        //     if (deta > 0.1) { continue; }
+
+        //     auto ele_phi = convert_radian((*hp_pjt->elePhi)[j]);
+        //     auto dphi = revert_radian(photon_phi - ele_phi);
+        //     auto dr2 = deta * deta + dphi * dphi;
+
+        //     if (dr2 < 0.01 && passes_electron_id<
+        //                 det::barrel, wp::loose, pjtree
+        //             >(hp_pjt, j, true)) {
+        //         electron = true; break; }
+        // }
+
+        // if (electron) { continue; }
+
+        double hp_subid_weight = 0;
+        for (int64_t j = 0; j < *hp_mult; ++j) {
+            hp_subid_weight += (*hp_subid)[j];
         }
+        hp_subid_weight /= *hp_mult;
 
-        if (leading < 0) { continue; }
-        if ((*hp_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
-
-        float isolation = (*hp_pjt->pho_ecalClusterIsoR3)[leading]
-            + (*hp_pjt->pho_hcalRechitIsoR3)[leading]
-            + (*hp_pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
-
-        /* leading photon axis */
-        auto photon_eta = (*hp_pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*hp_pjt->phoPhi)[leading]);
-
-        /* electron rejection */
-        bool electron = false;
-        for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
-            if (std::abs((*hp_pjt->eleSCEta)[j]) > 1.4442) { continue; }
-
-            auto deta = photon_eta - (*hp_pjt->eleEta)[j];
-            if (deta > 0.1) { continue; }
-
-            auto ele_phi = convert_radian((*hp_pjt->elePhi)[j]);
-            auto dphi = revert_radian(photon_phi - ele_phi);
-            auto dr2 = deta * deta + dphi * dphi;
-
-            if (dr2 < 0.01 && passes_electron_id<
-                        det::barrel, wp::loose, pjtree
-                    >(hp_pjt, j, true)) {
-                electron = true; break; }
-        }
-
-        if (electron) { continue; }
-
-        auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
-        (*hp_rh)[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
-        (*hp_rh_p)[0]->Fill(avg_rho, hp_pjt->hiHF, hp_pjt->w);
+        (*hp_mh)[0]->Fill(*hp_mult, *hp_hf, *hp_weight);
+        (*hp_hm)[0]->Fill(*hp_hf, (*hp_mult) * hp_subid_weight, *hp_weight);
+        (*hp_rm)[0]->Fill(*hp_rho, (*hp_mult) * hp_subid_weight, *hp_weight);
     }
 
-    nentries = static_cast<int64_t>(mb_t->GetEntries());
+    nentries = static_cast<int64_t>(mb_evt->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
-        mb_t->GetEntry(i);
-        auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
-        (*mb_rh)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
-        (*mb_rh_p)[0]->Fill(avg_rho, mb_pjt->hiHF, mb_pjt->w);
+        mb_gen.Next(); mb_evt.Next(); mb_pho.Next();
+
+        double mb_subid_weight = 0;
+        for (int64_t j = 0; j < *mb_mult; ++j) {
+            mb_subid_weight += (*mb_subid)[j];
+        }
+        mb_subid_weight /= *mb_mult;
+
+        (*mb_mh)[0]->Fill(*mb_mult, *mb_hf, *mb_weight);
+        (*mb_hm)[0]->Fill(*mb_hf, (*mb_mult) * mb_subid_weight, *mb_weight);
+        (*mb_rm)[0]->Fill(*mb_rho, (*mb_mult) * mb_subid_weight, *mb_weight);
     }
 
     /* draw rho distributions */
@@ -149,27 +198,54 @@ int hf_shift(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Pythia+Hydjet", "Hydjet"); 
     
-    auto c1 = new paper("pythia_hydjet_rho_v_hf", hb); 
+    auto c1 = new paper("pythia_hydjet_mult_v_hf", hb); 
     apply_style(c1, cms, system_tag);
     c1->set(paper::flags::logz);
-    c1->add((*hp_rh)[0], "Pythia+Hydjet");
-    c1->adjust((*hp_rh)[0], "col", "");
+    c1->add((*hp_mh)[0], "Pythia+Hydjet");
+    c1->adjust((*hp_mh)[0], "col", "");
 
-    auto c2 = new paper("hydjet_rho_v_hf", hb);
+    auto c2 = new paper("hydjet_mult_v_hf", hb);
     apply_style(c2, cms, system_tag);
     c2->set(paper::flags::logz);
-    c2->add((*mb_rh)[0], "Hydjet");
-    c2->adjust((*mb_rh)[0], "col", "");
+    c2->add((*mb_mh)[0], "Hydjet");
+    c2->adjust((*mb_mh)[0], "col", "");
 
-    auto c3 = new paper("comp_rho_v_hf", hb);
+    auto c3 = new paper("pythia_hydjet_hf_v_scaled_mult", hb); 
     apply_style(c3, cms, system_tag);
-    c3->add((*mb_rh_p)[0], "Hydjet");
-    c3->stack((*hp_rh_p)[0], "Pythia+Hydjet");
+    c3->set(paper::flags::logz);
+    c3->add((*hp_hm)[0], "Pythia+Hydjet");
+    c3->adjust((*hp_hm)[0], "col", "");
+
+    auto c4 = new paper("hydjet_hf_v_scaled_mult", hb);
+    apply_style(c4, cms, system_tag);
+    c4->set(paper::flags::logz);
+    c4->add((*mb_hm)[0], "Hydjet");
+    c4->adjust((*mb_hm)[0], "col", "");
+
+    auto c5 = new paper("pythia_hydjet_rho_v_scaled_mult", hb); 
+    apply_style(c5, cms, system_tag);
+    c5->set(paper::flags::logz);
+    c5->add((*hp_rm)[0], "Pythia+Hydjet");
+    c5->adjust((*hp_rm)[0], "col", "");
+
+    auto c6 = new paper("hydjet_rho_v_scaled_mult", hb);
+    apply_style(c6, cms, system_tag);
+    c6->set(paper::flags::logz);
+    c6->add((*mb_rm)[0], "Hydjet");
+    c6->adjust((*mb_rm)[0], "col", "");
+
+    // auto c3 = new paper("comp_rho_v_hf", hb);
+    // apply_style(c3, cms, system_tag);
+    // c3->add((*mb_rh_p)[0], "Hydjet");
+    // c3->stack((*hp_rh_p)[0], "Pythia+Hydjet");
 
     hb->sketch();
     c1->draw("pdf");
     c2->draw("pdf");
     c3->draw("pdf");
+    c4->draw("pdf");
+    c5->draw("pdf");
+    c6->draw("pdf");
 
     /* save output */
     in(output, [&]() {
