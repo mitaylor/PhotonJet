@@ -236,8 +236,8 @@ int hf_shift(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    hb->style("Hydjet", style);
-    hb->style("Pythia+Hydjet", style);
+    hb->style("Hydjet", mb_style);
+    hb->style("Pythia+Hydjet", hp_style);
 
     hb->sketch();
     c1->draw("pdf");
