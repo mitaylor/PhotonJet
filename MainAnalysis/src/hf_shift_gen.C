@@ -218,7 +218,6 @@ int hf_shift(char const* config, char const* output) {
     c8->draw("pdf");
     c9->draw("pdf");
 
-    /* save output */
     in(output, [&]() {
         hp_hn->save();
         hp_rn->save();
