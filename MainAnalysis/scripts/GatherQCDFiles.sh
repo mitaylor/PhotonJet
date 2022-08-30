@@ -14,6 +14,8 @@ uf_80="/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-8
 uf_120="/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM/QCDPhoton_pThat-120_TuneCP5_5p02TeV_pythia8/20220825PPMCUF120/220826_051532/"
 uf_170="/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM/QCDPhoton_pThat-170_TuneCP5_5p02TeV_pythia8/20220825PPMCUF170/220826_051608/"
 
+echo $f_15
+
 ./GatherFiles $f_15 f_15.txt
 ./GatherFiles $f_30 f_30.txt
 ./GatherFiles $f_50 f_50.txt
