@@ -96,6 +96,12 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho(mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
+    double hp_avg_hf;
+    double hp_avg_rho;
+
+    double mb_avg_hf;
+    double mb_avg_rho;
+
     auto nentries = static_cast<int64_t>(hp_evt_dir->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
@@ -103,6 +109,9 @@ int hf_shift(char const* config, char const* output) {
             printf("entry: %li/%li\n", i, nentries);
 
         hp_evt.Next(); hp_pho.Next();
+
+        hp_avg_hf += *hp_hf;
+        hp_avg_rho += *hp_rho;
 
         (*hp_hn)[0]->Fill(*hp_hf, *hp_npart, *hp_weight);
         (*hp_rn)[0]->Fill(*hp_rho, *hp_npart, *hp_weight);
@@ -112,6 +121,9 @@ int hf_shift(char const* config, char const* output) {
 
         ++i;
     }
+    
+    hp_avg_hf /= nentries;
+    hp_avg_rho /= nentries;
 
     nentries = static_cast<int64_t>(mb_evt_dir->GetEntries());
 
@@ -121,6 +133,9 @@ int hf_shift(char const* config, char const* output) {
 
         mb_evt.Next(); mb_pho.Next();
 
+        mb_avg_hf += *mb_hf;
+        mb_avg_rho += *mb_rho;
+
         (*mb_hn)[0]->Fill(*mb_hf, *mb_npart, *mb_weight);
         (*mb_rn)[0]->Fill(*mb_rho, *mb_npart, *mb_weight);
 
@@ -129,6 +144,9 @@ int hf_shift(char const* config, char const* output) {
 
         ++i;
     }
+
+    mb_avg_hf /= nentries;
+    mb_avg_rho /= nentries;
 
     /* subtract distributions */
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
@@ -147,6 +165,9 @@ int hf_shift(char const* config, char const* output) {
     diff_hn_p->SetMinimum(-1000);
     diff_rn_p->SetMaximum(40);
     diff_rn_p->SetMinimum(-40);
+
+    std::cout << "HF difference: " << hp_avg_hf - mb_avg_hf << std::endl;
+    std::cout << "Rho difference: " << hp_avg_rho - mb_avg_rho << std::endl;
 
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
