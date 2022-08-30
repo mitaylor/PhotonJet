@@ -73,11 +73,11 @@ int hf_shift(char const* config, char const* output) {
     /* read input files */
     TFile* hp_f = new TFile(hp_input.data(), "read");
     TTree* hp_t = (TTree*) hp_f->Get("pj");
-    auto hp_pjt = new pjtree(false, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 0, 0 });
+    auto hp_pjt = new pjtree(true, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 0, 0 });
 
     TFile* mb_f = new TFile(mb_input.data(), "read");
     TTree* mb_t = (TTree*) mb_f->Get("pj");
-    auto mb_pjt = new pjtree(false, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0, 0 });
+    auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0, 0 });
 
     double hp_avg_hf = 0;
     double hp_avg_rho = 0;
