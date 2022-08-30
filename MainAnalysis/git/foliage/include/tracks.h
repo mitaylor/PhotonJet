@@ -12,6 +12,7 @@
 
 #define B_VAL_TRK_RECO(ACTION, ...)                                         \
     ACTION(int,             nTrk,                       ## __VA_ARGS__)     \
+    ACTION(int,             nVtx,                       ## __VA_ARGS__)     \
 
 #define B_ARR_TRK_RECO(ACTION, ...)                                         \
     ACTION(float,           trkPt,                      ## __VA_ARGS__)     \
