@@ -146,7 +146,6 @@ int hf_shift(char const* config, char const* output) {
 
         (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, hp_pjt->hiHF, hp_pjt->w);
         (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
-        std::cout << hp_pjt->Ncoll << " " << hp_pjt->hiHF << " " << avg_rho << std::endl;
     }
 
     nentries = static_cast<int64_t>(mb_t->GetEntries());
