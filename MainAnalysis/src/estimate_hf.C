@@ -84,6 +84,7 @@ int estimate_hf(char const* config, char const* output) {
         t->GetEntry(i);
 
         if (std::abs(pjt->vz) > 15) { continue; }
+        if (pjt->nVtx != 1) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
