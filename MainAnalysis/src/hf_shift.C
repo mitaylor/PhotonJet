@@ -156,6 +156,9 @@ int hf_shift(char const* config, char const* output) {
 
     nentries = static_cast<int64_t>(mb_t->GetEntries());
 
+    double mb_avg_hf = 0;
+    double mb_avg_rho = 0;
+
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
@@ -265,12 +268,14 @@ int hf_shift(char const* config, char const* output) {
     c8->draw("pdf");
     c9->draw("pdf");
 
-    in(output, [&]() {
-        hp_hn->save();
-        hp_rn->save();
-        mb_hn->save();
-        mb_rn->save();
-    });
+    auto fout = new TFile(output, "recreate");
+
+    hp_hn->save();
+    hp_rn->save();
+    mb_hn->save();
+    mb_rn->save();
+
+    fout->Close();
 
     return 0;
 }
