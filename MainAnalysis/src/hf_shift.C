@@ -95,14 +95,9 @@ int hf_shift(char const* config, char const* output) {
         float leading_pt = 0;
         bool apply_er = 1;
         for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
-            if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
+            if ((*hp_pjt->phoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
-
-            auto pho_et = (*hp_pjt->phoEt)[j];
-            if (apply_er) pho_et = (*hp_pjt->phoEtErNew)[j];
-
-            if (pho_et < photon_pt_min) { continue; }
 
             if (pho_et > leading_pt) {
                 leading = j;
