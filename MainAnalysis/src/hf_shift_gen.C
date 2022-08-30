@@ -62,9 +62,9 @@ int hf_shift(char const* config, char const* output) {
     auto mb_rn = new history<TH2F>("mb_rn"s, "Hydjet", frn, 1);
 
     auto fhnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Npart;HF Energy;"s + label).data(), 100, 0, 22000, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";Npart;HF Energy;"s + label).data(), 100, 0, 420, 0, 7000, "LE"); };
     auto frnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Npart;#rho;"s + label).data(), 100, 0, 22000, 0, 400, "LE"); };
+        return new TProfile(name.data(), (";Npart;#rho;"s + label).data(), 100, 0, 420, 0, 400, "LE"); };
 
     auto hp_hn_p = new history<TProfile>("hp_hn_p"s, "Pythia+Hydjet", fhnp, 1);
     auto mb_hn_p = new history<TProfile>("mb_hn_p"s, "Hydjet", fhnp, 1);
