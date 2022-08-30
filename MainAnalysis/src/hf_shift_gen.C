@@ -47,7 +47,7 @@ int hf_shift(char const* config, char const* output) {
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 100, 0, 7000);
-    auto in = new interval("Npart"s, 100, 0, 22000);
+    auto in = new interval("Npart"s, 100, 0, 420);
 
     auto mhn = new multival(*ihf, *in);
     auto mrn = new multival(*irho, *in);
