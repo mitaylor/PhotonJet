@@ -47,13 +47,13 @@ int hf_shift(char const* config, char const* output) {
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 100, 0, 7000);
-    auto in = new interval("Ncoll"s, 100, 0, 22000);
+    auto in = new interval("Npart"s, 100, 0, 22000);
 
     auto mhn = new multival(*ihf, *in);
     auto mrn = new multival(*irho, *in);
 
-    auto fhn = std::bind(&multival::book<TH2F>, mhn, _1, _2, _3); // hf:ncoll
-    auto frn = std::bind(&multival::book<TH2F>, mrn, _1, _2, _3); // rho:ncoll
+    auto fhn = std::bind(&multival::book<TH2F>, mhn, _1, _2, _3); // hf:npart
+    auto frn = std::bind(&multival::book<TH2F>, mrn, _1, _2, _3); // rho:npart
 
     auto hp_hn = new history<TH2F>("hp_hn"s, "Pythia+Hydjet", fhn, 1);
     auto mb_hn = new history<TH2F>("mb_hn"s, "Hydjet", fhn, 1);
@@ -62,9 +62,9 @@ int hf_shift(char const* config, char const* output) {
     auto mb_rn = new history<TH2F>("mb_rn"s, "Hydjet", frn, 1);
 
     auto fhnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 22000, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";Npart;HF Energy;"s + label).data(), 100, 0, 22000, 0, 7000, "LE"); };
     auto frnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;#rho;"s + label).data(), 100, 0, 22000, 0, 400, "LE"); };
+        return new TProfile(name.data(), (";Npart;#rho;"s + label).data(), 100, 0, 22000, 0, 400, "LE"); };
 
     auto hp_hn_p = new history<TProfile>("hp_hn_p"s, "Pythia+Hydjet", fhnp, 1);
     auto mb_hn_p = new history<TProfile>("mb_hn_p"s, "Hydjet", fhnp, 1);
@@ -76,7 +76,7 @@ int hf_shift(char const* config, char const* output) {
     FillChain(hp_evt_dir, hp_input);
     TTreeReader hp_evt(hp_evt_dir);
     TTreeReaderValue<float> hp_hf(hp_evt, "hiHF");
-    TTreeReaderValue<float> hp_ncoll(hp_evt, "Ncoll");
+    TTreeReaderValue<float> hp_npart(hp_evt, "Npart");
     TTreeReaderValue<float> hp_weight(hp_evt, "weight");
 
     auto hp_pho_dir = new TChain("ggHiNtuplizerGED/EventTree");
@@ -88,7 +88,7 @@ int hf_shift(char const* config, char const* output) {
     FillChain(mb_evt_dir, mb_input);
     TTreeReader mb_evt(mb_evt_dir);
     TTreeReaderValue<float> mb_hf(mb_evt, "hiHF");
-    TTreeReaderValue<float> mb_ncoll(mb_evt, "Ncoll");
+    TTreeReaderValue<float> mb_npart(mb_evt, "Npart");
     TTreeReaderValue<float> mb_weight(mb_evt, "weight");
 
     auto mb_pho_dir = new TChain("ggHiNtuplizerGED/EventTree");
@@ -104,11 +104,11 @@ int hf_shift(char const* config, char const* output) {
 
         hp_evt.Next(); hp_pho.Next();
 
-        (*hp_hn)[0]->Fill(*hp_hf, *hp_ncoll, *hp_weight);
-        (*hp_rn)[0]->Fill(*hp_rho, *hp_ncoll, *hp_weight);
+        (*hp_hn)[0]->Fill(*hp_hf, *hp_npart, *hp_weight);
+        (*hp_rn)[0]->Fill(*hp_rho, *hp_npart, *hp_weight);
 
-        (*hp_hn_p)[0]->Fill(*hp_ncoll, *hp_hf, *hp_weight);
-        (*hp_rn_p)[0]->Fill(*hp_ncoll, *hp_rho, *hp_weight);
+        (*hp_hn_p)[0]->Fill(*hp_npart, *hp_hf, *hp_weight);
+        (*hp_rn_p)[0]->Fill(*hp_npart, *hp_rho, *hp_weight);
 
         ++i;
     }
@@ -121,11 +121,11 @@ int hf_shift(char const* config, char const* output) {
 
         mb_evt.Next(); mb_pho.Next();
 
-        (*mb_hn)[0]->Fill(*mb_hf, *mb_ncoll, *mb_weight);
-        (*mb_rn)[0]->Fill(*mb_rho, *mb_ncoll, *mb_weight);
+        (*mb_hn)[0]->Fill(*mb_hf, *mb_npart, *mb_weight);
+        (*mb_rn)[0]->Fill(*mb_rho, *mb_npart, *mb_weight);
 
-        (*mb_hn_p)[0]->Fill(*mb_ncoll, *mb_hf, *mb_weight);
-        (*mb_rn_p)[0]->Fill(*mb_ncoll, *mb_rho, *mb_weight);
+        (*mb_hn_p)[0]->Fill(*mb_npart, *mb_hf, *mb_weight);
+        (*mb_rn_p)[0]->Fill(*mb_npart, *mb_rho, *mb_weight);
 
         ++i;
     }
@@ -156,38 +156,38 @@ int hf_shift(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Pythia+Hydjet", "Hydjet"); 
 
-    auto c3 = new paper("pythia_hydjet_hf_v_ncoll", hb); 
+    auto c3 = new paper("pythia_hydjet_hf_v_npart", hb); 
     apply_style(c3, cms, system_tag);
     c3->set(paper::flags::logz);
     c3->add((*hp_hn)[0], "Pythia+Hydjet");
     c3->adjust((*hp_hn)[0], "col", "");
 
-    auto c4 = new paper("hydjet_hf_v_ncoll", hb);
+    auto c4 = new paper("hydjet_hf_v_npart", hb);
     apply_style(c4, cms, system_tag);
     c4->set(paper::flags::logz);
     c4->add((*mb_hn)[0], "Hydjet");
     c4->adjust((*mb_hn)[0], "col", "");
 
-    auto c5 = new paper("pythia_hydjet_rho_v_ncoll", hb); 
+    auto c5 = new paper("pythia_hydjet_rho_v_npart", hb); 
     apply_style(c5, cms, system_tag);
     c5->set(paper::flags::logz);
     c5->add((*hp_rn)[0], "Pythia+Hydjet");
     c5->adjust((*hp_rn)[0], "col", "");
 
-    auto c6 = new paper("hydjet_rho_v_ncoll", hb);
+    auto c6 = new paper("hydjet_rho_v_npart", hb);
     apply_style(c6, cms, system_tag);
     c6->set(paper::flags::logz);
     c6->add((*mb_rn)[0], "Hydjet");
     c6->adjust((*mb_rn)[0], "col", "");
 
-    auto c8 = new paper("comp_hf_v_ncoll", hb);
+    auto c8 = new paper("comp_hf_v_npart", hb);
     c8->divide(1, -1);
     apply_style(c8, cms, system_tag);
     c8->add((*mb_hn_p)[0], "Hydjet");
     c8->stack((*hp_hn_p)[0], "Pythia+Hydjet");
     c8->add(diff_hn_p);
 
-    auto c9 = new paper("comp_rho_v_ncoll", hb);
+    auto c9 = new paper("comp_rho_v_npart", hb);
     c9->divide(1, -1);
     apply_style(c9, cms, system_tag);
     c9->add((*mb_rn_p)[0], "Hydjet");
