@@ -96,11 +96,11 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mb_pho(mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
 
-    double hp_avg_hf;
-    double hp_avg_rho;
+    double hp_avg_hf = 0;
+    double hp_avg_rho = 0;
 
-    double mb_avg_hf;
-    double mb_avg_rho;
+    double mb_avg_hf = 0;
+    double mb_avg_rho = 0;
 
     auto nentries = static_cast<int64_t>(hp_evt_dir->GetEntries());
 
