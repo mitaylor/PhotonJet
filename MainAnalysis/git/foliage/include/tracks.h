@@ -31,6 +31,7 @@
 
 class tracks : tree {
   public:
+    tracks() = default;
     tracks(int64_t size);
     tracks(tracks const&) = delete;
     tracks& operator=(tracks const&) = delete;
