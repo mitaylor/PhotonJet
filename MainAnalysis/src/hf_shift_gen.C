@@ -161,10 +161,10 @@ int hf_shift(char const* config, char const* output) {
     diff_hn_p->Add((*mb_hn_p)[0], -1);
     diff_rn_p->Add((*mb_rn_p)[0], -1);
 
-    diff_hn_p->SetMaximum(1000);
-    diff_hn_p->SetMinimum(-1000);
-    diff_rn_p->SetMaximum(40);
-    diff_rn_p->SetMinimum(-40);
+    diff_hn_p->SetMaximum(300);
+    diff_hn_p->SetMinimum(-300);
+    diff_rn_p->SetMaximum(10);
+    diff_rn_p->SetMinimum(-10);
 
     std::cout << "HF difference: " << hp_avg_hf - mb_avg_hf << std::endl;
     std::cout << "Rho difference: " << hp_avg_rho - mb_avg_rho << std::endl;
