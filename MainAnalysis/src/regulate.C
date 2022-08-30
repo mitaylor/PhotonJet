@@ -108,6 +108,7 @@ int regulate(char const* config, char const* output) {
     auto jet_dir = conf->get<std::string>("jet_dir");
     auto photon_dir = conf->get<std::string>("photon_dir");
     auto rho_dir = conf->get<std::string>("rho_dir");
+    auto pf_path = conf->get<std::string>("pf_path");
     auto selections = conf->get<std::vector<std::string>>("selections");
     auto paths = conf->get<std::vector<std::string>>("paths");
     auto paths_only = conf->get<bool>("paths_only");
@@ -133,7 +134,7 @@ int regulate(char const* config, char const* output) {
     auto chain_jet = forest->attach((jet_dir + "/t").data(), !jet_dir.empty());
     auto chain_hlt = forest->attach("hltanalysis/HltTree", hlt_branches);
     auto chain_rho = forest->attach(rho_dir + "/t", heavyion);
-    auto chain_pf = forest->attach("pfcandAnalyzer/pfTree", true);
+    auto chain_pf = forest->attach(pf_path, true);
     auto chain_trk = forest->attach("ppTrack/trackTree", !heavyion);
 
     (*forest)();
