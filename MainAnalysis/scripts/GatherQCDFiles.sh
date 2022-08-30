@@ -14,18 +14,16 @@ uf_80="/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-8
 uf_120="/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM/QCDPhoton_pThat-120_TuneCP5_5p02TeV_pythia8/20220825PPMCUF120/220826_051532/"
 uf_170="/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM/QCDPhoton_pThat-170_TuneCP5_5p02TeV_pythia8/20220825PPMCUF170/220826_051608/"
 
-echo $f_15
+./GatherFiles.sh $f_15 f_15.txt
+./GatherFiles.sh $f_30 f_30.txt
+./GatherFiles.sh $f_50 f_50.txt
+./GatherFiles.sh $f_80 f_80.txt
+./GatherFiles.sh $f_120 f_120.txt
+./GatherFiles.sh $f_170 f_170.txt
 
-./GatherFiles $f_15 f_15.txt
-./GatherFiles $f_30 f_30.txt
-./GatherFiles $f_50 f_50.txt
-./GatherFiles $f_80 f_80.txt
-./GatherFiles $f_120 f_120.txt
-./GatherFiles $f_170 f_170.txt
-
-./GatherFiles $uf_15 uf_15.txt
-./GatherFiles $uf_30 uf_30.txt
-./GatherFiles $uf_50 uf_50.txt
-./GatherFiles $uf_80 uf_80.txt
-./GatherFiles $uf_120 uf_120.txt
-./GatherFiles $uf_170 uf_170.txt
+./GatherFiles.sh $uf_15 uf_15.txt
+./GatherFiles.sh $uf_30 uf_30.txt
+./GatherFiles.sh $uf_50 uf_50.txt
+./GatherFiles.sh $uf_80 uf_80.txt
+./GatherFiles.sh $uf_120 uf_120.txt
+./GatherFiles.sh $uf_170 uf_170.txt
