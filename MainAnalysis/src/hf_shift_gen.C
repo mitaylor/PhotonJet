@@ -224,7 +224,7 @@ int hf_shift(char const* config, char const* output) {
     //     mb_rn->save();
     // });
 
-    auto fout = new TFile(output.data(), "recreate");
+    auto fout = new TFile(output, "recreate");
 
     hp_hn->save();
     hp_rn->save();
