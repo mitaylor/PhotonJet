@@ -81,12 +81,12 @@ int estimate_hf(char const* config, char const* output) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % mod != 0) { continue; }
 
-        t->GetEntry(i);
+        t->GetEntry(i); std::cout << __LINE__ << std::endl;
 
         if (std::abs(pjt->vz) > 15) { continue; }
 
         int64_t leading = -1;
-        float leading_pt = 0;
+        float leading_pt = 0;std::cout << __LINE__ << std::endl;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
             if ((*pjt->phoEt)[j] <= 30) { continue; }
             if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
@@ -102,24 +102,24 @@ int estimate_hf(char const* config, char const* output) {
                 leading = j;
                 leading_pt = pho_et;
             }
-        }
+        }std::cout << __LINE__ << std::endl;
 
         /* require leading photon */
-        if (leading < 0) { continue; }
+        if (leading < 0) { continue; }std::cout << __LINE__ << std::endl;
 
         if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.02)
             continue;
-
+std::cout << __LINE__ << std::endl;
         /* isolation requirement */
         float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
             + (*pjt->pho_hcalRechitIsoR3)[leading]
             + (*pjt->pho_trackIsoR3PtCut20)[leading];
         if (isolation > iso_max) { continue; }
-
+std::cout << __LINE__ << std::endl;
         /* leading photon axis */
         auto photon_eta = (*pjt->phoEta)[leading];
         auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
-
+std::cout << __LINE__ << std::endl;
         /* electron rejection */
         if (ele_rej) {
             bool electron = false;
@@ -143,15 +143,15 @@ int estimate_hf(char const* config, char const* output) {
         }
 
         auto pt_x = ipt->index_for(leading_pt);
-
+std::cout << __LINE__ << std::endl;
         float pf_sum = 0;
 
         for (size_t j = 0; j < pjt->pfPt->size(); ++j) {
             // if ((*pjt->pfId)[j] != 0) std::cout << (*pjt->pfId)[j] << std::endl;
             pf_sum += (*pjt->pfId)[j] >= 6 ? (*pjt->pfPt)[j] : 0;
         }
-
-        (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);
+std::cout << __LINE__ << std::endl;
+        (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);std::cout << __LINE__ << std::endl;
     }
 
     /* calculate percentile */
