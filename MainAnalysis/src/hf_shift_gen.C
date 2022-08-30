@@ -21,7 +21,6 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TProfile.h"
-#include "TLatex.h"
 #include "TGaxis.h"
 
 #include <string>
@@ -218,12 +217,21 @@ int hf_shift(char const* config, char const* output) {
     c8->draw("pdf");
     c9->draw("pdf");
 
-    in(output, [&]() {
-        hp_hn->save();
-        hp_rn->save();
-        mb_hn->save();
-        mb_rn->save();
-    });
+    // in(output, [&]() {
+    //     hp_hn->save();
+    //     hp_rn->save();
+    //     mb_hn->save();
+    //     mb_rn->save();
+    // });
+
+    auto fout = new TFile(output.data(), "recreate");
+
+    hp_hn->save();
+    hp_rn->save();
+    mb_hn->save();
+    mb_rn->save();
+
+    fout->Close();
 
     return 0;
 }
