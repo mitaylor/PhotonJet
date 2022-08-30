@@ -91,7 +91,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReaderValue<float> mb_ncoll(mb_evt, "Ncoll");
     TTreeReaderValue<float> mb_weight(mb_evt, "weight");
 
-    auto mb_pho_dir = new TChain("ggHiNtuplizer/EventTree");
+    auto mb_pho_dir = new TChain("ggHiNtuplizerGED/EventTree");
     FillChain(mb_pho_dir, mb_input);
     TTreeReader mb_pho(mb_pho_dir);
     TTreeReaderValue<float> mb_rho(mb_pho, "rho");
