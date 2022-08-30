@@ -291,11 +291,11 @@ int populate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0 });
+    auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
 
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0 });
+    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
 
     printf("iterate..\n");
 

@@ -11,6 +11,7 @@
 #include "../git/foliage/include/triggers.h"
 #include "../git/foliage/include/evtrho.h"
 #include "../git/foliage/include/pfcand.h"
+#include "../git/foliage/include/tracks.h"
 
 #include "TTree.h"
 
@@ -54,7 +55,7 @@
     ACTION(sv<float>,       jtptCorScale,               ## __VA_ARGS__)     \
     ACTION(sv<float>,       jtptCor,                    ## __VA_ARGS__)     \
 
-enum tt { evt, egm, pho, ele, jet, trg, rho, pf, ntt };
+enum tt { evt, egm, pho, ele, jet, trg, rho, pf, trk, ntt };
 
 class pjtree {
   public:
@@ -63,6 +64,7 @@ class pjtree {
             : _gen(gen), _hlt(hlt), _hi(hi), _flags(flags) {
         B_VAL_EVT_RECO(SETMONE)
         B_VAL_EGM_RECO(SETMONE)
+        B_VAL_TRK_RECO(SETMONE)
         B_VAL_PHO_RECO(SETMONE)
         B_VAL_ELE_RECO(SETMONE)
         B_VAL_JET_RECO(SETMONE)
@@ -103,6 +105,7 @@ class pjtree {
 
         B_VAL_EVT_RECO(SETZERO)
         B_VAL_EGM_RECO(SETZERO)
+        B_VAL_TRK_RECO(SETZERO)
         B_VAL_PHO_RECO(SETZERO)
         B_VAL_ELE_RECO(SETZERO)
         B_VAL_JET_RECO(SETZERO)
@@ -163,7 +166,7 @@ class pjtree {
     }
 
     void copy(event* tevt, eggen* tegg, photons* tpho, electrons* tele,
-              jets* tjet, triggers* thlt, evtrho* trho, pfcand* tpf) {
+              jets* tjet, triggers* thlt, evtrho* trho, pfcand* tpf, tracks* ttrk) {
         if (_flags[tt::evt]) {
             B_VAL_EVT_RECO(COPYVAL, tevt)
 
@@ -215,6 +218,10 @@ class pjtree {
         if (_flags[tt::pf]) {
             B_VEC_PF_RECO(COPYOBJ, tpf)
         }
+
+        if (_flags[tt::trk]) {
+            B_VAL_TRK_RECO(COPYVAL, ttrk)
+        }
     }
 
     B_VAL_EVT_RECO(DECLVAL)
@@ -224,6 +231,7 @@ class pjtree {
     B_VAL_EGM_GEN(DECLVAL)
     B_VEC_EGM_GEN(DECLPTR)
     B_VAL_PHO_RECO(DECLVAL)
+    B_VAL_TRK_RECO(DECLVAL)
     B_VEC_PHO_RECO(DECLPTR)
     B_VEC_PF_RECO(DECLPTR)
     B_VEC_PHO_EXT(DECLPTR)
@@ -297,6 +305,10 @@ class pjtree {
         if (_flags[tt::pf]) {
             B_VEC_PF_RECO(BRANCHPTR, t)
         }
+
+        if (_flags[tt::trk]) {
+            B_VAL_TRK_RECO(BRANCHVAL, t)
+        }
     }
 
     void read(TTree* t) {
@@ -355,6 +367,10 @@ class pjtree {
 
         if (_flags[tt::pf]) {
             B_VEC_PF_RECO(SETVALADDR, t)
+        }
+
+        if (_flags[tt::trk]) {
+            B_VAL_TRK_RECO(SETVALADDR, t)
         }
     }
 

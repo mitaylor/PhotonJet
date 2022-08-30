@@ -69,11 +69,11 @@ int estimate_hf(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0 });
+    auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, 1 });
 
     TFile* f_pf = new TFile(input_pf.data(), "read");
     TTree* t_pf = (TTree*)f_pf->Get("pj");
-    auto pjt_pf = new pjtree(false, false, false, t_pf, { 0, 0, 0, 0, 0, 0, 0, 1 });
+    auto pjt_pf = new pjtree(false, false, false, t_pf, { 0, 0, 0, 0, 0, 0, 0, 1, 1 });
 
     printf("iterate..\n");
 

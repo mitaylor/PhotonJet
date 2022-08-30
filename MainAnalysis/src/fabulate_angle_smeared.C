@@ -13,6 +13,7 @@
 #include "TFile.h"
 #include "TH1.h"
 #include "TTree.h"
+#include "TRandom3.h"
 
 #include <string>
 #include <vector>
@@ -27,6 +28,10 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     return deta * deta + dphi * dphi;
 }
 
+float res(float c, float s, float n, float pt) {
+    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+}
+
 template <typename T>
 static int sgn(T val) { return (T(0) < val) - (val < T(0)); }
 
@@ -35,6 +40,11 @@ int fabulate(char const* config, char const* output) {
 
     auto input = conf->get<std::string>("input");
     auto tag = conf->get<std::string>("tag");
+
+    auto smear_input_aa = conf->get<std::string>("smear_input_aa");
+    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
+    auto smear_tag = conf->get<std::string>("smear_tag");
+    auto cent = conf->get<int64_t>("cent");
 
     auto heavyion = conf->get<bool>("heavyion");
     auto apply_jec = conf->get<bool>("apply_jec");
@@ -45,44 +55,38 @@ int fabulate(char const* config, char const* output) {
     auto pt_min = conf->get<float>("pt_min");
     auto eta_max = conf->get<float>("eta_max");
 
-    auto res = conf->get<std::vector<float>>("es_range");
-    auto rdr = conf->get<std::vector<float>>("dr_range");
-    auto rde = conf->get<std::vector<float>>("de_range");
-    auto rdp = conf->get<std::vector<float>>("dp_range");
+    auto rddr = conf->get<std::vector<float>>("ddr_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
-    auto deta = conf->get<std::vector<float>>("eta_diff");
+    auto ddr = conf->get<std::vector<float>>("dr_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     /* load centrality weighting for MC */
     TFile* frho;
     history<TH1F>* rho_weighting = nullptr;
-
+    
     if (!rho.empty()) {
         frho = new TFile(rho.data(), "read");
         rho_weighting = new history<TH1F>(frho, rho_label);
     }
 
+    /* load the smearing information */
+    TFile* fsmear_aa = new TFile(smear_input_aa.data(), "read");
+    TFile* fsmear_pp = new TFile(smear_input_pp.data(), "read");
+    history<TH1F>* smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
+    history<TH1F>* smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_" + smear_tag);
+
+    auto rng = new TRandom3(144);
+
     /* prepare histograms */
-    auto mptetahf = new multival(dpt, deta, dhf);
+    auto mptdrhf = new multival(dpt, ddr, dhf);
     auto ipt = new interval(dpt);
-    auto ieta = new interval(deta);
+    auto idr = new interval(ddr);
     auto ihf = new interval(dhf);
 
-    auto ies = new interval("energy scale"s, res[0], res[1], res[2]);
-    auto idr = new interval("#deltar^{2}"s, rdr[0], rdr[1], rdr[2]);
-    auto ide = new interval("#delta#eta"s, rde[0], rde[1], rde[2]);
-    auto idp = new interval("#delta#phi"s, rdp[0], rdp[1], rdp[2]);
-
-    auto fes = std::bind(&interval::book<TH1F>, ies, _1, _2, _3);
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
-    auto fde = std::bind(&interval::book<TH1F>, ide, _1, _2, _3);
-    auto fdp = std::bind(&interval::book<TH1F>, idp, _1, _2, _3);
-
-    auto scale = new memory<TH1F>("scale"s, "counts", fes, mptetahf);
-    auto angle = new memory<TH1F>("angle"s, "counts", fdr, mptetahf);
-    auto eta = new memory<TH1F>("eta"s, "counts", fde, mptetahf);
-    auto phi = new memory<TH1F>("phi"s, "counts", fdp, mptetahf);
+    auto iddr = new interval("#deltar^{2}"s, rddr[0], rddr[1], rddr[2]);
+    auto fdr = std::bind(&interval::book<TH1F>, iddr, _1, _2, _3);
+    auto angle = new memory<TH1F>("angle"s, "counts", fdr, mptdrhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -91,7 +95,7 @@ int fabulate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0 });
+    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
 
     /* fill histograms */
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -118,12 +122,17 @@ int fabulate(char const* config, char const* output) {
                 genid[(*p->genpt)[j]] = j;
 
         for (int64_t j = 0; j < p->nref; ++j) {
+            auto reco_pt = apply_jec ? (*p->jtptCor)[j] : (*p->jtpt)[j];
+            auto reco_eta = (*p->jteta)[j];
+            auto reco_phi = (*p->jtphi)[j];
             auto gen_pt = (*p->refpt)[j];
+
+            if (reco_pt < pt_min) { continue; }
             if (gen_pt < pt_min) { continue; }
 
-            auto gen_eta = (*p->refeta)[j];
-            if (std::abs(gen_eta) >= eta_max) { continue; }
+            if (std::abs(reco_eta) >= eta_max) { continue; }
 
+            auto gen_eta = (*p->refeta)[j];
             auto gen_phi = (*p->refphi)[j];
 
             bool match = false;
@@ -138,17 +147,35 @@ int fabulate(char const* config, char const* output) {
             if (heavyion && in_jet_failure_region(p, j))
                 continue;
 
-            auto reco_pt = apply_jec ? (*p->jtptCor)[j] : (*p->jtpt)[j];
-            auto reco_eta = (*p->jteta)[j];
-            auto reco_phi = (*p->jtphi)[j];
-
-            auto deta = reco_eta - gen_eta;
-            auto dphi = revert_radian(convert_radian(reco_phi)
-                - convert_radian(gen_phi));
-
             auto id = genid[gen_pt];
             auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
             auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j], reco_phi, (*p->WTAphi)[j]));
+            
+            if (rdr > rddr.back()) { continue; }
+
+            auto pt_x = ipt->index_for(reco_pt);
+            auto dr_x = idr->index_for(rdr);
+
+            /* do the smearing */
+            auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
+            auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
+            auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
+
+            auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
+            auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
+            auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
+
+            auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
+
+            if (res_diff > 0) {
+                auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
+                auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
+                auto adj = rdr + change * sign / 2;
+
+                // std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
+
+                if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
+            }
 
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
@@ -166,13 +193,8 @@ int fabulate(char const* config, char const* output) {
 
             /* fill histograms */
             for (int64_t j = 0; j < ihf->size(); ++j) {
-                auto pt_x = ipt->index_for(gen_pt);
-                auto eta_x = ieta->index_for(gen_eta);
-                auto index = mptetahf->index_for(x{pt_x, eta_x, j});
+                auto index = mptdrhf->index_for(x{pt_x, dr_x, j});
 
-                (*scale)[index]->Fill(reco_pt / gen_pt, weights[j]);
-                (*eta)[index]->Fill(deta, weights[j]);
-                (*phi)[index]->Fill(dphi, weights[j]);
                 (*angle)[index]->Fill(gdr-rdr, weights[j]);
             }
         }
@@ -180,10 +202,7 @@ int fabulate(char const* config, char const* output) {
 
     /* save output */
     in(output, [&]() {
-        scale->save(tag);
         angle->save(tag);
-        eta->save(tag);
-        phi->save(tag);
     });
 
     return 0;
