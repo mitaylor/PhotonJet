@@ -47,7 +47,7 @@ int hf_shift(char const* config, char const* output) {
     
     auto irho = new interval("#rho"s, 100, 0, 400);
     auto ihf = new interval("HF Energy"s, 100, 0, 7000);
-    auto in = new interval("Ncoll"s, 100, 0, 420);
+    auto in = new interval("Ncoll"s, 100, 0, 2100);
 
     auto mhn = new multival(*ihf, *in);
     auto mrn = new multival(*irho, *in);
@@ -62,9 +62,9 @@ int hf_shift(char const* config, char const* output) {
     auto mb_rn = new history<TH2F>("mb_rn"s, "Hydjet", frn, 1);
 
     auto fhnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 420, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, 7000, "LE"); };
     auto frnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;#rho;"s + label).data(), 100, 0, 420, 0, 400, "LE"); };
+        return new TProfile(name.data(), (";Ncoll;#rho;"s + label).data(), 100, 0, 2100, 0, 400, "LE"); };
 
     auto hp_hn_p = new history<TProfile>("hp_hn_p"s, "Pythia+Hydjet", fhnp, 1);
     auto mb_hn_p = new history<TProfile>("mb_hn_p"s, "Hydjet", fhnp, 1);
