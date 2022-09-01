@@ -187,8 +187,8 @@ int hf_shift(char const* config, char const* output) {
             (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
     }
 
-    diff_rn_p->Scale(nentries / nphotons);
-    diff_hn_p->Scale(nentries / nphotons);
+    diff_rn_p->SetBit(TH1::kIsAverage, false);
+    diff_hn_p->SetBit(TH1::kIsAverage, false);
 
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
