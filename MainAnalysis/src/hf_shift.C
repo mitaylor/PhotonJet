@@ -183,7 +183,7 @@ int hf_shift(char const* config, char const* output) {
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
     for (int i = 1; i <= diff_hn_p->GetNBins(); ++i) {
-        cout << diff_hn_p->GetBinContent(i) << endl;
+        std::cout << diff_hn_p->GetBinContent(i) << std::endl;
     }
 
     diff_rn_p->Scale(nentries / nphotons);
