@@ -179,35 +179,41 @@ int hf_shift(char const* config, char const* output) {
     }
 
     /* subtract distributions */
-    auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
-    auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
+    auto hp_hn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
+    auto hp_rn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
 
-    diff_rn_p->ResetBit(TH1::kIsAverage);
-    diff_hn_p->ResetBit(TH1::kIsAverage);
-    (*mb_hn_p)[0]->ResetBit(TH1::kIsAverage);
-    (*mb_rn_p)[0]->ResetBit(TH1::kIsAverage);
+    auto mb_hn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
+    auto mb_rn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
 
-    diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
-    diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
-
-    if (!(diff_hn_p->GetSumw2N() > 0)) diff_hn_p->Sumw2(true);
-    if (!(diff_rn_p->GetSumw2N() > 0)) diff_rn_p->Sumw2(true);
-
-    diff_hn_p->Add((*mb_hn_p)[0], -1);
-    diff_rn_p->Add((*mb_rn_p)[0], -1);
-
-    for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
-        std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinContent(i) << "\t" << 
-            (*hp_hn_p)[0]->GetBinEntries(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinEntries(i) << "\t" << 
-            diff_hn_p->GetBinContent(i) << std::endl;
+    for (int i = 1; i <= hp_hn_h->GetNbinsX(); ++i) {
+        hp_hn_h->SetBinContent(i, (*hp_hn_p)[0]->GetBinContent(i));
+        hp_hn_h->SetBinError(i, (*hp_hn_p)[0]->SetBinError(i));
+        hp_rn_h->SetBinContent(i, (*hp_rn_p)[0]->GetBinContent(i));
+        hp_rn_h->SetBinError(i, (*hp_rn_p)[0]->SetBinError(i));
+        mb_hn_h->SetBinContent(i, (*mb_hn_p)[0]->GetBinContent(i));
+        mb_hn_h->SetBinError(i, (*mb_hn_p)[0]->SetBinError(i));
+        mb_rn_h->SetBinContent(i, (*mb_rn_p)[0]->GetBinContent(i));
+        mb_rn_h->SetBinError(i, (*mb_rn_p)[0]->SetBinError(i));
     }
 
-    diff_hn_p->SetMaximum(300);
-    diff_hn_p->SetMinimum(-300);
-    diff_rn_p->SetMaximum(10);
-    diff_rn_p->SetMinimum(-10);
+    if (!(hp_hn_h->GetSumw2N() > 0)) diff_hn_p->Sumw2(true);
+    if (!(hp_rn_h->GetSumw2N() > 0)) diff_rn_p->Sumw2(true);
+
+    hp_hn_h->Add(mb_hn_h, -1);
+    hp_rn_h->Add(mb_rn_h, -1);
+
+    for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
+        std::cout << hp_hn_h->GetBinContent(i) << "\t" << 
+            (*hp_hn_p)[0]->GetBinContent(i) << "\t" << 
+            (*hp_hn_p)[0]->GetBinEntries(i) << "\t" << 
+            (*mb_hn_p)[0]->GetBinContent(i) << "\t" << 
+            (*mb_hn_p)[0]->GetBinEntries(i) << std::endl;
+    }
+
+    hp_hn_h->SetMaximum(300);
+    hp_hn_h->SetMinimum(-300);
+    hp_rn_h->SetMaximum(10);
+    hp_rn_h->SetMinimum(-10);
 
     hp_avg_hf /= nphotons;
     hp_avg_rho /= nphotons;
