@@ -182,11 +182,6 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
-    for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
-        std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
-    }
-
     diff_rn_p->SetBit(TH1::kIsAverage, false);
     diff_hn_p->SetBit(TH1::kIsAverage, false);
     (*mb_hn_p)[0]->SetBit(TH1::kIsAverage, false);
@@ -203,8 +198,8 @@ int hf_shift(char const* config, char const* output) {
     if (!(diff_hn_p->GetSumw2N() > 0)) diff_hn_p->Sumw2(true);
     if (!(diff_rn_p->GetSumw2N() > 0)) diff_rn_p->Sumw2(true);
 
-    diff_hn_p->Add((*mb_hn_p)[0], -1);
-    diff_rn_p->Add((*mb_rn_p)[0], -1);
+    std::cout << diff_hn_p->Add((*mb_hn_p)[0], -1) << std::endl;
+    std::cout << diff_rn_p->Add((*mb_rn_p)[0], -1) << std::endl;
 
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
