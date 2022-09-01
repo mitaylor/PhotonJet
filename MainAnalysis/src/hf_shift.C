@@ -182,7 +182,7 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
-    for (int i = 1; i <= diff_hn_p->GetNBins(); ++i) {
+    for (int i = 1; i <= diff_hn_p->GetNBinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << std::endl;
     }
 
