@@ -190,6 +190,12 @@ int hf_shift(char const* config, char const* output) {
     diff_rn_p->SetMaximum(10);
     diff_rn_p->SetMinimum(-10);
 
+    hp_avg_hf /= nentries;
+    hp_avg_rho /= nentries;
+
+    mb_avg_hf /= nentries;
+    mb_avg_rho /= nentries;
+
     std::cout << "HF difference: " << hp_avg_hf - mb_avg_hf << std::endl;
     std::cout << "Rho difference: " << hp_avg_rho - mb_avg_rho << std::endl;
 
