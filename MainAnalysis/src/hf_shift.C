@@ -187,9 +187,6 @@ int hf_shift(char const* config, char const* output) {
             (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
     }
 
-    diff_rn_p->Scale(nentries / nphotons);
-    diff_hn_p->Scale(nentries / nphotons);
-
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
     diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
 
@@ -198,6 +195,11 @@ int hf_shift(char const* config, char const* output) {
 
     diff_hn_p->Add((*mb_hn_p)[0], -1);
     diff_rn_p->Add((*mb_rn_p)[0], -1);
+
+    for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
+        std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
+            (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
+    }
 
     diff_hn_p->SetMaximum(300);
     diff_hn_p->SetMinimum(-300);
