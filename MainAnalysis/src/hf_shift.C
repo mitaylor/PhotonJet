@@ -187,13 +187,13 @@ int hf_shift(char const* config, char const* output) {
 
     for (int i = 1; i <= hp_hn_h->GetNbinsX(); ++i) {
         hp_hn_h->SetBinContent(i, (*hp_hn_p)[0]->GetBinContent(i));
-        hp_hn_h->SetBinError(i, (*hp_hn_p)[0]->SetBinError(i));
+        hp_hn_h->SetBinError(i, (*hp_hn_p)[0]->GetBinError(i));
         hp_rn_h->SetBinContent(i, (*hp_rn_p)[0]->GetBinContent(i));
-        hp_rn_h->SetBinError(i, (*hp_rn_p)[0]->SetBinError(i));
+        hp_rn_h->SetBinError(i, (*hp_rn_p)[0]->GetBinError(i));
         mb_hn_h->SetBinContent(i, (*mb_hn_p)[0]->GetBinContent(i));
-        mb_hn_h->SetBinError(i, (*mb_hn_p)[0]->SetBinError(i));
+        mb_hn_h->SetBinError(i, (*mb_hn_p)[0]->GetBinError(i));
         mb_rn_h->SetBinContent(i, (*mb_rn_p)[0]->GetBinContent(i));
-        mb_rn_h->SetBinError(i, (*mb_rn_p)[0]->SetBinError(i));
+        mb_rn_h->SetBinError(i, (*mb_rn_p)[0]->GetBinError(i));
     }
 
     if (!(hp_hn_h->GetSumw2N() > 0)) hp_hn_h->Sumw2(true);
