@@ -189,6 +189,8 @@ int hf_shift(char const* config, char const* output) {
 
     diff_rn_p->SetBit(TH1::kIsAverage, false);
     diff_hn_p->SetBit(TH1::kIsAverage, false);
+    (*mb_hn_p)[0]->SetBit(TH1::kIsAverage, false);
+    (*mb_rn_p)[0]->SetBit(TH1::kIsAverage, false);
 
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
