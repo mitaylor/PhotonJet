@@ -196,13 +196,13 @@ int hf_shift(char const* config, char const* output) {
         mb_rn_h->SetBinError(i, (*mb_rn_p)[0]->SetBinError(i));
     }
 
-    if (!(hp_hn_h->GetSumw2N() > 0)) diff_hn_p->Sumw2(true);
-    if (!(hp_rn_h->GetSumw2N() > 0)) diff_rn_p->Sumw2(true);
+    if (!(hp_hn_h->GetSumw2N() > 0)) hp_hn_h->Sumw2(true);
+    if (!(hp_rn_h->GetSumw2N() > 0)) hp_hn_h->Sumw2(true);
 
     hp_hn_h->Add(mb_hn_h, -1);
     hp_rn_h->Add(mb_rn_h, -1);
 
-    for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
+    for (int i = 1; i <= hp_hn_h->GetNbinsX(); ++i) {
         std::cout << hp_hn_h->GetBinContent(i) << "\t" << 
             (*hp_hn_p)[0]->GetBinContent(i) << "\t" << 
             (*hp_hn_p)[0]->GetBinEntries(i) << "\t" << 
@@ -262,14 +262,14 @@ int hf_shift(char const* config, char const* output) {
     apply_style(c8, cms, system_tag);
     c8->add((*mb_hn_p)[0], "Hydjet");
     c8->stack((*hp_hn_p)[0], "Pythia+Hydjet");
-    c8->add(diff_hn_p);
+    c8->add(hp_hn_h);
 
     auto c9 = new paper("comp_rho_v_ncoll", hb);
     c9->divide(1, -1);
     apply_style(c9, cms, system_tag);
     c9->add((*mb_rn_p)[0], "Hydjet");
     c9->stack((*hp_rn_p)[0], "Pythia+Hydjet");
-    c9->add(diff_rn_p);
+    c9->add(hp_rn_h);
 
     auto hp_style = [](TH1* h) {
         h->SetMarkerStyle(34);
