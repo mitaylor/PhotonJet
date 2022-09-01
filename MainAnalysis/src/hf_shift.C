@@ -190,7 +190,7 @@ int hf_shift(char const* config, char const* output) {
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
             (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
-            std::cout << diff_hn_p->GetBinEntries(i) << "\t" << 
+            std::cout << (*hp_hn_p)[0]->GetBinEntries(i) << "\t" << 
             (*mb_hn_p)[0]->GetBinEntries(i) << std::endl;
     }
 
