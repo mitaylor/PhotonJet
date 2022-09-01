@@ -182,17 +182,10 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
-    diff_rn_p->SetBit(TH1::kIsAverage, false);
-    diff_hn_p->SetBit(TH1::kIsAverage, false);
-    (*mb_hn_p)[0]->SetBit(TH1::kIsAverage, false);
-    (*mb_rn_p)[0]->SetBit(TH1::kIsAverage, false);
-
-    for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
-        std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinContent(i) << "\t" << 
-            (*hp_hn_p)[0]->GetBinEntries(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinEntries(i) << std::endl;
-    }
+    diff_rn_p->UnSetBit(TH1::kIsAverage);
+    diff_hn_p->UnSetBit(TH1::kIsAverage);
+    (*mb_hn_p)[0]->UnSetBit(TH1::kIsAverage);
+    (*mb_rn_p)[0]->UnSetBit(TH1::kIsAverage);
 
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
     diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
@@ -205,7 +198,10 @@ int hf_shift(char const* config, char const* output) {
 
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
+            (*mb_hn_p)[0]->GetBinContent(i) << "\t" << 
+            (*hp_hn_p)[0]->GetBinEntries(i) << "\t" << 
+            (*mb_hn_p)[0]->GetBinEntries(i) << "\t" << 
+            diff_hn_p->GetBinContent(i) << std::endl;
     }
 
     diff_hn_p->SetMaximum(300);
