@@ -84,6 +84,7 @@ int hf_shift(char const* config, char const* output) {
 
     int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
     nentries = nentries > 100000 ? 100000 : nentries;
+    int64_t nphotons = 0;
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
@@ -136,6 +137,8 @@ int hf_shift(char const* config, char const* output) {
 
         if (electron) { continue; }
 
+        nphotons++;
+
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
 
         hp_avg_hf += hp_pjt->hiHF;
@@ -176,6 +179,9 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
+    diff_rn_p->Scale(nentries / (nphotons * 1.00));
+    diff_hn_p->Scale(nentries / (nphotons * 1.00));
+
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
     diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
 
@@ -190,8 +196,8 @@ int hf_shift(char const* config, char const* output) {
     diff_rn_p->SetMaximum(10);
     diff_rn_p->SetMinimum(-10);
 
-    hp_avg_hf /= nentries;
-    hp_avg_rho /= nentries;
+    hp_avg_hf /= nphotons;
+    hp_avg_rho /= nphotons;
 
     mb_avg_hf /= nentries;
     mb_avg_rho /= nentries;
