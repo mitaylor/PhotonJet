@@ -182,10 +182,10 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
-    diff_rn_p->UnSetBit(TH1::kIsAverage);
-    diff_hn_p->UnSetBit(TH1::kIsAverage);
-    (*mb_hn_p)[0]->UnSetBit(TH1::kIsAverage);
-    (*mb_rn_p)[0]->UnSetBit(TH1::kIsAverage);
+    diff_rn_p->ResetBit(TH1::kIsAverage);
+    diff_hn_p->ResetBit(TH1::kIsAverage);
+    (*mb_hn_p)[0]->ResetBit(TH1::kIsAverage);
+    (*mb_rn_p)[0]->ResetBit(TH1::kIsAverage);
 
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
     diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
