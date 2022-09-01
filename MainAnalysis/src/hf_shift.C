@@ -141,8 +141,8 @@ int hf_shift(char const* config, char const* output) {
 
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
 
-        hp_avg_hf += hp_pjt->hiHF;
-        hp_avg_rho += avg_rho;
+        hp_avg_hf += hp_pjt->hiHF * hp_pjt->w;
+        hp_avg_rho += avg_rho * hp_pjt->w;
 
         (*hp_hn)[0]->Fill(hp_pjt->hiHF, hp_pjt->Ncoll, hp_pjt->w);
         (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
@@ -168,8 +168,8 @@ int hf_shift(char const* config, char const* output) {
 
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
 
-        mb_avg_hf += mb_pjt->hiHF;
-        mb_avg_rho += avg_rho;
+        mb_avg_hf += mb_pjt->hiHF * mb_pjt->w;
+        mb_avg_rho += avg_rho * mb_pjt->w;
 
         (*mb_hn)[0]->Fill(mb_pjt->hiHF, mb_pjt->Ncoll, mb_pjt->w);
         (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll, mb_pjt->w);
