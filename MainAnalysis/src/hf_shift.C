@@ -182,14 +182,17 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
+    auto test_hn_p = (TH1*) (*mb_hn_p)[0]->Clone();
+    auto test_rn_p = (TH1*) (*mb_rn_p)[0]->Clone(); 
+
     diff_rn_p->SetBit(TH1::kIsAverage, false);
     diff_hn_p->SetBit(TH1::kIsAverage, false);
-    (*mb_hn_p)[0]->SetBit(TH1::kIsAverage, false);
-    (*mb_rn_p)[0]->SetBit(TH1::kIsAverage, false);
+    test_hn_p->SetBit(TH1::kIsAverage, false);
+    test_rn_p->SetBit(TH1::kIsAverage, false);
 
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
+            test_rn_p->GetBinContent(i) << std::endl;
     }
 
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
@@ -198,12 +201,12 @@ int hf_shift(char const* config, char const* output) {
     if (!(diff_hn_p->GetSumw2N() > 0)) diff_hn_p->Sumw2(false);
     if (!(diff_rn_p->GetSumw2N() > 0)) diff_rn_p->Sumw2(false);
 
-    std::cout << diff_hn_p->Add((*mb_hn_p)[0], -1) << std::endl;
+    std::cout << diff_hn_p->Add(test_rn_p, -1) << std::endl;
     std::cout << diff_rn_p->Add((*mb_rn_p)[0], -1) << std::endl;
 
     for (int i = 1; i <= diff_hn_p->GetNbinsX(); ++i) {
         std::cout << diff_hn_p->GetBinContent(i) << "\t" << 
-            (*mb_hn_p)[0]->GetBinContent(i) << std::endl;
+            test_rn_p->GetBinContent(i) << std::endl;
     }
 
     diff_hn_p->SetMaximum(300);
