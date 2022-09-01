@@ -195,8 +195,8 @@ int hf_shift(char const* config, char const* output) {
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
     diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
 
-    if (!(diff_hn_p->GetSumw2N() > 0)) diff_hn_p->Sumw2(true);
-    if (!(diff_rn_p->GetSumw2N() > 0)) diff_rn_p->Sumw2(true);
+    if (!(diff_hn_p->GetSumw2N() > 0)) diff_hn_p->Sumw2(false);
+    if (!(diff_rn_p->GetSumw2N() > 0)) diff_rn_p->Sumw2(false);
 
     std::cout << diff_hn_p->Add((*mb_hn_p)[0], -1) << std::endl;
     std::cout << diff_rn_p->Add((*mb_rn_p)[0], -1) << std::endl;
