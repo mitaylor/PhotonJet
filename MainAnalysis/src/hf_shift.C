@@ -84,7 +84,7 @@ int hf_shift(char const* config, char const* output) {
 
     int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
     nentries = nentries > 100000 ? 100000 : nentries;
-    int64_t nphotons = 0;
+    double nphotons = 0;
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
@@ -137,7 +137,7 @@ int hf_shift(char const* config, char const* output) {
 
         if (electron) { continue; }
 
-        nphotons++;
+        nphotons += hp_pjt->w;
 
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
 
@@ -153,6 +153,7 @@ int hf_shift(char const* config, char const* output) {
 
     nentries = static_cast<int64_t>(mb_t->GetEntries());
     nentries = nentries > 100000 ? 100000 : nentries;
+    double nmb = 0;
 
     double mb_avg_hf = 0;
     double mb_avg_rho = 0;
@@ -162,6 +163,8 @@ int hf_shift(char const* config, char const* output) {
             printf("entry: %li/%li\n", i, nentries);
 
         mb_t->GetEntry(i);
+
+        nmb += mb_pjt->w;
 
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
 
@@ -179,8 +182,8 @@ int hf_shift(char const* config, char const* output) {
     auto diff_hn_p = (TH1*) (*hp_hn_p)[0]->Clone();
     auto diff_rn_p = (TH1*) (*hp_rn_p)[0]->Clone();
 
-    diff_rn_p->Scale(nentries / (nphotons * 1.00));
-    diff_hn_p->Scale(nentries / (nphotons * 1.00));
+    diff_rn_p->Scale(nentries / nphotons);
+    diff_hn_p->Scale(nentries / nphotons);
 
     diff_hn_p->SetNameTitle("diff_hn_p", ";;Orange - Purple");
     diff_rn_p->SetNameTitle("diff_rn_p", ";;Orange - Purple");
@@ -199,8 +202,8 @@ int hf_shift(char const* config, char const* output) {
     hp_avg_hf /= nphotons;
     hp_avg_rho /= nphotons;
 
-    mb_avg_hf /= nentries;
-    mb_avg_rho /= nentries;
+    mb_avg_hf /= nmb;
+    mb_avg_rho /= nmb;
 
     std::cout << "HF difference: " << hp_avg_hf - mb_avg_hf << std::endl;
     std::cout << "Rho difference: " << hp_avg_rho - mb_avg_rho << std::endl;
