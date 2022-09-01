@@ -83,7 +83,7 @@ int hf_shift(char const* config, char const* output) {
     double hp_avg_rho = 0;
 
     int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
-    nentries = nentries > 10000000 ? 10000000 : nentries;
+    nentries = nentries > 100000 ? 100000 : nentries;
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
@@ -149,6 +149,7 @@ int hf_shift(char const* config, char const* output) {
     }
 
     nentries = static_cast<int64_t>(mb_t->GetEntries());
+    nentries = nentries > 100000 ? 100000 : nentries;
 
     double mb_avg_hf = 0;
     double mb_avg_rho = 0;

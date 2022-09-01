@@ -196,10 +196,10 @@ int estimate_hf(char const* config, char const* output) {
     c1->accessory(pt_info);
     c1->accessory(mean_info);
 
-    c1->divide(ipt->size() - 1, -1);
+    c1->divide(ipt->size(), -1);
     // c1->set(paper::flags::logy);
 
-    for (int64_t j = 0; j < ipt->size() - 1; ++j) {
+    for (int64_t j = 0; j < ipt->size(); ++j) {
         c1->add((*hf)[j], type);
     }
 
@@ -212,10 +212,10 @@ int estimate_hf(char const* config, char const* output) {
     c2->accessory(pt_info);
     c2->accessory(mean_info);
 
-    c2->divide(ipt->size() - 1, -1);
+    c2->divide(ipt->size(), -1);
     // c2->set(paper::flags::logy);
 
-    for (int64_t j = 0; j < ipt->size() - 1; ++j) {
+    for (int64_t j = 0; j < ipt->size(); ++j) {
         c2->add((*percentile)[j], type);
     }
 
