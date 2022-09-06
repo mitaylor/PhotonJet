@@ -33,6 +33,8 @@ int hf_shift(char const* config, char const* output) {
     auto hp_input = conf->get<std::string>("hp_input");
     auto mb_input = conf->get<std::string>("mb_input");
 
+    auto tag = conf->get<std::string>("tag");
+
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
 
@@ -225,38 +227,38 @@ int hf_shift(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Pythia+Hydjet", "Hydjet"); 
 
-    auto c3 = new paper("pythia_hydjet_hf_v_ncoll", hb); 
+    auto c3 = new paper(tag + "_pythia_hydjet_hf_v_ncoll", hb); 
     apply_style(c3, cms, system_tag);
     c3->set(paper::flags::logz);
     c3->add((*hp_hn)[0], "Pythia+Hydjet");
     c3->adjust((*hp_hn)[0], "col", "");
 
-    auto c4 = new paper("hydjet_hf_v_ncoll", hb);
+    auto c4 = new paper(tag + "_hydjet_hf_v_ncoll", hb);
     apply_style(c4, cms, system_tag);
     c4->set(paper::flags::logz);
     c4->add((*mb_hn)[0], "Hydjet");
     c4->adjust((*mb_hn)[0], "col", "");
 
-    auto c5 = new paper("pythia_hydjet_rho_v_ncoll", hb); 
+    auto c5 = new paper(tag + "_pythia_hydjet_rho_v_ncoll", hb); 
     apply_style(c5, cms, system_tag);
     c5->set(paper::flags::logz);
     c5->add((*hp_rn)[0], "Pythia+Hydjet");
     c5->adjust((*hp_rn)[0], "col", "");
 
-    auto c6 = new paper("hydjet_rho_v_ncoll", hb);
+    auto c6 = new paper(tag + "_hydjet_rho_v_ncoll", hb);
     apply_style(c6, cms, system_tag);
     c6->set(paper::flags::logz);
     c6->add((*mb_rn)[0], "Hydjet");
     c6->adjust((*mb_rn)[0], "col", "");
 
-    auto c8 = new paper("comp_hf_v_ncoll", hb);
+    auto c8 = new paper(tag + "_comp_hf_v_ncoll", hb);
     c8->divide(1, -1);
     apply_style(c8, cms, system_tag);
     c8->add((*mb_hn_p)[0], "Hydjet");
     c8->stack((*hp_hn_p)[0], "Pythia+Hydjet");
     c8->add(hp_hn_h);
 
-    auto c9 = new paper("comp_rho_v_ncoll", hb);
+    auto c9 = new paper(tag + "_comp_rho_v_ncoll", hb);
     c9->divide(1, -1);
     apply_style(c9, cms, system_tag);
     c9->add((*mb_rn_p)[0], "Hydjet");
