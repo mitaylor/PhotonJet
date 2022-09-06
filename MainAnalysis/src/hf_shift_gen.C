@@ -201,7 +201,7 @@ int hf_shift(char const* config, char const* output) {
     c6->add((*mb_rn)[0], "Hydjet");
     c6->adjust((*mb_rn)[0], "col", "");
 
-    auto c8 = new paper("forest_comp_hf_v_ncollt", hb);
+    auto c8 = new paper("forest_comp_hf_v_ncoll", hb);
     c8->divide(1, -1);
     apply_style(c8, cms, system_tag);
     c8->add((*mb_hn_p)[0], "Hydjet");
