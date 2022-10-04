@@ -142,6 +142,7 @@ int hf_shift(char const* config, char const* output) {
         nphotons += hp_pjt->w;
 
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
+        float pf_sum = 0;
 
         for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
             if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
@@ -175,6 +176,7 @@ int hf_shift(char const* config, char const* output) {
         nmb += mb_pjt->w;
 
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
+        float pf_sum = 0;
 
         for (size_t j = 0; j < mb_pjt->pfPt->size(); ++j) {
             if (std::abs((*mb_pjt->pfEta)[j]) > 3 && std::abs((*mb_pjt->pfEta)[j]) < 5) {
