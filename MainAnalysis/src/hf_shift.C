@@ -184,6 +184,8 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
+        std::cout << pf_sum << std::endl;
+
         mb_avg_hf += pf_sum * mb_pjt->w;
         mb_avg_rho += avg_rho * mb_pjt->w;
 
