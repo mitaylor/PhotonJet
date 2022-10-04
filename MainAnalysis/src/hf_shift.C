@@ -182,10 +182,10 @@ int hf_shift(char const* config, char const* output) {
 
     /* subtract distributions */
     auto hp_hn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
-    auto hp_rn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
+    auto hp_rn_h = new TH1F("hp_rn_h", ";;Orange - Purple", 100, 0, 2100);
 
-    auto mb_hn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
-    auto mb_rn_h = new TH1F("hp_hn_h", ";;Orange - Purple", 100, 0, 2100);
+    auto mb_hn_h = new TH1F("mb_hn_h", ";;Orange - Purple", 100, 0, 2100);
+    auto mb_rn_h = new TH1F("mb_rn_h", ";;Orange - Purple", 100, 0, 2100);
 
     for (int i = 1; i <= hp_hn_h->GetNbinsX(); ++i) {
         hp_hn_h->SetBinContent(i, (*hp_hn_p)[0]->GetBinContent(i));
@@ -199,7 +199,7 @@ int hf_shift(char const* config, char const* output) {
     }
 
     if (!(hp_hn_h->GetSumw2N() > 0)) hp_hn_h->Sumw2(true);
-    if (!(hp_rn_h->GetSumw2N() > 0)) hp_hn_h->Sumw2(true);
+    if (!(hp_rn_h->GetSumw2N() > 0)) hp_rn_h->Sumw2(true);
 
     hp_hn_h->Add(mb_hn_h, -1);
     hp_rn_h->Add(mb_rn_h, -1);

@@ -21,6 +21,7 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TRandom3.h"
+#include "TProfile.h"
 
 #include <memory>
 #include <string>
@@ -57,9 +58,11 @@ int estimate_hf(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("Estimated HF"s, 50, 0, 250);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
+    auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 20, 0, 20, 0, 7000, "LE"); };
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
-    auto percentile = new history<TH1F>("percentile"s, "", fhf, ipt->size());
+    auto nvtx = new history<TProfile>("nvtx"s, "", fhnp, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -84,7 +87,6 @@ int estimate_hf(char const* config, char const* output) {
         t->GetEntry(i);
 
         if (std::abs(pjt->vz) > 15) { continue; }
-        if (pjt->nVtx != 1) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -149,28 +151,23 @@ int estimate_hf(char const* config, char const* output) {
         float pf_sum = 0;
 
         for (size_t j = 0; j < pjt->pfPt->size(); ++j) {
-            // if ((*pjt->pfId)[j] != 0) std::cout << (*pjt->pfId)[j] << std::endl;
-            pf_sum += (*pjt->pfId)[j] >= 6 ? (*pjt->pfPt)[j] : 0;
+            if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                pf_sum += (*pjt->pfPt)[j];
+            }
         }
 
-        (*hf)[pt_x]->Fill(pf_sum * 1.073, pjt->w);
-    }
-
-    /* calculate percentile */
-    for (int64_t j = 0; j < ipt->size() - 1; ++j) {
-        double sum = 0;
-
-        for (int64_t k = 0; k < (*hf)[j]->GetNbinsX(); ++k) {
-            sum += (*hf)[j]->GetBinContent(k+1) / (*hf)[j]->Integral();
-            (*percentile)[j]->SetBinContent(k+1, sum);
-            (*percentile)[j]->SetBinError(k+1, 0);
+        if (pjt->nVtx == 1) { 
+            (*hf)[pt_x]->Fill(pf_sum, pjt->w);
         }
+
+        (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
+
     }
 
     /* save histograms */
     in(output, [&]() {
         hf->save(tag);
-        percentile->save(tag);
+        nvtx->save(tag);
     });
 
     auto pt_info = [&](int64_t index) {
@@ -206,18 +203,10 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c1->draw("pdf");
 
-    auto c2 = new paper(tag + "_estimated_hf_percentile", hb);
+    auto c2 = new paper(tag + "_estimated_hf", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c2->accessory(pt_info);
-    c2->accessory(mean_info);
-
-    c2->divide(ipt->size(), -1);
-    // c2->set(paper::flags::logy);
-
-    for (int64_t j = 0; j < ipt->size(); ++j) {
-        c2->add((*percentile)[j], type);
-    }
+    c2->add((*hf)[j], type);
 
     hb->sketch();
     c2->draw("pdf");
