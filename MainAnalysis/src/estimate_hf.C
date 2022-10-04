@@ -80,7 +80,7 @@ int estimate_hf(char const* config, char const* output) {
     if (entries) { mod = nentries / entries; }
     if (mod != 1) { std::cout << "mod: " << mod << std::endl; }
 
-    for (int64_t i = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < 100000; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % mod != 0) { continue; }
 
