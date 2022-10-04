@@ -62,7 +62,7 @@ int estimate_hf(char const* config, char const* output) {
         return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 20, 0, 20, 0, 7000, "LE"); };
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
-    auto nvtx = new history<TProfile>("nvtx"s, "", fhnp, 1);
+    auto nvtx = new history<TProfile>("nvtx"s, "", fnvtx, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -206,7 +206,7 @@ int estimate_hf(char const* config, char const* output) {
     auto c2 = new paper(tag + "_estimated_hf", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c2->add((*hf)[j], type);
+    c2->add((*hf)[0], type);
 
     hb->sketch();
     c2->draw("pdf");
