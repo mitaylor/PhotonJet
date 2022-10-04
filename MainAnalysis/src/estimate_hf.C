@@ -59,7 +59,7 @@ int estimate_hf(char const* config, char const* output) {
     auto ihf = new interval("Estimated HF"s, 50, 0, 250);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 20, 0, 20, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 12, 0, 12, 0, 7000, "LE"); };
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
     auto nvtx = new history<TProfile>("nvtx"s, "", fnvtx, 1);
@@ -181,7 +181,7 @@ int estimate_hf(char const* config, char const* output) {
         TLatex* text = new TLatex();
         text->SetTextFont(43);
         text->SetTextSize(12);
-        text->DrawLatexNDC(0.54, 0.56, buffer);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
     };
 
     auto hb = new pencil();
