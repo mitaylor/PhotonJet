@@ -146,7 +146,7 @@ int hf_shift(char const* config, char const* output) {
 
         for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
             // if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
-            if ((*mb_pjt->pfId)[j] >= 6) {
+            if ((*hp_pjt->pfId)[j] >= 6) {
                 pf_sum += (*hp_pjt->pfPt)[j];
             }
         }
