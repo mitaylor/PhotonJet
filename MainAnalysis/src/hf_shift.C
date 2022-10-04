@@ -145,7 +145,8 @@ int hf_shift(char const* config, char const* output) {
         float pf_sum = 0;
 
         for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
-            if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
+            // if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
+            if ((*mb_pjt->pfId)[j] >= 6) {
                 pf_sum += (*hp_pjt->pfPt)[j];
             }
         }
@@ -179,12 +180,10 @@ int hf_shift(char const* config, char const* output) {
         float pf_sum = 0;
 
         for (size_t j = 0; j < mb_pjt->pfPt->size(); ++j) {
-            if (std::abs((*mb_pjt->pfEta)[j]) > 3 && std::abs((*mb_pjt->pfEta)[j]) < 5) {
+            if ((*mb_pjt->pfId)[j] >= 6) {
                 pf_sum += (*mb_pjt->pfPt)[j];
             }
         }
-
-        std::cout << pf_sum << " " << mb_pjt->Ncoll << " " << mb_pjt->w << std::endl;
 
         mb_avg_hf += pf_sum * mb_pjt->w;
         mb_avg_rho += avg_rho * mb_pjt->w;
