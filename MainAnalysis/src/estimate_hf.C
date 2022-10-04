@@ -151,7 +151,8 @@ int estimate_hf(char const* config, char const* output) {
         float pf_sum = 0;
 
         for (size_t j = 0; j < pjt->pfPt->size(); ++j) {
-            if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+            // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+            if ((*pjt->pfId)[j] >= 6) {
                 pf_sum += (*pjt->pfPt)[j];
             }
         }
