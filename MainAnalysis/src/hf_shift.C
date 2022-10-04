@@ -75,11 +75,11 @@ int hf_shift(char const* config, char const* output) {
     /* read input files */
     TFile* hp_f = new TFile(hp_input.data(), "read");
     TTree* hp_t = (TTree*) hp_f->Get("pj");
-    auto hp_pjt = new pjtree(true, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 0, 0 });
+    auto hp_pjt = new pjtree(true, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
 
     TFile* mb_f = new TFile(mb_input.data(), "read");
     TTree* mb_t = (TTree*) mb_f->Get("pj");
-    auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 0, 0 });
+    auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
 
     double hp_avg_hf = 0;
     double hp_avg_rho = 0;
@@ -143,13 +143,19 @@ int hf_shift(char const* config, char const* output) {
 
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
 
-        hp_avg_hf += hp_pjt->hiHF * hp_pjt->w;
+        for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
+            if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
+                pf_sum += (*hp_pjt->pfPt)[j];
+            }
+        }
+
+        hp_avg_hf += pf_sum * hp_pjt->w;
         hp_avg_rho += avg_rho * hp_pjt->w;
 
-        (*hp_hn)[0]->Fill(hp_pjt->hiHF, hp_pjt->Ncoll, hp_pjt->w);
+        (*hp_hn)[0]->Fill(pf_sum, hp_pjt->Ncoll, hp_pjt->w);
         (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
 
-        (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, hp_pjt->hiHF, hp_pjt->w);
+        (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt->w);
         (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
     }
 
@@ -170,13 +176,19 @@ int hf_shift(char const* config, char const* output) {
 
         auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
 
-        mb_avg_hf += mb_pjt->hiHF * mb_pjt->w;
+        for (size_t j = 0; j < mb_pjt->pfPt->size(); ++j) {
+            if (std::abs((*mb_pjt->pfEta)[j]) > 3 && std::abs((*mb_pjt->pfEta)[j]) < 5) {
+                pf_sum += (*mb_pjt->pfPt)[j];
+            }
+        }
+
+        mb_avg_hf += pf_sum * mb_pjt->w;
         mb_avg_rho += avg_rho * mb_pjt->w;
 
-        (*mb_hn)[0]->Fill(mb_pjt->hiHF, mb_pjt->Ncoll, mb_pjt->w);
+        (*mb_hn)[0]->Fill(pf_sum, mb_pjt->Ncoll, mb_pjt->w);
         (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll, mb_pjt->w);
 
-        (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, mb_pjt->hiHF, mb_pjt->w);
+        (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum, mb_pjt->w);
         (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho, mb_pjt->w);
     }
 
