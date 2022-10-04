@@ -59,7 +59,7 @@ int estimate_hf(char const* config, char const* output) {
     auto ihf = new interval("Estimated HF"s, 50, 0, 250);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 12, 0, 12, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, 7000, "LE"); };
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
     auto nvtx = new history<TProfile>("nvtx"s, "", fnvtx, 1);
@@ -80,7 +80,7 @@ int estimate_hf(char const* config, char const* output) {
     if (entries) { mod = nentries / entries; }
     if (mod != 1) { std::cout << "mod: " << mod << std::endl; }
 
-    for (int64_t i = 0; i < 100000; ++i) {
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
         if (i % mod != 0) { continue; }
 
