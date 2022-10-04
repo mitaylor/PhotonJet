@@ -203,10 +203,10 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c1->draw("pdf");
 
-    auto c2 = new paper(tag + "_estimated_hf", hb);
+    auto c2 = new paper(tag + "_nvtx_hf", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c2->add((*hf)[0], type);
+    c2->add((*nvtx)[0], type);
 
     hb->sketch();
     c2->draw("pdf");
