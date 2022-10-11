@@ -219,8 +219,8 @@ int hf_shift(char const* config, char const* output) {
     hp_hn_h->Add(mb_hn_h, -1);
     hp_rn_h->Add(mb_rn_h, -1);
 
-    hp_hn_h->SetMaximum(300);
-    hp_hn_h->SetMinimum(-300);
+    hp_hn_h->SetMaximum(100);
+    hp_hn_h->SetMinimum(-100);
     hp_rn_h->SetMaximum(10);
     hp_rn_h->SetMinimum(-10);
 
@@ -230,8 +230,10 @@ int hf_shift(char const* config, char const* output) {
     mb_avg_hf /= nmb;
     mb_avg_rho /= nmb;
 
-    std::cout << "HF difference: " << hp_avg_hf - mb_avg_hf << std::endl;
-    std::cout << "Rho difference: " << hp_avg_rho - mb_avg_rho << std::endl;
+    std::cout << "HF difference: " << hp_hn_h->GetMean(2) << " - " << mb_hn_h->GetMean(2) << std::endl;
+    std::cout << "HF difference: " << hp_hn_h->GetMeanError(2) << " " << mb_hn_h->GetMeanError(2) << std::endl;
+    std::cout << "Rho difference: " << hp_rn_h->GetMean(2) << " - " << mb_rn_h->GetMean(2) << std::endl;
+    std::cout << "Rho difference: " << hp_rn_h->GetMeanError(2) << " - " << mb_rn_h->GetMeanError(2) << std::endl;
 
     /* draw rho distributions */
     /* draw distributions */
@@ -309,6 +311,8 @@ int hf_shift(char const* config, char const* output) {
     hp_rn->save();
     mb_hn->save();
     mb_rn->save();
+    hp_hn_h->save();
+    hp_rn_h->save();
 
     fout->Close();
 
