@@ -163,6 +163,7 @@ int estimate_hf(char const* config, char const* output) {
 
         (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
 
+        if (nVtx >= 14) std::cout << pjt->nVtx << std::endl;
     }
 
     /* save histograms */
