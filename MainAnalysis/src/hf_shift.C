@@ -311,8 +311,8 @@ int hf_shift(char const* config, char const* output) {
     hp_rn->save();
     mb_hn->save();
     mb_rn->save();
-    hp_hn_h->save();
-    hp_rn_h->save();
+    hp_hn_h->Write();
+    hp_rn_h->Write();
 
     fout->Close();
 
