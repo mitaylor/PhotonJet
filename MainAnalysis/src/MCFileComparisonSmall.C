@@ -165,13 +165,13 @@ int Compare(char const* oldInput, char const* newInput) {
 
     TChain newPhotonChain("ggHiNtuplizerGED/EventTree");
     // FillChain(newPhotonChain, newFiles);
-    newRhoChain.Add(newInput);
     newPhotonChain.Add(newInput);
     TTreeReader newPhotonReader(&newPhotonChain);
     TTreeReaderValue<float> newPhotonRho(newPhotonReader, "rho");
 
     TChain newRhoChain("hiPuRhoR3Analyzer/t");
     // FillChain(newRhoChain, newFiles);
+    newRhoChain.Add(newInput);
     TTreeReader newRhoReader(&newRhoChain);
     TTreeReaderValue<vector<double>> newRhoEtaMin(newRhoReader, "etaMin");
     TTreeReaderValue<vector<double>> newRhoEtaMax(newRhoReader, "etaMax");
