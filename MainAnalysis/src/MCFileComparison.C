@@ -199,7 +199,8 @@ int Compare(char const* oldInput, char const* newInput) {
 
     /* read in information from TTrees */
     for (int i = 1; i < oldEntries; ++i) {
-        oldCaloTowerReader.Next();
+        oldPhotonReader.Next(); oldRhoReader.Next();
+
         if (i % (oldEntries / 100) == 0) cout << i << " / " << oldEntries << endl;
             
         oldPhotonHist->Fill(*oldPhotonRho);
@@ -207,7 +208,8 @@ int Compare(char const* oldInput, char const* newInput) {
     }
 
     for (int i = 1; i < newEntries; ++i) {
-        newCaloTowerReader.Next();
+        newPhotonReader.Next(); newRhoReader.Next();
+
         if (i % (newEntries / 100) == 0) cout << i << " / " << newEntries << endl;
 
         newPhotonHist->Fill(*newPhotonRho);
@@ -222,6 +224,9 @@ int Compare(char const* oldInput, char const* newInput) {
     newRhoHist->Scale(1.0/newEntries);
 
     /* plot the caloTower distributions */
+    auto canvas = new TCanvas("canvas", "", 0 , 0, 500, 500);
+    canvas->SetLeftMargin(0.15);
+    canvas->SetBottomMargin(0.15);
     canvas->Print("MCComparison.pdf[");
     canvas->SetLogy(1);
     canvas->Clear();
