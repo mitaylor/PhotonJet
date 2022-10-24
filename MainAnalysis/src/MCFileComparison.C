@@ -21,7 +21,7 @@
 
 using namespace std;
 
-double GetAvgRho(double** evtRho, double** etaMin, double** etaMax) {
+double GetAvgRho(vector<double>* evtRho, vector<double>* etaMin, vector<double>* etaMax) {
     double result = 0;
     double count = 0;
 
@@ -153,9 +153,9 @@ int Compare(char const* oldInput, char const* newInput) {
     TChain oldRhoChain("hiPuRhoR3Analyzer/t");
     FillChain(oldRhoChain, oldFiles);
     TTreeReader oldRhoReader(&oldRhoChain);
-    TTreeReaderValue<vector<double>> oldRhoEtaMin(oldCaloTowerReader, "etaMin");
-    TTreeReaderValue<vector<double>> oldRhoEtaMax(oldCaloTowerReader, "etaMax");
-    TTreeReaderValue<vector<double>> oldRhoRho(oldCaloTowerReader, "rho");
+    TTreeReaderValue<vector<double>> oldRhoEtaMin(oldRhoReader, "etaMin");
+    TTreeReaderValue<vector<double>> oldRhoEtaMax(oldRhoReader, "etaMax");
+    TTreeReaderValue<vector<double>> oldRhoRho(oldRhoReader, "rho");
 
     /* read in 2022 information */
     vector<string> newFiles;
@@ -169,9 +169,9 @@ int Compare(char const* oldInput, char const* newInput) {
     TChain newRhoChain("hiPuRhoR3Analyzer/t");
     FillChain(newRhoChain, newFiles);
     TTreeReader newRhoReader(&newRhoChain);
-    TTreeReaderValue<vector<double>> newRhoEtaMin(newCaloTowerReader, "etaMin");
-    TTreeReaderValue<vector<double>> newRhoEtaMax(newCaloTowerReader, "etaMax");
-    TTreeReaderValue<vector<double>> newRhoRho(newCaloTowerReader, "rho");
+    TTreeReaderValue<vector<double>> newRhoEtaMin(newRhoReader, "etaMin");
+    TTreeReaderValue<vector<double>> newRhoEtaMax(newRhoReader, "etaMax");
+    TTreeReaderValue<vector<double>> newRhoRho(newRhoReader, "rho");
 
     /* create histograms for energy sum plots */
     int nbins = 80;
