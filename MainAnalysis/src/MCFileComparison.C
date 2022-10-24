@@ -204,7 +204,7 @@ int Compare(char const* oldInput, char const* newInput) {
         if (i % (oldEntries / 100) == 0) cout << i << " / " << oldEntries << endl;
             
         oldPhotonHist->Fill(*oldPhotonRho);
-        oldRhoHist->Fill(GetAvgRho(oldRhoRho, oldRhoEtaMin, oldRhoEtaMax));
+        oldRhoHist->Fill(GetAvgRho(oldRhoRho.Get(), oldRhoEtaMin.Get(), oldRhoEtaMax.Get()));
     }
 
     for (int i = 1; i < newEntries; ++i) {
@@ -213,7 +213,7 @@ int Compare(char const* oldInput, char const* newInput) {
         if (i % (newEntries / 100) == 0) cout << i << " / " << newEntries << endl;
 
         newPhotonHist->Fill(*newPhotonRho);
-        newRhoHist->Fill(GetAvgRho(newRhoRho, newRhoEtaMin, newRhoEtaMax));
+        newRhoHist->Fill(GetAvgRho(newRhoRho.Get(), newRhoEtaMin.Get(), newRhoEtaMax.Get()));
     }
 
     /* scale the histograms */
