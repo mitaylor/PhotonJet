@@ -133,7 +133,7 @@ int hf_shift(char const* config, char const* output) {
 
         hp_avg_rho += avg_rho * hp_pjt->w;
 
-        if (hp_pjt->Ncoll / avg_rho > 20 || hp_pjt->Ncoll / avg_rho < 2) std::cout << i << std::endl;
+        if ((hp_pjt->Ncoll > 400 && hp_pjt->Ncoll / avg_rho > 20) || (avg_rho > 100 && hp_pjt->Ncoll / avg_rho < 2)) std::cout << i << std::endl;
 
         (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
         (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
