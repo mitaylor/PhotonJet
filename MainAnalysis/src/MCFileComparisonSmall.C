@@ -224,7 +224,7 @@ int Compare(char const* oldInput, char const* newInput) {
 
     /* read in information from TTrees */
     for (int i = 1; i < oldEntries; ++i) {
-        oldPhotonReader.Next(); oldRhoReader.Next(); oldEvtChain.Next();
+        oldPhotonReader.Next(); oldRhoReader.Next(); oldEvtReader.Next();
 
         if (i % (oldEntries / 100) == 0) cout << i << " / " << oldEntries << endl;
             
@@ -237,7 +237,7 @@ int Compare(char const* oldInput, char const* newInput) {
     }
 
     for (int i = 1; i < newEntries; ++i) {
-        newPhotonReader.Next(); newRhoReader.Next(); newEvtChain.Next();
+        newPhotonReader.Next(); newRhoReader.Next(); newEvtReader.Next();
 
         if (i % (newEntries / 100) == 0) cout << i << " / " << newEntries << endl;
 
