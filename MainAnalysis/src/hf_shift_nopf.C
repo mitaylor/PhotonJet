@@ -78,7 +78,7 @@ int hf_shift(char const* config, char const* output) {
 
     for (int64_t i = 13550000; i < 14550000; ++i) {
         if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, nentries);
+            printf("entry: %li/%li\n", i, 14550000);
 
         hp_t->GetEntry(i);
 
