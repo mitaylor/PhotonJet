@@ -244,12 +244,11 @@ int Compare(char const* oldInput, char const* newInput) {
     newPhotonNcollHist->Scale(1.0/oldEntries);
     newRhoNcollHist->Scale(1.0/oldEntries);
 
-    /* plot the caloTower distributions */
     auto canvas = new TCanvas("canvas", "", 0 , 0, 500, 500);
     canvas->SetLeftMargin(0.15);
     canvas->SetBottomMargin(0.15);
     canvas->Print("MCComparison.pdf[");
-    canvas->SetLogy(1);
+    canvas->SetLogz(1);
     canvas->Clear();
 
     PrintHist(oldPhotonHist, newPhotonHist, "Extra vs Nominal MC Photon Rho", canvas, legend, "MCComparison.pdf");
