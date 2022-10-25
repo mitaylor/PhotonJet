@@ -35,7 +35,7 @@ int hf_shift(char const* config, char const* output, int min, int max) {
 
     auto tag = conf->get<std::string>("tag");
 
-    tag += "_" + std::string(min) + "_" + std::string(max);
+    tag += "_" + std::to_string(min) + "_" + std::to_string(max);
 
     TH1::SetDefaultSumw2();
     
