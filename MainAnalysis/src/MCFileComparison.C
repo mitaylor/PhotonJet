@@ -123,8 +123,8 @@ void FillChain(TChain& chain, vector<string>& files) {
 
 int Compare(char const* oldInput, char const* newInput, int pthat) {
     /* read in 2018 information */
-    // vector<string> oldFiles;
-    // GetFiles(oldInput, oldFiles);
+    vector<string> oldFiles;
+    GetFiles(oldInput, oldFiles);
 
     TChain oldPhotonChain("ggHiNtuplizerGED/EventTree");
     FillChain(oldPhotonChain, oldFiles);
@@ -147,8 +147,8 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
     TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "Ncoll");
 
     /* read in 2022 information */
-    // vector<string> newFiles;
-    // GetFiles(newInput, newFiles);
+    vector<string> newFiles;
+    GetFiles(newInput, newFiles);
 
     TChain newPhotonChain("ggHiNtuplizerGED/EventTree");
     FillChain(newPhotonChain, newFiles);
