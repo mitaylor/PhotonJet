@@ -256,10 +256,10 @@ int Compare(char const* oldInput, char const* newInput) {
     PrintHist(oldRhoHist, newRhoHist, "Extra vs Nominal MC Calc Rho", canvas, legend, "MCComparison.pdf");
     PrintHist(oldPhotonHist, newPhotonHist, "Extra MC Photon vs Calc Rho", canvas, legend, "MCComparison.pdf");
     PrintHist(newPhotonHist, newRhoHist, "Nominal MC Photon vs Calc Rho", canvas, legend, "MCComparison.pdf");
-    PrintHist2D(oldPhotonNcollHist, "Extra MC Photon Rho vs Ncoll", canvas, "MCComparison.pdf")
-    PrintHist2D(oldRhoNcollHist, "Extra MC Calc Rho vs Ncoll", canvas, "MCComparison.pdf")
-    PrintHist2D(newPhotonNcollHist, "Nominal MC Photon Rho vs Ncoll", canvas, "MCComparison.pdf")
-    PrintHist2D(newRhoNcollHis, "Nominal MC Calc Rho vs Ncoll"t, canvas, "MCComparison.pdf")
+    PrintHist2D(oldPhotonNcollHist, "Extra MC Photon Rho vs Ncoll", canvas, "MCComparison.pdf");
+    PrintHist2D(oldRhoNcollHist, "Extra MC Calc Rho vs Ncoll", canvas, "MCComparison.pdf");
+    PrintHist2D(newPhotonNcollHist, "Nominal MC Photon Rho vs Ncoll", canvas, "MCComparison.pdf");
+    PrintHist2D(newRhoNcollHis, "Nominal MC Calc Rho vs Ncoll"t, canvas, "MCComparison.pdf");
 
     canvas->Print("MCComparison.pdf]");
 
