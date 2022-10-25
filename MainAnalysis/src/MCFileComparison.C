@@ -249,7 +249,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
     auto canvas = new TCanvas("canvas", "", 0 , 0, 500, 500);
     canvas->SetLeftMargin(0.15);
     canvas->SetBottomMargin(0.15);
-    canvas->Print(filename + "[");
+    canvas->Print(string(filename + "[").c_str());
     canvas->SetLogz(1);
     canvas->Clear();
 
@@ -262,7 +262,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
     PrintHist2D(newPhotonNcollHist, "Nominal MC Photon Rho vs Ncoll", canvas, filename);
     PrintHist2D(newRhoNcollHist, "Nominal MC Calc Rho vs Ncoll", canvas, filename);
 
-    canvas->Print(filename+ "]");
+    canvas->Print(string(filename + "]").c_str());
 
     return 0;
 }
