@@ -72,7 +72,7 @@ void FormatHistogram2D(TH2F* hist) {
     hist->SetStats(0);
     hist->GetXaxis()->SetTitle("Eta");
     hist->GetXaxis()->CenterTitle(true);
-    hist->GetYaxis()->SetTitle("Phi");
+    hist->GetYaxis()->SetTitle("Ncoll");
     hist->GetYaxis()->CenterTitle(true);
 }
 
@@ -173,7 +173,7 @@ int Compare(char const* oldInput, char const* newInput) {
     /* create histograms for energy sum plots */
     int nbins = 80;
     float min = 0;
-    float max = 400;
+    float max = 300;
 
     auto oldPhotonHist = new TH1F("oldPhotonHist", "", nbins, min, max);
     auto newPhotonHist = new TH1F("newPhotonHist", "", nbins, min, max);
