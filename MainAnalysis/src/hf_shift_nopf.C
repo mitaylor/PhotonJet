@@ -74,11 +74,12 @@ int hf_shift(char const* config, char const* output) {
 
     // int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
     // nentries = nentries > 1000000 ? 1000000 : nentries;
+    int64_t nentries = 14550000;
     double nphotons = 0;
 
-    for (int64_t i = 13550000; i < 14550000; ++i) {
+    for (int64_t i = 13550000; i < nentries; ++i) {
         if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, 14550000);
+            printf("entry: %li/%li\n", i, nentries);
 
         hp_t->GetEntry(i);
 
