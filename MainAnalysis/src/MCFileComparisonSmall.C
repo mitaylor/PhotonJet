@@ -9,6 +9,7 @@
 
 #include "TMath.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TGraphAsymmErrors.h"
 #include "TCanvas.h"
 #include "TLegend.h"
@@ -67,14 +68,12 @@ void FormatHistogram(TH1F* hist, int color) {
     hist->GetYaxis()->CenterTitle(true);
 }
 
-void FormatHistogramProf2D(TProfile2D* hist, double max) {
+void FormatHistogram2D(TH2F* hist) {
     hist->SetStats(0);
     hist->GetXaxis()->SetTitle("Eta");
     hist->GetXaxis()->CenterTitle(true);
     hist->GetYaxis()->SetTitle("Phi");
     hist->GetYaxis()->CenterTitle(true);
-    hist->SetMinimum(0);
-    hist->SetMaximum(max);
 }
 
 void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* legend, string filename) {
@@ -102,7 +101,7 @@ void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* l
     canvas->Print(filename.c_str());
 }
 
-void PrintHistProf2D(TProfile2D* hist1, TProfile2D* hist2, TCanvas* canvas, string filename) {
+void PrintHist2D(TProfile2D* hist1, TProfile2D* hist2, TCanvas* canvas, string filename) {
     hist1->Draw("COLZ");
     canvas->Print(filename.c_str());
     hist2->Draw("COLZ");
@@ -159,6 +158,12 @@ int Compare(char const* oldInput, char const* newInput) {
     TTreeReaderValue<vector<double>> oldRhoEtaMax(oldRhoReader, "etaMax");
     TTreeReaderValue<vector<double>> oldRhoRho(oldRhoReader, "rho");
 
+    TChain oldEvtChain("hiEvtAnalyzer/HiTree");
+    // FillChain(oldEvtChain, oldFiles);
+    oldEvtChain.Add(oldInput);
+    TTreeReader oldEvtReader(&oldEvtChain);
+    TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "etaMin");
+
     /* read in 2022 information */
     // vector<string> newFiles;
     // GetFiles(newInput, newFiles);
@@ -177,6 +182,12 @@ int Compare(char const* oldInput, char const* newInput) {
     TTreeReaderValue<vector<double>> newRhoEtaMax(newRhoReader, "etaMax");
     TTreeReaderValue<vector<double>> newRhoRho(newRhoReader, "rho");
 
+    TChain newEvtChain("hiEvtAnalyzer/HiTree");
+    // FillChain(newEvtChain, newFiles);
+    newEvtChain.Add(newInput);
+    TTreeReader newEvtReader(&newEvtChain);
+    TTreeReaderValue<float> newEvtNcoll(newEvtReader, "etaMin");
+
     /* create histograms for energy sum plots */
     int nbins = 80;
     float min = 0;
@@ -186,6 +197,11 @@ int Compare(char const* oldInput, char const* newInput) {
     auto newPhotonHist = new TH1F("newPhotonHist", "", nbins, min, max);
     auto oldRhoHist = new TH1F("oldRhoHist", "", nbins, min, max);
     auto newRhoHist = new TH1F("newRhoHist", "", nbins, min, max);
+
+    auto oldPhotonNcollHist = new TH2F("oldPhotonNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    auto oldRhoNcollHist = new TH2F("oldRhoNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    auto newPhotonNcollHist = new TH2F("newPhotonNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    auto newRhoNcollHist = new TH2F("newRhoNcollHist", "", nbins, min, max, nbins, 0, 2100);
 
     int oldEntries = oldPhotonChain.GetEntries();
     int newEntries = newPhotonChain.GetEntries();
@@ -201,14 +217,23 @@ int Compare(char const* oldInput, char const* newInput) {
     FormatHistogram(newRhoHist, 32);
     FormatHistogram(oldRhoHist, 44);
 
+    FormatHistogram2D(oldPhotonNcollHist);
+    FormatHistogram2D(oldRhoNcollHist);
+    FormatHistogram2D(newPhotonNcollHist);
+    FormatHistogram2D(newRhoNcollHist);
+
     /* read in information from TTrees */
     for (int i = 1; i < oldEntries; ++i) {
         oldPhotonReader.Next(); oldRhoReader.Next();
 
         if (i % (oldEntries / 100) == 0) cout << i << " / " << oldEntries << endl;
             
+        auto avg_rho = GetAvgRho(oldRhoRho.Get(), oldRhoEtaMin.Get(), oldRhoEtaMax.Get());
+
         oldPhotonHist->Fill(*oldPhotonRho);
-        oldRhoHist->Fill(GetAvgRho(oldRhoRho.Get(), oldRhoEtaMin.Get(), oldRhoEtaMax.Get()));
+        oldRhoHist->Fill(avg_rho);
+        oldPhotonNcollHist->Fill(*oldPhotonRho, *oldEvtNcoll);
+        oldRhoNcollHist->Fill(avg_rho, *oldEvtNcoll);
     }
 
     for (int i = 1; i < newEntries; ++i) {
@@ -216,16 +241,24 @@ int Compare(char const* oldInput, char const* newInput) {
 
         if (i % (newEntries / 100) == 0) cout << i << " / " << newEntries << endl;
 
+        auto avg_rho = GetAvgRho(newRhoRho.Get(), newRhoEtaMin.Get(), newRhoEtaMax.Get());
+
         newPhotonHist->Fill(*newPhotonRho);
-        newRhoHist->Fill(GetAvgRho(newRhoRho.Get(), newRhoEtaMin.Get(), newRhoEtaMax.Get()));
+        newRhoHist->Fill(avg_rho);
+        newPhotonNcollHist->Fill(*newPhotonRho, *newEvtNcoll);
+        newRhoNcollHist->Fill(avg_rho, *newEvtNcoll);
     }
 
     /* scale the histograms */
     oldPhotonHist->Scale(1.0/oldEntries);
     oldRhoHist->Scale(1.0/oldEntries);
+    oldPhotonNcollHist->Scale(1.0/oldEntries);
+    oldRhoNcollHist->Scale(1.0/oldEntries);
 
     newPhotonHist->Scale(1.0/newEntries);
     newRhoHist->Scale(1.0/newEntries);
+    newPhotonNcollHist->Scale(1.0/oldEntries);
+    newRhoNcollHist->Scale(1.0/oldEntries);
 
     /* plot the caloTower distributions */
     auto canvas = new TCanvas("canvas", "", 0 , 0, 500, 500);
