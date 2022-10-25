@@ -196,7 +196,7 @@ int hf_shift(char const* config, char const* output, int min, int max) {
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return hf_shift(argv[1], argv[2], stoi(argv[3]), stoi(argv[4]));
+        return hf_shift(argv[1], argv[2], std::stoi(argv[3]), std::stoi(argv[4]));
 
     return 0;
 }
