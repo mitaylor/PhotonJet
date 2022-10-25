@@ -81,30 +81,12 @@ void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* l
     hist1->Draw("HIST LP");
     hist2->Draw("HIST LP SAME");
     legend->Draw();
-
-    TLatex* newMean = new TLatex();
-    string newMeanText;
-    newMean->SetTextFont(43);
-    newMean->SetTextSize(12);
-    newMean->SetTextColor(30);
-
-    TLatex* oldMean = new TLatex();
-    string oldMeanText;
-    oldMean->SetTextFont(43);
-    oldMean->SetTextSize(12);
-    oldMean->SetTextColor(46);
-
-    oldMeanText = "2018 Mean: " + to_string(hist2->GetMean());
-    oldMean->DrawLatexNDC(0.6, 0.64, oldMeanText.c_str());
-    newMeanText = "2022 Mean: " + to_string(hist1->GetMean());
-    newMean->DrawLatexNDC(0.6, 0.60, newMeanText.c_str());
     canvas->Print(filename.c_str());
 }
 
-void PrintHist2D(TProfile2D* hist1, TProfile2D* hist2, TCanvas* canvas, string filename) {
+void PrintHist2D(TH2* hist1, string title, TCanvas* canvas, string filename) {
+    hist1->GetXaxis()->SetTitle(title.c_str());
     hist1->Draw("COLZ");
-    canvas->Print(filename.c_str());
-    hist2->Draw("COLZ");
     canvas->Print(filename.c_str());
 }
 
@@ -209,8 +191,10 @@ int Compare(char const* oldInput, char const* newInput) {
     /* customize energy sum histogram draw options */
     auto legend = new TLegend(0.55, 0.75 ,0.85, 0.85);
     legend->SetTextSize(0.03);
-    legend->AddEntry(oldPhotonHist, "Extra MC", "p");
-    legend->AddEntry(newPhotonHist, "Nominal MC", "p");
+    legend->AddEntry(oldPhotonHist, "Extra MC Photon Rho", "p");
+    legend->AddEntry(newPhotonHist, "Nominal MC Photon Rho", "p");
+    legend->AddEntry(oldRhoHist, "Extra MC Analyzer Rho", "p");
+    legend->AddEntry(newRhoHist, "Nominal MC Analyzer Rho", "p");
 
     FormatHistogram(newPhotonHist, 30);
     FormatHistogram(oldPhotonHist, 46);
@@ -272,6 +256,10 @@ int Compare(char const* oldInput, char const* newInput) {
     PrintHist(oldRhoHist, newRhoHist, "Extra vs Nominal MC Calc Rho", canvas, legend, "MCComparison.pdf");
     PrintHist(oldPhotonHist, newPhotonHist, "Extra MC Photon vs Calc Rho", canvas, legend, "MCComparison.pdf");
     PrintHist(newPhotonHist, newRhoHist, "Nominal MC Photon vs Calc Rho", canvas, legend, "MCComparison.pdf");
+    PrintHist2D(oldPhotonNcollHist, "Extra MC Photon Rho vs Ncoll", canvas, "MCComparison.pdf")
+    PrintHist2D(oldRhoNcollHist, "Extra MC Calc Rho vs Ncoll", canvas, "MCComparison.pdf")
+    PrintHist2D(newPhotonNcollHist, "Nominal MC Photon Rho vs Ncoll", canvas, "MCComparison.pdf")
+    PrintHist2D(newRhoNcollHis, "Nominal MC Calc Rho vs Ncoll"t, canvas, "MCComparison.pdf")
 
     canvas->Print("MCComparison.pdf]");
 
