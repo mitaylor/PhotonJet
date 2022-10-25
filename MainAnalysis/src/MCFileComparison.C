@@ -9,6 +9,7 @@
 
 #include "TMath.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TGraphAsymmErrors.h"
 #include "TCanvas.h"
 #include "TLegend.h"
@@ -67,14 +68,12 @@ void FormatHistogram(TH1F* hist, int color) {
     hist->GetYaxis()->CenterTitle(true);
 }
 
-void FormatHistogramProf2D(TProfile2D* hist, double max) {
+void FormatHistogram2D(TH2F* hist) {
     hist->SetStats(0);
     hist->GetXaxis()->SetTitle("Eta");
     hist->GetXaxis()->CenterTitle(true);
-    hist->GetYaxis()->SetTitle("Phi");
+    hist->GetYaxis()->SetTitle("Ncoll");
     hist->GetYaxis()->CenterTitle(true);
-    hist->SetMinimum(0);
-    hist->SetMaximum(max);
 }
 
 void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* legend, string filename) {
@@ -82,30 +81,12 @@ void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* l
     hist1->Draw("HIST LP");
     hist2->Draw("HIST LP SAME");
     legend->Draw();
-
-    TLatex* newMean = new TLatex();
-    string newMeanText;
-    newMean->SetTextFont(43);
-    newMean->SetTextSize(12);
-    newMean->SetTextColor(30);
-
-    TLatex* oldMean = new TLatex();
-    string oldMeanText;
-    oldMean->SetTextFont(43);
-    oldMean->SetTextSize(12);
-    oldMean->SetTextColor(46);
-
-    oldMeanText = "2018 Mean: " + to_string(hist2->GetMean());
-    oldMean->DrawLatexNDC(0.6, 0.64, oldMeanText.c_str());
-    newMeanText = "2022 Mean: " + to_string(hist1->GetMean());
-    newMean->DrawLatexNDC(0.6, 0.60, newMeanText.c_str());
     canvas->Print(filename.c_str());
 }
 
-void PrintHistProf2D(TProfile2D* hist1, TProfile2D* hist2, TCanvas* canvas, string filename) {
+void PrintHist2D(TH2* hist1, string title, TCanvas* canvas, string filename) {
+    hist1->GetXaxis()->SetTitle(title.c_str());
     hist1->Draw("COLZ");
-    canvas->Print(filename.c_str());
-    hist2->Draw("COLZ");
     canvas->Print(filename.c_str());
 }
 
@@ -140,48 +121,69 @@ void FillChain(TChain& chain, vector<string>& files) {
     }
 }
 
-int Compare(char const* oldInput, char const* newInput) {
+int Compare(char const* oldInput, char const* newInput, int pthat) {
     /* read in 2018 information */
-    vector<string> oldFiles;
-    GetFiles(oldInput, oldFiles);
+    // vector<string> oldFiles;
+    // GetFiles(oldInput, oldFiles);
 
     TChain oldPhotonChain("ggHiNtuplizerGED/EventTree");
     FillChain(oldPhotonChain, oldFiles);
+    // oldPhotonChain.Add(oldInput);
     TTreeReader oldPhotonReader(&oldPhotonChain);
     TTreeReaderValue<float> oldPhotonRho(oldPhotonReader, "rho");
 
     TChain oldRhoChain("hiPuRhoR3Analyzer/t");
     FillChain(oldRhoChain, oldFiles);
+    // oldRhoChain.Add(oldInput);
     TTreeReader oldRhoReader(&oldRhoChain);
     TTreeReaderValue<vector<double>> oldRhoEtaMin(oldRhoReader, "etaMin");
     TTreeReaderValue<vector<double>> oldRhoEtaMax(oldRhoReader, "etaMax");
     TTreeReaderValue<vector<double>> oldRhoRho(oldRhoReader, "rho");
 
+    TChain oldEvtChain("hiEvtAnalyzer/HiTree");
+    FillChain(oldEvtChain, oldFiles);
+    // oldEvtChain.Add(oldInput);
+    TTreeReader oldEvtReader(&oldEvtChain);
+    TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "Ncoll");
+
     /* read in 2022 information */
-    vector<string> newFiles;
-    GetFiles(newInput, newFiles);
+    // vector<string> newFiles;
+    // GetFiles(newInput, newFiles);
 
     TChain newPhotonChain("ggHiNtuplizerGED/EventTree");
     FillChain(newPhotonChain, newFiles);
+    // newPhotonChain.Add(newInput);
     TTreeReader newPhotonReader(&newPhotonChain);
     TTreeReaderValue<float> newPhotonRho(newPhotonReader, "rho");
 
     TChain newRhoChain("hiPuRhoR3Analyzer/t");
     FillChain(newRhoChain, newFiles);
+    // newRhoChain.Add(newInput);
     TTreeReader newRhoReader(&newRhoChain);
     TTreeReaderValue<vector<double>> newRhoEtaMin(newRhoReader, "etaMin");
     TTreeReaderValue<vector<double>> newRhoEtaMax(newRhoReader, "etaMax");
     TTreeReaderValue<vector<double>> newRhoRho(newRhoReader, "rho");
 
+    TChain newEvtChain("hiEvtAnalyzer/HiTree");
+    FillChain(newEvtChain, newFiles);
+    // newEvtChain.Add(newInput);
+    TTreeReader newEvtReader(&newEvtChain);
+    TTreeReaderValue<float> newEvtNcoll(newEvtReader, "Ncoll");
+
     /* create histograms for energy sum plots */
     int nbins = 80;
     float min = 0;
-    float max = 400;
+    float max = 300;
 
     auto oldPhotonHist = new TH1F("oldPhotonHist", "", nbins, min, max);
     auto newPhotonHist = new TH1F("newPhotonHist", "", nbins, min, max);
     auto oldRhoHist = new TH1F("oldRhoHist", "", nbins, min, max);
     auto newRhoHist = new TH1F("newRhoHist", "", nbins, min, max);
+
+    auto oldPhotonNcollHist = new TH2F("oldPhotonNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    auto oldRhoNcollHist = new TH2F("oldRhoNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    auto newPhotonNcollHist = new TH2F("newPhotonNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    auto newRhoNcollHist = new TH2F("newRhoNcollHist", "", nbins, min, max, nbins, 0, 2100);
 
     int oldEntries = oldPhotonChain.GetEntries();
     int newEntries = newPhotonChain.GetEntries();
@@ -189,54 +191,78 @@ int Compare(char const* oldInput, char const* newInput) {
     /* customize energy sum histogram draw options */
     auto legend = new TLegend(0.55, 0.75 ,0.85, 0.85);
     legend->SetTextSize(0.03);
-    legend->AddEntry(oldPhotonHist, "Extra MC", "p");
-    legend->AddEntry(newPhotonHist, "Nominal MC", "p");
+    legend->AddEntry(oldPhotonHist, "Extra MC Photon Rho", "p");
+    legend->AddEntry(newPhotonHist, "Nominal MC Photon Rho", "p");
+    legend->AddEntry(oldRhoHist, "Extra MC Analyzer Rho", "p");
+    legend->AddEntry(newRhoHist, "Nominal MC Analyzer Rho", "p");
 
     FormatHistogram(newPhotonHist, 30);
     FormatHistogram(oldPhotonHist, 46);
     FormatHistogram(newRhoHist, 32);
     FormatHistogram(oldRhoHist, 44);
 
+    FormatHistogram2D(oldPhotonNcollHist);
+    FormatHistogram2D(oldRhoNcollHist);
+    FormatHistogram2D(newPhotonNcollHist);
+    FormatHistogram2D(newRhoNcollHist);
+
     /* read in information from TTrees */
     for (int i = 1; i < oldEntries; ++i) {
-        oldPhotonReader.Next(); oldRhoReader.Next();
+        oldPhotonReader.Next(); oldRhoReader.Next(); oldEvtReader.Next();
 
         if (i % (oldEntries / 100) == 0) cout << i << " / " << oldEntries << endl;
             
+        auto avg_rho = GetAvgRho(oldRhoRho.Get(), oldRhoEtaMin.Get(), oldRhoEtaMax.Get());
+
         oldPhotonHist->Fill(*oldPhotonRho);
-        oldRhoHist->Fill(GetAvgRho(oldRhoRho.Get(), oldRhoEtaMin.Get(), oldRhoEtaMax.Get()));
+        oldRhoHist->Fill(avg_rho);
+        oldPhotonNcollHist->Fill(*oldPhotonRho, *oldEvtNcoll);
+        oldRhoNcollHist->Fill(avg_rho, *oldEvtNcoll);
     }
 
     for (int i = 1; i < newEntries; ++i) {
-        newPhotonReader.Next(); newRhoReader.Next();
+        newPhotonReader.Next(); newRhoReader.Next(); newEvtReader.Next();
 
         if (i % (newEntries / 100) == 0) cout << i << " / " << newEntries << endl;
 
+        auto avg_rho = GetAvgRho(newRhoRho.Get(), newRhoEtaMin.Get(), newRhoEtaMax.Get());
+
         newPhotonHist->Fill(*newPhotonRho);
-        newRhoHist->Fill(GetAvgRho(newRhoRho.Get(), newRhoEtaMin.Get(), newRhoEtaMax.Get()));
+        newRhoHist->Fill(avg_rho);
+        newPhotonNcollHist->Fill(*newPhotonRho, *newEvtNcoll);
+        newRhoNcollHist->Fill(avg_rho, *newEvtNcoll);
     }
 
     /* scale the histograms */
     oldPhotonHist->Scale(1.0/oldEntries);
     oldRhoHist->Scale(1.0/oldEntries);
+    oldPhotonNcollHist->Scale(1.0/oldEntries);
+    oldRhoNcollHist->Scale(1.0/oldEntries);
 
     newPhotonHist->Scale(1.0/newEntries);
     newRhoHist->Scale(1.0/newEntries);
+    newPhotonNcollHist->Scale(1.0/oldEntries);
+    newRhoNcollHist->Scale(1.0/oldEntries);
 
-    /* plot the caloTower distributions */
+    string filename = "MCComparison_" + to_string(pthat) + ".pdf";
+
     auto canvas = new TCanvas("canvas", "", 0 , 0, 500, 500);
     canvas->SetLeftMargin(0.15);
     canvas->SetBottomMargin(0.15);
-    canvas->Print("MCComparison.pdf[");
-    canvas->SetLogy(1);
+    canvas->Print(filename + "[");
+    canvas->SetLogz(1);
     canvas->Clear();
 
-    PrintHist(oldPhotonHist, newPhotonHist, "Extra vs Nominal MC Photon Rho", canvas, legend, "MCComparison.pdf");
-    PrintHist(oldRhoHist, newRhoHist, "Extra vs Nominal MC Calc Rho", canvas, legend, "MCComparison.pdf");
-    PrintHist(oldPhotonHist, newPhotonHist, "Extra MC Photon vs Calc Rho", canvas, legend, "MCComparison.pdf");
-    PrintHist(newPhotonHist, newRhoHist, "Nominal MC Photon vs Calc Rho", canvas, legend, "MCComparison.pdf");
+    PrintHist(oldPhotonHist, newPhotonHist, "Extra vs Nominal MC Photon Rho", canvas, legend, filename);
+    PrintHist(oldRhoHist, newRhoHist, "Extra vs Nominal MC Calc Rho", canvas, legend, filename);
+    PrintHist(oldPhotonHist, newPhotonHist, "Extra MC Photon vs Calc Rho", canvas, legend, filename);
+    PrintHist(newPhotonHist, newRhoHist, "Nominal MC Photon vs Calc Rho", canvas, legend, filename);
+    PrintHist2D(oldPhotonNcollHist, "Extra MC Photon Rho vs Ncoll", canvas, filename);
+    PrintHist2D(oldRhoNcollHist, "Extra MC Calc Rho vs Ncoll", canvas, filename);
+    PrintHist2D(newPhotonNcollHist, "Nominal MC Photon Rho vs Ncoll", canvas, filename);
+    PrintHist2D(newRhoNcollHist, "Nominal MC Calc Rho vs Ncoll", canvas, filename);
 
-    canvas->Print("MCComparison.pdf]");
+    canvas->Print(filename+ "]");
 
     return 0;
 }
