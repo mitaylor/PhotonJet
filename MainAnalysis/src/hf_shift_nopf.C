@@ -72,12 +72,11 @@ int hf_shift(char const* config, char const* output) {
 
     double hp_avg_rho = 0;
 
-    // int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
+    int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
     // nentries = nentries > 1000000 ? 1000000 : nentries;
-    int64_t nentries = 14550000;
     double nphotons = 0;
 
-    for (int64_t i = 13550000; i < nentries; ++i) {
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
             printf("entry: %li/%li\n", i, nentries);
 
@@ -133,6 +132,8 @@ int hf_shift(char const* config, char const* output) {
         auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
 
         hp_avg_rho += avg_rho * hp_pjt->w;
+
+        if (hp_pjt->Ncoll / avg_rho > 20 || hp_pjt->Ncoll / avg_rho < 2) std::cout << i << std::endl;
 
         (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
         (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
