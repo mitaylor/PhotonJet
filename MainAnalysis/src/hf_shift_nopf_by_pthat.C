@@ -81,7 +81,7 @@ int hf_shift(char const* config, char const* output, int min, int max) {
 
         nphotons += hp_pjt->w;
 
-        auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
+        auto avg_rho = get_avg_rho(hp_pjt, -1.442, 1.442);
 
         hp_avg_rho += avg_rho * hp_pjt->w;
 
@@ -103,7 +103,7 @@ int hf_shift(char const* config, char const* output, int min, int max) {
 
         nmb += mb_pjt->w;
 
-        auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
+        auto avg_rho = get_avg_rho(mb_pjt, -1.442, 1.442);
     
         mb_avg_rho += avg_rho * mb_pjt->w;
 
