@@ -162,7 +162,7 @@ int Compare(char const* oldInput, char const* newInput) {
     // FillChain(oldEvtChain, oldFiles);
     oldEvtChain.Add(oldInput);
     TTreeReader oldEvtReader(&oldEvtChain);
-    TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "etaMin");
+    TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "Ncoll");
 
     /* read in 2022 information */
     // vector<string> newFiles;
@@ -186,7 +186,7 @@ int Compare(char const* oldInput, char const* newInput) {
     // FillChain(newEvtChain, newFiles);
     newEvtChain.Add(newInput);
     TTreeReader newEvtReader(&newEvtChain);
-    TTreeReaderValue<float> newEvtNcoll(newEvtReader, "etaMin");
+    TTreeReaderValue<float> newEvtNcoll(newEvtReader, "Ncoll");
 
     /* create histograms for energy sum plots */
     int nbins = 80;
