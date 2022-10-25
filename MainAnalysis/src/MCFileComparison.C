@@ -269,7 +269,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return Compare(argv[1], argv[2]);
+        return Compare(argv[1], argv[2], stoi(argv[3]));
 
     else {
         cout << "ERROR: Please pass two paths for Extra MC and Nominal MC." << endl;
