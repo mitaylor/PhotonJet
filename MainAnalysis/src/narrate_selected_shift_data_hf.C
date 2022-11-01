@@ -68,7 +68,7 @@ int narrate(char const* config, char const* output) {
             printf("entry: %li/%li\n", i, nentries);
 
         t->GetEntry(i);
-        auto hf_x = ihf->index_for(pjt->hiHF);
+        auto hf_x = ihf->index_for(pjt->hiHF - 30);
 
         if (hf_x < 0) continue;
         if (hf_x == ihf->size()) continue;
@@ -197,7 +197,7 @@ int narrate(char const* config, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data", "MC");
         
-        auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
+        auto c1 = new paper(tag + "_rho_distribution_hf_shift_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size()/2, -1);
@@ -220,7 +220,7 @@ int narrate(char const* config, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data/MC");
         
-        auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
+        auto c1 = new paper(tag + "_rho_weight_hf_shift_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size()/2, -1);

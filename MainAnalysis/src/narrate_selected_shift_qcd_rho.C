@@ -101,7 +101,7 @@ int narrate(char const* config, char const* output) {
             auto eta_x = static_cast<int64_t>(j);
             auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
 
-            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
+            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho + 2);
         }
     }
 
@@ -197,7 +197,7 @@ int narrate(char const* config, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data", "MC");
         
-        auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
+        auto c1 = new paper(tag + "_rho_distribution_rho_shift_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size()/2, -1);
@@ -220,7 +220,7 @@ int narrate(char const* config, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data/MC");
         
-        auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
+        auto c1 = new paper(tag + "_rho_weight_rho_shift_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size()/2, -1);
