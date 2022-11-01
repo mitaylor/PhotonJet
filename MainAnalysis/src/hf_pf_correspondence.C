@@ -176,12 +176,12 @@ int hf_shift(char const* config, char const* output) {
     auto c1 = new paper(tag + "_pythia_hydjet_hf_v_pf_profile", hb);
     c1->divide(1, -1);
     apply_style(c1, cms, system_tag);
-    c1->add((*hp_hf_pf_p)[0], "Hydjet");
+    c1->add((*hp_hf_pf_p)[0], "Pythia+Hydjet");
 
     auto c2 = new paper(tag + "_hydjet_hf_v_pf_profile", hb);
     c2->divide(1, -1);
     apply_style(c2, cms, system_tag);
-    c2->add((*mb_hf_pf_p)[0], "Pythia+Hydjet");
+    c2->add((*mb_hf_pf_p)[0], "Hydjet");
 
     auto c3 = new paper(tag + "_pythia_hydjet_hf_v_pf", hb); 
     apply_style(c3, cms, system_tag);
