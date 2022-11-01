@@ -235,22 +235,30 @@ int hf_shift(char const* config, char const* output) {
     std::cout << "Fit Rho difference: " << hp_rn_h_mean << std::endl;
     std::cout << "Fit Rho error: " << hp_rn_h_error << std::endl;
 
-    auto hn_fit_info = [&](int64_t) {
-        TLatex* hn_mean = new TLatex();
-        std::string hn_mean_text = "Mean = " + std::to_string(hp_hn_h_mean) + " +- " + std::to_string(hp_hn_h_error);
-        hn_mean->SetTextFont(43);
-        hn_mean->SetTextSize(12);
+    auto hn_fit_info = [&](int64_t index) {
+        if (index == 1) {
+            char buffer[128] = { '\0' };
+            sprintf(buffer, "Mean = %.3f +- %.3f", hp_hn_h_mean, hp_hn_h_error);
 
-        hn_mean->DrawLatexNDC(0.2, 0.2, hn_mean_text.c_str());
+            TLatex* hn_mean = new TLatex();
+            hn_mean->SetTextFont(43);
+            hn_mean->SetTextSize(12);
+
+            hn_mean->DrawLatexNDC(0.2, 0.2, buffer);
+        }
     };
 
-    auto rn_fit_info = [&](int64_t) {
-        TLatex* rn_mean = new TLatex();
-        std::string rn_mean_text = "Mean = " + std::to_string(hp_rn_h_mean) + " +- " + std::to_string(hp_rn_h_error);
-        rn_mean->SetTextFont(43);
-        rn_mean->SetTextSize(12);
+    auto rn_fit_info = [&](int64_t index) {
+        if (index == 1) {
+            char buffer[128] = { '\0' };
+            sprintf(buffer, "Mean = %.3f +- %.3f", hp_rn_h_mean, hp_rn_h_error);
 
-        rn_mean->DrawLatexNDC(0.2, 0.2, rn_mean_text.c_str());
+            TLatex* rn_mean = new TLatex();
+            rn_mean->SetTextFont(43);
+            rn_mean->SetTextSize(12);
+
+            rn_mean->DrawLatexNDC(0.2, 0.2, buffer);
+        }
     };
 
     /* draw rho distributions */
