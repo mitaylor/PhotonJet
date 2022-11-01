@@ -276,7 +276,7 @@ int hf_shift(char const* config, char const* output) {
     c8->add(hp_hn_h);
     
     TLatex* hn_mean = new TLatex();
-    string hn_mean_text = "Mean = " + to_string(hp_hn_h_mean) + " +- " + to_string(hp_hn_h_error);
+    std::string hn_mean_text = "Mean = " + std::to_string(hp_hn_h_mean) + " +- " + std::to_string(hp_hn_h_error);
     hn_mean->SetTextFont(43);
     hn_mean->SetTextSize(12);
 
@@ -290,7 +290,7 @@ int hf_shift(char const* config, char const* output) {
     c9->add(hp_rn_h);
 
     TLatex* rn_mean = new TLatex();
-    string rn_mean_text = "Mean = " + to_string(hp_rn_h_mean) + " +- " + to_string(hp_rn_h_error);
+    std::string rn_mean_text = "Mean = " + std::to_string(hp_rn_h_mean) + " +- " + std::to_string(hp_rn_h_error);
     rn_mean->SetTextFont(43);
     rn_mean->SetTextSize(12);
 
