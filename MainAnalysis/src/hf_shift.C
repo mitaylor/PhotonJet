@@ -235,7 +235,7 @@ int hf_shift(char const* config, char const* output) {
     std::cout << "Fit Rho difference: " << hp_rn_h_mean << std::endl;
     std::cout << "Fit Rho error: " << hp_rn_h_error << std::endl;
 
-    auto hn_fit_info = [&](int64_t index) {
+    auto hn_fit_info = [&](int64_t) {
         TLatex* hn_mean = new TLatex();
         std::string hn_mean_text = "Mean = " + std::to_string(hp_hn_h_mean) + " +- " + std::to_string(hp_hn_h_error);
         hn_mean->SetTextFont(43);
@@ -244,7 +244,7 @@ int hf_shift(char const* config, char const* output) {
         hn_mean->DrawLatexNDC(0.2, 0.2, hn_mean_text.c_str());
     };
 
-    auto hn_fit_info = [&](int64_t index) {
+    auto rn_fit_info = [&](int64_t) {
         TLatex* rn_mean = new TLatex();
         std::string rn_mean_text = "Mean = " + std::to_string(hp_rn_h_mean) + " +- " + std::to_string(hp_rn_h_error);
         rn_mean->SetTextFont(43);
