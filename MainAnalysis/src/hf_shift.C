@@ -81,9 +81,6 @@ int hf_shift(char const* config, char const* output) {
     TTree* mb_t = (TTree*) mb_f->Get("pj");
     auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
 
-    double hp_avg_hf = 0;
-    double hp_avg_rho = 0;
-
     int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
     // nentries = nentries > 100000 ? 100000 : nentries;
     double nphotons = 0;
@@ -151,9 +148,6 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
-        hp_avg_hf += pf_sum * hp_pjt->w;
-        hp_avg_rho += avg_rho * hp_pjt->w;
-
         (*hp_hn)[0]->Fill(pf_sum, hp_pjt->Ncoll, hp_pjt->w);
         (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
 
@@ -164,9 +158,6 @@ int hf_shift(char const* config, char const* output) {
     nentries = static_cast<int64_t>(mb_t->GetEntries());
     // nentries = nentries > 100000 ? 100000 : nentries;
     double nmb = 0;
-
-    double mb_avg_hf = 0;
-    double mb_avg_rho = 0;
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % 100000 == 0)
@@ -184,9 +175,6 @@ int hf_shift(char const* config, char const* output) {
                 pf_sum += (*mb_pjt->pfPt)[j];
             }
         }
-
-        mb_avg_hf += pf_sum * mb_pjt->w;
-        mb_avg_rho += avg_rho * mb_pjt->w;
 
         (*mb_hn)[0]->Fill(pf_sum, mb_pjt->Ncoll, mb_pjt->w);
         (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll, mb_pjt->w);
@@ -224,16 +212,27 @@ int hf_shift(char const* config, char const* output) {
     hp_rn_h->SetMaximum(10);
     hp_rn_h->SetMinimum(-10);
 
-    hp_avg_hf /= nphotons;
-    hp_avg_rho /= nphotons;
+    /* fit to a constant function */
+    hp_hn_h->Fit("pol0");
+    hp_rn_h->Fit("pol0");
 
-    mb_avg_hf /= nmb;
-    mb_avg_rho /= nmb;
+    auto hp_hn_h_fit = hp_hn_h->GetFunction("pol0");
+    auto hp_rn_h_fit = hp_rn_h->GetFunction("pol0");
+
+    auto hp_hn_h_mean = hp_hn_h_fit->GetParameter(0);
+    auto hp_hn_h_error = hp_hn_h_fit->GetParError(0);
+    auto hp_rn_h_mean = hp_rn_h_fit->GetParameter(0);
+    auto hp_rn_h_error = hp_rn_h_fit->GetParError(0);
 
     std::cout << "HF difference: " << hp_hn_h->GetMean(2) << " - " << mb_hn_h->GetMean(2) << std::endl;
     std::cout << "HF difference: " << hp_hn_h->GetMeanError(2) << " " << mb_hn_h->GetMeanError(2) << std::endl;
+    std::cout << "Fit HF difference: " << hp_hn_h_mean << std::endl;
+    std::cout << "Fit HF difference: " << hp_hn_h_error << std::endl;
+
     std::cout << "Rho difference: " << hp_rn_h->GetMean(2) << " - " << mb_rn_h->GetMean(2) << std::endl;
     std::cout << "Rho difference: " << hp_rn_h->GetMeanError(2) << " - " << mb_rn_h->GetMeanError(2) << std::endl;
+    std::cout << "Fit Rho difference: " << hp_rn_h_mean << std::endl;
+    std::cout << "Fit Rho difference: " << hp_rn_h_error << std::endl;
 
     /* draw rho distributions */
     /* draw distributions */
@@ -274,6 +273,13 @@ int hf_shift(char const* config, char const* output) {
     c8->add((*mb_hn_p)[0], "Hydjet");
     c8->stack((*hp_hn_p)[0], "Pythia+Hydjet");
     c8->add(hp_hn_h);
+    
+    TLatex* hn_mean = new TLatex();
+    string hn_mean_text = "Mean = " + to_string(hp_hn_h_mean) + " +- " + to_string(hp_hn_h_error);
+    hn_mean->SetTextFont(43);
+    hn_mean->SetTextSize(12);
+
+    hn_mean->DrawLatexNDC(0.2, 0.2, hn_mean_text.c_str());
 
     auto c9 = new paper(tag + "_comp_rho_v_ncoll", hb);
     c9->divide(1, -1);
@@ -281,6 +287,13 @@ int hf_shift(char const* config, char const* output) {
     c9->add((*mb_rn_p)[0], "Hydjet");
     c9->stack((*hp_rn_p)[0], "Pythia+Hydjet");
     c9->add(hp_rn_h);
+
+    TLatex* rn_mean = new TLatex();
+    string rn_mean_text = "Mean = " + to_string(hp_rn_h_mean) + " +- " + to_string(hp_rn_h_error);
+    rn_mean->SetTextFont(43);
+    rn_mean->SetTextSize(12);
+
+    rn_mean->DrawLatexNDC(0.2, 0.2, rn_mean_text.c_str());
 
     auto hp_style = [](TH1* h) {
         h->SetMarkerStyle(34);

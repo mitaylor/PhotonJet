@@ -454,7 +454,7 @@ int populate(char const* config, char const* output) {
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
         if (hf_sub) {
-            hf -= 58;
+            hf -= 30;
         }
         if (hf_reclassify) {
             if (hf > dhf.front()) hf_x = ihf->index_for(hf);
