@@ -226,14 +226,32 @@ int hf_shift(char const* config, char const* output) {
     auto hp_rn_h_error = hp_rn_h_fit->GetParError(0);
 
     std::cout << "HF difference: " << hp_hn_h->GetMean(2) << " - " << mb_hn_h->GetMean(2) << std::endl;
-    std::cout << "HF difference: " << hp_hn_h->GetMeanError(2) << " " << mb_hn_h->GetMeanError(2) << std::endl;
+    std::cout << "HF error: " << hp_hn_h->GetMeanError(2) << " - " << mb_hn_h->GetMeanError(2) << std::endl;
     std::cout << "Fit HF difference: " << hp_hn_h_mean << std::endl;
-    std::cout << "Fit HF difference: " << hp_hn_h_error << std::endl;
+    std::cout << "Fit HF error: " << hp_hn_h_error << std::endl;
 
     std::cout << "Rho difference: " << hp_rn_h->GetMean(2) << " - " << mb_rn_h->GetMean(2) << std::endl;
-    std::cout << "Rho difference: " << hp_rn_h->GetMeanError(2) << " - " << mb_rn_h->GetMeanError(2) << std::endl;
+    std::cout << "Rho error: " << hp_rn_h->GetMeanError(2) << " - " << mb_rn_h->GetMeanError(2) << std::endl;
     std::cout << "Fit Rho difference: " << hp_rn_h_mean << std::endl;
-    std::cout << "Fit Rho difference: " << hp_rn_h_error << std::endl;
+    std::cout << "Fit Rho error: " << hp_rn_h_error << std::endl;
+
+    auto hn_fit_info = [&](int64_t index) {
+        TLatex* hn_mean = new TLatex();
+        std::string hn_mean_text = "Mean = " + std::to_string(hp_hn_h_mean) + " +- " + std::to_string(hp_hn_h_error);
+        hn_mean->SetTextFont(43);
+        hn_mean->SetTextSize(12);
+
+        hn_mean->DrawLatexNDC(0.2, 0.2, hn_mean_text.c_str());
+    };
+
+    auto hn_fit_info = [&](int64_t index) {
+        TLatex* rn_mean = new TLatex();
+        std::string rn_mean_text = "Mean = " + std::to_string(hp_rn_h_mean) + " +- " + std::to_string(hp_rn_h_error);
+        rn_mean->SetTextFont(43);
+        rn_mean->SetTextSize(12);
+
+        rn_mean->DrawLatexNDC(0.2, 0.2, rn_mean_text.c_str());
+    };
 
     /* draw rho distributions */
     /* draw distributions */
@@ -274,13 +292,7 @@ int hf_shift(char const* config, char const* output) {
     c8->add((*mb_hn_p)[0], "Hydjet");
     c8->stack((*hp_hn_p)[0], "Pythia+Hydjet");
     c8->add(hp_hn_h);
-    
-    TLatex* hn_mean = new TLatex();
-    std::string hn_mean_text = "Mean = " + std::to_string(hp_hn_h_mean) + " +- " + std::to_string(hp_hn_h_error);
-    hn_mean->SetTextFont(43);
-    hn_mean->SetTextSize(12);
-
-    hn_mean->DrawLatexNDC(0.2, 0.2, hn_mean_text.c_str());
+    c8->accessory(hn_fit_info);
 
     auto c9 = new paper(tag + "_comp_rho_v_ncoll", hb);
     c9->divide(1, -1);
@@ -288,13 +300,7 @@ int hf_shift(char const* config, char const* output) {
     c9->add((*mb_rn_p)[0], "Hydjet");
     c9->stack((*hp_rn_p)[0], "Pythia+Hydjet");
     c9->add(hp_rn_h);
-
-    TLatex* rn_mean = new TLatex();
-    std::string rn_mean_text = "Mean = " + std::to_string(hp_rn_h_mean) + " +- " + std::to_string(hp_rn_h_error);
-    rn_mean->SetTextFont(43);
-    rn_mean->SetTextSize(12);
-
-    rn_mean->DrawLatexNDC(0.2, 0.2, rn_mean_text.c_str());
+    c9->accessory(rn_fit_info);
 
     auto hp_style = [](TH1* h) {
         h->SetMarkerStyle(34);
