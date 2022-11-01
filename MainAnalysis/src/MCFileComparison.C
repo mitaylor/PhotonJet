@@ -84,10 +84,12 @@ void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* l
     canvas->Print(filename.c_str());
 }
 
-void PrintHist2D(TH2* hist1, string title, TCanvas* canvas, string filename) {
-    hist1->GetXaxis()->SetTitle(title.c_str());
-    hist1->Draw("COLZ");
+void PrintHist2D(TH2* hist, string title, TCanvas* canvas, string filename) {
+    hist->GetXaxis()->SetTitle(title.c_str());
+    hist->Draw("COLZ");
     canvas->Print(filename.c_str());
+    hist->SetMaximum(1);
+    hist->SetMinimum(0.0001);
 }
 
 void GetFiles(char const* input, vector<string>& files) {
@@ -255,7 +257,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
 
     PrintHist(oldPhotonHist, newPhotonHist, "Extra vs Nominal MC Photon Rho", canvas, legend, filename);
     PrintHist(oldRhoHist, newRhoHist, "Extra vs Nominal MC Calc Rho", canvas, legend, filename);
-    PrintHist(oldPhotonHist, newPhotonHist, "Extra MC Photon vs Calc Rho", canvas, legend, filename);
+    PrintHist(oldPhotonHist, oldRhoHist, "Extra MC Photon vs Calc Rho", canvas, legend, filename);
     PrintHist(newPhotonHist, newRhoHist, "Nominal MC Photon vs Calc Rho", canvas, legend, filename);
     PrintHist2D(oldPhotonNcollHist, "Extra MC Photon Rho vs Ncoll", canvas, filename);
     PrintHist2D(oldRhoNcollHist, "Extra MC Calc Rho vs Ncoll", canvas, filename);
