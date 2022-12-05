@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/PhotonJet'
 DatasetName = '/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbSpring21MiniAOD-mva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM'
-Tag = '20211224PbPbMCUF120'
+Tag = '20221205PbPbMCUF120'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
