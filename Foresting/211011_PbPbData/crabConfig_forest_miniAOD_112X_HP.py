@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/PhotonJet'
 DatasetName = '/HIHardProbes/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD'
-Tag = '20211223PbPbHP'
+Tag = '20221205PbPbHP'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
