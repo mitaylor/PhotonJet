@@ -124,6 +124,9 @@ int regulate(char const* config, char const* output) {
     auto pthatw = conf->get<std::vector<float>>("pthatw");
     auto vzw = conf->get<std::vector<float>>("vzw");
 
+    auto use_half = conf->get<bool>("use_half");
+    auto half = conf->get<bool>("half");
+
     for (auto& v : csn) { v = v * v; }
 
     /* load forest */
@@ -208,11 +211,16 @@ int regulate(char const* config, char const* output) {
     /* boom! */
     int64_t nentries = forest->count();
     if (max_entries) nentries = std::min(nentries, max_entries);
+
+    int64_t modulo = use_half ? 2 : 1;
+
     for (int64_t i = 0; i < nentries; ++i) {
         tree_pj->clear();
 
         if (i % 10000 == 0)
             printf("entry: %li/%li\n", i, nentries);
+
+        if ((i + half) % modulo != 0) { continue; }
 
         forest->get(i);
 

@@ -45,7 +45,7 @@ int narrate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
     
     auto ihf = new interval(dhf);
-    auto irho = new interval("rho"s, rho_range[0], rho_range[1], rho_range[2]);
+    auto irho = new interval("#rho"s, rho_range[0], rho_range[1], rho_range[2]);
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
 
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
@@ -58,7 +58,7 @@ int narrate(char const* config, char const* output) {
 
     TFile* f = new TFile(data.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1, 0, 0 });
+    auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
     // int64_t nentries = 10000;
@@ -72,6 +72,30 @@ int narrate(char const* config, char const* output) {
 
         if (hf_x < 0) continue;
         if (hf_x == ihf->size()) continue;
+
+        if (std::abs(pjt->vz) > 15) { continue; }
+
+        int64_t leading = -1;
+        float leading_pt = 0;
+        for (int64_t j = 0; j < pjt->nPho; ++j) {
+            if ((*pjt->phoEt)[j] <= 40) { continue; }
+            if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+            if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+
+            if ((*pjt->phoEt)[j] > leading_pt) {
+                leading = j;
+                leading_pt = (*pjt->phoEt)[j];
+            }
+        }
+
+        if (leading < 0) { continue; }
+        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
+        if (in_pho_failure_region(pjt, leading)) { continue; }
+
+        float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+            + (*pjt->pho_hcalRechitIsoR3)[leading]
+            + (*pjt->pho_trackIsoR3PtCut20)[leading];
+        if (isolation > 2.099277) { continue; }
 
         for (size_t j = 0; j < eta_min.size(); ++j) {
             auto eta_x = static_cast<int64_t>(j);
@@ -88,7 +112,7 @@ int narrate(char const* config, char const* output) {
     for (auto const& file : files) {
         f = new TFile(file.data(), "read");
         t = (TTree*)f->Get("pj");
-        pjt = new pjtree(false, false, true, t, { 1, 0, 0, 0, 0, 0, 1, 0, 0 });
+        pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
 
         nentries = static_cast<int64_t>(t->GetEntries());
         // nentries = 10000;
@@ -98,6 +122,30 @@ int narrate(char const* config, char const* output) {
                 printf("entry: %li/%li\n", i, nentries);
 
             t->GetEntry(i);
+
+            if (std::abs(pjt->vz) > 15) { continue; }
+
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if ((*pjt->phoEt)[j] <= 40) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+                if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+
+                if ((*pjt->phoEt)[j] > leading_pt) {
+                    leading = j;
+                    leading_pt = (*pjt->phoEt)[j];
+                }
+            }
+
+            if (leading < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
+            if (in_pho_failure_region(pjt, leading)) { continue; }
+
+            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+                + (*pjt->pho_hcalRechitIsoR3)[leading]
+                + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > 2.099277) { continue; }
 
             for (size_t j = 0; j < eta_min.size(); ++j) {
                 for (size_t k = 0; k < dhf.size()-1; ++k) {
@@ -140,6 +188,7 @@ int narrate(char const* config, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
+    cms += "         p_{T}^{#gamma} > 40 GeV";
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
