@@ -222,16 +222,27 @@ int Compare(char const* config, char const* output) {
     auto pt_info = [&](int64_t index) {
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    auto mean_info = [&](int64_t index) {
+    auto mean_info_vtx = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f",
-            (*hf)[index - 1]->GetMean(1));
+            (*hf_v1)[index - 1]->GetMean(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
         text->SetTextSize(12);
         text->DrawLatexNDC(0.54, 0.75, buffer);
     };
+
+    auto mean_info_pu = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "mean: %.3f",
+            (*hf_p0)[index - 1]->GetMean(1));
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };v
 
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
@@ -240,7 +251,7 @@ int Compare(char const* config, char const* output) {
     apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
-    c1->accessory(mean_info);
+    c1->accessory(mean_info_vtx);
     c1->divide(ipt->size(), -1);
     // c1->set(paper::flags::logy);
 
@@ -255,7 +266,7 @@ int Compare(char const* config, char const* output) {
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c2->accessory(pt_info);
-    c2->accessory(mean_info);
+    c2->accessory(mean_info_pu);
     c2->divide(ipt->size(), -1);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
