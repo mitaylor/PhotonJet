@@ -61,7 +61,7 @@ void GetFiles(char const* input, std::vector<std::string>& files) {
     return;
 }
 
-void FillChain(TChain& chain, std::vector<string>& files) {
+void FillChain(TChain& chain, std::vector<std::string>& files) {
     for (auto file : files) {
         chain.Add(file.c_str());
     }
@@ -167,7 +167,7 @@ int Compare(char const* config, char const* output) {
 
             if ((*phoEt)[j] > leading_pt) {
                 leading = j;
-                leading_pt = pho_et;
+                leading_pt = (*phoEt)[j];
             }
         }
 
