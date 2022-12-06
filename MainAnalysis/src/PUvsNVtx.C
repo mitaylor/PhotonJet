@@ -155,7 +155,7 @@ int Compare(char const* input, int pthat) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
+    if (argc == 3)
         return Compare(argv[1], stoi(argv[3]));
 
     else {
