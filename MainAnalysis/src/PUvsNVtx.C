@@ -3,6 +3,7 @@
 #include "TSystemDirectory.h"
 #include "TSystemFile.h"
 #include "TChain.h"
+#include "TStyle.h"
 
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
@@ -22,39 +23,35 @@
 
 using namespace std;
 
-void FormatHistogram(TH1F* hist, int color) {
+void FormatHistogram(TH1* hist, int color) {
     hist->SetMarkerColor(color);
     hist->SetLineColor(color);
     hist->SetMarkerSize(0.5);
     hist->SetMarkerStyle(20);
     hist->SetStats(0);
     hist->GetXaxis()->CenterTitle(true);
-    hist->GetYaxis()->SetTitle("Normalized Counts");
     hist->GetYaxis()->CenterTitle(true);
 }
 
-void FormatHistogram2D(TH2F* hist) {
-    hist->SetStats(0);
-    hist->GetXaxis()->SetTitle("Eta");
+void FormatHistogram2D(TH2* hist) {
     hist->GetXaxis()->CenterTitle(true);
-    hist->GetYaxis()->SetTitle("Ncoll");
     hist->GetYaxis()->CenterTitle(true);
+    hist->SetStats(0);
 }
 
-void PrintHist(TH1* hist1, TH1* hist2, string title, TCanvas* canvas, TLegend* legend, string filename) {
-    hist1->GetXaxis()->SetTitle(title.c_str());
+void PrintHist(TH1* hist1, string xlabel, string ylabel, TCanvas* canvas, TLegend* legend, string filename) {
+    hist->GetXaxis()->SetTitle(xlabel.c_str());
+    hist->GetXaxis()->SetTitle(ylabel.c_str());
     hist1->Draw("HIST LP");
-    hist2->Draw("HIST LP SAME");
     legend->Draw();
     canvas->Print(filename.c_str());
 }
 
-void PrintHist2D(TH2* hist, string title, TCanvas* canvas, string filename) {
-    hist->GetXaxis()->SetTitle(title.c_str());
+void PrintHist2D(TH2* hist, string xlabel, string ylabel, TCanvas* canvas, string filename) {
+    hist->GetXaxis()->SetTitle(xlabel.c_str());
+    hist->GetXaxis()->SetTitle(ylabel.c_str());
     hist->Draw("COLZ");
     canvas->Print(filename.c_str());
-    hist->SetMaximum(1);
-    hist->SetMinimum(0.0001);
 }
 
 void GetFiles(char const* input, vector<string>& files) {
@@ -95,66 +92,62 @@ int Compare(char const* input, int pthat) {
 
     // nPho phoEt phoSCEta phoHoverE phoSigmaIEtaIEta_2012 pho_ecalClusterIsoR3 pho_hcalRechitIsoR3 pho_trackIsoR3PtCut20 phoEta phoPhi
     // pfPt pfPt nVtx weight
-    
+
     TChain trackChain("ppTrack/trackTree");
     FillChain(trackChain, files);
     // trackChain.Add(input);
     TTreeReader trackReader(&trackChain);
-    TTreeReaderValue<int> trackEtaMin(trackReader, "nVtx");
-    // TTreeReaderValue<vector<double>> trackEtaMax(trackReader, "etaMax");
-    // TTreeReaderValue<vector<double>> tracktrack(trackReader, "track");
+    TTreeReaderValue<int> trackNVtx(trackReader, "nVtx");
 
     TChain evtChain("hiEvtAnalyzer/HiTree");
     FillChain(evtChain, files);
     // evtChain.Add(input);
     TTreeReader evtReader(&evtChain);
-    TTreeReaderValue<float> evtNcoll(evtReader, "Ncoll");
+    TTreeReaderValue<vector<int>> evtNPU(evtReader, "npus");
 
     /* create histograms for energy sum plots */
-    int nbins = 80;
-    float min = 0;
-    float max = 300;
 
-    auto trackHist = new TH1F("trackHist", "", nbins, min, max);
-    auto trackNcollHist = new TH2F("trackNcollHist", "", nbins, min, max, nbins, 0, 2100);
+    // auto trackHist = new TH1F("trackHist", "", nbins, min, max);
+    auto histVtxPU2D = new TH2F("histVtxPU", ";nVtx;nPU", 14, 0, 14, 14, 0, 14);
+    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 14, 0, 14, 0, 20, "LE");
 
     int entries = trackChain.GetEntries();
 
     /* customize energy sum histogram draw options */
     auto legend = new TLegend(0.55, 0.75 ,0.85, 0.85);
     legend->SetTextSize(0.03);
-    legend->AddEntry(trackHist, "Extra MC Photon track", "p");
+    legend->AddEntry(histVtxPU1D, "PP PU vs nVtx", "p");
 
-    FormatHistogram(trackHist, 46);
-    FormatHistogram2D(trackNcollHist);
+    FormatHistogram2D(histVtxPU2D);
+    FormatHistogram(histVtxPU1D, 30);
 
     /* read in information from TTrees */
     for (int i = 1; i < entries; ++i) {
         trackReader.Next(); evtReader.Next();
 
-        if (i % (entries / 100) == 0) cout << i << " / " << entries << endl;
-            
-        auto avg_track = GetAvgtrack(tracktrack.Get(), trackEtaMin.Get(), trackEtaMax.Get());
+        if (i % (entries / 200) == 0) cout << i << " / " << entries << endl;
 
-        trackHist->Fill(avg_track);
-        trackNcollHist->Fill(avg_track, *evtNcoll);
+        histVtxPU2D->Fill(*trackNVtx, (*evtNPU)[5]);
+        histVtxPU1D->Fill(*trackNVtx, (*evtNPU)[5]);
     }
 
-    /* scale the histograms */
-    trackHist->Scale(1.0/entries);
-    trackNcollHist->Scale(1.0/entries);
+    /* fit the histograms */
+    histVtxPU1D->Fit("pol1");
+    gStyle->SetOptFit(0011);
 
-    string filename = "MCComparison_" + to_string(pthat) + ".pdf";
+    /* plot the histograms */
+    string filename = "NVtx_vs_NPU_" + to_string(pthat) + ".pdf";
 
     auto canvas = new TCanvas("canvas", "", 0 , 0, 500, 500);
     canvas->SetLeftMargin(0.15);
     canvas->SetBottomMargin(0.15);
     canvas->Print(string(filename + "[").c_str());
-    canvas->SetLogz(1);
+    // canvas->SetLogz(1);
     canvas->Clear();
 
-    PrintHist(photonHist, newPhotonHist, "Extra vs Nominal MC Photon track", canvas, legend, filename);
-    PrintHist2D(photonNcollHist, "Extra MC Photon track vs Ncoll", canvas, filename);
+    // PrintHist(photonHist, newPhotonHist, "Extra vs Nominal MC Photon track", canvas, legend, filename);
+    PrintHist2D(histVtxPU2D, "nVtx", "nPU", canvas, filename);
+    PrintHist1D(histVtxPU1D, "nVtx", "nPU", canvas, filename);
 
     canvas->Print(string(filename + "]").c_str());
 
