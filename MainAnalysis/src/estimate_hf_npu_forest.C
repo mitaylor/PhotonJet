@@ -72,7 +72,6 @@ int Compare(char const* config, char const* output) {
 
     auto input = conf->get<std::string>("input");
     
-    auto entries = conf->get<int64_t>("entries");
     auto tag = conf->get<std::string>("tag");
     auto pthat = conf->get<std::string>("pthat");
     auto type = conf->get<std::string>("type");
@@ -86,7 +85,7 @@ int Compare(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* read in information */
-    std::vector<string> files;
+    std::vector<std::string> files;
     GetFiles(input, files);
 
     TChain trackChain("ppTrack/trackTree");
@@ -241,7 +240,7 @@ int Compare(char const* config, char const* output) {
         text->SetTextFont(43);
         text->SetTextSize(12);
         text->DrawLatexNDC(0.54, 0.75, buffer);
-    };v
+    };
 
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
