@@ -36,24 +36,24 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void GetFiles(char const* input, vector<string>& files) {
+void GetFiles(char const* input, std::vector<std::string>& files) {
     TSystemDirectory dir(input, input);
     TList *list = dir.GetListOfFiles();
 
     if (list) {
         TSystemFile *file;
-        string fname;
+        std::string fname;
         TIter next(list);
         while ((file = (TSystemFile*) next())) {
             fname = file->GetName();
 
-            if (file->IsDirectory() && (fname.find(".") == string::npos)) {
-                string newDir = string(input) + fname + "/";
+            if (file->IsDirectory() && (fname.find(".") == std::string::npos)) {
+                std::string newDir = std::string(input) + fname + "/";
                 GetFiles(newDir.c_str(), files);
             }
-            else if ((fname.find(".root") != string::npos)) {
-                files.push_back(string(input) + fname);
-                cout << files.back() << endl;
+            else if ((fname.find(".root") != std::string::npos)) {
+                files.push_back(std::string(input) + fname);
+                std::cout << files.back() << std::endl;
             }
         }
     }
@@ -61,7 +61,7 @@ void GetFiles(char const* input, vector<string>& files) {
     return;
 }
 
-void FillChain(TChain& chain, vector<string>& files) {
+void FillChain(TChain& chain, std::vector<string>& files) {
     for (auto file : files) {
         chain.Add(file.c_str());
     }
@@ -153,7 +153,7 @@ int Compare(char const* config, char const* output) {
     for (int i = 1; i < entries; ++i) {
         trackReader.Next(); evtReader.Next(); phoReader.Next(); pfReader.Next();
 
-        if (i % (entries/200) == 0) cout << i << " / " << entries << endl;
+        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
         if (std::abs(*vz) > 15) { continue; }
 
