@@ -109,7 +109,7 @@ int Compare(char const* input, int pthat) {
 
     // auto trackHist = new TH1F("trackHist", "", nbins, min, max);
     auto histVtxPU2D = new TH2F("histVtxPU", ";nVtx;nPU", 14, 0, 14, 14, 0, 14);
-    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 15, -0.5, 14.5, 0, 16, "E");
+    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 11, -0.5, 10.5, 0, 16, "E");
 
     int entries = trackChain.GetEntries();
 
