@@ -1,3 +1,4 @@
+#include "../include/lambdas.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -73,13 +74,9 @@ int Compare(char const* config, char const* output) {
     auto input = conf->get<std::string>("input");
     
     auto entries = conf->get<int64_t>("entries");
-    auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
     auto pthat = conf->get<std::string>("pthat");
     auto type = conf->get<std::string>("type");
-
-    /* options */
-    auto heavyion = conf->get<bool>("heavyion");
 
     /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
