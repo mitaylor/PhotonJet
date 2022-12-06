@@ -17,6 +17,7 @@
 
 #include <array>
 #include <vector>
+#include <iostream>
 
 #define B_VEC_JET_RECO(ACTION, ...)                                         \
     ACTION(sv<float>,       rawpt,                      ## __VA_ARGS__)     \
