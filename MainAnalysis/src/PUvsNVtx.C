@@ -39,10 +39,10 @@ void FormatHistogram2D(TH2* hist) {
     hist->SetStats(0);
 }
 
-void PrintHist(TH1* hist1, string xlabel, string ylabel, TCanvas* canvas, TLegend* legend, string filename) {
+void PrintHist1D(TH1* hist, string xlabel, string ylabel, TCanvas* canvas, TLegend* legend, string filename) {
     hist->GetXaxis()->SetTitle(xlabel.c_str());
     hist->GetXaxis()->SetTitle(ylabel.c_str());
-    hist1->Draw("HIST LP");
+    hist->Draw("HIST LP");
     legend->Draw();
     canvas->Print(filename.c_str());
 }
@@ -147,7 +147,7 @@ int Compare(char const* input, int pthat) {
 
     // PrintHist(photonHist, newPhotonHist, "Extra vs Nominal MC Photon track", canvas, legend, filename);
     PrintHist2D(histVtxPU2D, "nVtx", "nPU", canvas, filename);
-    PrintHist1D(histVtxPU1D, "nVtx", "nPU", canvas, filename);
+    PrintHist1D(histVtxPU1D, "nVtx", "nPU", canvas, legend, filename);
 
     canvas->Print(string(filename + "]").c_str());
 
@@ -156,7 +156,7 @@ int Compare(char const* input, int pthat) {
 
 int main(int argc, char* argv[]) {
     if (argc == 4)
-        return Compare(argv[1], argv[2], stoi(argv[3]));
+        return Compare(argv[1], stoi(argv[3]));
 
     else {
         cout << "ERROR: Please pass two paths for Extra MC and Nominal MC." << endl;
