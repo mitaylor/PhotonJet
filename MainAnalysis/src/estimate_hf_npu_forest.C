@@ -149,7 +149,7 @@ int Compare(char const* config, char const* output) {
     /* read in information from TTrees */
     int entries = trackChain.GetEntries();
 
-    for (int i = 1; i < entries; ++i) {
+    for (int i = 1; i < entries/200; ++i) {
         trackReader.Next(); evtReader.Next(); phoReader.Next(); pfReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
