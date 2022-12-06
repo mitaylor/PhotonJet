@@ -95,6 +95,7 @@ class pjtree {
 
         if (_gen && !_hi) {
             B_VEC_EVT_GEN(ALLOCOBJ)
+            std::cout << "place 1" << std::endl;
         }
 
         B_VAL_EVT_EXT(SETMONE)
@@ -174,6 +175,7 @@ class pjtree {
 
         if (_gen && !_hi) {
             B_VEC_EVT_GEN(CLEAROBJ)
+            std::cout << "place 2" << std::endl;
         }
     }
 
@@ -188,6 +190,7 @@ class pjtree {
 
             if (_gen && !_hi) {
                 B_VEC_EVT_GEN(COPYOBJ, tevt)
+                std::cout << "place 3" << std::endl;
             }
         }
 
@@ -276,6 +279,7 @@ class pjtree {
 
             if (_gen && !_hi) {
                 B_VEC_EVT_GEN(BRANCHPTR, t)
+                std::cout << "place 4" << std::endl;
             }
 
             B_VAL_EVT_EXT(BRANCHVAL, t)
