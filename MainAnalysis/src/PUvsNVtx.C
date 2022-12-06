@@ -28,7 +28,7 @@ void FormatHistogram(TH1* hist, int color) {
     hist->SetLineColor(color);
     hist->SetMarkerSize(0.5);
     hist->SetMarkerStyle(20);
-    hist->SetStats(0);
+    // hist->SetStats(0);
     hist->GetXaxis()->CenterTitle(true);
     hist->GetYaxis()->CenterTitle(true);
 }
@@ -109,7 +109,7 @@ int Compare(char const* input, int pthat) {
 
     // auto trackHist = new TH1F("trackHist", "", nbins, min, max);
     auto histVtxPU2D = new TH2F("histVtxPU", ";nVtx;nPU", 14, 0, 14, 14, 0, 14);
-    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 14, 0, 14, 0, 20, "LE");
+    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 16, 0, 16, 0, 16, "LE");
 
     int entries = trackChain.GetEntries();
 
@@ -133,7 +133,8 @@ int Compare(char const* input, int pthat) {
 
     /* fit the histograms */
     histVtxPU1D->Fit("pol1");
-    gStyle->SetOptFit(0011);
+    gStyle->SetOptStat(11)
+    gStyle->SetOptFit(1)
 
     /* plot the histograms */
     string filename = "NVtx_vs_NPU_" + to_string(pthat) + ".pdf";
