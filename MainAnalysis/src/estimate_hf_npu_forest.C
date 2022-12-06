@@ -33,7 +33,6 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
@@ -87,7 +86,7 @@ int Compare(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* read in information */
-    vector<string> files;
+    std::vector<string> files;
     GetFiles(input, files);
 
     TChain trackChain("ppTrack/trackTree");
@@ -100,7 +99,7 @@ int Compare(char const* config, char const* output) {
     FillChain(evtChain, files);
     // evtChain.Add(input);
     TTreeReader evtReader(&evtChain);
-    TTreeReaderValue<vector<int>> npus(evtReader, "npus");
+    TTreeReaderValue<std::vector<int>> npus(evtReader, "npus");
     TTreeReaderValue<float> weight(evtReader, "weight");
     TTreeReaderValue<float> vz(evtReader, "vz");
 
@@ -109,20 +108,20 @@ int Compare(char const* config, char const* output) {
     // phoChain.Add(input);
     TTreeReader phoReader(&phoChain);
     TTreeReaderValue<int32_t> nPho(phoReader, "nPho");
-    TTreeReaderValue<vector<float>> phoEt(phoReader, "phoEt");
-    TTreeReaderValue<vector<float>> phoSCEta(phoReader, "phoSCEta");
-    TTreeReaderValue<vector<float>> phoHoverE(phoReader, "phoHoverE");
-    TTreeReaderValue<vector<float>> phoSigmaIEtaIEta_2012(phoReader, "phoSigmaIEtaIEta_2012");
-    TTreeReaderValue<vector<float>> pho_ecalClusterIsoR3(phoReader, "pho_ecalClusterIsoR3");
-    TTreeReaderValue<vector<float>> pho_hcalRechitIsoR3(phoReader, "pho_hcalRechitIsoR3");
-    TTreeReaderValue<vector<float>> pho_trackIsoR3PtCut20(phoReader, "pho_trackIsoR3PtCut20");
+    TTreeReaderValue<std::vector<float>> phoEt(phoReader, "phoEt");
+    TTreeReaderValue<std::vector<float>> phoSCEta(phoReader, "phoSCEta");
+    TTreeReaderValue<std::vector<float>> phoHoverE(phoReader, "phoHoverE");
+    TTreeReaderValue<std::vector<float>> phoSigmaIEtaIEta_2012(phoReader, "phoSigmaIEtaIEta_2012");
+    TTreeReaderValue<std::vector<float>> pho_ecalClusterIsoR3(phoReader, "pho_ecalClusterIsoR3");
+    TTreeReaderValue<std::vector<float>> pho_hcalRechitIsoR3(phoReader, "pho_hcalRechitIsoR3");
+    TTreeReaderValue<std::vector<float>> pho_trackIsoR3PtCut20(phoReader, "pho_trackIsoR3PtCut20");
 
     TChain pfChain("pfcandAnalyzer/pfTree");
     FillChain(pfChain, files);
     // pfChain.Add(input);
     TTreeReader pfReader(&pfChain);
-    TTreeReaderValue<vector<int>> pfId(pfReader, "pfId");
-    TTreeReaderValue<vector<float>> pfPt(pfReader, "pfPt");
+    TTreeReaderValue<std::vector<int>> pfId(pfReader, "pfId");
+    TTreeReaderValue<std::vector<float>> pfPt(pfReader, "pfPt");
 
     /* create histograms */
     auto ipt = new interval(dpt);
@@ -189,7 +188,7 @@ int Compare(char const* config, char const* output) {
 
         float pf_sum = 0;
 
-        for (size_t j = 0; j < pjt->pfPt->size(); ++j) {
+        for (size_t j = 0; j < pfPt->size(); ++j) {
             // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
             if ((*pfId)[j] >= 6) {
                 pf_sum += (*pfPt)[j];
