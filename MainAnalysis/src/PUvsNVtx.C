@@ -123,7 +123,7 @@ int Compare(char const* input, int pthat) {
     FormatHistogram(histVtxPU1D, 30);
 
     /* read in information from TTrees */
-    for (int i = 1; i < entries/200; ++i) {
+    for (int i = 1; i < entries; ++i) {
         trackReader.Next(); evtReader.Next();
 
         if (i % (entries) == 0) cout << i << " / " << entries << endl;
