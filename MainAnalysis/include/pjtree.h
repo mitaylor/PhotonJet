@@ -93,6 +93,10 @@ class pjtree {
             B_VEC_RHO(ALLOCOBJ)
         }
 
+        if (_gen && !_hi) {
+            B_VEC_EVT_GEN(ALLOCOBJ)
+        }
+
         B_VAL_EVT_EXT(SETMONE)
 
         branch(t);
@@ -134,6 +138,10 @@ class pjtree {
             B_VEC_RHO(SETZERO)
         }
 
+        if (_gen && !_hi) {
+            B_VEC_EVT_GEN(SETZERO)
+        }
+
         B_VAL_EVT_EXT(SETZERO)
 
         read(t);
@@ -163,6 +171,10 @@ class pjtree {
         if (_hi) {
             B_VEC_RHO(CLEAROBJ)
         }
+
+        if (_gen && !_hi) {
+            B_VEC_EVT_GEN(CLEAROBJ)
+        }
     }
 
     void copy(event* tevt, eggen* tegg, photons* tpho, electrons* tele,
@@ -172,6 +184,10 @@ class pjtree {
 
             if (_gen) {
                 B_VAL_EVT_GEN(COPYVAL, tevt)
+            }
+
+            if (_gen && !_hi) {
+                B_VEC_EVT_GEN(COPYOBJ, tevt)
             }
         }
 
@@ -226,6 +242,7 @@ class pjtree {
 
     B_VAL_EVT_RECO(DECLVAL)
     B_VAL_EVT_GEN(DECLVAL)
+    B_VEC_EVT_GEN(DECLPTR)
     B_VAL_EVT_EXT(DECLVAL)
     B_VAL_EGM_RECO(DECLVAL)
     B_VAL_EGM_GEN(DECLVAL)
@@ -255,6 +272,10 @@ class pjtree {
             if (_gen) {
                 B_VAL_EVT_GEN(BRANCHVAL, t)
                 B_VEC_EVT_EXT(BRANCHPTR, t)
+            }
+
+            if (_gen && !_hi) {
+                B_VEC_EVT_GEN(BRANCHPTR, t)
             }
 
             B_VAL_EVT_EXT(BRANCHVAL, t)
@@ -318,6 +339,10 @@ class pjtree {
             if (_gen) {
                 B_VAL_EVT_GEN(SETVALADDR, t)
                 B_VEC_EVT_EXT(SETVALADDR, t)
+            }
+
+            if (_gen && !_hi) {
+                B_VEC_EVT_GEN(SETVALADDR, t)
             }
 
             B_VAL_EVT_EXT(SETVALADDR, t)

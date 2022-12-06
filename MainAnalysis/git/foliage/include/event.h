@@ -18,6 +18,9 @@
     ACTION(float,           weight,                     ## __VA_ARGS__)     \
     ACTION(float,           Ncoll,                      ## __VA_ARGS__)     \
 
+#define B_VEC_EVT_GEN(ACTION, ...)                                         \
+    ACTION(sv<int>,         npus,                       ## __VA_ARGS__)     \
+
 class event : tree {
   public:
     event(bool gen);
@@ -29,6 +32,7 @@ class event : tree {
 
     B_VAL_EVT_RECO(DECLVAL)
     B_VAL_EVT_GEN(DECLVAL)
+    B_VEC_EVT_GEN(DECLPTR)
 
   private:
     bool _gen;
