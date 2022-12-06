@@ -126,7 +126,7 @@ int Compare(char const* input, int pthat) {
     for (int i = 1; i < entries; ++i) {
         trackReader.Next(); evtReader.Next();
 
-        if (i % (entries) == 0) cout << i << " / " << entries << endl;
+        if (i % (entries/200) == 0) cout << i << " / " << entries << endl;
 
         histVtxPU2D->Fill(*trackNVtx, (*evtNPU)[5]);
         histVtxPU1D->Fill(*trackNVtx, (*evtNPU)[5]);
