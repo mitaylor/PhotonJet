@@ -17,7 +17,6 @@
 
 #include <array>
 #include <vector>
-#include <iostream>
 
 #define B_VEC_JET_RECO(ACTION, ...)                                         \
     ACTION(sv<float>,       rawpt,                      ## __VA_ARGS__)     \
@@ -95,7 +94,6 @@ class pjtree {
         }
 
         if (_gen && !_hi) {
-            std::cout << "place 1" << std::endl;
             B_VEC_EVT_GEN(ALLOCOBJ)
         }
 
@@ -175,7 +173,6 @@ class pjtree {
         }
 
         if (_gen && !_hi) {
-            std::cout << "place 2" << std::endl;
             B_VEC_EVT_GEN(CLEAROBJ)
         }
     }
@@ -190,7 +187,6 @@ class pjtree {
             }
 
             if (_gen && !_hi) {
-                std::cout << "place 3" << std::endl;
                 B_VEC_EVT_GEN(COPYOBJ, tevt)
             }
         }
@@ -279,7 +275,6 @@ class pjtree {
             }
 
             if (_gen && !_hi) {
-                std::cout << "place 4" << std::endl;
                 B_VEC_EVT_GEN(BRANCHPTR, t)
             }
 
