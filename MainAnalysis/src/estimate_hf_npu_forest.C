@@ -86,7 +86,7 @@ int Compare(char const* config, char const* output) {
 
     /* read in information */
     std::vector<std::string> files;
-    GetFiles(input, files);
+    GetFiles(std::string(input), files);
 
     TChain trackChain("ppTrack/trackTree");
     FillChain(trackChain, files);
