@@ -94,10 +94,9 @@ class pjtree {
             B_VEC_RHO(ALLOCOBJ)
         }
 
-        if (_gen && !_hi) {
-            B_VEC_EVT_GEN(ALLOCOBJ)
-            std::cout << "place 1" << std::endl;
-        }
+        // if (_gen && !_hi) {
+        //     B_VEC_EVT_GEN(ALLOCOBJ)
+        // }
 
         B_VAL_EVT_EXT(SETMONE)
 
@@ -140,9 +139,9 @@ class pjtree {
             B_VEC_RHO(SETZERO)
         }
 
-        if (_gen && !_hi) {
-            B_VEC_EVT_GEN(SETZERO)
-        }
+        // if (_gen && !_hi) {
+        //     B_VEC_EVT_GEN(SETZERO)
+        // }
 
         B_VAL_EVT_EXT(SETZERO)
 
@@ -174,10 +173,10 @@ class pjtree {
             B_VEC_RHO(CLEAROBJ)
         }
 
-        if (_gen && !_hi) {
-            B_VEC_EVT_GEN(CLEAROBJ)
-            std::cout << "place 2" << std::endl;
-        }
+        // if (_gen && !_hi) {
+        //     B_VEC_EVT_GEN(CLEAROBJ)
+        //     std::cout << "place 2" << std::endl;
+        // }
     }
 
     void copy(event* tevt, eggen* tegg, photons* tpho, electrons* tele,
@@ -189,10 +188,10 @@ class pjtree {
                 B_VAL_EVT_GEN(COPYVAL, tevt)
             }
 
-            if (_gen && !_hi) {
-                B_VEC_EVT_GEN(COPYOBJ, tevt)
-                std::cout << "place 3" << std::endl;
-            }
+            // if (_gen && !_hi) {
+            //     B_VEC_EVT_GEN(COPYOBJ, tevt)
+            //     std::cout << "place 3" << std::endl;
+            // }
         }
 
         if (_flags[tt::egm]) {
@@ -246,7 +245,7 @@ class pjtree {
 
     B_VAL_EVT_RECO(DECLVAL)
     B_VAL_EVT_GEN(DECLVAL)
-    B_VEC_EVT_GEN(DECLPTR)
+    // B_VEC_EVT_GEN(DECLPTR)
     B_VAL_EVT_EXT(DECLVAL)
     B_VAL_EGM_RECO(DECLVAL)
     B_VAL_EGM_GEN(DECLVAL)
@@ -278,10 +277,9 @@ class pjtree {
                 B_VEC_EVT_EXT(BRANCHPTR, t)
             }
 
-            if (_gen && !_hi) {
-                B_VEC_EVT_GEN(BRANCHPTR, t)
-                std::cout << "place 4" << std::endl;
-            }
+            // if (_gen && !_hi) {
+            //     B_VEC_EVT_GEN(BRANCHPTR, t)
+            // }
 
             B_VAL_EVT_EXT(BRANCHVAL, t)
         }
@@ -346,9 +344,9 @@ class pjtree {
                 B_VEC_EVT_EXT(SETVALADDR, t)
             }
 
-            if (_gen && !_hi) {
-                B_VEC_EVT_GEN(SETVALADDR, t)
-            }
+            // if (_gen && !_hi) {
+            //     B_VEC_EVT_GEN(SETVALADDR, t)
+            // }
 
             B_VAL_EVT_EXT(SETVALADDR, t)
         }
