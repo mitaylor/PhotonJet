@@ -109,7 +109,7 @@ int Compare(char const* input, int pthat) {
 
     // auto trackHist = new TH1F("trackHist", "", nbins, min, max);
     auto histVtxPU2D = new TH2F("histVtxPU", ";nVtx;nPU", 14, 0, 14, 14, 0, 14);
-    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 15, -0.5, 14.5, 0, 16, "LE");
+    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 15, -0.5, 14.5, 0, 16, "E");
 
     int entries = trackChain.GetEntries();
 
@@ -119,7 +119,7 @@ int Compare(char const* input, int pthat) {
     legend->AddEntry(histVtxPU1D, "PP PU vs nVtx", "p");
 
     FormatHistogram2D(histVtxPU2D);
-    // FormatHistogram(histVtxPU1D, 30);
+    FormatHistogram(histVtxPU1D, 30);
 
     /* read in information from TTrees */
     for (int i = 1; i < entries/200; ++i) {
@@ -133,7 +133,7 @@ int Compare(char const* input, int pthat) {
 
     /* fit the histograms */
     histVtxPU1D->Fit("pol1");
-    gStyle->SetOptStat(11);
+    gStyle->SetOptStat(0);
     gStyle->SetOptFit(1);
 
     /* plot the histograms */
