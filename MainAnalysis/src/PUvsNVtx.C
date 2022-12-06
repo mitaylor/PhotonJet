@@ -26,7 +26,7 @@ using namespace std;
 void FormatHistogram(TH1* hist, int color) {
     hist->SetMarkerColor(color);
     hist->SetLineColor(color);
-    hist->SetMarkerSize(0.5);
+    hist->SetMarkerSize(1.0);
     hist->SetMarkerStyle(20);
     // hist->SetStats(0);
     hist->GetXaxis()->CenterTitle(true);
@@ -122,7 +122,7 @@ int Compare(char const* input, int pthat) {
     FormatHistogram(histVtxPU1D, 30);
 
     /* read in information from TTrees */
-    for (int i = 1; i < entries; ++i) {
+    for (int i = 1; i < entries/200; ++i) {
         trackReader.Next(); evtReader.Next();
 
         if (i % (entries / 200) == 0) cout << i << " / " << entries << endl;
@@ -133,8 +133,8 @@ int Compare(char const* input, int pthat) {
 
     /* fit the histograms */
     histVtxPU1D->Fit("pol1");
-    gStyle->SetOptStat(11)
-    gStyle->SetOptFit(1)
+    gStyle->SetOptStat(11);
+    gStyle->SetOptFit(1);
 
     /* plot the histograms */
     string filename = "NVtx_vs_NPU_" + to_string(pthat) + ".pdf";
