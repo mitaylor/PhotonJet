@@ -115,7 +115,7 @@ int Compare(char const* input, int pthat) {
     int entries = trackChain.GetEntries();
 
     /* customize energy sum histogram draw options */
-    auto legend = new TLegend(0.55, 0.75 ,0.85, 0.85);
+    auto legend = new TLegend(0.15, 0.75 ,0.45, 0.85);
     legend->SetTextSize(0.03);
     legend->AddEntry(histVtxPU1D, "PP PU vs nVtx", "p");
 
@@ -123,7 +123,7 @@ int Compare(char const* input, int pthat) {
     FormatHistogram(histVtxPU1D, 30);
 
     /* read in information from TTrees */
-    for (int i = 1; i < entries/200; ++i) {
+    for (int i = 1; i < entries; ++i) {
         trackReader.Next(); evtReader.Next();
 
         if (i % (entries / 200) == 0) cout << i << " / " << entries << endl;
