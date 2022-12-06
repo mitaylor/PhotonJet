@@ -41,7 +41,7 @@ void FormatHistogram2D(TH2* hist) {
 
 void PrintHist1D(TH1* hist, string xlabel, string ylabel, TCanvas* canvas, TLegend* legend, string filename) {
     hist->GetXaxis()->SetTitle(xlabel.c_str());
-    hist->GetXaxis()->SetTitle(ylabel.c_str());
+    hist->GetYaxis()->SetTitle(ylabel.c_str());
     // hist->Draw("HIST LP");
     hist->Draw();
     legend->Draw();
@@ -50,7 +50,7 @@ void PrintHist1D(TH1* hist, string xlabel, string ylabel, TCanvas* canvas, TLege
 
 void PrintHist2D(TH2* hist, string xlabel, string ylabel, TCanvas* canvas, string filename) {
     hist->GetXaxis()->SetTitle(xlabel.c_str());
-    hist->GetXaxis()->SetTitle(ylabel.c_str());
+    hist->GetYaxis()->SetTitle(ylabel.c_str());
     hist->Draw("COLZ");
     canvas->Print(filename.c_str());
 }
@@ -115,7 +115,7 @@ int Compare(char const* input, int pthat) {
     int entries = trackChain.GetEntries();
 
     /* customize energy sum histogram draw options */
-    auto legend = new TLegend(0.15, 0.75 ,0.45, 0.85);
+    auto legend = new TLegend(0.55, 0.25 ,0.85, 0.35);
     legend->SetTextSize(0.03);
     legend->AddEntry(histVtxPU1D, "PP PU vs nVtx", "p");
 
@@ -123,10 +123,10 @@ int Compare(char const* input, int pthat) {
     FormatHistogram(histVtxPU1D, 30);
 
     /* read in information from TTrees */
-    for (int i = 1; i < entries; ++i) {
+    for (int i = 1; i < entries/200; ++i) {
         trackReader.Next(); evtReader.Next();
 
-        if (i % (entries / 200) == 0) cout << i << " / " << entries << endl;
+        if (i % (entries) == 0) cout << i << " / " << entries << endl;
 
         histVtxPU2D->Fill(*trackNVtx, (*evtNPU)[5]);
         histVtxPU1D->Fill(*trackNVtx, (*evtNPU)[5]);
