@@ -42,7 +42,8 @@ void FormatHistogram2D(TH2* hist) {
 void PrintHist1D(TH1* hist, string xlabel, string ylabel, TCanvas* canvas, TLegend* legend, string filename) {
     hist->GetXaxis()->SetTitle(xlabel.c_str());
     hist->GetXaxis()->SetTitle(ylabel.c_str());
-    hist->Draw("HIST LP");
+    // hist->Draw("HIST LP");
+    hist->Draw();
     legend->Draw();
     canvas->Print(filename.c_str());
 }
@@ -109,7 +110,7 @@ int Compare(char const* input, int pthat) {
 
     // auto trackHist = new TH1F("trackHist", "", nbins, min, max);
     auto histVtxPU2D = new TH2F("histVtxPU", ";nVtx;nPU", 14, 0, 14, 14, 0, 14);
-    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 11, -0.5, 10.5, 0, 16, "E");
+    auto histVtxPU1D = new TProfile("histVtxPU1D", ";nVtx;nPU", 11, -0.5, 10.5, 0, 16, "PE");
 
     int entries = trackChain.GetEntries();
 
