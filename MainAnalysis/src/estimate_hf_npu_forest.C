@@ -121,6 +121,9 @@ int Compare(char const* config, char const* output) {
     TTreeReader pfReader(&pfChain);
     TTreeReaderValue<std::vector<int>> pfId(pfReader, "pfId");
     TTreeReaderValue<std::vector<float>> pfPt(pfReader, "pfPt");
+    TTreeReaderValue<std::vector<float>> pfEnergy(pfReader, "pfEnergy");
+    TTreeReaderValue<std::vector<float>> pfEta(pfReader, "pfEta");
+    TTreeReaderValue<std::vector<float>> pfPhi(pfReader, "pfPhi");
 
     /* create histograms */
     auto ipt = new interval(dpt);
