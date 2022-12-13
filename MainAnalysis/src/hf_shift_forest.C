@@ -176,7 +176,7 @@ int hf_shift(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* read in information from TTrees */
-    int entries = hpEvtChain.GetEntries();
+    entries = hpEvtChain.GetEntries();
     double nphotons = 0;
 
     for (int64_t i = 0; i < entries; ++i) {
