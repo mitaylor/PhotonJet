@@ -198,7 +198,7 @@ int hf_shift(char const* config, char const* output) {
         for (int64_t j = 0; j < *aaNPho; ++j) {
             if ((*aaPhoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*aaPhoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*aaPhoHoverE)[j] > hovere_max) { continue; }
+            if ((*aaPhoHoverE)[j] > aa_hovere_max) { continue; }
 
             if ((*aaPhoEt)[j] > leading_pt) {
                 leading = j;
@@ -208,13 +208,13 @@ int hf_shift(char const* config, char const* output) {
 
         /* require leading photon */
         if (leading < 0) { continue; }
-        if ((*aaPhoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
+        if ((*aaPhoSigmaIEtaIEta_2012)[leading] > aa_see_max) { continue; }
 
         /* isolation requirement */
         float isolation = (*aaPho_ecalClusterIsoR3)[leading]
             + (*aaPho_hcalRechitIsoR3)[leading]
             + (*aaPho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
+        if (isolation > aa_iso_max) { continue; }
 
         if (leading_pt > 200) { continue; }
 
@@ -245,7 +245,7 @@ int hf_shift(char const* config, char const* output) {
         for (int64_t j = 0; j < *ppNPho; ++j) {
             if ((*ppPhoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*ppPhoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*ppPhoHoverE)[j] > hovere_max) { continue; }
+            if ((*ppPhoHoverE)[j] > pp_hovere_max) { continue; }
 
             if ((*ppPhoEt)[j] > leading_pt) {
                 leading = j;
@@ -255,13 +255,13 @@ int hf_shift(char const* config, char const* output) {
 
         /* require leading photon */
         if (leading < 0) { continue; }
-        if ((*ppPhoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
+        if ((*ppPhoSigmaIEtaIEta_2012)[leading] > pp_see_max) { continue; }
 
         /* isolation requirement */
         float isolation = (*ppPho_ecalClusterIsoR3)[leading]
             + (*ppPho_hcalRechitIsoR3)[leading]
             + (*ppPho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
+        if (isolation > pp_iso_max) { continue; }
 
         if (leading_pt > 200) { continue; }
 
