@@ -199,14 +199,16 @@ int hf_shift(char const* config, char const* output) {
 
         for (int64_t j = 0; j < *hpNPho; ++j) {
             if (i > 5040) std::cout << "C " << j << std::endl;
-            if ((*hpPhoEt)[j] <= photon_pt_min) { continue; }
-            if (std::abs((*hpPhoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*hpPhoHoverE)[j] > hovere_max) { continue; }
+            if ((*hpPhoEt)[j] <= photon_pt_min) { if (i > 5040) std::cout << "D1" << std::endl; continue; }
+            if (std::abs((*hpPhoSCEta)[j]) >= photon_eta_abs) { if (i > 5040) std::cout << "D2" << std::endl; continue; }
+            if ((*hpPhoHoverE)[j] > hovere_max) { if (i > 5040) std::cout << "D3" << std::endl; continue; }
 
             if ((*hpPhoEt)[j] > leading_pt) {
+                if (i > 5040) std::cout << "D4" << std::endl;
                 leading = j;
                 leading_pt = (*hpPhoEt)[j];
             }
+            if (i > 5040) std::cout << "D5" << std::endl;
         }
 
         /* require leading photon */
