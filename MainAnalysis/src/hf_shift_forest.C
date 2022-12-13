@@ -95,6 +95,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader hpEvtReader(&hpEvtChain);
     TTreeReaderValue<float> hpWeight(hpEvtReader, "weight");
     TTreeReaderValue<float> hpVz(hpEvtReader, "vz");
+    TTreeReaderValue<float> hpNcoll(hpEvtReader, "Ncoll");
 
     TChain hpPhoChain("ggHiNtuplizerGED/EventTree");
     FillChain(hpPhoChain, hp_files);
@@ -128,6 +129,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader mbEvtReader(&mbEvtChain);
     TTreeReaderValue<float> mbWeight(mbEvtReader, "weight");
     TTreeReaderValue<float> mbVz(mbEvtReader, "vz");
+    TTreeReaderValue<float> mbNcoll(mbEvtReader, "Ncoll");
 
     TChain mbPhoChain("ggHiNtuplizerGED/EventTree");
     FillChain(mbPhoChain, mb_files);
@@ -176,7 +178,7 @@ int hf_shift(char const* config, char const* output) {
     int entries = hpEvtChain.GetEntries();
     double nphotons = 0;
 
-    for (int64_t i = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < entries; ++i) {
         hpEvtReader.Next(); hpPhoReader.Next(); hpPfReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
@@ -207,7 +209,6 @@ int hf_shift(char const* config, char const* output) {
         if (isolation > iso_max) { continue; }
 
         if (leading_pt > 200) { continue; }
-        auto pt_x = ipt->index_for(leading_pt);
 
         nphotons += *hpWeight;
         float pf_sum = 0;
@@ -228,8 +229,8 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
-        (*hp_hn)[0]->Fill(pf_sum, *Ncoll, *hpWeight);
-        (*hp_hn_p)[0]->Fill(*Ncoll, pf_sum, *hpWeight);
+        (*hp_hn)[0]->Fill(pf_sum, *hpNcoll, *hpWeight);
+        (*hp_hn_p)[0]->Fill(*hpNcoll, pf_sum, *hpWeight);
     }
 
     nentries = static_cast<int64_t>(mb_t->GetEntries());
@@ -262,8 +263,8 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
-        (*mb_hn)[0]->Fill(pf_sum, *Ncoll, *mbWeight);
-        (*mb_hn_p)[0]->Fill(*Ncoll, pf_sum, *mbWeight);
+        (*mb_hn)[0]->Fill(pf_sum, *mbNcoll, *mbWeight);
+        (*mb_hn_p)[0]->Fill(*mbNcoll, pf_sum, *mbWeight);
     }
 
     /* subtract distributions */
