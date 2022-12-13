@@ -160,7 +160,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
     TTreeReaderValue<float> newPhotonRho(newPhotonReader, "rho");
 
     // TChain newRhoChain("hiPuRhoAnalyzer/t");
-    TChain oldRhoChain("hiPuRhoR3Analyzer/t");
+    TChain newRhoChain("hiPuRhoR3Analyzer/t");
     // FillChain(newRhoChain, newFiles);
     newRhoChain.Add(newInput);
     TTreeReader newRhoReader(&newRhoChain);
