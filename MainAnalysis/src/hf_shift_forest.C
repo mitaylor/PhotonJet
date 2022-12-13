@@ -21,6 +21,7 @@
 #include "TTreeReaderValue.h"
 
 #include "TMath.h"
+#include "TF1.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TGraphAsymmErrors.h"
@@ -233,11 +234,10 @@ int hf_shift(char const* config, char const* output) {
         (*hp_hn_p)[0]->Fill(*hpNcoll, pf_sum, *hpWeight);
     }
 
-    nentries = static_cast<int64_t>(mb_t->GetEntries());
-    // nentries = nentries > 100000 ? 100000 : nentries;
+    int entries = mbEvtChain.GetEntries();
     double nmb = 0;
 
-    for (int64_t i = 0; i < nentries; ++i) {
+    for (int64_t i = 0; i < entries; ++i) {
         mbEvtReader.Next(); mbPhoReader.Next(); mbPfReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
