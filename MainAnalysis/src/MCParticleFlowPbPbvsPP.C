@@ -78,9 +78,13 @@ int hf_shift(char const* config, char const* output) {
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
 
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
+    auto const aa_hovere_max = conf->get<float>("aa_hovere_max");
+    auto const aa_see_max = conf->get<float>("aa_see_max");
+    auto const aa_iso_max = conf->get<float>("aa_iso_max");
+
+    auto const pp_hovere_max = conf->get<float>("pp_hovere_max");
+    auto const pp_see_max = conf->get<float>("pp_see_max");
+    auto const pp_iso_max = conf->get<float>("pp_iso_max");
 
     /* read in information */
     std::vector<std::string> aa_files;
