@@ -70,7 +70,7 @@ void FillChain(TChain& chain, std::vector<std::string>& files) {
 int Compare(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto files = conf->get<std::string>("input");
     
     auto tag = conf->get<std::string>("tag");
     auto pthat = conf->get<std::string>("pthat");
@@ -88,8 +88,8 @@ int Compare(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* read in information */
-    std::vector<std::string> files;
-    GetFiles(input.c_str(), files);
+    // std::vector<std::string> files;
+    // GetFiles(input.c_str(), files);
 
     TChain trackChain("ppTrack/trackTree");
     FillChain(trackChain, files);
