@@ -186,36 +186,24 @@ int hf_shift(char const* config, char const* output) {
 
         if (i % (entries/2000) == 0) std::cout << i << " / " << entries << std::endl;
 
-        if (i > 5040) std::cout << i << std::endl;
-
         if (std::abs(*hpVz) > 15) { continue; }
-
-        if (i > 5040) std::cout << "A" << std::endl;
         
         int64_t leading = -1;
         float leading_pt = 0;
-
-        if (i > 5040) std::cout << "B" << std::endl;
-
         for (int64_t j = 0; j < *hpNPho; ++j) {
-            if (i > 5040) std::cout << "C " << j << std::endl;
-            if ((*hpPhoEt)[j] <= photon_pt_min) { if (i > 5040) std::cout << "D1" << std::endl; continue; }
-            if (std::abs((*hpPhoSCEta)[j]) >= photon_eta_abs) { if (i > 5040) std::cout << "D2" << std::endl; continue; }
-            if ((*hpPhoHoverE)[j] > hovere_max) { if (i > 5040) std::cout << "D3" << std::endl; continue; }
+            if ((*hpPhoEt)[j] <= photon_pt_min) { continue; }
+            if (std::abs((*hpPhoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if ((*hpPhoHoverE)[j] > hovere_max) { continue; }
 
             if ((*hpPhoEt)[j] > leading_pt) {
-                if (i > 5040) std::cout << "D4" << std::endl;
                 leading = j;
                 leading_pt = (*hpPhoEt)[j];
             }
-            if (i > 5040) std::cout << "D5" << std::endl;
         }
 
         /* require leading photon */
         if (leading < 0) { continue; }
         if ((*hpPhoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
-
-        if (i > 5040) std::cout << "D" << std::endl;
 
         /* isolation requirement */
         float isolation = (*hpPho_ecalClusterIsoR3)[leading]
@@ -227,8 +215,6 @@ int hf_shift(char const* config, char const* output) {
 
         nphotons += *hpWeight;
         float pf_sum = 0;
-
-        if (i > 5040) std::cout << "E" << std::endl;
 
         if (use_energy) {
             for (size_t j = 0; j < hpPfEnergy->size(); ++j) {
@@ -246,12 +232,8 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
-        if (i > 5040) std::cout << "F" << std::endl;
-
         (*hp_hn)[0]->Fill(pf_sum, *hpNcoll, *hpWeight);
         (*hp_hn_p)[0]->Fill(*hpNcoll, pf_sum, *hpWeight);
-
-        if (i > 5040) std::cout << "G" << std::endl;
     }
 
     entries = mbEvtChain.GetEntries();
