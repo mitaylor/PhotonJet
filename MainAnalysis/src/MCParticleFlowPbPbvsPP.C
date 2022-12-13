@@ -178,7 +178,7 @@ int hf_shift(char const* config, char const* output) {
 
     /* read in information from TTrees */
     int entries = aaEvtChain.GetEntries();
-    entries = (entries > 1000000 ? 1000000 : entries);
+    entries = (entries > 100000 ? 100000 : entries);
     double naa = 0;
 
     for (int64_t i = 0; i < entries; ++i) {
