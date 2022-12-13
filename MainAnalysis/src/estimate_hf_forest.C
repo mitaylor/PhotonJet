@@ -70,7 +70,8 @@ void FillChain(TChain& chain, std::vector<std::string>& files) {
 int Compare(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto files = conf->get<std::string>("input");
+    // auto input = conf->get<std::string>("input");
+    auto files = conf->get<std::vector<std::string>>("input");
     
     auto tag = conf->get<std::string>("tag");
     auto pthat = conf->get<std::string>("pthat");
