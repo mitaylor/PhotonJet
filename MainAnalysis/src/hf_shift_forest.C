@@ -186,6 +186,8 @@ int hf_shift(char const* config, char const* output) {
 
         if (i % (entries/2000) == 0) std::cout << i << " / " << entries << std::endl;
 
+        if (i > 5040) std::cout << i << std::endl;
+
         if (std::abs(*hpVz) > 15) { continue; }
         
         int64_t leading = -1;
