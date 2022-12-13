@@ -127,7 +127,7 @@ int hf_shift(char const* config, char const* output) {
     TTreeReader ppEvtReader(&ppEvtChain);
     TTreeReaderValue<float> ppWeight(ppEvtReader, "weight");
     TTreeReaderValue<float> ppVz(ppEvtReader, "vz");
-    TTreeReaderValue<std::vector<int>> ppNPU(evtReader, "npus");
+    TTreeReaderValue<std::vector<int>> ppNPU(ppEvtReader, "npus");
 
     TChain ppPhoChain("ggHiNtuplizerGED/EventTree");
     FillChain(ppPhoChain, pp_files);
@@ -166,12 +166,12 @@ int hf_shift(char const* config, char const* output) {
     auto aa_eta = new history<TH1F>("aa_eta"s, "", feta, 1);
     auto aa_phi = new history<TH1F>("aa_phi"s, "", fphi, 1);
     auto aa_energy = new history<TH1F>("aa_energy"s, "", fenergy, 1);
-    auto aa_pt = new history<TH1F>("aa_pt"s, "", ffpteta, 1);
+    auto aa_pt = new history<TH1F>("aa_pt"s, "", fpt, 1);
 
     auto pp_eta = new history<TH1F>("pp_eta"s, "", feta, 1);
     auto pp_phi = new history<TH1F>("pp_phi"s, "", fphi, 1);
     auto pp_energy = new history<TH1F>("pp_energy"s, "", fenergy, 1);
-    auto pp_pt = new history<TH1F>("pp_pt"s, "", ffpteta, 1);
+    auto pp_pt = new history<TH1F>("pp_pt"s, "", fpt, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -188,7 +188,7 @@ int hf_shift(char const* config, char const* output) {
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
         if (std::abs(*aaVz) > 15) { continue; }
-        if (aaNcoll > 4) { continue; }
+        if (*aaNcoll > 4) { continue; }
         
         int64_t leading = -1;
         float leading_pt = 0;
@@ -273,15 +273,15 @@ int hf_shift(char const* config, char const* output) {
     }
 
     /* normalize distributions */
-    (*aa_eta)[0]->Divide(naa);
-    (*aa_phi)[0]->Divide(naa);
-    (*aa_energy)[0]->Divide(naa);
-    (*aa_pt)[0]->Divide(naa);
+    (*aa_eta)[0]->Scale(1/naa);
+    (*aa_phi)[0]->Scale(1/naa);
+    (*aa_energy)[0]->Scale(1/naa);
+    (*aa_pt)[0]->Scale(1/naa);
 
-    (*pp_eta)[0]->Divide(npp);
-    (*pp_phi)[0]->Divide(npp);
-    (*pp_energy)[0]->Divide(npp);
-    (*pp_pt)[0]->Divide(npp);
+    (*pp_eta)[0]->Scale(1/naa);
+    (*pp_phi)[0]->Scale(1/naa);
+    (*pp_energy)[0]->Scale(1/naa);
+    (*pp_pt)[0]->Scale(1/naa);
 
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
