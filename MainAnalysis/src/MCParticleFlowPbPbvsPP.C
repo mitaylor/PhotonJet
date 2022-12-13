@@ -54,7 +54,6 @@ void GetFiles(char const* input, std::vector<std::string>& files) {
             }
             else if ((fname.find(".root") != std::string::npos)) {
                 files.push_back(std::string(input) + fname);
-                std::cout << files.back() << std::endl;
             }
         }
     }
@@ -325,8 +324,8 @@ int hf_shift(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    hb->style("Hydjet", pp_style);
-    hb->style("Pythia+Hydjet", aa_style);
+    hb->style("PbPb", pp_style);
+    hb->style("PP", aa_style);
 
     hb->sketch();
     c1->draw("pdf");
