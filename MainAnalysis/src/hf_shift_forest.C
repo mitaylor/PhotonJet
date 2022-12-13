@@ -207,6 +207,8 @@ int hf_shift(char const* config, char const* output) {
         if (leading < 0) { continue; }
         if ((*hpPhoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
 
+        if (i > 5040) std::cout << leading << std::endl;
+
         /* isolation requirement */
         float isolation = (*hpPho_ecalClusterIsoR3)[leading]
             + (*hpPho_hcalRechitIsoR3)[leading]
@@ -217,6 +219,8 @@ int hf_shift(char const* config, char const* output) {
 
         nphotons += *hpWeight;
         float pf_sum = 0;
+
+        if (i > 5040) std::cout << "A" << std::endl;
 
         if (use_energy) {
             for (size_t j = 0; j < hpPfEnergy->size(); ++j) {
@@ -234,8 +238,12 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
+        if (i > 5040) std::cout << "B" << std::endl;
+
         (*hp_hn)[0]->Fill(pf_sum, *hpNcoll, *hpWeight);
         (*hp_hn_p)[0]->Fill(*hpNcoll, pf_sum, *hpWeight);
+
+        if (i > 5040) std::cout << "C" << std::endl;
     }
 
     entries = mbEvtChain.GetEntries();
