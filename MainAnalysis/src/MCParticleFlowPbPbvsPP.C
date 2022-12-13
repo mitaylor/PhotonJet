@@ -152,10 +152,10 @@ int hf_shift(char const* config, char const* output) {
     TTreeReaderValue<std::vector<float>> ppPfPhi(ppPfReader, "pfPhi");
     
     /* define histograms */
-    auto ieta = new interval("PF Eta"s, 100, -5, 5);
-    auto iphi = new interval("PF Phi"s, 100, -3.15, 3.15);
-    auto ienergy = new interval("PF Energy"s, 100, 0, 1400);
-    auto ipt = new interval("PF Pt"s, 100, 0, 180);
+    auto ieta = new interval("PF Eta"s, 30, -5, 5);
+    auto iphi = new interval("PF Phi"s, 30, -3.15, 3.15);
+    auto ienergy = new interval("PF Energy"s, 50, 0, 1400);
+    auto ipt = new interval("PF Pt"s, 50, 0, 180);
 
     auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);
     auto fphi = std::bind(&interval::book<TH1F>, iphi, _1, _2, _3);
@@ -178,7 +178,7 @@ int hf_shift(char const* config, char const* output) {
 
     /* read in information from TTrees */
     int entries = aaEvtChain.GetEntries();
-    entries = (entries > 10000 ? 10000 : entries);
+    entries = (entries > 1000000 ? 1000000 : entries);
     double naa = 0;
 
     for (int64_t i = 0; i < entries; ++i) {
@@ -187,7 +187,7 @@ int hf_shift(char const* config, char const* output) {
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
         if (std::abs(*aaVz) > 15) { continue; }
-        if (*aaNcoll > 4) { continue; }
+        if (*aaNcoll > 1) { continue; }
         
         int64_t leading = -1;
         float leading_pt = 0;
@@ -225,7 +225,7 @@ int hf_shift(char const* config, char const* output) {
     }
 
     entries = ppEvtChain.GetEntries();
-    entries = (entries > 10000 ? 10000 : entries);
+    entries = (entries > 100000 ? 100000 : entries);
     double npp = 0;
 
     for (int64_t i = 0; i < entries; ++i) {
