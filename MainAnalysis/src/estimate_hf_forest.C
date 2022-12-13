@@ -76,10 +76,13 @@ int Compare(char const* config, char const* output) {
     auto pthat = conf->get<std::string>("pthat");
     auto type = conf->get<std::string>("type");
 
-    /* selections */
+    auto use_energy = conf->get<bool>("use_energy");
+
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
+
     auto const hovere_max = conf->get<float>("hovere_max");
+    auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
@@ -175,9 +178,7 @@ int Compare(char const* config, char const* output) {
 
         /* require leading photon */
         if (leading < 0) { continue; }
-
-        if ((*phoSigmaIEtaIEta_2012)[leading] > 0.02)
-            continue;
+        if ((*phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
 
         /* isolation requirement */
         float isolation = (*pho_ecalClusterIsoR3)[leading]
@@ -190,10 +191,19 @@ int Compare(char const* config, char const* output) {
 
         float pf_sum = 0;
 
-        for (size_t j = 0; j < pfPt->size(); ++j) {
-            // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-            if ((*pfId)[j] >= 6) {
-                pf_sum += (*pfPt)[j];
+        if (use_energy) {
+            for (size_t j = 0; j < pfEnergy->size(); ++j) {
+                // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                if ((*pfId)[j] >= 6) {
+                    pf_sum += (*pfEnergy)[j];
+                }
+            }
+        } else {
+            for (size_t j = 0; j < pfPt->size(); ++j) {
+                // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                if ((*pfId)[j] >= 6) {
+                    pf_sum += (*pfPt)[j];
+                }
             }
         }
 
