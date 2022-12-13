@@ -179,7 +179,7 @@ int hf_shift(char const* config, char const* output) {
     int entries = hpEvtChain.GetEntries();
     double nphotons = 0;
 
-    for (int64_t i = 0; i < entries; ++i) {
+    for (int64_t i = 0; i < entries/200; ++i) {
         hpEvtReader.Next(); hpPhoReader.Next(); hpPfReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
@@ -237,7 +237,7 @@ int hf_shift(char const* config, char const* output) {
     entries = mbEvtChain.GetEntries();
     double nmb = 0;
 
-    for (int64_t i = 0; i < entries; ++i) {
+    for (int64_t i = 0; i < entries/200; ++i) {
         mbEvtReader.Next(); mbPhoReader.Next(); mbPfReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
