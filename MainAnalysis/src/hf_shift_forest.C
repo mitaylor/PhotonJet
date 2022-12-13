@@ -313,7 +313,6 @@ int hf_shift(char const* config, char const* output) {
         }
     };
 
-    /* draw rho distributions */
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
