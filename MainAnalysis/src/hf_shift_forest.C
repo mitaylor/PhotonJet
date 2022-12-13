@@ -184,7 +184,7 @@ int hf_shift(char const* config, char const* output) {
     for (int64_t i = 0; i < entries/200; ++i) {
         hpEvtReader.Next(); hpPhoReader.Next(); hpPfReader.Next();
 
-        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
+        if (i % (entries/2000) == 0) std::cout << i << " / " << entries << std::endl;
 
         if (std::abs(*hpVz) > 15) { continue; }
         
