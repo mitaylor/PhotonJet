@@ -189,10 +189,16 @@ int hf_shift(char const* config, char const* output) {
         if (i > 5040) std::cout << i << std::endl;
 
         if (std::abs(*hpVz) > 15) { continue; }
+
+        if (i > 5040) std::cout << "A" << std::endl;
         
         int64_t leading = -1;
         float leading_pt = 0;
+
+        if (i > 5040) std::cout << "B" << std::endl;
+
         for (int64_t j = 0; j < *hpNPho; ++j) {
+            if (i > 5040) std::cout << "C " << j << std::endl;
             if ((*hpPhoEt)[j] <= photon_pt_min) { continue; }
             if (std::abs((*hpPhoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*hpPhoHoverE)[j] > hovere_max) { continue; }
@@ -207,7 +213,7 @@ int hf_shift(char const* config, char const* output) {
         if (leading < 0) { continue; }
         if ((*hpPhoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
 
-        if (i > 5040) std::cout << leading << std::endl;
+        if (i > 5040) std::cout << "D" << std::endl;
 
         /* isolation requirement */
         float isolation = (*hpPho_ecalClusterIsoR3)[leading]
@@ -220,7 +226,7 @@ int hf_shift(char const* config, char const* output) {
         nphotons += *hpWeight;
         float pf_sum = 0;
 
-        if (i > 5040) std::cout << "A" << std::endl;
+        if (i > 5040) std::cout << "E" << std::endl;
 
         if (use_energy) {
             for (size_t j = 0; j < hpPfEnergy->size(); ++j) {
@@ -238,12 +244,12 @@ int hf_shift(char const* config, char const* output) {
             }
         }
 
-        if (i > 5040) std::cout << "B" << std::endl;
+        if (i > 5040) std::cout << "F" << std::endl;
 
         (*hp_hn)[0]->Fill(pf_sum, *hpNcoll, *hpWeight);
         (*hp_hn_p)[0]->Fill(*hpNcoll, pf_sum, *hpWeight);
 
-        if (i > 5040) std::cout << "C" << std::endl;
+        if (i > 5040) std::cout << "G" << std::endl;
     }
 
     entries = mbEvtChain.GetEntries();
