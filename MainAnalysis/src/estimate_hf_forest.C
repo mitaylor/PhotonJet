@@ -129,15 +129,18 @@ int Compare(char const* config, char const* output) {
     TTreeReaderValue<std::vector<float>> pfPhi(pfReader, "pfPhi");
 
     /* create histograms */
+    int max_hf = use_energy ? 70000 : 7000;
+    int max_avg_hf = use_energy ? 2500 : 250;
+
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, 250);
+    auto ihf = new interval("Estimated HF"s, 50, 0, max_avg_hf);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     
     auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
     auto fpv = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";nPU;nVtx;"s + label).data(), 11, -0.5, 10.5, 0, 16, "LE"); };
 

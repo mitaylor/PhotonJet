@@ -156,7 +156,9 @@ int hf_shift(char const* config, char const* output) {
     TTreeReaderValue<std::vector<float>> mbPfPhi(mbPfReader, "pfPhi");
     
     /* define histograms */
-    auto ihf = new interval("HF Energy"s, 100, 0, 7000);
+    int hf_max = use_energy ? 70000 : 7000;
+
+    auto ihf = new interval("HF Energy"s, 100, 0, hf_max);
     auto in = new interval("Ncoll"s, 100, 0, 2100);
 
     auto mhn = new multival(*ihf, *in);
@@ -166,7 +168,7 @@ int hf_shift(char const* config, char const* output) {
     auto mb_hn = new history<TH2F>("mb_hn"s, "Hydjet", fhn, 1);
 
     auto fhnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, hf_max, "LE"); };
 
     auto hp_hn_p = new history<TProfile>("hp_hn_p"s, "Pythia+Hydjet", fhnp, 1);
     auto mb_hn_p = new history<TProfile>("mb_hn_p"s, "Hydjet", fhnp, 1);
