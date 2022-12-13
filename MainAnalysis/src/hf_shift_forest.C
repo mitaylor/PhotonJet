@@ -176,7 +176,7 @@ int hf_shift(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* read in information from TTrees */
-    entries = hpEvtChain.GetEntries();
+    int entries = hpEvtChain.GetEntries();
     double nphotons = 0;
 
     for (int64_t i = 0; i < entries; ++i) {
@@ -234,7 +234,7 @@ int hf_shift(char const* config, char const* output) {
         (*hp_hn_p)[0]->Fill(*hpNcoll, pf_sum, *hpWeight);
     }
 
-    int entries = mbEvtChain.GetEntries();
+    entries = mbEvtChain.GetEntries();
     double nmb = 0;
 
     for (int64_t i = 0; i < entries; ++i) {
