@@ -143,8 +143,8 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
     TTreeReaderValue<vector<double>> oldRhoRho(oldRhoReader, "rho");
 
     TChain oldEvtChain("hiEvtAnalyzer/HiTree");
-    FillChain(oldEvtChain, oldFiles);
-    // oldEvtChain.Add(oldInput);
+    // FillChain(oldEvtChain, oldFiles);
+    oldEvtChain.Add(oldInput);
     TTreeReader oldEvtReader(&oldEvtChain);
     TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "Ncoll");
 
