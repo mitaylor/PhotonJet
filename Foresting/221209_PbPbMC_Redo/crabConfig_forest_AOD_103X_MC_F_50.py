@@ -24,4 +24,5 @@ config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName
 
 config.section_("Site")
+config.Site.whitelist =  ['T2_US_MIT']
 config.Site.storageSite = 'T2_US_MIT'
