@@ -16,7 +16,7 @@ for file in ${files}; do
     sed -i 's/$/ \\/' ${file} # add \ after every line
     sed -i '${s/\\$//;p;x}' ${file} # delete the final \
 
-    echo "$(cat ${config_fragment})" >> ${file}.py # add the rest of the configuration file
+    echo "$(cat ${config_fragment})" >> ${file} # add the rest of the configuration file
 done
 
 find . -type f -name "${output_tag}???" > "${output_tag}.list"
