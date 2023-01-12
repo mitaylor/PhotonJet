@@ -14,7 +14,7 @@ cd ${output_tag}
 
 # split the input files so there are no more than 30 files per job
 # files=`find ${folder} -type f -printf '%f\n' > ${output_tag}`
-files=`find ${folder} -type f -printf '%f\n'
+files=`find ${folder} -type f -printf '%f\n'`
 
 # create all of the config files
 for file in ${files}; do
