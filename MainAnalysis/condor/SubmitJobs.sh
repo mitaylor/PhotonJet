@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-get_number () { 
-    s="${1%%.*}"
-    echo "${s##*[!0-9]}"
-}
+# get_number () { 
+#     s="${1%%.*}"
+#     echo "${s##*[!0-9]}"
+# }
 
 folder=${1}
 config_fragment=${2}
@@ -18,7 +18,8 @@ echo $files
 
 # create all of the config files
 for file in ${files}; do
-    index=$(get_number ${file})
+    # index=$(get_number ${file})
+    index=2
     echo $index
     echo 'std::vector<std::string> files = \' > ${output_tag}_{index}.conf
     echo "${file}" >> ${output_tag}_{index}.conf
