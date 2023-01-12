@@ -18,6 +18,7 @@ files=`find ${folder} -type f -printf '%f\n' > ${output_tag}`
 # create all of the config files
 for file in ${files}; do
     index=$(get_number ${file})
+    echo $index
     echo 'std::vector<std::string> files = \' > ${output_tag}_{index}.conf
     echo "${file}" >> ${output_tag}_{index}.conf
     echo "" >> ${output_tag}_{index}.conf
