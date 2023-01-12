@@ -19,6 +19,6 @@ for file in ${files}; do
 done
 
 find . -type f -name "${output_tag}???" > "${output_tag}.list"
-sed '=' "${output_tag}.list" | sed 'N; s/\n/, /' > "${output_tag}.list"
+sed '=' "${output_tag}.list" | sed 'N; s/\n/, /'
 
 echo "$(cat ${output_tag}.list)"
