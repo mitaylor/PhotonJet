@@ -7,7 +7,7 @@ output_tag=${3}
 # split the input files so there are no more than 30 files per job
 find ${folder} -type f > ${output_tag}
 split -l 30 -d -a 3 ${output_tag} ${output_tag}
-files=`ls "${output_tag}?*"`
+files=`ls ${output_tag}?*`
 
 echo $files
 
