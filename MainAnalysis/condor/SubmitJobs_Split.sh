@@ -21,6 +21,7 @@ files=`find . -type f -printf '%f\n' -name "${output_tag}???"`
 
 # create all of the config files
 for file in ${files}; do
+    echo $file
     mv ${file} ${file}.conf
     index=$(get_number ${file})
 
