@@ -20,4 +20,4 @@ fi
 cd CMSSW_10_3_3_patch1/src
 eval `scramv1 runtime -sh`
 
-../regulate $file $output
+/home/submit/mitay/physics/PhotonJet2018/MainAnalysis/bin/regulate $file $output
