@@ -10,7 +10,7 @@ WorkDir=`pwd`
 # cd $WorkDir
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-export SCRAM_ARCH=slc6_amd64_gcc700
+# export SCRAM_ARCH=slc6_amd64_gcc700
 
 if [ -r CMSSW_10_3_3_patch1/src ] ; then
  echo release CMSSW_10_3_3_patch1 already exists
@@ -20,4 +20,4 @@ fi
 cd CMSSW_10_3_3_patch1/src
 eval `scramv1 runtime -sh`
 
-regulate $file $output
+./regulate $file $output
