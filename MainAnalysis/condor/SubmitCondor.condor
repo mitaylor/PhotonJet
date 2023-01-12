@@ -1,0 +1,14 @@
+Universe                = vanilla
+Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/RunRegulate.sh
+Should_Transfer_Files   = YES
+When_To_Transfer_Output = ON_EXIT
++JobFlavour             = "tomorrow"
+#+RequestMemory         = 8000
++Desired_Sites = "mit_tier3"
+
+Arguments = $file /data/submit/mitay/photons/condor/__MASTER__$index.root
+Output                = __MASTER__.$(ClusterId).$(ProcId).out
+Error                 = __MASTER__.$(ClusterId).$(ProcId).err
+Log                   = __MASTER__.$(ClusterId).$(ProcId).log
+
+Queue $index,$file from __MASTER__.list
