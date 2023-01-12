@@ -1,7 +1,8 @@
 Universe                = vanilla
-Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/bin/regulate
+Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/RunRegulate.sh
 Should_Transfer_Files   = YES
 When_To_Transfer_Output = ON_EXIT
+Transfer_Input_Files    = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/bin/regulate
 +JobFlavour             = "tomorrow"
 #+RequestMemory         = 8000
 +Desired_Sites = "mit_tier3"
