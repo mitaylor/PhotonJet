@@ -20,5 +20,5 @@ for file in ${files}; do
     echo "$(cat ${config_fragment})" >> ${file}.py # add the rest of the configuration file
 done
 
-find . -type f -name ${output_tag}??? > "${output_tag}.list"
+find . -type f -name "${output_tag}???" > "${output_tag}.list"
 sed '=' "${output_tag}.list" | sed -i 'N; s/\n/, /'
