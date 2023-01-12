@@ -3,4 +3,4 @@
 file=$1
 output=$2
 
-../bin/regulate $file $output
+/home/submit/mitay/physics/PhotonJet2018/MainAnalysis/bin/regulate $file $output
