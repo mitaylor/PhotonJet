@@ -15,7 +15,7 @@ cd ${output_tag}
 rm *
 
 # split the input files so there are no more than 30 files per job
-find ${folder} -type f > ${output_tag}
+find ${folder} -type f -printf '%f\n' > ${output_tag}
 split -l ${n_files} -d -a 3 ${output_tag} ${output_tag}
 files=`find . -type f -printf '%f\n' -name "${output_tag}???"`
 
@@ -29,7 +29,7 @@ for file in ${files}; do
     sed -i '${s/\\$//;p;x}' ${file}.conf # delete the final \
     echo "$(cat ${config_fragment})" >> ${file}.conf # add the rest of the configuration file
 
-    echo "${index}, ${file}${index}.conf" >> "${output_tag}.list"
+    echo "${index}, ${file}.conf" >> "${output_tag}.list"
 done
 
 
