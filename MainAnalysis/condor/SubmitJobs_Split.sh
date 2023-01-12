@@ -34,9 +34,8 @@ for file in ${files}; do
 
     sed -i '$ ! s/$/,/g' ${output_tag}_full${index}
     full_list=`cat ${output_tag}_full${index} | tr -d '\n'`
-    echo $full_list
 
-    echo "${index}, ${file}.conf" >> "${output_tag}.list"
+    echo "${index}, ${file}.conf, ${full_list}" >> "${output_tag}.list"
 done
 
 
