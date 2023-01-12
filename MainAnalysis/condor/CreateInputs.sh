@@ -9,6 +9,8 @@ find ${folder} -type f > ${output_tag}
 split -l 30 -d -a 3 ${output_tag} ${output_tag}
 files=`ls "${output_tag}?*"`
 
+echo $files
+
 # create all of the config files
 for file in ${files}; do
     sed -i '1 i\ std::vector<std::string> files =' ${file}
@@ -19,6 +21,6 @@ for file in ${files}; do
 done
 
 find . -type f -iname "${output_tag}???" > "${output_tag}.list"
-sed '=' "${output_tag}.list" | sed 'N; s/\n/, /'
+sed '=' "${output_tag}.list" | sed -i 'N; s/\n/, /'
 
 echo "$(cat ${config_fragment})"
