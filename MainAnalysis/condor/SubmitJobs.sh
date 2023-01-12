@@ -20,12 +20,12 @@ files=`find ${folder} -type f -printf '%f\n'`
 # create all of the config files
 for file in ${files}; do
     index=$(get_number ${file})
-    echo 'std::vector<std::string> files = \' > ${output_tag}_{index}.conf
-    echo "${file}" >> ${output_tag}_{index}.conf
-    echo "" >> ${output_tag}_{index}.conf
+    echo 'std::vector<std::string> files = \' > ${output_tag}_${index}.conf
+    echo "${file}" >> ${output_tag}_${index}.conf
+    echo "" >> ${output_tag}_${index}.conf
     echo "$(cat ${config_fragment})" >> ${output_tag}_${index}.conf # add the rest of the configuration file
 
-    echo "${index}, ${output_tag}_{index}.conf" >> "${output_tag}.list"
+    echo "${index}, ${output_tag}_${index}.conf" >> "${output_tag}.list"
 done
 
 # find . -type f -name "${output_tag}_*" -printf '%f\n' > "${output_tag}.list"
