@@ -17,7 +17,7 @@ rm *
 # split the input files so there are no more than 30 files per job
 find ${folder} -type f -printf '%f\n' > ${output_tag}
 split -l ${n_files} -d -a 3 ${output_tag} ${output_tag}
-files=`find . -type f -printf '%f\n' -name ${output_tag}???`
+files=`find . -type f -printf '%f\n' -name "${output_tag}???"`
 
 # create all of the config files
 for file in ${files}; do
