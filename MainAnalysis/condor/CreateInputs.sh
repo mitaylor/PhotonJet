@@ -20,4 +20,4 @@ for file in ${files}; do
 done
 
 find . -type f -name "${output_tag}???" > "${output_tag}.list"
-sed '=' "${output_tag}.list" | sed -i 'N; s/\n/, /'
+sed '=' "${output_tag}.list" | sed 'N; s/\n/, /'
