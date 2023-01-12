@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-get_number { 
+get_number () { 
     s="${1%%.*}"
-    return "${s##*[!0-9]}"
+    echo "${s##*[!0-9]}"
 }
 
 folder=${1}
