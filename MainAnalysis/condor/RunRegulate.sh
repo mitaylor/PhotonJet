@@ -5,6 +5,8 @@ output=$2
 
 WorkDir=`pwd`
 
+export X509_USER_PROXY=${WorkDir}/x509up_proxy
+
 # cd /afs/cern.ch/user/m/mitaylor/cmssw/CMSSW_10_3_3_patch1/src/
 # eval `scramv1 runtime -sh`
 
