@@ -11,7 +11,6 @@ files=`find . -type f -name "${output_tag}???"`
 
 # create all of the config files
 for file in ${files}; do
-    echo $file
     sed -i '1 i\ std::vector<std::string> files =' ${file}
     sed -i 's/$/ \\/' ${file} # add \ after every line
     sed -i '${s/\\$//;p;x}' ${file} # delete the final \
@@ -21,3 +20,5 @@ done
 
 find . -type f -name "${output_tag}???" > "${output_tag}.list"
 sed '=' "${output_tag}.list" | sed 'N; s/\n/, /'
+
+echo "$(cat ${output_tag}.list)"
