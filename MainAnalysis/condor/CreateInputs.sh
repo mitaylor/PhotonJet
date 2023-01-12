@@ -9,10 +9,9 @@ find ${folder} -type f > ${output_tag}
 split -l 30 -d -a 3 ${output_tag} ${output_tag}
 files=`find . -type f -name "${output_tag}???"`
 
-echo $files
-
 # create all of the config files
 for file in ${files}; do
+    echo $file
     sed -i '1 i\ std::vector<std::string> files =' ${file}
     sed -i 's/$/ \\/' ${file} # add \ after every line
     sed -i '${s/\\$//;p;x}' ${file} # delete the final \
