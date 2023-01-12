@@ -32,8 +32,8 @@ for file in ${files}; do
     sed -i '${s/\\$//;p;x}' ${file}.conf # delete the final \
     echo "$(cat ${config_fragment})" >> ${file}.conf # add the rest of the configuration file
 
-    sed -i '$ ! s/$/,/g' ${file}_full${index}
-    full_list=`cat ${file}_full${index} | tr -d '\n'`
+    sed -i '$ ! s/$/,/g' ${output_tag}_full${index}
+    full_list=`cat ${output_tag}_full${index} | tr -d '\n'`
     echo $full_list
 
     echo "${index}, ${file}.conf" >> "${output_tag}.list"
