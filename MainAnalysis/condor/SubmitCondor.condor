@@ -11,4 +11,4 @@ Output                = __MASTER__.$(ClusterId).$(ProcId).out
 Error                 = __MASTER__.$(ClusterId).$(ProcId).err
 Log                   = __MASTER__.$(ClusterId).$(ProcId).log
 
-Queue $index,$file from __MASTER__.list
+Queue index,file from __MASTER__.list
