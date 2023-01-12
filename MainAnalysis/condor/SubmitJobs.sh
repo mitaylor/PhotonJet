@@ -5,6 +5,9 @@ config_fragment=${2}
 output_tag=${3}
 n_files=${4}
 
+mkdir ${output_tag}
+cd ${output_tag}
+
 # split the input files so there are no more than 30 files per job
 find ${folder} -type f > ${output_tag}
 split -l ${n_files} -d -a 3 ${output_tag} ${output_tag}
@@ -25,5 +28,5 @@ sed -i 'N; s/\n/, /' "${output_tag}.list"
 
 echo "$(cat ${output_tag}.list)"
 
-cat SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/" > SubmitCondor_${output_tag}.condor
+cat ../SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/" > SubmitCondor_${output_tag}.condor
 condor_submit SubmitCondor_${output_tag}.condor
