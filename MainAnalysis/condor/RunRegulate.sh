@@ -20,4 +20,4 @@ fi
 cd CMSSW_10_3_3_patch1/src
 eval `scramv1 runtime -sh`
 
-../bin/regulate $file $output
+./regulate $file $output
