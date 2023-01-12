@@ -11,6 +11,7 @@ output_tag=${3}
 
 mkdir -p ${output_tag}
 cd ${output_tag}
+rm *
 
 # split the input files so there are no more than 30 files per job
 # files=`find ${folder} -type f -printf '%f\n' > ${output_tag}`
@@ -23,11 +24,13 @@ for file in ${files}; do
     echo "${file}" >> ${output_tag}_{index}.conf
     echo "" >> ${output_tag}_{index}.conf
     echo "$(cat ${config_fragment})" >> ${output_tag}_${index}.conf # add the rest of the configuration file
+
+    echo "${index}, ${output_tag}_{index}.conf" >> "${output_tag}.list"
 done
 
-find . -type f -name "${output_tag}_*" -printf '%f\n' > "${output_tag}.list"
-sed -i '=' "${output_tag}.list"
-sed -i 'N; s/\n/, /' "${output_tag}.list"
+# find . -type f -name "${output_tag}_*" -printf '%f\n' > "${output_tag}.list"
+# sed -i '=' "${output_tag}.list"
+# sed -i 'N; s/\n/, /' "${output_tag}.list"
 
 echo "$(cat ${output_tag}.list)"
 
