@@ -5,7 +5,7 @@ config_fragment=${2}
 output_tag=${3}
 n_files=${4}
 
-mkdir ${output_tag}
+mkdir -p ${output_tag}
 cd ${output_tag}
 
 # split the input files so there are no more than 30 files per job
