@@ -28,5 +28,6 @@ sed -i 'N; s/\n/, /' "${output_tag}.list"
 
 echo "$(cat ${output_tag}.list)"
 
-cat ../SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/" > SubmitCondor_${output_tag}.condor
+cd ..
+cat SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/" > SubmitCondor_${output_tag}.condor
 condor_submit SubmitCondor_${output_tag}.condor
