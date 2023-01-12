@@ -19,6 +19,9 @@ find ${folder} -type f -printf '%f\n' > ${output_tag}
 split -l ${n_files} -d -a 3 ${output_tag} ${output_tag}
 files=`find . -type f -name "${output_tag}[0-9][0-9][0-9]" -printf '%f\n'`
 
+find ${folder} -type f > ${output_tag}_full
+split -l ${n_files} -d -a 3 ${output_tag}_full ${output_tag}_full
+
 # create all of the config files
 for file in ${files}; do
     mv ${file} ${file}.conf
@@ -28,6 +31,10 @@ for file in ${files}; do
     sed -i 's/$/ \\/' ${file}.conf # add \ after every line
     sed -i '${s/\\$//;p;x}' ${file}.conf # delete the final \
     echo "$(cat ${config_fragment})" >> ${file}.conf # add the rest of the configuration file
+
+    sed -i '$ ! s/$/,/g' ${file}_full${index}
+    full_list=`cat ${file}_full${index} | tr -d '\n'`
+    echo $full_list
 
     echo "${index}, ${file}.conf" >> "${output_tag}.list"
 done
