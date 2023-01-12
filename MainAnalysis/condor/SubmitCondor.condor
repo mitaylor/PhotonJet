@@ -6,7 +6,7 @@ When_To_Transfer_Output = ON_EXIT
 #+RequestMemory         = 8000
 +Desired_Sites = "mit_tier3"
 
-Arguments = $file /data/submit/mitay/photons/condor/__MASTER__$index.root
+Arguments = $(file) /data/submit/mitay/photons/condor/__MASTER__$(index).root
 Output                = __MASTER__.$(ClusterId).$(ProcId).out
 Error                 = __MASTER__.$(ClusterId).$(ProcId).err
 Log                   = __MASTER__.$(ClusterId).$(ProcId).log
