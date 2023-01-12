@@ -15,7 +15,8 @@ cd ${output_tag}
 rm *
 
 # split the input files so there are no more than 30 files per job
-find ${folder} -type f -printf '%f\n' > ${output_tag}
+find ${folder} -type f > ${output_tag}
+sed -i 's/^.*\/store/root:\/\/xrootd.cmsaf.mit.edu\/\/store/' ${output_tag}
 split -l ${n_files} -d -a 3 ${output_tag} ${output_tag}
 files=`find . -type f -name "${output_tag}[0-9][0-9][0-9]" -printf '%f\n'`
 
@@ -35,11 +36,11 @@ for file in ${files}; do
     sed -i '$ ! s/$/,/g' ${output_tag}_full${index}
     full_list=`cat ${output_tag}_full${index} | tr -d '\n'`
 
-    echo "${index}, ${file}.conf, ${full_list}" >> "${output_tag}.list"
+    echo "${index}, ${file}.conf" >> "${output_tag}.list"
 done
 
 
 echo "$(cat ${output_tag}.list)"
 
-cat ../SubmitCondor_Split.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor_${output_tag}.condor
-condor_submit SubmitCondor_${output_tag}.condor
+# cat ../SubmitCondor_Split.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor_${output_tag}.condor
+# condor_submit SubmitCondor_${output_tag}.condor
