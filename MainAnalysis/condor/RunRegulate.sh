@@ -21,4 +21,4 @@ eval `scramv1 runtime -sh`
 
 cd $WorkDir
 
-./regulate $file $output
+../regulate $file $output
