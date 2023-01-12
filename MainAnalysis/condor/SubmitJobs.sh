@@ -22,7 +22,7 @@ for file in ${files}; do
     echo "$(cat ${config_fragment})" >> ${file} # add the rest of the configuration file
 done
 
-find . -type f -name "${output_tag}???" > "${output_tag}.list"
+find . -type f -name "${output_tag}???" -printf '%f\n' > "${output_tag}.list"
 sed -i '=' "${output_tag}.list"
 sed -i 'N; s/\n/, /' "${output_tag}.list"
 
