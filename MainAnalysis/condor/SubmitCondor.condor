@@ -7,8 +7,8 @@ When_To_Transfer_Output = ON_EXIT
 +DESIRED_Sites          = "mit_tier3"
 Max_Retries             = 5
 When_To_Transfer_Output = ON_EXIT
-Transfer_Output_Files   = __MASTER__$(index).root
-Transfer_Output_Remaps  = "__MASTER__$(index).root=/data/submit/mitay/photons/condor/__MASTER__$(index).root"
+Transfer_Output_Files   = __MASTER___$(index).root
+Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/photons/condor/__MASTER___$(index).root"
 
 Transfer_Input_Files    = $(file),../regulate,../data,../x509up_u168456
 Arguments               = $(file) __MASTER___$(index).root

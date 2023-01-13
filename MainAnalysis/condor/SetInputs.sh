@@ -6,11 +6,11 @@
 # ../../configs/regulate/preapproval-parallel/regulate_aa_data.conf \
 # "regulate_aa_data" 30
 
-# # regulate_aa_qcd_15 filtered
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbSpring21MiniAOD-mva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221205PbPbMC30F15/221205_183553/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_prelim.conf \
-# "regulate_aa_qcd_15_F" 900
+# regulate_aa_qcd_15 filtered
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbSpring21MiniAOD-mva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221205PbPbMC30F15/221205_183553/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_prelim.conf \
+"regulate_aa_qcd_15_F" 900
 
 # regulate_aa_qcd_30 filtered
 ./SubmitJobs.sh \
