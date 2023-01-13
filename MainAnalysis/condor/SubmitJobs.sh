@@ -13,7 +13,6 @@ start=${5}
 
 mkdir -p ${output_tag}
 cd ${output_tag}
-rm -f *
 
 # split the input files so there are no more than 30 files per job
 find ${folder} -type f > ${output_tag}
@@ -33,7 +32,6 @@ for file in ${files}; do
 
     echo "${index}, ${file}.conf" >> "${output_tag}.list"
 done
-
 
 echo "$(cat ${output_tag}.list)"
 
