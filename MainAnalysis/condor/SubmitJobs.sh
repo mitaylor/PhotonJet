@@ -36,5 +36,5 @@ done
 
 echo "$(cat ${output_tag}.list)"
 
-cat ../SubmitCondor_Split.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor_${output_tag}.condor
+cat ../SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor_${output_tag}.condor
 condor_submit SubmitCondor_${output_tag}.condor
