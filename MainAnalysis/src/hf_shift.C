@@ -75,7 +75,7 @@ int hf_shift(char const* config, char const* output) {
 
     /* read input files */
     for (auto const& file : hp_input) {
-        std::cout << std::endl << file << std::endl;
+        std::cout << file << std::endl;
 
         TFile* hp_f = new TFile(file.data(), "read");
         TTree* hp_t = (TTree*) hp_f->Get("pj");
@@ -84,7 +84,7 @@ int hf_shift(char const* config, char const* output) {
         int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            if (i % 100000 == 0)
+            if (i % 10000 == 0)
                 printf("entry: %li/%li\n", i, nentries);
 
             hp_t->GetEntry(i);
@@ -153,7 +153,7 @@ int hf_shift(char const* config, char const* output) {
     }
 
     for (auto const& file : mb_input) {
-        std::cout << std::endl << file << std::endl;
+        std::cout << file << std::endl;
 
         TFile* mb_f = new TFile(file.data(), "read");
         TTree* mb_t = (TTree*) mb_f->Get("pj");
