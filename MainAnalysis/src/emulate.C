@@ -62,7 +62,7 @@ int emulate(char const* config, char const* output) {
     TH1F* hbase = new TH1F("npthats_model", "", count, pthats);
 
     /* iterate through base chain */
-    nt64_t nentries = static_cast<int64_t>(tbase->GetEntries());
+    int64_t nentries = static_cast<int64_t>(tbase->GetEntries());
     auto pjt_base = new pjtree(true, false, false, tbase, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
     for (int64_t i = 0; i < nentries; ++i) {
