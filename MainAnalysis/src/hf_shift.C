@@ -31,8 +31,8 @@ using namespace std::placeholders;
 int hf_shift(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto hp_input = conf->get<std::string>("hp_input");
-    auto mb_input = conf->get<std::string>("mb_input");
+    auto hp_input = conf->get<std::vector<std::string>>("hp_input");
+    auto mb_input = conf->get<std::vector<std::string>>("mb_input");
 
     auto tag = conf->get<std::string>("tag");
 
@@ -74,114 +74,113 @@ int hf_shift(char const* config, char const* output) {
     auto mb_rn_p = new history<TProfile>("mb_rn_p"s, "Hydjet", frnp, 1);
 
     /* read input files */
-    TFile* hp_f = new TFile(hp_input.data(), "read");
-    TTree* hp_t = (TTree*) hp_f->Get("pj");
-    auto hp_pjt = new pjtree(true, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
+    for (auto const& file : hp_input) {
+        std::cout << std::endl << file << std::endl;
 
-    TFile* mb_f = new TFile(mb_input.data(), "read");
-    TTree* mb_t = (TTree*) mb_f->Get("pj");
-    auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
+        TFile* hp_f = new TFile(file.data(), "read");
+        TTree* hp_t = (TTree*) hp_f->Get("pj");
+        auto hp_pjt = new pjtree(true, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
 
-    int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
-    // nentries = nentries > 100000 ? 100000 : nentries;
-    double nphotons = 0;
+        int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
 
-    for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, nentries);
+        for (int64_t i = 0; i < nentries; ++i) {
+            if (i % 100000 == 0)
+                printf("entry: %li/%li\n", i, nentries);
 
-        hp_t->GetEntry(i);
+            hp_t->GetEntry(i);
 
-        int64_t leading = -1;
-        float leading_pt = 0;
-        for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
-            if ((*hp_pjt->phoEt)[j] <= photon_pt_min) { continue; }
-            if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
+                if ((*hp_pjt->phoEt)[j] <= photon_pt_min) { continue; }
+                if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-            if ((*hp_pjt->phoEt)[j] > leading_pt) {
-                leading = j;
-                leading_pt = (*hp_pjt->phoEt)[j];
+                if ((*hp_pjt->phoEt)[j] > leading_pt) {
+                    leading = j;
+                    leading_pt = (*hp_pjt->phoEt)[j];
+                }
             }
-        }
 
-        if (leading < 0) { continue; }
-        if ((*hp_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
+            if (leading < 0) { continue; }
+            if ((*hp_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
 
-        float isolation = (*hp_pjt->pho_ecalClusterIsoR3)[leading]
-            + (*hp_pjt->pho_hcalRechitIsoR3)[leading]
-            + (*hp_pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
+            float isolation = (*hp_pjt->pho_ecalClusterIsoR3)[leading]
+                + (*hp_pjt->pho_hcalRechitIsoR3)[leading]
+                + (*hp_pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > iso_max) { continue; }
 
-        /* leading photon axis */
-        auto photon_eta = (*hp_pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*hp_pjt->phoPhi)[leading]);
+            /* leading photon axis */
+            auto photon_eta = (*hp_pjt->phoEta)[leading];
+            auto photon_phi = convert_radian((*hp_pjt->phoPhi)[leading]);
 
-        /* electron rejection */
-        bool electron = false;
-        for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
-            if (std::abs((*hp_pjt->eleSCEta)[j]) > 1.4442) { continue; }
+            /* electron rejection */
+            bool electron = false;
+            for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
+                if (std::abs((*hp_pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-            auto deta = photon_eta - (*hp_pjt->eleEta)[j];
-            if (deta > 0.1) { continue; }
+                auto deta = photon_eta - (*hp_pjt->eleEta)[j];
+                if (deta > 0.1) { continue; }
 
-            auto ele_phi = convert_radian((*hp_pjt->elePhi)[j]);
-            auto dphi = revert_radian(photon_phi - ele_phi);
-            auto dr2 = deta * deta + dphi * dphi;
+                auto ele_phi = convert_radian((*hp_pjt->elePhi)[j]);
+                auto dphi = revert_radian(photon_phi - ele_phi);
+                auto dr2 = deta * deta + dphi * dphi;
 
-            if (dr2 < 0.01 && passes_electron_id<
-                        det::barrel, wp::loose, pjtree
-                    >(hp_pjt, j, true)) {
-                electron = true; break; }
-        }
-
-        if (electron) { continue; }
-
-        nphotons += hp_pjt->w;
-
-        auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
-        float pf_sum = 0;
-
-        for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
-            // if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
-            if ((*hp_pjt->pfId)[j] >= 6) {
-                pf_sum += (*hp_pjt->pfPt)[j];
+                if (dr2 < 0.01 && passes_electron_id<
+                            det::barrel, wp::loose, pjtree
+                        >(hp_pjt, j, true)) {
+                    electron = true; break; }
             }
-        }
 
-        (*hp_hn)[0]->Fill(pf_sum, hp_pjt->Ncoll, hp_pjt->w);
-        (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
+            if (electron) { continue; }
 
-        (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt->w);
-        (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
-    }
+            auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
+            float pf_sum = 0;
 
-    nentries = static_cast<int64_t>(mb_t->GetEntries());
-    // nentries = nentries > 100000 ? 100000 : nentries;
-    double nmb = 0;
-
-    for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, nentries);
-
-        mb_t->GetEntry(i);
-
-        nmb += mb_pjt->w;
-
-        auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
-        float pf_sum = 0;
-
-        for (size_t j = 0; j < mb_pjt->pfPt->size(); ++j) {
-            if ((*mb_pjt->pfId)[j] >= 6) {
-                pf_sum += (*mb_pjt->pfPt)[j];
+            for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
+                // if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
+                if ((*hp_pjt->pfId)[j] >= 6) {
+                    pf_sum += (*hp_pjt->pfPt)[j];
+                }
             }
+
+            (*hp_hn)[0]->Fill(pf_sum, hp_pjt->Ncoll, hp_pjt->w);
+            (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt->w);
+
+            (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt->w);
+            (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
         }
 
-        (*mb_hn)[0]->Fill(pf_sum, mb_pjt->Ncoll, mb_pjt->w);
-        (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll, mb_pjt->w);
+    for (auto const& file : mb_input) {
+        std::cout << std::endl << file << std::endl;
+        
+        TFile* mb_f = new TFile(file.data(), "read");
+        TTree* mb_t = (TTree*) mb_f->Get("pj");
+        auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
 
-        (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum, mb_pjt->w);
-        (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho, mb_pjt->w);
+        int64_t nentries = static_cast<int64_t>(mb_t->GetEntries());
+
+        for (int64_t i = 0; i < nentries; ++i) {
+            if (i % 100000 == 0)
+                printf("entry: %li/%li\n", i, nentries);
+
+            mb_t->GetEntry(i);
+
+            auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
+            float pf_sum = 0;
+
+            for (size_t j = 0; j < mb_pjt->pfPt->size(); ++j) {
+                if ((*mb_pjt->pfId)[j] >= 6) {
+                    pf_sum += (*mb_pjt->pfPt)[j];
+                }
+            }
+
+            (*mb_hn)[0]->Fill(pf_sum, mb_pjt->Ncoll, mb_pjt->w);
+            (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll, mb_pjt->w);
+
+            (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum, mb_pjt->w);
+            (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho, mb_pjt->w);
+        }
     }
 
     /* subtract distributions */
