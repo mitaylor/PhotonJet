@@ -162,7 +162,7 @@ int hf_shift(char const* config, char const* output) {
         int64_t nentries = static_cast<int64_t>(mb_t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            if (i % 100000 == 0)
+            if (i % 10000 == 0)
                 printf("entry: %li/%li\n", i, nentries);
 
             mb_t->GetEntry(i);
