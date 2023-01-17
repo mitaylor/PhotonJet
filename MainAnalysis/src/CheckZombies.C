@@ -58,7 +58,7 @@ int CheckZombies(char const* input) {
             std::cout << file << std::endl;
         }
 
-        infile.Close()
+        infile->Close()
     }
     
     return 0;
