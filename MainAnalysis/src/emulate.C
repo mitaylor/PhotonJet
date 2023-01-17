@@ -62,7 +62,6 @@ int emulate(char const* config, char const* output) {
         for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
             hbase->Fill(pjt->pthat, pjt->weight);
-            std::cout << i << " " << pjt->pthat << std::endl;
         }
     }
 
@@ -77,7 +76,6 @@ int emulate(char const* config, char const* output) {
         for (int64_t i = 0; i < nentries; ++i) {
             t->GetEntry(i);
             hcomb->Fill(pjt->pthat, pjt->weight);
-            std::cout << i << " " << pjt->pthat << std::endl;
         }
     }
 
