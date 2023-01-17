@@ -67,6 +67,7 @@ int emulate(char const* config, char const* output) {
     auto pjt_base = new pjtree(true, false, false, base_t, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
     for (int64_t i = 0; i < nentries; ++i) {
+        std::cout << i << " " << pjt_base->pthat << std::endl;
         tbase->GetEntry(i);
         hbase->Fill(pjt_base->pthat, pjt_base->weight);
     }
