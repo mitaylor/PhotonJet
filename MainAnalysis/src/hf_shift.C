@@ -150,6 +150,8 @@ int hf_shift(char const* config, char const* output) {
             (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt->w);
             (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
         }
+        
+        hp_f.Close();
     }
 
     for (auto const& file : mb_input) {
@@ -182,6 +184,8 @@ int hf_shift(char const* config, char const* output) {
             (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum, mb_pjt->w);
             (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho, mb_pjt->w);
         }
+
+        mb_f->Close();
     }
 
     /* subtract distributions */
