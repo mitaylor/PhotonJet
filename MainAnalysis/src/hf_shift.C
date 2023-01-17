@@ -210,12 +210,12 @@ int hf_shift(char const* config, char const* output) {
 
     hp_hn_h->SetMaximum(100);
     hp_hn_h->SetMinimum(-100);
-    hp_rn_h->SetMaximum(10);
+    hp_rn_h->SetMaximum(100);
     hp_rn_h->SetMinimum(-10);
 
     /* fit to a constant function */
-    hp_hn_h->Fit("pol0");
-    hp_rn_h->Fit("pol0");
+    hp_hn_h->Fit("pol0", "", "", 1.712, 1737);
+    hp_rn_h->Fit("pol0""", "", 1.712, 1737));
 
     auto hp_hn_h_fit = hp_hn_h->GetFunction("pol0");
     auto hp_rn_h_fit = hp_rn_h->GetFunction("pol0");
