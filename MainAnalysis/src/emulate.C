@@ -63,7 +63,8 @@ int emulate(char const* config, char const* output) {
 
     /* iterate through base chain */
     int64_t nentries = static_cast<int64_t>(tbase->GetEntries());
-    auto pjt_base = new pjtree(true, false, false, tbase, { 1, 0, 0, 0, 0, 0, 0, 0 });
+    auto base_t = (TTree *) tbase->GetTree();
+    auto pjt_base = new pjtree(true, false, false, base_t, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
     for (int64_t i = 0; i < nentries; ++i) {
         tbase->GetEntry(i);
@@ -72,7 +73,8 @@ int emulate(char const* config, char const* output) {
 
     /* iterate through combined chain */
     nentries = static_cast<int64_t>(tcomb->GetEntries());
-    auto pjt_comb = new pjtree(true, false, false, tcomb, { 1, 0, 0, 0, 0, 0, 0, 0 });
+    auto comb_t = (TTree *) tcomb->GetTree();
+    auto pjt_comb = new pjtree(true, false, false, comb_t, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
     for (int64_t i = 0; i < nentries; ++i) {
         tcomb->GetEntry(i);
