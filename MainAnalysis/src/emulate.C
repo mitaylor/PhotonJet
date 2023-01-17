@@ -68,7 +68,7 @@ int emulate(char const* config, char const* output) {
 
     for (int64_t i = 0; i < nentries; ++i) {
         tbase->GetEntry(i);
-        hcomb->Fill(pjt_base->pthat, pjt_base->weight);
+        hbase->Fill(pjt_base->pthat, pjt_base->weight);
     }
 
     /* iterate through combined chain */
