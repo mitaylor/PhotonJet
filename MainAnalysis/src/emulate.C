@@ -26,53 +26,57 @@ using namespace std::placeholders;
 int emulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto data = conf->get<std::string>("data");
-    auto files = conf->get<std::vector<std::string>>("files");
-    auto pthats = conf->get<std::vector<int32_t>>("pthats");
+    auto data = conf->get<std::vector<std::string>>("data");
+    auto pthat15 = conf->get<std::vector<std::string>>("pthat15");
+    auto pthat30 = conf->get<std::vector<std::string>>("pthat30");
+    auto pthat50 = conf->get<std::vector<std::string>>("pthat50");
+    auto pthat80 = conf->get<std::vector<std::string>>("pthat80");
+    auto pthat120 = conf->get<std::vector<std::string>>("pthat120");
+    auto pthat170 = conf->get<std::vector<std::string>>("pthat170");
+
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
     
     auto rvz = conf->get<std::vector<float>>("vz_range");
-    auto extra = conf->get<bool>("extra");
 
     TH1::SetDefaultSumw2();
 
     /* merged gen inputs */
     TChain* tcomb = new TChain("pj");
-    for (auto const& f : files)
-        tcomb->Add(f.data());
+    for (auto const& f : pthat15)   tcomb->Add(f.data());
+    for (auto const& f : pthat30)   tcomb->Add(f.data());
+    for (auto const& f : pthat50)   tcomb->Add(f.data());
+    for (auto const& f : pthat80)   tcomb->Add(f.data());
+    for (auto const& f : pthat120)  tcomb->Add(f.data());
+    for (auto const& f : pthat170)  tcomb->Add(f.data());
+
+    /* merged base inputs */
+    TChain* tbase = new TChain("pj");
+    for (auto const& f : pthat15)   tbase->Add(f.data());
 
     /* get entries in each pthat bin */
-    auto count = static_cast<int>(pthats.size());
-    pthats.push_back(999999);
+    double pthats[7] = { 15, 30, 50, 80, 120, 170, 999999 };
+    int count = 6; // number of pthats
 
-    double apthats[100];
+    TH1F* hcomb = new TH1F("npthats", "", count, pthats);
+    TH1F* hbase = new TH1F("npthats_model", "", count, pthats);
 
-    std::copy(pthats.begin(), pthats.end(), apthats);
+    /* iterate through base chain */
+    nt64_t nentries = static_cast<int64_t>(tbase->GetEntries());
+    auto pjt_base = new pjtree(true, false, false, tbase, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
-    TH1F* hcomb = new TH1F("npthats", "", count, apthats);
-    TH1F* hbase = new TH1F("npthats_model", "", count, apthats);
+    for (int64_t i = 0; i < nentries; ++i) {
+        tbase->GetEntry(i);
+        hcomb->Fill(pjt_base->pthat, pjt_base->weight);
+    }
 
-    for (auto const& file : files) {
-        TFile* f = new TFile(file.data(), "read");
-        TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 0, 0, 0, 0 });
+    /* iterate through combined chain */
+    nentries = static_cast<int64_t>(tcomb->GetEntries());
+    auto pjt_comb = new pjtree(true, false, false, tcomb, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
-        int64_t nentries = static_cast<int64_t>(t->GetEntries());
-
-        for (int64_t i = 0; i < nentries; ++i) {
-            t->GetEntry(i);
-
-            if (file == files[0] || (extra && file == files[1])) {
-                hbase->Fill(pjt->pthat, pjt->weight);
-            }
-
-            hcomb->Fill(pjt->pthat, pjt->weight);
-        }
-
-        f->Close();
-        delete f;
-        delete pjt;
+    for (int64_t i = 0; i < nentries; ++i) {
+        tcomb->GetEntry(i);
+        hcomb->Fill(pjt_comb->pthat, pjt_comb->weight);
     }
 
     /* loop over and assign pthat weights */
@@ -96,7 +100,7 @@ int emulate(char const* config, char const* output) {
     auto vz = new history<TH1F>("vz"s, "", fvz, 3L);
 
     TChain* tdata = new TChain("pj");
-    tdata->Add(data.data());
+    for (auto const& f : data)   tdata->Add(f.data());
 
     tdata->Project((*vz)[0]->GetName(), "vz");
     tcomb->Project((*vz)[1]->GetName(), "vz");
