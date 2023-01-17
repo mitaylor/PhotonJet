@@ -55,7 +55,7 @@ int emulate(char const* config, char const* output) {
     for (auto const& f : pthat15)   tbase->Add(f.data());
 
     /* get entries in each pthat bin */
-    int pthats[7] = { 15, 30, 50, 80, 120, 170, 999999 };
+    double[7] = { 15, 30, 50, 80, 120, 170, 999999 };
     int count = 6; // number of pthats
 
     TH1F* hcomb = new TH1F("npthats", "", count, pthats);
@@ -88,7 +88,7 @@ int emulate(char const* config, char const* output) {
         auto weight = hbase->GetBinContent(i+1) / hcomb->GetBinContent(i+1);
         (*pthatw)[i]->SetBinContent(1, weight);
 
-        printf("[%i, %i]: %E\n", pthats[i], pthats[i + 1], weight);
+        printf("[%d, %d]: %E\n", pthats[i], pthats[i + 1], weight);
     }
 
     printf("\n");
