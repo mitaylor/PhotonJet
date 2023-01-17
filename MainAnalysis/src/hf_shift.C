@@ -150,10 +150,11 @@ int hf_shift(char const* config, char const* output) {
             (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt->w);
             (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
         }
+    }
 
     for (auto const& file : mb_input) {
         std::cout << std::endl << file << std::endl;
-        
+
         TFile* mb_f = new TFile(file.data(), "read");
         TTree* mb_t = (TTree*) mb_f->Get("pj");
         auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
