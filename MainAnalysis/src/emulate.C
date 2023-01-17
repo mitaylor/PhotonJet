@@ -27,12 +27,8 @@ int emulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto data = conf->get<std::vector<std::string>>("data");
+    auto mc = conf->get<std::vector<std::string>>("mc");
     auto pthat15 = conf->get<std::vector<std::string>>("pthat15");
-    auto pthat30 = conf->get<std::vector<std::string>>("pthat30");
-    auto pthat50 = conf->get<std::vector<std::string>>("pthat50");
-    auto pthat80 = conf->get<std::vector<std::string>>("pthat80");
-    auto pthat120 = conf->get<std::vector<std::string>>("pthat120");
-    auto pthat170 = conf->get<std::vector<std::string>>("pthat170");
 
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
@@ -43,12 +39,7 @@ int emulate(char const* config, char const* output) {
 
     /* merged gen inputs */
     TChain* tcomb = new TChain("pj");
-    for (auto const& f : pthat15)   tcomb->Add(f.data());
-    for (auto const& f : pthat30)   tcomb->Add(f.data());
-    for (auto const& f : pthat50)   tcomb->Add(f.data());
-    for (auto const& f : pthat80)   tcomb->Add(f.data());
-    for (auto const& f : pthat120)  tcomb->Add(f.data());
-    for (auto const& f : pthat170)  tcomb->Add(f.data());
+    for (auto const& f : mc)   tcomb->Add(f.data());
 
     /* merged base inputs */
     TChain* tbase = new TChain("pj");
@@ -61,25 +52,33 @@ int emulate(char const* config, char const* output) {
     TH1F* hcomb = new TH1F("npthats", "", count, pthats);
     TH1F* hbase = new TH1F("npthats_model", "", count, pthats);
 
-    /* iterate through base chain */
-    int64_t nentries = static_cast<int64_t>(tbase->GetEntries());
-    auto base_t = (TTree *) tbase->GetTree();
-    auto pjt_base = new pjtree(true, false, false, base_t, { 1, 0, 0, 0, 0, 0, 0, 0 });
+    for (auto const& file : pthat15) {
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
-    for (int64_t i = 0; i < nentries; ++i) {
-        std::cout << i << " " << pjt_base->pthat << std::endl;
-        tbase->GetEntry(i);
-        hbase->Fill(pjt_base->pthat, pjt_base->weight);
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
+
+        for (int64_t i = 0; i < nentries; ++i) {
+            std::cout << i << " " << pjt->pthat << std::endl;
+            tbase->GetEntry(i);
+            hbase->Fill(pjt->pthat, pjt->weight);
+        }
     }
 
     /* iterate through combined chain */
-    nentries = static_cast<int64_t>(tcomb->GetEntries());
-    auto comb_t = (TTree *) tcomb->GetTree();
-    auto pjt_comb = new pjtree(true, false, false, comb_t, { 1, 0, 0, 0, 0, 0, 0, 0 });
+    for (auto const& file : mc) {
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 0, 0, 0, 0 });
 
-    for (int64_t i = 0; i < nentries; ++i) {
-        tcomb->GetEntry(i);
-        hcomb->Fill(pjt_comb->pthat, pjt_comb->weight);
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
+
+        for (int64_t i = 0; i < nentries; ++i) {
+            std::cout << i << " " << pjt->pthat << std::endl;
+            tbase->GetEntry(i);
+            hcomb->Fill(pjt->pthat, pjt->weight);
+        }
     }
 
     /* loop over and assign pthat weights */
