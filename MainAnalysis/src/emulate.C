@@ -60,9 +60,9 @@ int emulate(char const* config, char const* output) {
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            std::cout << i << " " << pjt->pthat << std::endl;
-            tbase->GetEntry(i);
+            t->GetEntry(i);
             hbase->Fill(pjt->pthat, pjt->weight);
+            std::cout << i << " " << pjt->pthat << std::endl;
         }
     }
 
@@ -75,9 +75,9 @@ int emulate(char const* config, char const* output) {
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            std::cout << i << " " << pjt->pthat << std::endl;
-            tbase->GetEntry(i);
+            t->GetEntry(i);
             hcomb->Fill(pjt->pthat, pjt->weight);
+            std::cout << i << " " << pjt->pthat << std::endl;
         }
     }
 
