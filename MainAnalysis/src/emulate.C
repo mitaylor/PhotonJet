@@ -55,7 +55,7 @@ int emulate(char const* config, char const* output) {
     for (auto const& f : pthat15)   tbase->Add(f.data());
 
     /* get entries in each pthat bin */
-    double[7] = { 15, 30, 50, 80, 120, 170, 999999 };
+    double pthats[7] = { 15, 30, 50, 80, 120, 170, 999999 };
     int count = 6; // number of pthats
 
     TH1F* hcomb = new TH1F("npthats", "", count, pthats);
