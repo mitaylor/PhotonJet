@@ -8,11 +8,13 @@
 
 #include <vector>
 
-#define B_VEC_PF_RECO(ACTION, ...)                                         \
-    ACTION(sv<int>,         pfId,                       ## __VA_ARGS__)    \
-    ACTION(sv<float>,       pfPt,                       ## __VA_ARGS__)    \
+#define B_VEC_PF_RECO(ACTION, ...)                                          \
+    ACTION(sv<int>,         pfId,                        ## __VA_ARGS__)    \
+    ACTION(sv<float>,       pfPt,                        ## __VA_ARGS__)    \
     ACTION(sv<float>,       pfEta,                       ## __VA_ARGS__)    \
     ACTION(sv<float>,       pfPhi,                       ## __VA_ARGS__)    \
+    ACTION(sv<float>,       pfEnergy,                    ## __VA_ARGS__)    \
+    ACTION(sv<float>,       pfE,                         ## __VA_ARGS__)    \
 
 class pfcand : tree {
   public:
