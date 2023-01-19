@@ -6,7 +6,7 @@
 # ../../configs/regulate/preapproval-parallel/regulate_aa_data.conf \
 # "regulate_aa_data" 20
 
-regulate_aa_mb_data
+# regulate_aa_mb_data
 ./SubmitJobs.sh \
 "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIMinimumBias4/20220215PbPbMB/220215_213434/" \
 ../../configs/regulate/preapproval-parallel/regulate_aa_mb_data.conf \
