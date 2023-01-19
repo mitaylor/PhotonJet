@@ -10,7 +10,7 @@ cp /tmp/x509up_u168456 x509up_u168456
 old_folder=" "
 
 for i in "${!folders[@]}"; do
-    if [ ${folders[i]} = ${old_folder} ]
+    if [ ${folders[i]} -eq ${old_folder} ]
     then
         echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
     else
