@@ -5,12 +5,16 @@ strings=$(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | gre
 for string in ${strings}; do
     files=$(ls -lt ${string} | awk '{print $9}')
 
-    for i in ${!files[@]}; do
-        echo "$i"
-        if [ $i -gt 1 ]; then
-            echo "${files[i]}"
-        fi
+    for file in ${files}; do
+        echo $file
     done
+
+    # for i in ${!files[@]}; do
+    #     echo "$i"
+    #     if [ $i -gt 1 ]; then
+    #         echo "${files[i]}"
+    #     fi
+    # done
 done
 
 
