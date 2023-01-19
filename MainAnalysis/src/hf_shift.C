@@ -172,9 +172,9 @@ int hf_shift(char const* config, char const* output) {
             auto avg_rho = get_avg_rho(mb_pjt, -photon_eta_abs, photon_eta_abs);
             float pf_sum = 0;
 
-            for (size_t j = 0; j < mb_pjt->pfPt->size(); ++j) {
+            for (size_t j = 0; j < mb_pjt->pfEnergy->size(); ++j) {
                 if ((*mb_pjt->pfId)[j] >= 6) {
-                    pf_sum += (*mb_pjt->pfPt)[j];
+                    pf_sum += (*mb_pjt->pfEnergy)[j];
                 }
             }
 
