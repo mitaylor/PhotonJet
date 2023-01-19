@@ -10,15 +10,15 @@ old_folder=""
 
 for i in "${!folders[@]}"; do
     echo "${folders[i]}"
-    if [ ${folders[i]} -eq ${old_folder} ]
-    then
-        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" # >> "${folders[i]}/${folders[i]}.list"
-    else
-        # echo ${old_folder}
-        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" #> "${folders[i]}/${folders[i]}.list"
-    fi
+    # if [ ${folders[i]} -eq ${old_folder} ]
+    # then
+    #     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" # >> "${folders[i]}/${folders[i]}.list"
+    # else
+    #     # echo ${old_folder}
+    #     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" #> "${folders[i]}/${folders[i]}.list"
+    # fi
 
-    old_folder=${folders[i]}
+    # old_folder=${folders[i]}
 done
 
 # echo ${old_folder}
