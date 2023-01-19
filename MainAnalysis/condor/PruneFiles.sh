@@ -4,6 +4,8 @@ set -o noglob
 
 strings=($(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print}'))
 
+set -o glob
+
 for string in ${strings}; do
     echo ${string}
     files=($(ls -lt ${string} | awk '{print $9}'))
