@@ -15,7 +15,6 @@ for string in ${strings}; do
         then
             echo ${string}
         fi
-    else
     fi
 
     previous_string_folder=${folder}
@@ -28,7 +27,6 @@ then
     then
         echo ${string}
     fi
-else
 fi
 
 # list=${1}
