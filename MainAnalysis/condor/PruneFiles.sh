@@ -2,8 +2,8 @@
 
 strings=$(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print}')
 
-previous_string_folder="x"
-previous_string_number="y"
+# previous_string_folder="x"
+# previous_string_number="y"
 
 for string in ${strings}; do
     echo ${string}
