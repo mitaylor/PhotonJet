@@ -6,8 +6,8 @@ previous_string_folder="x"
 previous_string_number="y"
 
 for string in ${strings}; do
-    folder= echo ${string} | awk -F / '{ print $2 }'
-    number= echo ${string} | awk -F . '{ print $4 }'
+    folder=$(echo ${string} | awk -F / '{ print $2 }')
+    number=$(echo ${string} | awk -F . '{ print $4 }')
 
     if [ ${folder} == ${previous_string_folder} ]
     then
