@@ -4,15 +4,20 @@ list=${1}
 
 folders=($(awk -F '/' '{print $2}' ${list}))
 numbers=($(awk -F '.' '{print $4}' ${list}))
+old_files=$(cat ${list})
 
 cp /tmp/x509up_u168456 x509up_u168456
 
-# for i in ${!folders[@]}; do
-#     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}.list"
-# done
+for i in ${!folders[@]}; do
+    rm "${folders[i]}/${folders[i]}.list"
+done
 
 for i in ${!folders[@]}; do
     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
+done
+
+for i in ${!old_files[@]}; do
+    rm ${old_files[i]}
 done
 
 # get_number () { 
