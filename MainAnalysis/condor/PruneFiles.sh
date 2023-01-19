@@ -9,6 +9,9 @@ for string in ${strings}; do
     folder= echo ${string} | awk -F / '{ print $2 }'
     number= echo ${string} | awk -F . '{ print $4 }'
 
+    echo $folder
+    echo $number
+
     if [ ${previous_string_folder} == ${folder} ]
     then
         if [ ${previous_string_number} == ${number} ]
