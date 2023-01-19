@@ -47,7 +47,7 @@ int hf_shift(char const* config, char const* output) {
     
     /* define histograms */
     auto irho = new interval("#rho"s, 100, 0, 400);
-    auto ihf = new interval("HF Energy"s, 100, 0, 70000);
+    auto ihf = new interval("HF Energy"s, 100, 0, 500000);
     auto in = new interval("Ncoll"s, 100, 0, 2100);
 
     auto mhn = new multival(*ihf, *in);
@@ -63,7 +63,7 @@ int hf_shift(char const* config, char const* output) {
     auto mb_rn = new history<TH2F>("mb_rn"s, "Hydjet", frn, 1);
 
     auto fhnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, 70000, "LE"); };
+        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, 500000, "LE"); };
     auto frnp = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";Ncoll;#rho;"s + label).data(), 100, 0, 2100, 0, 400, "LE"); };
 
@@ -212,10 +212,10 @@ int hf_shift(char const* config, char const* output) {
     hp_hn_h->Add(mb_hn_h, -1);
     hp_rn_h->Add(mb_rn_h, -1);
 
-    hp_hn_h->SetMaximum(100);
+    hp_hn_h->SetMaximum(1000);
     hp_hn_h->SetMinimum(-100);
-    hp_rn_h->SetMaximum(100);
-    hp_rn_h->SetMinimum(-10);
+    hp_rn_h->SetMaximum(10);
+    hp_rn_h->SetMinimum(-1);
 
     /* fit to a constant function */
     hp_hn_h->Fit("pol0", "", "", 1.712, 1737.0);
