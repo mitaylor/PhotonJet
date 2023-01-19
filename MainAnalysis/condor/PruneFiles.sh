@@ -3,14 +3,11 @@
 strings=($(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print}'))
 
 previous_string_folder="x"
-previous_string_number="x"
+previous_string_number="y"
 
 for string in ${strings}; do
     folder= echo ${string} | awk -F / '{ print $2 }'
     number= echo ${string} | awk -F . '{ print $4 }'
-
-    echo $folder
-    echo $number
 
     if [ ${previous_string_folder} == ${folder} ]
     then
