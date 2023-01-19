@@ -13,7 +13,7 @@ for string in ${strings}; do
     then
         if [ ${number} == ${previous_string_number} ]
         then
-            echo ${string}
+            rm ${string}
         fi
     fi
 
