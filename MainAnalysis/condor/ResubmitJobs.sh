@@ -14,6 +14,7 @@ for i in ${!folders[@]}; do
     if [ ${old_folder} != ${folders[i]} ]
     then  
         rm "${folders[i]}/${folders[i]}.list"
+        old_folder=${folders[i]}
     fi
 done
 
