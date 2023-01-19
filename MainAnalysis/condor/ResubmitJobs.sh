@@ -20,8 +20,8 @@ old_folder=" "
 
 for i in ${!old_files[@]}; do
     echo ${old_folder}
-    
-    if [${old_folder} != ${folders[i]}]
+
+    if [ ${old_folder} != ${folders[i]} ]
     then  
         rm ${old_files[i]}
     fi
