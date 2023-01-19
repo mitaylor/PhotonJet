@@ -4,7 +4,7 @@ strings=$(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | gre
 
 for string in ${strings}; do
     echo ${string}
-    files=($(ls -lt ${string} | awk '{print $9}'))
+    # files=($(ls -lt ${string} | awk '{print $9}'))
 
     # for i in ${!files[@]}; do
     #     echo "$i"
