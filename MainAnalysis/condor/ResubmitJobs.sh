@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 list=${1}
-folders=`awk -F '/' '{print $2}' ${list}`
-numbers=`awk -F '.' '{print $4}' ${list}`
+
+folders=($(awk -F '/' '{print $2}' ${list}))
+numbers=($(awk -F '.' '{print $4}' ${list}))
 
 cp /tmp/x509up_u168456 x509up_u168456
 
