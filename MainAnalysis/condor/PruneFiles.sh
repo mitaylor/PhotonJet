@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# set -o noglob
+grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print}' > temp.txt
 
-strings=($(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3='*'; print}'))
+strings=$(cat temp.txt)
 
 for string in ${strings}; do
     echo ${string}
@@ -16,7 +16,7 @@ for string in ${strings}; do
     done
 done
 
-
+rm temp.txt
 
 # list=${1}
 
