@@ -1,22 +1,35 @@
 #!/usr/bin/env bash
 
-grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print "\x22"$0"\x22"}' > temp.txt
+strings=($(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print}'))
 
-strings=$(cat temp.txt)
+previous_string_folder="x"
+previous_string_number="x"
 
 for string in ${strings}; do
-    echo ${string}
-    files=$(ls -lt ${string} | awk '{print $9}')
+    folder= echo ${string} | awk -F / '{ print $2 }'
+    number= echo ${string} | awk -F . '{ print $4 }'
 
-    for i in ${!files[@]}; do
-        echo "$i"
-        if [ $i -gt 1 ]; then
-            echo "${files[i]}"
+    if [ ${previous_string_folder} == ${folder} ]
+    then
+        if [ ${previous_string_number} == ${number} ]
+        then
+            echo ${string}
         fi
-    done
+    else
+    fi
+
+    previous_string_folder=${folder}
+    previous_string_number=${number}
 done
 
-rm temp.txt
+if [ ${previous_string_folder} == ${folder} ]
+then
+    if [ ${previous_string_number} == ${number} ]
+    then
+        echo ${string}
+    fi
+else
+fi
 
 # list=${1}
 
