@@ -3,7 +3,7 @@
 strings=$(grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; print}')
 
 for string in ${strings}; do
-    files=($(ls -lt ./regulate_aa_qcd_extra_weighted_80_F/regulate_aa_qcd_extra_weighted_80_F.*.027.err | awk '{print $9}'))
+    files=($(ls -lt ${string} | awk '{print $9}'))
 
     for file in ${files}; do
         echo ${file}
