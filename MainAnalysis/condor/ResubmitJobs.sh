@@ -8,7 +8,7 @@ old_files=$(cat ${list})
 
 cp /tmp/x509up_u168456 x509up_u168456
 
-old_folder=" "
+old_folder="x"
 
 for i in ${!folders[@]}; do
     if [ ${old_folder} != ${folders[i]} ]
