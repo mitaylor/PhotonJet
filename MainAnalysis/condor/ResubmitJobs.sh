@@ -8,25 +8,21 @@ old_files=$(cat ${list})
 
 cp /tmp/x509up_u168456 x509up_u168456
 
+old_folder=" "
+
 for i in ${!folders[@]}; do
-    rm "${folders[i]}/${folders[i]}.list"
+    if [ ${old_folder} != ${folders[i]} ]
+    then  
+        rm "${folders[i]}/${folders[i]}.list"
+    fi
 done
 
 for i in ${!folders[@]}; do
     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
 done
 
-old_folder=" "
-
 for i in ${!old_files[@]}; do
-    echo ${old_folder}
-
-    if [ ${old_folder} != ${folders[i]} ]
-    then  
-        rm ${old_files[i]}
-    fi
-
-    old_folder=${folders[i]}
+    rm ${old_files[i]}
 done
 
 # get_number () { 
