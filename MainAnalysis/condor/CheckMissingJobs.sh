@@ -10,11 +10,26 @@ folders=$(cat missing.txt | awk -F / '{print $7}' | awk -F . '{print $1}' | sed 
 
 cp /tmp/x509up_u168456 x509up_u168456
 
-for folder in $folders; do
-    echo $folder
+old_folder="x"
+
+for i in ${!folders[@]}; do
+    if [ ${old_folder} != ${folders[i]} ]
+    then
+        # if [ ${old_folder} != "x" ]
+        # then
+        #     cd ${old_folder}
+        #     condor_submit SubmitCondor_${old_folder}.condor
+        #     cd ..
+        # fi
+
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}/${folders[i]}.list"
+    else
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
+    fi
+
+    old_folder=${folders[i]}
 done
 
-# for conf in ${confs}; do
-#     # echo $conf
-#     bash -c '[[ ! -e ${conf} ]] && echo "${conf}"'
-# done
+# cd ${old_folder}
+# condor_submit SubmitCondor_${old_folder}.condor
+# cd ..
