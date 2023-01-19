@@ -7,10 +7,12 @@ numbers=($(awk -F '.' '{print $4}' ${list}))
 
 cp /tmp/x509up_u168456 x509up_u168456
 
-old_folder=" "
+# for i in ${!folders[@]}; do
+#     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}.list"
+# done
 
 for i in ${!folders[@]}; do
-    echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}.list"
+    echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
 done
 
 # get_number () { 
