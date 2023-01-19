@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; \"print\"}' > temp.txt
+grep -rl "Error in <TNetXNGFile::Open>: \[FATAL\] Auth failed" . | grep err | awk -F . 'BEGIN{FS=OFS="."} {$3="*"; "\x22"print"\x22"}' > temp.txt
 
 strings=$(cat temp.txt)
 
