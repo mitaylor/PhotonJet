@@ -16,8 +16,15 @@ for i in ${!folders[@]}; do
     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
 done
 
+old_folder=" "
+
 for i in ${!old_files[@]}; do
-    rm ${old_files[i]}
+    if [${old_folder} != ${folders[i]}]
+    then  
+        rm ${old_files[i]}
+    fi
+
+    old_folder=${folders[i]}
 done
 
 # get_number () { 
