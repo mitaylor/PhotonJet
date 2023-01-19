@@ -21,9 +21,9 @@ for i in ${!folders[@]}; do
     echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
 done
 
-for i in ${!old_files[@]}; do
-    rm ${old_files[i]}
-done
+# for i in ${!old_files[@]}; do
+#     rm ${old_files[i]}
+# done
 
 # get_number () { 
 #     s="${1%%.*}"
