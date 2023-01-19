@@ -13,13 +13,12 @@ old_folder="x"
 for i in ${!folders[@]}; do
     if [ ${old_folder} != ${folders[i]} ]
     then  
-        rm "${folders[i]}/${folders[i]}.list"
-        old_folder=${folders[i]}
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}/${folders[i]}.list"
+    else
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
     fi
-done
 
-for i in ${!folders[@]}; do
-    echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
+    old_folder=${folders[i]}
 done
 
 for i in ${!old_files[@]}; do
