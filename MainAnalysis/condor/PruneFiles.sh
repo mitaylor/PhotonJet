@@ -6,8 +6,9 @@ for string in ${strings}; do
     files=($(ls -lt ${string} | awk '{print $9}'))
 
     for i in ${!files[@]}; do
+        echo "$i"
         if [ $i -gt 1 ]; then
-            echo ${files[i]}
+            echo "${files[i]}"
         fi
     done
 done
