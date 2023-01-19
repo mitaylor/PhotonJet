@@ -56,10 +56,10 @@ int estimate_hf(char const* config, char const* output) {
 
     /* create histograms */
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, 250);
+    auto ihf = new interval("Estimated HF"s, 50, 0, 2500);
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, 70000, "LE"); };
 
     auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
     auto nvtx = new history<TProfile>("nvtx"s, "", fnvtx, 1);

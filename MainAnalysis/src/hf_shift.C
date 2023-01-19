@@ -47,7 +47,7 @@ int hf_shift(char const* config, char const* output) {
     
     /* define histograms */
     auto irho = new interval("#rho"s, 100, 0, 400);
-    auto ihf = new interval("HF Energy"s, 100, 0, 7000);
+    auto ihf = new interval("HF Energy"s, 100, 0, 70000);
     auto in = new interval("Ncoll"s, 100, 0, 2100);
 
     auto mhn = new multival(*ihf, *in);
@@ -63,7 +63,7 @@ int hf_shift(char const* config, char const* output) {
     auto mb_rn = new history<TH2F>("mb_rn"s, "Hydjet", frn, 1);
 
     auto fhnp = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, 7000, "LE"); };
+        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 100, 0, 2100, 0, 70000, "LE"); };
     auto frnp = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";Ncoll;#rho;"s + label).data(), 100, 0, 2100, 0, 400, "LE"); };
 
@@ -137,10 +137,10 @@ int hf_shift(char const* config, char const* output) {
             auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
             float pf_sum = 0;
 
-            for (size_t j = 0; j < hp_pjt->pfPt->size(); ++j) {
+            for (size_t j = 0; j < hp_pjt->pfEnergy->size(); ++j) {
                 // if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
                 if ((*hp_pjt->pfId)[j] >= 6) {
-                    pf_sum += (*hp_pjt->pfPt)[j];
+                    pf_sum += (*hp_pjt->pfEnergy)[j];
                 }
             }
 
