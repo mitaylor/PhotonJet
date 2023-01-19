@@ -12,7 +12,14 @@ old_folder="x"
 
 for i in ${!folders[@]}; do
     if [ ${old_folder} != ${folders[i]} ]
-    then  
+    then
+        if [ ${old_folder} != "x" ]
+        then
+            cd ${old_folder}
+            condor_submit SubmitCondor_${old_folder}.condor
+            cd ..
+        fi
+
         echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}/${folders[i]}.list"
     else
         echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
@@ -21,26 +28,13 @@ for i in ${!folders[@]}; do
     old_folder=${folders[i]}
 done
 
+cd ${old_folder}
+condor_submit SubmitCondor_${old_folder}.condor
+cd ..
+
 for i in ${!old_files[@]}; do
     rm -f ${old_files[i]}
 done
-
-# get_number () { 
-#     s="${1%%.*}"
-#     echo "${s##*[!0-9]}"
-# }
-
-# errors=${1}
-# config_fragment=${2}
-# output_tag=${3}
-# n_files=${4}
-# start=${5}
-
-# cp /tmp/x509up_u168456 x509up_u168456
-
-# mkdir -p ${output_tag}
-# cd ${output_tag}
-# rm -f *
 
 # # split the input files so there are no more than 30 files per job
 # find ${folder} -type f > ${output_tag}
