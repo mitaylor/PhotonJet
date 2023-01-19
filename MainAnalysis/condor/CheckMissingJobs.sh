@@ -15,12 +15,12 @@ old_folder="x"
 for i in ${!folders[@]}; do
     if [ ${old_folder} != ${folders[i]} ]
     then
-        # if [ ${old_folder} != "x" ]
-        # then
-        #     cd ${old_folder}
-        #     condor_submit SubmitCondor_${old_folder}.condor
-        #     cd ..
-        # fi
+        if [ ${old_folder} != "x" ]
+        then
+            cd ${old_folder}
+            condor_submit SubmitCondor_${old_folder}.condor
+            cd ..
+        fi
 
         echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}/${folders[i]}.list"
     else
@@ -30,6 +30,6 @@ for i in ${!folders[@]}; do
     old_folder=${folders[i]}
 done
 
-# cd ${old_folder}
-# condor_submit SubmitCondor_${old_folder}.condor
-# cd ..
+cd ${old_folder}
+condor_submit SubmitCondor_${old_folder}.condor
+cd ..
