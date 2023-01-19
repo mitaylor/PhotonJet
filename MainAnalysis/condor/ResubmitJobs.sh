@@ -9,13 +9,13 @@ cp /tmp/x509up_u168456 x509up_u168456
 
 old_folder=" "
 
-for i in "${!folders[@]}"; do
+for i in ${!folders[@]}; do
     if [ ${folders[i]} = ${old_folder} ]
     then
-        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" # >> "${folders[i]}/${folders[i]}.list"
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> ${folders[i]}/${folders[i]}.list
     else
         # echo ${old_folder}
-        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" #> "${folders[i]}/${folders[i]}.list"
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > ${folders[i]}/${folders[i]}.list
     fi
 
     old_folder=${folders[i]}
