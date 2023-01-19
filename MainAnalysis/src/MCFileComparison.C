@@ -130,13 +130,13 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
 
     TChain oldPhotonChain("ggHiNtuplizerGED/EventTree");
     FillChain(oldPhotonChain, oldFiles);
-    oldPhotonChain.Add(oldInput);
+    // oldPhotonChain.Add(oldInput);
     TTreeReader oldPhotonReader(&oldPhotonChain);
     TTreeReaderValue<float> oldPhotonRho(oldPhotonReader, "rho");
 
     TChain oldRhoChain("hiPuRhoR3Analyzer/t");
     FillChain(oldRhoChain, oldFiles);
-    oldRhoChain.Add(oldInput);
+    // oldRhoChain.Add(oldInput);
     TTreeReader oldRhoReader(&oldRhoChain);
     TTreeReaderValue<vector<double>> oldRhoEtaMin(oldRhoReader, "etaMin");
     TTreeReaderValue<vector<double>> oldRhoEtaMax(oldRhoReader, "etaMax");
@@ -144,7 +144,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
 
     TChain oldEvtChain("hiEvtAnalyzer/HiTree");
     FillChain(oldEvtChain, oldFiles);
-    oldEvtChain.Add(oldInput);
+    // oldEvtChain.Add(oldInput);
     TTreeReader oldEvtReader(&oldEvtChain);
     TTreeReaderValue<float> oldEvtNcoll(oldEvtReader, "Ncoll");
 
@@ -155,14 +155,14 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
     // TChain newPhotonChain("ggHiNtuplizerGED/EventTree");
     TChain newPhotonChain("ggHiNtuplizer/EventTree");
     FillChain(newPhotonChain, newFiles);
-    newPhotonChain.Add(newInput);
+    // newPhotonChain.Add(newInput);
     TTreeReader newPhotonReader(&newPhotonChain);
     TTreeReaderValue<float> newPhotonRho(newPhotonReader, "rho");
 
     // TChain newRhoChain("hiPuRhoAnalyzer/t");
     TChain newRhoChain("hiPuRhoR3Analyzer/t");
     FillChain(newRhoChain, newFiles);
-    newRhoChain.Add(newInput);
+    // newRhoChain.Add(newInput);
     TTreeReader newRhoReader(&newRhoChain);
     TTreeReaderValue<vector<double>> newRhoEtaMin(newRhoReader, "etaMin");
     TTreeReaderValue<vector<double>> newRhoEtaMax(newRhoReader, "etaMax");
@@ -170,7 +170,7 @@ int Compare(char const* oldInput, char const* newInput, int pthat) {
 
     TChain newEvtChain("hiEvtAnalyzer/HiTree");
     FillChain(newEvtChain, newFiles);
-    newEvtChain.Add(newInput);
+    // newEvtChain.Add(newInput);
     TTreeReader newEvtReader(&newEvtChain);
     TTreeReaderValue<float> newEvtNcoll(newEvtReader, "Ncoll");
 
