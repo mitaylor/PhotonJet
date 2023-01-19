@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
 
-errors=`cat ${1}`
+list=${1}
+folders=`awk -F '/' '{print $2}' ${list}`
+numbers=`awk -F '.' '{print $4}' ${list}`
 
 cp /tmp/x509up_u168456 x509up_u168456
 
-for error in ${errors}; do
-    echo ${error}
+old_folder=""
+
+for i in ${!folders[@]}; do
+    if [ ${folders[i]} -eq ${old_folder} ]
+    then
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
+    else
+        echo ${old_folder}
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}/${folders[i]}.list"
+    fi
+
+    old_folder=${folders[i]}
 done
+
+echo ${old_folder}
 
 
 # get_number () { 
