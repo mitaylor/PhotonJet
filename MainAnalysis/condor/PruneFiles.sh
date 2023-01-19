@@ -6,19 +6,21 @@ previous_string_folder="x"
 previous_string_number="y"
 
 for string in ${strings}; do
-    folder=$(echo ${string} | awk -F / '{ print $2 }')
-    number=$(echo ${string} | awk -F . '{ print $4 }')
+    echo ${string}
 
-    if [ ${folder} == ${previous_string_folder} ]
-    then
-        if [ ${number} == ${previous_string_number} ]
-        then
-            rm ${string}
-        fi
-    fi
+    # folder=$(echo ${string} | awk -F / '{ print $2 }')
+    # number=$(echo ${string} | awk -F . '{ print $4 }')
 
-    previous_string_folder=${folder}
-    previous_string_number=${number}
+    # if [ ${folder} == ${previous_string_folder} ]
+    # then
+    #     if [ ${number} == ${previous_string_number} ]
+    #     then
+    #         echo ${string}
+    #     fi
+    # fi
+
+    # previous_string_folder=${folder}
+    # previous_string_number=${number}
 done
 
 # list=${1}
