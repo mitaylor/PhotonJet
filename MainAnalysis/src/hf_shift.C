@@ -212,7 +212,7 @@ int hf_shift(char const* config, char const* output) {
     hp_hn_h->Add(mb_hn_h, -1);
     hp_rn_h->Add(mb_rn_h, -1);
 
-    hp_hn_h->SetMaximum(1000);
+    hp_hn_h->SetMaximum(10000);
     hp_hn_h->SetMinimum(-100);
     hp_rn_h->SetMaximum(10);
     hp_rn_h->SetMinimum(-1);
