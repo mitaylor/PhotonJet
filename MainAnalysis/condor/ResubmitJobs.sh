@@ -34,5 +34,5 @@ cd ..
 
 for i in ${!old_files[@]}; do
     rm ${old_files[i]}
-    echo "${old_files[i]}" > deleted.txt
+    echo "${old_files[i]}" >> deleted.txt
 done
