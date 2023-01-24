@@ -90,7 +90,7 @@ int estimate_hf(char const* config, char const* output) {
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            if (i % (nentries/200) == 0) std::cout << i << " / " << nentries << std::endl;
+            if (i % (nentries/20) == 0) std::cout << i << " / " << nentries << std::endl;
             
             t->GetEntry(i);
             
