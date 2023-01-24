@@ -34,7 +34,7 @@ using namespace std::placeholders;
 int estimate_hf(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = cconf->get<std::vector<std::string>>("input");
+    auto input = conf->get<std::vector<std::string>>("input");
     
     auto tag = conf->get<std::string>("tag");
     auto type = conf->get<std::string>("type");
