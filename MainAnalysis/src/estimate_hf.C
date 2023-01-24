@@ -37,32 +37,43 @@ int estimate_hf(char const* config, char const* output) {
     auto input = conf->get<std::string>("input");
     
     auto entries = conf->get<int64_t>("entries");
-    auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
     auto type = conf->get<std::string>("type");
 
-    /* options */
-    auto heavyion = conf->get<bool>("heavyion");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto apply_er = conf->get<bool>("apply_er");
 
-    /* selections */
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
+
     auto const hovere_max = conf->get<float>("hovere_max");
+    auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* create histograms */
-    auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, 2500);
-    auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
-    auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, 70000, "LE"); };
+    int max_hf = 70000;
+    int max_avg_hf = 2500;
 
-    auto hf = new history<TH1F>("hf"s, "", fhf, ipt->size());
+    auto ipt = new interval(dpt);
+    auto ihf = new interval("Estimated HF"s, 50, 0, max_avg_hf);
+
+    auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
+
+    auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
+    auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
+    auto fpv = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TProfile(name.data(), (";nPU;nVtx;"s + label).data(), 11, -0.5, 10.5, 0, 16, "LE"); };
+
+    auto hf_v1 = new history<TH1F>("hf_v1"s, "", fhf, ipt->size());
+    auto hf_p0 = new history<TH1F>("hf_p0"s, "", fhf, ipt->size());
+
     auto nvtx = new history<TProfile>("nvtx"s, "", fnvtx, 1);
+    auto npu = new history<TProfile>("npu"s, "", fnpu, 1);
+    auto npv = new history<TProfile>("npv"s, "", fpv, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -71,18 +82,14 @@ int estimate_hf(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, 1 });
+    auto pjt = new pjtree(false, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
 
     printf("iterate..\n");
 
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    int64_t mod = 1;
-    if (entries) { mod = nentries / entries; }
-    if (mod != 1) { std::cout << "mod: " << mod << std::endl; }
 
     for (int64_t i = 0; i < nentries; ++i) {
-        if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
-        if (i % mod != 0) { continue; }
+        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
         t->GetEntry(i);
 
@@ -96,8 +103,7 @@ int estimate_hf(char const* config, char const* output) {
             if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
             auto pho_et = (*pjt->phoEt)[j];
-            if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
+            if (apply_er) pho_et = (*pjt->phoEtEr)[j];
 
             if (pho_et < photon_pt_min) { continue; }
 
@@ -110,7 +116,7 @@ int estimate_hf(char const* config, char const* output) {
         /* require leading photon */
         if (leading < 0) { continue; }
 
-        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.02)
+        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max)
             continue;
 
         /* isolation requirement */
@@ -138,7 +144,7 @@ int estimate_hf(char const* config, char const* output) {
 
                 if (dr2 < 0.01 && passes_electron_id<
                             det::barrel, wp::loose, pjtree
-                        >(pjt, j, heavyion)) {
+                        >(pjt, j, false)) {
                     electron = true; break; }
             }
 
@@ -150,35 +156,53 @@ int estimate_hf(char const* config, char const* output) {
 
         float pf_sum = 0;
 
-        for (size_t j = 0; j < pjt->pfPt->size(); ++j) {
-            // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+        for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
             if ((*pjt->pfId)[j] >= 6) {
-                pf_sum += (*pjt->pfPt)[j];
+                pf_sum += (*pjt->pfEnergy)[j];
             }
         }
 
         if (pjt->nVtx == 1) { 
-            (*hf)[pt_x]->Fill(pf_sum, pjt->w);
+            (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
+        }
+
+        if (pjt->npus[5] == 0) { 
+            (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
         }
 
         (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
-
-        if (pjt->nVtx >= 14) std::cout << pjt->nVtx << std::endl;
+        (*npu)[0]->Fill(pjt->npus[5], pf_sum, pjt->w);
+        (*npv)[0]->Fill(pjt->npus[5], pjt->nVtx, pjt->w);
     }
 
     /* save histograms */
     in(output, [&]() {
-        hf->save(tag);
+        hf_v1->save(tag);
+        hf_p0->save(tag);
         nvtx->save(tag);
+        npu->save(tag);
+        npv->save(tag);
     });
 
+    /* plot histograms */
     auto pt_info = [&](int64_t index) {
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    auto mean_info = [&](int64_t index) {
+    auto mean_info_vtx = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f",
-            (*hf)[index - 1]->GetMean(1));
+            (*hf_v1)[index - 1]->GetMean(1));
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };
+
+    auto mean_info_pu = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "mean: %.3f",
+            (*hf_p0)[index - 1]->GetMean(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
@@ -189,17 +213,16 @@ int estimate_hf(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
     
-    auto c1 = new paper(tag + "_estimated_hf", hb);
+    auto c1 = new paper(tag + "_estimated_hf_nvtx_1", hb);
     apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
-    c1->accessory(mean_info);
-
+    c1->accessory(mean_info_vtx);
     c1->divide(ipt->size(), -1);
     // c1->set(paper::flags::logy);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c1->add((*hf)[j], type);
+        c1->add((*hf_v1)[j], type);
     }
 
     hb->sketch();
@@ -208,10 +231,43 @@ int estimate_hf(char const* config, char const* output) {
     auto c2 = new paper(tag + "_nvtx_hf", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c2->add((*nvtx)[0], type);
+    auto c2 = new paper(tag + "_" + pthat + "_estimated_hf_npu_0", hb);
+    apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
+
+    c2->accessory(pt_info);
+    c2->accessory(mean_info_pu);
+    c2->divide(ipt->size(), -1);
+
+    for (int64_t j = 0; j < ipt->size(); ++j) {
+        c2->add((*hf_p0)[j], type);
+    }
 
     hb->sketch();
     c2->draw("pdf");
+
+    auto c3 = new paper(tag + "_" + pthat + "_nvtx_hf", hb);
+    apply_style(c3, "", "pp #sqrt{s} = 5.02 TeV"s);
+
+    c3->add((*nvtx)[0], type);
+
+    hb->sketch();
+    c3->draw("pdf");
+
+    auto c4 = new paper(tag + "_" + pthat + "_npu_hf", hb);
+    apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
+
+    c4->add((*npu)[0], type);
+
+    hb->sketch();
+    c4->draw("pdf");
+
+    auto c5 = new paper(tag + "_" + pthat + "_npv_hf", hb);
+    apply_style(c5, "", "pp #sqrt{s} = 5.02 TeV"s);
+
+    c5->add((*npv)[0], type);
+
+    hb->sketch();
+    c5->draw("pdf");
 
     printf("destroying objects..\n");
 
