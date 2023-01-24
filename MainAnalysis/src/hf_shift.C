@@ -89,16 +89,16 @@ int hf_shift(char const* config, char const* output) {
 
             hp_t->GetEntry(i);
 
-            if (std::abs(pjt->vz) > 15) { continue; } // new
+            if (std::abs(hp_pjt->vz) > 15) { continue; } // new
 
             int64_t leading = -1;
             float leading_pt = 0;
             for (int64_t j = 0; j < hp_pjt->nPho; ++j) { // new
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+                if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
+                if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                pho_et = (*pjt->phoEtErNew)[j];
+                pho_et = (*hp_pjt->phoEtErNew)[j];
 
                 if (pho_et < photon_pt_min) { continue; }
                 if (pho_et > leading_pt) {
