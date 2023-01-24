@@ -162,6 +162,8 @@ int estimate_hf(char const* config, char const* output) {
                     pf_sum += (*pjt->pfEnergy)[j];
                 }
             }
+
+            std::cout << "pf_sum " << pf_sum << std::endl;
             
             if (pjt->nVtx == 1) { 
                 (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
