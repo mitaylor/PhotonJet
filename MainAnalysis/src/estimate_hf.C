@@ -36,7 +36,6 @@ int estimate_hf(char const* config, char const* output) {
 
     auto input = conf->get<std::string>("input");
     
-    auto entries = conf->get<int64_t>("entries");
     auto tag = conf->get<std::string>("tag");
     auto type = conf->get<std::string>("type");
 
@@ -89,7 +88,7 @@ int estimate_hf(char const* config, char const* output) {
     int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
     for (int64_t i = 0; i < nentries; ++i) {
-        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
+        if (i % (nentries/200) == 0) std::cout << i << " / " << nentries << std::endl;
 
         t->GetEntry(i);
 
