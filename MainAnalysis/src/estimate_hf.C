@@ -89,11 +89,11 @@ int estimate_hf(char const* config, char const* output) {
 
     for (int64_t i = 0; i < nentries; ++i) {
         if (i % (nentries/200) == 0) std::cout << i << " / " << nentries << std::endl;
-        std::cout << __LINE__ << std::endl;
+        
         t->GetEntry(i);
-        std::cout << __LINE__ << std::endl;
+        
         if (std::abs(pjt->vz) > 15) { continue; }
-        std::cout << __LINE__ << std::endl;
+        
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < pjt->nPho; ++j) {
@@ -111,19 +111,19 @@ int estimate_hf(char const* config, char const* output) {
                 leading_pt = pho_et;
             }
         }
-        std::cout << __LINE__ << std::endl;
+        
         /* require leading photon */
         if (leading < 0) { continue; }
 
         if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max)
             continue;
-        std::cout << __LINE__ << std::endl;
+        
         /* isolation requirement */
         float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
             + (*pjt->pho_hcalRechitIsoR3)[leading]
             + (*pjt->pho_trackIsoR3PtCut20)[leading];
         if (isolation > iso_max) { continue; }
-        std::cout << __LINE__ << std::endl;
+        
         /* leading photon axis */
         auto photon_eta = (*pjt->phoEta)[leading];
         auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
@@ -149,7 +149,7 @@ int estimate_hf(char const* config, char const* output) {
 
             if (electron) { continue; }
         }
-        std::cout << __LINE__ << std::endl;
+
         if (leading_pt > 200) { continue; }
         auto pt_x = ipt->index_for(leading_pt);
 
@@ -164,7 +164,7 @@ int estimate_hf(char const* config, char const* output) {
         if (pjt->nVtx == 1) { 
             (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
         }
-
+        std::cout << __LINE__ << std::endl;
         if ((*pjt->npus)[5] == 0) { 
             (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
         }
