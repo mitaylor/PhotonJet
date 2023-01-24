@@ -213,7 +213,7 @@ int estimate_hf(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
     
-    auto c1 = new paper(tag + "_estimated_hf_nvtx_1", hb);
+    auto c1 = new paper(tag + "_" + pthat + "_estimated_hf_nvtx_1", hb);
     apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
@@ -227,9 +227,6 @@ int estimate_hf(char const* config, char const* output) {
 
     hb->sketch();
     c1->draw("pdf");
-
-    auto c2 = new paper(tag + "_nvtx_hf", hb);
-    apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     auto c2 = new paper(tag + "_" + pthat + "_estimated_hf_npu_0", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
