@@ -156,14 +156,12 @@ int estimate_hf(char const* config, char const* output) {
             auto pt_x = ipt->index_for(leading_pt);
 
             float pf_sum = 0;
-            
+
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
                 if ((*pjt->pfId)[j] >= 6 && (*pjt->pfPt)[j] >= 5) {
                     pf_sum += (*pjt->pfEnergy)[j];
                 }
             }
-
-            std::cout << "pf_sum " << pf_sum << std::endl;
             
             if (pjt->nVtx == 1) { 
                 (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
