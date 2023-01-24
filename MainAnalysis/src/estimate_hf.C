@@ -213,7 +213,7 @@ int estimate_hf(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
     
-    auto c1 = new paper(tag + "_" + pthat + "_estimated_hf_nvtx_1", hb);
+    auto c1 = new paper(tag + "_estimated_hf_nvtx_1", hb);
     apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
@@ -228,7 +228,7 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c1->draw("pdf");
 
-    auto c2 = new paper(tag + "_" + pthat + "_estimated_hf_npu_0", hb);
+    auto c2 = new paper(tag + "_estimated_hf_npu_0", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c2->accessory(pt_info);
@@ -242,7 +242,7 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c2->draw("pdf");
 
-    auto c3 = new paper(tag + "_" + pthat + "_nvtx_hf", hb);
+    auto c3 = new paper(tag + "_nvtx_hf", hb);
     apply_style(c3, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c3->add((*nvtx)[0], type);
@@ -250,7 +250,7 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c3->draw("pdf");
 
-    auto c4 = new paper(tag + "_" + pthat + "_npu_hf", hb);
+    auto c4 = new paper(tag + "_npu_hf", hb);
     apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c4->add((*npu)[0], type);
@@ -258,7 +258,7 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c4->draw("pdf");
 
-    auto c5 = new paper(tag + "_" + pthat + "_npv_hf", hb);
+    auto c5 = new paper(tag + "_npv_hf", hb);
     apply_style(c5, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c5->add((*npv)[0], type);
