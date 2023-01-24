@@ -160,28 +160,29 @@ int estimate_hf(char const* config, char const* output) {
                 pf_sum += (*pjt->pfEnergy)[j];
             }
         }
-        std::cout << __LINE__ << std::endl;
+        
         if (pjt->nVtx == 1) { 
             (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
         }
-        std::cout << __LINE__ << std::endl;
-        if ((*pjt->npus)[5] == 0) { 
-            (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
+        
+        if (type == "MC") {
+            if ((*pjt->npus)[5] == 0) { 
+                (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
+            }
         }
-        std::cout << __LINE__ << std::endl;
+        
         (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
-        (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w);
-        (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w);
-        std::cout << __LINE__ << std::endl;
+        if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
+        if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
     }
 
     /* save histograms */
     in(output, [&]() {
         hf_v1->save(tag);
-        hf_p0->save(tag);
+        if (type == "MC") { hf_p0->save(tag); }
         nvtx->save(tag);
-        npu->save(tag);
-        npv->save(tag);
+        if (type == "MC") { npu->save(tag); }
+        if (type == "MC") { npv->save(tag); }
     });
 
     /* plot histograms */
@@ -228,19 +229,21 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c1->draw("pdf");
 
-    auto c2 = new paper(tag + "_estimated_hf_npu_0", hb);
-    apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
+    if (type == "MC") {
+        auto c2 = new paper(tag + "_estimated_hf_npu_0", hb);
+        apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c2->accessory(pt_info);
-    c2->accessory(mean_info_pu);
-    c2->divide(ipt->size(), -1);
+        c2->accessory(pt_info);
+        c2->accessory(mean_info_pu);
+        c2->divide(ipt->size(), -1);
 
-    for (int64_t j = 0; j < ipt->size(); ++j) {
-        c2->add((*hf_p0)[j], type);
+        for (int64_t j = 0; j < ipt->size(); ++j) {
+            c2->add((*hf_p0)[j], type);
+        }
+
+        hb->sketch();
+        c2->draw("pdf");
     }
-
-    hb->sketch();
-    c2->draw("pdf");
 
     auto c3 = new paper(tag + "_nvtx_hf", hb);
     apply_style(c3, "", "pp #sqrt{s} = 5.02 TeV"s);
@@ -250,21 +253,23 @@ int estimate_hf(char const* config, char const* output) {
     hb->sketch();
     c3->draw("pdf");
 
-    auto c4 = new paper(tag + "_npu_hf", hb);
-    apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
+    if (type == "MC") {
+        auto c4 = new paper(tag + "_npu_hf", hb);
+        apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c4->add((*npu)[0], type);
+        c4->add((*npu)[0], type);
 
-    hb->sketch();
-    c4->draw("pdf");
+        hb->sketch();
+        c4->draw("pdf");
 
-    auto c5 = new paper(tag + "_npv_hf", hb);
-    apply_style(c5, "", "pp #sqrt{s} = 5.02 TeV"s);
+        auto c5 = new paper(tag + "_npv_hf", hb);
+        apply_style(c5, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c5->add((*npv)[0], type);
+        c5->add((*npv)[0], type);
 
-    hb->sketch();
-    c5->draw("pdf");
+        hb->sketch();
+        c5->draw("pdf");
+    }
 
     printf("destroying objects..\n");
 
