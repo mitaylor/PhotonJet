@@ -53,7 +53,7 @@ int estimate_hf(char const* config, char const* output) {
 
     /* create histograms */
     int max_hf = 70000;
-    int max_avg_hf = 1000;
+    int max_avg_hf = 100;
 
     auto ipt = new interval(dpt);
     auto ihf = new interval("Estimated HF"s, 50, 0, max_avg_hf);
