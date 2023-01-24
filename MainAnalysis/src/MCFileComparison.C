@@ -109,7 +109,7 @@ void GetFiles(char const* input, vector<string>& files) {
             }
             else if ((fname.find(".root") != string::npos)) {
                 files.push_back(string(input) + fname);
-                cout << files.back() << endl;
+                // cout << files.back() << endl;
             }
         }
     }

@@ -89,16 +89,21 @@ int hf_shift(char const* config, char const* output) {
 
             hp_t->GetEntry(i);
 
+            if (std::abs(pjt->vz) > 15) { continue; } // new
+
             int64_t leading = -1;
             float leading_pt = 0;
-            for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
-                if ((*hp_pjt->phoEt)[j] <= photon_pt_min) { continue; }
-                if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-                if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
+            for (int64_t j = 0; j < hp_pjt->nPho; ++j) { // new
+                if ((*pjt->phoEt)[j] <= 30) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                if ((*hp_pjt->phoEt)[j] > leading_pt) {
+                pho_et = (*pjt->phoEtErNew)[j];
+
+                if (pho_et < photon_pt_min) { continue; }
+                if (pho_et > leading_pt) {
                     leading = j;
-                    leading_pt = (*hp_pjt->phoEt)[j];
+                    leading_pt = pho_et;
                 }
             }
 
@@ -134,11 +139,12 @@ int hf_shift(char const* config, char const* output) {
 
             if (electron) { continue; }
 
+            if (leading_pt > 200) { continue; } // new
+
             auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
             float pf_sum = 0;
 
             for (size_t j = 0; j < hp_pjt->pfEnergy->size(); ++j) {
-                // if (std::abs((*hp_pjt->pfEta)[j]) > 3 && std::abs((*hp_pjt->pfEta)[j]) < 5) {
                 if ((*hp_pjt->pfId)[j] >= 6) {
                     pf_sum += (*hp_pjt->pfEnergy)[j];
                 }

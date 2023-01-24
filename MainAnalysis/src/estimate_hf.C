@@ -107,7 +107,6 @@ int estimate_hf(char const* config, char const* output) {
                 if (apply_er) pho_et = (*pjt->phoEtEr)[j];
 
                 if (pho_et < photon_pt_min) { continue; }
-
                 if (pho_et > leading_pt) {
                     leading = j;
                     leading_pt = pho_et;
