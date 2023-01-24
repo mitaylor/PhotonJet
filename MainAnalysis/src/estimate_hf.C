@@ -34,7 +34,7 @@ using namespace std::placeholders;
 int estimate_hf(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto input = cconf->get<std::vector<std::string>>("input");
     
     auto tag = conf->get<std::string>("tag");
     auto type = conf->get<std::string>("type");
@@ -79,101 +79,104 @@ int estimate_hf(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* load input */
-    TFile* f = new TFile(input.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
 
-    printf("iterate..\n");
+    for (auto const& file : input) {
+        std::cout << file << std::endl;
 
-    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto pjt = new pjtree(false, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
 
-    for (int64_t i = 0; i < nentries; ++i) {
-        if (i % (nentries/200) == 0) std::cout << i << " / " << nentries << std::endl;
-        
-        t->GetEntry(i);
-        
-        if (std::abs(pjt->vz) > 15) { continue; }
-        
-        int64_t leading = -1;
-        float leading_pt = 0;
-        for (int64_t j = 0; j < pjt->nPho; ++j) {
-            if ((*pjt->phoEt)[j] <= 30) { continue; }
-            if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-            auto pho_et = (*pjt->phoEt)[j];
-            if (apply_er) pho_et = (*pjt->phoEtEr)[j];
+        for (int64_t i = 0; i < nentries; ++i) {
+            if (i % (nentries/200) == 0) std::cout << i << " / " << nentries << std::endl;
+            
+            t->GetEntry(i);
+            
+            if (std::abs(pjt->vz) > 15) { continue; }
+            
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if ((*pjt->phoEt)[j] <= 30) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-            if (pho_et < photon_pt_min) { continue; }
+                auto pho_et = (*pjt->phoEt)[j];
+                if (apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
+                if (pho_et < photon_pt_min) { continue; }
+
+                if (pho_et > leading_pt) {
+                    leading = j;
+                    leading_pt = pho_et;
+                }
             }
-        }
-        
-        /* require leading photon */
-        if (leading < 0) { continue; }
+            
+            /* require leading photon */
+            if (leading < 0) { continue; }
 
-        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max)
-            continue;
-        
-        /* isolation requirement */
-        float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-            + (*pjt->pho_hcalRechitIsoR3)[leading]
-            + (*pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
-        
-        /* leading photon axis */
-        auto photon_eta = (*pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max)
+                continue;
+            
+            /* isolation requirement */
+            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+                + (*pjt->pho_hcalRechitIsoR3)[leading]
+                + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > iso_max) { continue; }
+            
+            /* leading photon axis */
+            auto photon_eta = (*pjt->phoEta)[leading];
+            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
 
-        /* electron rejection */
-        if (ele_rej) {
-            bool electron = false;
-            for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+            /* electron rejection */
+            if (ele_rej) {
+                bool electron = false;
+                for (int64_t j = 0; j < pjt->nEle; ++j) {
+                    if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*pjt->eleEta)[j];
-                if (deta > 0.1) { continue; }
+                    auto deta = photon_eta - (*pjt->eleEta)[j];
+                    if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
+                    auto ele_phi = convert_radian((*pjt->elePhi)[j]);
+                    auto dphi = revert_radian(photon_phi - ele_phi);
+                    auto dr2 = deta * deta + dphi * dphi;
 
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(pjt, j, false)) {
-                    electron = true; break; }
+                    if (dr2 < 0.01 && passes_electron_id<
+                                det::barrel, wp::loose, pjtree
+                            >(pjt, j, false)) {
+                        electron = true; break; }
+                }
+
+                if (electron) { continue; }
             }
 
-            if (electron) { continue; }
-        }
+            if (leading_pt > 200) { continue; }
+            auto pt_x = ipt->index_for(leading_pt);
 
-        if (leading_pt > 200) { continue; }
-        auto pt_x = ipt->index_for(leading_pt);
+            float pf_sum = 0;
 
-        float pf_sum = 0;
-
-        for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
-            if ((*pjt->pfId)[j] >= 6) {
-                pf_sum += (*pjt->pfEnergy)[j];
+            for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
+                if ((*pjt->pfId)[j] >= 6) {
+                    pf_sum += (*pjt->pfEnergy)[j];
+                }
             }
-        }
-        
-        if (pjt->nVtx == 1) { 
-            (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
-        }
-        
-        if (type == "MC") {
-            if ((*pjt->npus)[5] == 0) { 
-                (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
+            
+            if (pjt->nVtx == 1) { 
+                (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
             }
+            
+            if (type == "MC") {
+                if ((*pjt->npus)[5] == 0) { 
+                    (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
+                }
+            }
+            
+            (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
+            if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
+            if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
         }
-        
-        (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
-        if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
-        if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
     }
 
     /* save histograms */
