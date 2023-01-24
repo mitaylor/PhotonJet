@@ -85,7 +85,7 @@ int estimate_hf(char const* config, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(false, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
+        auto pjt = new pjtree(type == "MC", false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -168,15 +168,14 @@ int estimate_hf(char const* config, char const* output) {
             }
             
             if (type == "MC") {
-                std::cout << __LINE__ << std::endl;
-                if ((*pjt->npus)[5] == 0) { std::cout << __LINE__ << std::endl;
-                    (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);std::cout << __LINE__ << std::endl;
+                if ((*pjt->npus)[5] == 0) { 
+                    (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
                 }
             }
-            std::cout << __LINE__ << std::endl;
-            (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);std::cout << __LINE__ << std::endl;
-            if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }std::cout << __LINE__ << std::endl;
-            if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }std::cout << __LINE__ << std::endl;
+            
+            (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
+            if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
+            if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
         }
     }
 
