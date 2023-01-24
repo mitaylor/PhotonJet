@@ -156,7 +156,7 @@ int estimate_hf(char const* config, char const* output) {
             auto pt_x = ipt->index_for(leading_pt);
 
             float pf_sum = 0;
-
+            
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
                 if ((*pjt->pfId)[j] >= 6 && (*pjt->pfPt)[j] >= 5) {
                     pf_sum += (*pjt->pfEnergy)[j];
