@@ -52,7 +52,7 @@ int estimate_hf(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* create histograms */
-    int max_hf = 70000;
+    int max_hf = 7000;
     int max_avg_hf = 100;
 
     auto ipt = new interval(dpt);
