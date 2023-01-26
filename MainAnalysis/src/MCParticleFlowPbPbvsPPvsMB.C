@@ -183,7 +183,7 @@ int hf_shift(char const* config, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*) f->Get("pj");
-        auto pjt = new pjtree(true, false, true, t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
+        auto pjt = new pjtree(true, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
