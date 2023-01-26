@@ -178,7 +178,7 @@ int hf_shift(char const* config, char const* output) {
         f->Close();
     }
 
-    for (auto const& file : aa_input) {
+    for (auto const& file : pp_input) {
         std::cout << file << std::endl;
 
         TFile* f = new TFile(file.data(), "read");
