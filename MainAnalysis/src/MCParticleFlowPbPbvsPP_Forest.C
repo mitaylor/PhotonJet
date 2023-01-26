@@ -281,10 +281,10 @@ int hf_shift(char const* config, char const* output) {
     (*aa_energy)[0]->Scale(1/naa);
     (*aa_pt)[0]->Scale(1/naa);
 
-    (*pp_eta)[0]->Scale(1/naa);
-    (*pp_phi)[0]->Scale(1/naa);
-    (*pp_energy)[0]->Scale(1/naa);
-    (*pp_pt)[0]->Scale(1/naa);
+    (*pp_eta)[0]->Scale(1/npp);
+    (*pp_phi)[0]->Scale(1/npp);
+    (*pp_energy)[0]->Scale(1/npp);
+    (*pp_pt)[0]->Scale(1/npp);
 
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
