@@ -166,13 +166,19 @@ int hf_shift(char const* config, char const* output) {
             if (leading_pt > 200) { continue; } // new
 
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
-                (*aa_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
-                (*aa_phi)[0]->Fill((*pjt->pfPhi)[j], pjt->w);
-                (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j], pjt->w);
-                (*aa_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
+                // (*aa_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
+                // (*aa_phi)[0]->Fill((*pjt->pfPhi)[j], pjt->w);
+                // (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j], pjt->w);
+                // (*aa_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
+
+                (*aa_eta)[0]->Fill((*pjt->pfEta)[j]);
+                (*aa_phi)[0]->Fill((*pjt->pfPhi)[j]);
+                (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j]);
+                (*aa_pt)[0]->Fill((*pjt->pfPt)[j]);
             }
 
-            naa += pjt->w;
+            // naa += pjt->w;
+            naa++;
         }
 
         f->Close();
@@ -246,13 +252,19 @@ int hf_shift(char const* config, char const* output) {
             if (leading_pt > 200) { continue; } // new
 
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
-                (*pp_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
-                (*pp_phi)[0]->Fill((*pjt->pfPhi)[j], pjt->w);
-                (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j], pjt->w);
-                (*pp_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
+                // (*pp_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
+                // (*pp_phi)[0]->Fill((*pjt->pfPhi)[j], pjt->w);
+                // (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j], pjt->w);
+                // (*pp_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
+
+                (*pp_eta)[0]->Fill((*pjt->pfEta)[j]);
+                (*pp_phi)[0]->Fill((*pjt->pfPhi)[j]);
+                (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j]);
+                (*pp_pt)[0]->Fill((*pjt->pfPt)[j]);
             }
 
-            npp += pjt->w;
+            // npp += pjt->w;
+            npp++;
         }
 
         f->Close();
