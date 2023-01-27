@@ -483,41 +483,41 @@
 ##############################################################################
 ##############################################################################
 
-# # regulate_aa_qcd_aod_15 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F15/221209_191019/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_15_F" 100
+# regulate_aa_qcd_aod_15 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F15/221209_191019/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_15_F" 100
 
-# # regulate_aa_qcd_aod_15 filtered remainder weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMC30F15/230109_194214/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_15_F_R" 100
+# regulate_aa_qcd_aod_15 filtered remainder weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMC30F15/230109_194214/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_15_F_R" 100
 
-# # regulate_aa_qcd_aod_30 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F30/221209_190930/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_30_F" 100
+# regulate_aa_qcd_aod_30 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F30/221209_190930/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_30_F" 100
 
-# regulate_aa_qcd_aod_50 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMC30F50/230109_194133/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_50_F" 50
+regulate_aa_qcd_aod_50 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMC30F50/230109_194133/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_50_F" 50
 
-# # regulate_aa_qcd_aod_80 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F80/221209_190714/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_80_F" 100
+# regulate_aa_qcd_aod_80 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F80/221209_190714/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_80_F" 100
 
-# # regulate_aa_qcd_aod_120 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F120/221209_172335/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_120_F" 100
+# regulate_aa_qcd_aod_120 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMC30F120/221209_172335/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_120_F" 100
 
 # # regulate_aa_qcd_aod_120 filtered remainder weighted
 # ./SubmitJobs.sh \
@@ -525,23 +525,23 @@
 # ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
 # "regulate_aa_qcd_aod_weighted_120_F_R" 100
 
-# # regulate_aa_qcd_aod_170 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMC30F170/230109_194058/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_170_F" 100
+# regulate_aa_qcd_aod_170 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMC30F170/230109_194058/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_170_F" 100
 
-# # regulate_aa_qcd_aod_15 unfiltered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF15/221209_191723/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_15_UF" 100
+# regulate_aa_qcd_aod_15 unfiltered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF15/221209_191723/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_15_UF" 100
 
-# # regulate_aa_qcd_aod_30 unfiltered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-30_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-30_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF30/221209_191628/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_30_UF" 100
+# regulate_aa_qcd_aod_30 unfiltered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-30_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-30_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF30/221209_191628/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_30_UF" 100
 
 # # regulate_aa_qcd_aod_30 unfiltered remainder weighted
 # ./SubmitJobs.sh \
@@ -550,22 +550,22 @@
 # "regulate_aa_qcd_aod_weighted_30_UF_R" 100
 
 # # regulate_aa_qcd_aod_50 unfiltered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-50_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-50_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF50/221209_191543/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_50_UF" 100
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-50_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-50_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF50/221209_191543/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_50_UF" 100
 
-# # regulate_aa_qcd_aod_80 unfiltered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-80_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-80_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF80/221209_191446/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_80_UF" 100
+# regulate_aa_qcd_aod_80 unfiltered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-80_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM/QCDPhoton_pThat-80_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF80/221209_191446/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_80_UF" 100
 
-# # regulate_aa_qcd_aod_120 unfiltered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF120/221209_191355/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_120_UF" 100
+# regulate_aa_qcd_aod_120 unfiltered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM/QCDPhoton_pThat-120_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF120/221209_191355/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_120_UF" 100
 
 # # regulate_aa_qcd_aod_120 unfiltered remainder weighted
 # ./SubmitJobs.sh \
@@ -573,11 +573,11 @@
 # ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
 # "regulate_aa_qcd_aod_weighted_120_UF_R" 100
 
-# # regulate_aa_qcd_aod_170 unfiltered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM/QCDPhoton_pThat-170_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF170/221209_191252/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
-# "regulate_aa_qcd_aod_weighted_170_UF" 100
+# regulate_aa_qcd_aod_170 unfiltered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v2/AODSIM/QCDPhoton_pThat-170_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCUF170/221209_191252/" \
+../../configs/regulate/preapproval-parallel/regulate_aa_qcd_aod.conf \
+"regulate_aa_qcd_aod_weighted_170_UF" 100
 
 ##############################################################################
 ##############################################################################
