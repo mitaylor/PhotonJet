@@ -157,7 +157,7 @@ int estimate_hf(char const* config, char const* output) {
                 }
             }
             
-            if (pjt->Ncoll == 1) { 
+            if (pjt->Ncoll == 0) { 
                 // (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
                 (*hf_p0)[pt_x]->Fill(pf_sum);
             }
