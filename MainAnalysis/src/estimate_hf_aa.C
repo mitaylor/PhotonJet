@@ -55,7 +55,7 @@ int estimate_hf(char const* config, char const* output) {
     int max_avg_hf = 2500;
 
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, max_avg_hf);
+    auto ihf = new interval("Estimated HF"s, 20, 0, max_avg_hf);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
 
