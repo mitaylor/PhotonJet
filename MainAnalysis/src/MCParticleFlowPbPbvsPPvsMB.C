@@ -106,6 +106,7 @@ int hf_shift(char const* config, char const* output) {
         auto pjt = new pjtree(true, false, true, t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        nentries = (nentries > 30000) ? 30000 : nentries;
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % (nentries/20) == 0) std::cout << i << " / " << nentries << std::endl;
@@ -192,6 +193,7 @@ int hf_shift(char const* config, char const* output) {
         auto pjt = new pjtree(true, false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        nentries = (nentries > 30000) ? 30000 : nentries;
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % (nentries/20) == 0) std::cout << i << " / " << nentries << std::endl;
