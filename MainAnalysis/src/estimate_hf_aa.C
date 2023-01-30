@@ -40,7 +40,6 @@ int estimate_hf(char const* config, char const* output) {
     auto type = conf->get<std::string>("type");
 
     auto ele_rej = conf->get<bool>("electron_rejection");
-    auto apply_er = conf->get<bool>("apply_er");
 
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
