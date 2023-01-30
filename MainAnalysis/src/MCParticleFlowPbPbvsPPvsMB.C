@@ -67,17 +67,20 @@ int hf_shift(char const* config, char const* output) {
     auto ieta = new interval("PF Eta"s, 10, -5, 5);
     auto iphi = new interval("PF Phi"s, 10, -3.15, 3.15);
     auto ienergy = new interval("PF Energy"s, 50, 0, 1400);
-    auto ipt = new interval("PF Pt"s, 50, 0, 180);
+    auto ipt = new interval("PF Pt"s, 50, 0, 100);
+    auto isum = new interval("PF Energy Sum"s, 50, 0, 2500);
 
     auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);
     auto fphi = std::bind(&interval::book<TH1F>, iphi, _1, _2, _3);
     auto fenergy = std::bind(&interval::book<TH1F>, ienergy, _1, _2, _3);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
+    auto fsum = std::bind(&interval::book<TH1F>, isum, _1, _2, _3);
 
     auto aa_eta = new history<TH1F>("aa_eta"s, "", feta, 1);
     auto aa_phi = new history<TH1F>("aa_phi"s, "", fphi, 1);
     auto aa_energy = new history<TH1F>("aa_energy"s, "", fenergy, 1);
     auto aa_pt = new history<TH1F>("aa_pt"s, "", fpt, 1);
+    auto aa_sum = new history<TH1F>("aa_energy_sum"s, "", fsum, 1);
 
     // auto mb_eta = new history<TH1F>("mb_eta"s, "", feta, 1);
     // auto mb_phi = new history<TH1F>("mb_phi"s, "", fphi, 1);
@@ -88,6 +91,7 @@ int hf_shift(char const* config, char const* output) {
     auto pp_phi = new history<TH1F>("pp_phi"s, "", fphi, 1);
     auto pp_energy = new history<TH1F>("pp_energy"s, "", fenergy, 1);
     auto pp_pt = new history<TH1F>("pp_pt"s, "", fpt, 1);
+    auto pp_sum = new history<TH1F>("pp_energy_sum"s, "", fsum, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -166,6 +170,8 @@ int hf_shift(char const* config, char const* output) {
 
             // if (leading_pt > 200) { continue; } // new
 
+            float pf_sum = 0;
+
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
                 // (*aa_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
                 // (*aa_phi)[0]->Fill((*pjt->pfPhi)[j], pjt->w);
@@ -173,12 +179,15 @@ int hf_shift(char const* config, char const* output) {
                 // (*aa_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
 
                 if ((*pjt->pfId)[j] >= 6) {
-                (*aa_eta)[0]->Fill((*pjt->pfEta)[j]);
-                (*aa_phi)[0]->Fill((*pjt->pfPhi)[j]);
-                (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j]);
-                (*aa_pt)[0]->Fill((*pjt->pfPt)[j]);
+                    (*aa_eta)[0]->Fill((*pjt->pfEta)[j]);
+                    (*aa_phi)[0]->Fill((*pjt->pfPhi)[j]);
+                    (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j]);
+                    (*aa_pt)[0]->Fill((*pjt->pfPt)[j]);
+                    pf_sum += (*pjt->pfEnergy)[j];
                 }
             }
+
+            (*aa_sum)[0]->Fill(pf_sum);
 
             // naa += pjt->w;
             naa++;
@@ -253,7 +262,9 @@ int hf_shift(char const* config, char const* output) {
 
             // if (electron) { continue; }
 
-            // if (leading_pt > 200) { continue; } // new
+            // if (leading_pt > 200) { continue; }
+
+            float pf_sum = 0;
 
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
                 // (*pp_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
@@ -266,8 +277,11 @@ int hf_shift(char const* config, char const* output) {
                     (*pp_phi)[0]->Fill((*pjt->pfPhi)[j]);
                     (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j]);
                     (*pp_pt)[0]->Fill((*pjt->pfPt)[j]);
+                    pf_sum += (*pjt->pfEnergy)[j];
                 }
             }
+
+            (*pp_sum)[0]->Fill(pf_sum);
 
             // npp += pjt->w;
             npp++;
@@ -281,11 +295,13 @@ int hf_shift(char const* config, char const* output) {
     (*aa_phi)[0]->Scale(1/naa);
     (*aa_energy)[0]->Scale(1/naa);
     (*aa_pt)[0]->Scale(1/naa);
+    (*aa_sum)[0]->Scale(1/naa);
 
     (*pp_eta)[0]->Scale(1/npp);
     (*pp_phi)[0]->Scale(1/npp);
     (*pp_energy)[0]->Scale(1/npp);
     (*pp_pt)[0]->Scale(1/npp);
+    (*pp_sum)[0]->Scale(1/npp);
 
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
@@ -317,6 +333,12 @@ int hf_shift(char const* config, char const* output) {
     c4->add((*aa_pt)[0], "PbPb");
     c4->stack((*pp_pt)[0], "PP");
 
+    auto c5 = new paper(tag + "_energy_sum", hb); 
+    apply_style(c5, cms, system_tag);
+    c5->set(paper::flags::logy);
+    c5->add((*aa_sum)[0], "PbPb");
+    c5->stack((*pp_sum)[0], "PP");
+
     auto aa_style = [](TH1* h) {
         h->SetMarkerStyle(34);
         h->SetMarkerColor(95);
@@ -337,6 +359,7 @@ int hf_shift(char const* config, char const* output) {
     c2->draw("pdf");
     c3->draw("pdf");
     c4->draw("pdf");
+    c5->draw("pdf");
 
     auto fout = new TFile(output, "recreate");
 
@@ -344,10 +367,12 @@ int hf_shift(char const* config, char const* output) {
     aa_phi->save();
     aa_energy->save();
     aa_pt->save();
+    aa_sum->save();
     pp_eta->save();
     pp_phi->save();
     pp_energy->save();
     pp_pt->save();
+    pp_sum->save();
 
     fout->Close();
 
