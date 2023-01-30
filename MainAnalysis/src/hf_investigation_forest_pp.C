@@ -148,7 +148,7 @@ int Compare(char const* config, char const* output) {
 
     auto h_hf_pf = new history<TH1F>("h_hf_pf"s, "", fhf, ipt->size());
     auto h_npu_hf_pf = new history<TProfile>("npu"s, "", fnpu, 1);
-    auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, ipt->size());
+    auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -164,7 +164,7 @@ int Compare(char const* config, char const* output) {
 
         if (std::abs(*vz) > 15) { continue; }
 
-        h_pthat[0]->Fill(*pthat, *weight);
+        (*h_pthat)[0]->Fill(*pthat, *weight);
 
         int64_t leading = -1;
         float leading_pt = 0;
