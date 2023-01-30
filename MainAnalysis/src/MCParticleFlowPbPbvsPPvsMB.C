@@ -115,55 +115,55 @@ int hf_shift(char const* config, char const* output) {
             if (std::abs(pjt->vz) > 15) { continue; }
             if (pjt->Ncoll > 1) { continue; }
 
-            int64_t leading = -1;
-            float leading_pt = 0;
-            for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-                if ((*pjt->phoHoverE)[j] > aa_hovere_max) { continue; }
+            // int64_t leading = -1;
+            // float leading_pt = 0;
+            // for (int64_t j = 0; j < pjt->nPho; ++j) {
+            //     if ((*pjt->phoEt)[j] <= 30) { continue; }
+            //     if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            //     if ((*pjt->phoHoverE)[j] > aa_hovere_max) { continue; }
 
-                auto pho_et = (*pjt->phoEtErNew)[j];
+            //     auto pho_et = (*pjt->phoEtErNew)[j];
 
-                if (pho_et < photon_pt_min) { continue; }
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
-                }
-            }
+            //     if (pho_et < photon_pt_min) { continue; }
+            //     if (pho_et > leading_pt) {
+            //         leading = j;
+            //         leading_pt = pho_et;
+            //     }
+            // }
 
-            if (leading < 0) { continue; }
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > aa_see_max) { continue; }
+            // if (leading < 0) { continue; }
+            // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > aa_see_max) { continue; }
 
-            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                + (*pjt->pho_hcalRechitIsoR3)[leading]
-                + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > aa_iso_max) { continue; }
+            // float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+            //     + (*pjt->pho_hcalRechitIsoR3)[leading]
+            //     + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            // if (isolation > aa_iso_max) { continue; }
 
-            /* leading photon axis */
-            auto photon_eta = (*pjt->phoEta)[leading];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+            // /* leading photon axis */
+            // auto photon_eta = (*pjt->phoEta)[leading];
+            // auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
 
-            /* electron rejection */
-            bool electron = false;
-            for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+            // /* electron rejection */
+            // bool electron = false;
+            // for (int64_t j = 0; j < pjt->nEle; ++j) {
+            //     if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*pjt->eleEta)[j];
-                if (deta > 0.1) { continue; }
+            //     auto deta = photon_eta - (*pjt->eleEta)[j];
+            //     if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
+            //     auto ele_phi = convert_radian((*pjt->elePhi)[j]);
+            //     auto dphi = revert_radian(photon_phi - ele_phi);
+            //     auto dr2 = deta * deta + dphi * dphi;
 
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(pjt, j, true)) {
-                    electron = true; break; }
-            }
+            //     if (dr2 < 0.01 && passes_electron_id<
+            //                 det::barrel, wp::loose, pjtree
+            //             >(pjt, j, true)) {
+            //         electron = true; break; }
+            // }
 
-            if (electron) { continue; }
+            // if (electron) { continue; }
 
-            if (leading_pt > 200) { continue; } // new
+            // if (leading_pt > 200) { continue; } // new
 
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
                 // (*aa_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
@@ -201,55 +201,55 @@ int hf_shift(char const* config, char const* output) {
             if (std::abs(pjt->vz) > 15) { continue; }
             if ((*pjt->npus)[5] != 0) { continue; }
 
-            int64_t leading = -1;
-            float leading_pt = 0;
-            for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-                if ((*pjt->phoHoverE)[j] > pp_hovere_max) { continue; }
+            // int64_t leading = -1;
+            // float leading_pt = 0;
+            // for (int64_t j = 0; j < pjt->nPho; ++j) {
+            //     if ((*pjt->phoEt)[j] <= 30) { continue; }
+            //     if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            //     if ((*pjt->phoHoverE)[j] > pp_hovere_max) { continue; }
 
-                auto pho_et = (*pjt->phoEt)[j];
+            //     auto pho_et = (*pjt->phoEt)[j];
 
-                if (pho_et < photon_pt_min) { continue; }
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
-                }
-            }
+            //     if (pho_et < photon_pt_min) { continue; }
+            //     if (pho_et > leading_pt) {
+            //         leading = j;
+            //         leading_pt = pho_et;
+            //     }
+            // }
 
-            if (leading < 0) { continue; }
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > pp_see_max) { continue; }
+            // if (leading < 0) { continue; }
+            // if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > pp_see_max) { continue; }
 
-            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                + (*pjt->pho_hcalRechitIsoR3)[leading]
-                + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > pp_iso_max) { continue; }
+            // float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+            //     + (*pjt->pho_hcalRechitIsoR3)[leading]
+            //     + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            // if (isolation > pp_iso_max) { continue; }
 
-            /* leading photon axis */
-            auto photon_eta = (*pjt->phoEta)[leading];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+            // /* leading photon axis */
+            // auto photon_eta = (*pjt->phoEta)[leading];
+            // auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
 
-            /* electron rejection */
-            bool electron = false;
-            for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+            // /* electron rejection */
+            // bool electron = false;
+            // for (int64_t j = 0; j < pjt->nEle; ++j) {
+            //     if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*pjt->eleEta)[j];
-                if (deta > 0.1) { continue; }
+            //     auto deta = photon_eta - (*pjt->eleEta)[j];
+            //     if (deta > 0.1) { continue; }
 
-                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
+            //     auto ele_phi = convert_radian((*pjt->elePhi)[j]);
+            //     auto dphi = revert_radian(photon_phi - ele_phi);
+            //     auto dr2 = deta * deta + dphi * dphi;
 
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(pjt, j, true)) {
-                    electron = true; break; }
-            }
+            //     if (dr2 < 0.01 && passes_electron_id<
+            //                 det::barrel, wp::loose, pjtree
+            //             >(pjt, j, true)) {
+            //         electron = true; break; }
+            // }
 
-            if (electron) { continue; }
+            // if (electron) { continue; }
 
-            if (leading_pt > 200) { continue; } // new
+            // if (leading_pt > 200) { continue; } // new
 
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
                 // (*pp_eta)[0]->Fill((*pjt->pfEta)[j], pjt->w);
