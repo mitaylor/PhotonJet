@@ -198,7 +198,7 @@ int estimate_hf(char const* config, char const* output) {
 
     auto mean_info_vtx = [&](int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f\nstd: %.3f",
+        sprintf(buffer, "mean: %.3f +- %.3f",
             (*hf_v1)[index - 1]->GetMean(1),
             (*hf_v1)[index - 1]->GetMeanError(1));
 
@@ -210,7 +210,7 @@ int estimate_hf(char const* config, char const* output) {
 
     auto mean_info_pu = [&](int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f\nstd: %.3f",
+        sprintf(buffer, "mean: %.3f +- %.3f",
             (*hf_p0)[index - 1]->GetMean(1),
             (*hf_p0)[index - 1]->GetMeanError(1));
 

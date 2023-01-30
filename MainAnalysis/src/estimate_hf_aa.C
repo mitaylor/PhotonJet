@@ -90,7 +90,6 @@ int estimate_hf(char const* config, char const* output) {
             if (std::abs(pjt->vz) > 15) { continue; }
             if (pjt->Ncoll > 18) { continue; }
             
-            // later try fixing for PbPb
             int64_t leading = -1;
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
@@ -98,9 +97,8 @@ int estimate_hf(char const* config, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                auto pho_et = (*pjt->phoEt)[j];
-                if (apply_er) pho_et = (*pjt->phoEtEr)[j];
-
+                auto pho_et = (*pjt->phoEtErNew)[j];
+     
                 if (pho_et < photon_pt_min) { continue; }
                 if (pho_et > leading_pt) {
                     leading = j;
@@ -179,7 +177,7 @@ int estimate_hf(char const* config, char const* output) {
 
     auto mean_info_pu = [&](int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f\nstd: %.3f",
+        sprintf(buffer, "mean: %.3f +- %.3f",
             (*hf_p0)[index - 1]->GetMean(1),
             (*hf_p0)[index - 1]->GetMeanError(1));
 

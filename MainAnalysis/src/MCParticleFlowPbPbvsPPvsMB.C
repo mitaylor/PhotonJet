@@ -118,7 +118,7 @@ int hf_shift(char const* config, char const* output) {
             t->GetEntry(i);
 
             if (std::abs(pjt->vz) > 15) { continue; }
-            if (pjt->Ncoll > 1) { continue; }
+            if (pjt->Ncoll > 0) { continue; }
 
             // int64_t leading = -1;
             // float leading_pt = 0;
