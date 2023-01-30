@@ -236,7 +236,7 @@ int Compare(char const* config, char const* output) {
 
     auto c1 = new paper(tag + "_" + pthat + "_pthat", hb);
     apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
-    c4->add((*h_pthat)[0], "PP MC");
+    c1->add((*h_pthat)[0], "PP MC");
 
     auto c2 = new paper(tag + "_" + pthat + "_selected_estimated_hf_sum", hb);
     apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
