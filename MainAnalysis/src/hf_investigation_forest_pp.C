@@ -74,7 +74,7 @@ int Compare(char const* config, char const* output) {
     auto files = conf->get<std::vector<std::string>>("input");
     
     auto tag = conf->get<std::string>("tag");
-    auto pthat = conf->get<std::string>("pthat");
+    auto pthat_tag = conf->get<std::string>("pthat");
 
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
@@ -234,11 +234,11 @@ int Compare(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "PbPb MC", "PP MC");
 
-    auto c1 = new paper(tag + "_" + pthat + "_pthat", hb);
+    auto c1 = new paper(tag + "_" + pthat_tag + "_pthat", hb);
     apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
     c1->add((*h_pthat)[0], "PP MC");
 
-    auto c2 = new paper(tag + "_" + pthat + "_selected_estimated_hf_sum", hb);
+    auto c2 = new paper(tag + "_" + pthat_tag + "_selected_estimated_hf_sum", hb);
     apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
 
     c2->accessory(pt_info);
@@ -252,7 +252,7 @@ int Compare(char const* config, char const* output) {
     hb->sketch();
     c2->draw("pdf");
 
-    auto c4 = new paper(tag + "_" + pthat + "_selected_estimated_hf_vs_pu", hb);
+    auto c4 = new paper(tag + "_" + pthat_tag + "_selected_estimated_hf_vs_pu", hb);
     apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
 
     c4->add((*h_npu_hf_pf)[0], "PP MC");
