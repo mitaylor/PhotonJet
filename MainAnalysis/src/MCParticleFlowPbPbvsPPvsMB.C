@@ -172,10 +172,12 @@ int hf_shift(char const* config, char const* output) {
                 // (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j], pjt->w);
                 // (*aa_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
 
+                if ((*pjt->pfId)[j] >= 6) {
                 (*aa_eta)[0]->Fill((*pjt->pfEta)[j]);
                 (*aa_phi)[0]->Fill((*pjt->pfPhi)[j]);
                 (*aa_energy)[0]->Fill((*pjt->pfEnergy)[j]);
                 (*aa_pt)[0]->Fill((*pjt->pfPt)[j]);
+                }
             }
 
             // naa += pjt->w;
@@ -259,10 +261,12 @@ int hf_shift(char const* config, char const* output) {
                 // (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j], pjt->w);
                 // (*pp_pt)[0]->Fill((*pjt->pfPt)[j], pjt->w);
 
-                (*pp_eta)[0]->Fill((*pjt->pfEta)[j]);
-                (*pp_phi)[0]->Fill((*pjt->pfPhi)[j]);
-                (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j]);
-                (*pp_pt)[0]->Fill((*pjt->pfPt)[j]);
+                if ((*pjt->pfId)[j] >= 6) {
+                    (*pp_eta)[0]->Fill((*pjt->pfEta)[j]);
+                    (*pp_phi)[0]->Fill((*pjt->pfPhi)[j]);
+                    (*pp_energy)[0]->Fill((*pjt->pfEnergy)[j]);
+                    (*pp_pt)[0]->Fill((*pjt->pfPt)[j]);
+                }
             }
 
             // npp += pjt->w;
