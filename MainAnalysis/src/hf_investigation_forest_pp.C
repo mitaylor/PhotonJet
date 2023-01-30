@@ -96,6 +96,19 @@ int Compare(char const* config, char const* output) {
     TTreeReaderValue<std::vector<int>> npus(evtReader, "npus");
     TTreeReaderValue<float> weight(evtReader, "weight");
     TTreeReaderValue<float> vz(evtReader, "vz");
+    TTreeReaderValue<float> pthat(evtReader, "pthat");
+
+    TChain genChain("HiGenParticleAna/hi");
+    FillChain(genChain, files);
+    // genChain.Add(input);
+    TTreeReader genReader(&genChain);
+    TTreeReaderValue<float> ncoll(genReader, "ncoll");
+    TTreeReaderValue<int> mult(genReader, "mult");
+    TTreeReaderValue<std::vector<float>> energy(genReader, "E");
+    TTreeReaderValue<std::vector<float>> eta(genReader, "eta");
+    // TTreeReaderValue<std::vector<float>> phi(genReader, "phi");
+    // TTreeReaderValue<std::vector<float>> pt(genReader, "pt");
+    TTreeReaderValue<std::vector<int>> sube(genReader, "sube");
 
     TChain phoChain("ggHiNtuplizerGED/EventTree");
     FillChain(phoChain, files);
@@ -126,14 +139,16 @@ int Compare(char const* config, char const* output) {
 
     auto ipt = new interval(dpt);
     auto ihf = new interval("Estimated HF"s, 20, 0, max_avg_hf);
+    auto ipthat = new interval("pthat"s, 50, 0, 200);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
-    
+    auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
 
-    auto hf_p0 = new history<TH1F>("hf_p0"s, "", fhf, ipt->size());
-    auto npu = new history<TProfile>("npu"s, "", fnpu, 1);
+    auto h_hf_pf = new history<TH1F>("h_hf_pf"s, "", fhf, ipt->size());
+    auto h_npu_hf_pf = new history<TProfile>("npu"s, "", fnpu, 1);
+    auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, ipt->size());
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -143,11 +158,13 @@ int Compare(char const* config, char const* output) {
     int entries = evtChain.GetEntries();
 
     for (int i = 1; i < entries; ++i) {
-        evtReader.Next(); phoReader.Next(); pfReader.Next();
+        evtReader.Next(); phoReader.Next(); pfReader.Next(); genReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
         if (std::abs(*vz) > 15) { continue; }
+
+        h_pthat[0]->Fill(*pthat, *weight);
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -185,16 +202,17 @@ int Compare(char const* config, char const* output) {
         }
 
         if ((*npus)[5] == 0) { 
-            (*hf_p0)[pt_x]->Fill(pf_sum, *weight);
+            (*h_hf_pf)[pt_x]->Fill(pf_sum, *weight);
         }
 
-        (*npu)[0]->Fill((*npus)[5], pf_sum, *weight);
+        (*h_npu_hf_pf)[0]->Fill((*npus)[5], pf_sum, *weight);
     }
 
     /* save histograms */
     in(output, [&]() {
-        hf_p0->save(tag);
-        npu->save(tag);
+        h_hf_pf->save(tag);
+        h_npu_hf_pf->save(tag);
+        h_pthat->save(tag);
     });
 
     /* plot histograms */
@@ -204,8 +222,8 @@ int Compare(char const* config, char const* output) {
     auto mean_info_pu = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f +- %.3f",
-            (*hf_p0)[index - 1]->GetMean(1),
-            (*hf_p0)[index - 1]->GetMeanError(1));
+            (*h_hf_pf)[index - 1]->GetMean(1),
+            (*h_hf_pf)[index - 1]->GetMeanError(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
@@ -216,24 +234,28 @@ int Compare(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "PbPb MC", "PP MC");
 
-    auto c2 = new paper(tag + "_" + pthat + "_estimated_hf_npu_0", hb);
-    apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
+    auto c1 = new paper(tag + "_" + pthat + "_pthat", hb);
+    apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
+    c4->add((*h_pthat)[0], "PP MC");
+
+    auto c2 = new paper(tag + "_" + pthat + "_selected_estimated_hf_sum", hb);
+    apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
 
     c2->accessory(pt_info);
     c2->accessory(mean_info_pu);
     c2->divide(ipt->size(), -1);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c2->add((*hf_p0)[j], "PP MC");
+        c2->add((*h_hf_pf)[j], "PP MC");
     }
 
     hb->sketch();
     c2->draw("pdf");
 
-    auto c4 = new paper(tag + "_" + pthat + "_npu_hf", hb);
-    apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
+    auto c4 = new paper(tag + "_" + pthat + "_selected_estimated_hf_vs_pu", hb);
+    apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
 
-    c4->add((*npu)[0], "PP MC");
+    c4->add((*h_npu_hf_pf)[0], "PP MC");
 
     hb->sketch();
     c4->draw("pdf");
