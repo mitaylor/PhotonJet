@@ -52,16 +52,16 @@ int hf_shift(char const* config, char const* output) {
 
     auto tag = conf->get<std::string>("tag");
 
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
+    // auto const photon_pt_min = conf->get<float>("photon_pt_min");
+    // auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
 
-    auto const aa_hovere_max = conf->get<float>("aa_hovere_max");
-    auto const aa_see_max = conf->get<float>("aa_see_max");
-    auto const aa_iso_max = conf->get<float>("aa_iso_max");
+    // auto const aa_hovere_max = conf->get<float>("aa_hovere_max");
+    // auto const aa_see_max = conf->get<float>("aa_see_max");
+    // auto const aa_iso_max = conf->get<float>("aa_iso_max");
 
-    auto const pp_hovere_max = conf->get<float>("pp_hovere_max");
-    auto const pp_see_max = conf->get<float>("pp_see_max");
-    auto const pp_iso_max = conf->get<float>("pp_iso_max");
+    // auto const pp_hovere_max = conf->get<float>("pp_hovere_max");
+    // auto const pp_see_max = conf->get<float>("pp_see_max");
+    // auto const pp_iso_max = conf->get<float>("pp_iso_max");
 
     /* define histograms */
     auto ieta = new interval("PF Eta"s, 10, -5, 5);
