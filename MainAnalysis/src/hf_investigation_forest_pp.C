@@ -172,7 +172,7 @@ int Compare(char const* config, char const* output) {
         (*h_pthat)[0]->Fill(*pthat, *weight);
 
         float gen_sum = 0;
-        float gen_sum_subid0 = 0
+        float gen_sum_subid0 = 0;
 
         for (size_t j = 0; j < energy->size(); ++j) {
             if ((*eta)[j] >= 3 && (*eta)[j] <= 5) {
