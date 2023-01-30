@@ -237,26 +237,23 @@ int Compare(char const* config, char const* output) {
     auto c1 = new paper(tag + "_" + pthat_tag + "_pthat", hb);
     apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
     c1->add((*h_pthat)[0], "PP MC");
+    hb->sketch();
+    c1->draw("pdf");
 
     auto c2 = new paper(tag + "_" + pthat_tag + "_selected_estimated_hf_sum", hb);
     apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
-
     c2->accessory(pt_info);
     c2->accessory(mean_info_pu);
     c2->divide(ipt->size(), -1);
-
     for (int64_t j = 0; j < ipt->size(); ++j) {
         c2->add((*h_hf_pf)[j], "PP MC");
     }
-
     hb->sketch();
     c2->draw("pdf");
 
     auto c4 = new paper(tag + "_" + pthat_tag + "_selected_estimated_hf_vs_pu", hb);
     apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
-
     c4->add((*h_npu_hf_pf)[0], "PP MC");
-
     hb->sketch();
     c4->draw("pdf");
 
