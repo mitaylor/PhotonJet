@@ -214,7 +214,7 @@ int Compare(char const* config, char const* output) {
     };
 
     auto hb = new pencil();
-    hb->category("type", "Data", "MC");
+    hb->category("type", "PbPb MC", "PP MC");
 
     auto c2 = new paper(tag + "_" + pthat + "_estimated_hf_npu_0", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
@@ -224,7 +224,7 @@ int Compare(char const* config, char const* output) {
     c2->divide(ipt->size(), -1);
 
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c2->add((*hf_p0)[j], type);
+        c2->add((*hf_p0)[j], "PP MC");
     }
 
     hb->sketch();
@@ -233,7 +233,7 @@ int Compare(char const* config, char const* output) {
     auto c4 = new paper(tag + "_" + pthat + "_npu_hf", hb);
     apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
 
-    c4->add((*npu)[0], type);
+    c4->add((*npu)[0], "PP MC");
 
     hb->sketch();
     c4->draw("pdf");
