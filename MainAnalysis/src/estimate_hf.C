@@ -163,18 +163,23 @@ int estimate_hf(char const* config, char const* output) {
             }
             
             if (pjt->nVtx == 1) { 
-                (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
+                // (*hf_v1)[pt_x]->Fill(pf_sum, pjt->w);
+                (*hf_v1)[pt_x]->Fill(pf_sum);
             }
             
             if (type == "MC") {
                 if ((*pjt->npus)[5] == 0) { 
-                    (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
+                    // (*hf_p0)[pt_x]->Fill(pf_sum, pjt->w);
+                    (*hf_p0)[pt_x]->Fill(pf_sum);
                 }
             }
             
-            (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
-            if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
-            if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
+            // (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
+            // if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
+            // if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
+            (*nvtx)[0]->Fill(pjt->nVtx, pf_sum);
+            if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum); }
+            if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx); }
         }
     }
 
