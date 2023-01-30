@@ -103,7 +103,7 @@ int Compare(char const* config, char const* output) {
     // genChain.Add(input);
     TTreeReader genReader(&genChain);
     TTreeReaderValue<float> ncoll(genReader, "ncoll");
-    TTreeReaderValue<int> mult(genReader, "mult");
+    // TTreeReaderValue<int> mult(genReader, "mult");
     TTreeReaderValue<std::vector<float>> energy(genReader, "E");
     TTreeReaderValue<std::vector<float>> eta(genReader, "eta");
     // TTreeReaderValue<std::vector<float>> phi(genReader, "phi");
@@ -139,16 +139,21 @@ int Compare(char const* config, char const* output) {
 
     auto ipt = new interval(dpt);
     auto ihf = new interval("Estimated HF"s, 20, 0, max_avg_hf);
-    auto ipthat = new interval("pthat"s, 50, 0, 200);
+    auto ipthat = new interval("pthat"s, 200, 0, 200);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
 
-    auto h_hf_pf = new history<TH1F>("h_hf_pf"s, "", fhf, ipt->size());
-    auto h_npu_hf_pf = new history<TProfile>("npu"s, "", fnpu, 1);
+    auto h_hf_pf_selected = new history<TH1F>("h_hf_pf_selected"s, "", fhf, ipt->size());
+    auto h_npu_hf_pf_selected = new history<TProfile>("h_npu_hf_pf_selected"s, "", fnpu, 1);
     auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, 1);
+    auto h_pthat_selected = new history<TH1F>("h_pthat_selected"s, "", fpthat, 1);
+    auto h_hf_gen_selected = new history<TH1F>("h_hf_gen_selected"s, "", fhf, 1);
+    auto h_hf_gen_selected_subid0 = new history<TH1F>("h_hf_gen_selected_subid0"s, "", fhf, 1);
+    auto h_hf_gen = new history<TH1F>("h_hf_gen"s, "", fhf, 1);
+    auto h_hf_gen_subid0 = new history<TH1F>("h_hf_gen_subid0"s, "", fhf, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -165,6 +170,22 @@ int Compare(char const* config, char const* output) {
         if (std::abs(*vz) > 15) { continue; }
 
         (*h_pthat)[0]->Fill(*pthat, *weight);
+
+        float gen_sum = 0;
+        float gen_sum_subid0 = 0
+
+        for (size_t j = 0; j < energy->size(); ++j) {
+            if ((*eta)[j] >= 3 && (*eta)[j] <= 5) {
+                gen_sum += (*energy)[j];
+
+                if ((*sube)[j] == 0) {
+                    gen_sum_subid0 += (*energy)[j];
+                }
+            }
+        }
+
+        (*h_hf_gen)[0]->Fill(gen_sum, *weight);
+        (*h_hf_gen_subid0)[0]->Fill(gen_sum_subid0, *weight);
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -202,17 +223,25 @@ int Compare(char const* config, char const* output) {
         }
 
         if ((*npus)[5] == 0) { 
-            (*h_hf_pf)[pt_x]->Fill(pf_sum, *weight);
+            (*h_hf_pf_selected)[pt_x]->Fill(pf_sum, *weight);
         }
 
-        (*h_npu_hf_pf)[0]->Fill((*npus)[5], pf_sum, *weight);
+        (*h_npu_hf_pf_selected)[0]->Fill((*npus)[5], pf_sum, *weight);
+        (*h_pthat_selected)[0]->Fill(*pthat, *weight);
+        (*h_hf_gen_selected)[0]->Fill(gen_sum, *weight);
+        (*h_hf_gen_selected_subid0)[0]->Fill(gen_sum_subid0, *weight);
     }
 
     /* save histograms */
     in(output, [&]() {
-        h_hf_pf->save(tag);
-        h_npu_hf_pf->save(tag);
+        h_hf_pf_selected->save(tag);
+        h_npu_hf_pf_selected->save(tag);
         h_pthat->save(tag);
+        h_pthat_selected->save(tag);
+        h_hf_gen_selected->save(tag);
+        h_hf_gen_selected_subid0->save(tag);
+        h_hf_gen->save(tag);
+        h_hf_gen_subid0->save(tag);
     });
 
     /* plot histograms */
@@ -222,8 +251,8 @@ int Compare(char const* config, char const* output) {
     auto mean_info_pu = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f +- %.3f",
-            (*h_hf_pf)[index - 1]->GetMean(1),
-            (*h_hf_pf)[index - 1]->GetMeanError(1));
+            (*h_hf_pf_selected)[index - 1]->GetMean(1),
+            (*h_hf_pf_selected)[index - 1]->GetMeanError(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
@@ -240,22 +269,52 @@ int Compare(char const* config, char const* output) {
     hb->sketch();
     c1->draw("pdf");
 
-    auto c2 = new paper(tag + "_" + pthat_tag + "_selected_estimated_hf_sum", hb);
+    auto c2 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_sum", hb);
     apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
     c2->accessory(pt_info);
     c2->accessory(mean_info_pu);
     c2->divide(ipt->size(), -1);
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c2->add((*h_hf_pf)[j], "PP MC");
+        c2->add((*h_hf_pf_selected)[j], "PP MC");
     }
     hb->sketch();
     c2->draw("pdf");
 
-    auto c4 = new paper(tag + "_" + pthat_tag + "_selected_estimated_hf_vs_pu", hb);
+    auto c3 = new paper(tag + "_" + pthat_tag + "_selected_pthat", hb);
+    apply_style(c3, "", "#sqrt{s} = 5.02 TeV"s);
+    c3->add((*h_pthat_selected)[0], "PP MC");
+    hb->sketch();
+    c3->draw("pdf");
+
+    auto c4 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_vs_pu", hb);
     apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
-    c4->add((*h_npu_hf_pf)[0], "PP MC");
+    c4->add((*h_npu_hf_pf_selected)[0], "PP MC");
     hb->sketch();
     c4->draw("pdf");
+
+    auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_sum", hb);
+    apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
+    c5->add((*h_hf_gen_selected)[0], "PP MC");
+    hb->sketch();
+    c5->draw("pdf");
+
+    auto c6 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_sum_subid0", hb);
+    apply_style(c6, "", "#sqrt{s} = 5.02 TeV"s);
+    c6->add((*h_hf_gen_selected_subid0)[0], "PP MC");
+    hb->sketch();
+    c6->draw("pdf");
+
+    auto c7 = new paper(tag + "_" + pthat_tag + "_gen_hf_sum", hb);
+    apply_style(c7, "", "#sqrt{s} = 5.02 TeV"s);
+    c7->add((*h_hf_gen)[0], "PP MC");
+    hb->sketch();
+    c7->draw("pdf");
+
+    auto c8 = new paper(tag + "_" + pthat_tag + "_gen_hf_sum_subid0", hb);
+    apply_style(c8, "", "#sqrt{s} = 5.02 TeV"s);
+    c8->add((*h_hf_gen_subid0)[0], "PP MC");
+    hb->sketch();
+    c8->draw("pdf");
 
     printf("destroying objects..\n");
 
