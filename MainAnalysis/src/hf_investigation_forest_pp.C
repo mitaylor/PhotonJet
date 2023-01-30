@@ -79,25 +79,15 @@ int Compare(char const* config, char const* output) {
     auto const photon_pt_min = conf->get<float>("photon_pt_min");
     auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
 
-    auto const hovere_max = conf->get<float>("aa_hovere_max");
-    auto const see_max = conf->get<float>("aa_see_max");
-    auto const iso_max = conf->get<float>("aa_iso_max");
-
-    auto const hovere_max = conf->get<float>("pp_hovere_max");
-    auto const see_max = conf->get<float>("pp_see_max");
-    auto const iso_max = conf->get<float>("pp_iso_max");
+    auto const hovere_max = conf->get<float>("hovere_max");
+    auto const see_max = conf->get<float>("see_max");
+    auto const iso_max = conf->get<float>("iso_max");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* read in information */
     // std::vector<std::string> files;
     // GetFiles(input.c_str(), files);
-
-    TChain trackChain("ppTrack/trackTree");
-    FillChain(trackChain, files);
-    // trackChain.Add(input);
-    TTreeReader trackReader(&trackChain);
-    TTreeReaderValue<int> nVtx(trackReader, "nVtx");
 
     TChain evtChain("hiEvtAnalyzer/HiTree");
     FillChain(evtChain, files);
@@ -131,37 +121,29 @@ int Compare(char const* config, char const* output) {
     TTreeReaderValue<std::vector<float>> pfPhi(pfReader, "pfPhi");
 
     /* create histograms */
-    int max_hf = use_energy ? 70000 : 7000;
-    int max_avg_hf = use_energy ? 2500 : 250;
+    int max_hf = 70000;
+    int max_avg_hf = 2500;
 
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 50, 0, max_avg_hf);
+    auto ihf = new interval("Estimated HF"s, 20, 0, max_avg_hf);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     
-    auto fnvtx = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nVtx;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
-    auto fpv = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nPU;nVtx;"s + label).data(), 11, -0.5, 10.5, 0, 16, "LE"); };
 
-    auto hf_v1 = new history<TH1F>("hf_v1"s, "", fhf, ipt->size());
     auto hf_p0 = new history<TH1F>("hf_p0"s, "", fhf, ipt->size());
-
-    auto nvtx = new history<TProfile>("nvtx"s, "", fnvtx, 1);
     auto npu = new history<TProfile>("npu"s, "", fnpu, 1);
-    auto npv = new history<TProfile>("npv"s, "", fpv, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* read in information from TTrees */
-    int entries = trackChain.GetEntries();
+    int entries = evtChain.GetEntries();
 
     for (int i = 1; i < entries; ++i) {
-        trackReader.Next(); evtReader.Next(); phoReader.Next(); pfReader.Next();
+        evtReader.Next(); phoReader.Next(); pfReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
@@ -196,63 +178,34 @@ int Compare(char const* config, char const* output) {
 
         float pf_sum = 0;
 
-        if (use_energy) {
-            for (size_t j = 0; j < pfEnergy->size(); ++j) {
-                // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                if ((*pfId)[j] >= 6) {
-                    pf_sum += (*pfEnergy)[j];
-                }
+        for (size_t j = 0; j < pfEnergy->size(); ++j) {
+            if ((*pfId)[j] >= 6) {
+                pf_sum += (*pfEnergy)[j];
             }
-        } else {
-            for (size_t j = 0; j < pfPt->size(); ++j) {
-                // if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                if ((*pfId)[j] >= 6) {
-                    pf_sum += (*pfPt)[j];
-                }
-            }
-        }
-
-        if (*nVtx == 1) { 
-            (*hf_v1)[pt_x]->Fill(pf_sum, *weight);
         }
 
         if ((*npus)[5] == 0) { 
             (*hf_p0)[pt_x]->Fill(pf_sum, *weight);
         }
 
-        (*nvtx)[0]->Fill(*nVtx, pf_sum, *weight);
         (*npu)[0]->Fill((*npus)[5], pf_sum, *weight);
-        (*npv)[0]->Fill((*npus)[5], *nVtx, *weight);
     }
 
     /* save histograms */
     in(output, [&]() {
-        hf_v1->save(tag);
         hf_p0->save(tag);
-        nvtx->save(tag);
         npu->save(tag);
-        npv->save(tag);
     });
 
     /* plot histograms */
     auto pt_info = [&](int64_t index) {
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    auto mean_info_vtx = [&](int64_t index) {
-        char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f",
-            (*hf_v1)[index - 1]->GetMean(1));
-
-        TLatex* text = new TLatex();
-        text->SetTextFont(43);
-        text->SetTextSize(12);
-        text->DrawLatexNDC(0.54, 0.75, buffer);
-    };
-
     auto mean_info_pu = [&](int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f",
-            (*hf_p0)[index - 1]->GetMean(1));
+        sprintf(buffer, "mean: %.3f +- %.3f",
+            (*hf_p0)[index - 1]->GetMean(1),
+            (*hf_p0)[index - 1]->GetMeanError(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
@@ -262,21 +215,6 @@ int Compare(char const* config, char const* output) {
 
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
-    
-    auto c1 = new paper(tag + "_" + pthat + "_estimated_hf_nvtx_1", hb);
-    apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
-
-    c1->accessory(pt_info);
-    c1->accessory(mean_info_vtx);
-    c1->divide(ipt->size(), -1);
-    // c1->set(paper::flags::logy);
-
-    for (int64_t j = 0; j < ipt->size(); ++j) {
-        c1->add((*hf_v1)[j], type);
-    }
-
-    hb->sketch();
-    c1->draw("pdf");
 
     auto c2 = new paper(tag + "_" + pthat + "_estimated_hf_npu_0", hb);
     apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
@@ -292,14 +230,6 @@ int Compare(char const* config, char const* output) {
     hb->sketch();
     c2->draw("pdf");
 
-    auto c3 = new paper(tag + "_" + pthat + "_nvtx_hf", hb);
-    apply_style(c3, "", "pp #sqrt{s} = 5.02 TeV"s);
-
-    c3->add((*nvtx)[0], type);
-
-    hb->sketch();
-    c3->draw("pdf");
-
     auto c4 = new paper(tag + "_" + pthat + "_npu_hf", hb);
     apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
 
@@ -307,14 +237,6 @@ int Compare(char const* config, char const* output) {
 
     hb->sketch();
     c4->draw("pdf");
-
-    auto c5 = new paper(tag + "_" + pthat + "_npv_hf", hb);
-    apply_style(c5, "", "pp #sqrt{s} = 5.02 TeV"s);
-
-    c5->add((*npv)[0], type);
-
-    hb->sketch();
-    c5->draw("pdf");
 
     printf("destroying objects..\n");
 
