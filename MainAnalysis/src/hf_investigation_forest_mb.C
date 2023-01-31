@@ -76,13 +76,6 @@ int Compare(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
     auto pthat_tag = conf->get<std::string>("pthat");
 
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
-
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
-
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
     /* read in information */
