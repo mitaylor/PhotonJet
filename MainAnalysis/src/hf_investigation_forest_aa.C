@@ -139,7 +139,7 @@ int Compare(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
-    auto igen = new interval("Gen Pt", 20, 0, 700);
+    auto igen = new interval("Gen Pt", 20, 0, 100);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
