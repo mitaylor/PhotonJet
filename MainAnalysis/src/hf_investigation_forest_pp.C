@@ -104,10 +104,10 @@ int Compare(char const* config, char const* output) {
     TTreeReader genReader(&genChain);
     TTreeReaderValue<float> ncoll(genReader, "ncoll");
     // TTreeReaderValue<int> mult(genReader, "mult");
-    TTreeReaderValue<std::vector<float>> energy(genReader, "E");
+    // TTreeReaderValue<std::vector<float>> energy(genReader, "E");
     TTreeReaderValue<std::vector<float>> eta(genReader, "eta");
     // TTreeReaderValue<std::vector<float>> phi(genReader, "phi");
-    // TTreeReaderValue<std::vector<float>> pt(genReader, "pt");
+    TTreeReaderValue<std::vector<float>> pt(genReader, "pt");
     TTreeReaderValue<std::vector<int>> sube(genReader, "sube");
 
     TChain phoChain("ggHiNtuplizerGED/EventTree");
@@ -140,7 +140,7 @@ int Compare(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
-    auto igen = new interval("Gen Energy", 20, 0, 700);
+    auto igen = new interval("Gen Pt", 20, 0, 100);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
@@ -177,13 +177,13 @@ int Compare(char const* config, char const* output) {
         float gen_sum_subid0 = 0;
 
         for (size_t j = 0; j < energy->size(); ++j) {
-            // if ((*eta)[j] >= 3 && (*eta)[j] <= 5) {
-                gen_sum += (*energy)[j];
+            if ((*eta)[j] > -2 && (*eta)[j] < 2) {
+                gen_sum += (*pt)[j];
 
                 if ((*sube)[j] == 0) {
-                    gen_sum_subid0 += (*energy)[j];
+                    gen_sum_subid0 += (*pt)[j];
                 }
-            // }
+            }
         }
 
         (*h_hf_gen)[0]->Fill(gen_sum, *weight);

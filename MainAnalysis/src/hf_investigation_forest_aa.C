@@ -103,10 +103,10 @@ int Compare(char const* config, char const* output) {
     TTreeReader genReader(&genChain);
     TTreeReaderValue<float> ncoll(genReader, "ncoll");
     // TTreeReaderValue<int> mult(genReader, "mult");
-    TTreeReaderValue<std::vector<float>> energy(genReader, "E");
+    // TTreeReaderValue<std::vector<float>> energy(genReader, "E");
     TTreeReaderValue<std::vector<float>> eta(genReader, "eta");
     // TTreeReaderValue<std::vector<float>> phi(genReader, "phi");
-    // TTreeReaderValue<std::vector<float>> pt(genReader, "pt");
+    TTreeReaderValue<std::vector<float>> pt(genReader, "pt");
     TTreeReaderValue<std::vector<int>> sube(genReader, "sube");
 
     TChain phoChain("ggHiNtuplizerGED/EventTree");
@@ -139,7 +139,7 @@ int Compare(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
-    auto igen = new interval("Gen Energy", 20, 0, 700);
+    auto igen = new interval("Gen Pt", 20, 0, 100);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
@@ -176,13 +176,13 @@ int Compare(char const* config, char const* output) {
         float gen_sum_subid0 = 0;
 
         for (size_t j = 0; j < energy->size(); ++j) {
-            // if ((*eta)[j] >= 3 && (*eta)[j] <= 5) {
-                gen_sum += (*energy)[j];
+            if ((*eta)[j] > -2 && (*eta)[j] < 2) {
+                gen_sum += (*pt)[j];
 
                 if ((*sube)[j] == 0) {
-                    gen_sum_subid0 += (*energy)[j];
+                    gen_sum_subid0 += (*pt)[j];
                 }
-            // }
+            }
         }
 
         (*h_hf_gen)[0]->Fill(gen_sum, *weight);
@@ -335,7 +335,7 @@ int Compare(char const* config, char const* output) {
     auto c1 = new paper(tag + "_" + pthat_tag + "_pthat", hb);
     apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
     c1->accessory(mean_info_pthat);
-    c1->add((*h_pthat)[0], "PP MC");
+    c1->add((*h_pthat)[0], "PbPb MC");
     hb->sketch();
     c1->draw("pdf");
 
@@ -345,7 +345,7 @@ int Compare(char const* config, char const* output) {
     c2->accessory(mean_info_pu);
     c2->divide(ipt->size(), -1);
     for (int64_t j = 0; j < ipt->size(); ++j) {
-        c2->add((*h_hf_pf_selected)[j], "PP MC");
+        c2->add((*h_hf_pf_selected)[j], "PbPb MC");
     }
     hb->sketch();
     c2->draw("pdf");
@@ -353,40 +353,40 @@ int Compare(char const* config, char const* output) {
     auto c3 = new paper(tag + "_" + pthat_tag + "_selected_pthat", hb);
     apply_style(c3, "", "#sqrt{s} = 5.02 TeV"s);
     c3->accessory(mean_info_selected_pthat);
-    c3->add((*h_pthat_selected)[0], "PP MC");
+    c3->add((*h_pthat_selected)[0], "PbPb MC");
     hb->sketch();
     c3->draw("pdf");
 
     auto c4 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_vs_pu", hb);
     apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
     c4->accessory(avg_incremental_gain);
-    c4->add((*h_npu_hf_pf_selected)[0], "PP MC");
+    c4->add((*h_npu_hf_pf_selected)[0], "PbPb MC");
     hb->sketch();
     c4->draw("pdf");
 
     auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_sum", hb);
     apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
     c5->accessory(mean_info_gen_selected);
-    c5->add((*h_hf_gen_selected)[0], "PP MC");
+    c5->add((*h_hf_gen_selected)[0], "PbPb MC");
     hb->sketch();
     c5->draw("pdf");
 
     auto c6 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_sum_subid0", hb);
     apply_style(c6, "", "#sqrt{s} = 5.02 TeV"s);
     c6->accessory(mean_info_gen_selected_subid0);
-    c6->add((*h_hf_gen_selected_subid0)[0], "PP MC");
+    c6->add((*h_hf_gen_selected_subid0)[0], "PbPb MC");
     hb->sketch();
     c6->draw("pdf");
 
     auto c7 = new paper(tag + "_" + pthat_tag + "_gen_hf_sum", hb);
     apply_style(c7, "", "#sqrt{s} = 5.02 TeV"s);
-    c7->add((*h_hf_gen)[0], "PP MC");
+    c7->add((*h_hf_gen)[0], "PbPb MC");
     hb->sketch();
     c7->draw("pdf");
 
     auto c8 = new paper(tag + "_" + pthat_tag + "_gen_hf_sum_subid0", hb);
     apply_style(c8, "", "#sqrt{s} = 5.02 TeV"s);
-    c8->add((*h_hf_gen_subid0)[0], "PP MC");
+    c8->add((*h_hf_gen_subid0)[0], "PbPb MC");
     hb->sketch();
     c8->draw("pdf");
 
