@@ -141,7 +141,7 @@ int Compare(char const* config, char const* output) {
     int entries = evtChain.GetEntries();
 
     for (int i = 1; i < entries; ++i) {
-        evtReader.Next(); phoReader.Next(); pfReader.Next(); genReader.Next();
+        evtReader.Next(); pfReader.Next(); genReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
 
