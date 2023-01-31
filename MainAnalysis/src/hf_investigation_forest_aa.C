@@ -139,12 +139,12 @@ int Compare(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
-    auto igen = new interval("Gen Pt", 20, 0, 100);
+    auto igen = new interval("Gen Pt", 20, 0, 700);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
+        return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
     auto fgen = std::bind(&interval::book<TH1F>, igen, _1, _2, _3);
 
     auto h_hf_pf_selected = new history<TH1F>("h_hf_pf_selected"s, "", fhf, ipt->size());
