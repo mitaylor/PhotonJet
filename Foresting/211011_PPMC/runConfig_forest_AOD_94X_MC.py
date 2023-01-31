@@ -96,6 +96,8 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 process.load('HeavyIonsAnalysis.JetAnalysis.HiGenAnalyzer_cfi')
 process.HiGenParticleAna.genParticleSrc = cms.untracked.InputTag("genParticles")
 process.HiGenParticleAna.doHI = False
+process.HiGenParticleAna.ptMin = cms.untracked.double(0.4) # default is 5
+process.HiGenParticleAna.etaMax = cms.untracked.double(5.) # default is 2
 
 process.load('HeavyIonsAnalysis.EventAnalysis.runanalyzer_cff')
 
