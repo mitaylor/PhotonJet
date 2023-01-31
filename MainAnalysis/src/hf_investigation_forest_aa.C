@@ -176,7 +176,7 @@ int Compare(char const* config, char const* output) {
         float gen_sum_subid0 = 0;
 
         for (size_t j = 0; j < pt->size(); ++j) {
-            if ((*eta)[j] > -2 && (*eta)[j] < 2 && (*pt)[j] > 0.4) {
+            if (std::abs((*eta)[j]) > 3 && std::abs((*eta)[j]) < 5  && (*pt)[j] > 0.4) {
                 gen_sum += (*pt)[j];
 
                 if ((*sube)[j] == 0) {
