@@ -138,22 +138,24 @@ int Compare(char const* config, char const* output) {
     int max_avg_hf = 2500;
 
     auto ipt = new interval(dpt);
-    auto ihf = new interval("Estimated HF"s, 20, 0, max_avg_hf);
+    auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
+    auto igen = new interval("Gen HF", 20, 0, 100);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
+    auto fgen = std::bind(&interval::book<TH1F>, igen, _1, _2, _3);
 
     auto h_hf_pf_selected = new history<TH1F>("h_hf_pf_selected"s, "", fhf, ipt->size());
     auto h_npu_hf_pf_selected = new history<TProfile>("h_npu_hf_pf_selected"s, "", fnpu, 1);
     auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, 1);
     auto h_pthat_selected = new history<TH1F>("h_pthat_selected"s, "", fpthat, 1);
-    auto h_hf_gen_selected = new history<TH1F>("h_hf_gen_selected"s, "", fhf, 1);
-    auto h_hf_gen_selected_subid0 = new history<TH1F>("h_hf_gen_selected_subid0"s, "", fhf, 1);
-    auto h_hf_gen = new history<TH1F>("h_hf_gen"s, "", fhf, 1);
-    auto h_hf_gen_subid0 = new history<TH1F>("h_hf_gen_subid0"s, "", fhf, 1);
+    auto h_hf_gen_selected = new history<TH1F>("h_hf_gen_selected"s, "", fgen, 1);
+    auto h_hf_gen_selected_subid0 = new history<TH1F>("h_hf_gen_selected_subid0"s, "", fgen, 1);
+    auto h_hf_gen = new history<TH1F>("h_hf_gen"s, "", fgen, 1);
+    auto h_hf_gen_subid0 = new history<TH1F>("h_hf_gen_subid0"s, "", fgen, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -175,13 +177,13 @@ int Compare(char const* config, char const* output) {
         float gen_sum_subid0 = 0;
 
         for (size_t j = 0; j < energy->size(); ++j) {
-            if ((*eta)[j] >= 3 && (*eta)[j] <= 5) {
+            // if ((*eta)[j] >= 3 && (*eta)[j] <= 5) {
                 gen_sum += (*energy)[j];
 
                 if ((*sube)[j] == 0) {
                     gen_sum_subid0 += (*energy)[j];
                 }
-            }
+            // }
         }
 
         (*h_hf_gen)[0]->Fill(gen_sum, *weight);
