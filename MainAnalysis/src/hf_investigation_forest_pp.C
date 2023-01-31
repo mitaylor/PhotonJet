@@ -140,12 +140,12 @@ int Compare(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
-    auto igen = new interval("Gen HF", 20, 0, 100);
+    auto igen = new interval("Gen HF", 20, 0, 500);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
+        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 7, 0, 7, 0, max_hf, "LE"); };
     auto fgen = std::bind(&interval::book<TH1F>, igen, _1, _2, _3);
 
     auto h_hf_pf_selected = new history<TH1F>("h_hf_pf_selected"s, "", fhf, ipt->size());
@@ -250,6 +250,30 @@ int Compare(char const* config, char const* output) {
     auto pt_info = [&](int64_t index) {
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
+    auto mean_info_pthat = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "mean: %.3f +- %.3f",
+            (*h_pthat)[index - 1]->GetMean(1),
+            (*h_pthat)[index - 1]->GetMeanError(1));
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };
+
+    auto mean_info_selected_pthat = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "mean: %.3f +- %.3f",
+            (*h_pthat_selected)[index - 1]->GetMean(1),
+            (*h_pthat_selected)[index - 1]->GetMeanError(1));
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };
+
     auto mean_info_pu = [&](int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f +- %.3f",
@@ -262,11 +286,56 @@ int Compare(char const* config, char const* output) {
         text->DrawLatexNDC(0.54, 0.75, buffer);
     };
 
+    auto mean_info_gen_selected = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "mean: %.3f +- %.3f",
+            (*h_hf_gen_selected)[index - 1]->GetMean(1),
+            (*h_hf_gen_selected)[index - 1]->GetMeanError(1));
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };
+
+    auto mean_info_gen_selected_subid0 = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "mean: %.3f +- %.3f",
+            (*h_hf_gen_selected_subid0)[index - 1]->GetMean(1),
+            (*h_hf_gen_selected_subid0)[index - 1]->GetMeanError(1));
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };
+
+    auto avg_incremental_gain = [&](int64_t index) {
+        float avg_gain = 0;
+
+        for (int i = 1; i < (*h_npu_hf_pf_selected)[0]->GetNbinsX(); ++i) {
+            avg_gain += (*h_npu_hf_pf_selected)[0]->GetBinContent(i+1) 
+                - (*h_npu_hf_pf_selected)[0]->GetBinContent(i);
+        }
+
+        avg_gain /= ((*h_npu_hf_pf_selected)[0]->GetNbinsX() - 1);
+
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "avg gain: %.3f", avg_gain);
+
+        TLatex* text = new TLatex();
+        text->SetTextFont(43);
+        text->SetTextSize(12);
+        text->DrawLatexNDC(0.54, 0.75, buffer);
+    };
+    
+
     auto hb = new pencil();
     hb->category("type", "PbPb MC", "PP MC");
 
     auto c1 = new paper(tag + "_" + pthat_tag + "_pthat", hb);
     apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
+    c1->accessory(mean_info_pthat);
     c1->add((*h_pthat)[0], "PP MC");
     hb->sketch();
     c1->draw("pdf");
@@ -284,24 +353,28 @@ int Compare(char const* config, char const* output) {
 
     auto c3 = new paper(tag + "_" + pthat_tag + "_selected_pthat", hb);
     apply_style(c3, "", "#sqrt{s} = 5.02 TeV"s);
+    c3->accessory(mean_info_selected_pthat);
     c3->add((*h_pthat_selected)[0], "PP MC");
     hb->sketch();
     c3->draw("pdf");
 
     auto c4 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_vs_pu", hb);
     apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
+    c4->accessory(avg_incremental_gain);
     c4->add((*h_npu_hf_pf_selected)[0], "PP MC");
     hb->sketch();
     c4->draw("pdf");
 
     auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_sum", hb);
     apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
+    c5->accessory(mean_info_gen_selected);
     c5->add((*h_hf_gen_selected)[0], "PP MC");
     hb->sketch();
     c5->draw("pdf");
 
     auto c6 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_sum_subid0", hb);
     apply_style(c6, "", "#sqrt{s} = 5.02 TeV"s);
+    c6->accessory(mean_info_gen_selected_subid0);
     c6->add((*h_hf_gen_selected_subid0)[0], "PP MC");
     hb->sketch();
     c6->draw("pdf");
