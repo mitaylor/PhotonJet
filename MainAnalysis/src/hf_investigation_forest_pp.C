@@ -313,12 +313,12 @@ int Compare(char const* config, char const* output) {
     auto avg_incremental_gain = [&](int64_t index) {
         float avg_gain = 0;
 
-        for (int i = 1; i < (*h_npu_hf_pf_selected)[0]->GetNbinsX(); ++i) {
-            avg_gain += (*h_npu_hf_pf_selected)[0]->GetBinContent(i+1) 
-                - (*h_npu_hf_pf_selected)[0]->GetBinContent(i);
+        for (int i = 1; i < (*h_npu_hf_pf_selected)[index - 1]->GetNbinsX(); ++i) {
+            avg_gain += (*h_npu_hf_pf_selected)[index - 1]->GetBinContent(i+1) 
+                - (*h_npu_hf_pf_selected)[index - 1]->GetBinContent(i);
         }
 
-        avg_gain /= ((*h_npu_hf_pf_selected)[0]->GetNbinsX() - 1);
+        avg_gain /= ((*h_npu_hf_pf_selected)[index - 1]->GetNbinsX() - 1);
 
         char buffer[128] = { '\0' };
         sprintf(buffer, "avg gain: %.3f", avg_gain);
