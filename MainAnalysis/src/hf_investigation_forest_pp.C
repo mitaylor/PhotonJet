@@ -140,12 +140,12 @@ int Compare(char const* config, char const* output) {
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
     auto ipthat = new interval("pthat"s, 200, 0, 200);
-    auto igen = new interval("Gen HF", 20, 0, 500);
+    auto igen = new interval("Gen Energy", 20, 0, 500);
 
     auto fhf = std::bind(&interval::book<TH1F>, ihf, _1, _2, _3);
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 7, 0, 7, 0, max_hf, "LE"); };
+        return new TProfile(name.data(), (";nPU;HF Energy;"s + label).data(), 18, 0, 18, 0, max_hf, "LE"); };
     auto fgen = std::bind(&interval::book<TH1F>, igen, _1, _2, _3);
 
     auto h_hf_pf_selected = new history<TH1F>("h_hf_pf_selected"s, "", fhf, ipt->size());
@@ -313,12 +313,12 @@ int Compare(char const* config, char const* output) {
     auto avg_incremental_gain = [&](int64_t index) {
         float avg_gain = 0;
 
-        for (int i = 1; i < (*h_npu_hf_pf_selected)[index - 1]->GetNbinsX(); ++i) {
+        for (int i = 1; i < 8; ++i) {
             avg_gain += (*h_npu_hf_pf_selected)[index - 1]->GetBinContent(i+1) 
                 - (*h_npu_hf_pf_selected)[index - 1]->GetBinContent(i);
         }
 
-        avg_gain /= ((*h_npu_hf_pf_selected)[index - 1]->GetNbinsX() - 1);
+        avg_gain /= 7;
 
         char buffer[128] = { '\0' };
         sprintf(buffer, "avg gain: %.3f", avg_gain);
