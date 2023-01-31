@@ -175,7 +175,7 @@ int Compare(char const* config, char const* output) {
         float gen_sum = 0;
         float gen_sum_subid0 = 0;
 
-        for (size_t j = 0; j < energy->size(); ++j) {
+        for (size_t j = 0; j < pt->size(); ++j) {
             if ((*eta)[j] > -2 && (*eta)[j] < 2) {
                 gen_sum += (*pt)[j];
 
