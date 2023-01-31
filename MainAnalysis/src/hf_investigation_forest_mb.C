@@ -114,7 +114,7 @@ int Compare(char const* config, char const* output) {
 
     /* create histograms */
     int max_hf = 70000;
-    int max_avg_hf = 2500;
+    int max_avg_hf = 100; //2500;
 
     auto ipt = new interval(dpt);
     auto ihf = new interval("PF HF"s, 20, 0, max_avg_hf);
@@ -164,9 +164,9 @@ int Compare(char const* config, char const* output) {
 
         float pf_sum = 0;
 
-        for (size_t j = 0; j < pfEnergy->size(); ++j) {
+        for (size_t j = 0; j < pfPt->size(); ++j) {
             if ((*pfId)[j] >= 6) {
-                pf_sum += (*pfEnergy)[j];
+                pf_sum += (*pfPt)[j];
             }
         }
 
