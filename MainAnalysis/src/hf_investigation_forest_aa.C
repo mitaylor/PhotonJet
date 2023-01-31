@@ -93,7 +93,6 @@ int Compare(char const* config, char const* output) {
     FillChain(evtChain, files);
     // evtChain.Add(input);
     TTreeReader evtReader(&evtChain);
-    TTreeReaderValue<std::vector<int>> npus(evtReader, "npus");
     TTreeReaderValue<float> weight(evtReader, "weight");
     TTreeReaderValue<float> vz(evtReader, "vz");
     TTreeReaderValue<float> pthat(evtReader, "pthat");
@@ -224,11 +223,11 @@ int Compare(char const* config, char const* output) {
             }
         }
 
-        if ((*npus)[5] == 0) { 
+        if (*ncoll == 0) { 
             (*h_hf_pf_selected)[pt_x]->Fill(pf_sum, *weight);
         }
 
-        (*h_npu_hf_pf_selected)[0]->Fill((*npus)[5], pf_sum, *weight);
+        (*h_npu_hf_pf_selected)[0]->Fill(*ncoll, pf_sum, *weight);
         (*h_pthat_selected)[0]->Fill(*pthat, *weight);
         (*h_hf_gen_selected)[0]->Fill(gen_sum, *weight);
         (*h_hf_gen_selected_subid0)[0]->Fill(gen_sum_subid0, *weight);
