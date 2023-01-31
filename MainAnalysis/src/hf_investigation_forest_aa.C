@@ -184,9 +184,10 @@ int Compare(char const* config, char const* output) {
                 }
             }
         }
-
-        (*h_hf_gen)[0]->Fill(gen_sum, *weight);
-        (*h_hf_gen_subid0)[0]->Fill(gen_sum_subid0, *weight);
+        if (*ncoll == 0) { 
+            (*h_hf_gen)[0]->Fill(gen_sum, *weight);
+            (*h_hf_gen_subid0)[0]->Fill(gen_sum_subid0, *weight);
+        }
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -225,12 +226,12 @@ int Compare(char const* config, char const* output) {
 
         if (*ncoll == 0) { 
             (*h_hf_pf_selected)[pt_x]->Fill(pf_sum, *weight);
+            (*h_pthat_selected)[0]->Fill(*pthat, *weight);
+            (*h_hf_gen_selected)[0]->Fill(gen_sum, *weight);
+            (*h_hf_gen_selected_subid0)[0]->Fill(gen_sum_subid0, *weight);
         }
 
         (*h_npu_hf_pf_selected)[0]->Fill(*ncoll, pf_sum, *weight);
-        (*h_pthat_selected)[0]->Fill(*pthat, *weight);
-        (*h_hf_gen_selected)[0]->Fill(gen_sum, *weight);
-        (*h_hf_gen_selected_subid0)[0]->Fill(gen_sum_subid0, *weight);
     }
 
     /* save histograms */
