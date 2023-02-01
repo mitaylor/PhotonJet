@@ -88,7 +88,6 @@ int Compare(char const* config, char const* output) {
     TTreeReader evtReader(&evtChain);
     TTreeReaderValue<float> weight(evtReader, "weight");
     TTreeReaderValue<float> vz(evtReader, "vz");
-    TTreeReaderValue<float> pthat(evtReader, "pthat");
 
     TChain genChain("HiGenParticleAna/hi");
     FillChain(genChain, files);
@@ -116,12 +115,10 @@ int Compare(char const* config, char const* output) {
     auto iphoton = new interval(dpt);
     auto ienergy = new interval("HF Energy Sum"s, 20, 0, 2500);
     auto ipt = new interval("HF Pt Sum"s, 20, 0, 150);
-    auto ipthat = new interval("pthat"s, 200, 0, 200);
     auto ieta = new interval("Eta", 20, -5, 5);
 
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
     auto fenergy = std::bind(&interval::book<TH1F>, ienergy, _1, _2, _3);
-    auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 18, 0, 18, 0, 70000, "LE"); };
     auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);
@@ -130,7 +127,6 @@ int Compare(char const* config, char const* output) {
     auto h_hf_pf_pt_selected = new history<TH1F>("h_hf_pf_pt_selected"s, "", fpt, iphoton->size());
     auto h_hf_pf_eta_selected = new history<TH1F>("h_hf_pf_eta_selected"s, "", feta, 1);
     auto h_npu_hf_pf_energy_selected = new history<TProfile>("h_npu_hf_pf_energy_selected"s, "", fnpu, 1);
-    auto h_pthat_selected = new history<TH1F>("h_pthat_selected"s, "", fpthat, 1);
     auto h_hf_gen_energy_selected = new history<TH1F>("h_hf_gen_energy_selected"s, "", fenergy, 1);
     auto h_hf_gen_pt_selected = new history<TH1F>("h_hf_gen_pt_selected"s, "", fpt, 1);
     auto h_hf_gen_eta_selected = new history<TH1F>("h_hf_gen_eta_selected"s, "", feta, 1);
@@ -178,7 +174,6 @@ int Compare(char const* config, char const* output) {
         if (*ncoll == 0) { 
             (*h_hf_pf_energy_selected)[pt_x]->Fill(pf_energy_sum, *weight);
             (*h_hf_pf_pt_selected)[pt_x]->Fill(pf_pt_sum, *weight);
-            (*h_pthat_selected)[0]->Fill(*pthat, *weight);
             (*h_hf_gen_energy_selected)[0]->Fill(gen_energy_sum, *weight);
             (*h_hf_gen_pt_selected)[0]->Fill(gen_pt_sum, *weight);
             for (size_t j = 0; j < pt->size(); ++j) {
@@ -197,7 +192,6 @@ int Compare(char const* config, char const* output) {
         h_hf_pf_pt_selected->save(tag);
         h_hf_pf_eta_selected->save(tag);
         h_npu_hf_pf_energy_selected->save(tag);
-        h_pthat_selected->save(tag);
         h_hf_gen_energy_selected->save(tag);
         h_hf_gen_pt_selected->save(tag);
         h_hf_gen_eta_selected->save(tag);
@@ -241,13 +235,6 @@ int Compare(char const* config, char const* output) {
 
     auto hb = new pencil();
     hb->category("type", "PbPb MC", "PP MC");
-
-    auto c2 = new paper(tag + "_" + pthat_tag + "_selected_pthat", hb);
-    apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
-    c2->accessory(std::bind(mean_info, h_pthat_selected, _1));
-    c2->add((*h_pthat_selected)[0], "PbPb MC");
-    hb->sketch();
-    c2->draw("pdf");
 
     auto c3 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_energy", hb);
     apply_style(c3, "", "#sqrt{s} = 5.02 TeV"s);
