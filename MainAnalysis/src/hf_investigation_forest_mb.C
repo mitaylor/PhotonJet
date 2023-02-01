@@ -148,7 +148,7 @@ int Compare(char const* config, char const* output) {
         if (std::abs(*vz) > 15) { continue; }
 
         float gen_energy_sum = 0;
-        float gen_pt_sum = 0;
+        float gen_pt_sum = 0;pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
 
         if (*ncoll == 0) { 
             for (size_t j = 0; j < pt->size(); ++j) {
@@ -157,9 +157,9 @@ int Compare(char const* config, char const* output) {
                     gen_pt_sum += (*pt)[j];
                 }
             }
-        }
+        }pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
 
-        auto pt_x = ipt->index_for(200);
+        auto pt_x = ipt->index_for(200);pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
 
         float pf_energy_sum = 0;
         float pf_pt_sum = 0;
@@ -171,7 +171,7 @@ int Compare(char const* config, char const* output) {
                 pf_energy_sum += (*pfEnergy)[j];
                 pf_pt_sum += (*pfPt)[j];
             }
-        }
+        }pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
 
         if (*ncoll == 0) { 
             (*h_hf_pf_energy_selected)[pt_x]->Fill(pf_energy_sum, *weight);
@@ -182,10 +182,10 @@ int Compare(char const* config, char const* output) {
                 if ((*pt)[j] > 0.4) {
                     (*h_hf_gen_eta_selected)[0]->Fill((*eta)[j], *weight);
                 }
-            }
+            }pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
         }
 
-        (*h_npu_hf_pf_energy_selected)[0]->Fill(*ncoll, pf_energy_sum, *weight);
+        (*h_npu_hf_pf_energy_selected)[0]->Fill(*ncoll, pf_energy_sum, *weight);pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
     }
 
     /* save histograms */
