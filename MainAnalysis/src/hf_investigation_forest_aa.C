@@ -369,12 +369,12 @@ int Compare(char const* config, char const* output) {
     hb->sketch();
     c4->draw("pdf");
 
-    // auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_energy", hb);
-    // apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
-    // c5->accessory(std::bind(mean_info, h_hf_gen_energy_selected, _1));
-    // c5->add((*h_hf_gen_energy_selected)[0], "PbPb MC");
-    // hb->sketch();
-    // c5->draw("pdf");
+    auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_energy", hb);
+    apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
+    c5->accessory(std::bind(mean_info, h_hf_gen_energy_selected, _1));
+    c5->add((*h_hf_gen_energy_selected)[0], "PbPb MC");
+    hb->sketch();
+    c5->draw("pdf");
 
     // auto c6 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_energy_subid0", hb);
     // apply_style(c6, "", "#sqrt{s} = 5.02 TeV"s);
