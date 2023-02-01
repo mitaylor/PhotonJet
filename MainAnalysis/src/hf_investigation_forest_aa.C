@@ -362,12 +362,12 @@ int Compare(char const* config, char const* output) {
     hb->sketch();
     c31->draw("pdf");
 
-    // auto c4 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_energy_vs_pu", hb);
-    // apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
-    // c4->accessory(std::bind(mean_info, h_npu_hf_pf_energy_selected, _1));
-    // c4->add((*h_npu_hf_pf_energy_selected)[0], "PbPb MC");
-    // hb->sketch();
-    // c4->draw("pdf");
+    auto c4 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_energy_vs_pu", hb);
+    apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
+    c4->accessory(avg_incremental_gain);
+    c4->add((*h_npu_hf_pf_energy_selected)[0], "PbPb MC");
+    hb->sketch();
+    c4->draw("pdf");
 
     // auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_energy", hb);
     // apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
