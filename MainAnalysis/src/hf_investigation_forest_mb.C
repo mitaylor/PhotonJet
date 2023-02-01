@@ -150,9 +150,7 @@ int Compare(char const* config, char const* output) {
         if (std::abs(*vz) > 15) { continue; }
 
         float gen_energy_sum = 0;
-        float gen_energy_sum_subid0 = 0;
         float gen_pt_sum = 0;
-        float gen_pt_sum_subid0 = 0;
 
         if (*ncoll == 0) { 
             for (size_t j = 0; j < pt->size(); ++j) {
@@ -198,7 +196,6 @@ int Compare(char const* config, char const* output) {
         h_hf_pf_pt_selected->save(tag);
         h_hf_pf_eta_selected->save(tag);
         h_npu_hf_pf_energy_selected->save(tag);
-        h_pthat->save(tag);
         h_pthat_selected->save(tag);
         h_hf_gen_energy_selected->save(tag);
         h_hf_gen_pt_selected->save(tag);
