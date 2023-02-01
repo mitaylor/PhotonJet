@@ -146,20 +146,20 @@ int Compare(char const* config, char const* output) {
         return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 18, 0, 18, 0, 70000, "LE"); };
     auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);
 
-    auto h_hf_pf_energy_selected = new history<TH1F>("h_hf_pf_energy_selected"s, "", ienergy, iphoton->size());
-    auto h_hf_pf_pt_selected = new history<TH1F>("h_hf_pf_pt_selected"s, "", ipt, iphoton->size());
+    auto h_hf_pf_energy_selected = new history<TH1F>("h_hf_pf_energy_selected"s, "", fenergy, iphoton->size());
+    auto h_hf_pf_pt_selected = new history<TH1F>("h_hf_pf_pt_selected"s, "", fpt, iphoton->size());
     auto h_hf_pf_eta_selected = new history<TH1F>("h_hf_pf_eta_selected"s, "", feta, 1);
     auto h_npu_hf_pf_energy_selected = new history<TProfile>("h_npu_hf_pf_energy_selected"s, "", fnpu, 1);
     auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, 1);
     auto h_pthat_selected = new history<TH1F>("h_pthat_selected"s, "", fpthat, 1);
-    auto h_hf_gen_energy_selected = new history<TH1F>("h_hf_gen_energy_selected"s, "", ienergy, 1);
-    auto h_hf_gen_energy_selected_subid0 = new history<TH1F>("h_hf_gen_energy_selected_subid0"s, "", ienergy, 1);
-    auto h_hf_gen_pt_selected = new history<TH1F>("h_hf_gen_pt_selected"s, "", ipt, 1);
-    auto h_hf_gen_pt_selected_subid0 = new history<TH1F>("h_hf_gen_pt_selected_subid0"s, "", ipt, 1);
+    auto h_hf_gen_energy_selected = new history<TH1F>("h_hf_gen_energy_selected"s, "", fenergy, 1);
+    auto h_hf_gen_energy_selected_subid0 = new history<TH1F>("h_hf_gen_energy_selected_subid0"s, "", fenergy, 1);
+    auto h_hf_gen_pt_selected = new history<TH1F>("h_hf_gen_pt_selected"s, "", fpt, 1);
+    auto h_hf_gen_pt_selected_subid0 = new history<TH1F>("h_hf_gen_pt_selected_subid0"s, "", fpt, 1);
     auto h_hf_gen_eta_selected = new history<TH1F>("h_hf_gen_eta_selected"s, "", feta, 1);
     auto h_hf_gen_eta_selected_subid0 = new history<TH1F>("h_hf_gen_eta_selected_subid0"s, "", feta, 1);
-    auto h_hf_gen_energy = new history<TH1F>("h_hf_gen_energy"s, "", ienergy, 1);
-    auto h_hf_gen_energy_subid0 = new history<TH1F>("h_hf_gen_energy_subid0"s, "", ienergy, 1);
+    auto h_hf_gen_energy = new history<TH1F>("h_hf_gen_energy"s, "", fenergy, 1);
+    auto h_hf_gen_energy_subid0 = new history<TH1F>("h_hf_gen_energy_subid0"s, "", fenergy, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
