@@ -143,7 +143,9 @@ int Compare(char const* config, char const* output) {
     for (int i = 1; i < entries; ++i) {std::cout << __LINE__ << std::endl;
         evtReader.Next(); pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
 
-        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;std::cout << __LINE__ << std::endl;
+        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
+        
+        std::cout << __LINE__ << std::endl;
 
         if (std::abs(*vz) > 15) { continue; }
 
