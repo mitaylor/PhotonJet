@@ -78,8 +78,6 @@ int Compare(char const* config, char const* output) {
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
 
-    std::cout << __LINE__ << std::endl;
-
     /* read in information */
     // std::vector<std::string> files;
     // GetFiles(input.c_str(), files);
@@ -140,12 +138,10 @@ int Compare(char const* config, char const* output) {
     /* read in information from TTrees */
     int entries = evtChain.GetEntries();
 
-    for (int i = 1; i < entries; ++i) {std::cout << __LINE__ << std::endl;
-        evtReader.Next(); pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
+    for (int i = 1; i < entries; ++i) {
+        evtReader.Next(); pfReader.Next(); genReader.Next();
 
         if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
-        
-        std::cout << __LINE__ << std::endl;
 
         if (std::abs(*vz) > 15) { continue; }
 
@@ -159,12 +155,12 @@ int Compare(char const* config, char const* output) {
                     gen_pt_sum += (*pt)[j];
                 }
             }
-        }std::cout << __LINE__ << std::endl;
+        }
 
-        auto pt_x = ipt->index_for(200);
+        auto pt_x = iphoton->index_for(200);
 
         float pf_energy_sum = 0;
-        float pf_pt_sum = 0;std::cout << __LINE__ << std::endl;
+        float pf_pt_sum = 0;
 
         for (size_t j = 0; j < pfPt->size(); ++j) {
             (*h_hf_pf_eta_selected)[0]->Fill((*pfEta)[j], *weight);
@@ -173,24 +169,23 @@ int Compare(char const* config, char const* output) {
                 pf_energy_sum += (*pfEnergy)[j];
                 pf_pt_sum += (*pfPt)[j];
             }
-        }std::cout << __LINE__ << std::endl;
+        }
 
         if (*ncoll == 0) { 
-            std::cout << __LINE__ << std::endl;
-            (*h_hf_pf_energy_selected)[pt_x]->Fill(pf_energy_sum, *weight);std::cout << __LINE__ << std::endl;
-            (*h_hf_pf_pt_selected)[pt_x]->Fill(pf_pt_sum, *weight);std::cout << __LINE__ << std::endl;
-            (*h_hf_gen_energy_selected)[0]->Fill(gen_energy_sum, *weight);std::cout << __LINE__ << std::endl;
-            (*h_hf_gen_pt_selected)[0]->Fill(gen_pt_sum, *weight);std::cout << __LINE__ << std::endl;
-            for (size_t j = 0; j < pt->size(); ++j) {std::cout << __LINE__ << std::endl;
-                if ((*pt)[j] > 0.4) {std::cout << __LINE__ << std::endl;
+            (*h_hf_pf_energy_selected)[pt_x]->Fill(pf_energy_sum, *weight);
+            (*h_hf_pf_pt_selected)[pt_x]->Fill(pf_pt_sum, *weight);
+            (*h_hf_gen_energy_selected)[0]->Fill(gen_energy_sum, *weight);
+            (*h_hf_gen_pt_selected)[0]->Fill(gen_pt_sum, *weight);
+            for (size_t j = 0; j < pt->size(); ++j) {
+                if ((*pt)[j] > 0.4) {
                     (*h_hf_gen_eta_selected)[0]->Fill((*eta)[j], *weight);
                 }
             }
-        }std::cout << __LINE__ << std::endl;
+        }
 
-        (*h_npu_hf_pf_energy_selected)[0]->Fill(*ncoll, pf_energy_sum, *weight);std::cout << __LINE__ << std::endl;
+        (*h_npu_hf_pf_energy_selected)[0]->Fill(*ncoll, pf_energy_sum, *weight);
     }
-std::cout << __LINE__ << std::endl;
+
     /* save histograms */
     in(output, [&]() {
         h_hf_pf_energy_selected->save(tag);
