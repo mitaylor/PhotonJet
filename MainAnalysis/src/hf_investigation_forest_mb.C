@@ -176,6 +176,7 @@ int Compare(char const* config, char const* output) {
         }std::cout << __LINE__ << std::endl;
 
         if (*ncoll == 0) { 
+            std::cout << __LINE__ << std::endl;
             (*h_hf_pf_energy_selected)[pt_x]->Fill(pf_energy_sum, *weight);std::cout << __LINE__ << std::endl;
             (*h_hf_pf_pt_selected)[pt_x]->Fill(pf_pt_sum, *weight);std::cout << __LINE__ << std::endl;
             (*h_hf_gen_energy_selected)[0]->Fill(gen_energy_sum, *weight);std::cout << __LINE__ << std::endl;
