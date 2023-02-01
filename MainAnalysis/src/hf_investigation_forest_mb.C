@@ -89,7 +89,7 @@ int Compare(char const* config, char const* output) {
     // evtChain.Add(input);
     TTreeReader evtReader(&evtChain);
     TTreeReaderValue<float> weight(evtReader, "weight");
-    TTreeReaderValue<float> vz(evtReader, "vz");std::cout << __LINE__ << std::endl;
+    TTreeReaderValue<float> vz(evtReader, "vz");
 
     TChain genChain("HiGenParticleAna/hi");
     FillChain(genChain, files);
@@ -101,7 +101,7 @@ int Compare(char const* config, char const* output) {
     TTreeReaderValue<std::vector<float>> eta(genReader, "eta");
     // TTreeReaderValue<std::vector<float>> phi(genReader, "phi");
     TTreeReaderValue<std::vector<float>> pt(genReader, "pt");
-    TTreeReaderValue<std::vector<int>> sube(genReader, "sube");std::cout << __LINE__ << std::endl;
+    TTreeReaderValue<std::vector<int>> sube(genReader, "sube");
 
     TChain pfChain("pfcandAnalyzer/pfTree");
     FillChain(pfChain, files);
@@ -111,19 +111,19 @@ int Compare(char const* config, char const* output) {
     TTreeReaderValue<std::vector<float>> pfPt(pfReader, "pfPt");
     TTreeReaderValue<std::vector<float>> pfEnergy(pfReader, "pfEnergy");
     TTreeReaderValue<std::vector<float>> pfEta(pfReader, "pfEta");
-    TTreeReaderValue<std::vector<float>> pfPhi(pfReader, "pfPhi");std::cout << __LINE__ << std::endl;
+    TTreeReaderValue<std::vector<float>> pfPhi(pfReader, "pfPhi");
 
     /* create histograms */
     auto iphoton = new interval(dpt);
     auto ienergy = new interval("HF Energy Sum"s, 20, 0, 2500);
     auto ipt = new interval("HF Pt Sum"s, 20, 0, 150);
-    auto ieta = new interval("Eta", 20, -5, 5);std::cout << __LINE__ << std::endl;
+    auto ieta = new interval("Eta", 20, -5, 5);
 
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
     auto fenergy = std::bind(&interval::book<TH1F>, ienergy, _1, _2, _3);
     auto fnpu = [&](int64_t, std::string const& name, std::string const& label) {
         return new TProfile(name.data(), (";Ncoll;HF Energy;"s + label).data(), 18, 0, 18, 0, 70000, "LE"); };
-    auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);
 
     auto h_hf_pf_energy_selected = new history<TH1F>("h_hf_pf_energy_selected"s, "", fenergy, iphoton->size());
     auto h_hf_pf_pt_selected = new history<TH1F>("h_hf_pf_pt_selected"s, "", fpt, iphoton->size());
@@ -131,24 +131,24 @@ int Compare(char const* config, char const* output) {
     auto h_npu_hf_pf_energy_selected = new history<TProfile>("h_npu_hf_pf_energy_selected"s, "", fnpu, 1);
     auto h_hf_gen_energy_selected = new history<TH1F>("h_hf_gen_energy_selected"s, "", fenergy, 1);
     auto h_hf_gen_pt_selected = new history<TH1F>("h_hf_gen_pt_selected"s, "", fpt, 1);
-    auto h_hf_gen_eta_selected = new history<TH1F>("h_hf_gen_eta_selected"s, "", feta, 1);std::cout << __LINE__ << std::endl;
+    auto h_hf_gen_eta_selected = new history<TH1F>("h_hf_gen_eta_selected"s, "", feta, 1);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* read in information from TTrees */
-    int entries = evtChain.GetEntries();std::cout << __LINE__ << std::endl;
+    int entries = evtChain.GetEntries();
 
-    for (int i = 1; i < entries; ++i) {
+    for (int i = 1; i < entries; ++i) {std::cout << __LINE__ << std::endl;
         evtReader.Next(); pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
 
-        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;
+        if (i % (entries/200) == 0) std::cout << i << " / " << entries << std::endl;std::cout << __LINE__ << std::endl;
 
         if (std::abs(*vz) > 15) { continue; }
 
         float gen_energy_sum = 0;
-        float gen_pt_sum = 0;pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
+        float gen_pt_sum = 0;
 
         if (*ncoll == 0) { 
             for (size_t j = 0; j < pt->size(); ++j) {
@@ -157,12 +157,12 @@ int Compare(char const* config, char const* output) {
                     gen_pt_sum += (*pt)[j];
                 }
             }
-        }pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
+        }std::cout << __LINE__ << std::endl;
 
-        auto pt_x = ipt->index_for(200);pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
+        auto pt_x = ipt->index_for(200);
 
         float pf_energy_sum = 0;
-        float pf_pt_sum = 0;
+        float pf_pt_sum = 0;std::cout << __LINE__ << std::endl;
 
         for (size_t j = 0; j < pfPt->size(); ++j) {
             (*h_hf_pf_eta_selected)[0]->Fill((*pfEta)[j], *weight);
@@ -171,7 +171,7 @@ int Compare(char const* config, char const* output) {
                 pf_energy_sum += (*pfEnergy)[j];
                 pf_pt_sum += (*pfPt)[j];
             }
-        }pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
+        }std::cout << __LINE__ << std::endl;
 
         if (*ncoll == 0) { 
             (*h_hf_pf_energy_selected)[pt_x]->Fill(pf_energy_sum, *weight);
@@ -182,12 +182,12 @@ int Compare(char const* config, char const* output) {
                 if ((*pt)[j] > 0.4) {
                     (*h_hf_gen_eta_selected)[0]->Fill((*eta)[j], *weight);
                 }
-            }pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
-        }
+            }
+        }std::cout << __LINE__ << std::endl;
 
-        (*h_npu_hf_pf_energy_selected)[0]->Fill(*ncoll, pf_energy_sum, *weight);pfReader.Next(); genReader.Next();std::cout << __LINE__ << std::endl;
+        (*h_npu_hf_pf_energy_selected)[0]->Fill(*ncoll, pf_energy_sum, *weight);std::cout << __LINE__ << std::endl;
     }
-
+std::cout << __LINE__ << std::endl;
     /* save histograms */
     in(output, [&]() {
         h_hf_pf_energy_selected->save(tag);
