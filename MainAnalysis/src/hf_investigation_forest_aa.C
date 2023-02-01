@@ -232,7 +232,7 @@ int Compare(char const* config, char const* output) {
         for (size_t j = 0; j < pfPt->size(); ++j) {
             (*h_hf_pf_eta_selected)[0]->Fill((*pfEta)[j], *weight);
 
-            if ((*pfId)[j] >= 6) {
+            if ((*pfId)[j] >= 6 && (*pfEta)[j] < 5) {
                 pf_energy_sum += (*pfEnergy)[j];
                 pf_pt_sum += (*pfPt)[j];
             }
