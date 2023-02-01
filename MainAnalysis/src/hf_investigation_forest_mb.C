@@ -158,6 +158,7 @@ int Compare(char const* config, char const* output) {
                     gen_energy_sum += (*pt)[j] * std::cosh((*eta)[j]);
                     gen_pt_sum += (*pt)[j];
                 }
+            }
         }
 
         auto pt_x = ipt->index_for(200);
