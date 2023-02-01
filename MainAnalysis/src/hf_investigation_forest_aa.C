@@ -320,14 +320,14 @@ int Compare(char const* config, char const* output) {
 
     auto c1 = new paper(tag + "_" + pthat_tag + "_pthat", hb);
     apply_style(c1, "", "#sqrt{s} = 5.02 TeV"s);
-    c1->accessory(std::bind(mean_info, h_pthat, _2));
+    c1->accessory(std::bind(mean_info, h_pthat, _1));
     c1->add((*h_pthat)[0], "PbPb MC");
     hb->sketch();
     c1->draw("pdf");
 
     auto c2 = new paper(tag + "_" + pthat_tag + "_selected_pthat", hb);
     apply_style(c2, "", "#sqrt{s} = 5.02 TeV"s);
-    c2->accessory(std::bind(mean_info, h_pthat_selected, _2));
+    c2->accessory(std::bind(mean_info, h_pthat_selected, _1));
     c2->add((*h_pthat_selected)[0], "PbPb MC");
     hb->sketch();
     c2->draw("pdf");
@@ -335,7 +335,7 @@ int Compare(char const* config, char const* output) {
     auto c3 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_energy", hb);
     apply_style(c3, "", "#sqrt{s} = 5.02 TeV"s);
     c3->accessory(pt_info);
-    c3->accessory(std::bind(mean_info, h_hf_pf_energy_selected, _2));
+    c3->accessory(std::bind(mean_info, h_hf_pf_energy_selected, _1));
     c3->divide(iphoton->size(), -1);
     for (int64_t j = 0; j < iphoton->size(); ++j) {
         c3->add((*h_hf_pf_energy_selected)[j], "PbPb MC");
@@ -346,7 +346,7 @@ int Compare(char const* config, char const* output) {
     auto c30 = new paper(tag + "_" + pthat_tag + "_selected_pf_eta", hb);
     apply_style(c30, "", "#sqrt{s} = 5.02 TeV"s);
     c30->accessory(pt_info);
-    c30->accessory(std::bind(mean_info, h_hf_pf_eta_selected, _2));
+    c30->accessory(std::bind(mean_info, h_hf_pf_eta_selected, _1));
     c30->add((*h_hf_pf_eta_selected)[0], "PbPb MC");
     hb->sketch();
     c30->draw("pdf");
@@ -354,7 +354,7 @@ int Compare(char const* config, char const* output) {
     auto c31 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_pt", hb);
     apply_style(c31, "", "#sqrt{s} = 5.02 TeV"s);
     c31->accessory(pt_info);
-    c31->accessory(std::bind(mean_info, h_hf_pf_pt_selected, _2));
+    c31->accessory(std::bind(mean_info, h_hf_pf_pt_selected, _1));
     c31->divide(iphoton->size(), -1);
     for (int64_t j = 0; j < iphoton->size(); ++j) {
         c31->add((*h_hf_pf_pt_selected)[j], "PbPb MC");
@@ -364,63 +364,63 @@ int Compare(char const* config, char const* output) {
 
     auto c4 = new paper(tag + "_" + pthat_tag + "_selected_pf_hf_energy_vs_pu", hb);
     apply_style(c4, "", "#sqrt{s} = 5.02 TeV"s);
-    c4->accessory(std::bind(mean_info, h_npu_hf_pf_energy_selected, _2));
+    c4->accessory(std::bind(mean_info, h_npu_hf_pf_energy_selected, _1));
     c4->add((*h_npu_hf_pf_energy_selected)[0], "PbPb MC");
     hb->sketch();
     c4->draw("pdf");
 
     auto c5 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_energy", hb);
     apply_style(c5, "", "#sqrt{s} = 5.02 TeV"s);
-    c5->accessory(std::bind(mean_info, h_hf_gen_energy_selected, _2));
+    c5->accessory(std::bind(mean_info, h_hf_gen_energy_selected, _1));
     c5->add((*h_hf_gen_energy_selected)[0], "PbPb MC");
     hb->sketch();
     c5->draw("pdf");
 
     auto c6 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_energy_subid0", hb);
     apply_style(c6, "", "#sqrt{s} = 5.02 TeV"s);
-    c6->accessory(std::bind(mean_info, h_hf_gen_energy_selected_subid0, _2));
+    c6->accessory(std::bind(mean_info, h_hf_gen_energy_selected_subid0, _1));
     c6->add((*h_hf_gen_energy_selected_subid0)[0], "PbPb MC");
     hb->sketch();
     c6->draw("pdf");
 
     auto c50 = new paper(tag + "_" + pthat_tag + "_selected_gen_eta", hb);
     apply_style(c50, "", "#sqrt{s} = 5.02 TeV"s);
-    c50->accessory(std::bind(mean_info, h_hf_gen_eta_selected, _2));
+    c50->accessory(std::bind(mean_info, h_hf_gen_eta_selected, _1));
     c50->add((*h_hf_gen_eta_selected)[0], "PbPb MC");
     hb->sketch();
     c50->draw("pdf");
 
     auto c60 = new paper(tag + "_" + pthat_tag + "_selected_gen_eta_subid0", hb);
     apply_style(c60, "", "#sqrt{s} = 5.02 TeV"s);
-    c60->accessory(std::bind(mean_info, h_hf_gen_eta_selected_subid0, _2));
+    c60->accessory(std::bind(mean_info, h_hf_gen_eta_selected_subid0, _1));
     c60->add((*h_hf_gen_eta_selected_subid0)[0], "PbPb MC");
     hb->sketch();
     c60->draw("pdf");
 
     auto c51 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_pt", hb);
     apply_style(c51, "", "#sqrt{s} = 5.02 TeV"s);
-    c51->accessory(std::bind(mean_info, h_hf_gen_pt_selected, _2));
+    c51->accessory(std::bind(mean_info, h_hf_gen_pt_selected, _1));
     c51->add((*h_hf_gen_pt_selected)[0], "PbPb MC");
     hb->sketch();
     c51->draw("pdf");
 
     auto c61 = new paper(tag + "_" + pthat_tag + "_selected_gen_hf_pt_subid0", hb);
     apply_style(c61, "", "#sqrt{s} = 5.02 TeV"s);
-    c61->accessory(std::bind(mean_info, h_hf_gen_pt_selected_subid0, _2));
+    c61->accessory(std::bind(mean_info, h_hf_gen_pt_selected_subid0, _1));
     c61->add((*h_hf_gen_pt_selected_subid0)[0], "PbPb MC");
     hb->sketch();
     c61->draw("pdf");
 
     auto c7 = new paper(tag + "_" + pthat_tag + "_gen_hf_energy", hb);
     apply_style(c7, "", "#sqrt{s} = 5.02 TeV"s);
-    c7->accessory(std::bind(mean_info, h_hf_gen_energy, _2));
+    c7->accessory(std::bind(mean_info, h_hf_gen_energy, _1));
     c7->add((*h_hf_gen_energy)[0], "PbPb MC");
     hb->sketch();
     c7->draw("pdf");
 
     auto c8 = new paper(tag + "_" + pthat_tag + "_gen_hf_energy_subid0", hb);
     apply_style(c8, "", "#sqrt{s} = 5.02 TeV"s);
-    c8->accessory(std::bind(mean_info, h_hf_gen_energy_subid0, _2));
+    c8->accessory(std::bind(mean_info, h_hf_gen_energy_subid0, _1));
     c8->add((*h_hf_gen_energy_subid0)[0], "PbPb MC");
     hb->sketch();
     c8->draw("pdf");
