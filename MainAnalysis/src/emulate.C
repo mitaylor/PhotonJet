@@ -67,6 +67,8 @@ int emulate(char const* config, char const* output) {
 
     /* iterate through combined chain */
     for (auto const& file : mc) {
+        std::cout << file << std::endl;
+
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 0, 0, 0, 0 });
