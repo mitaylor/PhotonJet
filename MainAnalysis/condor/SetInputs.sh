@@ -249,11 +249,11 @@
 # ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_extra_prelim.conf \
 # "regulate_aa_qcd_extra_120_F" 100
 
-# regulate_aa_qcd_extra_120 filtered remainder ***
-./SubmitJobs.sh \
-"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMCExtra30F120/230109_194605/" \
-../../configs/regulate/preapproval-parallel/regulate_aa_qcd_extra_prelim.conf \
-"regulate_aa_qcd_extra_120_F_R" 100
+# # regulate_aa_qcd_extra_120 filtered remainder ***
+# ./SubmitJobs.sh \
+# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMCExtra30F120/230109_194605/" \
+# ../../configs/regulate/preapproval-parallel/regulate_aa_qcd_extra_prelim.conf \
+# "regulate_aa_qcd_extra_120_F_R" 100
 
 # # regulate_aa_qcd_extra_170 filtered
 # ./SubmitJobs.sh \
