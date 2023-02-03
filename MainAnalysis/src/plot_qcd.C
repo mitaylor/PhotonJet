@@ -22,6 +22,16 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+float weight_for(std::vector<int32_t> const& divisions,
+                 std::vector<float> const& weights, float value) {
+    int64_t index = -1;
+    for (auto edge : divisions)
+        if (value > edge)
+            ++index;
+
+    return weights[index];
+}
+
 int populate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -32,6 +42,10 @@ int populate(char const* config, char const* output) {
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
+
+    std::vector<float> original_weights = { 9.972652E-01, 2.132830E-01, 6.679997E-02, 1.784052E-02, 8.292187E-03, 1.131320E-03 };
+    std::vector<float> new_weights = { 9.970141E-01, 2.132282E-01, 6.680332E-02, 1.783156E-02, 8.286595E-03, 1.130233E-03 };
+    std::vector<int32_t> pthat = { 0, 30, 50, 80, 120, 170 };
 
     /* load input */
     for (auto const& file : files) {
@@ -45,7 +59,7 @@ int populate(char const* config, char const* output) {
 
             t->GetEntry(i);
 
-            pthat_w->Fill(pjt->pthat, pjt->w);
+            pthat_w->Fill(pjt->pthat, pjt->w * weight_for(pthat, new_weights, pjt->pthat) / weight_for(pthat, original_weights, pjt->pthat));
         }
     }
 
