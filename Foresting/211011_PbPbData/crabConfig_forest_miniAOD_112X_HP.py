@@ -28,3 +28,5 @@ config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Coll
 config.section_("Site")
 # config.Site.storageSite = 'T2_US_MIT'
 config.Site.storageSite = 'T2_CH_CERN'
+config.Site.ignoreGlobalBlacklist = True
+config.Site.whitelist = ['T2_US_Vanderbilt']
