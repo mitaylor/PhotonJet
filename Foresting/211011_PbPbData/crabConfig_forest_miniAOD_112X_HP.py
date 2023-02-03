@@ -1,6 +1,7 @@
-OutputBase = '/store/user/mitaylor/PhotonJet'
+# OutputBase = '/store/user/mitaylor/PhotonJet'
+OutputBase = '/store/group/phys_heavyions/mitaylor/PhotonJet'
 DatasetName = '/HIHardProbes/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD'
-Tag = '20230130PbPbHP'
+Tag = '20230203PbPbHP'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -25,4 +26,5 @@ config.Data.outLFNDirBase = OutputBase + DatasetName
 config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/HI/PromptReco/Cert_326381-327564_HI_PromptReco_Collisions18_JSON.txt'
 
 config.section_("Site")
-config.Site.storageSite = 'T2_US_MIT'
+# config.Site.storageSite = 'T2_US_MIT'
+config.Site.storageSite = 'T2_CH_CERN'
