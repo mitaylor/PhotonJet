@@ -43,8 +43,11 @@ int populate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<float> original_weights = { 9.972652E-01, 2.132830E-01, 6.679997E-02, 1.784052E-02, 8.292187E-03, 1.131320E-03 };
-    std::vector<float> new_weights = { 9.970141E-01, 2.132282E-01, 6.680332E-02, 1.783156E-02, 9.286595E-03, 1.130233E-03 };
+    // std::vector<float> original_weights = { 9.972652E-01, 2.132830E-01, 6.679997E-02, 1.784052E-02, 8.292187E-03, 1.131320E-03 }; //Extra
+    // std::vector<float> new_weights = { 9.970141E-01, 2.132282E-01, 6.680332E-02, 1.783156E-02, 9.286595E-03, 1.130233E-03 };
+
+    std::vector<float> original_weights = { 9.972652E-01, 2.132830E-01, 6.679997E-02, 1.784052E-02, 8.292187E-03, 1.131320E-03 }; //AOD 
+    std::vector<float> new_weights = { 9.992514E-01, 2.156008E-01, 5.488456E-02, 1.328866E-02, 5.958453E-03, 9.055225E-04 };
     std::vector<int32_t> pthat = { 0, 30, 50, 80, 120, 170 };
 
     /* load input */
