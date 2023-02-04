@@ -1,6 +1,7 @@
-OutputBase = '/store/user/mitaylor/PhotonJet'
+# OutputBase = '/store/user/mitaylor/PhotonJet'
+OutputBase = '/store/group/phys_heavyions/mitaylor/PhotonJet'
 DatasetName = '/ZeroBias/Run2017G-17Nov2017-v1/AOD'
-Tag = '20220829PPZB'
+Tag = '20230204PPZB'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -25,4 +26,7 @@ config.Data.outLFNDirBase = OutputBase + DatasetName
 config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/5TeV/ReReco/Cert_306546-306826_5TeV_EOY2017ReReco_Collisions17_JSON.txt'
 
 config.section_("Site")
-config.Site.storageSite = 'T2_US_MIT'
+# config.Site.storageSite = 'T2_US_MIT'
+config.Site.storageSite = 'T2_CH_CERN'
+config.Site.ignoreGlobalBlacklist = True
+config.Site.whitelist = ['T2_US_Vanderbilt']
