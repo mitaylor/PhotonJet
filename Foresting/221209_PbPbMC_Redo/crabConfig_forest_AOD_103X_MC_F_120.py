@@ -21,7 +21,6 @@ config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 config.Data.publication = False
-config.Data.lumiMask = '/afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/Foresting/221209_PbPbMC_Redo/30F120_remains.json'
 config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName
 
