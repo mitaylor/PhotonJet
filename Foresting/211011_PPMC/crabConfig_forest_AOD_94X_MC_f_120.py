@@ -1,6 +1,7 @@
-OutputBase = '/store/user/mitaylor/PhotonJet'
+# OutputBase = '/store/user/mitaylor/PhotonJet'
+OutputBase = '/store/group/phys_heavyions/mitaylor/PhotonJet'
 DatasetName = '/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM'
-Tag = '20220825PPMC30F120'
+Tag = '20230204PPMC30F120'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -24,4 +25,6 @@ config.Data.outputDatasetTag = Tag
 config.Data.outLFNDirBase = OutputBase + DatasetName
 
 config.section_("Site")
-config.Site.storageSite = 'T2_US_MIT'
+# config.Site.storageSite = 'T2_US_MIT'
+config.Site.storageSite = 'T2_CH_CERN'
+config.Site.ignoreGlobalBlacklist = True
