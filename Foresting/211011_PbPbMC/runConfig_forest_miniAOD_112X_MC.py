@@ -130,9 +130,9 @@ process.muonAnalyzer.doGen = cms.bool(True)
 process.forest = cms.Path(
     process.HiForestInfo +
     process.hltanalysis +
-    process.hltobject +
-    process.l1object +
-    process.trackSequencePbPb +
+    # process.hltobject +
+    # process.l1object +
+    # process.trackSequencePbPb +
     process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
     process.HiGenParticleAna +
