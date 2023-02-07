@@ -7,7 +7,6 @@ When_To_Transfer_Output = ON_EXIT
 +DESIRED_Sites          = "mit_tier3"
 Max_Retries             = 5
 When_To_Transfer_Output = ON_EXIT
-+DESIRED_Sites = "mit_tier3"
 Transfer_Output_Files   = __MASTER___$(index).root
 Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/photons/condor/__MASTER___$(index).root"
 
