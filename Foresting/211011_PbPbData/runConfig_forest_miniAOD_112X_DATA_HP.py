@@ -137,7 +137,7 @@ process.forest = cms.Path(
     process.hltanalysis +
     process.hltobject +
     process.l1object +
-    # process.trackSequencePbPb +
+    process.trackSequencePbPb +
     process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
     # process.unpackedMuons +
