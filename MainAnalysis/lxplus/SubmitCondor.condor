@@ -1,0 +1,18 @@
+Universe                = vanilla
+Executable              = /afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAnalysis/lxplus/RunRegulate.sh
+Should_Transfer_Files   = YES
+When_To_Transfer_Output = ON_EXIT
++JobFlavour             = "longlunch"
++RequestMemory          = 4096
+Max_Retries             = 5
+When_To_Transfer_Output = ON_EXIT
+Transfer_Output_Files   = __MASTER___$(index).root
+Transfer_Output_Remaps  = "__MASTER___$(index).root=/eos/cms/store/group/phys_heavyions/mitaylor/Skims/__MASTER___$(index).root"
+
+Transfer_Input_Files    = $(file),../regulate,../data,../x509up_u117190
+Arguments               = $(file) __MASTER___$(index).root
+Output                  = __MASTER__.$(ClusterId).$(index).out
+Error                   = __MASTER__.$(ClusterId).$(index).err
+Log                     = __MASTER__.$(ClusterId).$(index).log
+
+Queue index,file from __MASTER__.list
