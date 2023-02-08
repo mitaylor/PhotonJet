@@ -3,13 +3,17 @@
 list=${1}
 
 folders=($(awk -F '/' '{print $9}' ${list} | awk -F '.' '{print $1}'))
+echo 1
 numbers=($(awk -F '.' '{print $3}'))
+echo 2
 old_files=$(cat ${list})
+echo 3
 
 cp /tmp/x509up_u117190 x509up_u117190
+echo 4
 
 old_folder="x"
-
+echo 5
 for i in ${!folders[@]}; do
     if [ ${old_folder} != ${folders[i]} ]
     then
@@ -20,7 +24,7 @@ for i in ${!folders[@]}; do
         #     cd ..
         # fi
 
-        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" > "${folders[i]}/${folders[i]}.list"
+        echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
     else
         echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
     fi
