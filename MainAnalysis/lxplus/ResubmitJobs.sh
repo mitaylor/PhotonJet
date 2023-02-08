@@ -10,6 +10,9 @@ cp /tmp/x509up_u117190 x509up_u117190
 
 old_folder="x"
 
+cat $folders
+cat $numbers
+
 for i in ${!folders[@]}; do
     echo ${folders[i]}
     if [ ${old_folder} != ${folders[i]} ]
