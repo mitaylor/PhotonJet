@@ -4,7 +4,7 @@ list=${1}
 
 folders=($(awk -F '/' '{print $9}' ${list} | awk -F '.' '{print $1}'))
 numbers=($(awk -F '.' '{print $3}' ${list} ))
-old_files=$(cat ${list})
+old_files=($(cat ${list}))
 
 # cp /tmp/x509up_u117190 x509up_u117190
 
