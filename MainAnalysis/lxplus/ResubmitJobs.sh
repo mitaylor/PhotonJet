@@ -10,19 +10,15 @@ cp /tmp/x509up_u117190 x509up_u117190
 
 old_folder="x"
 
-cat $folders
-cat $numbers
-
 for i in ${!folders[@]}; do
-    echo ${folders[i]}
     if [ ${old_folder} != ${folders[i]} ]
     then
-        # if [ ${old_folder} != "x" ]
-        # then
-        #     cd ${old_folder}
-        #     condor_submit SubmitCondor_${old_folder}.condor
-        #     cd ..
-        # fi
+        if [ ${old_folder} != "x" ]
+        then
+            cd ${old_folder}
+            condor_submit SubmitCondor_${old_folder}.condor
+            cd ..
+        fi
 
         echo "${numbers[i]}, ${folders[i]}_${numbers[i]}.conf" >> "${folders[i]}/${folders[i]}.list"
     else
@@ -32,12 +28,12 @@ for i in ${!folders[@]}; do
     old_folder=${folders[i]}
 done
 
-# cd ${old_folder}
-# condor_submit SubmitCondor_${old_folder}.condor
-# cd ..
+cd ${old_folder}
+condor_submit SubmitCondor_${old_folder}.condor
+cd ..
 
-# for i in ${!old_files[@]}; do
-#     rm ${old_files[i]}
-#     echo "${old_files[i]}" >> deleted_err.txt
-#     rm "/eos/cms/store/group/phys_heavyions/mitaylor/Skims/${folders[i]}_${numbers[i]}.root"
-# done
+for i in ${!old_files[@]}; do
+    rm ${old_files[i]}
+    echo "${old_files[i]}" >> deleted_err.txt
+    rm "/eos/cms/store/group/phys_heavyions/mitaylor/Skims/${folders[i]}_${numbers[i]}.root"
+done
