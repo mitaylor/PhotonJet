@@ -3,6 +3,7 @@ Executable              = /afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/Mai
 Should_Transfer_Files   = YES
 When_To_Transfer_Output = ON_EXIT
 +MaxRuntime             = 14400
++MaxTransferOutputMB     = 4096
 +RequestMemory          = 4096
 Max_Retries             = 5
 When_To_Transfer_Output = ON_EXIT
