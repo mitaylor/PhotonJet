@@ -156,11 +156,11 @@ int hf_shift(char const* config, char const* output) {
             // (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt->w);
             // (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt->w);
 
-            (*hp_hn)[0]->Fill(pf_sum, hp_pjt->Ncoll, hp_pjt);
-            (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll, hp_pjt);
+            (*hp_hn)[0]->Fill(pf_sum, hp_pjt->Ncoll);
+            (*hp_rn)[0]->Fill(avg_rho, hp_pjt->Ncoll);
 
-            (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum, hp_pjt);
-            (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho, hp_pjt);
+            (*hp_hn_p)[0]->Fill(hp_pjt->Ncoll, pf_sum);
+            (*hp_rn_p)[0]->Fill(hp_pjt->Ncoll, avg_rho);
         }
 
         hp_f->Close();
@@ -196,11 +196,11 @@ int hf_shift(char const* config, char const* output) {
             // (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum, mb_pjt->w);
             // (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho, mb_pjt->w);
 
-            (*mb_hn)[0]->Fill(pf_sum, mb_pjt->Ncoll, mb_pjt);
-            (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll, mb_pjt);
+            (*mb_hn)[0]->Fill(pf_sum, mb_pjt->Ncoll);
+            (*mb_rn)[0]->Fill(avg_rho, mb_pjt->Ncoll);
 
-            (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum, mb_pjt);
-            (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho, mb_pjt);
+            (*mb_hn_p)[0]->Fill(mb_pjt->Ncoll, pf_sum);
+            (*mb_rn_p)[0]->Fill(mb_pjt->Ncoll, avg_rho);
         }
 
         mb_f->Close();
