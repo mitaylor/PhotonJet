@@ -157,7 +157,7 @@ int estimate_hf(char const* config, char const* output) {
             float pf_sum = 0;
 
             for (size_t j = 0; j < pjt->pfEnergy->size(); ++j) {
-                if ((*pjt->pfId)[j] >= 6) {
+                if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
                     pf_sum += (*pjt->pfEnergy)[j];
                 }
             }
@@ -196,23 +196,11 @@ int estimate_hf(char const* config, char const* output) {
     auto pt_info = [&](int64_t index) {
         info_text(index, 0.75, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    auto mean_info_vtx = [&](int64_t index) {
+    auto mean_info = [&](history<TH1F>* h, int64_t index) {
         char buffer[128] = { '\0' };
         sprintf(buffer, "mean: %.3f +- %.3f",
-            (*hf_v1)[index - 1]->GetMean(1),
-            (*hf_v1)[index - 1]->GetMeanError(1));
-
-        TLatex* text = new TLatex();
-        text->SetTextFont(43);
-        text->SetTextSize(12);
-        text->DrawLatexNDC(0.54, 0.75, buffer);
-    };
-
-    auto mean_info_pu = [&](int64_t index) {
-        char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f +- %.3f",
-            (*hf_p0)[index - 1]->GetMean(1),
-            (*hf_p0)[index - 1]->GetMeanError(1));
+            (*h)[index - 1]->GetMean(1),
+            (*h)[index - 1]->GetMeanError(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
@@ -227,7 +215,7 @@ int estimate_hf(char const* config, char const* output) {
     apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
-    c1->accessory(mean_info_vtx);
+    c1->accessory(std::bind(mean_info, hf_v1, _1));
     c1->divide(ipt->size(), -1);
     // c1->set(paper::flags::logy);
 
@@ -243,7 +231,7 @@ int estimate_hf(char const* config, char const* output) {
         apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
         c2->accessory(pt_info);
-        c2->accessory(mean_info_pu);
+        c2->accessory(std::bind(mean_info, hf_p0, _1));
         c2->divide(ipt->size(), -1);
 
         for (int64_t j = 0; j < ipt->size(); ++j) {
