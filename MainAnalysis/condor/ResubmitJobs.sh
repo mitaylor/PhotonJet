@@ -33,6 +33,5 @@ condor_submit SubmitCondor_${old_folder}.condor
 cd ..
 
 for i in ${!old_files[@]}; do
-    rm ${old_files[i]}
-    echo "${old_files[i]}" >> deleted.txt
+    mv ${old_files[i]} ../errors
 done
