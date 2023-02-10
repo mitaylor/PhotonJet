@@ -22,7 +22,7 @@ sed -i 's/^.*\/store/root:\/\/xrootd.cmsaf.mit.edu\/\/store/' ${output_tag}
 # split -l 1 --numeric-suffixes=0 -a 3 ${output_tag} ${output_tag}_
 # files=`find . -type f -name "${output_tag}_[0-9][0-9][0-9]" -printf '%f\n'`
 
-file=$(cat ${output_tag})
+files=$(cat ${output_tag})
 
 # create all of the config files
 for file in ${files}; do
