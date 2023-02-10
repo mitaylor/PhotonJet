@@ -19,22 +19,25 @@ cd ${output_tag}
 find ${folder} -type f > ${output_tag}
 sed -i 's/^.*\/store/root:\/\/xrootd.cmsaf.mit.edu\/\/store/' ${output_tag}
 # sed -i 's/^.*\/store/root:\/\/eoscms.cern.ch\/\/store/' ${output_tag}
-split -l 1 --numeric-suffixes=0 -a 3 ${output_tag} ${output_tag}_
-files=`find . -type f -name "${output_tag}_[0-9][0-9][0-9]" -printf '%f\n'`
+# split -l 1 --numeric-suffixes=0 -a 3 ${output_tag} ${output_tag}_
+# files=`find . -type f -name "${output_tag}_[0-9][0-9][0-9]" -printf '%f\n'`
+
+file=$(cat ${output_tag})
 
 # create all of the config files
 for file in ${files}; do
-    input=$(cat ${file})
-    mv ${file} ${file}.conf
+    # mv ${file} ${file}.conf
     index=$(get_number ${file})
 
-    sed -i '1 i\ std::vector<std::string> files =' ${file}.conf
-    sed -i 's/$/ \\/' ${file}.conf # add \ after every line
-    sed -i '${s/\\$//;p;x}' ${file}.conf # delete the final \
-    echo "$(cat ${config_fragment})" >> ${file}.conf # add the rest of the configuration file
+    # sed -i '1 i\ std::vector<std::string> files =' ${file}.conf
+    # sed -i 's/$/ \\/' ${file}.conf # add \ after every line
+    # sed -i '${s/\\$//;p;x}' ${file}.conf # delete the final \
+    # echo "$(cat ${config_fragment})" >> ${file}.conf # add the rest of the configuration file
 
-    echo "${index}, ${input}" >> "${output_tag}.list"
+    echo "${index}, ${file}" >> "${output_tag}.list"
 done
 
 cat ../SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor_${output_tag}.condor
+sed -i "s/__CONFIG__/${config_fragment}/g" SubmitCondor_${output_tag}.condor
+
 # condor_submit SubmitCondor_${output_tag}.condor
