@@ -36,7 +36,5 @@ for file in ${files}; do
     echo "${index}, ${input}" >> "${output_tag}.list"
 done
 
-echo "$(cat ${output_tag}.list)"
-
 cat ../SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor_${output_tag}.condor
 # condor_submit SubmitCondor_${output_tag}.condor
