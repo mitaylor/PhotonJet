@@ -10,10 +10,10 @@ When_To_Transfer_Output = ON_EXIT
 Transfer_Output_Files   = __MASTER___$(index).root
 Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/photons/condor/__MASTER___$(index).root"
 
-Transfer_Input_Files    = $(file),../regulate,../data,../x509up_u168456
-Arguments               = $(file) __MASTER___$(index).root
+Transfer_Input_Files    = __MASTER___$(index).conf,../regulate,../data,../x509up_u168456
+Arguments               = __MASTER___$(index).conf __MASTER___$(index).root $(input)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err
 Log                     = __MASTER__.$(ClusterId).$(index).log
 
-Queue index,file from __MASTER__.list
+Queue index,input from __MASTER__.list

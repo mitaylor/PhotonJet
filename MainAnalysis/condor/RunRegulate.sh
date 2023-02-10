@@ -2,6 +2,7 @@
 
 file=$1
 output=$2
+input=$3
 
 WorkDir=`pwd`
 
@@ -23,4 +24,8 @@ eval `scramv1 runtime -sh`
 
 cd $WorkDir
 
+xrdcp ${input} input.root
+
 ./regulate $file $output
+
+rm input.root
