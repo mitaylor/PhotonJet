@@ -42,4 +42,4 @@ awk -F "[_.]" -v OFS=", " '{print $(NF-1), $0}' ${output_tag} > ${output_tag}.li
 cat ../SubmitCondor.condor | sed "s/__MASTER__/${output_tag}/g" > SubmitCondor.condor
 sed -i "s/__CONFIG__/${config_fragment}/g" SubmitCondor.condor
 
-condor_submit SubmitCondor.condor
+# condor_submit SubmitCondor.condor

@@ -4,12 +4,9 @@ file=$1
 output=$2
 input=$3
 
-# WorkDir=`pwd`
+WorkDir=`pwd`
 
 # export X509_USER_PROXY=${WorkDir}/x509up_u168456
-
-# # cd /afs/cern.ch/user/m/mitaylor/cmssw/CMSSW_10_3_3_patch1/src/
-# # eval `scramv1 runtime -sh`
 
 # source /cvmfs/cms.cern.ch/cmsset_default.sh
 # export SCRAM_ARCH=slc7_amd64_gcc700
@@ -24,7 +21,7 @@ input=$3
 
 # cd $WorkDir
 
-echo ${input}
+echo ${input} > ${output}
 
 # xrdcp ${input} input.root
 
