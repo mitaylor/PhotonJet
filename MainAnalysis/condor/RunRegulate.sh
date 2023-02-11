@@ -24,8 +24,10 @@ eval `scramv1 runtime -sh`
 
 cd $WorkDir
 
-xrdcp ${input} input.root
+echo ${input}
 
-./regulate $file $output
+# xrdcp ${input} input.root
 
-rm input.root
+# ./regulate $file $output
+
+# rm input.root

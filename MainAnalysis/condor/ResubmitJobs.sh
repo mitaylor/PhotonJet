@@ -16,7 +16,7 @@ for i in ${!folders[@]}; do
         if [ ${old_folder} != "x" ]
         then
             cd ${old_folder}
-            condor_submit SubmitCondor_${old_folder}.condor
+            condor_submit SubmitCondor.condor
             cd ..
         fi
 
@@ -29,7 +29,7 @@ for i in ${!folders[@]}; do
 done
 
 cd ${old_folder}
-condor_submit SubmitCondor_${old_folder}.condor
+condor_submit SubmitCondor.condor
 cd ..
 
 for i in ${!old_files[@]}; do
