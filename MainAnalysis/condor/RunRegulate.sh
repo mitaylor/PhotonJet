@@ -25,6 +25,6 @@ echo ${input} > ${output}
 
 xrdcp ${input} input.root
 
-# ./regulate $file $output
+./regulate $file $output
 
 rm input.root
