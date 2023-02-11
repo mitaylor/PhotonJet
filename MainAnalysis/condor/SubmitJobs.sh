@@ -24,7 +24,7 @@ sed -i 's/^.*\/store/root:\/\/xrootd.cmsaf.mit.edu\/\/store/' ${output_tag}
 
 # files=$(cat ${output_tag})
 
-awk -F "_." '{print ${NF-1}, $0}' ${output_tag}
+awk -F "_." '{print $(NF-1), $0}' ${output_tag}
 
 # # create all of the config files
 # for file in ${files}; do
