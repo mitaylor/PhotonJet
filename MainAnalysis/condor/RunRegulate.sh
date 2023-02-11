@@ -23,8 +23,8 @@ cd $WorkDir
 
 echo ${input} > ${output}
 
-# xrdcp ${input} input.root
+xrdcp ${input} input.root
 
 # ./regulate $file $output
 
-# rm input.root
+rm input.root
