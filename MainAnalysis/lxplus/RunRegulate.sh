@@ -24,6 +24,8 @@ export X509_USER_PROXY=/afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAn
 
 xrdcp ${input} input.root
 
+echo "./regulate $file $output" > $output
+
 ./regulate $file $output
 
 rm input.root

@@ -9,7 +9,6 @@ Max_Retries             = 5
 When_To_Transfer_Output = ON_EXIT
 Transfer_Output_Files   = __MASTER___$(index).root
 Output_Destination = root://eosuser.cern.ch//eos/cms/store/group/phys_heavyions/mitaylor/Skims/
-use_x509userproxy = true
 
 Transfer_Input_Files    = __CONFIG__,../regulate,../data,../x509up_u117190
 Arguments               = __CONFIG__ __MASTER___$(index).root $(file)
