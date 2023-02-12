@@ -16,12 +16,11 @@ if [ -r CMSSW_10_3_3_patch1/src ] ; then
 else
 scram p CMSSW CMSSW_10_3_3_patch1
 fi
+
 cd CMSSW_10_3_3_patch1/src
 eval `scramv1 runtime -sh`
 
 cd $WorkDir
-
-echo ${input} > ${output}
 
 xrdcp ${input} input.root
 
