@@ -8,7 +8,7 @@ cp /tmp/x509up_u117190 x509up_u117190
 
 mkdir -p ${output_tag}
 cd ${output_tag}
-cp ./../configs/regulate/preapproval-parallel/${config_fragment} .
+cp ../../configs/regulate/preapproval-parallel/${config_fragment} .
 # rm -f *
 
 # split the input files so there are no more than 30 files per job
