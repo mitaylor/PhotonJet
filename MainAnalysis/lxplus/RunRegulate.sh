@@ -22,10 +22,10 @@ cd $WorkDir
 
 export X509_USER_PROXY=/afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAnalysis/lxplus/x509up_u117190
 
-xrdcp ${input} input.root
+# xrdcp ${input} input.root
 
 echo "./regulate $file $output" > $output
 
-./regulate $file $output
+# ./regulate $file $output
 
-rm input.root
+# rm input.root
