@@ -12,9 +12,9 @@ Output_Destination = root://eosuser.cern.ch//eos/cms/store/group/phys_heavyions/
 use_x509userproxy = true
 
 Transfer_Input_Files    = __CONFIG__,../regulate,../data,../x509up_u117190
-Arguments               = __CONFIG__ __MASTER___$(index).root $(input)
+Arguments               = __CONFIG__ __MASTER___$(index).root $(file)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err
 Log                     = __MASTER__.$(ClusterId).$(index).log
 
-Queue index,input from __MASTER__.list
+Queue index,file from __MASTER__.list
