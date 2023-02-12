@@ -24,8 +24,11 @@ export X509_USER_PROXY=/afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAn
 
 cp /afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAnalysis/lxplus/x509up_u117190 /tmp/x509up_u117190
 
-xrdcp ${input} input.root
+echo $X509_USER_PROXY
+cat /afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAnalysis/lxplus/x509up_u117190
 
-./regulate $file $output
+# xrdcp ${input} input.root
 
-rm input.root
+# ./regulate $file $output
+
+# rm input.root
