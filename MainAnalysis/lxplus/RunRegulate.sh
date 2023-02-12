@@ -6,7 +6,7 @@ input=$3
 
 WorkDir=`pwd`
 
-export X509_USER_PROXY=${WorkDir}/x509up_u117190
+export X509_USER_PROXY=/afs/cern.ch/user/m/mitaylor/physics/PhotonJet2018/MainAnalysis/lxplus/x509up_u117190
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 export SCRAM_ARCH=slc7_amd64_gcc700
