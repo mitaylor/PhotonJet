@@ -2,7 +2,7 @@ Universe                = vanilla
 Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/RunRegulate.sh
 Should_Transfer_Files   = YES
 When_To_Transfer_Output = ON_EXIT
-+JobFlavour             = "longlunch"
++MaxRuntime             = 14400
 +RequestMemory          = 4096
 +DESIRED_Sites          = "mit_tier3"
 Max_Retries             = 5
@@ -11,9 +11,9 @@ Transfer_Output_Files   = __MASTER___$(index).root
 Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/photons/condor/__MASTER___$(index).root"
 
 Transfer_Input_Files    = __CONFIG__,../regulate,../data,../x509up_u168456
-Arguments               = __CONFIG__ __MASTER___$(index).root $(input)
+Arguments               = __CONFIG__ __MASTER___$(index).root $(file)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err
 Log                     = __MASTER__.$(ClusterId).$(index).log
 
-Queue index,input from __MASTER__.list
+Queue index,file from __MASTER__.list
