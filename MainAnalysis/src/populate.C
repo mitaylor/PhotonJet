@@ -368,8 +368,6 @@ int populate(char const* config, char const* output) {
                 }
             }
 
-            std::cout << __LINE__ << std::endl;
-
             if ((i + parity) % modulo != 0) { continue; }
 
             t->GetEntry(i);
