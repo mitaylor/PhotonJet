@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-dataset=regulate_aa_qcd_extra_80_F
+dataset=$1
 
 files=$(ls /data/submit/mitay/photons/condor/${dataset}*)
 
 hadd /data/submit/mitay/photons/${dataset}.root $files
 
 # n=$(ls /data/submit/mitay/photons/condor/${dataset}* | wc -l)
-
 
 # limit=`expr $n / 2`
 
