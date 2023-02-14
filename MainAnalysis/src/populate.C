@@ -341,7 +341,7 @@ int populate(char const* config, char const* output) {
 
     if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
 
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries());
+    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
     
     int64_t tentries = 0;
     clock_t time = clock();
@@ -526,6 +526,10 @@ int populate(char const* config, char const* output) {
                         acceptance, total);
 
                 ++k;
+
+                if (m > mentries - 10) {
+                    std::cout << m << "/" << mentries << std::endl;
+                }
             }
 
             tentries++;
