@@ -286,7 +286,7 @@ int populate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* fm = new TFile(mb.data(), "read");
+    TFile* fm = new TFile(mb[0].data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
@@ -348,10 +348,10 @@ int populate(char const* config, char const* output) {
     clock_t duration = 0;
 
     /* load input */
-    for (auto const& file : hp_input) {
+    for (auto const& file : input) {
         std::cout << file << std::endl;
 
-        TFile* f = new TFile(input.data(), "read");
+        TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
