@@ -16,7 +16,7 @@ then
         hadd /data/submit/mitay/photons/${dataset}_$i.root ${files[index_1]} ${files[index_2]}
     done
 else
-    limit=`expr ($n - 1) / 2`
+    limit=`expr $n - 1 / 2`
 
 	for ((i=0 ; i<$limit ; i++)); 
     do
