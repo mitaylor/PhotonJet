@@ -507,7 +507,7 @@ int populate(char const* config, char const* output) {
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             tm->GetEntry(m);
 
-            float pfsum_m = 0
+            float pfsum_m = 0;
             for (size_t j = 0; j < pjtm->pfEta->size(); ++j) {
                 if (std::abs((*pjtm->pfEta)[j]) > 3 && std::abs((*pjtm->pfEta)[j]) < 5) {
                     pfsum_m += (*pjtm->pfE)[j];
