@@ -192,7 +192,7 @@ int populate(char const* config, char const* output) {
 
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
-    auto tag = conf->get<std::string>("tag");
+    auto tag = conf->get<std::string>("tag");std::cout << __LINE__ << std::endl;
 
     /* options */
     auto heavyion = conf->get<bool>("heavyion");
@@ -225,7 +225,7 @@ int populate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto const hf_interval = conf->get<float>("hf_interval");
-    auto const hf_offset = conf->get<float>("hf_offset");
+    auto const hf_offset = conf->get<float>("hf_offset");std::cout << __LINE__ << std::endl;
 
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
@@ -246,7 +246,7 @@ int populate(char const* config, char const* output) {
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
-    auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
+    auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);std::cout << __LINE__ << std::endl;
 
     auto frdr = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", mdr->size(), 0, mdr->size()); };
@@ -254,7 +254,7 @@ int populate(char const* config, char const* output) {
         return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
 
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
-    auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);
+    auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);std::cout << __LINE__ << std::endl;
 
     auto pjet_es_f_dphi = new memory<TH1F>("pjet_es_f_dphi"s,
         "1/N^{#gamma} dN/d#Delta#phi^{#gammaj}", fdphi, mpthf);
@@ -272,7 +272,7 @@ int populate(char const* config, char const* output) {
     auto mix_pjet_f_dr = new memory<TH1F>("mix_pjet_f_dr",
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
-        "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
+        "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);std::cout << __LINE__ << std::endl;
 
     auto pjet_u_dr = new memory<TH1F>("pjet_u_dr"s, "", frdr, mpthf);
     auto pjet_es_u_dphi = new memory<TH1F>("pjet_es_u_dphi"s, "", frdphi, mpthf);
@@ -280,17 +280,17 @@ int populate(char const* config, char const* output) {
 
     auto mix_pjet_u_dr = new memory<TH1F>("mix_pjet_u_dr"s, "", frdr, mpthf);
     auto mix_pjet_es_u_dphi = new memory<TH1F>("mix_pjet_es_u_dphi"s, "", frdphi, mpthf);
-    auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);
+    auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);std::cout << __LINE__ << std::endl;
 
     /* manage memory manually */
     TH1::AddDirectory(false);
-    TH1::SetDefaultSumw2();
+    TH1::SetDefaultSumw2();std::cout << __LINE__ << std::endl;
 
-    TFile* fm = new TFile(mb[0].data(), "read");
-    TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
+    TFile* fm = new TFile(mb[0].data(), "read");std::cout << __LINE__ << std::endl;
+    TTree* tm = (TTree*)fm->Get("pj");std::cout << __LINE__ << std::endl;
+    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });std::cout << __LINE__ << std::endl;
 
-    printf("iterate..\n");
+    printf("iterate..\n");std::cout << __LINE__ << std::endl;
 
     /* load efficiency correction */
     TFile* fe;
