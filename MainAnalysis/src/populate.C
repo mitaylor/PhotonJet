@@ -214,10 +214,6 @@ int populate(char const* config, char const* output) {
     auto const gen_iso_max = conf->get<float>("gen_iso_max");
     auto const jet_pt_min = conf->get<float>("jet_pt_min");
 
-    auto const hf_threshold = conf->get<float>("hf_threshold");
-    auto hf_sub = conf->get<bool>("hf_sub");
-    auto hf_reclassify = conf->get<bool>("hf_reclassify");
-
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
     auto rdr = conf->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram and also the smearing application
@@ -228,6 +224,9 @@ int populate(char const* config, char const* output) {
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
+
+    auto const hf_interval = conf->get<float>("hf_interval");
+    auto const hf_offset = conf->get<float>("hf_offset");
 
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
@@ -291,11 +290,11 @@ int populate(char const* config, char const* output) {
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+    auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
 
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
     printf("iterate..\n");
 
@@ -453,12 +452,6 @@ int populate(char const* config, char const* output) {
 
         double hf = pjt->hiHF;
         auto hf_x = ihf->index_for(hf);
-        if (hf_sub) {
-            hf -= 30;
-        }
-        if (hf_reclassify) {
-            if (hf > dhf.front()) hf_x = ihf->index_for(hf);
-        }
 
         std::vector<int64_t> pthf_x;
         if (!rho.empty()) {
@@ -500,12 +493,29 @@ int populate(char const* config, char const* output) {
                   pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
                   acceptance, total);
 
+        float pfsum = 0
+        for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
+            if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                pfsum += (*pjt->pfE)[j];
+            }
+        }
+
+        int interval = (pfsum - hf_offset) / hf_interval;
+        interval = (interval < 0) ? 0 : interval;
+
         /* mixing events in minimum bias */
         for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
             tm->GetEntry(m);
 
-            /* hf within +/- 10% */
-            if (std::abs(pjtm->hiHF / hf - 1.) > hf_threshold) { continue; }
+            float pfsum_m = 0
+            for (size_t j = 0; j < pjtm->pfEta->size(); ++j) {
+                if (std::abs((*pjtm->pfEta)[j]) > 3 && std::abs((*pjtm->pfEta)[j]) < 5) {
+                    pfsum_m += (*pjtm->pfE)[j];
+                }
+            }
+
+            int intervalm = pfsum_m / hf_interval;
+            if (intervalm != interval) { continue; }
 
             fill_axes(pjtm, pthf_x, weights, pho_cor,
                       photon_eta, photon_phi, exclude, heavyion && !no_jes,
