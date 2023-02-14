@@ -168,8 +168,8 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
 int populate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
-    auto mb = conf->get<std::string>("mb");
+    auto input = conf->get<std::vector<std::string>>("input");
+    auto mb = conf->get<std::vector<std::string>>("mb");
 
     auto smear = conf->get<bool>("smear");
     auto smear_input_aa = conf->get<std::string>("smear_input_aa");
@@ -187,8 +187,7 @@ int populate(char const* config, char const* output) {
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
 
-    auto entries = conf->get<int64_t>("entries");
-    auto mod = conf->get<bool>("mod");
+    auto modulo = conf->get<int64_t>("modulo");
     auto parity = conf->get<bool>("parity");
 
     auto mix = conf->get<int64_t>("mix");
@@ -287,11 +286,6 @@ int populate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    /* load input */
-    TFile* f = new TFile(input.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
-
     TFile* fm = new TFile(mb.data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
@@ -345,10 +339,6 @@ int populate(char const* config, char const* output) {
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
-    int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    int64_t modulo = 1;
-    if (mod) modulo = 2;
-    if (entries) { modulo = nentries / entries; }
     if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
 
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
@@ -357,179 +347,191 @@ int populate(char const* config, char const* output) {
     clock_t time = clock();
     clock_t duration = 0;
 
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
-        if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
-        if (i % frequency == 0) { 
-            if (tentries != 0) {
-                duration = clock() - time;
-                std::cout << "Time per " << frequency/modulo << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
-                std::cout << "Entries: " << tentries << std::endl;
-                tentries = 0;
-                time = clock();
-            }
-        }
+    /* load input */
+    for (auto const& file : hp_input) {
+        std::cout << file << std::endl;
 
-        if ((i + parity) % modulo != 0) { continue; }
+        TFile* f = new TFile(input.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        t->GetEntry(i);
-
-        if (rho.empty() && pjt->hiHF <= dhf.front()) { continue; }
-        if (rho.empty() && pjt->hiHF >= dhf.back()) { continue; }
-        if (std::abs(pjt->vz) > 15) { continue; }
-
-        int64_t leading = -1;
-        float leading_pt = 0;
-        for (int64_t j = 0; j < pjt->nPho; ++j) {
-            if ((*pjt->phoEt)[j] <= 30) { continue; }
-            if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-            if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
-
-            auto pho_et = (*pjt->phoEt)[j];
-            if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
-
-            if (filtered && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
-
-            if (pho_et < photon_pt_min) { continue; }
-
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
-            }
-        }
-
-        /* require leading photon */
-        if (leading < 0) { continue; }
-
-        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
-                || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
-            continue;
-
-        /* hem failure region exclusion */
-        if (exclude && in_pho_failure_region(pjt, leading)) { continue; }
-
-        /* isolation requirement */
-        if (gen_iso) {
-            auto gen_index = (*pjt->pho_genMatchedIndex)[leading];
-            if (gen_index == -1) { continue; }
-
-            float isolation = (*pjt->mcCalIsoDR04)[gen_index];
-            if (isolation > gen_iso_max) { continue; }
-        } else {
-            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                + (*pjt->pho_hcalRechitIsoR3)[leading]
-                + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
-        }
-
-        /* leading photon axis */
-        auto photon_eta = (*pjt->phoEta)[leading];
-        auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
-
-        /* electron rejection */
-        if (ele_rej) {
-            bool electron = false;
-            for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
-
-                auto deta = photon_eta - (*pjt->eleEta)[j];
-                if (deta > 0.1) { continue; }
-
-                auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
-
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(pjt, j, heavyion)) {
-                    electron = true; break; }
-            }
-
-            if (electron) { continue; }
-        }
-
-        auto pt_x = ipt->index_for(leading_pt);
-
-        double hf = pjt->hiHF;
-        auto hf_x = ihf->index_for(hf);
-
-        std::vector<int64_t> pthf_x;
-        if (!rho.empty()) {
-            for (int64_t k = 0; k < ihf->size(); ++k) {
-                pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
-            }
-        } else {
-            pthf_x.push_back(mpthf->index_for(x{pt_x, hf_x}));
-        }
-
-        auto weight = pjt->w;
-
-        if (!eff.empty() && leading_pt < 70) {
-            auto bin = (*efficiency)[1]->FindBin(leading_pt);
-            auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
-            if (corr < 1) { std::cout << "error" << std::endl; return -1; }
-            weight *= corr;
-        }
-
-        std::vector<float> weights;
-        if (!rho.empty()) {
-            auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
-
-            for (int64_t k = 0; k < ihf->size(); ++k) {
-                auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
-                auto corr = (*rho_weighting)[k]->GetBinContent(bin);
-                weights.push_back(weight * corr);
-            }
-        } else {
-            weights.push_back(weight);
-        }
-
-        fill_axes(pjt, pthf_x, weights, pho_cor,
-                  photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                  jet_pt_min, mdphi, mdr, idphi, idr, rng,
-                  smear, smear_fits_aa, smear_fits_pp, cent, nevt,
-                  pjet_es_f_dphi, pjet_wta_f_dphi, 
-                  pjet_f_dr, pjet_f_jpt,
-                  pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
-                  acceptance, total);
-
-        float pfsum = 0;
-        for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
-            if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                pfsum += (*pjt->pfE)[j];
-            }
-        }
-
-        int interval = (pfsum - hf_offset) / hf_interval;
-        interval = (interval < 0) ? 0 : interval;
-
-        /* mixing events in minimum bias */
-        for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
-            tm->GetEntry(m);
-
-            float pfsum_m = 0;
-            for (size_t j = 0; j < pjtm->pfEta->size(); ++j) {
-                if (std::abs((*pjtm->pfEta)[j]) > 3 && std::abs((*pjtm->pfEta)[j]) < 5) {
-                    pfsum_m += (*pjtm->pfE)[j];
+        for (int64_t i = 0, m = 0; i < nentries; ++i) {
+            if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
+            if (i % frequency == 0) { 
+                if (tentries != 0) {
+                    duration = clock() - time;
+                    std::cout << "Time per " << frequency/modulo << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                    std::cout << "Entries: " << tentries << std::endl;
+                    tentries = 0;
+                    time = clock();
                 }
             }
 
-            int intervalm = pfsum_m / hf_interval;
-            if (intervalm != interval) { continue; }
+            if ((i + parity) % modulo != 0) { continue; }
 
-            fill_axes(pjtm, pthf_x, weights, pho_cor,
-                      photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                      jet_pt_min, mdphi, mdr, idphi, idr, rng,
-                      smear, smear_fits_aa, smear_fits_pp, cent, nmix,
-                      mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
-                      mix_pjet_f_dr, mix_pjet_f_jpt,
-                      mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
-                      acceptance, total);
+            t->GetEntry(i);
 
-            ++k;
+            if (rho.empty() && pjt->hiHF <= dhf.front()) { continue; }
+            if (rho.empty() && pjt->hiHF >= dhf.back()) { continue; }
+            if (std::abs(pjt->vz) > 15) { continue; }
+
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if ((*pjt->phoEt)[j] <= 30) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+
+                auto pho_et = (*pjt->phoEt)[j];
+                if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
+                if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
+
+                if (filtered && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
+
+                if (pho_et < photon_pt_min) { continue; }
+
+                if (pho_et > leading_pt) {
+                    leading = j;
+                    leading_pt = pho_et;
+                }
+            }
+
+            /* require leading photon */
+            if (leading < 0) { continue; }
+
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
+                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
+                continue;
+
+            /* hem failure region exclusion */
+            if (exclude && in_pho_failure_region(pjt, leading)) { continue; }
+
+            /* isolation requirement */
+            if (gen_iso) {
+                auto gen_index = (*pjt->pho_genMatchedIndex)[leading];
+                if (gen_index == -1) { continue; }
+
+                float isolation = (*pjt->mcCalIsoDR04)[gen_index];
+                if (isolation > gen_iso_max) { continue; }
+            } else {
+                float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+                    + (*pjt->pho_hcalRechitIsoR3)[leading]
+                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
+                if (isolation > iso_max) { continue; }
+            }
+
+            /* leading photon axis */
+            auto photon_eta = (*pjt->phoEta)[leading];
+            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+
+            /* electron rejection */
+            if (ele_rej) {
+                bool electron = false;
+                for (int64_t j = 0; j < pjt->nEle; ++j) {
+                    if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+
+                    auto deta = photon_eta - (*pjt->eleEta)[j];
+                    if (deta > 0.1) { continue; }
+
+                    auto ele_phi = convert_radian((*pjt->elePhi)[j]);
+                    auto dphi = revert_radian(photon_phi - ele_phi);
+                    auto dr2 = deta * deta + dphi * dphi;
+
+                    if (dr2 < 0.01 && passes_electron_id<
+                                det::barrel, wp::loose, pjtree
+                            >(pjt, j, heavyion)) {
+                        electron = true; break; }
+                }
+
+                if (electron) { continue; }
+            }
+
+            auto pt_x = ipt->index_for(leading_pt);
+
+            double hf = pjt->hiHF;
+            auto hf_x = ihf->index_for(hf);
+
+            std::vector<int64_t> pthf_x;
+            if (!rho.empty()) {
+                for (int64_t k = 0; k < ihf->size(); ++k) {
+                    pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
+                }
+            } else {
+                pthf_x.push_back(mpthf->index_for(x{pt_x, hf_x}));
+            }
+
+            auto weight = pjt->w;
+
+            if (!eff.empty() && leading_pt < 70) {
+                auto bin = (*efficiency)[1]->FindBin(leading_pt);
+                auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
+                if (corr < 1) { std::cout << "error" << std::endl; return -1; }
+                weight *= corr;
+            }
+
+            std::vector<float> weights;
+            if (!rho.empty()) {
+                auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
+
+                for (int64_t k = 0; k < ihf->size(); ++k) {
+                    auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
+                    auto corr = (*rho_weighting)[k]->GetBinContent(bin);
+                    weights.push_back(weight * corr);
+                }
+            } else {
+                weights.push_back(weight);
+            }
+
+            fill_axes(pjt, pthf_x, weights, pho_cor,
+                    photon_eta, photon_phi, exclude, heavyion && !no_jes,
+                    jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                    smear, smear_fits_aa, smear_fits_pp, cent, nevt,
+                    pjet_es_f_dphi, pjet_wta_f_dphi, 
+                    pjet_f_dr, pjet_f_jpt,
+                    pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
+                    acceptance, total);
+
+            float pfsum = 0;
+            for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
+                if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                    pfsum += (*pjt->pfE)[j];
+                }
+            }
+
+            int interval = (pfsum - hf_offset) / hf_interval;
+            interval = (interval < 0) ? 0 : interval;
+
+            /* mixing events in minimum bias */
+            for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
+                tm->GetEntry(m);
+
+                float pfsum_m = 0;
+                for (size_t j = 0; j < pjtm->pfEta->size(); ++j) {
+                    if (std::abs((*pjtm->pfEta)[j]) > 3 && std::abs((*pjtm->pfEta)[j]) < 5) {
+                        pfsum_m += (*pjtm->pfE)[j];
+                    }
+                }
+
+                int intervalm = pfsum_m / hf_interval;
+                if (intervalm != interval) { continue; }
+
+                fill_axes(pjtm, pthf_x, weights, pho_cor,
+                        photon_eta, photon_phi, exclude, heavyion && !no_jes,
+                        jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                        smear, smear_fits_aa, smear_fits_pp, cent, nmix,
+                        mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
+                        mix_pjet_f_dr, mix_pjet_f_jpt,
+                        mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
+                        acceptance, total);
+
+                ++k;
+            }
+
+            tentries++;
         }
 
-        tentries++;
+        f->Close();
     }
 
     /* normalise histograms */
