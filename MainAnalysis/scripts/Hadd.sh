@@ -13,18 +13,22 @@ then
     do
         index_1=`expr $i * 2`
         index_2=`expr $i * 2 + 1`
-        hadd /data/submit/mitay/photons/${dataset}_$i.root ${files[index_1]} ${files[index_2]}
+        # hadd /data/submit/mitay/photons/${dataset}_$i.root ${files[index_1]} ${files[index_2]}
     done
 else
     limit=`expr $n - 1 / 2`
+
+    echo $limit
 
 	for ((i=0 ; i<$limit ; i++)); 
     do
         index_1=`expr $i * 2`
         index_2=`expr $i * 2 + 1`
-        hadd /data/submit/mitay/photons/${dataset}_$i.root ${files[index_1]} ${files[index_2]}
+
+        echo "$index_1 $index_2"
+        # hadd /data/submit/mitay/photons/${dataset}_$i.root ${files[index_1]} ${files[index_2]}
     done
 
     index=`expr $n - 1`
-    cp ${files[index]} /data/submit/mitay/photons/${dataset}_$limit.root
+    # cp ${files[index]} /data/submit/mitay/photons/${dataset}_$limit.root
 fi
