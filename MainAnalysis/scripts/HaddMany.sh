@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 dataset=$1
+n=$2
 
 ls /data/submit/mitay/photons/condor/${dataset}* > ${dataset}
-split -l 30 --numeric-suffixes=0 -a 3 ${dataset} ${dataset}_
+split -l ${n} --numeric-suffixes=0 -a 3 ${dataset} ${dataset}_
 
 files=($(ls ${dataset}_*))
 
