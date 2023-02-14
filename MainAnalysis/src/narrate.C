@@ -26,7 +26,7 @@ using namespace std::placeholders;
 int narrate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto data = conf->get<std::string>("data");
+    auto data = conf->get<std::vector<std::string>>("data");
     auto files = conf->get<std::vector<std::string>>("files");
 
     auto system = conf->get<std::string>("system");
@@ -56,60 +56,66 @@ int narrate(char const* config, char const* output) {
     auto rho_ratio = new history<TH1F>("rho_ratio"s, "", frho, dim_1_size, dim_2_size);
 
 
-    TFile* f = new TFile(data.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
+    for (auto const& file : data) {
+        std::cout << file << std::endl;
 
-    int64_t nentries = static_cast<int64_t>(t->GetEntries());
-    // int64_t nentries = 10000;
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
 
-    for (int64_t i = 0; i < nentries-1; ++i) {
-        if (i % 100000 == 0)
-            printf("entry: %li/%li\n", i, nentries);
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        // int64_t nentries = 10000;
 
-        t->GetEntry(i);
-        auto hf_x = ihf->index_for(pjt->hiHF);
+        for (int64_t i = 0; i < nentries-1; ++i) {
+            if (i % 100000 == 0)
+                printf("entry: %li/%li\n", i, nentries);
 
-        if (hf_x < 0) continue;
-        if (hf_x == ihf->size()) continue;
+            t->GetEntry(i);
+            auto hf_x = ihf->index_for(pjt->hiHF);
 
-        if (std::abs(pjt->vz) > 15) { continue; }
+            if (hf_x < 0) continue;
+            if (hf_x == ihf->size()) continue;
 
-        int64_t leading = -1;
-        float leading_pt = 0;
-        for (int64_t j = 0; j < pjt->nPho; ++j) {
-            if ((*pjt->phoEt)[j] <= 40) { continue; }
-            if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
-            if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+            if (std::abs(pjt->vz) > 15) { continue; }
 
-            if ((*pjt->phoEt)[j] > leading_pt) {
-                leading = j;
-                leading_pt = (*pjt->phoEt)[j];
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if ((*pjt->phoEt)[j] <= 40) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+                if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+
+                if ((*pjt->phoEt)[j] > leading_pt) {
+                    leading = j;
+                    leading_pt = (*pjt->phoEt)[j];
+                }
+            }
+
+            if (leading < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
+            if (in_pho_failure_region(pjt, leading)) { continue; }
+
+            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+                + (*pjt->pho_hcalRechitIsoR3)[leading]
+                + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > 2.099277) { continue; }
+
+            for (size_t j = 0; j < eta_min.size(); ++j) {
+                auto eta_x = static_cast<int64_t>(j);
+                auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
+
+                (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
             }
         }
 
-        if (leading < 0) { continue; }
-        if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
-        if (in_pho_failure_region(pjt, leading)) { continue; }
-
-        float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-            + (*pjt->pho_hcalRechitIsoR3)[leading]
-            + (*pjt->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > 2.099277) { continue; }
-
-        for (size_t j = 0; j < eta_min.size(); ++j) {
-            auto eta_x = static_cast<int64_t>(j);
-            auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
-
-            (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
-        }
+        f->Close();
+        delete f;
+        delete pjt;
     }
 
-    f->Close();
-    delete f;
-    delete pjt;
-
     for (auto const& file : files) {
+        std::cout << file << std::endl;
+        
         f = new TFile(file.data(), "read");
         t = (TTree*)f->Get("pj");
         pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
