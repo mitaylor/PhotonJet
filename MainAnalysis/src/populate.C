@@ -493,7 +493,7 @@ int populate(char const* config, char const* output) {
                   pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
                   acceptance, total);
 
-        float pfsum = 0
+        float pfsum = 0;
         for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
             if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
                 pfsum += (*pjt->pfE)[j];
