@@ -107,18 +107,14 @@ int narrate(char const* config, char const* output) {
                 (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
             }
         }
-
-        f->Close();
-        delete f;
-        delete pjt;
     }
 
     for (auto const& file : files) {
         std::cout << file << std::endl;
-        
-        f = new TFile(file.data(), "read");
-        t = (TTree*)f->Get("pj");
-        pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
+
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
 
         nentries = static_cast<int64_t>(t->GetEntries());
         // nentries = 10000;
@@ -164,10 +160,6 @@ int narrate(char const* config, char const* output) {
                 }
             }
         }
-
-        f->Close();
-        delete f;
-        delete pjt;
     }
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
