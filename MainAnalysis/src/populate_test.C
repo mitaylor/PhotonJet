@@ -384,13 +384,13 @@ int populate(char const* config, char const* output) {
                 }
             }
 
-            if ((i + parity) % modulo != 0) { continue; }
+            if ((i + parity) % modulo != 0) { continue; }std::cout<<__LINE__<<std::endl;
 
-            t->GetEntry(i);
+            t->GetEntry(i);std::cout<<__LINE__<<std::endl;
 
-            if (rho.empty() && pjt->hiHF <= dhf.front()) { continue; }
-            if (rho.empty() && pjt->hiHF >= dhf.back()) { continue; }
-            if (std::abs(pjt->vz) > 15) { continue; }
+            if (rho.empty() && pjt->hiHF <= dhf.front()) { continue; }std::cout<<__LINE__<<std::endl;
+            if (rho.empty() && pjt->hiHF >= dhf.back()) { continue; }std::cout<<__LINE__<<std::endl;
+            if (std::abs(pjt->vz) > 15) { continue; }std::cout<<__LINE__<<std::endl;
 
             int64_t leading = -1;
             float leading_pt = 0;
@@ -411,22 +411,22 @@ int populate(char const* config, char const* output) {
                     leading = j;
                     leading_pt = pho_et;
                 }
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             /* require leading photon */
             if (leading < 0) { continue; }
 
             if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
-                continue;
+                continue;std::cout<<__LINE__<<std::endl;
 
             /* hem failure region exclusion */
-            if (exclude && in_pho_failure_region(pjt, leading)) { continue; }
+            if (exclude && in_pho_failure_region(pjt, leading)) { continue; }std::cout<<__LINE__<<std::endl;
 
             /* isolation requirement */
             if (gen_iso) {
                 auto gen_index = (*pjt->pho_genMatchedIndex)[leading];
-                if (gen_index == -1) { continue; }
+                if (gen_index == -1) { continue; }std::cout<<__LINE__<<std::endl;
 
                 float isolation = (*pjt->mcCalIsoDR04)[gen_index];
                 if (isolation > gen_iso_max) { continue; }
@@ -435,11 +435,11 @@ int populate(char const* config, char const* output) {
                     + (*pjt->pho_hcalRechitIsoR3)[leading]
                     + (*pjt->pho_trackIsoR3PtCut20)[leading];
                 if (isolation > iso_max) { continue; }
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[leading];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);std::cout<<__LINE__<<std::endl;
 
             /* electron rejection */
             if (ele_rej) {
@@ -461,12 +461,12 @@ int populate(char const* config, char const* output) {
                 }
 
                 if (electron) { continue; }
-            }
+            }std::cout<<__LINE__<<std::endl;
 
-            auto pt_x = ipt->index_for(leading_pt);
+            auto pt_x = ipt->index_for(leading_pt);std::cout<<__LINE__<<std::endl;
 
             double hf = pjt->hiHF;
-            auto hf_x = ihf->index_for(hf);
+            auto hf_x = ihf->index_for(hf);std::cout<<__LINE__<<std::endl;
 
             std::vector<int64_t> pthf_x;
             if (!rho.empty()) {
@@ -475,7 +475,7 @@ int populate(char const* config, char const* output) {
                 }
             } else {
                 pthf_x.push_back(mpthf->index_for(x{pt_x, hf_x}));
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             auto weight = pjt->w;
 
@@ -484,7 +484,7 @@ int populate(char const* config, char const* output) {
                 auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
                 if (corr < 1) { std::cout << "error" << std::endl; return -1; }
                 weight *= corr;
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             std::vector<float> weights;
             if (!rho.empty()) {
@@ -497,7 +497,7 @@ int populate(char const* config, char const* output) {
                 }
             } else {
                 weights.push_back(weight);
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             fill_axes(pjt, pthf_x, weights, pho_cor,
                     photon_eta, photon_phi, exclude, heavyion && !no_jes,
@@ -506,19 +506,19 @@ int populate(char const* config, char const* output) {
                     pjet_es_f_dphi, pjet_wta_f_dphi, 
                     pjet_f_dr, pjet_f_jpt,
                     pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
-                    acceptance, total);
+                    acceptance, total);std::cout<<__LINE__<<std::endl;
 
             float pfsum = 0;
             for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
                 if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
                     pfsum += (*pjt->pfE)[j];
                 }
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             int interval = (pfsum - hf_offset) / hf_interval;
-            interval = (interval < 0) ? 0 : interval;
+            interval = (interval < 0) ? 0 : interval;std::cout<<__LINE__<<std::endl;
 
-            /* mixing events in minimum bias */
+            /* mixing events in minimum bias */std::cout<<__LINE__<<std::endl;
             for (int64_t k = 0; k < mix; m++) {
                 if ((m + 1) % mentries == 0) {
                     std::cout << "Switch MB file" << std::endl;
@@ -561,7 +561,7 @@ int populate(char const* config, char const* output) {
                         acceptance, total);
 
                 ++k;
-            }
+            }std::cout<<__LINE__<<std::endl;
 
             tentries++;
         }
