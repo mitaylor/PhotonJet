@@ -174,11 +174,11 @@
 ##############################################################################
 ##############################################################################
 
-# regulate_aa_mb_hydjet
-./SubmitJobs.sh \
-"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/MinBias_Hydjet_Drum5F_2018_5p02TeV/HINPbPbSpring21MiniAOD-NoPUmva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/MinBias_Hydjet_Drum5F_2018_5p02TeV/20230127PbPbMCMB/230127_211118/" \
-"regulate_aa_mb_hydjet.conf" \
-"regulate_aa_mb_hydjet"
+# # regulate_aa_mb_hydjet
+# ./SubmitJobs.sh \
+# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/MinBias_Hydjet_Drum5F_2018_5p02TeV/HINPbPbSpring21MiniAOD-NoPUmva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/MinBias_Hydjet_Drum5F_2018_5p02TeV/20230127PbPbMCMB/230127_211118/" \
+# "regulate_aa_mb_hydjet.conf" \
+# "regulate_aa_mb_hydjet"
 
 ##############################################################################
 ##############################################################################
