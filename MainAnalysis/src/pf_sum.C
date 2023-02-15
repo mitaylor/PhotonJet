@@ -32,15 +32,19 @@ int pf_sum(char const* input, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* load input */
-    TFile* f = new TFile(input, "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, heavyion, t, { 0, 0, 0, 0, 0, 0, 0, 1, 0 });
-    int64_t nentries = static_cast<int64_t>(t->GetEntries());
+    TFile* fin = new TFile(input, "read");
+    TTree* tin = (TTree*)fin->Get("pj");
+    auto pjt = new pjtree(gen_iso, false, heavyion, tin, { 0, 0, 0, 0, 0, 0, 0, 1, 0 });
+    int64_t nentries = static_cast<int64_t>(tin->GetEntries());
 
-    for (int64_t i = 0, m = 0; i < nentries; ++i) {
+    /* create output tree */
+    TTree* o("MyTree","Example Tree");
+
+    /* fill output tree */
+    for (int64_t i = 0; i < nentries; ++i) {
         if (i % (nentries/200) == 0) { printf("entry: %li/%li\n", i, nentries); }
 
-        t->GetEntry(i);
+        tin->GetEntry(i);
 
         float pfsum = 0;
         for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
