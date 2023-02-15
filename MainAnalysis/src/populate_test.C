@@ -299,8 +299,8 @@ int populate(char const* config, char const* output) {
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
     float pfSum_m;
-    TFile* fms;
-    TTree* tms;
+    TFile* fms = new TFile();
+    TTree* tms = new TTree();
     int64_t mentries = 0;
 
     if (mb_sum.size() != 0) {
