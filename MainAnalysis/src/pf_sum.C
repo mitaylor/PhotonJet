@@ -41,7 +41,7 @@ int pf_sum(char const* input, char const* output) {
     float pfSum;
     TFile* fout = new TFile(output, "recreate");
     TTree* tout = new TTree("pj", "photon-jet");
-    tout->Branch("pfSum", &pfSum,);
+    tout->Branch("pfSum", &pfSum);
 
     /* fill output tree */
     for (int64_t i = 0; i < nentries; ++i) {
