@@ -73,7 +73,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
-        // if (jet_pt <= jet_pt_min) { continue; }
+        if (jet_pt <= jet_pt_min) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= 1.6) { continue; }
@@ -155,15 +155,16 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
                 (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
-            } else if (jet_pt < jet_pt_min) {
-                (*pjet_u_dr)[index]->Fill(-1, corr * weight);
-                (*pjet_f_jpt)[index]->Fill(-1, corr * weight);
-                (*pjet_f_dr)[index]->Fill(-1, corr * weight);
-            } else {
-                (*pjet_u_dr)[index]->Fill(mdr->size() + 1, corr * weight);
-                (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
-                (*pjet_f_dr)[index]->Fill(1, corr * weight);
             }
+            // } else if (jet_pt < jet_pt_min) {
+            //     (*pjet_u_dr)[index]->Fill(-1, corr * weight);
+            //     (*pjet_f_jpt)[index]->Fill(-1, corr * weight);
+            //     (*pjet_f_dr)[index]->Fill(-1, corr * weight);
+            // } else {
+            //     (*pjet_u_dr)[index]->Fill(mdr->size() + 1, corr * weight);
+            //     (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
+            //     (*pjet_f_dr)[index]->Fill(1, corr * weight);
+            // }
         }, pthf_x, weights);
     }
 }
