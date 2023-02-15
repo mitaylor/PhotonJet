@@ -21,7 +21,7 @@ files1=($(cat files1.txt))
 index1=($(cat index1.txt))
 
 for i in ${!files1[@]}; do
-    ../bin/pf_sum ${files1[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_data_sum_${index1[i]}.root
+    ../bin/pf_sum ${files1[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_hydjet_${index1[i]}.root
 done
 
 rm files1.txt
@@ -34,7 +34,7 @@ rm index1.txt
 # index2=($(cat index2.txt))
 
 # for i in ${!files2[@]}; do
-#     ../bin/pf_sum ${files2[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_data_sum_${index2[i]}.root
+#     ../bin/pf_sum ${files2[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_hydjet_${index2[i]}.root
 # done
 
 # rm files2.txt
