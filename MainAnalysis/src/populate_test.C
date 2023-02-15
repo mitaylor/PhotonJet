@@ -151,15 +151,18 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         }
 
         zip([&](auto const& index, auto const& weight) {
-            (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
-            (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
-
             if (jet_pt < 200 && jet_pt > jet_pt_min) {
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
+                (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
             } else if (jet_pt < jet_pt_min) {
                 (*pjet_u_dr)[index]->Fill(-1, corr * weight);
+                (*pjet_f_jpt)[index]->Fill(-1, corr * weight);
+                (*pjet_f_dr)[index]->Fill(-1, corr * weight);
             } else {
                 (*pjet_u_dr)[index]->Fill(mdr->size() + 1, corr * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
+                (*pjet_f_dr)[index]->Fill(1, corr * weight);
             }
         }, pthf_x, weights);
     }
