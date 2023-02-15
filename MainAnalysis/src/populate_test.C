@@ -170,8 +170,6 @@ int populate(char const* config, char const* output) {
 
     auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
-
-    // auto input_sum = conf->get<std::vector<std::string>>("input_sum");
     auto mb_sum = conf->get<std::vector<std::string>>("mb_sum");
 
     auto smear = conf->get<bool>("smear");
@@ -298,11 +296,16 @@ int populate(char const* config, char const* output) {
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
     float pfSum_m;
-    TFile* fms = new TFile(mb_sum[index_m].data(), "read");
-    TTree* tms = (TTree*)fms->Get("pj");
-    tms->SetBranchAddress("pfSum", &pfSum_m);
+    TFile* fms;
+    TTree* tms;
+    int64_t mentries = 0;
 
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+    if (mb_sum.size() != 0) {
+        fms = new TFile(mb_sum[index_m].data(), "read");
+        tms = (TTree*)fms->Get("pj");
+        tms->SetBranchAddress("pfSum", &pfSum_m);
+        mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+    }
 
     printf("iterate..\n");
 
