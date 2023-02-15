@@ -516,7 +516,10 @@ int populate(char const* config, char const* output) {
                 int intervalm = pfsum_m / hf_interval;
 
                 std::cout << "Nominal: " << pfsum << " (" << interval << ")\t MB: " << pfsum_m << " (" << intervalm << ")" << std::endl;
+                std::cout << "Nominal: " << pjt->hiHF << "\t MB: " << pjtm->hiHF << std::endl;
                 if (intervalm != interval) { continue; }
+
+                std::cout << "FOUND" << std::endl;
 
                 fill_axes(pjtm, pthf_x, weights, pho_cor,
                         photon_eta, photon_phi, exclude, heavyion && !no_jes,
