@@ -38,7 +38,10 @@ int pf_sum(char const* input, char const* output) {
     int64_t nentries = static_cast<int64_t>(tin->GetEntries());
 
     /* create output tree */
-    TTree* o("MyTree","Example Tree");
+    float pfSum;
+    TFile* fout = new TFile(output, "recreate");
+    TTree* tout = new TTree("pj", "photon-jet");
+    tout->Branch("pfSum", &pfSum,);
 
     /* fill output tree */
     for (int64_t i = 0; i < nentries; ++i) {
@@ -46,13 +49,18 @@ int pf_sum(char const* input, char const* output) {
 
         tin->GetEntry(i);
 
-        float pfsum = 0;
+        pfSum = 0;
         for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
             if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                pfsum += (*pjt->pfE)[j];
+                pfSum += (*pjt->pfE)[j];
             }
         }
+
+        tout->Fill();
     }
+
+    fout->Write("", TObject::kOverwrite);
+    fout->Close();
 
     return 0;
 }
