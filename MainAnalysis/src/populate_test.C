@@ -157,7 +157,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
                 (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
             }
 
-            if (pthf_x == 5) {
+            if (index == 5) {
                 std::cout << jet_pt << " " << jt_dr << " " << mdr->index_for(v{jt_dr, jet_pt}) << std::endl;
             }
         }, pthf_x, weights);
