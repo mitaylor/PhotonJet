@@ -10,7 +10,7 @@ files=($(cat files.txt))
 index=($(cat index.txt))
 
 for i in ${!files[@]}; do
-    echo ../bin/pf_sum ${files[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_data_sum_${index[i]}.root
+    ../bin/pf_sum ${files[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_data_sum_${index[i]}.root
 done
 
 rm files.txt
