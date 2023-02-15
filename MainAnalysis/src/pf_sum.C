@@ -34,7 +34,7 @@ int pf_sum(char const* input, char const* output) {
     /* load input */
     TFile* fin = new TFile(input, "read");
     TTree* tin = (TTree*)fin->Get("pj");
-    auto pjt = new pjtree(gen_iso, false, heavyion, tin, { 0, 0, 0, 0, 0, 0, 0, 1, 0 });
+    auto pjt = new pjtree(false, false, true, tin, { 0, 0, 0, 0, 0, 0, 0, 1, 0 });
     int64_t nentries = static_cast<int64_t>(tin->GetEntries());
 
     /* create output tree */
