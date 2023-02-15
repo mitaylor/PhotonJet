@@ -509,61 +509,64 @@ int populate(char const* config, char const* output) {
                     acceptance, total);std::cout<<__LINE__<<std::endl;
 
             float pfsum = 0;
-            for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
-                if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                    pfsum += (*pjt->pfE)[j];
-                }
-            }std::cout<<__LINE__<<std::endl;
 
-            int interval = (pfsum - hf_offset) / hf_interval;
-            interval = (interval < 0) ? 0 : interval;std::cout<<__LINE__<<std::endl;
+            if (mix > 0) {
+                for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
+                    if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                        pfsum += (*pjt->pfE)[j];
+                    }
+                }std::cout<<__LINE__<<std::endl;
 
-            /* mixing events in minimum bias */std::cout<<__LINE__<<std::endl;
-            for (int64_t k = 0; k < mix; m++) {
-                if ((m + 1) % mentries == 0) {
-                    std::cout << "Switch MB file" << std::endl;
-                    m = -1;
+                int interval = (pfsum - hf_offset) / hf_interval;
+                interval = (interval < 0) ? 0 : interval;std::cout<<__LINE__<<std::endl;
 
-                    fm->Close();
-                    fms->Close();
+                /* mixing events in minimum bias */std::cout<<__LINE__<<std::endl;
+                for (int64_t k = 0; k < mix; m++) {
+                    if ((m + 1) % mentries == 0) {
+                        std::cout << "Switch MB file" << std::endl;
+                        m = -1;
 
-                    delete fm; delete fms; delete pjtm;
-                    
-                    index_m = rng->Integer(mb.size());
-                    fm = new TFile(mb[index_m].data(), "read");
-                    tm = (TTree*)fm->Get("pj");
-                    pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
+                        fm->Close();
+                        fms->Close();
 
-                    fms = new TFile(mb_sum[index_m].data(), "read");
-                    tms = (TTree*)fms->Get("pj");
-                    tms->SetBranchAddress("pfSum", &pfSum_m);
+                        delete fm; delete fms; delete pjtm;
+                        
+                        index_m = rng->Integer(mb.size());
+                        fm = new TFile(mb[index_m].data(), "read");
+                        tm = (TTree*)fm->Get("pj");
+                        pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
-                    mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
-                }
+                        fms = new TFile(mb_sum[index_m].data(), "read");
+                        tms = (TTree*)fms->Get("pj");
+                        tms->SetBranchAddress("pfSum", &pfSum_m);
 
-                tms->GetEntry(m);
+                        mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+                    }
 
-                int interval_m = pfSum_m / hf_interval;
+                    tms->GetEntry(m);
 
-                // std::cout << "Nominal: " << pfsum << " (" << interval << ")\t MB: " << pfSum_m << " (" << intervalm << ")" << std::endl;
-                // std::cout << "Nominal: " << pjt->hiHF << "\t MB: " << pjtm->hiHF << std::endl;
-                if (interval_m != interval) { continue; }
+                    int interval_m = pfSum_m / hf_interval;
 
-                tm->GetEntry(m);
+                    // std::cout << "Nominal: " << pfsum << " (" << interval << ")\t MB: " << pfSum_m << " (" << intervalm << ")" << std::endl;
+                    // std::cout << "Nominal: " << pjt->hiHF << "\t MB: " << pjtm->hiHF << std::endl;
+                    if (interval_m != interval) { continue; }
 
-                fill_axes(pjtm, pthf_x, weights, pho_cor,
-                        photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                        jet_pt_min, mdphi, mdr, idphi, idr, rng,
-                        smear, smear_fits_aa, smear_fits_pp, cent, nmix,
-                        mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
-                        mix_pjet_f_dr, mix_pjet_f_jpt,
-                        mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
-                        acceptance, total);
+                    tm->GetEntry(m);
 
-                ++k;
-            }std::cout<<__LINE__<<std::endl;
+                    fill_axes(pjtm, pthf_x, weights, pho_cor,
+                            photon_eta, photon_phi, exclude, heavyion && !no_jes,
+                            jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                            smear, smear_fits_aa, smear_fits_pp, cent, nmix,
+                            mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
+                            mix_pjet_f_dr, mix_pjet_f_jpt,
+                            mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
+                            acceptance, total);
 
-            tentries++;
+                    ++k;
+                }std::cout<<__LINE__<<std::endl;
+
+                tentries++;
+            }
         }
 
         f->Close();
