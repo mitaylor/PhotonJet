@@ -513,10 +513,10 @@ int populate(char const* config, char const* output) {
             interval = (interval < 0) ? 0 : interval;
 
             /* mixing events in minimum bias */
-            for (int64_t k = 0; k < mix; ) {
+            for (int64_t k = 0; k < mix; m++) {
                 if ((m + 1) % mentries == 0) {
                     std::cout << "Switch MB file" << std::endl;
-                    m = 0;
+                    m = -1;
 
                     fm->Close();
                     fms->Close();
