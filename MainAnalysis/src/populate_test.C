@@ -418,7 +418,7 @@ int populate(char const* config, char const* output) {
 
             if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
-                continue;std::cout<<__LINE__<<std::endl;
+                continue;
 
             /* hem failure region exclusion */
             if (exclude && in_pho_failure_region(pjt, leading)) { continue; }std::cout<<__LINE__<<std::endl;
