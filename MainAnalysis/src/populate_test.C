@@ -285,18 +285,24 @@ int populate(char const* config, char const* output) {
     auto mix_pjet_es_u_dphi = new memory<TH1F>("mix_pjet_es_u_dphi"s, "", frdphi, mpthf);
     auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);
 
+    /* random number for smearing and mb selection */
+    auto rng = new TRandom3(144);
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* fm = new TFile(mb[0].data(), "read");
+    int index_m = rng->Integer(mb.size());
+    TFile* fm = new TFile(mb[index_m].data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
     float pfSum_m;
-    TFile* fms = new TFile(mb_sum[0].data(), "read");
+    TFile* fms = new TFile(mb_sum[index_m].data(), "read");
     TTree* tms = (TTree*)fms->Get("pj");
     tms->SetBranchAddress("pfSum", &pfSum_m);
+
+    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
 
     printf("iterate..\n");
 
@@ -342,14 +348,10 @@ int populate(char const* config, char const* output) {
         smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_" + smear_tag);
     }
 
-    auto rng = new TRandom3(144);
-
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
     if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
-
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
     
     int64_t tentries = 0;
     clock_t time = clock();
@@ -364,7 +366,7 @@ int populate(char const* config, char const* output) {
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        for (int64_t i = 0, m = 0; i < nentries; ++i) {
+        for (int64_t i = 0, m = 203000; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
             if (i % frequency == 0) { 
                 if (tentries != 0) {
@@ -511,7 +513,28 @@ int populate(char const* config, char const* output) {
             interval = (interval < 0) ? 0 : interval;
 
             /* mixing events in minimum bias */
-            for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
+            for (int64_t k = 0; k < mix; ) {
+                if ((m + 1) % mentries == 0) {
+                    std::cout << "Switch MB file" << std::endl;
+                    m = 0;
+
+                    fm->Close();
+                    fms->Close();
+
+                    delete fm, fms, pjtm;
+                    
+                    index_m = rng->Integer(mb.size());
+                    fm = new TFile(mb[index_m].data(), "read");
+                    tm = (TTree*)fm->Get("pj");
+                    pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
+
+                    fms = new TFile(mb_sum[index_m].data(), "read");
+                    tms = (TTree*)fms->Get("pj");
+                    tms->SetBranchAddress("pfSum", &pfSum_m);
+
+                    mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+                }
+
                 tms->GetEntry(m);
 
                 int interval_m = pfSum_m / hf_interval;
@@ -532,10 +555,6 @@ int populate(char const* config, char const* output) {
                         acceptance, total);
 
                 ++k;
-
-                if (m > mentries - 10) {
-                    std::cout << m << "/" << mentries << std::endl;
-                }
             }
 
             tentries++;

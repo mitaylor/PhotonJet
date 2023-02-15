@@ -27,15 +27,15 @@
 # rm files1.txt
 # rm index1.txt
 
-ls /data/submit/mitay/photons/condor/regulate_aa_mb_hydjet_?.root > files2.txt
-awk -F "[_.]" '{print $(NF-1)}' files2.txt > index2.txt
+# ls /data/submit/mitay/photons/condor/regulate_aa_mb_hydjet_?.root > files2.txt
+# awk -F "[_.]" '{print $(NF-1)}' files2.txt > index2.txt
 
-files2=($(cat files2.txt))
-index2=($(cat index2.txt))
+# files2=($(cat files2.txt))
+# index2=($(cat index2.txt))
 
-for i in ${!files2[@]}; do
-    ../bin/pf_sum ${files2[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_hydjet_sum_${index2[i]}.root
-done
+# for i in ${!files2[@]}; do
+#     ../bin/pf_sum ${files2[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_hydjet_sum_${index2[i]}.root
+# done
 
-rm files2.txt
-rm index2.txt
+# rm files2.txt
+# rm index2.txt
