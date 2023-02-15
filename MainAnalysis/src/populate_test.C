@@ -521,7 +521,7 @@ int populate(char const* config, char const* output) {
                     fm->Close();
                     fms->Close();
 
-                    delete fm, fms, pjtm;
+                    delete fm; delete fms; delete pjtm;
                     
                     index_m = rng->Integer(mb.size());
                     fm = new TFile(mb[index_m].data(), "read");
