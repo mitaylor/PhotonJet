@@ -579,18 +579,18 @@ int populate(char const* config, char const* output) {
             mix_pjet_wta_u_dphi,
             mix_pjet_u_dr);
 
-    /* scale by bin width */
-    scale_bin_width(
-        pjet_f_dr,
-        pjet_f_jpt,
-        mix_pjet_f_dr,
-        mix_pjet_f_jpt);
+    // /* scale by bin width */
+    // scale_bin_width(
+    //     pjet_f_dr,
+    //     pjet_f_jpt,
+    //     mix_pjet_f_dr,
+    //     mix_pjet_f_jpt);
 
-    scale_ia_bin_width(
-        pjet_es_f_dphi,
-        pjet_wta_f_dphi,
-        mix_pjet_es_f_dphi,
-        mix_pjet_wta_f_dphi);
+    // scale_ia_bin_width(
+    //     pjet_es_f_dphi,
+    //     pjet_wta_f_dphi,
+    //     mix_pjet_es_f_dphi,
+    //     mix_pjet_wta_f_dphi);
 
     /* normalise by number of photons (events) */
     pjet_es_f_dphi->divide(*nevt);
