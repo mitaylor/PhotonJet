@@ -184,9 +184,10 @@ int distillate(char const* config, char const* output) {
         sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
 
         TLatex* l = new TLatex();
+        l->SetTextAlign(31);
         l->SetTextFont(43);
         l->SetTextSize(13);
-        l->DrawLatexNDC(0.135, pos, buffer);
+        l->DrawLatexNDC(0.865, pos, buffer);
         x++;
     };
 
