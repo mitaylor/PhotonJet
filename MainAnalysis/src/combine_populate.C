@@ -93,7 +93,7 @@ int populate(char const* config, char const* output) {
     /* combine nevt information */
     auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
 
-    for (int i = 1; i < files.size(); ++i) {
+    for (size_t i = 1; i < files.size(); ++i) {
         auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
         *nevt += *nevt_add;
     }
