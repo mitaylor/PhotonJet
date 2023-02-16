@@ -91,37 +91,9 @@ int populate(char const* config, char const* output) {
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
 
-    /* combine information */
+    /* combine nevt information */
     auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
-    
-    for (auto const& label : labels) {
-        std::cout << label << std::endl;
-
-        auto name = group + "_"s + label;
-        auto hist = new history<TH1F>(files[0], name); 
-
-        auto name_mix = group + "_mix_"s + label;
-        auto hist_mix = new history<TH1F>(files[0], name_mix);
-
-        hist->multiply(*nevt);
-        hist_mix->multiply(*nevt);
-
-        for (size_t i = 1; i < files.size(); ++i) {
-            auto hist_add = new history<TH1F>(files[i], name);
-            auto hist_mix_add = new history<TH1F>(files[i], name_mix);
-            auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
-
-            hist_add->multiply(*nevt_add);
-            hist_mix_add->multiply(*nevt_add);
-
-            std::cout << (*nevt)[0]->GetBinContent(1) << " " << (*nevt_add)[0]->GetBinContent(1) << std::endl;
-
-            *hist += *hist_add;
-            *hist_mix += *hist_mix_add;
-
-            delete hist_add; delete hist_mix_add; delete nevt_add;
-        }
-    }
+    auto nevt_0 = new history<TH1F>(*nevt, "nominal");
 
     for (size_t i = 1; i < files.size(); ++i) {
         auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
@@ -131,10 +103,39 @@ int populate(char const* config, char const* output) {
     nevt->save();
 
     for (auto const& label : labels) {
+        std::cout << label << std::endl;
+
+        auto name = group + "_"s + label;
+        auto hist = new history<TH1F>(files[0], name); 
+
+        auto name_mix = group + "_mix_"s + label;
+        auto hist_mix = new history<TH1F>(files[0], name_mix);
+
+        // auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
+
+        hist->multiply(*nevt_0);
+        hist_mix->multiply(*nevt_0);
+
+        for (size_t i = 1; i < files.size(); ++i) {
+            auto hist_add = new history<TH1F>(files[i], name);
+            auto hist_mix_add = new history<TH1F>(files[i], name_mix);
+            auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
+
+            hist_add->multiply(*nevt_add);
+            hist_mix_add->multiply(*nevt_add);
+
+            std::cout << (*nevt_0)[0]->GetBinContent(1) << " " << (*nevt_add)[0]->GetBinContent(1) << std::endl;
+
+            *hist += *hist_add;
+            *hist_mix += *hist_mix_add;
+
+            delete hist_add; delete hist_mix_add; delete nevt_add;
+        }
+
         scale_bin_width(hist, hist_mix);
 
-        hist->divide(*nevt_total);
-        hist_mix->divide(*nevt_total);
+        hist->divide(*nevt);
+        hist_mix->divide(*nevt);
 
         auto hist_sub = new history<TH1F>(*hist, "sub");
         *hist_sub -= *hist_mix;
@@ -142,6 +143,8 @@ int populate(char const* config, char const* output) {
         hist->save();
         hist_mix->save();
         hist_sub->save();
+
+        delete nevt;
     }
 
     fout->Close();
