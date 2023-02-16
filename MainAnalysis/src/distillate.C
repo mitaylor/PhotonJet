@@ -160,7 +160,7 @@ int distillate(char const* config, char const* output) {
             f->SetParameters(0.085, 0.6, 0.);
         } else {
             f->SetParameters(csn[0], csn[1], csn[2]);
-            f->FixParameter(0, 085);
+            f->FixParameter(0, 0.085);
         }
 
         return f;
