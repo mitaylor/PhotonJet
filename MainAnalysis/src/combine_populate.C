@@ -6,7 +6,7 @@
 
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
-#include "../git/history/include/memory.h"
+#include "../git/history/include/history.h"
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
@@ -18,7 +18,7 @@
 #include "TH2.h"
 #include "TRandom3.h"
 
-#include <memory>
+#include <history>
 #include <string>
 #include <vector>
 #include <ctime>
@@ -102,10 +102,10 @@ int populate(char const* config, char const* output) {
 
     for (auto const& label : labels) {
         auto name = group + "_"s + label;
-        auto hist = new memory<TH1F>(files[0], name);
+        auto hist = new history<TH1F>(files[0], name);
 
         auto name_mix = group + "_mix_"s + label;
-        auto hist_mix = new memory<TH1F>(files[0], name);
+        auto hist_mix = new history<TH1F>(files[0], name);
 
         auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
 
@@ -113,7 +113,7 @@ int populate(char const* config, char const* output) {
 
         for (int i = 1; i < files.size(); ++i) {
             auto hist_add = new history<TH1F>(files[i], name);
-            auto hist_mix_add = new memory<TH1F>(files[i], name);
+            auto hist_mix_add = new history<TH1F>(files[i], name);
             auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
 
             *hist += *hist_add;
@@ -126,7 +126,7 @@ int populate(char const* config, char const* output) {
         hist->divide(*nevt);
         hist_mix->divide(*nevt);
 
-        auto hist_sub = new memory<TH1F>(*hist, "sub");
+        auto hist_sub = new history<TH1F>(*hist, "sub");
         *hist_sub -= *hist_mix;
 
         hist->save();
