@@ -120,7 +120,7 @@ int populate(char const* config, char const* output) {
             auto hist_mix_add = new history<TH1F>(files[i], name_mix);
             auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
 
-            hist_add->multiply(*nevt);
+            hist_add->multiply(*nevt_add);
             hist_mix_add->multiply(*nevt_add);
 
             *hist += *hist_add;
