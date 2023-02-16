@@ -28,36 +28,36 @@ void mold(TF1* f, std::vector<double> const& value) {
 }
 
 int distillate(char const* config, char const* output) {
-    auto conf = new configurer(config);
+    auto conf = new configurer(config);std::cout<<__LINE__<<std::endl;
 
-    auto input = conf->get<std::string>("input");
-    auto system = conf->get<std::string>("system");
-    auto tag = conf->get<std::string>("tag");
+    auto input = conf->get<std::string>("input");std::cout<<__LINE__<<std::endl;
+    auto system = conf->get<std::string>("system");std::cout<<__LINE__<<std::endl;
+    auto tag = conf->get<std::string>("tag");std::cout<<__LINE__<<std::endl;
 
-    auto object = conf->get<std::string>("object");
-    auto label = conf->get<std::string>("label");
-    auto pdf = conf->get<std::string>("pdf");
-    auto value = conf->get<std::vector<double>>("value");
+    auto object = conf->get<std::string>("object");std::cout<<__LINE__<<std::endl;
+    auto label = conf->get<std::string>("label");std::cout<<__LINE__<<std::endl;
+    auto pdf = conf->get<std::string>("pdf");std::cout<<__LINE__<<std::endl;
+    auto value = conf->get<std::vector<double>>("value");std::cout<<__LINE__<<std::endl;
 
     auto fit = conf->get<bool>("fit");
     auto func = conf->get<std::string>("func");
 
-    auto rpt = conf->get<std::vector<float>>("pt_range");
+    auto rpt = conf->get<std::vector<float>>("pt_range");std::cout<<__LINE__<<std::endl;
     auto rdr = conf->get<std::vector<float>>("dr_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto ddr = conf->get<std::vector<float>>("dr_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");std::cout<<__LINE__<<std::endl;
 
     auto remove = conf->get<std::vector<int64_t>>("remove");
     auto csn = conf->get<std::vector<float>>("csn");
 
-    auto smeared = conf->get<bool>("smeared");
+    auto smeared = conf->get<bool>("smeared");std::cout<<__LINE__<<std::endl;
 
     auto s_range = conf->get<std::vector<float>>("s_range");
     auto s_lines = conf->get<std::vector<float>>("s_lines");
-    auto r_range = conf->get<std::vector<float>>("r_range");
+    auto r_range = conf->get<std::vector<float>>("r_range");std::cout<<__LINE__<<std::endl;
 
     /* manage memory manually */
     TH1::AddDirectory(false);
