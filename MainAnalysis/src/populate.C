@@ -73,7 +73,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
-        // if (jet_pt <= jet_pt_min) { continue; }
+        if (jet_pt <= jet_pt_min) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= 1.6) { continue; }
@@ -151,15 +151,10 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         }
 
         zip([&](auto const& index, auto const& weight) {
-            (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
-            (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
-
             if (jet_pt < 200 && jet_pt > jet_pt_min) {
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr * weight);
-            } else if (jet_pt < jet_pt_min) {
-                (*pjet_u_dr)[index]->Fill(-1, corr * weight);
-            } else {
-                (*pjet_u_dr)[index]->Fill(mdr->size() + 1, corr * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
+                (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
             }
         }, pthf_x, weights);
     }
@@ -170,6 +165,7 @@ int populate(char const* config, char const* output) {
 
     auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
+    auto mb_sum = conf->get<std::vector<std::string>>("mb_sum");
 
     auto smear = conf->get<bool>("smear");
     auto smear_input_aa = conf->get<std::string>("smear_input_aa");
@@ -282,13 +278,29 @@ int populate(char const* config, char const* output) {
     auto mix_pjet_es_u_dphi = new memory<TH1F>("mix_pjet_es_u_dphi"s, "", frdphi, mpthf);
     auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);
 
+    /* random number for smearing and mb selection */
+    auto rng = new TRandom3(144);
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* fm = new TFile(mb[0].data(), "read");
+    int index_m = rng->Integer(mb.size());
+    TFile* fm = new TFile(mb[index_m].data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
+
+    float pfSum_m;
+    TFile* fms = new TFile();
+    TTree* tms = new TTree();
+    int64_t mentries = 0;
+
+    if (mb_sum.size() != 0) {
+        fms = new TFile(mb_sum[index_m].data(), "read");
+        tms = (TTree*)fms->Get("pj");
+        tms->SetBranchAddress("pfSum", &pfSum_m);
+        mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+    }
 
     printf("iterate..\n");
 
@@ -334,14 +346,10 @@ int populate(char const* config, char const* output) {
         smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_" + smear_tag);
     }
 
-    auto rng = new TRandom3(144);
-
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
     if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
-
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
     
     int64_t tentries = 0;
     clock_t time = clock();
@@ -493,51 +501,64 @@ int populate(char const* config, char const* output) {
                     acceptance, total);
 
             float pfsum = 0;
-            for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
-                if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                    pfsum += (*pjt->pfE)[j];
-                }
-            }
 
-            int interval = (pfsum - hf_offset) / hf_interval;
-            interval = (interval < 0) ? 0 : interval;
-
-            /* mixing events in minimum bias */
-            for (int64_t k = 0; k < mix; m = (m + 1) % mentries) {
-                tm->GetEntry(m);
-
-                float pfsum_m = 0;
-                for (size_t j = 0; j < pjtm->pfEta->size(); ++j) {
-                    if (std::abs((*pjtm->pfEta)[j]) > 3 && std::abs((*pjtm->pfEta)[j]) < 5) {
-                        pfsum_m += (*pjtm->pfE)[j];
+            if (mix > 0) {
+                for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
+                    if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                        pfsum += (*pjt->pfE)[j];
                     }
                 }
 
-                int intervalm = pfsum_m / hf_interval;
+                int interval = (pfsum - hf_offset) / hf_interval;
+                interval = (interval < 0) ? 0 : interval;
 
-                std::cout << "Nominal: " << pfsum << " (" << interval << ")\t MB: " << pfsum_m << " (" << intervalm << ")" << std::endl;
-                std::cout << "Nominal: " << pjt->hiHF << "\t MB: " << pjtm->hiHF << std::endl;
-                if (intervalm != interval) { continue; }
+                /* mixing events in minimum bias */
+                for (int64_t k = 0; k < mix; m++) {
+                    if ((m + 1) % mentries == 0) {
+                        std::cout << "Switch MB file" << std::endl;
+                        m = -1;
 
-                std::cout << "FOUND" << std::endl;
+                        fm->Close();
+                        fms->Close();
 
-                fill_axes(pjtm, pthf_x, weights, pho_cor,
-                        photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                        jet_pt_min, mdphi, mdr, idphi, idr, rng,
-                        smear, smear_fits_aa, smear_fits_pp, cent, nmix,
-                        mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
-                        mix_pjet_f_dr, mix_pjet_f_jpt,
-                        mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
-                        acceptance, total);
+                        delete fm; delete fms; delete pjtm;
+                        
+                        index_m = rng->Integer(mb.size());
+                        fm = new TFile(mb[index_m].data(), "read");
+                        tm = (TTree*)fm->Get("pj");
+                        pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
-                ++k;
+                        fms = new TFile(mb_sum[index_m].data(), "read");
+                        tms = (TTree*)fms->Get("pj");
+                        tms->SetBranchAddress("pfSum", &pfSum_m);
 
-                if (m > mentries - 10) {
-                    std::cout << m << "/" << mentries << std::endl;
+                        mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+                    }
+
+                    tms->GetEntry(m);
+
+                    int interval_m = pfSum_m / hf_interval;
+
+                    // std::cout << "Nominal: " << pfsum << " (" << interval << ")\t MB: " << pfSum_m << " (" << intervalm << ")" << std::endl;
+                    // std::cout << "Nominal: " << pjt->hiHF << "\t MB: " << pjtm->hiHF << std::endl;
+                    if (interval_m != interval) { continue; }
+
+                    tm->GetEntry(m);
+
+                    fill_axes(pjtm, pthf_x, weights, pho_cor,
+                            photon_eta, photon_phi, exclude, heavyion && !no_jes,
+                            jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                            smear, smear_fits_aa, smear_fits_pp, cent, nmix,
+                            mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
+                            mix_pjet_f_dr, mix_pjet_f_jpt,
+                            mix_pjet_es_u_dphi, mix_pjet_wta_u_dphi, mix_pjet_u_dr,
+                            acceptance, total);
+
+                    ++k;
                 }
-            }
 
-            tentries++;
+                tentries++;
+            }
         }
 
         f->Close();
@@ -554,18 +575,18 @@ int populate(char const* config, char const* output) {
             mix_pjet_wta_u_dphi,
             mix_pjet_u_dr);
 
-    /* scale by bin width */
-    scale_bin_width(
-        pjet_f_dr,
-        pjet_f_jpt,
-        mix_pjet_f_dr,
-        mix_pjet_f_jpt);
+    // /* scale by bin width */
+    // scale_bin_width(
+    //     pjet_f_dr,
+    //     pjet_f_jpt,
+    //     mix_pjet_f_dr,
+    //     mix_pjet_f_jpt);
 
-    scale_ia_bin_width(
-        pjet_es_f_dphi,
-        pjet_wta_f_dphi,
-        mix_pjet_es_f_dphi,
-        mix_pjet_wta_f_dphi);
+    // scale_ia_bin_width(
+    //     pjet_es_f_dphi,
+    //     pjet_wta_f_dphi,
+    //     mix_pjet_es_f_dphi,
+    //     mix_pjet_wta_f_dphi);
 
     /* normalise by number of photons (events) */
     pjet_es_f_dphi->divide(*nevt);
