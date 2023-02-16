@@ -92,14 +92,14 @@ int populate(char const* config, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     /* combine nevt information */
-    auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
+    auto nevt_total = new history<TH1F>(files[0], group + "_nevt"s);
 
     for (size_t i = 1; i < files.size(); ++i) {
         auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
-        *nevt += *nevt_add;
+        *nevt_total += *nevt_add;
     }
 
-    nevt->save();
+    nevt_total->save();
 
     for (auto const& label : labels) {
         std::cout << label << std::endl;
