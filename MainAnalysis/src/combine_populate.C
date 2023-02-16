@@ -143,8 +143,6 @@ int populate(char const* config, char const* output) {
         hist->save();
         hist_mix->save();
         hist_sub->save();
-
-        delete nevt;
     }
 
     fout->Close();
