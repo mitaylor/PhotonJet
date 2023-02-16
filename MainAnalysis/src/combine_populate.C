@@ -7,6 +7,7 @@
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
 #include "../git/history/include/history.h"
+#include "../git/history/include/memory.h"
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
@@ -101,13 +102,14 @@ int populate(char const* config, char const* output) {
     nevt->save();
 
     for (auto const& label : labels) {
+        std::cout << label << std::endl;
         auto name = group + "_"s + label;
-        auto hist = new history<TH1F>(files[0], name);
+        auto hist = new history<TH1F>(files[0], name); std::cout << __LINE__ << std::endl;
 
         auto name_mix = group + "_mix_"s + label;
         auto hist_mix = new history<TH1F>(files[0], name);
 
-        auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
+        auto nevt = new history<TH1F>(files[0], group + "_nevt"s);std::cout << __LINE__ << std::endl;
 
         hist->multiply(*nevt);
 
@@ -119,22 +121,22 @@ int populate(char const* config, char const* output) {
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
             *nevt += *nevt_add;
-        }
+        }std::cout << __LINE__ << std::endl;
 
-        scale_bin_width(hist, hist_mix);
+        scale_bin_width(hist, hist_mix);std::cout << __LINE__ << std::endl;
 
         hist->divide(*nevt);
-        hist_mix->divide(*nevt);
+        hist_mix->divide(*nevt);std::cout << __LINE__ << std::endl;
 
-        auto hist_sub = new history<TH1F>(*hist, "sub");
-        *hist_sub -= *hist_mix;
+        auto hist_sub = new memory<TH1F>(*hist, "sub");
+        *hist_sub -= *hist_mix;std::cout << __LINE__ << std::endl;
 
-        hist->save();
-        hist_mix->save();
-        hist_sub->save();
+        hist->save();std::cout << __LINE__ << std::endl;
+        hist_mix->save();std::cout << __LINE__ << std::endl;
+        hist_sub->save();std::cout << __LINE__ << std::endl;
     }
-
-    fout->Close();
+std::cout << __LINE__ << std::endl;
+    fout->Close();std::cout << __LINE__ << std::endl;
 
     return 0;
 }
