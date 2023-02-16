@@ -248,7 +248,7 @@ int distillate(char const* config, char const* output) {
 
     auto c2 = new paper(tag_object + "_dhf_f_pt_s", hb);
     apply_style(c2, cms, system_tag);
-    if (!heavyion) c2->accessory(std::bind(kinematics, _1, 0.69));
+    if (!heavyion) c2->accessory(std::bind(kinematics, _1, 0.81));
     c2->accessory(std::bind(hf_info, _1, 0.75));
     c2->accessory(guide_lines);
     c2->divide(plot_size, -1);
@@ -268,7 +268,7 @@ int distillate(char const* config, char const* output) {
 
     auto c3 = new paper(tag_object + "_dhf_f_pt_r", hb);
     apply_style(c3, cms, system_tag);
-    if (!heavyion) c3->accessory(std::bind(kinematics, _1, 0.69));
+    if (!heavyion) c3->accessory(std::bind(kinematics, _1, 0.81));
     c3->accessory(std::bind(hf_info, _1, 0.75));
     c3->divide(plot_size, -1);
     c3->set(paper::flags::logx);
@@ -323,7 +323,7 @@ int distillate(char const* config, char const* output) {
 
     auto c5 = new paper(tag_object + "_dhf_f_eta_s", hb);
     apply_style(c5, cms, system_tag);
-    if (!heavyion) c5->accessory(std::bind(kinematics, _1, 0.69));
+    if (!heavyion) c5->accessory(std::bind(kinematics, _1, 0.81));
     c5->accessory(std::bind(hf_info, _1, 0.75));
     c5->divide(plot_size, -1);
 
@@ -333,7 +333,7 @@ int distillate(char const* config, char const* output) {
 
     auto c6 = new paper(tag_object + "_dhf_f_eta_r", hb);
     apply_style(c6, cms, system_tag);
-    if (!heavyion) c6->accessory(std::bind(kinematics, _1, 0.69));
+    if (!heavyion) c6->accessory(std::bind(kinematics, _1, 0.81));
     c6->accessory(std::bind(hf_info, _1, 0.75));
     c6->divide(plot_size, -1);
 
@@ -348,14 +348,14 @@ int distillate(char const* config, char const* output) {
     for (int64_t i = 0; i < ideta->size(); ++i) {
         c7[i] = new paper(tag_object + "_sr_fits_s" + std::to_string(i), hb);
         apply_style(c7[i], cms, system_tag);
-        if (!heavyion) c7[i]->accessory(std::bind(kinematics, _1, 0.6));
+        if (!heavyion) c7[i]->accessory(std::bind(kinematics, _1, 0.81));
         c7[i]->accessory(pthf_info);
         c7[i]->ornaments(std::bind(eta_info, i + 1, 0.67));
         c7[i]->divide(plot_size, -1);
 
         c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
         apply_style(c8[i], cms, system_tag);
-        if (!heavyion) c8[i]->accessory(std::bind(kinematics, _1, 0.6));
+        if (!heavyion) c8[i]->accessory(std::bind(kinematics, _1, 0.81));
         c8[i]->accessory(std::bind(hf_info, _1, 0.75));
         c8[i]->accessory(guide_lines);
         c8[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
@@ -364,7 +364,7 @@ int distillate(char const* config, char const* output) {
 
         c9[i] = new paper(tag_object + "_f_pt_r_s" + std::to_string(i), hb);
         apply_style(c9[i], cms, system_tag);
-        if (!heavyion) c9[i]->accessory(std::bind(kinematics, _1, 0.6));
+        if (!heavyion) c9[i]->accessory(std::bind(kinematics, _1, 0.81));
         c9[i]->accessory(std::bind(hf_info, _1, 0.75));
         c9[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
         c9[i]->divide(plot_size, -1);
