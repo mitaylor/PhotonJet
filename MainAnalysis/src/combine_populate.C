@@ -127,7 +127,7 @@ int populate(char const* config, char const* output) {
             *hist_mix += *hist_mix_add;
             *nevt += *nevt_add;
 
-            delete hist_add, hist_mix_add, nevt_add;
+            delete hist_add; delete hist_mix_add; delete nevt_add;
         }
 
         scale_bin_width(hist, hist_mix);
@@ -135,7 +135,7 @@ int populate(char const* config, char const* output) {
         hist->divide(*nevt);
         hist_mix->divide(*nevt);
 
-        auto hist_sub = new memory<TH1F>(*hist, "sub");
+        auto hist_sub = new history<TH1F>(*hist, "sub");
         *hist_sub -= *hist_mix;
 
         hist->save();
