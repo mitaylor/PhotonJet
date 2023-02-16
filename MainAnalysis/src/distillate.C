@@ -187,7 +187,7 @@ int distillate(char const* config, char const* output) {
         l->SetTextFont(43);
         l->SetTextSize(13);
         l->DrawLatexNDC(0.135, pos, buffer);
-        sprintf(buffer, "%.0d", x);
+        sprintf(buffer, "%" PRId64 "\n", x);
     };
 
     auto pthf_info = [&](int64_t index) {
