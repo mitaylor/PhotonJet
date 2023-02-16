@@ -33,13 +33,13 @@ int distillate(char const* config, char const* output) {
     auto input = conf->get<std::string>("input");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
-    auto heavyion = conf->get<bool>("heavyion");
 
     auto object = conf->get<std::string>("object");
     auto label = conf->get<std::string>("label");
     auto pdf = conf->get<std::string>("pdf");
     auto value = conf->get<std::vector<double>>("value");
 
+    auto heavyion = conf->get<bool>("heavyion");
     auto fit = conf->get<bool>("fit");
     auto func = conf->get<std::string>("func");
 
