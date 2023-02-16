@@ -100,6 +100,7 @@ int populate(char const* config, char const* output) {
     }
 
     nevt_total->save();
+    delete nevt_total;
 
     for (auto const& label : labels) {
         std::cout << label << std::endl;
@@ -143,6 +144,8 @@ int populate(char const* config, char const* output) {
         hist->save();
         hist_mix->save();
         hist_sub->save();
+
+        delete nevt;
     }
 
     fout->Close();
