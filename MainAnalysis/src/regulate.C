@@ -282,8 +282,8 @@ int regulate(char const* config, char const* output) {
 
             if (!csn.empty()) { 
                 (*tree_pj->jtpt)[j] *= smear(csn, (*tree_pj->jtpt)[j]) > 0 ? rng->Gaus(1., smear(csn, (*tree_pj->jtpt)[j])) : 1;
-                if (!jecs.empty()) (*tree_pj->jtptCor)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtptCor)[j]));
-                if (!jecs_scale.empty()) (*tree_pj->jtptCorScale)[j] *= rng->Gaus(1., smear(csn, (*tree_pj->jtptCorScale)[j]));
+                if (!jecs.empty()) (*tree_pj->jtptCor)[j] *= smear(csn, (*tree_pj->jtptCor)[j]) > 0 ? rng->Gaus(1., smear(csn, (*tree_pj->jtptCor)[j])) : 1;
+                if (!jecs_scale.empty()) (*tree_pj->jtptCorScale)[j] *= smear(csn, (*tree_pj->jtptCorScale)[j]) > 0 ? rng->Gaus(1., smear(csn, (*tree_pj->jtptCorScale)[j])) : 1;
             }
         }
 
