@@ -629,3 +629,30 @@
 
 ##############################################################################
 ##############################################################################
+
+# regulate_pp_smear_0_10_data
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HighEGJet/Run2017G-17Nov2017-v2/AOD/HighEGJet/20220825PPEG/220826_052801/" \
+"regulate_pp_smear_0_10_data.conf" \
+"regulate_pp_smear_0_10_data"
+
+# regulate_pp_smear_10_30_data
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HighEGJet/Run2017G-17Nov2017-v2/AOD/HighEGJet/20220825PPEG/220826_052801/" \
+"regulate_pp_smear_10_30_data.conf" \
+"regulate_pp_smear_10_30_data"
+
+# regulate_pp_smear_30_50_data
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HighEGJet/Run2017G-17Nov2017-v2/AOD/HighEGJet/20220825PPEG/220826_052801/" \
+"regulate_pp_smear_30_50_data.conf" \
+"regulate_pp_smear_30_50_data"
+
+# regulate_pp_smear_50_90_data
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HighEGJet/Run2017G-17Nov2017-v2/AOD/HighEGJet/20220825PPEG/220826_052801/" \
+"regulate_pp_smear_50_90_data.conf" \
+"regulate_pp_smear_50_90_data"
+
+##############################################################################
+##############################################################################
