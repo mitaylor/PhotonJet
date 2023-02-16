@@ -180,6 +180,18 @@ int distillate(char const* config, char const* output) {
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
+    std::function<void(int64_t, float)> kinematics = [&](int64_t x, float pos) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+
+        TLatex* l = new TLatex();
+        l->SetTextAlign(31);
+        l->SetTextFont(43);
+        l->SetTextSize(13);
+        l->DrawLatexNDC(0.865, pos, buffer);
+        x++;
+    };
+
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, obj_dpthf, pt_info, hf_info); };
 
@@ -237,6 +249,7 @@ int distillate(char const* config, char const* output) {
 
     auto c2 = new paper(tag_object + "_dhf_f_pt_s", hb);
     apply_style(c2, cms, system_tag);
+    if (!heavyion) c2->accessory(std::bind(kinematics, _1, 0.79));
     c2->accessory(std::bind(hf_info, _1, 0.75));
     c2->accessory(guide_lines);
     c2->divide(plot_size, -1);
@@ -256,6 +269,7 @@ int distillate(char const* config, char const* output) {
 
     auto c3 = new paper(tag_object + "_dhf_f_pt_r", hb);
     apply_style(c3, cms, system_tag);
+    if (!heavyion) c3->accessory(std::bind(kinematics, _1, 0.79));
     c3->accessory(std::bind(hf_info, _1, 0.75));
     c3->divide(plot_size, -1);
     c3->set(paper::flags::logx);
@@ -310,6 +324,7 @@ int distillate(char const* config, char const* output) {
 
     auto c5 = new paper(tag_object + "_dhf_f_dr_s", hb);
     apply_style(c5, cms, system_tag);
+    if (!heavyion) c5->accessory(std::bind(kinematics, _1, 0.79));
     c5->accessory(std::bind(hf_info, _1, 0.75));
     c5->divide(plot_size, -1);
 
@@ -319,6 +334,7 @@ int distillate(char const* config, char const* output) {
 
     auto c6 = new paper(tag_object + "_dhf_f_dr_r", hb);
     apply_style(c6, cms, system_tag);
+    if (!heavyion) c6->accessory(std::bind(kinematics, _1, 0.79));
     c6->accessory(std::bind(hf_info, _1, 0.75));
     c6->divide(plot_size, -1);
 
@@ -333,12 +349,14 @@ int distillate(char const* config, char const* output) {
     for (int64_t i = 0; i < iddr->size(); ++i) {
         c7[i] = new paper(tag_object + "_sr_fits_s" + std::to_string(i), hb);
         apply_style(c7[i], cms, system_tag);
+        if (!heavyion) c7[i]->accessory(std::bind(kinematics, _1, 0.79));
         c7[i]->accessory(pthf_info);
         c7[i]->ornaments(std::bind(dr_info, i + 1, 0.67));
         c7[i]->divide(plot_size, -1);
 
         c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
         apply_style(c8[i], cms, system_tag);
+        if (!heavyion) c8[i]->accessory(std::bind(kinematics, _1, 0.79));
         c8[i]->accessory(std::bind(hf_info, _1, 0.75));
         c8[i]->accessory(guide_lines);
         c8[i]->ornaments(std::bind(dr_info, i + 1, 0.71));
@@ -347,6 +365,7 @@ int distillate(char const* config, char const* output) {
 
         c9[i] = new paper(tag_object + "_f_pt_r_s" + std::to_string(i), hb);
         apply_style(c9[i], cms, system_tag);
+        if (!heavyion) c9[i]->accessory(std::bind(kinematics, _1, 0.79));
         c9[i]->accessory(std::bind(hf_info, _1, 0.75));
         c9[i]->ornaments(std::bind(dr_info, i + 1, 0.71));
         c9[i]->divide(plot_size, -1);

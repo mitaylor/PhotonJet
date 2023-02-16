@@ -190,7 +190,7 @@ int distillate(char const* config, char const* output) {
         l->DrawLatexNDC(0.865, pos, buffer);
         x++;
     };
-
+    
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, obj_dpthf, pt_info, hf_info); };
 
