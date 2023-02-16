@@ -10,8 +10,8 @@ awk -F "[_.]" '{print $(NF-1)}' files_${n} > index_${n}
 files=($(cat files_${n}))
 index=($(cat index_${n}))
 
-rm files*
-rm index*
+# rm files*
+# rm index*
 
 for i in ${!files[@]}; do
     cat ../configs/populate/preapproval-parallel/${tag}_template.conf  | sed "s/__INPUT__/${files[i]}/g" > nohup/${tag}_${index[i]}.conf
