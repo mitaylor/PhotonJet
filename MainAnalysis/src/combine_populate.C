@@ -128,7 +128,7 @@ int populate(char const* config, char const* output) {
         hist->divide(*nevt);
         hist_mix->divide(*nevt);std::cout << __LINE__ << std::endl;
 
-        auto hist_sub = new memory<TH1F>(*hist, "sub");
+        auto hist_sub = new history<TH1F>(*hist, "sub");
         *hist_sub -= *hist_mix;std::cout << __LINE__ << std::endl;
 
         hist->save();std::cout << __LINE__ << std::endl;
