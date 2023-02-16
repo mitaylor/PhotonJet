@@ -111,7 +111,7 @@ int populate(char const* config, char const* output) {
 
         hist->multiply(*nevt);
 
-        for (int i = 1; i < files.size(); ++i) {
+        for (size_t i = 1; i < files.size(); ++i) {
             auto hist_add = new history<TH1F>(files[i], name);
             auto hist_mix_add = new history<TH1F>(files[i], name);
             auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
