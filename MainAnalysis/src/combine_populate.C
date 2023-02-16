@@ -103,40 +103,47 @@ int populate(char const* config, char const* output) {
 
     for (auto const& label : labels) {
         std::cout << label << std::endl;
+
         auto name = group + "_"s + label;
-        auto hist = new history<TH1F>(files[0], name); std::cout << __LINE__ << std::endl;
+        auto hist = new history<TH1F>(files[0], name); 
 
         auto name_mix = group + "_mix_"s + label;
-        auto hist_mix = new history<TH1F>(files[0], name);
+        auto hist_mix = new history<TH1F>(files[0], name_mix);
 
-        auto nevt = new history<TH1F>(files[0], group + "_nevt"s);std::cout << __LINE__ << std::endl;
+        auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
 
         hist->multiply(*nevt);
+        hist_mix->multiply(*nevt);
 
         for (size_t i = 1; i < files.size(); ++i) {
             auto hist_add = new history<TH1F>(files[i], name);
-            auto hist_mix_add = new history<TH1F>(files[i], name);
+            auto hist_mix_add = new history<TH1F>(files[i], name_mix);
             auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
+
+            hist_add->multiply(*nevt);
+            hist_mix_add->multiply(*nevt_add);
 
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
             *nevt += *nevt_add;
-        }std::cout << __LINE__ << std::endl;
 
-        scale_bin_width(hist, hist_mix);std::cout << __LINE__ << std::endl;
+            delete hist_add, hist_mix_add, nevt_add;
+        }
+
+        scale_bin_width(hist, hist_mix);
 
         hist->divide(*nevt);
-        hist_mix->divide(*nevt);std::cout << __LINE__ << std::endl;
+        hist_mix->divide(*nevt);
 
-        auto hist_sub = new history<TH1F>(*hist, "sub");
-        *hist_sub -= *hist_mix;std::cout << __LINE__ << std::endl;
+        auto hist_sub = new memory<TH1F>(*hist, "sub");
+        *hist_sub -= *hist_mix;
 
-        hist->save();std::cout << __LINE__ << std::endl;
-        hist_mix->save();std::cout << __LINE__ << std::endl;
-        hist_sub->save();std::cout << __LINE__ << std::endl;
+        hist->save();
+        hist_mix->save();
+        hist_sub->save();
     }
-std::cout << __LINE__ << std::endl;
-    fout->Close();std::cout << __LINE__ << std::endl;
+
+    fout->Close();
 
     return 0;
 }
