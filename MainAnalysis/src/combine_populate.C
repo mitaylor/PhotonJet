@@ -123,6 +123,8 @@ int populate(char const* config, char const* output) {
             hist_add->multiply(*nevt_add);
             hist_mix_add->multiply(*nevt_add);
 
+            std::cout << (*nevt)[0]->GetBinContent(1) << " " << (*nevt_add)[0]->GetBinContent(1) << std::endl;
+
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
             *nevt += *nevt_add;
