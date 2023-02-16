@@ -285,6 +285,7 @@ int populate(char const* config, char const* output) {
     TFile* fm = new TFile(mb[index_m].data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
 
     printf("iterate..\n");
 
