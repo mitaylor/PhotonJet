@@ -14,6 +14,6 @@ index=($(cat index_${n}))
 # rm index*
 
 for i in ${!files[@]}; do
-    cat ../configs/populate/preapproval-parallel/${tag}_template.conf  | sed "s/__INPUT__/${files[i]}/g" > nohup/${tag}_${index[i]}.conf
-    ../bin/populate_test nohup/${tag}_${index[i]}.conf /data/submit/mitay/populate/${tag}_${index[i]}.root
+    echo cat ../configs/populate/preapproval-parallel/${tag}_template.conf  | sed "s/__INPUT__/${files[i]}/g" > nohup/${tag}_${index[i]}.conf
+    echo ../bin/populate_test nohup/${tag}_${index[i]}.conf /data/submit/mitay/populate/${tag}_${index[i]}.root
 done
