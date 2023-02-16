@@ -125,6 +125,7 @@ int populate(char const* config, char const* output) {
 
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
+            *nevt += *nevt_add;
 
             delete hist_add; delete hist_mix_add; delete nevt_add;
         }
