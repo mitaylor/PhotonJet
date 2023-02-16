@@ -485,8 +485,6 @@ int populate(char const* config, char const* output) {
                     pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
                     acceptance, total);
 
-            float pfsum = 0;
-
             if (mix > 0) {
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; m++) {
