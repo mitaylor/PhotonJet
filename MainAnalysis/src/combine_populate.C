@@ -18,7 +18,7 @@
 #include "TH2.h"
 #include "TRandom3.h"
 
-#include <history>
+#include <memory>
 #include <string>
 #include <vector>
 #include <ctime>
