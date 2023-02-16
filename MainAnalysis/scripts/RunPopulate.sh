@@ -14,6 +14,9 @@ index=($(cat index_${n}))
 # rm index*
 
 for i in ${!files[@]}; do
-    echo "cat ../configs/populate/preapproval-parallel/${tag}_template.conf  | sed "s/__INPUT__/${files[i]}/g" > nohup/${tag}_${index[i]}.conf"
+    echo "std::vector<std::string> input = \\" > nohup/${tag}_${index[i]}.conf
+    echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
+    cat ../configs/populate/preapproval-parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
+    # echo "cat ../configs/populate/preapproval-parallel/${tag}_template.conf  | sed "s/__INPUT__/${files[i]}/g" > nohup/${tag}_${index[i]}.conf"
     echo ../bin/populate_test nohup/${tag}_${index[i]}.conf /data/submit/mitay/populate/${tag}_${index[i]}.root
 done
