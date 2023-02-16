@@ -10,13 +10,13 @@ awk -F "[_.]" '{print $(NF-1)}' files_${n} > index_${n}
 files=($(cat files_${n}))
 index=($(cat index_${n}))
 
-# rm files*
-# rm index*
+rm files*
+rm index*
 
 for i in ${!files[@]}; do
     echo "std::vector<std::string> input = \\" > nohup/${tag}_${index[i]}.conf
     echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
     cat ../configs/populate/preapproval-parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
-    # echo "cat ../configs/populate/preapproval-parallel/${tag}_template.conf  | sed "s/__INPUT__/${files[i]}/g" > nohup/${tag}_${index[i]}.conf"
-    echo ../bin/populate_test nohup/${tag}_${index[i]}.conf /data/submit/mitay/populate/${tag}_${index[i]}.root
+
+    ../bin/populate_test nohup/${tag}_${index[i]}.conf /data/submit/mitay/populate/${tag}_${index[i]}.root
 done
