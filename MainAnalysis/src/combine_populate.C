@@ -56,30 +56,30 @@ int populate(char const* config, char const* output) {
     // auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     /* convert to integral angle units (cast to double) */
-    convert_in_place_pi(rdphi);
+    // convert_in_place_pi(rdphi);
 
-    auto ipt = new interval(dpt);
-    auto ihf = new interval(dhf);
+    // auto ipt = new interval(dpt);
+    // auto ihf = new interval(dhf);
 
-    auto mpthf = new multival(dpt, dhf);
+    // auto mpthf = new multival(dpt, dhf);
 
-    auto incl = new interval(""s, 1, 0.f, 9999.f);
-    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
-    auto idr = new interval("#deltaj"s, rdr);
-    auto ijpt = new interval("p_{T}^{j}"s, rjpt);
+    // auto incl = new interval(""s, 1, 0.f, 9999.f);
+    // auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
+    // auto idr = new interval("#deltaj"s, rdr);
+    // auto ijpt = new interval("p_{T}^{j}"s, rjpt);
 
-    auto mdr = new multival(rrdr, rrpt);
-    auto mdphi = new multival(rrdphi, rrpt);
+    // auto mdr = new multival(rrdr, rrpt);
+    // auto mdphi = new multival(rrdphi, rrpt);
 
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-    auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
-    auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
+    // auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+    // auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
+    // auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
+    // auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
 
-    auto frdr = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", mdr->size(), 0, mdr->size()); };
-    auto frdphi = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
+    // auto frdr = [&](int64_t, std::string const& name, std::string const&) {
+    //     return new TH1F(name.data(), ";index;", mdr->size(), 0, mdr->size()); };
+    // auto frdphi = [&](int64_t, std::string const& name, std::string const&) {
+    //     return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
 
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
