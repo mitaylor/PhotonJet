@@ -199,8 +199,8 @@ int plot_unfolding_inputs(char const* config) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, pos, "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6");
-            l->DrawLatexNDC(0.865, pos-0.06, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
+            l->DrawLatexNDC(0.865, 0.75, "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, 0.81, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
         }
     };
 
