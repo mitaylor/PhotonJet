@@ -30,7 +30,7 @@ using namespace std::placeholders;
 int plot_hem(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto input = conf->get<std::vector<std::string>>("input");
     auto entries = conf->get<int64_t>("entries");
     auto frequency = conf->get<int64_t>("frequency");
 
