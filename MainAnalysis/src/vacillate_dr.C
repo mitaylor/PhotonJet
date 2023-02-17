@@ -169,6 +169,8 @@ int vacillate(char const* config, char const* output) {
 
     /* load input */
     for (auto const& input : inputs) {
+        std::cout << input << std::endl;
+        
         TFile* f = new TFile(input.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
