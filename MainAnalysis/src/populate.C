@@ -505,7 +505,7 @@ int populate(char const* config, char const* output) {
                 int interval = (pfsum - hf_offset) / hf_interval;
                 interval = (interval < 0) ? 0 : interval;
 
-                int infinite = 0; // avoid infinite loop in the case there is no match
+                size_t infinite = 0; // avoid infinite loop in the case there is no match
 
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; m++) {
