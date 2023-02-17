@@ -491,15 +491,8 @@ int populate(char const* config, char const* output) {
                 weights.push_back(weight);
             }
 
-            fill_axes(pjt, pthf_x, weights, pho_cor,
-                    photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                    jet_pt_min, mdphi, mdr, idphi, idr, rng,
-                    smear, smear_fits_aa, smear_fits_pp, cent, nevt,
-                    pjet_es_f_dphi, pjet_wta_f_dphi, 
-                    pjet_f_dr, pjet_f_jpt,
-                    pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
-                    acceptance, total);
 
+            /* do MEBS first so that if there is no match, the histogram is not filled */
             float pfsum = 0;
 
             if (mix > 0) {
@@ -512,9 +505,18 @@ int populate(char const* config, char const* output) {
                 int interval = (pfsum - hf_offset) / hf_interval;
                 interval = (interval < 0) ? 0 : interval;
 
+                int infinite = 0; // avoid infinite loop in the case there is no match
+
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; m++) {
                     if ((m + 1) % mentries == 0) {
+                        infinite++;
+
+                        if (infinite > mb.size() && k == 0) { // not perfect measure, but configs have either 1 file or 750 files
+                            break; 
+                            std::cout << "MEBS Error: No match found, skipping event" << std::endl;
+                        }
+
                         std::cout << "Switch MB file" << std::endl;
                         m = -1;
 
@@ -555,10 +557,22 @@ int populate(char const* config, char const* output) {
                             acceptance, total);
 
                     ++k;
+                    infinite = 0;
                 }
 
-                tentries++;
+                if (infinite > mb.size()) { continue; }
             }
+
+            fill_axes(pjt, pthf_x, weights, pho_cor,
+                photon_eta, photon_phi, exclude, heavyion && !no_jes,
+                jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                smear, smear_fits_aa, smear_fits_pp, cent, nevt,
+                pjet_es_f_dphi, pjet_wta_f_dphi, 
+                pjet_f_dr, pjet_f_jpt,
+                pjet_es_u_dphi, pjet_wta_u_dphi, pjet_u_dr,
+                acceptance, total);
+            
+            tentries++;
         }
 
         f->Close();
