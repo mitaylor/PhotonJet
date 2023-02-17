@@ -105,15 +105,15 @@ int vacillate(char const* config, char const* output) {
     auto fcpt = std::bind(&multival::book<TH2F>, mcpt, _1, _2, _3);
 
     auto fr = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TH1F(name.data(), (";reco;"s + label).data(),
+        return new TH1F(name.data(), (";Reconstructed Bin;"s + label).data(),
             mr->size(), 0, mr->size()); };
 
     auto fg = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TH1F(name.data(), (";gen;"s + label).data(),
+        return new TH1F(name.data(), (";Generator Bin;"s + label).data(),
             mg->size(), 0, mg->size()); };
 
     auto fc = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TH2F(name.data(), (";reco;gen;"s + label).data(),
+        return new TH2F(name.data(), (";Reconstructed Bin;Generator Bin;"s + label).data(),
             mr->size(), 0, mr->size(), mg->size(), 0, mg->size()); };
 
     auto n = new history<TH1F>("n"s, "events", fn, ihf->size());

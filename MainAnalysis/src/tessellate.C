@@ -298,6 +298,8 @@ int tessellate(char const* config, char const* output) {
     }
 
     for (auto const& file : signal) {
+        std::cout << file << std::endl;
+        
         TFile* fs = new TFile(file.data(), "read");
         TTree* ts = (TTree*)fs->Get("pj");
         auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});

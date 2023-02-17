@@ -145,6 +145,7 @@ int plot_unfolding_inputs(char const* config) {
     auto victim = conf->get<std::string>("victim");
     auto label = conf->get<std::string>("label");
     auto divisions = conf->get<std::vector<int64_t>>("divisions");
+    auto heavyion = conf->get<bool>("heavyion");
 
     auto rdrr = conf->get<std::vector<float>>("drr_range");
     auto rptr = conf->get<std::vector<float>>("ptr_range");
@@ -187,12 +188,26 @@ int plot_unfolding_inputs(char const* config) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
 
-    auto system_info = system + " #sqrt{s_{NN}} = 5.02 TeV";
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, pos, "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, pos-0.06, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
+        }
+    };
+
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     /* figures */
     auto hb = new pencil();
@@ -200,8 +215,9 @@ int plot_unfolding_inputs(char const* config) {
     std::vector<paper*> cs(5, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);
-        apply_style(c, system_info);
+        apply_style(c, cms, system_tag);
         c->accessory(pthf_info);
+        c->accessory(kinematics);
         c->divide(divisions[0], divisions[1]);
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "fold0"s, "fold1"s, "shaded"s });
