@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/specifics.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -119,8 +120,8 @@ int jubilate(char const* config, char const* output) {
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
