@@ -56,15 +56,15 @@ int plot_hem(char const* config, char const* output) {
 
     /* create histograms */
 
-    auto photonEtaPhi = new TH2F("photon_eta_phi_nosel","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto photonEtaPhi = new TH2F("photon_eta_phi_nosel",";#eta;#phi",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel",";#eta;#phi",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhi = new TH2F("jet_eta_phi_nosel",";#eta;#phi",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel",";#eta;#phi",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
-    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex",";#eta;#phi",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex",";#eta;#phi",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex",";#eta;#phi",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex",";#eta;#phi",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
