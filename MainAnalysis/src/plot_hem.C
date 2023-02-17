@@ -202,7 +202,7 @@ int plot_hem(char const* config, char const* output) {
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, pos, "jets associated with selected photons");
-            l->DrawLatexNDC(0.865, pos-0.06, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, pos-0.06, "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6");
             l->DrawLatexNDC(0.865, pos-0.12, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
         }
     };
