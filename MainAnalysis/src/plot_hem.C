@@ -192,7 +192,6 @@ int plot_hem(char const* config, char const* output) {
     auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
 
     std::function<void(int64_t, float)> kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
@@ -203,7 +202,7 @@ int plot_hem(char const* config, char const* output) {
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, pos, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
-            l->DrawLatexNDC(0.865, pos-0.05, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, pos-0.06, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
         }
     };
 
