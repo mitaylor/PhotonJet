@@ -281,9 +281,9 @@ int plot_hem(char const* config, char const* output) {
     return 0;
 }
 
-int plot_hem(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     if (argc == 3)
-        return populate(argv[1], argv[2]);
+        return plot_hem(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
