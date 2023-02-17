@@ -138,6 +138,7 @@ int populate(char const* config, char const* output) {
         hist_mix->divide(*nevt);
 
         auto hist_sub = new history<TH1F>(*hist, "sub");
+        hist_sub->rename(group + "_sub_" + label);
         *hist_sub -= *hist_mix;
 
         hist->save();
