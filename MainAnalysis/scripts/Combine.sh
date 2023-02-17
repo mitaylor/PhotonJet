@@ -3,6 +3,8 @@
 histogram() {
     tag=$1
 
+    echo "./bin/combine_populate configs/combine_populate/combine_${tag}.conf data/preapproval/populate_${tag}.root > log/combine_populate_${tag}_log.txt"
+    
     ./bin/combine_populate configs/combine_populate/combine_${tag}.conf data/preapproval/populate_${tag}.root > log/combine_populate_${tag}_log.txt
 }
 
