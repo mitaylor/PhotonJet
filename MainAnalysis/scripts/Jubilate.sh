@@ -3,10 +3,10 @@
 histogram() {
     tag=$1
 
-    ./bin/jubilate configs/jubilate/preapproval/jubilate_${tag}_raw.conf data/preapproval/jubilate_${tag}_raw.root > log/jubilate_${tag}_raw_log.txt
+    ./bin/jubilate configs/jubilate/preapproval/jubilate_${tag}.conf data/preapproval/jubilate_${tag}.root > log/jubilate_${tag}_log.txt
 }
 
-samples=(pp pp_qcd aa aa_qcd aa_original) # add aa_qcd_original at some point
+samples=(pp_raw pp_qcd_raw aa_raw aa_qcd_raw aa_raw_original) # add aa_qcd_original at some point
 
 for sample in ${samples[@]}; do
     histogram ${sample}
