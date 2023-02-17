@@ -193,7 +193,7 @@ int plot_hem(char const* config, char const* output) {
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
 
-    std::function<void(int64_t, float)> kinematics = [&](int64_t x, float pos) {
+    std::function<void(int64_t, float)> jet_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             // char buffer[128] = { '\0' };
             // sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
@@ -207,6 +207,19 @@ int plot_hem(char const* config, char const* output) {
         }
     };
 
+    std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
+        if (x > 0) {
+            // char buffer[128] = { '\0' };
+            // sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, pos, "selected photons");
+            l->DrawLatexNDC(0.865, pos-0.06, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
+        }
+    };
+
     auto hb = new pencil();
     hb->category("type", "data");
     hb->alias("data", "");
@@ -214,7 +227,7 @@ int plot_hem(char const* config, char const* output) {
     auto c1 = new paper(tag + "_photon_distribution", hb);
     apply_style(c1, cms, system_tag);
     c1->divide(2, -1);
-    c1->accessory(std::bind(kinematics, _1, 0.85));
+    c1->accessory(std::bind(pho_kinematics, _1, 0.85));
 
     // photonEtaPhi->Scale(1/photonEtaPhi->Integral());
     // photonEtaPhi->SetMinimum(0);
@@ -244,7 +257,7 @@ int plot_hem(char const* config, char const* output) {
     auto c2 = new paper(tag + "_jet_distribution", hb);
     apply_style(c2, cms, system_tag);
     c2->divide(2, -1);
-    c2->accessory(std::bind(kinematics, _1, 0.85));
+    c2->accessory(std::bind(jet_kinematics, _1, 0.85));
 
     // jetEtaPhi->Scale(1/jetEtaPhi->Integral());
     // jetEtaPhi->SetMinimum(0);
