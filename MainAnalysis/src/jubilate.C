@@ -47,6 +47,8 @@ int jubilate(char const* config, char const* output) {
 
     auto background = conf->get<bool>("background");
 
+    auto is_paper = conf->get<bool>("paper");
+
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
 
@@ -117,8 +119,8 @@ int jubilate(char const* config, char const* output) {
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
-    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+    auto hf_info = [&](int64_t index) {
+        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
@@ -129,8 +131,9 @@ int jubilate(char const* config, char const* output) {
 
     hb->set_binary("type");
 
-    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
     cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6, ";
     cms += "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
 
