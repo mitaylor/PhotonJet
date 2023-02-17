@@ -56,15 +56,15 @@ int plot_hem(char const* config, char const* output) {
 
     /* create histograms */
 
-    auto photonEtaPhi = new TH2F("photon_eta_phi_nosel","Photon #eta-#phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel","Selected Photon #eta-#phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","Jet #eta-#phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","Selected Jet #eta-#phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto photonEtaPhi = new TH2F("photon_eta_phi_nosel","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhi = new TH2F("jet_eta_phi_nosel","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhi = new TH2F("jet_eta_phi_sel","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
-    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","Photon #eta-#phi Distibution",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","Selected Photon #eta-#phi Distibution, with Exclusions",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
-    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","Jet #eta-#phi Distibution",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
-    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","Selected Jet #eta-#phi Distibution, with Exclusions",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto photonEtaPhiEx = new TH2F("photon_eta_phi_nosel_ex","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto photonSelectedEtaPhiEx = new TH2F("photon_eta_phi_sel_ex","",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
+    auto jetEtaPhiEx = new TH2F("jet_eta_phi_nosel_ex","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
+    auto jetSelectedEtaPhiEx = new TH2F("jet_eta_phi_sel_ex","",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -192,8 +192,20 @@ int plot_hem(char const* config, char const* output) {
     auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6, ";
     cms += "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
+
+    std::function<void(int64_t, float)> kinematics = [&](int64_t x, float pos) {
+        if (x > 0) {
+            // char buffer[128] = { '\0' };
+            // sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, pos, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, pos-0.05, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+        }
+    };
 
     auto hb = new pencil();
     hb->category("type", "data");
@@ -202,6 +214,7 @@ int plot_hem(char const* config, char const* output) {
     auto c1 = new paper(tag + "_photon_distribution", hb);
     apply_style(c1, cms, system_tag);
     c1->divide(2, -1);
+    c1->accessory(std::bind(kinematics, _1, 0.79));
 
     // photonEtaPhi->Scale(1/photonEtaPhi->Integral());
     // photonEtaPhi->SetMinimum(0);
@@ -231,6 +244,7 @@ int plot_hem(char const* config, char const* output) {
     auto c2 = new paper(tag + "_jet_distribution", hb);
     apply_style(c2, cms, system_tag);
     c2->divide(2, -1);
+    c2->accessory(std::bind(kinematics, _1, 0.79));
 
     // jetEtaPhi->Scale(1/jetEtaPhi->Integral());
     // jetEtaPhi->SetMinimum(0);
