@@ -354,11 +354,13 @@ int tessellate(char const* config, char const* output) {
     };
 
     auto kinematics = [&](int64_t index) {
-        TLatex* l = new TLatex();
-        l->SetTextAlign(11);
-        l->SetTextFont(43);
-        l->SetTextSize(13);
-        l->DrawLatexNDC(0.135, 0.79, "|#eta^{#gamma}| < 1.44");
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.135, 0.79, "|#eta^{#gamma}| < 1.44");
+        }
     };
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
