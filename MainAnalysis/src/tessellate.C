@@ -353,16 +353,25 @@ int tessellate(char const* config, char const* output) {
         text->DrawLatexNDC(0.54, 0.56, buffer);
     };
 
+    auto kinematics = [&](int64_t index) {
+        TLatex* l = new TLatex();
+        l->SetTextAlign(11);
+        l->SetTextFont(43);
+        l->SetTextSize(13);
+        l->DrawLatexNDC(0.135, 0.79, "|#eta^{#gamma}| < 1.44");
+    };
+
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    system_tag += (heavyion) ? "1.69 nb^{-1}"s : "3.02 pb^{-1}"s;
+    system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "                  |#eta^{#gamma}| < 1.44";
+    // cms += "                  |#eta^{#gamma}| < 1.44";
 
     auto c1 = new paper(tag + "_purity", hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->accessory(purity_info);
+    c1->accessory(kinematics);
     c1->divide(ipt->size() - 1, -1);
 
     printf("fit templates\n");
