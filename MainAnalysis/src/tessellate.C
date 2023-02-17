@@ -214,8 +214,8 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
 int tessellate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto data = conf->get<std::string>("data");
-    auto signal = conf->get<std::string>("signal");
+    auto data = conf->get<std::vector<std::string>>("data");
+    auto signal = conf->get<std::vector<std::string>>("signal");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
@@ -241,6 +241,8 @@ int tessellate(char const* config, char const* output) {
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto is_paper = conf->get<bool>("paper");
 
     auto dpt_short = dpt;
     dpt_short.pop_back();
@@ -283,23 +285,29 @@ int tessellate(char const* config, char const* output) {
     }
 
     /* load inputs */
-    TFile* fd = new TFile(data.data(), "read");
-    TTree* td = (TTree*)fd->Get("pj");
-    auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0});
+    for (auto const& file : data) {
+        std::cout << file << std::endl;
 
-    TFile* fs = new TFile(signal.data(), "read");
-    TTree* ts = (TTree*)fs->Get("pj");
-    auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0});
+        TFile* fd = new TFile(file.data(), "read");
+        TTree* td = (TTree*)fd->Get("pj");
+        auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0, 0});
 
-    fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
-              pt_min, eta_max, hovere_max, hf_min, hf_max, iso_max, 
-              noniso_min, noniso_max);
+        fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
+                pt_min, eta_max, hovere_max, hf_min, hf_max, iso_max, 
+                noniso_min, noniso_max);
+    }
 
-    fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
-                heavyion, apply_er, pt_min, eta_max, 
-                hovere_max, hf_min, hf_max, iso_max, 
-                noniso_min, noniso_max, geniso_max, offset, 
-                rho_weighting);
+    for (auto const& file : signal) {
+        TFile* fs = new TFile(file.data(), "read");
+        TTree* ts = (TTree*)fs->Get("pj");
+        auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
+
+        fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
+                    heavyion, apply_er, pt_min, eta_max, 
+                    hovere_max, hf_min, hf_max, iso_max, 
+                    noniso_min, noniso_max, geniso_max, offset, 
+                    rho_weighting);
+    }
 
     auto hb = new pencil();
     hb->category("type", "data", "sig", "bkg");
@@ -329,7 +337,7 @@ int tessellate(char const* config, char const* output) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(convert_index(index), 0.75, 0.04, mpthf, pt_info, hf_info); };
@@ -345,8 +353,14 @@ int tessellate(char const* config, char const* output) {
         text->DrawLatexNDC(0.54, 0.56, buffer);
     };
 
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (heavyion) ? "1.69 nb^{-1}"s : "3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
+    cms += "                  |#eta^{#gamma}| < 1.44";
+
     auto c1 = new paper(tag + "_purity", hb);
-    apply_style(c1, system + " #sqrt{s_{NN}} = 5.02 TeV"s);
+    apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->accessory(purity_info);
     c1->divide(ipt->size() - 1, -1);
@@ -365,6 +379,7 @@ int tessellate(char const* config, char const* output) {
 
             auto entries = std::get<0>(res);
             auto fraction = std::get<1>(res);
+            auto chisq = std::get<4>(res);
 
             pfit->Scale(entries * fraction / pfit->Integral());
             pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
@@ -383,6 +398,7 @@ int tessellate(char const* config, char const* output) {
 
             (*purity)[i]->SetBinContent(1, 1. - nbkg / ntot);
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
+            printf("chisq: %.3f\n", chisq);
         }
         else {
             (*purity)[i]->SetBinContent(1, 1);
