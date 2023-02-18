@@ -189,7 +189,7 @@ int jubilate(char const* config, char const* output) {
 
     hb->sketch();
 
-    for (auto const& c : { c1, c2, c3 })
+    for (auto const& c : { c1, c2, c3, c4 })
         c->draw("pdf");
 
     /* save output */
