@@ -169,7 +169,7 @@ int jubilate(char const* config, char const* output) {
 
     auto c4 = new paper(tag + "_mixing_jpt_d_pthf", hb);
     apply_style(c4, cms, system_tag, -1., 24.);
-    c4->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rpjt[1]));
+    c4->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     c4->accessory(pthf_info);
     c4->divide(-1 , ihf->size());
 
