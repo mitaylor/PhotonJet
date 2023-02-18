@@ -168,7 +168,7 @@ int jubilate(char const* config, char const* output) {
     c3->divide(-1 , ihf->size());
 
     auto c4 = new paper(tag + "_mixing_jpt_d_pthf", hb);
-    apply_style(c4, cms, system_tag, -1., 24.);
+    apply_style(c4, cms, system_tag, -0.007, 0.07);
     c4->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     c4->accessory(pthf_info);
     c4->divide(-1 , ihf->size());
@@ -189,7 +189,7 @@ int jubilate(char const* config, char const* output) {
 
     hb->sketch();
 
-    for (auto const& c : { c1, c2, c3, c4 })
+    for (auto const& c : { c3, c4 })
         c->draw("pdf");
 
     /* save output */
