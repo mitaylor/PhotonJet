@@ -163,21 +163,21 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
 int populate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::vector<std::string>>("input");std::cout << __LINE__ << std::endl;
+    auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
     auto mb_sum = conf->get<std::vector<std::string>>("mb_sum");
 
     auto smear = conf->get<bool>("smear");
     auto smear_input_aa = conf->get<std::string>("smear_input_aa");
-    auto smear_input_pp = conf->get<std::string>("smear_input_pp");std::cout << __LINE__ << std::endl;
+    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
     auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
     
     auto eff = conf->get<std::string>("eff");
-    auto eff_label = conf->get<std::string>("eff_label");std::cout << __LINE__ << std::endl;
+    auto eff_label = conf->get<std::string>("eff_label");
 
     auto rho = conf->get<std::string>("rho");
-    auto rho_label = conf->get<std::string>("rho_label");std::cout << __LINE__ << std::endl;
+    auto rho_label = conf->get<std::string>("rho_label");
 
     auto acc = conf->get<std::string>("acc");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
@@ -187,7 +187,7 @@ int populate(char const* config, char const* output) {
     auto parity = conf->get<bool>("parity");
 
     auto mix = conf->get<int64_t>("mix");
-    auto frequency = conf->get<int64_t>("frequency");std::cout << __LINE__ << std::endl;
+    auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
 
     /* options */
@@ -206,7 +206,7 @@ int populate(char const* config, char const* output) {
     auto const see_min = conf->get<float>("see_min");
     auto const see_max = conf->get<float>("see_max");
     auto const iso_max = conf->get<float>("iso_max");
-    auto const gen_iso_max = conf->get<float>("gen_iso_max");std::cout << __LINE__ << std::endl;
+    auto const gen_iso_max = conf->get<float>("gen_iso_max");
     auto const jet_pt_min = conf->get<float>("jet_pt_min");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
@@ -239,7 +239,7 @@ int populate(char const* config, char const* output) {
     auto mdr = new multival(rrdr, rrpt);
     auto mdphi = new multival(rrdphi, rrpt);
 
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
     auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
@@ -270,13 +270,13 @@ int populate(char const* config, char const* output) {
     auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
 
-    auto pjet_u_dr = new memory<TH1F>("pjet_u_dr"s, "", frdr, mpthf);std::cout << __LINE__ << std::endl;
+    auto pjet_u_dr = new memory<TH1F>("pjet_u_dr"s, "", frdr, mpthf);
     auto pjet_es_u_dphi = new memory<TH1F>("pjet_es_u_dphi"s, "", frdphi, mpthf);
     auto pjet_wta_u_dphi = new memory<TH1F>("pjet_wta_u_dphi"s, "", frdphi, mpthf);
 
     auto mix_pjet_u_dr = new memory<TH1F>("mix_pjet_u_dr"s, "", frdr, mpthf);
     auto mix_pjet_es_u_dphi = new memory<TH1F>("mix_pjet_es_u_dphi"s, "", frdphi, mpthf);
-    auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);std::cout << __LINE__ << std::endl;
+    auto mix_pjet_wta_u_dphi = new memory<TH1F>("mix_pjet_wta_u_dphi"s, "", frdphi, mpthf);
 
     /* random number for smearing and mb selection */
     auto rng = new TRandom3(144);
@@ -285,10 +285,10 @@ int populate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();std::cout << __LINE__ << std::endl;
 
-    int index_m = rng->Integer(mb.size());
-    TFile* fm = new TFile(mb[index_m].data(), "read");
-    TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
+    int index_m = rng->Integer(mb.size());std::cout << __LINE__ << std::endl;
+    TFile* fm = new TFile(mb[index_m].data(), "read");std::cout << __LINE__ << std::endl;
+    TTree* tm = (TTree*)fm->Get("pj");std::cout << __LINE__ << std::endl;
+    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });std::cout << __LINE__ << std::endl;
 
     float pfSum_m;std::cout << __LINE__ << std::endl;
     TFile* fms = new TFile();
