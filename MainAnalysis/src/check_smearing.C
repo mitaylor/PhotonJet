@@ -87,12 +87,13 @@ int congratulate(char const* config, char const* output) {
     auto drhf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, mdrhf_short, dr_info, hf_info); };
 
-    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
+    auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV, 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
     /* prepare paper */
     auto width = idr->index_for(0.2) + 1;
     auto s = new paper("smeared_pp_dj_resolution", hb);
-    apply_style(s, collisions, ymin, ymax, false);
+    apply_style(s, cms, system_tag, ymin, ymax, false);
     s->accessory(drhf_info);
     s->divide(width, ihf->size());
 
