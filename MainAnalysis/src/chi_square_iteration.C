@@ -125,7 +125,7 @@ int data_iteration_study(char const* config, char const* output) {
     };
 
     /* set up figures */
-    string system_tag = (tag == "aa") ? "PbPb" : "pp";  
+    std::string system_tag = (tag == "aa") ? "PbPb" : "pp";  
     system_tag += "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
