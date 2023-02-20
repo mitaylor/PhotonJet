@@ -75,7 +75,7 @@ int fabulate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* load input */
-        /* fill histograms */
+    /* fill histograms */
     for (auto const& file : input) {
         std::cout << file << std::endl;
 

@@ -38,7 +38,7 @@ static int sgn(T val) { return (T(0) < val) - (val < T(0)); }
 int fabulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto input = conf->get<std::vector<std::string>>("input");
     auto tag = conf->get<std::string>("tag");
 
     auto smear_input_aa = conf->get<std::string>("smear_input_aa");
@@ -93,109 +93,113 @@ int fabulate(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* load input */
-    TFile* f = new TFile(input.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
-
     /* fill histograms */
-    auto nentries = static_cast<int64_t>(t->GetEntries());
-    for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
+    for (auto const& file : input) {
+        std::cout << file << std::endl;
 
-        t->GetEntry(i);
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
+        auto nentries = static_cast<int64_t>(t->GetEntries());
 
-        std::vector<int64_t> exclusion;
-        for (int64_t j = 0; j < p->nMC; ++j) {
-            auto pid = (*p->mcPID)[j];
-            auto mpid = (*p->mcMomPID)[j];
-            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
+        for (int64_t i = 0; i < nentries; ++i) {
+            if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
 
-            /* gen isolation requirement */
-            float isolation = (*p->mcCalIsoDR04)[j];
-            if (isolation > 5.) { continue; }
+            t->GetEntry(i);
 
-            exclusion.push_back(j);
-        }
+            std::vector<int64_t> exclusion;
+            for (int64_t j = 0; j < p->nMC; ++j) {
+                auto pid = (*p->mcPID)[j];
+                auto mpid = (*p->mcMomPID)[j];
+                if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { continue; }
 
-        std::unordered_map<float, int64_t> genid;
-            for (int64_t j = 0; j < p->ngen; ++j)
-                genid[(*p->genpt)[j]] = j;
+                /* gen isolation requirement */
+                float isolation = (*p->mcCalIsoDR04)[j];
+                if (isolation > 5.) { continue; }
 
-        for (int64_t j = 0; j < p->nref; ++j) {
-            auto reco_pt = apply_jec ? (*p->jtptCor)[j] : (*p->jtpt)[j];
-            auto reco_eta = (*p->jteta)[j];
-            auto reco_phi = (*p->jtphi)[j];
-            auto gen_pt = (*p->refpt)[j];
-
-            if (reco_pt < pt_min) { continue; }
-            if (gen_pt < pt_min) { continue; }
-
-            if (std::abs(reco_eta) >= eta_max) { continue; }
-
-            auto gen_eta = (*p->refeta)[j];
-            auto gen_phi = (*p->refphi)[j];
-
-            bool match = false;
-            for (auto const& index : exclusion) {
-                if (dr2((*p->mcEta)[index], gen_eta,
-                        (*p->mcPhi)[index], gen_phi) < 0.01) {
-                    match = true; break; }
+                exclusion.push_back(j);
             }
 
-            if (match == true) { continue; }
+            std::unordered_map<float, int64_t> genid;
+                for (int64_t j = 0; j < p->ngen; ++j)
+                    genid[(*p->genpt)[j]] = j;
 
-            if (heavyion && in_jet_failure_region(p, j))
-                continue;
+            for (int64_t j = 0; j < p->nref; ++j) {
+                auto reco_pt = apply_jec ? (*p->jtptCor)[j] : (*p->jtpt)[j];
+                auto reco_eta = (*p->jteta)[j];
+                auto reco_phi = (*p->jtphi)[j];
+                auto gen_pt = (*p->refpt)[j];
 
-            auto id = genid[gen_pt];
-            auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
-            auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j], reco_phi, (*p->WTAphi)[j]));
-            
-            if (rdr > rddr.back()) { continue; }
+                if (reco_pt < pt_min) { continue; }
+                if (gen_pt < pt_min) { continue; }
 
-            auto pt_x = ipt->index_for(reco_pt);
-            auto dr_x = idr->index_for(rdr);
+                if (std::abs(reco_eta) >= eta_max) { continue; }
 
-            /* do the smearing */
-            auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
-            auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
-            auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
+                auto gen_eta = (*p->refeta)[j];
+                auto gen_phi = (*p->refphi)[j];
 
-            auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
-            auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
-            auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
-
-            auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
-
-            if (res_diff > 0) {
-                auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
-                auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
-                auto adj = rdr + change * sign / 2;
-
-                // std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
-
-                if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
-            }
-
-            auto weight = p->w;
-            std::vector<float> weights(ihf->size(), weight);
-            
-            /* fill event weight */
-            if (heavyion) {
-                auto avg_rho = get_avg_rho(p, -1.442, 1.442);
-
-                for (int64_t j = 0; j < ihf->size(); ++j) {
-                    auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
-                    auto corr = (*rho_weighting)[j]->GetBinContent(bin);
-                    weights[j] *= corr;
+                bool match = false;
+                for (auto const& index : exclusion) {
+                    if (dr2((*p->mcEta)[index], gen_eta,
+                            (*p->mcPhi)[index], gen_phi) < 0.01) {
+                        match = true; break; }
                 }
-            }
 
-            /* fill histograms */
-            for (int64_t j = 0; j < ihf->size(); ++j) {
-                auto index = mptdrhf->index_for(x{pt_x, dr_x, j});
+                if (match == true) { continue; }
 
-                (*angle)[index]->Fill(gdr-rdr, weights[j]);
+                if (heavyion && in_jet_failure_region(p, j))
+                    continue;
+
+                auto id = genid[gen_pt];
+                auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
+                auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j], reco_phi, (*p->WTAphi)[j]));
+                
+                if (rdr > rddr.back()) { continue; }
+
+                auto pt_x = ipt->index_for(reco_pt);
+                auto dr_x = idr->index_for(rdr);
+
+                /* do the smearing */
+                auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
+                auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
+                auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
+
+                auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
+                auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
+                auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
+
+                auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
+
+                if (res_diff > 0) {
+                    auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
+                    auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
+                    auto adj = rdr + change * sign / 2;
+
+                    // std::cout << dr_x << " " << reco_pt << " " << res_diff << " " << change << std::endl;
+
+                    if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
+                }
+
+                auto weight = p->w;
+                std::vector<float> weights(ihf->size(), weight);
+                
+                /* fill event weight */
+                if (heavyion) {
+                    auto avg_rho = get_avg_rho(p, -1.442, 1.442);
+
+                    for (int64_t j = 0; j < ihf->size(); ++j) {
+                        auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
+                        auto corr = (*rho_weighting)[j]->GetBinContent(bin);
+                        weights[j] *= corr;
+                    }
+                }
+
+                /* fill histograms */
+                for (int64_t j = 0; j < ihf->size(); ++j) {
+                    auto index = mptdrhf->index_for(x{pt_x, dr_x, j});
+
+                    (*angle)[index]->Fill(gdr-rdr, weights[j]);
+                }
             }
         }
     }
