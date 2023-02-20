@@ -258,8 +258,8 @@ int accumulate(char const* config, char const* output) {
     system_tag += (system == "PbPb") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "                                                                                  ";
-    cms += "                                                                                  ";
+    cms += "                                                                            ";
+    cms += "                                                                            ";
     cms += "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6, p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
