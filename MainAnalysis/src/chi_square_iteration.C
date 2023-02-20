@@ -115,7 +115,7 @@ int data_iteration_study(char const* config, char const* output) {
 
     auto minimum = [&](int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "minimum: %.3d", choice[index]);
+        sprintf(buffer, "minimum: %d", choice[index-1]);
 
         TLatex* l = new TLatex();
         l->SetTextAlign(11);
@@ -125,8 +125,7 @@ int data_iteration_study(char const* config, char const* output) {
     };
 
     /* set up figures */
-    std::string system_tag = (tag == "aa") ? "PbPb" : "pp";  
-    system_tag += "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    std::string system_tag += "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
