@@ -108,7 +108,7 @@ int data_iteration_study(char const* config, char const* output) {
             }
         }
 
-        if (set.size() == choice.size()) { choice[i] = set[i]; }
+        // if (set.size() == choice.size()) { choice[i] = set[i]; }
 
         std::cout << std::endl << choice[i] << std::endl;
     }

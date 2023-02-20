@@ -198,7 +198,7 @@ int quantitate(char const* config, char const* output) {
     auto mg = new multival(*idrg, *iptg);
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
-    std::vector<int64_t> osr{ 0, 0, 1, 3 };
+    std::vector<int64_t> osr{ 0, 0, 1, 2 };
     std::vector<int64_t> osg{ 0, 0, 1, 1 };
 
     if (fine) {
