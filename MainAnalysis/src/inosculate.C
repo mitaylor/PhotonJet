@@ -243,7 +243,7 @@ int64_t inosculate(char const* config, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.81, "p_{T,1}^{#gamma} > 15 GeV, p_{T,2}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.85, "p_{T,1}^{#gamma} > 15 GeV, p_{T,2}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
         }
     };
 
