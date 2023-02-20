@@ -90,12 +90,12 @@ int data_iteration_study(char const* config, char const* output) {
         chi_square->save("test");
     });
 
-    std::vector<int64_t> choice(chi_square->size(), 1);
+    std::vector<int> choice(chi_square->size(), 1);
 
-    for (int64_t i = 0; i < chi_square->size(); ++i) {
+    for (int i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
 
-        for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
+        for (int j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (top == 0) { continue; }
@@ -115,7 +115,7 @@ int data_iteration_study(char const* config, char const* output) {
 
     auto minimum = [&](int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "minimum: %.3f", choice[index]);
+        sprintf(buffer, "minimum: %.3d", choice[index]);
 
         TLatex* l = new TLatex();
         l->SetTextAlign(11);
