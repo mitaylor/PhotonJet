@@ -37,3 +37,9 @@ for sample in ${samples[@]}; do
         systematic $sample $syst
     done
 done
+
+samples=(aa_mebs aa_qcd_mebs)
+
+for sample in ${samples[@]}; do
+    nominal $sample
+done
