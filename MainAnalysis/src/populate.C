@@ -343,10 +343,10 @@ int populate(char const* config, char const* output) {
         fsmear_aa = new TFile(smear_input_aa.data(), "read");std::cout << __LINE__ << std::endl;
         fsmear_pp = new TFile(smear_input_pp.data(), "read");std::cout << __LINE__ << std::endl;
         smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);std::cout << __LINE__ << std::endl;
-        if (cent == 0) smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag);std::cout << __LINE__ << std::endl;
-        if (cent == 1) smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag);std::cout << __LINE__ << std::endl;
-        if (cent == 2) smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag);std::cout << __LINE__ << std::endl;
-        if (cent == 3) smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag);std::cout << __LINE__ << std::endl;
+        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }std::cout << __LINE__ << std::endl;
+        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }std::cout << __LINE__ << std::endl;
+        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }std::cout << __LINE__ << std::endl;
+        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }std::cout << __LINE__ << std::endl;
     }
 std::cout << __LINE__ << std::endl;
     /* add weight for the number of photons, based on the fraction that are excluded by area */
