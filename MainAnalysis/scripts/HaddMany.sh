@@ -11,7 +11,7 @@ files=($(ls ${dataset}_*))
 for i in 1; do
 # for i in ${!files[@]}; do
     list=$(cat ${files[i]})
-    echo "hadd /data/submit/mitay/photons/${dataset}_$i.root $list"
+    hadd /data/submit/mitay/photons/${dataset}_$i.root $list
 done
 
 # rm ${dataset}*
