@@ -121,7 +121,7 @@ int data_iteration_study(char const* config, char const* output) {
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
-        l->DrawLatexNDC(0.565, 0.75, buffer);
+        l->DrawLatexNDC(0.135, 0.17, buffer);
     };
 
     /* set up figures */
