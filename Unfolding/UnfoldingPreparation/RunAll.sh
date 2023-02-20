@@ -345,9 +345,9 @@
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCDAll1.root
-./Execute --Data ../../MainAnalysis/data/preapproval/accumulate_aa_qcd_all.root \
+./Execute --Data ../../MainAnalysis/data/preapproval/accumulate_aa_qcd.root \
     --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
-    --Response ../../MainAnalysis/data/preapproval/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/preapproval/vacillate_aa_qcd_all.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseReco aa_r_2 \
@@ -356,9 +356,9 @@
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/AAQCDAll2.root
-./Execute --Data ../../MainAnalysis/data/preapproval/accumulate_aa_qcd_all.root \
+./Execute --Data ../../MainAnalysis/data/preapproval/accumulate_aa_qcd.root \
     --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
-    --Response ../../MainAnalysis/data/preapproval/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/preapproval/vacillate_aa_qcd_all.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseReco aa_r_3 \
