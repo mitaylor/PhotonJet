@@ -114,11 +114,11 @@ int obnubilate(char const* config, char const* output) {
         auto stub = "_"s + figure;
 
         auto c1 = new paper(tag + "_var"s + stub, hb);
-        apply_style(p1, cms, system_tag, std::bind(shader, _1, range));
+        apply_style(c1, cms, system_tag, std::bind(shader, _1, range));
         c1->divide(cols, -1);
 
         auto c2 = new paper(tag + "_var_unfolding"s + stub, hb);
-        apply_style(p1, cms, system_tag, std::bind(shader, _1, range));
+        apply_style(c2, cms, system_tag, std::bind(shader, _1, range));
         c2->divide(cols, -1);
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
