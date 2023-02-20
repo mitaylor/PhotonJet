@@ -90,14 +90,51 @@ int data_iteration_study(char const* config, char const* output) {
         chi_square->save("test");
     });
 
+    std::vector<int64_t> choice(chi_square->size(), 1);
+
+    for (int64_t i = 0; i < chi_square->size(); ++i) {
+        double min = 99999999999;
+
+        for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
+            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+
+            if (top == 0) { continue; }
+
+            std::cout << top << " ";
+
+            if (top < min) {
+                min = top;
+                choice[i] = j;
+            }
+        }
+
+        if (set.size() == choice.size()) { choice[i] = set[i]; }
+
+        std::cout << std::endl << choice[i] << std::endl;
+    }
+
+    auto minimum = [&](int64_t index) {
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "minimum: %.3f", choice[index]);
+
+        TLatex* l = new TLatex();
+        l->SetTextAlign(11);
+        l->SetTextFont(43);
+        l->SetTextSize(13);
+        l->DrawLatexNDC(0.565, 0.75, buffer);
+    };
+
     /* set up figures */
-    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.25, 0.04, mpthf, pt_info, hf_info); };
@@ -107,7 +144,8 @@ int data_iteration_study(char const* config, char const* output) {
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
-    apply_style(p1, collisions);
+    p1->accessory(minimum);
+    apply_style(p1, cms, system_tag);
     p1->set(paper::flags::logx);
 
     chi_square->apply([&](TH1* h) { p1->add(h); });
