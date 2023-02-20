@@ -259,7 +259,8 @@ int accumulate(char const* config, char const* output) {
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
     cms += "                                                                                        ";
-    cms += "        anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6, p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
+    cms += "                                                                                        ";
+    cms += "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6, p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
