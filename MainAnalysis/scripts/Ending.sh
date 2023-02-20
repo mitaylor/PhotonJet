@@ -12,6 +12,6 @@ for sample in ${samples[@]}; do
         data/preapproval/obnubilate_${sample}.root
 done
 
-./bin/congratulate configs/congratulate/preapproval/congratulate.conf temp.root
-./bin/congratulate configs/congratulate/preapproval/congratulate_smeared.conf temp.root
-./bin/congratulate configs/congratulate/preapproval/congratulate_smeared_corrected.conf temp.root
+# ./bin/congratulate configs/congratulate/preapproval/congratulate.conf temp.root
+# ./bin/congratulate configs/congratulate/preapproval/congratulate_smeared.conf temp.root
+# ./bin/congratulate configs/congratulate/preapproval/congratulate_smeared_corrected.conf temp.root
