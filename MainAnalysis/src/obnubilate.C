@@ -153,7 +153,7 @@ int obnubilate(char const* config, char const* output) {
                     if (difference > max) { max = difference; }
                 }
 
-                printf("%.1f-%.1f ", min, max);
+                printf("%.2f-%.2f ", min, max);
             }
             std::cout << std::endl;
 
