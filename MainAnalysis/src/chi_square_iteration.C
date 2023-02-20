@@ -106,7 +106,7 @@ int data_iteration_study(char const* config, char const* output) {
                 min = top;
                 choice[i] = j;
             }
-            else if (top > min || std::abs((top-min)/min) < 0.01){
+            else if (top > min || std::abs((top-min)/min) < 0.03){
                 break;
             }
         }
