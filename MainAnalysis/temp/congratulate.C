@@ -29,6 +29,11 @@ using namespace std::placeholders;
 static auto const red = TColor::GetColor("#f2777a");
 static auto const blue = TColor::GetColor("#6699cc");
 
+template <typename... T>
+void title(std::function<void(TH1*)> f, T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+}
+
 int congratulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -52,6 +57,8 @@ int congratulate(char const* config, char const* output) {
     // auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto is_paper = conf->get<bool>("paper");
 
     // auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
@@ -148,6 +155,7 @@ int congratulate(char const* config, char const* output) {
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
+            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
 
         }, hists, systs, files, base_stubs, syst_stubs);

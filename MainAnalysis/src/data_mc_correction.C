@@ -20,6 +20,11 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename... T>
+void title(std::function<void(TH1*)> f, T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+}
+
 int data_mc_comparison(char const* config, const char* output) {
     auto conf = new configurer(config);
 
@@ -93,6 +98,27 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_reco_reco_iso_unmatched = new history<TH1F>(ftruth, tag + "_"s + r_reco_reco_iso_label_unmatched);
     auto h_j_reco_reco_iso_matched = new history<TH1F>(ftruth, tag + "_"s + j_reco_reco_iso_label_matched);
     auto h_j_reco_reco_iso_unmatched = new history<TH1F>(ftruth, tag + "_"s + j_reco_reco_iso_label_unmatched);
+
+    title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
+        h_r_data_before,
+        h_r_data_after,
+        h_r_data_circle, 
+        h_r_qcd_before,
+        h_j_qcd_before,
+        h_r_qcd_after, 
+        h_j_qcd_after,
+        h_r_qcd_circle, 
+        h_j_qcd_circle,
+        h_r_r,
+        h_j_r, 
+        h_r_truth_gen_iso,
+        h_j_truth_gen_iso,
+        h_r_truth_reco_iso, 
+        h_j_truth_reco_iso,
+        h_r_reco_reco_iso_matched,
+        h_r_reco_reco_iso_unmatched, 
+        h_j_reco_reco_iso_matched,
+        h_j_reco_reco_iso_unmatched);
 
     in(output, [&]() {
         h_r_qcd_after->save();

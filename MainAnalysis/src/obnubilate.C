@@ -24,6 +24,11 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename... T>
+void title(std::function<void(TH1*)> f, T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+}
+
 int obnubilate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -42,11 +47,11 @@ int obnubilate(char const* config, char const* output) {
     auto ranges = conf->get<std::vector<float>>("ranges");
     auto groups = conf->get<std::vector<int32_t>>("groups");
 
-    auto info = conf->get<std::string>("info");
-
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto is_paper = conf->get<bool>("paper");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -82,59 +87,70 @@ int obnubilate(char const* config, char const* output) {
         h->SetLineWidth(1);
     };
 
-    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+    auto hf_info = [&](int64_t index) {
+        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
-    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
-
-    auto pthf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.75, 0.04, h, pt_info, hf_info); };
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 300, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+        }
+    };
 
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
+
+    std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     /* calculate variations */
     zip([&](auto const& figure, auto cols, auto range) {
         auto stub = "_"s + figure;
 
         auto c1 = new paper(tag + "_var"s + stub, hb);
-        apply_style(c1, system + " #sqrt{s_{NN}} = 5.02 TeV",
-            std::bind(shader, _1, range));
+        apply_style(p1, cms, system_tag, std::bind(shader, _1, range));
         c1->divide(cols, -1);
 
         auto c2 = new paper(tag + "_var_unfolding"s + stub, hb);
-        apply_style(c2, system + " #sqrt{s_{NN}} = 5.02 TeV",
-            std::bind(shader, _1, range));
+        apply_style(p1, cms, system_tag, std::bind(shader, _1, range));
         c2->divide(cols, -1);
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
+        title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), base);
 
         std::vector<history<TH1F>*> sets;
 
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
         zip([&](auto& batch, auto file, auto const& label) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
+            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), batch);
         }, batches, files, labels);
 
         auto total = new history<TH1F>(*base, "total");
+        title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), total);
         total->apply([](TH1* h) { h->Reset("MICES"); });
 
         for (auto const& batch : batches) {
             batch->add(*base, -1);
 
             for (int64_t i = 0; i < batch->size(); ++i) {
-                std::vector<float> percentages;
+                std::vector<float> differences;
 
                 for (int64_t j = 0; j < (*batch)[i]->GetNbinsX() - 2; ++j) {
-                    percentages.push_back(std::abs((*batch)[i]->GetBinContent(j + 1) / (*base)[i]->GetBinContent(j + 1)) * 100);
+                    differences.push_back(std::abs((*batch)[i]->GetBinContent(j + 1) - (*base)[i]->GetBinContent(j + 1)));
                 }
 
                 float min = 10000;
                 float max = 0;
-                for (auto percentage : percentages) {
-                    if (percentage < min) { min = percentage; }
-                    if (percentage > max) { max = percentage; }
+                for (auto difference : differences) {
+                    if (difference < min) { min = difference; }
+                    if (difference > max) { max = difference; }
                 }
 
                 printf("%.1f-%.1f%% ", min, max);
@@ -210,18 +226,10 @@ int obnubilate(char const* config, char const* output) {
         }, batches, legend_keys, plots);
 
         /* add info text */
-        if (info == "pt") { 
-            c1->accessory(std::bind(pt_info, _1, 0.75)); 
-            c2->accessory(std::bind(pt_info, _1, 0.75)); 
-        }
-        if (info == "hf") { 
-            c1->accessory(std::bind(hf_info, _1, 0.75)); 
-            c2->accessory(std::bind(hf_info, _1, 0.75)); 
-        }
-        if (info == "pthf") { 
-            c1->accessory(std::bind(pthf_info, _1, base)); 
-            c2->accessory(std::bind(pthf_info, _1, base)); 
-        }
+        c1->accessory(hf_info); 
+        c1->accessory(kinematics);
+        c2->accessory(hf_info); 
+        c2->accessory(kinematics);
 
         /* save histograms */
         for (auto const& set : sets)
