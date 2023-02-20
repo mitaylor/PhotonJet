@@ -187,7 +187,7 @@ int vacillate(char const* config, char const* output) {
             if (mod) {
                 if ((i + parity) % 2 == 0) { continue; }
             }
-
+            
             t->GetEntry(i);
 
             int64_t leading = -1;

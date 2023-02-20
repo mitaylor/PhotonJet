@@ -156,7 +156,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto ihf = new interval(dhf);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
-    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
+    std::array<int64_t, 4> osr = { 0, 0, 1, 2 };
     std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
     auto mr = new multival(rdrr, rptr);
@@ -216,15 +216,22 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
     /* load input */
     for (auto const& input : inputs) {
+        std::cout << input << std::endl;
+        
         TFile* f = new TFile(input.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0 });
+        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
+
+            if (mod) {
+                if ((i + parity) % 2 == 0) { continue; }
+            }
+
             t->GetEntry(i);
 
             int64_t leading = -1;
@@ -271,7 +278,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                 + (*p->pho_trackIsoR3PtCut20)[leading];
 
             /* isolation requirement */
-            if (!is_gen && isolation > iso_max) { continue; }
+            if (!is_gen && isolation > iso_max) { continue; } // see if it should be && or ||
 
             /* photon axis */
             auto photon_eta = (*p->phoEta)[leading];
