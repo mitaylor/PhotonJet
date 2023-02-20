@@ -50,6 +50,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto j_reco_reco_iso_label_unmatched = conf->get<std::string>("j_reco_reco_iso_label_unmatched");
 
     auto tag = conf->get<std::string>("tag");
+    auto heavyion = conf->get<bool>("heavyion");
 
     auto rdr = conf->get<std::vector<float>>("dr_range");
     auto rpt = conf->get<std::vector<float>>("pt_range");
@@ -102,16 +103,23 @@ int data_mc_comparison(char const* config, const char* output) {
         h->SetBinError(i, 0); } });
 
     /* set up figures */
-    auto collisions = "#sqrt{s_{NN}} = 5.02 TeV"s;
+    auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
-    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+    auto hf_info = [&](int64_t index) {
+        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
-    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
-
-    auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 300, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.67, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} > 120, |#eta^{jet}| < 1.6");
+        }
+    };
 
     auto hb = new pencil();
     hb->category("type", "data_before", "qcd_before", "truth_reco_iso", 
@@ -132,8 +140,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (1) unfolded MC vs reco truth dr */
     auto p1 = new paper(tag + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
     p1->divide(ihf->size(), -1);
-    p1->accessory(pthf_info);
-    apply_style(p1, collisions, -2., 27.);
+    p1->accessory(hf_info);
+    p1->accessory(kinematics);
+    apply_style(p1, cms, system_tag, -2., 27.);
     p1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
@@ -142,8 +151,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (2) unfolded MC vs reco truth jtpt */
     auto p2 = new paper(tag + "_jtpt_unfolded_mc_vs_truth_reco_iso", hb);
     p2->divide(ihf->size(), -1);
-    p2->accessory(pthf_info);
-    apply_style(p2, collisions, -0.001, 0.04);
+    p2->accessory(hf_info);
+    p2->accessory(kinematics);
+    apply_style(p2, cms, system_tag, -0.001, 0.04);
     p2->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_qcd_after->apply([&](TH1* h) { p2->add(h, "qcd_after"); });
@@ -152,8 +162,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (3) data vs refolded data */
     auto p3 = new paper(tag + "_refolding_test", hb);
     p3->divide(ihf->size(), -1);
-    p3->accessory(pthf_info);
-    apply_style(p3, collisions, -2., 27.);
+    p3->accessory(hf_info);
+    p3->accessory(kinematics);
+    apply_style(p3, cms, system_tag, -2., 27.);
     p3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
 
     h_r_data_before->apply([&](TH1* h) { p3->add(h, "data_before"); });
@@ -162,8 +173,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (5) matched vs unmatched dr */
     auto p5 = new paper(tag + "_dj_matched_unmatched", hb);
     p5->divide(ihf->size(), -1);
-    p5->accessory(pthf_info);
-    apply_style(p5, collisions, -2., 27.);
+    p5->accessory(hf_info);
+    p5->accessory(kinematics);
+    apply_style(p5, cms, system_tag, -2., 27.);
     p5->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_reco_reco_iso_matched->apply([&](TH1* h) { p5->add(h, "reco_matched"); });
@@ -172,8 +184,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (6) matched vs unmatched jtpt */
     auto p6 = new paper(tag + "_jtpt_matched_unmatched", hb);
     p6->divide(ihf->size(), -1);
-    p6->accessory(pthf_info);
-    apply_style(p6, collisions, -0.001, 0.07);
+    p6->accessory(hf_info);
+    p6->accessory(kinematics);
+    apply_style(p6, cms, system_tag, -0.001, 0.07);
     p6->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p6->add(h, "reco_matched"); });
@@ -182,8 +195,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (7) MC vs reco truth dr */
     auto p7 = new paper(tag + "_dj_mc_vs_reco", hb);
     p7->divide(ihf->size(), -1);
-    p7->accessory(pthf_info);
-    apply_style(p7, collisions, -2., 27.);
+    p7->accessory(hf_info);
+    p7->accessory(kinematics);
+    apply_style(p7, cms, system_tag, -2., 27.);
     p7->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_reco_reco_iso_matched->apply([&](TH1* h) { p7->add(h, "reco_matched"); });
@@ -193,8 +207,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (8) MC vs reco truth jtpt */
     auto p8 = new paper(tag + "_jtpt_mc_vs_reco", hb);
     p8->divide(ihf->size(), -1);
-    p8->accessory(pthf_info);
-    apply_style(p8, collisions, -0.001, 0.04);
+    p8->accessory(hf_info);
+    p8->accessory(kinematics);
+    apply_style(p8, cms, system_tag, -0.001, 0.04);
     p8->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_reco_reco_iso_matched->apply([&](TH1* h) { p8->add(h, "reco_matched"); });
@@ -204,8 +219,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (9) qcd vs refolded qcd */
     auto p9 = new paper(tag + "_dj_qcd_refolding_test", hb);
     p9->divide(ihf->size(), -1);
-    p9->accessory(pthf_info);
-    apply_style(p9, collisions, -2., 27.);
+    p9->accessory(hf_info);
+    p9->accessory(kinematics);
+    apply_style(p9, cms, system_tag, -2., 27.);
     p9->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
 
     h_r_qcd_before->apply([&](TH1* h) { p9->add(h, "qcd_before"); });
@@ -214,8 +230,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (10) qcd vs refolded qcd */
     auto p10 = new paper(tag + "_jtpt_qcd_refolding_test", hb);
     p10->divide(ihf->size(), -1);
-    p10->accessory(pthf_info);
-    apply_style(p10, collisions, -0.001, 0.04);
+    p10->accessory(hf_info);
+    p10->accessory(kinematics);
+    apply_style(p10, cms, system_tag, -0.001, 0.04);
     p10->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
 
     h_j_qcd_before->apply([&](TH1* h) { p10->add(h, "qcd_before"); });
@@ -224,8 +241,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (11) truth reco iso vs truth gen iso */
     auto p11 = new paper(tag + "_dj_reco_iso_vs_gen_iso", hb);
     p11->divide(ihf->size(), -1);
-    p11->accessory(pthf_info);
-    apply_style(p11, collisions, -2., 27.);
+    p11->accessory(hf_info);
+    p11->accessory(kinematics);
+    apply_style(p11, cms, system_tag, -2., 27.);
     p11->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     
     h_r_truth_gen_iso->apply([&](TH1* h) { h->GetXaxis()->SetTitle("#deltaj"); });
@@ -236,8 +254,9 @@ int data_mc_comparison(char const* config, const char* output) {
     /* (12) truth reco iso vs truth gen iso */
     auto p12 = new paper(tag + "_jtpt_reco_iso_vs_gen_iso", hb);
     p12->divide(ihf->size(), -1);
-    p12->accessory(pthf_info);
-    apply_style(p12, collisions, -0.001, 0.04);
+    p12->accessory(hf_info);
+    p12->accessory(kinematics);
+    apply_style(p12, cms, system_tag, -0.001, 0.04);
     p12->accessory(std::bind(line_at, _1, 0.f, rpt[0], rpt[1]));
     
     h_j_truth_gen_iso->apply([&](TH1* h) { h->GetXaxis()->SetTitle("dp_{T}^{j}"); });
