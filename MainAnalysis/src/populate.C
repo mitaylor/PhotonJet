@@ -283,17 +283,17 @@ int populate(char const* config, char const* output) {
 
     /* manage memory manually */
     TH1::AddDirectory(false);
-    TH1::SetDefaultSumw2();std::cout << __LINE__ << std::endl;
+    TH1::SetDefaultSumw2();
 
-    int index_m = rng->Integer(mb.size());std::cout << __LINE__ << std::endl;
-    TFile* fm = new TFile(mb[index_m].data(), "read");std::cout << __LINE__ << std::endl;
+    int index_m = rng->Integer(mb.size());std::cout << __LINE__ << std::endl; std::cout<<index_m<<std::endl;
+    TFile* fm = new TFile(mb[index_m].data(), "read");std::cout << __LINE__ << std::endl; std::cout<< mb[index_m].data() << std::endl;
     TTree* tm = (TTree*)fm->Get("pj");std::cout << __LINE__ << std::endl;
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });std::cout << __LINE__ << std::endl;
+    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
-    float pfSum_m;std::cout << __LINE__ << std::endl;
+    float pfSum_m;
     TFile* fms = new TFile();
     TTree* tms = new TTree();
-    int64_t mentries = 0;std::cout << __LINE__ << std::endl;
+    int64_t mentries = 0;
 
     if (mb_sum.size() != 0) {
         fms = new TFile(mb_sum[index_m].data(), "read");
@@ -302,28 +302,28 @@ int populate(char const* config, char const* output) {
         mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
     }
 
-    printf("iterate..\n");std::cout << __LINE__ << std::endl;
+    printf("iterate..\n");
 
     /* load efficiency correction */
     TFile* fe;
-    history<TH1F>* efficiency = nullptr;std::cout << __LINE__ << std::endl;
+    history<TH1F>* efficiency = nullptr;
 
     if (!eff.empty()) {
         fe = new TFile(eff.data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
-    }std::cout << __LINE__ << std::endl;
+    }
 
     /* load centrality weighting for MC */
     TFile* fr;
-    history<TH1F>* rho_weighting = nullptr;std::cout << __LINE__ << std::endl;
+    history<TH1F>* rho_weighting = nullptr;
 
     if (!rho.empty()) {
         fr = new TFile(rho.data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
-    }std::cout << __LINE__ << std::endl;
+    }
 
     /* load acceptance weighting for HI */
-    TFile* fa;std::cout << __LINE__ << std::endl;
+    TFile* fa;
     history<TH2F>* acceptance = nullptr;
     history<TH2F>* total = nullptr;
 
@@ -334,30 +334,30 @@ int populate(char const* config, char const* output) {
     }
 
     /* load the smearing information */
-    TFile* fsmear_aa;std::cout << __LINE__ << std::endl;
+    TFile* fsmear_aa;
     TFile* fsmear_pp;
     history<TH1F>* smear_fits_aa = nullptr;
-    history<TH1F>* smear_fits_pp = nullptr;std::cout << __LINE__ << std::endl;
+    history<TH1F>* smear_fits_pp = nullptr;
 
     if (smear) {
-        fsmear_aa = new TFile(smear_input_aa.data(), "read");std::cout << __LINE__ << std::endl;
-        fsmear_pp = new TFile(smear_input_pp.data(), "read");std::cout << __LINE__ << std::endl;
-        smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);std::cout << __LINE__ << std::endl;
-        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }std::cout << __LINE__ << std::endl;
-        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }std::cout << __LINE__ << std::endl;
-        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }std::cout << __LINE__ << std::endl;
-        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }std::cout << __LINE__ << std::endl;
+        fsmear_aa = new TFile(smear_input_aa.data(), "read");
+        fsmear_pp = new TFile(smear_input_pp.data(), "read");
+        smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
+        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }
+        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }
+        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }
+        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }
     }
-std::cout << __LINE__ << std::endl;
+
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
-std::cout << __LINE__ << std::endl;
+
     if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
-    std::cout << __LINE__ << std::endl;
+    
     int64_t tentries = 0;
     clock_t time = clock();
     clock_t duration = 0;
-std::cout << __LINE__ << std::endl;
+
     /* load input */
     for (auto const& file : input) {
         std::cout << file << std::endl;
