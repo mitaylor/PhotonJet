@@ -130,6 +130,8 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto acc = conf->get<std::string>("acc");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
+    auto mod = conf->get<bool>("mod");
+    auto parity = conf->get<bool>("parity");
 
     auto heavyion = conf->get<bool>("heavyion");
     auto apply_er = conf->get<bool>("apply_er");
@@ -229,7 +231,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
             if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
 
             if (mod) {
-                if ((i + parity) % 2 == 0) { continue; }
+                if ((i + parity + 1) % 2 == 0) { continue; }
             }
 
             t->GetEntry(i);
