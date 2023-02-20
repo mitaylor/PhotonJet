@@ -72,7 +72,7 @@ static std::string index_to_string(int64_t i, int64_t j) {
 int64_t inosculate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::string>("input");
+    auto input = conf->get<std::vector<std::string>>("input");
     auto tag = conf->get<std::string>("tag");
     auto heavyion = conf->get<bool>("heavyion");
     auto use_er = conf->get<bool>("use_er");
@@ -90,11 +90,6 @@ int64_t inosculate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    /* load input */
-    TFile* f = new TFile(input.data(), "read");
-    TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(false, true, false, t, { 1, 0, 1, 0, 0, 1, 0, 0 });
-
     /* prepare histograms */
     auto ihf = new interval(dhf);
     std::vector<int64_t> shape = { 1, ihf->size() };
@@ -104,77 +99,85 @@ int64_t inosculate(char const* config, char const* output) {
 
     auto minv = new history<TH1F>("mass"s, "counts"s, fmass, shape);
 
-    /* iterate */
-    int64_t nentries = t->GetEntries();
-    for (int64_t i = 0; i < nentries; ++i) {
-        if (i % 100000 == 0) { printf("entry: %li/%li\n", i, nentries); }
+    /* load input */
+    for (auto const& file : input) {
+        std::cout << file << std::endl;
 
-        t->GetEntry(i);
-        if ((*p->accepts)[0] == 0) { continue; }
+        TFile* f = new TFile(file.data(), "read");
+        TTree* t = (TTree*)f->Get("pj");
+        auto p = new pjtree(false, true, false, t, { 1, 0, 1, 0, 0, 1, 0, 0 });
+        int64_t nentries = t->GetEntries();
 
-        if (p->hiHF <= hf_min) { continue; }
+        for (int64_t i = 0; i < nentries; ++i) {
+            if (i % 100000 == 0) { printf("entry: %li/%li\n", i, nentries); }
 
-        auto hf_x = ihf->index_for(p->hiHF);
-        std::vector<float> masses;
+            t->GetEntry(i);
+            if ((*p->accepts)[0] == 0) { continue; }
 
-        for (int64_t j = 0; j < p->nPho; ++j) {
-            if ((*p->phoEt)[j] < 15) //15
-                continue;
-            if (std::abs((*p->phoSCEta)[j]) > 1.4442)
-                continue;
-            if (heavyion && in_pho_failure_region(p, j))
-                continue;
+            if (p->hiHF <= hf_min) { continue; }
 
-            if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            if ((*p->phoSigmaIEtaIEta_2012)[j] > see_max
-                || (*p->phoSigmaIEtaIEta_2012)[j] < see_min)
-            { continue; }
+            auto hf_x = ihf->index_for(p->hiHF);
+            std::vector<float> masses;
 
-            for (int64_t k = j + 1; k < p->nPho; ++k) {
-                if ((*p->phoEt)[k] < 15) //15
+            for (int64_t j = 0; j < p->nPho; ++j) {
+                if ((*p->phoEt)[j] < 15) //15
                     continue;
-                if (std::abs((*p->phoSCEta)[k]) > 1.4442)
+                if (std::abs((*p->phoSCEta)[j]) > 1.4442)
                     continue;
-                if (heavyion && in_pho_failure_region(p, k))
-                    continue;
-                if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
+                if (heavyion && in_pho_failure_region(p, j))
                     continue;
 
-                if ((*p->phoHoverE)[k] > hovere_max) { continue; }
-                if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
-                    || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
+                if ((*p->phoHoverE)[j] > hovere_max) { continue; }
+                if ((*p->phoSigmaIEtaIEta_2012)[j] > see_max
+                    || (*p->phoSigmaIEtaIEta_2012)[j] < see_min)
                 { continue; }
 
+                for (int64_t k = j + 1; k < p->nPho; ++k) {
+                    if ((*p->phoEt)[k] < 15) //15
+                        continue;
+                    if (std::abs((*p->phoSCEta)[k]) > 1.4442)
+                        continue;
+                    if (heavyion && in_pho_failure_region(p, k))
+                        continue;
+                    if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
+                        continue;
 
-                float phoEt_j = (*p->phoEt)[j];
-                if ((*p->phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*p->phoEtErNew)[j];
-                if ((*p->phoEt)[j] > 30 && !heavyion && use_er) phoEt_j = (*p->phoEtEr)[j];
+                    if ((*p->phoHoverE)[k] > hovere_max) { continue; }
+                    if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
+                        || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
+                    { continue; }
 
-                float phoEt_k = (*p->phoEt)[k];
-                if ((*p->phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*p->phoEtErNew)[k];
-                if ((*p->phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*p->phoEtEr)[k];
 
-                /* double electron invariant mass */
-                auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
-                    phoEt_j,
-                    (*p->phoEta)[j],
-                    (*p->phoPhi)[j],
-                    0.f,
-                    phoEt_k,
-                    (*p->phoEta)[k],
-                    (*p->phoPhi)[k],
-                    0.f));
+                    float phoEt_j = (*p->phoEt)[j];
+                    if ((*p->phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*p->phoEtErNew)[j];
+                    if ((*p->phoEt)[j] > 30 && !heavyion && use_er) phoEt_j = (*p->phoEtEr)[j];
 
-                masses.push_back(mass);
+                    float phoEt_k = (*p->phoEt)[k];
+                    if ((*p->phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*p->phoEtErNew)[k];
+                    if ((*p->phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*p->phoEtEr)[k];
+
+                    /* double electron invariant mass */
+                    auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
+                        phoEt_j,
+                        (*p->phoEta)[j],
+                        (*p->phoPhi)[j],
+                        0.f,
+                        phoEt_k,
+                        (*p->phoEta)[k],
+                        (*p->phoPhi)[k],
+                        0.f));
+
+                    masses.push_back(mass);
+                }
             }
+
+            if (masses.empty()) { continue; }
+
+            float weight = p->Ncoll > 1e-4 ? p->Ncoll / 1000. : 1.;
+            std::sort(masses.begin(), masses.end(), [](float a, float b) {
+                return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
+            (*minv)[x{0, hf_x}]->Fill(masses[0], weight);
         }
-
-        if (masses.empty()) { continue; }
-
-        float weight = p->Ncoll > 1e-4 ? p->Ncoll / 1000. : 1.;
-        std::sort(masses.begin(), masses.end(), [](float a, float b) {
-            return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
-        (*minv)[x{0, hf_x}]->Fill(masses[0], weight);
     }
 
     TF1** fits[1] = { new TF1*[ihf->size()] };
@@ -232,7 +235,21 @@ int64_t inosculate(char const* config, char const* output) {
     };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
+
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.81, "p_{T,1}^{#gamma} > 15 GeV, p_{T,2}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+        }
+    };
+
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     /* prepare plots */
     auto hb = new pencil();
@@ -241,10 +258,11 @@ int64_t inosculate(char const* config, char const* output) {
     hb->alias("bb", "EB #otimes EB");
 
     auto c1 = new paper(tag + "_mass", hb);
-    apply_style(c1, "PbPb #sqrt{s} = 5.02 TeV"s);
+    apply_style(c1, cms, system_tag);
     c1->legend(std::bind(coordinates, 0.135, 0.4, 0.75, 0.04));
     if (heavyion) c1->accessory(std::bind(hf_info, _1, 0.75));
     c1->accessory(fit_info);
+    c1->accessory(kinematics);
     c1->divide(ihf->size(), 1);
 
     for (int64_t i = 0; i < 1; ++i) {
