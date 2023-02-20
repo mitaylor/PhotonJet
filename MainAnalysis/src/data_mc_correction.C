@@ -61,7 +61,7 @@ int data_mc_comparison(char const* config, const char* output) {
 
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
-    auto mpthf = new multival(dpt, dhf);
+    // auto mpthf = new multival(dpt, dhf);
 
     /* load history objects */
     TFile* fdata = new TFile(input_data.data(), "read");
