@@ -162,7 +162,10 @@ int vacillate(char const* config, char const* output) {
         fsmear_aa = new TFile(smear_input_aa.data(), "read");
         fsmear_pp = new TFile(smear_input_pp.data(), "read");
         smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
-        smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_" + smear_tag);
+        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }
+        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }
+        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }
+        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }
     }
 
     auto rng = new TRandom3(144);
