@@ -285,9 +285,9 @@ int populate(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    int index_m = rng->Integer(mb.size());std::cout << __LINE__ << std::endl; std::cout<<index_m<<" "<< mb.size()<<std::endl;
-    TFile* fm = new TFile(mb[index_m].data(), "read");std::cout << __LINE__ << std::endl; std::cout<< mb[index_m].data() << std::endl;
-    TTree* tm = (TTree*)fm->Get("pj");std::cout << __LINE__ << std::endl;
+    int index_m = rng->Integer(mb.size());
+    TFile* fm = new TFile(mb[index_m].data(), "read");
+    TTree* tm = (TTree*)fm->Get("pj");
     auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
 
     float pfSum_m;
