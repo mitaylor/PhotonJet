@@ -3,8 +3,8 @@
 arithmetic() {
     tag=$1
 
-    ./bin/accumulate configs/accumulate/new/jet_20_fine/accumulate_${tag}.conf \
-        data/jet_20_fine/accumulate_${tag}.root
+    ./bin/accumulate configs/accumulate/preapproval/accumulate_${tag}.conf \
+        data/preapproval/accumulate_${tag}.root
 }
 
 nominal() {
@@ -21,20 +21,19 @@ systematic() {
 }
 
 samples=(pp aa pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
-# samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
 
 for sample in ${samples[@]}; do
     nominal $sample
 
-    for syst in qcd; do
+    for syst in qcd qcd_gen_iso wo_ele_rej; do
         systematic $sample $syst
     done
 done
 
 samples=(aa)
 
-# for sample in ${samples[@]}; do
-#     for syst in cent_up cent_down; do
-#         systematic $sample $syst
-#     done
-# done
+for sample in ${samples[@]}; do
+    for syst in cent_up cent_down; do
+        systematic $sample $syst
+    done
+done

@@ -254,11 +254,17 @@ int accumulate(char const* config, char const* output) {
         // transform_axis(h, [](int64_t val) -> float {
         //     return std::abs(revert_radian(val)); }); };
 
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (system == "PbPb") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    cms += " #it{#scale[1.2]{Preliminary}}"s;
+    cms += "        anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6, p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8"
+
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
