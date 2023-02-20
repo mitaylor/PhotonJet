@@ -7,7 +7,7 @@ histogram() {
     ./bin/fabulate_angle configs/fabulate/preapproval/fabulate_${tag}_angle.conf data/preapproval/fabulate_${tag}_angle.root
 }
 
-samples=(pp_smear_0_10_test pp_smear_10_30_test pp_smear_30_50_test pp_smear_50_90_tes)
+samples=(pp_smear_0_10_test pp_smear_10_30_test pp_smear_30_50_test pp_smear_50_90_test)
 
 for sample in ${samples[@]}; do
     histogram ${sample}
