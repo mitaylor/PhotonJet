@@ -258,7 +258,7 @@ int accumulate(char const* config, char const* output) {
     system_tag += (system == "PbPb") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "        anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6, p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8"
+    cms += "        anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6, p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
@@ -278,8 +278,6 @@ int accumulate(char const* config, char const* output) {
     hb->alias("wta", "WTA");
 
     hb->ditto("es", "na");
-
-    auto collisions = system + " #sqrt{s_{NN}} = 5.02 TeV"s;
 
     auto suffixes = { "d_pthf"s, "d_pt"s, "d_hf"s };
     auto texts = std::vector<std::function<void(int64_t)>> {
@@ -324,7 +322,7 @@ int accumulate(char const* config, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, collisions, -2., 27.);
+        apply_style(c, cms, system_tag, -2., 27.);
         c->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     }, c2, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
@@ -338,7 +336,7 @@ int accumulate(char const* config, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, collisions, -0.001, 0.02);
+        apply_style(c, cms, system_tag, -0.001, 0.02);
         c->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     }, c3, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
@@ -377,7 +375,7 @@ int accumulate(char const* config, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, collisions, -0.01, 0.07);
+        apply_style(c, cms, system_tag, -0.01, 0.07);
         c->accessory(std::bind(line_at, _1, 0.f, 0, mdr->size()));
     }, c5, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
