@@ -100,24 +100,6 @@ int congratulate(char const* config, char const* output) {
     hb->alias("ss", "pp");
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
-        TLatex* cms = new TLatex();
-        cms->SetTextFont(62);
-        cms->SetTextSize(0.084);
-        cms->SetTextAlign(13);
-        cms->DrawLatexNDC(0.135, 0.87, "CMS");
-
-        TLatex* prel = new TLatex();
-        prel->SetTextFont(52);
-        prel->SetTextSize(0.056);
-        prel->SetTextAlign(13);
-        prel->DrawLatexNDC(0.135, 0.80, "Preliminary");
-
-        TLatex* com = new TLatex();
-        com->SetTextFont(42);
-        com->SetTextSize(0.056);
-        com->SetTextAlign(11);
-        com->DrawLatexNDC(0.11, 0.92, "#sqrt{s_{NN}} = 5.02 TeV");
-
         TLatex* info = new TLatex();
         info->SetTextFont(42);
         info->SetTextSize(0.04);
@@ -135,7 +117,7 @@ int congratulate(char const* config, char const* output) {
     //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     // auto pp_info = [&](int64_t index, history<TH1F>* h) {
     //     stack_text(index, 0.73, 0.04, h, pt_info); };
@@ -237,7 +219,7 @@ int congratulate(char const* config, char const* output) {
 
         /* prepare papers */
         auto p = new paper(prefix + "_results_pp_" + figure, hb);
-        apply_style(p, "", ymin, ymax, false);
+        apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV", ymin, ymax, false);
         p->decorate(std::bind(decorator, "pp 300 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         // p->accessory(std::bind(pp_info, _1, hists[1]));
@@ -245,20 +227,20 @@ int congratulate(char const* config, char const* output) {
         p->divide(-1, 1);
 
         auto a = new paper(prefix+ "_results_aa_" + figure, hb);
-        apply_style(a, "", ymin, ymax, false);
+        apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
         a->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
         a->jewellery(box);
-        a->divide(ihf->size(), -1);
+        a->divide(ihf->size()/2, -1);
 
         auto s = new paper(prefix + "_results_ss_" + figure, hb);
-        apply_style(s, "", ymin, ymax, false);
+        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
         s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->jewellery(box);
-        s->divide(ihf->size(), -1);
+        s->divide(ihf->size()/2, -1);
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { a->add(h, "aa"); s->add(h, "aa"); });
