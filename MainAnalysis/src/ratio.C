@@ -259,7 +259,7 @@ int ratio(char const* config, char const* output) {
 
         /* prepare papers */
         auto s = new paper(prefix + "_ratio_" + figure, hb);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
+        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", "", ymin, ymax, false);
         s->accessory(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
