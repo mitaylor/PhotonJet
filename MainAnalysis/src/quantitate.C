@@ -277,7 +277,7 @@ int quantitate(char const* config, char const* output) {
         double min = 99999999999;
 
         for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
-            auto top = (*chi_square)[i]->GetBinContent(j + 1) + 2 * (*chi_square)[i]->GetBinError(j + 1);
+            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (top == 0) { continue; }
 
@@ -287,7 +287,7 @@ int quantitate(char const* config, char const* output) {
                 min = top;
                 choice[i] = j;
             }
-            else if (top > min || std::abs((top-min)/min) < 0.1){
+            else {
                 break;
             }
         }
