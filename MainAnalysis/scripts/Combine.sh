@@ -41,9 +41,9 @@ histogram() {
 # samples=(aa_raw aa_bkg aa_qcd_raw aa_qcd_bkg aa_qcd_gen_iso_raw aa_qcd_gen_iso_bkg aa_wo_ele_rej_raw aa_wo_ele_rej_bkg aa_cent_down_raw aa_cent_down_bkg aa_cent_up_raw aa_cent_up_bkg)
 samples=(aa_qcd_raw aa_qcd_bkg)
 
-# for sample in ${samples[@]}; do
-#     histogram ${sample}
-# done
+for sample in ${samples[@]}; do
+    histogram ${sample}
+done
 
 # samples=(aa_mebs_raw aa_mebs_bkg aa_qcd_mebs_raw aa_qcd_mebs_bkg)
 samples=(aa_qcd_mebs_raw aa_qcd_mebs_bkg)
