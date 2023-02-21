@@ -220,7 +220,7 @@ int congratulate(char const* config, char const* output) {
 
         /* prepare papers */
         auto p = new paper(prefix + "_results_pp_" + figure, hb);
-        apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV", "", ymin, ymax, false);
+        apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, ""s, ymin, ymax, false);
         p->accessory(std::bind(decorator, "pp 300 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         p->accessory(kinematics);
@@ -228,7 +228,7 @@ int congratulate(char const* config, char const* output) {
         p->divide(-1, 1);
 
         auto a = new paper(prefix+ "_results_aa_" + figure, hb);
-        apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", "", ymin, ymax, false);
+        apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, ymin, ymax, false);
         a->accessory(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
@@ -237,7 +237,7 @@ int congratulate(char const* config, char const* output) {
         a->divide(ihf->size()/2, -1);
 
         auto s = new paper(prefix + "_results_ss_" + figure, hb);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", "", ymin, ymax, false);
+        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, ymin, ymax, false);
         s->accessory(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
