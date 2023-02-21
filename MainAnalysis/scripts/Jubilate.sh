@@ -7,7 +7,7 @@ histogram() {
 }
 
 # samples=(pp_raw pp_qcd_raw aa_mebs_raw aa_qcd_mebs_raw aa_qcd aa_raw) # add aa_qcd_original at some point
-samples=(aa_qcd_mebs_raw aa_qcd)
+samples=(aa_qcd_mebs_raw aa_qcd_raw)
 
 for sample in ${samples[@]}; do
     histogram ${sample}
