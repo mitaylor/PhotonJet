@@ -58,7 +58,7 @@ int congratulate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto is_paper = conf->get<bool>("paper");
+    // auto is_paper = conf->get<bool>("paper");
     
     // auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
@@ -221,7 +221,7 @@ int congratulate(char const* config, char const* output) {
         /* prepare papers */
         auto p = new paper(prefix + "_results_pp_" + figure, hb);
         apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV", ymin, ymax, false);
-        p->decorate(std::bind(decorator, "pp 300 pb^{-1}"));
+        p->accessory(std::bind(decorator, "pp 300 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         p->accessory(kinematics);
         p->jewellery(box);
@@ -229,7 +229,7 @@ int congratulate(char const* config, char const* output) {
 
         auto a = new paper(prefix+ "_results_aa_" + figure, hb);
         apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
-        a->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
+        a->accessory(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
         a->accessory(kinematics);
@@ -238,7 +238,7 @@ int congratulate(char const* config, char const* output) {
 
         auto s = new paper(prefix + "_results_ss_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
-        s->decorate(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
+        s->accessory(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->accessory(kinematics);
