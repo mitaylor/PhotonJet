@@ -153,36 +153,36 @@ int congratulate(char const* config, char const* output) {
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst, auto unfolded_qcd, auto truth_reco_iso) {
-            hist->apply([&](TH1* h, int64_t index) {
-                for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-                    double val = h->GetBinContent(i);
-                    double err = h->GetBinError(i);
-                    double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+            // hist->apply([&](TH1* h, int64_t index) {
+            //     for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
+            //         double val = h->GetBinContent(i);
+            //         double err = h->GetBinError(i);
+            //         double correction = (*truth_reco_iso)[index]->GetBinContent(i);
 
-                    if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
-                        correction /= (*unfolded_qcd)[index]->GetBinContent(i);
-                    } else {
-                        correction = 1;
-                    }
+            //         if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
+            //             correction /= (*unfolded_qcd)[index]->GetBinContent(i);
+            //         } else {
+            //             correction = 1;
+            //         }
  
-                    h->SetBinContent(i, val*correction);
-                    h->SetBinError(i, err*correction);
-                }});
-            syst->apply([&](TH1* h, int64_t index) {
-                for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
-                    double val = h->GetBinContent(i);
-                    double err = h->GetBinError(i);
-                    double correction = (*truth_reco_iso)[index]->GetBinContent(i);
+            //         h->SetBinContent(i, val*correction);
+            //         h->SetBinError(i, err*correction);
+            //     }});
+            // syst->apply([&](TH1* h, int64_t index) {
+            //     for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
+            //         double val = h->GetBinContent(i);
+            //         double err = h->GetBinError(i);
+            //         double correction = (*truth_reco_iso)[index]->GetBinContent(i);
 
-                    if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
-                        correction /= (*unfolded_qcd)[index]->GetBinContent(i);
-                    } else {
-                        correction = 1;
-                    }
+            //         if ((*unfolded_qcd)[index]->GetBinContent(i) > 0.001) {
+            //             correction /= (*unfolded_qcd)[index]->GetBinContent(i);
+            //         } else {
+            //             correction = 1;
+            //         }
 
-                    h->SetBinContent(i, val*correction);
-                    h->SetBinError(i, err*correction);
-                }});
+            //         h->SetBinContent(i, val*correction);
+            //         h->SetBinError(i, err*correction);
+            //     }});
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
