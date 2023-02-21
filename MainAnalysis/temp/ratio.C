@@ -29,6 +29,11 @@ using namespace std::placeholders;
 static auto const red = TColor::GetColor("#f2777a");
 static auto const blue = TColor::GetColor("#6699cc");
 
+template <typename... T>
+void title(std::function<void(TH1*)> f, T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+}
+
 int ratio(char const* config, char const* output) {
     auto conf = new configurer(config);
 
@@ -50,6 +55,8 @@ int ratio(char const* config, char const* output) {
     // auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto is_paper = conf->get<bool>("paper");
 
     // auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
@@ -89,24 +96,6 @@ int ratio(char const* config, char const* output) {
     hb->alias("aa", "PbPb");
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
-        TLatex* cms = new TLatex();
-        cms->SetTextFont(62);
-        cms->SetTextSize(0.084);
-        cms->SetTextAlign(13);
-        cms->DrawLatexNDC(0.135, 0.87, "CMS");
-
-        TLatex* prel = new TLatex();
-        prel->SetTextFont(52);
-        prel->SetTextSize(0.056);
-        prel->SetTextAlign(13);
-        prel->DrawLatexNDC(0.135, 0.80, "Unofficial");
-
-        TLatex* com = new TLatex();
-        com->SetTextFont(42);
-        com->SetTextSize(0.056);
-        com->SetTextAlign(11);
-        com->DrawLatexNDC(0.11, 0.92, "#sqrt{s_{NN}} = 5.02 TeV");
-
         TLatex* info = new TLatex();
         info->SetTextFont(42);
         info->SetTextSize(0.04);
@@ -118,13 +107,24 @@ int ratio(char const* config, char const* output) {
         info_extra->SetTextSize(0.04);
         info_extra->SetTextAlign(31);
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    }; 
+    };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%i - %i%%", dcent, true); };
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
+
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+        }
+    };
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
@@ -135,11 +135,11 @@ int ratio(char const* config, char const* output) {
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
+            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
+        }, hists, systs, files, base_stubs, syst_stubs);
 
-        }, hists, systs, files, base_stubs, syst_stubs); 
-
-        for (size_t i = 2; i < files.size(); ++i) { 
+        for (size_t i = 2; i < files.size(); ++i) {
             std::string name1 = std::to_string(i) + std::string("happy");
             std::string name2 = std::to_string(i) + std::string("sad");
             hists[i]->rename(name1);
@@ -147,7 +147,7 @@ int ratio(char const* config, char const* output) {
         }
 
         /* link histograms, uncertainties */
-        std::unordered_map<TH1*, TH1*> links; 
+        std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst, auto unfolded_qcd, auto truth_reco_iso) {
             hist->apply([&](TH1* h, int64_t index) {
                 for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
@@ -177,13 +177,13 @@ int ratio(char const* config, char const* output) {
                     }
 
                     h->SetBinContent(i, val*correction);
-                    h->SetBinError(i, err*correction); 
+                    h->SetBinError(i, err*correction);
                 }});
 
             /* scale everything by the truth gen iso vs reco iso difference */
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });
-        }, hists, systs, unfolded_qcds, truth_reco_isos); 
+        }, hists, systs, unfolded_qcds, truth_reco_isos);
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
@@ -231,7 +231,7 @@ int ratio(char const* config, char const* output) {
         std::unordered_map<TH1*, int32_t> colours; 
         hists[0]->apply([&](TH1* h) { colours[h] = 1; });
 
-        /* uncertainty box */ 
+        /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
             gr->SetFillStyle(1001);
@@ -259,12 +259,13 @@ int ratio(char const* config, char const* output) {
 
         /* prepare papers */
         auto s = new paper(prefix + "_ratio_" + figure, hb);
-        apply_style(s, "", ymin, ymax, false);
-        s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
+        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
+        s->decorate(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
+        s->accessory(kinematics);
         s->jewellery(box);
-        s->divide(ihf->size(), -1);
+        s->divide(ihf->size()/2, -1);
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { 

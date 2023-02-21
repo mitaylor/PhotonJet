@@ -59,7 +59,7 @@ int congratulate(char const* config, char const* output) {
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto is_paper = conf->get<bool>("paper");
-
+    
     // auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
 
@@ -113,20 +113,22 @@ int congratulate(char const* config, char const* output) {
         info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
     };
 
-    // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-    //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
-
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
-    // auto pp_info = [&](int64_t index, history<TH1F>* h) {
-    //     stack_text(index, 0.73, 0.04, h, pt_info); };
-
-    // auto aa_info = [&](int64_t index, history<TH1F>* h) {
-    //     stack_text(index, 0.73, 0.04, h, pt_info, hf_info); };
-
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
+
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+        }
+    };
 
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
@@ -139,7 +141,6 @@ int congratulate(char const* config, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
-
         }, hists, systs, files, base_stubs, syst_stubs);
 
         for (size_t i = 2; i < files.size(); ++i) {
@@ -222,7 +223,7 @@ int congratulate(char const* config, char const* output) {
         apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV", ymin, ymax, false);
         p->decorate(std::bind(decorator, "pp 300 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        // p->accessory(std::bind(pp_info, _1, hists[1]));
+        p->accessory(kinematics);
         p->jewellery(box);
         p->divide(-1, 1);
 
@@ -231,14 +232,16 @@ int congratulate(char const* config, char const* output) {
         a->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
+        a->accessory(kinematics);
         a->jewellery(box);
         a->divide(ihf->size()/2, -1);
 
         auto s = new paper(prefix + "_results_ss_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV", ymin, ymax, false);
-        s->decorate(std::bind(decorator, "PbPb 1.6 nb^{-1}", "pp 300 pb^{-1}"));
+        s->decorate(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
+        s->accessory(kinematics);
         s->jewellery(box);
         s->divide(ihf->size()/2, -1);
 

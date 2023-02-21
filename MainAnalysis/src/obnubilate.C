@@ -96,7 +96,7 @@ int obnubilate(char const* config, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 300, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
             l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
@@ -105,7 +105,7 @@ int obnubilate(char const* config, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 3.02 pb^{-1}"s;
+    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 320 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
@@ -159,28 +159,28 @@ int obnubilate(char const* config, char const* output) {
 
             batch->apply(square_);
 
-            for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
-                    if (j == 2) {
-                        double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 4));
-                        value = value * 3 / 4;
-                        value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 4));
-                        (*batch)[i]->SetBinContent(j + 1, value);
-                    }
-                    if (j == 3) {
-                        double value = std::abs((*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 3));
-                        value = value * 1 / 2;
-                        value += std::min((*batch)[i]->GetBinContent(j - 1), (*batch)[i]->GetBinContent(j + 3));
-                        (*batch)[i]->SetBinContent(j + 1, value);
-                    }
-                    if (j == 4) {
-                        double value = std::abs((*batch)[i]->GetBinContent(j - 2) - (*batch)[i]->GetBinContent(j + 2));
-                        value = value * 1 / 4;
-                        value += std::min((*batch)[i]->GetBinContent(j - 2), (*batch)[i]->GetBinContent(j + 2));
-                        (*batch)[i]->SetBinContent(j + 1, value);
-                    }
-                }
-            }
+            // for (int64_t i = 0; i < batch->size(); ++i) {
+            //     for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
+            //         if (j == 2) {
+            //             double value = std::abs((*batch)[i]->GetBinContent(j) - (*batch)[i]->GetBinContent(j + 4));
+            //             value = value * 3 / 4;
+            //             value += std::min((*batch)[i]->GetBinContent(j), (*batch)[i]->GetBinContent(j + 4));
+            //             (*batch)[i]->SetBinContent(j + 1, value);
+            //         }
+            //         if (j == 3) {
+            //             double value = std::abs((*batch)[i]->GetBinContent(j - 1) - (*batch)[i]->GetBinContent(j + 3));
+            //             value = value * 1 / 2;
+            //             value += std::min((*batch)[i]->GetBinContent(j - 1), (*batch)[i]->GetBinContent(j + 3));
+            //             (*batch)[i]->SetBinContent(j + 1, value);
+            //         }
+            //         if (j == 4) {
+            //             double value = std::abs((*batch)[i]->GetBinContent(j - 2) - (*batch)[i]->GetBinContent(j + 2));
+            //             value = value * 1 / 4;
+            //             value += std::min((*batch)[i]->GetBinContent(j - 2), (*batch)[i]->GetBinContent(j + 2));
+            //             (*batch)[i]->SetBinContent(j + 1, value);
+            //         }
+            //     }
+            // }
         }
 
         zip([&](auto const& batch, auto group) {

@@ -87,7 +87,7 @@ int congratulate(char const* config, char const* output) {
     auto drhf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, mdrhf_short, dr_info, hf_info); };
 
-    auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV, 3.02 pb^{-1}"s;
+    auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV, 320 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
     /* prepare paper */
