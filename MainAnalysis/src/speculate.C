@@ -51,7 +51,7 @@ int speculate(char const* config, char const* output) {
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
     TTree* t = (TTree*)f->Get("pj");
-    auto p = new pjtree(mc_branches, true, false, t, { 1, 0, 1, 1, 0, 1, 0, 0 });
+    auto p = new pjtree(mc_branches, true, false, t, { 1, 0, 1, 1, 0, 1, 0, 0, 0 });
 
     auto ipt = new interval("photon p_{T}"s, rpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
@@ -148,13 +148,16 @@ int speculate(char const* config, char const* output) {
     hframe->GetXaxis()->SetTitle("photon p_{T}");
 
     auto eff = new TGraphAsymmErrors((*counts)[1], (*counts)[0], "cl=0.683 b(1,1) mode");
+
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
     
     /* draw efficiency */
     auto hb = new pencil();
     hb->category("sample", "pp", "PbPb");
 
     auto c1 = new paper(tag + "_efficiency", hb);
-    apply_style(c1, system + " #sqrt{s} = 5.02 TeV"s, 0., 1.2);
+    apply_style(c1, cms, system_tag, 0., 1.2);
     c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
     c1->add(hframe);
