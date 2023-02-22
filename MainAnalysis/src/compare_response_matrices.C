@@ -65,14 +65,14 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
 
     /* normalize distributions */
-    h_r_nominal->divide(*h_n_nominal);
-    h_g_nominal->divide(*h_n_nominal);
-    h_r_old->divide(*h_n_old);
-    h_g_old->divide(*h_n_old);
-    h_r_nominalu->divide(*h_n_nominalu);
-    h_g_nominalu->divide(*h_n_nominalu);
-    h_r_oldu->divide(*h_n_oldu);
-    h_g_oldu->divide(*h_n_oldu);
+    // h_r_nominal->divide(*h_n_nominal);
+    // h_g_nominal->divide(*h_n_nominal);
+    // h_r_old->divide(*h_n_old);
+    // h_g_old->divide(*h_n_old);
+    // h_r_nominalu->divide(*h_n_nominalu);
+    // h_g_nominalu->divide(*h_n_nominalu);
+    // h_r_oldu->divide(*h_n_oldu);
+    // h_g_oldu->divide(*h_n_oldu);
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
