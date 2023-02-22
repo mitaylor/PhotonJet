@@ -225,7 +225,7 @@ int congratulate(char const* config, char const* output) {
         /* prepare papers */
         auto p = new paper(prefix + "_results_pp_" + figure, hb);
         apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, ""s, ymin, ymax);
-        p->accessory(std::bind(decorator, "pp 300 pb^{-1}"));
+        p->accessory(std::bind(decorator, "pp 302 pb^{-1}"));
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         p->accessory(kinematics);
         p->jewellery(box);

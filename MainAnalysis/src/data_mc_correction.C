@@ -145,7 +145,7 @@ int data_mc_comparison(char const* config, const char* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 300, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
             l->DrawLatexNDC(0.865, 0.67, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
