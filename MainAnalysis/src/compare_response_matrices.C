@@ -47,10 +47,10 @@ int data_mc_comparison(char const* config, const char* output) {
     TFile* f_oldu = new TFile(input_old_unfolding.data(), "read");
 
     /* n */
-    auto h_n_nominal = new history<TH1F>(f_nominal, "aa_n");
-    auto h_n_old = new history<TH1F>(f_old, "aa_n");
-    auto h_n_nominalu = new history<TH1F>(f_nominalu, "aa_n");
-    auto h_n_oldu = new history<TH1F>(f_oldu, "aa_n");
+    // auto h_n_nominal = new history<TH1F>(f_nominal, "aa_n");
+    // auto h_n_old = new history<TH1F>(f_old, "aa_n");
+    // auto h_n_nominalu = new history<TH1F>(f_nominalu, "aa_n");
+    // auto h_n_oldu = new history<TH1F>(f_oldu, "aa_n");
 
     /* r */
     auto h_r_nominal = new history<TH1F>(f_nominal, "aa_r");
@@ -59,10 +59,10 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_oldu = new history<TH1F>(f_oldu, "aa_r");
     
     /* g */
-    auto h_g_nominal = new history<TH1F>(f_nominal, "aa_g");
-    auto h_g_old = new history<TH1F>(f_old, "aa_g");
-    auto h_g_nominalu = new history<TH1F>(f_nominalu, "aa_g");
-    auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
+    // auto h_g_nominal = new history<TH1F>(f_nominal, "aa_g");
+    // auto h_g_old = new history<TH1F>(f_old, "aa_g");
+    // auto h_g_nominalu = new history<TH1F>(f_nominalu, "aa_g");
+    // auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
 
     /* normalize distributions */
     // h_r_nominal->divide(*h_n_nominal);
@@ -101,7 +101,7 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("old_previous", "Old response matrix");
 
     /* (1) reco comparisions */
-    auto p1 = new paper("vacillate_aa_r_comparison", hb);
+    auto p1 = new paper("vacillate_aa_r_comparison_latest", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -109,10 +109,30 @@ int data_mc_comparison(char const* config, const char* output) {
     
     h_r_nominal->apply([&](TH1* h) { p1->add(h, "nominal"); });
     h_r_old->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "old"); });
+
+    auto p2 = new paper("vacillate_aa_r_comparison_nominal", hb);
+    p2->divide(ihf->size(), -1);
+    p2->accessory(hf_info);
+    p2->accessory(kinematics);
+    apply_style(p2, cms, system_tag);
+    
+    h_r_nominal->apply([&](TH1* h) { p2->add(h, "nominal"); });
+    h_r_nominalu->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "nominal_previous"); });
+
+    auto p3 = new paper("vacillate_aa_r_comparison_old", hb);
+    p3->divide(ihf->size(), -1);
+    p3->accessory(hf_info);
+    p3->accessory(kinematics);
+    apply_style(p3, cms, system_tag);
+    
+    h_r_old->apply([&](TH1* h) { p3->add(h, "old"); });
+    h_r_oldu->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "old_previous"); });
     
     hb->sketch();
 
     p1->draw("pdf");
+    p2->draw("pdf");
+    p3->draw("pdf");
 
     in(output, [&]() {
         h_r_nominal->save();
