@@ -158,7 +158,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto ihf = new interval(dhf);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
-    std::array<int64_t, 4> osr = { 0, 0, 1, 2 };
+    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
     std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
     auto mr = new multival(rdrr, rptr);

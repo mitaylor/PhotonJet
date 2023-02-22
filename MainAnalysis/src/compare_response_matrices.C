@@ -21,8 +21,87 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 template <typename... T>
-void title(std::function<void(TH1*)> f, T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+void normalise_to_unity(T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1. / obj->Integral("width")); }), 0)... };
+}
+
+template <typename T>
+T* null(int64_t, std::string const&, std::string const&) {
+    return nullptr;
+}
+
+TH2F* variance(TH1* flat, multival const* m) {
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
+        m->size(), 0, m->size());
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto err = flat->GetBinError(i + 1);
+        cov->SetBinContent(i + 1, i + 1, err * err);
+    }
+
+    return cov;
+}
+
+template <std::size_t N>
+TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
+           std::array<int64_t, N> const& offsets) {
+    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
+    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
+        { offsets[axis << 1], offsets[(axis << 1) + 1] });
+
+    auto shape = m->shape();
+
+    auto front = std::vector<int64_t>(m->dims(), 0);
+    auto back = std::vector<int64_t>(m->dims(), 0);
+    for (int64_t i = 0; i < m->dims(); ++i) {
+        front[i] = offsets[i << 1];
+        back[i] = shape[i] - offsets[(i << 1) + 1];
+    }
+
+    auto size = back[axis] - front[axis];
+    auto list = new std::vector<int64_t>[size];
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto indices = m->indices_for(i);
+
+        bool flag = false;
+        zip([&](int64_t index, int64_t f, int64_t b) {
+            flag = flag || index < f || index >= b;
+        }, indices, front, back);
+        if (flag) { continue; }
+
+        auto index = indices[axis] - front[axis];
+        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
+            + flat->GetBinContent(i + 1));
+
+        list[index].push_back(i);
+    }
+
+    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
+
+    for (int64_t i = 0; i < size; ++i) {
+        auto indices = list[i];
+        int64_t count = indices.size();
+
+        auto error = 0.;
+        for (int64_t j = 0; j < count; ++j) {
+            auto j_x = indices[j] + 1;
+            for (int64_t k = 0; k < count; ++k) {
+                auto k_x = indices[k] + 1;
+                error = error + cov->GetBinContent(j_x, k_x);
+            }
+        }
+
+        hfold->SetBinError(i + 1, std::sqrt(error));
+    }
+
+    delete [] list;
+    delete cov;
+
+    hfold->Scale(1., "width");
+
+    return hfold;
 }
 
 int data_mc_comparison(char const* config, const char* output) {
@@ -37,8 +116,20 @@ int data_mc_comparison(char const* config, const char* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto rdrr = conf->get<std::vector<float>>("drr_range");
+    auto rdrg = conf->get<std::vector<float>>("drg_range");
+    auto rptr = conf->get<std::vector<float>>("ptr_range");
+    auto rptg = conf->get<std::vector<float>>("ptg_range");
+
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
+
+    auto mr = new multival(rdrr, rptr);
+    auto mg = new multival(rdrg, rptg);
+
+    /* offsets */
+    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
+    std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
     /* load history objects */
     TFile* f_nominal = new TFile(input_nominal.data(), "read");
@@ -59,20 +150,78 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_oldu = new history<TH1F>(f_oldu, "aa_r");
     
     /* g */
-    // auto h_g_nominal = new history<TH1F>(f_nominal, "aa_g");
-    // auto h_g_old = new history<TH1F>(f_old, "aa_g");
-    // auto h_g_nominalu = new history<TH1F>(f_nominalu, "aa_g");
-    // auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
+    auto h_g_nominal = new history<TH1F>(f_nominal, "aa_g");
+    auto h_g_old = new history<TH1F>(f_old, "aa_g");
+    auto h_g_nominalu = new history<TH1F>(f_nominalu, "aa_g");
+    auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
 
-    /* normalize distributions */
-    // h_r_nominal->divide(*h_n_nominal);
-    // h_g_nominal->divide(*h_n_nominal);
-    // h_r_old->divide(*h_n_old);
-    // h_g_old->divide(*h_n_old);
-    // h_r_nominalu->divide(*h_n_nominalu);
-    // h_g_nominalu->divide(*h_n_nominalu);
-    // h_r_oldu->divide(*h_n_oldu);
-    // h_g_oldu->divide(*h_n_oldu);
+    /* folded */
+    auto h_r_nominal_fold0 = new history<TH1F>("h_r_nominal_fold0", "", null<TH1F>, ihf->size());
+    auto h_r_old_fold0 = new history<TH1F>("h_r_old_fold0", "", null<TH1F>, ihf->size());
+    auto h_r_nominalu_fold0 = new history<TH1F>("h_r_nominalu_fold0", "", null<TH1F>, ihf->size());
+    auto h_r_oldu_fold0 = new history<TH1F>("h_r_oldu_fold0", "", null<TH1F>, ihf->size());
+
+    auto h_r_nominal_fold1 = new history<TH1F>("h_r_nominal_fold1", "", null<TH1F>, ihf->size());
+    auto h_r_old_fold1 = new history<TH1F>("h_r_old_fold1", "", null<TH1F>, ihf->size());
+    auto h_r_nominalu_fold1 = new history<TH1F>("h_r_nominalu_fold1", "", null<TH1F>, ihf->size());
+    auto h_r_oldu_fold1 = new history<TH1F>("h_r_oldu_fold1", "", null<TH1F>, ihf->size());
+
+    auto h_g_nominal_fold0 = new history<TH1F>("h_g_nominal_fold0", "", null<TH1F>, ihf->size());
+    auto h_g_old_fold0 = new history<TH1F>("h_g_old_fold0", "", null<TH1F>, ihf->size());
+    auto h_g_nominalu_fold0 = new history<TH1F>("h_g_nominalu_fold0", "", null<TH1F>, ihf->size());
+    auto h_g_oldu_fold0 = new history<TH1F>("h_g_oldu_fold0", "", null<TH1F>, ihf->size());
+
+    auto h_g_nominal_fold1 = new history<TH1F>("h_g_nominal_fold1", "", null<TH1F>, ihf->size());
+    auto h_g_old_fold1 = new history<TH1F>("h_g_old_fold1", "", null<TH1F>, ihf->size());
+    auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", "", null<TH1F>, ihf->size());
+    auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", "", null<TH1F>, ihf->size());
+
+    for (int64_t i = 0; i < ihf->size(); ++i) {
+        (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
+        (*h_r_old_fold0)[i] = fold((*h_r_old)[i], nullptr, mr, 0, osr);
+        (*h_r_nominalu_fold0)[i] = fold((*h_r_nominalu)[i], nullptr, mr, 0, osr);
+        (*h_r_oldu_fold0)[i] = fold((*r_reco_iso_matched)[i], nullptr, mr, 0, osr);
+
+        (*h_r_nominal_fold1)[i] = fold((*h_r_nominal)[i], nullptr, mr, 1, osr);
+        (*h_r_old_fold1)[i] = fold((*h_r_old)[i], nullptr, mr, 1, osr);
+        (*h_r_nominalu_fold1)[i] = fold((*h_r_nominalu)[i], nullptr, mr, 1, osr);
+        (*h_r_oldu_fold1)[i] = fold((*h_r_oldu)[i], nullptr, mr, 1, osr);
+
+        (*h_g_nominal_fold0)[i] = fold((*h_g_nominal)[i], nullptr, mg, 0, osg);
+        (*h_g_old_fold0)[i] = fold((*h_g_old)[i], nullptr, mg, 0, osg);
+        (*h_g_nominalu_fold0)[i] = fold((*h_g_nominalu)[i], nullptr, mg, 0, osg);
+        (*h_g_oldu_fold0)[i] = fold((*r_geco_iso_matched)[i], nullptr, mg, 0, osg);
+
+        (*h_g_nominal_fold1)[i] = fold((*h_g_nominal)[i], nullptr, mg, 1, osg);
+        (*h_g_old_fold1)[i] = fold((*h_g_old)[i], nullptr, mg, 1, osg);
+        (*h_g_nominalu_fold1)[i] = fold((*h_g_nominalu)[i], nullptr, mg, 1, osg);
+        (*h_g_oldu_fold1)[i] = fold((*h_g_oldu)[i], nullptr, mg, 1, osg);
+    }
+
+    h_r_nominal_fold0->rename("h_r_nominal_fold0");
+    h_r_old_fold0->rename("h_r_old_fold0");
+    h_r_nominalu_fold0->rename("h_r_nominalu_fold0");
+    h_r_nominalu_fold0->rename("h_r_nominalu_fold0");
+
+    h_r_nominal_fold1->rename("h_r_nominal_fold1");
+    h_r_old_fold1->rename("h_r_old_fold1");
+    h_r_nominalu_fold1->rename("h_r_nominalu_fold1");
+    h_r_oldu_fold1->rename("h_r_oldu_fold1");
+
+    h_g_nominal_fold0->rename("h_g_nominal_fold0");
+    h_g_old_fold0->rename("h_g_old_fold0");
+    h_g_nominalu_fold0->rename("h_g_nominalu_fold0");
+    h_g_nominalu_fold0->rename("h_g_nominalu_fold0");
+
+    h_g_nominal_fold1->rename("h_g_nominal_fold1");
+    h_g_old_fold1->rename("h_g_old_fold1");
+    h_g_nominalu_fold1->rename("h_g_nominalu_fold1");
+    h_g_oldu_fold1->rename("h_g_oldu_fold1");
+
+    normalise_to_unity(h_r_nominal_fold0, h_r_old_fold0, h_r_nominalu_fold0, h_r_nominalu_fold0);
+    normalise_to_unity(h_r_nominal_fold1, h_r_old_fold1, h_r_nominalu_fold1, h_r_oldu_fold1);
+    normalise_to_unity(h_g_nominal_fold0, h_g_old_fold0, h_g_nominalu_fold0, h_g_nominalu_fold0);
+    normalise_to_unity(h_g_nominal_fold1, h_g_old_fold1, h_g_nominalu_fold1, h_g_oldu_fold1);
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
@@ -101,7 +250,7 @@ int data_mc_comparison(char const* config, const char* output) {
     hb->alias("old_previous", "Old response matrix");
 
     /* (1) reco comparisions */
-    auto p1 = new paper("vacillate_aa_r_comparison_latest", hb);
+    auto p1 = new paper("vacillate_aa_r_flat_comparison_latest", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -110,7 +259,7 @@ int data_mc_comparison(char const* config, const char* output) {
     h_r_nominal->apply([&](TH1* h) { p1->add(h, "nominal"); });
     h_r_old->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "old"); });
 
-    auto p2 = new paper("vacillate_aa_r_comparison_nominal", hb);
+    auto p2 = new paper("vacillate_aa_r_flat_comparison_nominal", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
@@ -119,7 +268,7 @@ int data_mc_comparison(char const* config, const char* output) {
     h_r_nominal->apply([&](TH1* h) { p2->add(h, "nominal"); });
     h_r_nominalu->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "nominal_previous"); });
 
-    auto p3 = new paper("vacillate_aa_r_comparison_old", hb);
+    auto p3 = new paper("vacillate_aa_r_flat_comparison_old", hb);
     p3->divide(ihf->size(), -1);
     p3->accessory(hf_info);
     p3->accessory(kinematics);
@@ -127,12 +276,55 @@ int data_mc_comparison(char const* config, const char* output) {
     
     h_r_old->apply([&](TH1* h) { p3->add(h, "old"); });
     h_r_oldu->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "old_previous"); });
+
+    /* (2) gen comparisions */
+    auto p4 = new paper("vacillate_aa_g_flat_comparison_latest", hb);
+    p4->divide(ihf->size(), -1);
+    p4->accessory(hf_info);
+    p4->accessory(kinematics);
+    apply_style(p4, cms, system_tag);
+    
+    h_g_nominal->apply([&](TH1* h) { p4->add(h, "nominal"); });
+    h_g_old->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "old"); });
+
+    auto p5 = new paper("vacillate_aa_g_flat_comparison_nominal", hb);
+    p5->divide(ihf->size(), -1);
+    p5->accessory(hf_info);
+    p5->accessory(kinematics);
+    apply_style(p5, cms, system_tag);
+    
+    h_g_nominal->apply([&](TH1* h) { p5->add(h, "nominal"); });
+    h_g_nominalu->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "nominal_previous"); });
+
+    auto p6 = new paper("vacillate_aa_g_flat_comparison_old", hb);
+    p6->divide(ihf->size(), -1);
+    p6->accessory(hf_info);
+    p6->accessory(kinematics);
+    apply_style(p6, cms, system_tag);
+    
+    h_g_old->apply([&](TH1* h) { p6->add(h, "old"); });
+    h_g_oldu->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "old_previous"); });
     
     hb->sketch();
 
     p1->draw("pdf");
     p2->draw("pdf");
     p3->draw("pdf");
+    p4->draw("pdf");
+    p5->draw("pdf");
+    p6->draw("pdf");
+    // p7->draw("pdf");
+    // p8->draw("pdf");
+    // p9->draw("pdf");
+    // p10->draw("pdf");
+    // p11->draw("pdf");
+    // p12->draw("pdf");
+    // p13->draw("pdf");
+    // p14->draw("pdf");
+    // p15->draw("pdf");
+    // p16->draw("pdf");
+    // p17->draw("pdf");
+    // p18->draw("pdf");
 
     in(output, [&]() {
         h_r_nominal->save();
