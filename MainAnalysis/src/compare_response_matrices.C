@@ -180,7 +180,7 @@ int data_mc_comparison(char const* config, const char* output) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
         (*h_r_old_fold0)[i] = fold((*h_r_old)[i], nullptr, mr, 0, osr);
         (*h_r_nominalu_fold0)[i] = fold((*h_r_nominalu)[i], nullptr, mr, 0, osr);
-        (*h_r_oldu_fold0)[i] = fold((*r_reco_iso_matched)[i], nullptr, mr, 0, osr);
+        (*h_r_oldu_fold0)[i] = fold((*h_r_oldu)[i], nullptr, mr, 0, osr);
 
         (*h_r_nominal_fold1)[i] = fold((*h_r_nominal)[i], nullptr, mr, 1, osr);
         (*h_r_old_fold1)[i] = fold((*h_r_old)[i], nullptr, mr, 1, osr);
@@ -190,7 +190,7 @@ int data_mc_comparison(char const* config, const char* output) {
         (*h_g_nominal_fold0)[i] = fold((*h_g_nominal)[i], nullptr, mg, 0, osg);
         (*h_g_old_fold0)[i] = fold((*h_g_old)[i], nullptr, mg, 0, osg);
         (*h_g_nominalu_fold0)[i] = fold((*h_g_nominalu)[i], nullptr, mg, 0, osg);
-        (*h_g_oldu_fold0)[i] = fold((*r_geco_iso_matched)[i], nullptr, mg, 0, osg);
+        (*h_g_oldu_fold0)[i] = fold((*h_r_oldu)[i], nullptr, mg, 0, osg);
 
         (*h_g_nominal_fold1)[i] = fold((*h_g_nominal)[i], nullptr, mg, 1, osg);
         (*h_g_old_fold1)[i] = fold((*h_g_old)[i], nullptr, mg, 1, osg);
