@@ -6,8 +6,8 @@ histogram() {
     echo "nohup ./bin/vacillate_dr configs/vacillate_dr/preapproval/vacillate_${tag}.conf data/preapproval/vacillate_${tag}.root > log/vacillate_${tag}_log.txt 2>&1 &"
 }
 
-samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
-# samples=(pp)
+# samples=(pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(aa)
 
 for sample in ${samples[@]}; do
     histogram ${sample}
@@ -25,10 +25,10 @@ done
 #     done
 # done
 
-# samples=(aa)
+samples=(aa)
 
-# for sample in ${samples[@]}; do
-#     for syst in cent_down cent_up; do
-#         histogram ${sample}_${syst}
-#     done
-# done
+for sample in ${samples[@]}; do
+    for syst in cent_down cent_up; do
+        histogram ${sample}_${syst}
+    done
+done
