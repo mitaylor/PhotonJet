@@ -105,7 +105,7 @@ int obnubilate(char const* config, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 320 pb^{-1}"s;
+    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 

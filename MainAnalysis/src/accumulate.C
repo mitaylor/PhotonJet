@@ -255,7 +255,7 @@ int accumulate(char const* config, char const* output) {
         //     return std::abs(revert_radian(val)); }); };
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    system_tag += (system == "PbPb") ? ", 1.69 nb^{-1}"s : ", 320 pb^{-1}"s;
+    system_tag += (system == "PbPb") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     cms += " #it{#scale[1.2]{Preliminary}}"s;
     cms += "                                                                   ";
