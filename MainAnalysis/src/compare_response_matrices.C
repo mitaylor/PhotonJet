@@ -108,7 +108,7 @@ int data_mc_comparison(char const* config, const char* output) {
     apply_style(p1, cms, system_tag);
     
     h_r_nominal->apply([&](TH1* h) { p1->add(h, "nominal"); });
-    h_r_nominalu->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "nominal_previous"); });
+    h_r_old->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "old"); });
     
     hb->sketch();
 
