@@ -36,6 +36,7 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
 
 float res(float c, float s, float n, float pt) {
     return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+}
 
 template <typename... T>
 void normalise_to_unity(T*&... args) {
