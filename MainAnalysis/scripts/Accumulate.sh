@@ -38,7 +38,7 @@ systematic() {
 #     done
 # done
 
-samples=(aa aa_mebs aa_qcd_mebs)
+samples=(aa aa_qcd aa_mebs aa_qcd_mebs)
 
 for sample in ${samples[@]}; do
     nominal $sample
