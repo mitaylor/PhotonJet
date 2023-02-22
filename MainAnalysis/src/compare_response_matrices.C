@@ -115,6 +115,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p1->draw("pdf");
 
     in(output, [&]() {
+        h_r_nominal->save();
     });
 
     return 0;
