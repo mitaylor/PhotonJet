@@ -34,6 +34,9 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     return deta * deta + dphi * dphi;
 }
 
+float res(float c, float s, float n, float pt) {
+    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+
 template <typename... T>
 void normalise_to_unity(T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
@@ -130,6 +133,15 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto acc = conf->get<std::string>("acc");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
+
+    auto smear = conf->get<bool>("smear");
+    auto smear_input_aa = conf->get<std::string>("smear_input_aa");
+    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
+    auto smear_tag = conf->get<std::string>("smear_tag");
+    auto cent = conf->get<int64_t>("cent");
+
+    auto dr_diff = conf->get<std::vector<float>>("dr_diff");
+
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
@@ -156,6 +168,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
     /* prepare histograms */
     auto ihf = new interval(dhf);
+    auto isdr = new interval("#deltaj"s, dr_diff);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
     std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
@@ -165,11 +178,11 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto mg = new multival(rdrg, rptg);
 
     auto fr = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TH1F(name.data(), (";reco;"s + label).data(),
+        return new TH1F(name.data(), (";Reconstructed Bin;"s + label).data(),
             mr->size(), 0, mr->size()); };
 
     auto fg = [&](int64_t, std::string const& name, std::string const& label) {
-        return new TH1F(name.data(), (";gen;"s + label).data(),
+        return new TH1F(name.data(), (";Generator Bin;"s + label).data(),
             mg->size(), 0, mg->size()); };
 
     auto g_gen_iso = new history<TH1F>("g_gen_iso"s, "counts", fg, ihf->size());
@@ -215,6 +228,24 @@ int create_truth_gen_reco(char const* config, char const* output) {
         acceptance = new history<TH2F>(fa, acc_label_acc);
         total = new history<TH2F>(fa, acc_label_ref);
     }
+
+    /* load the smearing information */
+    TFile* fsmear_aa;
+    TFile* fsmear_pp;
+    history<TH1F>* smear_fits_aa = nullptr;
+    history<TH1F>* smear_fits_pp = nullptr;
+
+    if (smear) {
+        fsmear_aa = new TFile(smear_input_aa.data(), "read");
+        fsmear_pp = new TFile(smear_input_pp.data(), "read");
+        smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
+        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }
+        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }
+        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }
+        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }
+    }
+
+    auto rng = new TRandom3(144);
 
     /* load input */
     for (auto const& input : inputs) {
@@ -384,6 +415,29 @@ int create_truth_gen_reco(char const* config, char const* output) {
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
+                    if (smear) {
+                        if (rdr > 0.3) { continue; }
+                        auto dr_x = isdr->index_for(rdr);
+
+                        auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
+                        auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
+                        auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
+
+                        auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
+                        auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
+                        auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
+
+                        auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
+
+                        if (res_diff > 0) {
+                            auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
+                            auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
+                            auto adj = rdr + change * sign / 2;
+
+                            if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
+                        }
+                    }
+                    
                     if (is_gen) {
                         if ((*p->mcCalIsoDR04)[gen_index] < 5 && gen_pt > rptg.front()) {
                             for (int64_t k = 0; k < ihf->size(); ++k) {

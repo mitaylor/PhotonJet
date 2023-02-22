@@ -128,7 +128,7 @@ int quantitate(char const* config, char const* output) {
     auto mr = new multival(*idrr, *iptr);
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
-    std::vector<int64_t> osr{ 0, 0, 1, 3 };
+    std::vector<int64_t> osr{ 0, 0, 1, 2 };
 
     if (fine) {
         for (auto os : osr) os *= 2;

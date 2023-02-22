@@ -223,7 +223,7 @@ int vacillate(char const* config, char const* output) {
             auto gen_index = (*p->pho_genMatchedIndex)[leading];
             if (gen_index == -1) { continue; }
             
-            if ((*p->mcCalIsoDR04)[gen_index]> 5) { continue; } // HERE
+            if ((*p->mcCalIsoDR04)[gen_index]> 5) { continue; }
 
             if (!gen_iso) {
                 float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -374,7 +374,7 @@ int vacillate(char const* config, char const* output) {
                             if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
                         }
                     }
-
+                    
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*r)[k]->Fill(r_x, weights[k]*cor);
                         (*cdr)[k]->Fill(rdr, gdr, weights[k]*cor);
