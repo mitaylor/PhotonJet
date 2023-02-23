@@ -135,7 +135,7 @@ int ratio(char const* config, char const* output) {
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
-            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
+            title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
 
