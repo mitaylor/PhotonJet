@@ -207,7 +207,7 @@ int plot_unfolding_inputs(char const* config) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
-    cms += " #it{#scale[1.2]{Preliminary}}"s;
+    cms += " #it{#scale[1.2]{Simulation}}"s;
 
     /* figures */
     auto hb = new pencil();
