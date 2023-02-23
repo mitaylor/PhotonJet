@@ -97,7 +97,7 @@ int congratulate(char const* config, char const* output) {
 
     hb->alias("aa", "PbPb");
     if (smeared) hb->alias("ss", "pp (smeared)");
-    hb->alias("ss", "pp");
+    else hb->alias("ss", "pp");
 
     auto decorator = [](std::string const& system, std::string const& extra = "") {
         TLatex* info = new TLatex();
