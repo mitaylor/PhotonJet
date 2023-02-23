@@ -99,20 +99,6 @@ int congratulate(char const* config, char const* output) {
     if (smeared) hb->alias("ss", "pp (smeared)");
     else hb->alias("ss", "pp");
 
-    auto decorator = [](std::string const& system, std::string const& extra = "") {
-        TLatex* info = new TLatex();
-        info->SetTextFont(42);
-        info->SetTextSize(0.04);
-        info->SetTextAlign(31);
-        info->DrawLatexNDC(0.89, 0.92, system.data());
-
-        TLatex* info_extra = new TLatex();
-        info_extra->SetTextFont(42);
-        info_extra->SetTextSize(0.04);
-        info_extra->SetTextAlign(31);
-        info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    };
-
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
@@ -224,16 +210,14 @@ int congratulate(char const* config, char const* output) {
 
         /* prepare papers */
         auto p = new paper(prefix + "_results_pp_" + figure, hb);
-        apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, ""s, ymin, ymax);
-        p->accessory(std::bind(decorator, "pp 302 pb^{-1}"));
+        apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         p->accessory(kinematics);
         p->jewellery(box);
         p->divide(-1, 1);
 
         auto a = new paper(prefix+ "_results_aa_" + figure, hb);
-        apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, ymin, ymax);
-        a->accessory(std::bind(decorator, "PbPb 1.6 nb^{-1}"));
+        apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(std::bind(aa_info, _1, hists[0]));
         a->accessory(kinematics);
@@ -241,8 +225,7 @@ int congratulate(char const* config, char const* output) {
         a->divide(ihf->size()/2, -1);
 
         auto s = new paper(prefix + "_results_ss_" + figure, hb);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, ymin, ymax);
-        s->accessory(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
+        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->accessory(kinematics);

@@ -95,20 +95,6 @@ int ratio(char const* config, char const* output) {
 
     hb->alias("aa", "PbPb");
 
-    auto decorator = [](std::string const& system, std::string const& extra = "") {
-        TLatex* info = new TLatex();
-        info->SetTextFont(42);
-        info->SetTextSize(0.04);
-        info->SetTextAlign(31);
-        info->DrawLatexNDC(0.89, 0.92, system.data());
-
-        TLatex* info_extra = new TLatex();
-        info_extra->SetTextFont(42);
-        info_extra->SetTextSize(0.04);
-        info_extra->SetTextAlign(31);
-        info_extra->DrawLatexNDC(0.89, 0.96, extra.data());
-    };
-
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
@@ -263,8 +249,7 @@ int ratio(char const* config, char const* output) {
 
         /* prepare papers */
         auto s = new paper(prefix + "_ratio_" + figure, hb);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, ymin, ymax);
-        s->accessory(std::bind(decorator, "PbPb 1.69 nb^{-1}", "pp 302 pb^{-1}"));
+        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
         s->accessory(kinematics);
