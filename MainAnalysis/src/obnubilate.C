@@ -195,6 +195,8 @@ int obnubilate(char const* config, char const* output) {
                     // }
                 }
             }
+
+            batch->apply(square_);
         }
 
         zip([&](auto const& batch, auto group) {
