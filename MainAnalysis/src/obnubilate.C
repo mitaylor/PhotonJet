@@ -158,6 +158,7 @@ int obnubilate(char const* config, char const* output) {
             std::cout << std::endl;
 
             batch->apply(square_);
+            batch->apply(sqrt_);
 
             /* apply smoothing */
             for (int64_t i = 0; i < batch->size(); ++i) {
