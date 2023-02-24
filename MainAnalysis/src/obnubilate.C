@@ -158,10 +158,11 @@ int obnubilate(char const* config, char const* output) {
             std::cout << std::endl;
 
             batch->apply(square_);
+            batch->apply(sqrt_);
 
             /* apply smoothing */
             for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 0; j < (*batch)[i]->GetNbinsX(); ++j) {
+                for (int64_t j = 0; j <= (*batch)[i]->GetNbinsX(); ++j) {
                 // for (int64_t j = (*batch)[i]->GetNbinsX(); j > 0; --j) {
                     if (j == 1) {
                         double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
@@ -195,6 +196,8 @@ int obnubilate(char const* config, char const* output) {
                     // }
                 }
             }
+
+            batch->apply(square_);
         }
 
         zip([&](auto const& batch, auto group) {
