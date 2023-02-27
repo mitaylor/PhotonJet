@@ -6,10 +6,10 @@ output_tag=${3}
 
 cp /tmp/x509up_u168456 x509up_u168456
 
-# mkdir -p ${output_tag}
-# cd ${output_tag}
-# rm -f *
-# cp ../../configs/regulate/preapproval-parallel/${config_fragment} .
+mkdir -p ${output_tag}
+cd ${output_tag}
+rm -f *
+cp ../../configs/regulate/preapproval-parallel/${config_fragment} .
 
 # # split the input files so there are no more than 30 files per job
 # find ${folder} -type f > ${output_tag}
