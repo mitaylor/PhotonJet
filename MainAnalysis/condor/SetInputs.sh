@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# # regulate_aa_data
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HIHardProbes/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIHardProbes/20221205PbPbHP/221205_183819/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_data.conf \
-# "regulate_aa_data" 10
+# regulate_aa_data
+./SubmitJobs.sh \
+"/eos/cms/store/group/phys_heavyions/mitaylor/PhotonJet/HIHardProbes/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIHardProbes/20230203PbPbHP/230203_165035/" \
+"regulate_aa_data.conf" \
+"regulate_aa_data"
 
 # # regulate_aa_mb_data
 # ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIMinimumBias4/20220215PbPbMB/220215_213434/" \
-# ../../configs/regulate/preapproval-parallel/regulate_aa_mb_data.conf \
-# "regulate_aa_mb_data" 10
+# "/eos/cms/store/group/phys_heavyions/mitaylor/PhotonJet/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIMinimumBias4/20230203PbPbMB/230203_165233/" \
+# "regulate_aa_mb_data.conf" \
+# "regulate_aa_mb_data"
 
 ##############################################################################
 ##############################################################################
