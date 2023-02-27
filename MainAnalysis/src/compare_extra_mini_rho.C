@@ -73,7 +73,7 @@ int narrate(char const* config, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= 1.442) { continue; }
                 if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
-                pho_et = (*pjt->phoEtErNew)[j];
+                auto pho_et = (*pjt->phoEtErNew)[j];
                 if (pho_et < 40) { continue; }
 
                 if (pho_et > leading_pt) {
@@ -122,7 +122,7 @@ int narrate(char const* config, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= 1.442) { continue; }
                 if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
-                pho_et = (*pjt->phoEtErNew)[j];
+                auto pho_et = (*pjt->phoEtErNew)[j];
                 if (pho_et < 40) { continue; }
 
                 if (pho_et > leading_pt) {
@@ -171,7 +171,7 @@ int narrate(char const* config, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= 1.442) { continue; }
                 if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
-                pho_et = (*pjt->phoEtErNew)[j];
+                auto pho_et = (*pjt->phoEtErNew)[j];
                 if (pho_et < 40) { continue; }
 
                 if (pho_et > leading_pt) {
