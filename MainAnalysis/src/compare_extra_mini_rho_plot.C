@@ -30,7 +30,7 @@ int narrate(char const* config, char const* output) {
 
     TH1::SetDefaultSumw2();
 
-    TFile* fin = new TFile(file.data(), "recreate");
+    TFile* fin = new TFile(file.data(), "read");
 
     std::cout<<file<<std::endl;
 

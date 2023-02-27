@@ -32,7 +32,7 @@ int narrate(char const* config, char const* output) {
 
     TH1::SetDefaultSumw2();
     
-    auto irho = new interval("#rho"s, 100, 0, 400);
+    auto irho = new interval("#rho"s, 50, 0, 400);
     auto frho = std::bind(&interval::book<TH1F>, irho, _1, _2, _3);
 
     auto rho_ana_nominal_miniaod = new history<TH1F>("rho_ana_nominal_miniaod"s, "", frho, 1, 1);
@@ -208,10 +208,31 @@ int narrate(char const* config, char const* output) {
     (*rho_ana_ratio_new_extra_aod)[0]->Divide((*rho_ana_new_extra_aod)[0], (*rho_ana_nominal_miniaod)[0]);
     (*rho_pho_ratio_new_extra_aod)[0]->Divide((*rho_pho_new_extra_aod)[0], (*rho_pho_nominal_miniaod)[0]);
 
+    (*rho_ana_nominal_miniaod)[0]->SetMarkerSize(0.5);
+    (*rho_pho_nominal_miniaod)[0]->SetMarkerSize(0.5);
+    (*rho_ana_old_extra_aod)[0]->SetMarkerSize(0.5);
+    (*rho_pho_old_extra_aod)[0]->SetMarkerSize(0.5);
+    (*rho_ana_new_extra_aod)[0]->SetMarkerSize(0.5);
+    (*rho_pho_new_extra_aod)[0]->SetMarkerSize(0.5);
+
+    (*rho_ana_ratio_old_extra_aod)[0]->SetMarkerSize(0.5);
+    (*rho_pho_ratio_old_extra_aod)[0]->SetMarkerSize(0.5);
+    (*rho_ana_ratio_new_extra_aod)[0]->SetMarkerSize(0.5);
+    (*rho_pho_ratio_new_extra_aod)[0]->SetMarkerSize(0.5);
+
     /* draw rho distributions */
     auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV"s;
-    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
-    cms += "         p_{T}^{#gamma} > 40 GeV";
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
+
+    std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
+        if (x > 0) {
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, pos, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+        }
+    };
 
     auto hb = new pencil();
     hb->category("type", "nominal_miniaod", "new_extra_aod", "old_extra_aod");
@@ -222,12 +243,14 @@ int narrate(char const* config, char const* output) {
     
     auto c1 = new paper("aa_qcd_hiPuRhoAnalyzer_normal", hb);
     apply_style(c1, cms, system_tag);
+    c1->accessory(std::bind(pho_kinematics, _1, 0.85));
     c1->add((*rho_ana_nominal_miniaod)[0], "nominal_miniaod");
     c1->stack((*rho_ana_old_extra_aod)[0], "old_extra_aod");
     c1->stack((*rho_ana_new_extra_aod)[0], "new_extra_aod");
     
     auto c2 = new paper("aa_qcd_hiPuRhoAnalyzer_log", hb);
     apply_style(c2, cms, system_tag);
+    c2->accessory(std::bind(pho_kinematics, _1, 0.85));
     c2->set(paper::flags::logy);
     c2->add((*rho_ana_nominal_miniaod)[0], "nominal_miniaod");
     c2->stack((*rho_ana_old_extra_aod)[0], "old_extra_aod");
@@ -235,17 +258,20 @@ int narrate(char const* config, char const* output) {
 
     auto c3 = new paper("aa_qcd_hiPuRhoAnalyzer_ratio", hb);
     apply_style(c3, cms, system_tag);
+    c3->accessory(std::bind(pho_kinematics, _1, 0.85));
     c3->add((*rho_ana_ratio_old_extra_aod)[0], "old_extra_aod");
     c3->stack((*rho_ana_ratio_new_extra_aod)[0], "new_extra_aod");
 
     auto c4 = new paper("aa_qcd_ggHiNtuplizer_normal", hb);
     apply_style(c4, cms, system_tag);
+    c4->accessory(std::bind(pho_kinematics, _1, 0.85));
     c4->add((*rho_pho_nominal_miniaod)[0], "nominal_miniaod");
     c4->stack((*rho_pho_old_extra_aod)[0], "old_extra_aod");
     c4->stack((*rho_pho_new_extra_aod)[0], "new_extra_aod");
 
     auto c5 = new paper("aa_qcd_ggHiNtuplizer_log", hb);
     apply_style(c5, cms, system_tag);
+    c5->accessory(std::bind(pho_kinematics, _1, 0.85));
     c5->set(paper::flags::logy);
     c5->add((*rho_pho_nominal_miniaod)[0], "nominal_miniaod");
     c5->stack((*rho_pho_old_extra_aod)[0], "old_extra_aod");
@@ -253,6 +279,7 @@ int narrate(char const* config, char const* output) {
 
     auto c6 = new paper("aa_qcd_ggHiNtuplizer_ratio", hb);
     apply_style(c6, cms, system_tag);
+    c6->accessory(std::bind(pho_kinematics, _1, 0.85));
     c6->add((*rho_pho_ratio_old_extra_aod)[0], "old_extra_aod");
     c6->stack((*rho_pho_ratio_new_extra_aod)[0], "new_extra_aod");
 
