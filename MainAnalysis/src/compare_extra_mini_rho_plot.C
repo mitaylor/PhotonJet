@@ -30,21 +30,23 @@ int narrate(char const* config, char const* output) {
 
     TH1::SetDefaultSumw2();
 
-    TFile* fout = new TFile(file.data(), "recreate");
+    TFile* fin = new TFile(file.data(), "recreate");
 
-    auto rho_ana_nominal_miniaod = new history<TH1F>(fout, "rho_ana_nominal_miniaod"s);
-    auto rho_ana_old_extra_aod = new history<TH1F>(fout, "rho_ana_old_extra_aod"s);
-    auto rho_ana_new_extra_aod = new history<TH1F>(fout, "rho_ana_new_extra_aod"s);
+    std::cout<<file<<std::endl;
 
-    auto rho_pho_nominal_miniaod = new history<TH1F>(fout, "rho_pho_nominal_miniaod"s);
-    auto rho_pho_old_extra_aod = new history<TH1F>(fout, "rho_pho_old_extra_aod"s);
-    auto rho_pho_new_extra_aod = new history<TH1F>(fout, "rho_pho_new_extra_aod"s);
+    auto rho_ana_nominal_miniaod = new history<TH1F>(fin, "rho_ana_nominal_miniaod"s);
+    auto rho_ana_old_extra_aod = new history<TH1F>(fin, "rho_ana_old_extra_aod"s);
+    auto rho_ana_new_extra_aod = new history<TH1F>(fin, "rho_ana_new_extra_aod"s);
 
-    auto rho_ana_ratio_old_extra_aod = new history<TH1F>(fout, "rho_ana_ratio_old_extra_aod"s);
-    auto rho_ana_ratio_new_extra_aod = new history<TH1F>(fout, "rho_ana_ratio_new_extra_aod"s);
+    auto rho_pho_nominal_miniaod = new history<TH1F>(fin, "rho_pho_nominal_miniaod"s);
+    auto rho_pho_old_extra_aod = new history<TH1F>(fin, "rho_pho_old_extra_aod"s);
+    auto rho_pho_new_extra_aod = new history<TH1F>(fin, "rho_pho_new_extra_aod"s);
 
-    auto rho_pho_ratio_old_extra_aod = new history<TH1F>(fout, "rho_pho_ratio_old_extra_aod"s);
-    auto rho_pho_ratio_new_extra_aod = new history<TH1F>(fout, "rho_pho_ratio_new_extra_aod"s);
+    auto rho_ana_ratio_old_extra_aod = new history<TH1F>(fin, "rho_ana_ratio_old_extra_aod"s);
+    auto rho_ana_ratio_new_extra_aod = new history<TH1F>(fin, "rho_ana_ratio_new_extra_aod"s);
+
+    auto rho_pho_ratio_old_extra_aod = new history<TH1F>(fin, "rho_pho_ratio_old_extra_aod"s);
+    auto rho_pho_ratio_new_extra_aod = new history<TH1F>(fin, "rho_pho_ratio_new_extra_aod"s);
 
     // (*rho_ana_nominal_miniaod)[0]->Scale(1. / (*rho_ana_nominal_miniaod)[0]->Integral());
     // (*rho_pho_nominal_miniaod)[0]->Scale(1. / (*rho_pho_nominal_miniaod)[0]->Integral());
