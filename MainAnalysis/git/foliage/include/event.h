@@ -10,6 +10,8 @@
 
 #define B_VAL_EVT_RECO(ACTION, ...)                                         \
     ACTION(float,           vz,                         ## __VA_ARGS__)     \
+    ACTION(float,           vy,                         ## __VA_ARGS__)     \
+    ACTION(float,           vx,                         ## __VA_ARGS__)     \
     ACTION(int32_t,         hiBin,                      ## __VA_ARGS__)     \
     ACTION(float,           hiHF,                       ## __VA_ARGS__)     \
 
