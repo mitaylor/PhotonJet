@@ -30,7 +30,7 @@ int narrate(char const* config, char const* output) {
 
     TH1::SetDefaultSumw2();
 
-    TFile* fout = new TFile(file, "recreate");
+    TFile* fout = new TFile(file.data(), "recreate");
 
     auto rho_ana_nominal_miniaod = new history<TH1F>(fout, "rho_ana_nominal_miniaod"s);
     auto rho_ana_old_extra_aod = new history<TH1F>(fout, "rho_ana_old_extra_aod"s);
