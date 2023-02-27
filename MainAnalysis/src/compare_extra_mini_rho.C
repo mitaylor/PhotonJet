@@ -54,7 +54,7 @@ int narrate(char const* config, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
+        auto pjt = new pjtree(false, false, true, t, { 1, 1, 1, 1, 0, 0, 1, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -93,8 +93,8 @@ int narrate(char const* config, char const* output) {
 
             auto avg_rho = get_avg_rho(pjt, -1.442, 1.442);
 
-            (*rho_ana_nominal_miniaod)[0]->Fill(avg_rho);
-            (*rho_pho_nominal_miniaod)[0]->Fill(pjt->rho);
+            (*rho_ana_nominal_miniaod)[0]->Fill(avg_rho, pjt->w);
+            (*rho_pho_nominal_miniaod)[0]->Fill(pjt->rho, pjt->w);
         }
     }
 
@@ -103,7 +103,7 @@ int narrate(char const* config, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
+        auto pjt = new pjtree(false, false, true, t, { 1, 1, 1, 1, 0, 0, 1, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -142,8 +142,8 @@ int narrate(char const* config, char const* output) {
 
             auto avg_rho = get_avg_rho(pjt, -1.442, 1.442);
 
-            (*rho_ana_old_extra_aod)[0]->Fill(avg_rho);
-            (*rho_pho_old_extra_aod)[0]->Fill(pjt->rho);
+            (*rho_ana_old_extra_aod)[0]->Fill(avg_rho, pjt->w);
+            (*rho_pho_old_extra_aod)[0]->Fill(pjt->rho, pjt->w);
         }
     }
 
@@ -152,7 +152,7 @@ int narrate(char const* config, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
+        auto pjt = new pjtree(false, false, true, t, { 1, 1, 1, 1, 0, 0, 1, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
@@ -191,8 +191,8 @@ int narrate(char const* config, char const* output) {
 
             auto avg_rho = get_avg_rho(pjt, -1.442, 1.442);
 
-            (*rho_ana_new_extra_aod)[0]->Fill(avg_rho);
-            (*rho_pho_new_extra_aod)[0]->Fill(pjt->rho);
+            (*rho_ana_new_extra_aod)[0]->Fill(avg_rho, pjt->w);
+            (*rho_pho_new_extra_aod)[0]->Fill(pjt->rho, pjt->w);
         }
     }
 
@@ -215,7 +215,6 @@ int narrate(char const* config, char const* output) {
 
     auto hb = new pencil();
     hb->category("type", "nominal_miniaod", "new_extra_aod", "old_extra_aod");
-    hb->category("system", "pp", "aa", "ss");
 
     hb->alias("nominal_miniaod", "Nominal MC MiniAOD");
     hb->alias("new_extra_aod", "New Extra MC AOD");
