@@ -2,7 +2,7 @@
 
 dataset=$1
 
-files=$(ls /data/submit/mitay/photons/condor/${dataset}*)
+files=$(ls /data/submit/mitay/photons/condor/230227/${dataset}*)
 
 hadd /data/submit/mitay/photons/${dataset}.root $files
 
