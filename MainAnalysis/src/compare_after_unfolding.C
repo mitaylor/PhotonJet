@@ -31,7 +31,7 @@ void normalise_to_unity(T*&... args) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
 }
 
-int compare_before_unfolding(char const* config, const char* output) {
+int compare_after_unfolding(char const* config, const char* output) {
     auto conf = new configurer(config);
 
     auto input_new = conf->get<std::string>("input_new");
@@ -48,13 +48,13 @@ int compare_before_unfolding(char const* config, const char* output) {
     TFile* f_new = new TFile(input_new.data(), "read");
     TFile* f_old = new TFile(input_old.data(), "read");
 
-    auto h_new_dr = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side0");
+    auto h_new_dr = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold0");
     h_new_dr->rename("aa_new_dr");
-    auto h_old_dr = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side0");
+    auto h_old_dr = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold0");
     h_old_dr->rename("aa_old_dr");
-    auto h_new_jtpt = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side1");
+    auto h_new_jtpt = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold1");
     h_new_jtpt->rename("aa_new_jtpt");
-    auto h_old_jtpt = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side1");
+    auto h_old_jtpt = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold1");
     h_old_jtpt->rename("aa_old_jtpt");
 
     normalise_to_unity(h_new_dr, h_old_dr, h_new_jtpt, h_old_jtpt);
@@ -81,10 +81,10 @@ int compare_before_unfolding(char const* config, const char* output) {
     auto hb = new pencil();
     hb->category("type", "new", "old");
 
-    hb->alias("new", "Current Result");
-    hb->alias("old", "Previous Result");
+    hb->alias("new", "Result with New Response Matrix");
+    hb->alias("old", "Result with Old Response Matrix");
 
-    auto p1 = new paper("accumulate_aa_dr_comparison", hb);
+    auto p1 = new paper("quantitate_aa_dr_comparison", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -93,7 +93,7 @@ int compare_before_unfolding(char const* config, const char* output) {
     h_new_dr->apply([&](TH1* h) { p1->add(h, "new"); });
     h_old_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "old"); });
 
-    auto p2 = new paper("accumulate_aa_jtpt_comparison", hb);
+    auto p2 = new paper("quantitate_aa_jtpt_comparison", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
@@ -116,7 +116,7 @@ int compare_before_unfolding(char const* config, const char* output) {
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return compare_before_unfolding(argv[1], argv[2]);
+        return compare_after_unfolding(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
