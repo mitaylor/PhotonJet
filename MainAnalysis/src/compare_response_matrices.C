@@ -188,12 +188,12 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_old_fold1 = new history<TH1F>("h_g_old_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
     auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
     auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
-std::cout << __LINE__ << std::endl;
+
     auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", null<TH1F>, ihf->size());
     auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", null<TH1F>, ihf->size());
     auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", null<TH1F>, ihf->size());
     auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", null<TH1F>, ihf->size());
-std::cout << __LINE__ << std::endl;
+
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
         (*h_r_old_fold0)[i] = fold((*h_r_old)[i], nullptr, mr, 0, osr);
@@ -243,16 +243,14 @@ std::cout << __LINE__ << std::endl;
 
     std::cout << __LINE__ << std::endl;
 
-    std::cout << h_r_ratio_fold0->size() << " " << h_r_ratio_fold1->size() << " " << h_g_ratio_fold0->size() << " " << h_g_ratio_fold1->size() << " " << std::endl;
-    std::cout << h_r_old_fold0->size() << " " << h_r_old_fold1->size() << " " << h_g_old_fold0->size() << " " << h_g_old_fold1->size() << " " << std::endl;
-   std::cout <<  h_r_nominal_fold0->size() << " " << h_r_nominal_fold1->size() << " " << h_g_nominal_fold0->size() << " " << h_g_nominal_fold1->size() << " " << std::endl;
     for (size_t j = 0; j < dhf.size()-1; ++j) {
+        std::cout << (*h_r_ratio_fold0)[j]->GetNbinsX() << " " << (*h_r_old_fold0)[j]->GetNbinsX() << " " << (*h_r_nominal_fold0)[j]->GetNbinsX() << std::endl;
         (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
         (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
         (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
         (*h_g_ratio_fold1)[j]->Divide((*h_g_old_fold1)[j], (*h_g_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
     }
-std::cout << __LINE__ << std::endl;
+
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
