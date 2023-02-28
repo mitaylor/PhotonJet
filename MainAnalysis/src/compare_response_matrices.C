@@ -242,6 +242,10 @@ std::cout << __LINE__ << std::endl;
     normalise_to_unity(h_g_nominal_fold1, h_g_old_fold1, h_g_nominalu_fold1, h_g_oldu_fold1);
 
     std::cout << __LINE__ << std::endl;
+
+    std::cout << h_r_ratio_fold0->size() << " " << h_r_ratio_fold1->size() << " " << h_g_ratio_fold0->size() << " " << h_g_ratio_fold1->size() << " " << std::endl;
+    std::cout << h_r_old_fold0->size() << " " << h_r_old_fold1->size() << " " << h_g_old_fold0->size() << " " << h_g_old_fold1->size() << " " << std::endl;
+   std::cout <<  h_r_nominal_fold0->size() << " " << h_r_nominal_fold1->size() << " " << h_g_nominal_fold0->size() << " " << h_g_nominal_fold1->size() << " " << std::endl;
     for (size_t j = 0; j < dhf.size()-1; ++j) {
         (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
         (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
