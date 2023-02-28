@@ -156,25 +156,25 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
 
     /* folded */
-    auto h_r_nominal_fold0 = new history<TH1F>("h_r_nominal_fold0", "", null<TH1F>, ihf->size());
-    auto h_r_old_fold0 = new history<TH1F>("h_r_old_fold0", "", null<TH1F>, ihf->size());
-    auto h_r_nominalu_fold0 = new history<TH1F>("h_r_nominalu_fold0", "", null<TH1F>, ihf->size());
-    auto h_r_oldu_fold0 = new history<TH1F>("h_r_oldu_fold0", "", null<TH1F>, ihf->size());
+    auto h_r_nominal_fold0 = new history<TH1F>("h_r_nominal_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
+    auto h_r_old_fold0 = new history<TH1F>("h_r_old_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
+    auto h_r_nominalu_fold0 = new history<TH1F>("h_r_nominalu_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
+    auto h_r_oldu_fold0 = new history<TH1F>("h_r_oldu_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
 
-    auto h_r_nominal_fold1 = new history<TH1F>("h_r_nominal_fold1", "", null<TH1F>, ihf->size());
-    auto h_r_old_fold1 = new history<TH1F>("h_r_old_fold1", "", null<TH1F>, ihf->size());
-    auto h_r_nominalu_fold1 = new history<TH1F>("h_r_nominalu_fold1", "", null<TH1F>, ihf->size());
-    auto h_r_oldu_fold1 = new history<TH1F>("h_r_oldu_fold1", "", null<TH1F>, ihf->size());
+    auto h_r_nominal_fold1 = new history<TH1F>("h_r_nominal_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
+    auto h_r_old_fold1 = new history<TH1F>("h_r_old_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
+    auto h_r_nominalu_fold1 = new history<TH1F>("h_r_nominalu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
+    auto h_r_oldu_fold1 = new history<TH1F>("h_r_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
 
-    auto h_g_nominal_fold0 = new history<TH1F>("h_g_nominal_fold0", "", null<TH1F>, ihf->size());
-    auto h_g_old_fold0 = new history<TH1F>("h_g_old_fold0", "", null<TH1F>, ihf->size());
-    auto h_g_nominalu_fold0 = new history<TH1F>("h_g_nominalu_fold0", "", null<TH1F>, ihf->size());
-    auto h_g_oldu_fold0 = new history<TH1F>("h_g_oldu_fold0", "", null<TH1F>, ihf->size());
+    auto h_g_nominal_fold0 = new history<TH1F>("h_g_nominal_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
+    auto h_g_old_fold0 = new history<TH1F>("h_g_old_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
+    auto h_g_nominalu_fold0 = new history<TH1F>("h_g_nominalu_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
+    auto h_g_oldu_fold0 = new history<TH1F>("h_g_oldu_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
 
-    auto h_g_nominal_fold1 = new history<TH1F>("h_g_nominal_fold1", "", null<TH1F>, ihf->size());
-    auto h_g_old_fold1 = new history<TH1F>("h_g_old_fold1", "", null<TH1F>, ihf->size());
-    auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", "", null<TH1F>, ihf->size());
-    auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", "", null<TH1F>, ihf->size());
+    auto h_g_nominal_fold1 = new history<TH1F>("h_g_nominal_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
+    auto h_g_old_fold1 = new history<TH1F>("h_g_old_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
+    auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
+    auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
@@ -190,7 +190,7 @@ int data_mc_comparison(char const* config, const char* output) {
         (*h_g_nominal_fold0)[i] = fold((*h_g_nominal)[i], nullptr, mg, 0, osg);
         (*h_g_old_fold0)[i] = fold((*h_g_old)[i], nullptr, mg, 0, osg);
         (*h_g_nominalu_fold0)[i] = fold((*h_g_nominalu)[i], nullptr, mg, 0, osg);
-        (*h_g_oldu_fold0)[i] = fold((*h_r_oldu)[i], nullptr, mg, 0, osg);
+        (*h_g_oldu_fold0)[i] = fold((*h_g_oldu)[i], nullptr, mg, 0, osg);
 
         (*h_g_nominal_fold1)[i] = fold((*h_g_nominal)[i], nullptr, mg, 1, osg);
         (*h_g_old_fold1)[i] = fold((*h_g_old)[i], nullptr, mg, 1, osg);
@@ -233,7 +233,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
@@ -256,8 +256,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag);
     
-    h_r_nominal->apply([&](TH1* h) { p1->add(h, "nominal"); });
-    h_r_old->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "old"); });
+    h_r_old->apply([&](TH1* h) { p1->add(h, "nominal"); });
+    h_r_nominal->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "old"); });
 
     auto p2 = new paper("vacillate_aa_r_flat_comparison_nominal", hb);
     p2->divide(ihf->size(), -1);
@@ -284,8 +284,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p4->accessory(kinematics);
     apply_style(p4, cms, system_tag);
     
-    h_g_nominal->apply([&](TH1* h) { p4->add(h, "nominal"); });
-    h_g_old->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "old"); });
+    h_g_old->apply([&](TH1* h) { p4->add(h, "nominal"); });
+    h_g_nominal->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "old"); });
 
     auto p5 = new paper("vacillate_aa_g_flat_comparison_nominal", hb);
     p5->divide(ihf->size(), -1);
@@ -312,8 +312,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p7->accessory(kinematics);
     apply_style(p7, cms, system_tag);
     
-    h_r_nominal_fold0->apply([&](TH1* h) { p7->add(h, "nominal"); });
-    h_r_old_fold0->apply([&](TH1* h, int64_t index) { p7->stack(index + 1, h, "old"); });
+    h_r_old_fold0->apply([&](TH1* h) { p7->add(h, "nominal"); });
+    h_r_nominal_fold0->apply([&](TH1* h, int64_t index) { p7->stack(index + 1, h, "old"); });
 
     auto p8 = new paper("vacillate_aa_r_dr_comparison_nominal", hb);
     p8->divide(ihf->size(), -1);
@@ -340,8 +340,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p10->accessory(kinematics);
     apply_style(p10, cms, system_tag);
     
-    h_g_nominal_fold0->apply([&](TH1* h) { p10->add(h, "nominal"); });
-    h_g_old_fold0->apply([&](TH1* h, int64_t index) { p10->stack(index + 1, h, "old"); });
+    h_g_old_fold0->apply([&](TH1* h) { p10->add(h, "nominal"); });
+    h_g_nominal_fold0->apply([&](TH1* h, int64_t index) { p10->stack(index + 1, h, "old"); });
 
     auto p11 = new paper("vacillate_aa_g_dr_comparison_nominal", hb);
     p11->divide(ihf->size(), -1);
@@ -368,8 +368,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p13->accessory(kinematics);
     apply_style(p13, cms, system_tag);
     
-    h_r_nominal_fold1->apply([&](TH1* h) { p13->add(h, "nominal"); });
-    h_r_old_fold1->apply([&](TH1* h, int64_t index) { p13->stack(index + 1, h, "old"); });
+    h_r_old_fold1->apply([&](TH1* h) { p13->add(h, "nominal"); });
+    h_r_nominal_fold1->apply([&](TH1* h, int64_t index) { p13->stack(index + 1, h, "old"); });
 
     auto p14 = new paper("vacillate_aa_r_jtpt_comparison_nominal", hb);
     p14->divide(ihf->size(), -1);
@@ -396,8 +396,8 @@ int data_mc_comparison(char const* config, const char* output) {
     p16->accessory(kinematics);
     apply_style(p16, cms, system_tag);
     
-    h_g_nominal_fold1->apply([&](TH1* h) { p16->add(h, "nominal"); });
-    h_g_old_fold1->apply([&](TH1* h, int64_t index) { p16->stack(index + 1, h, "old"); });
+    h_g_old_fold1->apply([&](TH1* h) { p16->add(h, "nominal"); });
+    h_g_nominal_fold1->apply([&](TH1* h, int64_t index) { p16->stack(index + 1, h, "old"); });
 
     auto p17 = new paper("vacillate_aa_g_jtpt_comparison_nominal", hb);
     p17->divide(ihf->size(), -1);
