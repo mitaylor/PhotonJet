@@ -160,19 +160,19 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_r_old = new history<TH1F>(f_old, "aa_r");
     h_r_old->rename("aa_r_old");
     auto h_r_nominalu = new history<TH1F>(f_nominalu, "aa_r");
-    h_r_nominal->rename("aa_r_nominalu");
+    h_r_nominalu->rename("aa_r_nominalu");
     auto h_r_oldu = new history<TH1F>(f_oldu, "aa_r");
-    h_r_old->rename("aa_r_oldu");
+    h_r_oldu->rename("aa_r_oldu");
     
     /* g */
     auto h_g_nominal = new history<TH1F>(f_nominal, "aa_g");
-    h_r_nominal->rename("aa_g_nominal");
+    h_g_nominal->rename("aa_g_nominal");
     auto h_g_old = new history<TH1F>(f_old, "aa_g");
-    h_r_old->rename("aa_g_old");
+    h_g_old->rename("aa_g_old");
     auto h_g_nominalu = new history<TH1F>(f_nominalu, "aa_g");
-    h_r_nominal->rename("aa_g_nominalu");
+    h_g_nominalu->rename("aa_g_nominalu");
     auto h_g_oldu = new history<TH1F>(f_oldu, "aa_g");
-    h_r_old->rename("aa_g_oldu");
+    h_g_oldu->rename("aa_g_oldu");
 
     /* folded */
     auto h_r_nominal_fold0 = new history<TH1F>("h_r_nominal_fold0", ";#deltaj;1/N^{#gammaj}dN/d#deltaj", null<TH1F>, ihf->size());
