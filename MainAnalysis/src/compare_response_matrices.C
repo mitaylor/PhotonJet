@@ -148,12 +148,6 @@ int data_mc_comparison(char const* config, const char* output) {
     TFile* f_nominalu = new TFile(input_nominal_unfolding.data(), "read");
     TFile* f_oldu = new TFile(input_old_unfolding.data(), "read");
 
-    /* n */
-    // auto h_n_nominal = new history<TH1F>(f_nominal, "aa_n");
-    // auto h_n_old = new history<TH1F>(f_old, "aa_n");
-    // auto h_n_nominalu = new history<TH1F>(f_nominalu, "aa_n");
-    // auto h_n_oldu = new history<TH1F>(f_oldu, "aa_n");
-
     /* r */
     auto h_r_nominal = new history<TH1F>(f_nominal, "aa_r");
     h_r_nominal->rename("aa_r_nominal");
@@ -195,10 +189,10 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
     auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
 
-    // auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", null<TH1F>, ihf->size());
-    // auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", null<TH1F>, ihf->size());
-    // auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", null<TH1F>, ihf->size());
-    // auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", null<TH1F>, ihf->size());
+    auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", null<TH1F>, ihf->size());
+    auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", null<TH1F>, ihf->size());
+    auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", null<TH1F>, ihf->size());
+    auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", null<TH1F>, ihf->size());
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
@@ -247,12 +241,12 @@ int data_mc_comparison(char const* config, const char* output) {
     normalise_to_unity(h_g_nominal_fold0, h_g_old_fold0, h_g_nominalu_fold0, h_g_oldu_fold0);
     normalise_to_unity(h_g_nominal_fold1, h_g_old_fold1, h_g_nominalu_fold1, h_g_oldu_fold1);
 
-    // for (size_t j = 0; j < dhf.size()-1; ++j) {
-    //     (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);
-    //     (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);
-    //     (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);
-    //     (*h_g_ratio_fold1)[j]->Divide((*h_g_old_fold1)[j], (*h_g_nominal_fold1)[j]);
-    // }
+    for (size_t j = 0; j < dhf.size()-1; ++j) {
+        (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);
+        (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);
+        (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);
+        (*h_g_ratio_fold1)[j]->Divide((*h_g_old_fold1)[j], (*h_g_nominal_fold1)[j]);
+    }
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
