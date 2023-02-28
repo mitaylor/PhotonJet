@@ -60,17 +60,17 @@ int narrate(char const* config, char const* output) {
     // (*rho_ana_ratio_new_extra_aod)[0]->Divide((*rho_ana_new_extra_aod)[0], (*rho_ana_nominal_miniaod)[0]);
     // (*rho_pho_ratio_new_extra_aod)[0]->Divide((*rho_pho_new_extra_aod)[0], (*rho_pho_nominal_miniaod)[0]);
 
-    (*rho_ana_nominal_miniaod)[0]->Rebin();
-    (*rho_pho_nominal_miniaod)[0]->Rebin();
-    (*rho_ana_old_extra_aod)[0]->Rebin();
-    (*rho_pho_old_extra_aod)[0]->Rebin();
-    (*rho_ana_new_extra_aod)[0]->Rebin();
-    (*rho_pho_new_extra_aod)[0]->Rebin();
+    // (*rho_ana_nominal_miniaod)[0]->Rebin();
+    // (*rho_pho_nominal_miniaod)[0]->Rebin();
+    // (*rho_ana_old_extra_aod)[0]->Rebin();
+    // (*rho_pho_old_extra_aod)[0]->Rebin();
+    // (*rho_ana_new_extra_aod)[0]->Rebin();
+    // (*rho_pho_new_extra_aod)[0]->Rebin();
 
-    (*rho_ana_ratio_old_extra_aod)[0]->Rebin();
-    (*rho_pho_ratio_old_extra_aod)[0]->Rebin();
-    (*rho_ana_ratio_new_extra_aod)[0]->Rebin();
-    (*rho_pho_ratio_new_extra_aod)[0]->Rebin();
+    // (*rho_ana_ratio_old_extra_aod)[0]->Rebin();
+    // (*rho_pho_ratio_old_extra_aod)[0]->Rebin();
+    // (*rho_ana_ratio_new_extra_aod)[0]->Rebin();
+    // (*rho_pho_ratio_new_extra_aod)[0]->Rebin();
 
     (*rho_ana_nominal_miniaod)[0]->SetMarkerSize(0.5);
     (*rho_pho_nominal_miniaod)[0]->SetMarkerSize(0.5);
@@ -91,10 +91,10 @@ int narrate(char const* config, char const* output) {
     std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, pos, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.135, pos, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
         }
     };
 
@@ -134,8 +134,8 @@ int narrate(char const* config, char const* output) {
     c4->stack((*rho_pho_new_extra_aod)[0], "new_extra_aod");
 
     auto c5 = new paper("aa_qcd_ggHiNtuplizer_log", hb);
-    c5->accessory(std::bind(pho_kinematics, _1, 0.85));
     apply_style(c5, cms, system_tag);
+    c5->accessory(std::bind(pho_kinematics, _1, 0.85));
     c5->set(paper::flags::logy);
     c5->add((*rho_pho_nominal_miniaod)[0], "nominal_miniaod");
     c5->stack((*rho_pho_old_extra_aod)[0], "old_extra_aod");

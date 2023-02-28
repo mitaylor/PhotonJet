@@ -223,7 +223,7 @@ int narrate(char const* config, char const* output) {
     /* draw rho distributions */
     auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
-
+    
     std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             TLatex* l = new TLatex();
