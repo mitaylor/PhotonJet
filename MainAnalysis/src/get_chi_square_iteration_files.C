@@ -150,12 +150,12 @@ int quantitate(char const* config, char const* output) {
 
     /* prepare fold from pre-unfolded data */
     auto stub = "_"s + before_folds[0];
-std::cout<<__LINE__<<std::endl;
-    auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);std::cout<<__LINE__<<std::endl;
+
+    auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
     auto shape = hin->shape();
 
-    auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);std::cout<<__LINE__<<std::endl;
-    auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);std::cout<<__LINE__<<std::endl;
+    auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
+    auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
 
     for (int64_t i = 0; i < hin->size(); ++i) {
         (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr, fine);
@@ -173,10 +173,10 @@ std::cout<<__LINE__<<std::endl;
     /* prepare the refolded data */
     std::vector<int64_t> iteration {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 200, 250};
-std::cout<<__LINE__<<std::endl;
+
     for (size_t i = 0; i < iteration.size(); ++i) {
-        auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
-        auto refold1 = new history<TH1F>("refold1", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+        auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, (int64_t) afters.size());
+        auto refold1 = new history<TH1F>("refold1", "", null<TH1F>, (int64_t) afters.size());
 
         for (size_t j = 0; j < fafters.size(); ++j) {
                     std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
