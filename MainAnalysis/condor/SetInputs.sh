@@ -15,6 +15,21 @@
 ##############################################################################
 ##############################################################################
 
+# regulate_pp_qcd_15 filtered weighted
+./SubmitJobs.sh \
+"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v2/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_5p02TeV_pythia8/20220825PPMC30F15/220826_051338/" \
+"regulate_pp_eff.conf" \
+"regulate_pp_eff"
+
+# regulate_aa_mb_data
+./SubmitJobs.sh \
+"/eos/cms/store/group/phys_heavyions/mitaylor/PhotonJet/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIMinimumBias4/20230203PbPbMB/230203_165233/" \
+"regulate_aa_eff.conf" \
+"regulate_aa_eff"
+
+##############################################################################
+##############################################################################
+
 # regulate_pp_data
 # ./SubmitJobs.sh \
 # "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/HighEGJet/Run2017G-17Nov2017-v2/AOD/HighEGJet/20220825PPEG/220826_052801/" \
