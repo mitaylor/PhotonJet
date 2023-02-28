@@ -142,7 +142,7 @@ int obnubilate(char const* config, char const* output) {
             for (int64_t i = 0; i < batch->size(); ++i) {
                 std::vector<float> differences;
 
-                for (int64_t j = 0; j < (*batch)[i]->GetNbinsX() - 2; ++j) {
+                for (int64_t j = 0; j <= (*batch)[i]->GetNbinsX(); ++j) {
                     differences.push_back(std::abs((*batch)[i]->GetBinContent(j + 1)));
                 }
 
@@ -197,10 +197,12 @@ int obnubilate(char const* config, char const* output) {
 
         total->apply(sqrt_);
 
+        std::cout<<total->size()<<std::endl;
         for (int64_t i = 0; i < total->size(); ++i) {
+            std::cout<<"here"<<std::endl;
             std::vector<float> differences;
 
-            for (int64_t j = 0; j < (*total)[i]->GetNbinsX() - 2; ++j) {
+            for (int64_t j = 0; j <= (*total)[i]->GetNbinsX(); ++j) {
                 differences.push_back(std::abs((*total)[i]->GetBinContent(j + 1)));
             }
 
