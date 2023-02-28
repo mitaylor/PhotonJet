@@ -5,14 +5,14 @@ arithmetic() {
 
     echo ${tag}
 
-    ./bin/get_chi_square_iteration_files configs/quantitate/quantitate_${tag}.conf \
-        data/preapproval/data_iteration_${tag}.root
+    echo "./bin/get_chi_square_iteration_files configs/quantitate/quantitate_${tag}.conf data/preapproval/data_iteration_${tag}.root"
+    ./bin/get_chi_square_iteration_files configs/quantitate/quantitate_${tag}.conf data/preapproval/data_iteration_${tag}.root
 
-    ./bin/chi_square_iteration configs/chi_square_iteration/chi_square_iteration_${tag}.conf \
-        data/preapproval/iteration_${tag}.root
+    echo "./bin/chi_square_iteration configs/chi_square_iteration/chi_square_iteration_${tag}.conf data/preapproval/iteration_${tag}.root"
+    ./bin/chi_square_iteration configs/chi_square_iteration/chi_square_iteration_${tag}.conf data/preapproval/iteration_${tag}.root
 
-    ./bin/quantitate configs/quantitate/quantitate_${tag}.conf \
-        data/preapproval/quantitate_${tag}.root
+    echo "./bin/quantitate configs/quantitate/quantitate_${tag}.conf data/preapproval/quantitate_${tag}.root"
+    ./bin/quantitate configs/quantitate/quantitate_${tag}.conf data/preapproval/quantitate_${tag}.root
 }
 
 nominal() {
@@ -40,8 +40,14 @@ systematic() {
 
 samples=(aa)
 
+# for sample in ${samples[@]}; do
+#     for syst in cent_up cent_down mebs qcd_mebs qcd_all; do
+#         systematic $sample $syst
+#     done
+# done
+
 for sample in ${samples[@]}; do
-    for syst in cent_up cent_down mebs qcd_mebs qcd_all; do
+    for syst in mebs qcd_mebs; do
         systematic $sample $syst
     done
 done
