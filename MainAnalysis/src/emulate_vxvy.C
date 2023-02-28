@@ -175,7 +175,7 @@ int emulate(char const* config, char const* output) {
     c1->add((*vz)[2]);
 
     auto c2 = new paper(tag + "_vy", hb);
-    apply_style(c2, cms, system_tag, 0., 0.04);
+    apply_style(c2, cms, system_tag);
     c2->divide(3, -1);
 
     c2->add((*vy)[0], "data");
@@ -183,7 +183,7 @@ int emulate(char const* config, char const* output) {
     c2->add((*vy)[2]);
 
     auto c3 = new paper(tag + "_vx", hb);
-    apply_style(c3, cms, system_tag, 0., 0.04);
+    apply_style(c3, cms, system_tag);
     c3->divide(3, -1);
 
     c3->add((*vx)[0], "data");
