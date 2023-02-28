@@ -131,9 +131,13 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto idrr = new interval("#deltaj"s, rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
-
     auto idrg = new interval("#deltaj"s, rdrg);
     auto iptg = new interval("p_{T}^{j}"s, rptg);
+
+    auto fdrr = std::bind(&interval::book<TH1F>, idrr, _1, _2, _3);
+    auto fptr = std::bind(&interval::book<TH1F>, iptr, _1, _2, _3);
+    auto fdrg = std::bind(&interval::book<TH1F>, idrg, _1, _2, _3);
+    auto fptg = std::bind(&interval::book<TH1F>, iptg, _1, _2, _3);
 
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
@@ -189,10 +193,10 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
     auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
 
-    auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", null<TH1F>, ihf->size());
-    // auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", null<TH1F>, ihf->size());
-    // auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", null<TH1F>, ihf->size());
-    // auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", null<TH1F>, ihf->size());
+    auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", fdrr, ihf->size());
+    // auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", fptr, ihf->size());
+    // auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", fdrg, ihf->size());
+    // auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", fptg, ihf->size());
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
