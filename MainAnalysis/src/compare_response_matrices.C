@@ -220,7 +220,7 @@ int data_mc_comparison(char const* config, const char* output) {
 
     normalise_to_unity(h_r_nominal_fold0, h_r_old_fold0, h_r_nominalu_fold0, h_r_oldu_fold0);
     normalise_to_unity(h_r_nominal_fold1, h_r_old_fold1, h_r_nominalu_fold1, h_r_oldu_fold1);
-    normalise_to_unity(h_g_nominal_fold0, h_g_old_fold0, h_g_nominalu_fold0, h_r_oldu_fold0);
+    normalise_to_unity(h_g_nominal_fold0, h_g_old_fold0, h_g_nominalu_fold0, h_g_oldu_fold0);
     normalise_to_unity(h_g_nominal_fold1, h_g_old_fold1, h_g_nominalu_fold1, h_g_oldu_fold1);
 
     /* set up figures */
@@ -305,35 +305,119 @@ int data_mc_comparison(char const* config, const char* output) {
     h_g_old->apply([&](TH1* h) { p6->add(h, "old"); });
     h_g_oldu->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "old_previous"); });
     
-    // /* (3) reco dr comparisions */
-    // auto p4 = new paper("vacillate_aa_r_dr_comparison_latest", hb);
-    // p4->divide(ihf->size(), -1);
-    // p4->accessory(hf_info);
-    // p4->accessory(kinematics);
-    // apply_style(p4, cms, system_tag);
+    /* (3) reco dr comparisions */
+    auto p7 = new paper("vacillate_aa_r_dr_comparison_latest", hb);
+    p7->divide(ihf->size(), -1);
+    p7->accessory(hf_info);
+    p7->accessory(kinematics);
+    apply_style(p7, cms, system_tag);
     
-    // h_r_nominal_fold0->apply([&](TH1* h) { p4->add(h, "nominal"); });
-    // h_g_old->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "old"); });
+    h_r_nominal_fold0->apply([&](TH1* h) { p7->add(h, "nominal"); });
+    h_r_old_fold0->apply([&](TH1* h, int64_t index) { p7->stack(index + 1, h, "old"); });
 
-    // auto p5 = new paper("vacillate_aa_r_dr_comparison_nominal", hb);
-    // p5->divide(ihf->size(), -1);
-    // p5->accessory(hf_info);
-    // p5->accessory(kinematics);
-    // apply_style(p5, cms, system_tag);
+    auto p8 = new paper("vacillate_aa_r_dr_comparison_nominal", hb);
+    p8->divide(ihf->size(), -1);
+    p8->accessory(hf_info);
+    p8->accessory(kinematics);
+    apply_style(p8, cms, system_tag);
     
-    // h_g_nominal->apply([&](TH1* h) { p5->add(h, "nominal"); });
-    // h_g_nominalu->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "nominal_previous"); });
+    h_r_nominal_fold0->apply([&](TH1* h) { p8->add(h, "nominal"); });
+    h_r_nominalu_fold0->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "nominal_previous"); });
 
-    // auto p6 = new paper("vacillate_aa_r_dr_comparison_old", hb);
-    // p6->divide(ihf->size(), -1);
-    // p6->accessory(hf_info);
-    // p6->accessory(kinematics);
-    // apply_style(p6, cms, system_tag);
+    auto p9 = new paper("vacillate_aa_r_dr_comparison_old", hb);
+    p9->divide(ihf->size(), -1);
+    p9->accessory(hf_info);
+    p9->accessory(kinematics);
+    apply_style(p9, cms, system_tag);
     
-    // h_g_old->apply([&](TH1* h) { p6->add(h, "old"); });
-    // h_g_oldu->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "old_previous"); });
+    h_r_old_fold0->apply([&](TH1* h) { p9->add(h, "old"); });
+    h_r_oldu_fold0->apply([&](TH1* h, int64_t index) { p9->stack(index + 1, h, "old_previous"); });
 
-    // hb->sketch();
+    /* (4) gen dr comparisions */
+    auto p10 = new paper("vacillate_aa_g_dr_comparison_latest", hb);
+    p10->divide(ihf->size(), -1);
+    p10->accessory(hf_info);
+    p10->accessory(kinematics);
+    apply_style(p10, cms, system_tag);
+    
+    h_g_nominal_fold0->apply([&](TH1* h) { p10->add(h, "nominal"); });
+    h_g_old_fold0->apply([&](TH1* h, int64_t index) { p10->stack(index + 1, h, "old"); });
+
+    auto p11 = new paper("vacillate_aa_g_dr_comparison_nominal", hb);
+    p11->divide(ihf->size(), -1);
+    p11->accessory(hf_info);
+    p11->accessory(kinematics);
+    apply_style(p11, cms, system_tag);
+    
+    h_g_nominal_fold0->apply([&](TH1* h) { p11->add(h, "nominal"); });
+    h_g_nominalu_fold0->apply([&](TH1* h, int64_t index) { p11->stack(index + 1, h, "nominal_previous"); });
+
+    auto p12 = new paper("vacillate_aa_g_dr_comparison_old", hb);
+    p12->divide(ihf->size(), -1);
+    p12->accessory(hf_info);
+    p12->accessory(kinematics);
+    apply_style(p12, cms, system_tag);
+    
+    h_g_old_fold0->apply([&](TH1* h) { p12->add(h, "old"); });
+    h_g_oldu_fold0->apply([&](TH1* h, int64_t index) { p12->stack(index + 1, h, "old_previous"); });
+
+    /* (5) reco jtpt comparisions */
+    auto p13 = new paper("vacillate_aa_r_jtpt_comparison_latest", hb);
+    p13->divide(ihf->size(), -1);
+    p13->accessory(hf_info);
+    p13->accessory(kinematics);
+    apply_style(p13, cms, system_tag);
+    
+    h_r_nominal_fold1->apply([&](TH1* h) { p13->add(h, "nominal"); });
+    h_r_old_fold1->apply([&](TH1* h, int64_t index) { p13->stack(index + 1, h, "old"); });
+
+    auto p14 = new paper("vacillate_aa_r_jtpt_comparison_nominal", hb);
+    p14->divide(ihf->size(), -1);
+    p14->accessory(hf_info);
+    p14->accessory(kinematics);
+    apply_style(p14, cms, system_tag);
+    
+    h_r_nominal_fold1->apply([&](TH1* h) { p14->add(h, "nominal"); });
+    h_r_nominalu_fold1->apply([&](TH1* h, int64_t index) { p14->stack(index + 1, h, "nominal_previous"); });
+
+    auto p15 = new paper("vacillate_aa_r_jtpt_comparison_old", hb);
+    p15->divide(ihf->size(), -1);
+    p15->accessory(hf_info);
+    p15->accessory(kinematics);
+    apply_style(p15, cms, system_tag);
+    
+    h_r_old_fold1->apply([&](TH1* h) { p15->add(h, "old"); });
+    h_r_oldu_fold1->apply([&](TH1* h, int64_t index) { p15->stack(index + 1, h, "old_previous"); });
+
+    /* (6) gen jtpt comparisions */
+    auto p16 = new paper("vacillate_aa_g_jtpt_comparison_latest", hb);
+    p16->divide(ihf->size(), -1);
+    p16->accessory(hf_info);
+    p16->accessory(kinematics);
+    apply_style(p16, cms, system_tag);
+    
+    h_g_nominal_fold1->apply([&](TH1* h) { p16->add(h, "nominal"); });
+    h_g_old_fold1->apply([&](TH1* h, int64_t index) { p16->stack(index + 1, h, "old"); });
+
+    auto p17 = new paper("vacillate_aa_g_jtpt_comparison_nominal", hb);
+    p17->divide(ihf->size(), -1);
+    p17->accessory(hf_info);
+    p17->accessory(kinematics);
+    apply_style(p17, cms, system_tag);
+    
+    h_g_nominal_fold1->apply([&](TH1* h) { p17->add(h, "nominal"); });
+    h_g_nominalu_fold1->apply([&](TH1* h, int64_t index) { p17->stack(index + 1, h, "nominal_previous"); });
+
+    auto p18 = new paper("vacillate_aa_g_jtpt_comparison_old", hb);
+    p18->divide(ihf->size(), -1);
+    p18->accessory(hf_info);
+    p18->accessory(kinematics);
+    apply_style(p18, cms, system_tag);
+    
+    h_g_old_fold1->apply([&](TH1* h) { p18->add(h, "old"); });
+    h_g_oldu_fold1->apply([&](TH1* h, int64_t index) { p18->stack(index + 1, h, "old_previous"); });
+
+    hb->sketch();
 
     p1->draw("pdf");
     p2->draw("pdf");
@@ -341,18 +425,18 @@ int data_mc_comparison(char const* config, const char* output) {
     p4->draw("pdf");
     p5->draw("pdf");
     p6->draw("pdf");
-    // p7->draw("pdf");
-    // p8->draw("pdf");
-    // p9->draw("pdf");
-    // p10->draw("pdf");
-    // p11->draw("pdf");
-    // p12->draw("pdf");
-    // p13->draw("pdf");
-    // p14->draw("pdf");
-    // p15->draw("pdf");
-    // p16->draw("pdf");
-    // p17->draw("pdf");
-    // p18->draw("pdf");
+    p7->draw("pdf");
+    p8->draw("pdf");
+    p9->draw("pdf");
+    p10->draw("pdf");
+    p11->draw("pdf");
+    p12->draw("pdf");
+    p13->draw("pdf");
+    p14->draw("pdf");
+    p15->draw("pdf");
+    p16->draw("pdf");
+    p17->draw("pdf");
+    p18->draw("pdf");
 
     in(output, [&]() {
         h_r_nominal->save();
