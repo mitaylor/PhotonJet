@@ -178,7 +178,7 @@ int data_mc_comparison(char const* config, const char* output) {
     apply_style(p2, cms, system_tag);
     
     h_new_jtpt->apply([&](TH1* h) { p2->add(h, "new"); });
-    h_old_jtpt->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "nominal_previous"); });
+    h_old_jtpt->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "old"); });
 
     hb->sketch();
 
