@@ -162,7 +162,7 @@ int quantitate(char const* config, char const* output) {
         (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr, fine);
     }
 
-    normalise_to_unity(side0, side0);
+    normalise_to_unity(side0, side1);
 
     side0->rename(tag + "_"s + before_label + stub + "_side0"s);
     side1->rename(tag + "_"s + before_label + stub + "_side1"s);

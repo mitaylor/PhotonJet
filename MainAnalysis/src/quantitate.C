@@ -218,15 +218,15 @@ int quantitate(char const* config, char const* output) {
     }, fafters, afters);
 
     TFile* fiter = new TFile(regularization.data(), "read");
-    auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);
+    auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);std::cout<<__LINE__<<std::endl;
 
     /* prepare output from pre-unfolded data */
     TFile* fout = new TFile(output, "recreate");
 
     zip([&](auto const& figure) {
         auto stub = "_"s + figure;
-
-        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
+std::cout<<__LINE__<<std::endl;
+        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);std::cout<<__LINE__<<std::endl;
         hin->save();
 
     }, before_figures);
@@ -234,12 +234,12 @@ int quantitate(char const* config, char const* output) {
     /* prepare folds from pre-unfolded data */
     zip([&](auto const& figure) {
         auto stub = "_"s + figure;
-
-        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
+std::cout<<__LINE__<<std::endl;
+        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);std::cout<<__LINE__<<std::endl;
         auto shape = hin->shape();
-
-        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
-        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
+std::cout<<__LINE__<<std::endl;
+        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);std::cout<<__LINE__<<std::endl;
+        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);std::cout<<__LINE__<<std::endl;
 
         for (int64_t i = 0; i < hin->size(); ++i) {
             (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr, fine);
@@ -257,18 +257,18 @@ int quantitate(char const* config, char const* output) {
     }, before_folds);
 
     /* prepare the post-unfolded data */
+std::cout<<__LINE__<<std::endl;
+    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+    auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+    auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
 
-    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto refolded = new history<TH1F>("refolded", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+    auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+    auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
 
-    auto refolded = new history<TH1F>("refolded", "", null<TH1F>, (int64_t) afters.size());
-    auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, (int64_t) afters.size());
-
-    auto measured = new history<TH1F>("measured", "", null<TH1F>, (int64_t) afters.size());
-    auto measured_fold0 = new history<TH1F>("measured_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto measured_fold1 = new history<TH1F>("measured_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto measured = new history<TH1F>("measured", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+    auto measured_fold0 = new history<TH1F>("measured_fold0", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
+    auto measured_fold1 = new history<TH1F>("measured_fold1", "", null<TH1F>, (int64_t) afters.size());std::cout<<__LINE__<<std::endl;
 
     /* determine the number of iterations to use */
     std::vector<int64_t> choice(chi_square->size(), 1);
