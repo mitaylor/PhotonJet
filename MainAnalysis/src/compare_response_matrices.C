@@ -135,9 +135,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto fdrr = std::bind(&interval::book<TH1F>, idrr, _1, _2, _3);
-    auto fptr = std::bind(&interval::book<TH1F>, iptr, _1, _2, _3);
-    auto fdrg = std::bind(&interval::book<TH1F>, idrg, _1, _2, _3);
-    auto fptg = std::bind(&interval::book<TH1F>, iptg, _1, _2, _3);
+    // auto fptr = std::bind(&interval::book<TH1F>, iptr, _1, _2, _3);
+    // auto fdrg = std::bind(&interval::book<TH1F>, idrg, _1, _2, _3);
+    // auto fptg = std::bind(&interval::book<TH1F>, iptg, _1, _2, _3);
 
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
