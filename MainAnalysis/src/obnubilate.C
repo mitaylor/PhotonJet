@@ -197,9 +197,7 @@ int obnubilate(char const* config, char const* output) {
 
         total->apply(sqrt_);
 
-        std::cout<<total->size()<<std::endl;
         for (int64_t i = 0; i < total->size(); ++i) {
-            std::cout<<"here"<<std::endl;
             std::vector<float> differences;
 
             for (int64_t j = 0; j <= (*total)[i]->GetNbinsX(); ++j) {
@@ -215,6 +213,7 @@ int obnubilate(char const* config, char const* output) {
 
             printf("%.2f-%.2f ", min, max);
         }
+        std::cout << std::endl;
 
         /* add plots */
         auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
