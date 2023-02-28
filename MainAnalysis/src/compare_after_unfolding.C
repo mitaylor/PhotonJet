@@ -70,7 +70,7 @@ int compare_after_unfolding(char const* config, const char* output) {
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
