@@ -128,11 +128,11 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto h_new_dr = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side0");
     h_new_dr->rename("aa_new_dr");
-    auto h_old_dr = old history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side0");
+    auto h_old_dr = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side0");
     h_old_dr->rename("aa_old_dr");
     auto h_new_jtpt = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side1");
     h_new_jtpt->rename("aa_new_jtpt");
-    auto h_old_jtpt = old history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side1");
+    auto h_old_jtpt = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_side1");
     h_old_jtpt->rename("aa_old_jtpt");
 
     normalise_to_unity(h_new_dr, h_old_dr, h_new_jtpt, h_old_jtpt);
