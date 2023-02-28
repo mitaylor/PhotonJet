@@ -143,7 +143,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.745, "Cent. %i - %i%%", dcent, true); };
+        info_text(index, 0.45, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
