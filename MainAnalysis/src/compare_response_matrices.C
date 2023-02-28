@@ -244,10 +244,15 @@ int data_mc_comparison(char const* config, const char* output) {
     std::cout << __LINE__ << std::endl;
 
     for (size_t j = 0; j < dhf.size()-1; ++j) {
-        std::cout << (*h_r_ratio_fold0)[j]->GetNbinsX() << " " << (*h_r_old_fold0)[j]->GetNbinsX() << " " << (*h_r_nominal_fold0)[j]->GetNbinsX() << std::endl;
-        std::cout << (*h_r_ratio_fold1)[j]->GetNbinsX() << " " << (*h_r_old_fold1)[j]->GetNbinsX() << " " << (*h_r_nominal_fold1)[j]->GetNbinsX() << std::endl;
-        std::cout << (*h_g_ratio_fold0)[j]->GetNbinsX() << " " << (*h_g_old_fold0)[j]->GetNbinsX() << " " << (*h_g_nominal_fold0)[j]->GetNbinsX() << std::endl;
-        std::cout << (*h_g_ratio_fold1)[j]->GetNbinsX() << " " << (*h_g_old_fold1)[j]->GetNbinsX() << " " << (*h_g_nominal_fold1)[j]->GetNbinsX() << std::endl;
+        // std::cout << (*h_r_ratio_fold0)[j]->GetNbinsX() << " " << (*h_r_old_fold0)[j]->GetNbinsX() << " " << (*h_r_nominal_fold0)[j]->GetNbinsX() << std::endl;
+        // std::cout << (*h_r_ratio_fold1)[j]->GetNbinsX() << " " << (*h_r_old_fold1)[j]->GetNbinsX() << " " << (*h_r_nominal_fold1)[j]->GetNbinsX() << std::endl;
+        // std::cout << (*h_g_ratio_fold0)[j]->GetNbinsX() << " " << (*h_g_old_fold0)[j]->GetNbinsX() << " " << (*h_g_nominal_fold0)[j]->GetNbinsX() << std::endl;
+        // std::cout << (*h_g_ratio_fold1)[j]->GetNbinsX() << " " << (*h_g_old_fold1)[j]->GetNbinsX() << " " << (*h_g_nominal_fold1)[j]->GetNbinsX() << std::endl;
+
+        std::cout << (*h_r_ratio_fold0)[j]->GetNbinsX() << std::endl;
+        std::cout << (*h_r_ratio_fold1)[j]->GetNbinsX() << std::endl;
+        std::cout << (*h_g_ratio_fold0)[j]->GetNbinsX() << std::endl;
+        std::cout << (*h_g_ratio_fold1)[j]->GetNbinsX() << std::endl;
         // (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
         // (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
         // (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
@@ -508,6 +513,29 @@ int data_mc_comparison(char const* config, const char* output) {
 
     in(output, [&]() {
         h_r_nominal->save();
+        h_r_old->save();
+        h_r_nominalu->save();
+        h_r_oldu->save();
+        h_g_nominal->save();
+        h_g_old->save();
+        h_g_nominalu->save();
+        h_g_oldu->save();
+        h_r_nominal_fold0->save();
+        h_r_old_fold0->save();
+        h_r_nominalu_fold0->save();
+        h_r_oldu_fold0->save();
+        h_r_nominal_fold1->save();
+        h_r_old_fold1->save();
+        h_r_nominalu_fold1->save();
+        h_r_oldu_fold1->save();
+        h_g_nominal_fold0->save();
+        h_g_old_fold0->save();
+        h_g_nominalu_fold0->save();
+        h_g_oldu_fold0->save();
+        h_g_nominal_fold1->save();
+        h_g_old_fold1->save();
+        h_g_nominalu_fold1->save();
+        h_g_oldu_fold1->save();
     });
 
     return 0;
