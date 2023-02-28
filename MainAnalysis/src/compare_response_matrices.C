@@ -135,9 +135,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto fdrr = std::bind(&interval::book<TH1F>, idrr, _1, _2, _3);
-    // auto fptr = std::bind(&interval::book<TH1F>, iptr, _1, _2, _3);
-    // auto fdrg = std::bind(&interval::book<TH1F>, idrg, _1, _2, _3);
-    // auto fptg = std::bind(&interval::book<TH1F>, iptg, _1, _2, _3);
+    auto fptr = std::bind(&interval::book<TH1F>, iptr, _1, _2, _3);
+    auto fdrg = std::bind(&interval::book<TH1F>, idrg, _1, _2, _3);
+    auto fptg = std::bind(&interval::book<TH1F>, iptg, _1, _2, _3);
 
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
@@ -194,9 +194,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
 
     auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", fdrr, ihf->size());
-    // auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", fptr, ihf->size());
-    // auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", fdrg, ihf->size());
-    // auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", fptg, ihf->size());
+    auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", fptr, ihf->size());
+    auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", fdrg, ihf->size());
+    auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", fptg, ihf->size());
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
@@ -245,22 +245,13 @@ int data_mc_comparison(char const* config, const char* output) {
     normalise_to_unity(h_g_nominal_fold0, h_g_old_fold0, h_g_nominalu_fold0, h_g_oldu_fold0);
     normalise_to_unity(h_g_nominal_fold1, h_g_old_fold1, h_g_nominalu_fold1, h_g_oldu_fold1);
 
-    std::cout << __LINE__ << std::endl;
+    
 
     for (size_t j = 0; j < dhf.size()-1; ++j) {
-        // std::cout << (*h_r_ratio_fold0)[j]->GetNbinsX() << " " << (*h_r_old_fold0)[j]->GetNbinsX() << " " << (*h_r_nominal_fold0)[j]->GetNbinsX() << std::endl;
-        // std::cout << (*h_r_ratio_fold1)[j]->GetNbinsX() << " " << (*h_r_old_fold1)[j]->GetNbinsX() << " " << (*h_r_nominal_fold1)[j]->GetNbinsX() << std::endl;
-        // std::cout << (*h_g_ratio_fold0)[j]->GetNbinsX() << " " << (*h_g_old_fold0)[j]->GetNbinsX() << " " << (*h_g_nominal_fold0)[j]->GetNbinsX() << std::endl;
-        // std::cout << (*h_g_ratio_fold1)[j]->GetNbinsX() << " " << (*h_g_old_fold1)[j]->GetNbinsX() << " " << (*h_g_nominal_fold1)[j]->GetNbinsX() << std::endl;
-
-        std::cout << (*h_r_old_fold0)[j]->GetNbinsX() << " " << (*h_r_nominal_fold0)[j]->GetNbinsX() << std::endl;
-        std::cout << (*h_r_old_fold1)[j]->GetNbinsX() << " " << (*h_r_nominal_fold1)[j]->GetNbinsX() << std::endl;
-        std::cout << (*h_g_old_fold0)[j]->GetNbinsX() << " " << (*h_g_nominal_fold0)[j]->GetNbinsX() << std::endl;
-        std::cout << (*h_g_old_fold1)[j]->GetNbinsX() << " " << (*h_g_nominal_fold1)[j]->GetNbinsX() << std::endl;
-        (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
-        // (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
-        // (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
-        // (*h_g_ratio_fold1)[j]->Divide((*h_g_old_fold1)[j], (*h_g_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
+        (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);
+        (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);
+        (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);
+        (*h_g_ratio_fold1)[j]->Divide((*h_g_old_fold1)[j], (*h_g_nominal_fold1)[j]);
     }
 
     /* set up figures */
@@ -457,38 +448,38 @@ int data_mc_comparison(char const* config, const char* output) {
     h_g_old_fold1->apply([&](TH1* h) { p18->add(h, "old"); });
     h_g_oldu_fold1->apply([&](TH1* h, int64_t index) { p18->stack(index + 1, h, "old_previous"); });
 
-    // /* (7) ratio plots */
-    // auto p19 = new paper("vacillate_aa_r_dr_ratio", hb);
-    // p19->divide(ihf->size(), -1);
-    // p19->accessory(hf_info);
-    // p19->accessory(kinematics);
-    // apply_style(p19, cms, system_tag);
-    // title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold0);
-    // h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, "old"); });
+    /* (7) ratio plots */
+    auto p19 = new paper("vacillate_aa_r_dr_ratio", hb);
+    p19->divide(ihf->size(), -1);
+    p19->accessory(hf_info);
+    p19->accessory(kinematics);
+    apply_style(p19, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold0);
+    h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, "old"); });
 
-    // auto p20 = new paper("vacillate_aa_r_jtpt_ratio", hb);
-    // p20->divide(ihf->size(), -1);
-    // p20->accessory(hf_info);
-    // p20->accessory(kinematics);
-    // apply_style(p20, cms, system_tag);
-    // title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold1);
-    // h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, "old"); });
+    auto p20 = new paper("vacillate_aa_r_jtpt_ratio", hb);
+    p20->divide(ihf->size(), -1);
+    p20->accessory(hf_info);
+    p20->accessory(kinematics);
+    apply_style(p20, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold1);
+    h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, "old"); });
 
-    // auto p21 = new paper("vacillate_aa_g_dr_ratio", hb);
-    // p21->divide(ihf->size(), -1);
-    // p21->accessory(hf_info);
-    // p21->accessory(kinematics);
-    // apply_style(p21, cms, system_tag);
-    // title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold0);
-    // h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, "old"); });
+    auto p21 = new paper("vacillate_aa_g_dr_ratio", hb);
+    p21->divide(ihf->size(), -1);
+    p21->accessory(hf_info);
+    p21->accessory(kinematics);
+    apply_style(p21, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold0);
+    h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, "old"); });
 
-    // auto p22 = new paper("vacillate_aa_g_jtpt_ratio", hb);
-    // p22->divide(ihf->size(), -1);
-    // p22->accessory(hf_info);
-    // p22->accessory(kinematics);
-    // apply_style(p22, cms, system_tag);
-    // title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold1);
-    // h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, "old"); });
+    auto p22 = new paper("vacillate_aa_g_jtpt_ratio", hb);
+    p22->divide(ihf->size(), -1);
+    p22->accessory(hf_info);
+    p22->accessory(kinematics);
+    apply_style(p22, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold1);
+    h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, "old"); });
 
     hb->sketch();
 
