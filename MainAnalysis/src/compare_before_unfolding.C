@@ -143,7 +143,7 @@ int data_mc_comparison(char const* config, const char* output) {
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+        info_text(index, 0.745, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -151,16 +151,16 @@ int data_mc_comparison(char const* config, const char* output) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.135, 0.67, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.135, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.135, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
 
     auto hb = new pencil();
     hb->category("type", "new", "old");
 
-    hb->alias("new", "Current Result Before Unfolding");
-    hb->alias("old", "Previous Result Before Unfolding");
+    hb->alias("new", "Current Result");
+    hb->alias("old", "Previous Result");
 
     auto p1 = new paper("accumulate_aa_dr_comparison", hb);
     p1->divide(ihf->size(), -1);
