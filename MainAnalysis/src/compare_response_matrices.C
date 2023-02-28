@@ -124,8 +124,14 @@ int data_mc_comparison(char const* config, const char* output) {
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
 
-    auto mr = new multival(rdrr, rptr);
-    auto mg = new multival(rdrg, rptg);
+    auto idrr = new interval("#deltaj"s, rdrr);
+    auto iptr = new interval("p_{T}^{j}"s, rptr);
+
+    auto idrg = new interval("#deltaj"s, rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
+
+    auto mr = new multival(*idrr, *iptr);
+    auto mg = new multival(*idrg, *iptg);
 
     /* offsets */
     std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
@@ -236,8 +242,8 @@ int data_mc_comparison(char const* config, const char* output) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.67, "anti-k_{T} R = 0.3, 20 < p_{T}^{jet} < 200, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.135, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.135, 0.67, "anti-k_{T} R = 0.3, 20 < p_{T}^{jet} < 200, |#eta^{jet}| < 1.6");
         }
     };
 
