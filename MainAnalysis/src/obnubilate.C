@@ -197,6 +197,23 @@ int obnubilate(char const* config, char const* output) {
 
         total->apply(sqrt_);
 
+        for (int64_t i = 0; i < total->size(); ++i) {
+            std::vector<float> differences;
+
+            for (int64_t j = 0; j < (*total)[i]->GetNbinsX() - 2; ++j) {
+                differences.push_back(std::abs((*total)[i]->GetBinContent(j + 1)));
+            }
+
+            float min = 10000;
+            float max = 0;
+            for (auto difference : differences) {
+                if (difference < min) { min = difference; }
+                if (difference > max) { max = difference; }
+            }
+
+            printf("%.2f-%.2f ", min, max);
+        }
+
         /* add plots */
         auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
         auto style2 = [&](TH1* h) { c2->adjust(h, "hist", "f"); };
