@@ -126,6 +126,9 @@ int data_mc_comparison(char const* config, const char* output) {
     auto rptr = conf->get<std::vector<float>>("ptr_range");
     auto rptg = conf->get<std::vector<float>>("ptg_range");
 
+    auto rptr_final = conf->get<std::vector<float>>("ptr_range_final");
+    auto rptg_final = conf->get<std::vector<float>>("ptg_range_final");
+
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
 
@@ -134,10 +137,13 @@ int data_mc_comparison(char const* config, const char* output) {
     auto idrg = new interval("#deltaj"s, rdrg);
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
+    auto iptr_final = new interval("p_{T}^{j}"s, rptr);
+    auto iptg_final = new interval("p_{T}^{j}"s, rptg);
+
     auto fdrr = std::bind(&interval::book<TH1F>, idrr, _1, _2, _3);
-    auto fptr = std::bind(&interval::book<TH1F>, iptr, _1, _2, _3);
+    auto fptr = std::bind(&interval::book<TH1F>, iptr_final, _1, _2, _3);
     auto fdrg = std::bind(&interval::book<TH1F>, idrg, _1, _2, _3);
-    auto fptg = std::bind(&interval::book<TH1F>, iptg, _1, _2, _3);
+    auto fptg = std::bind(&interval::book<TH1F>, iptg_final, _1, _2, _3);
 
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
@@ -455,7 +461,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p19->accessory(kinematics);
     apply_style(p19, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold0);
-    h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, "old"); });
+    h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, ""); });
 
     auto p20 = new paper("vacillate_aa_r_jtpt_ratio", hb);
     p20->divide(ihf->size(), -1);
@@ -463,7 +469,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p20->accessory(kinematics);
     apply_style(p20, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold1);
-    h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, "old"); });
+    h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, ""); });
 
     auto p21 = new paper("vacillate_aa_g_dr_ratio", hb);
     p21->divide(ihf->size(), -1);
@@ -471,7 +477,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p21->accessory(kinematics);
     apply_style(p21, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold0);
-    h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, "old"); });
+    h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, ""); });
 
     auto p22 = new paper("vacillate_aa_g_jtpt_ratio", hb);
     p22->divide(ihf->size(), -1);
@@ -479,7 +485,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p22->accessory(kinematics);
     apply_style(p22, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold1);
-    h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, "old"); });
+    h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, ""); });
 
     hb->sketch();
 
