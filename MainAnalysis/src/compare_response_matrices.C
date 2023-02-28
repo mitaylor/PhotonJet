@@ -21,6 +21,11 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 template <typename... T>
+void title(std::function<void(TH1*)> f, T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
+}
+
+template <typename... T>
 void normalise_to_unity(T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
@@ -182,6 +187,11 @@ int data_mc_comparison(char const* config, const char* output) {
     auto h_g_nominalu_fold1 = new history<TH1F>("h_g_nominalu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
     auto h_g_oldu_fold1 = new history<TH1F>("h_g_oldu_fold1", ";jet pT (GeV)", null<TH1F>, ihf->size());
 
+    auto h_r_ratio_fold0 = new history<TH1F>("h_r_ratio_fold0", "", null<TH1F>, ihf->size());
+    auto h_r_ratio_fold1 = new history<TH1F>("h_r_ratio_fold1", "", null<TH1F>, ihf->size());
+    auto h_g_ratio_fold0 = new history<TH1F>("h_g_ratio_fold0", "", null<TH1F>, ihf->size());
+    auto h_g_ratio_fold1 = new history<TH1F>("h_g_ratio_fold1", "", null<TH1F>, ihf->size());
+
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_r_nominal_fold0)[i] = fold((*h_r_nominal)[i], nullptr, mr, 0, osr);
         (*h_r_old_fold0)[i] = fold((*h_r_old)[i], nullptr, mr, 0, osr);
@@ -229,6 +239,11 @@ int data_mc_comparison(char const* config, const char* output) {
     normalise_to_unity(h_g_nominal_fold0, h_g_old_fold0, h_g_nominalu_fold0, h_g_oldu_fold0);
     normalise_to_unity(h_g_nominal_fold1, h_g_old_fold1, h_g_nominalu_fold1, h_g_oldu_fold1);
 
+    (*h_r_ratio_fold0)[0]->Divide((*h_r_old_fold0)[0], (*h_r_nominal_fold0)[0]);
+    (*h_r_ratio_fold1)[0]->Divide((*h_r_old_fold1)[0], (*h_r_nominal_fold1)[0]);
+    (*h_g_ratio_fold0)[0]->Divide((*h_g_old_fold0)[0], (*h_g_nominal_fold0)[0]);
+    (*h_g_ratio_fold1)[0]->Divide((*h_g_old_fold1)[0], (*h_g_nominal_fold1)[0]);
+
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -250,8 +265,8 @@ int data_mc_comparison(char const* config, const char* output) {
     auto hb = new pencil();
     hb->category("type", "nominal", "old", "nominal_previous", "old_previous");
 
-    hb->alias("nominal", "Nominal w/ new weights");
-    hb->alias("old", "Old forest w/ new skim");
+    hb->alias("nominal", "New Extra MC");
+    hb->alias("old", "Old Extra MC");
     hb->alias("nominal_previous", "Nominal w/ old weights");
     hb->alias("old_previous", "Old response matrix");
 
@@ -423,6 +438,39 @@ int data_mc_comparison(char const* config, const char* output) {
     h_g_old_fold1->apply([&](TH1* h) { p18->add(h, "old"); });
     h_g_oldu_fold1->apply([&](TH1* h, int64_t index) { p18->stack(index + 1, h, "old_previous"); });
 
+    /* (7) ratio plots */
+    auto p19 = new paper("vacillate_aa_r_dr_ratio", hb);
+    p19->divide(ihf->size(), -1);
+    p19->accessory(hf_info);
+    p19->accessory(kinematics);
+    apply_style(p19, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold0);
+    h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, "old"); });
+
+    auto p20 = new paper("vacillate_aa_r_jtpt_ratio", hb);
+    p20->divide(ihf->size(), -1);
+    p20->accessory(hf_info);
+    p20->accessory(kinematics);
+    apply_style(p20, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold1);
+    h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, "old"); });
+
+    auto p21 = new paper("vacillate_aa_g_dr_ratio", hb);
+    p21->divide(ihf->size(), -1);
+    p21->accessory(hf_info);
+    p21->accessory(kinematics);
+    apply_style(p21, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold0);
+    h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, "old"); });
+
+    auto p22 = new paper("vacillate_aa_g_jtpt_ratio", hb);
+    p22->divide(ihf->size(), -1);
+    p22->accessory(hf_info);
+    p22->accessory(kinematics);
+    apply_style(p22, cms, system_tag);
+    title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold1);
+    h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, "old"); });
+
     hb->sketch();
 
     p1->draw("pdf");
@@ -443,6 +491,10 @@ int data_mc_comparison(char const* config, const char* output) {
     p16->draw("pdf");
     p17->draw("pdf");
     p18->draw("pdf");
+    p19->draw("pdf");
+    p20->draw("pdf");
+    p21->draw("pdf");
+    p22->draw("pdf");
 
     in(output, [&]() {
         h_r_nominal->save();
