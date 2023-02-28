@@ -21,11 +21,11 @@
 # "regulate_pp_eff.conf" \
 # "regulate_pp_eff"
 
-# regulate_aa_mb_data
-./SubmitJobs.sh \
-"/eos/cms/store/group/phys_heavyions/mitaylor/PhotonJet/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIMinimumBias4/20230203PbPbMB/230203_165233/" \
-"regulate_aa_eff.conf" \
-"regulate_aa_eff"
+# # regulate_aa_mb_data
+# ./SubmitJobs.sh \
+# "/eos/cms/store/group/phys_heavyions/mitaylor/PhotonJet/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD/HIMinimumBias4/20230203PbPbMB/230203_165233/" \
+# "regulate_aa_eff.conf" \
+# "regulate_aa_eff"
 
 ##############################################################################
 ##############################################################################
