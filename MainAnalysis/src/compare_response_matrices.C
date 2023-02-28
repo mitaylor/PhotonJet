@@ -501,10 +501,10 @@ int data_mc_comparison(char const* config, const char* output) {
     p16->draw("pdf");
     p17->draw("pdf");
     p18->draw("pdf");
-    // p19->draw("pdf");
-    // p20->draw("pdf");
-    // p21->draw("pdf");
-    // p22->draw("pdf");
+    p19->draw("pdf");
+    p20->draw("pdf");
+    p21->draw("pdf");
+    p22->draw("pdf");
 
     in(output, [&]() {
         h_r_nominal->save();
