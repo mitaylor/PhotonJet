@@ -65,7 +65,7 @@ int compare_after_unfolding(char const* config, const char* output) {
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.45, "Cent. %i - %i%%", dcent, true); };
+        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -73,8 +73,8 @@ int compare_after_unfolding(char const* config, const char* output) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.135, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, 0.71, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.67, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
 
