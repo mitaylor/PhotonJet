@@ -245,6 +245,9 @@ int data_mc_comparison(char const* config, const char* output) {
 
     for (size_t j = 0; j < dhf.size()-1; ++j) {
         std::cout << (*h_r_ratio_fold0)[j]->GetNbinsX() << " " << (*h_r_old_fold0)[j]->GetNbinsX() << " " << (*h_r_nominal_fold0)[j]->GetNbinsX() << std::endl;
+        std::cout << (*h_r_ratio_fold1)[j]->GetNbinsX() << " " << (*h_r_old_fold1)[j]->GetNbinsX() << " " << (*h_r_nominal_fold1)[j]->GetNbinsX() << std::endl;
+        std::cout << (*h_g_ratio_fold0)[j]->GetNbinsX() << " " << (*h_g_old_fold0)[j]->GetNbinsX() << " " << (*h_g_nominal_fold0)[j]->GetNbinsX() << std::endl;
+        std::cout << (*h_g_ratio_fold1)[j]->GetNbinsX() << " " << (*h_g_old_fold1)[j]->GetNbinsX() << " " << (*h_g_nominal_fold1)[j]->GetNbinsX() << std::endl;
         // (*h_r_ratio_fold0)[j]->Divide((*h_r_old_fold0)[j], (*h_r_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
         // (*h_r_ratio_fold1)[j]->Divide((*h_r_old_fold1)[j], (*h_r_nominal_fold1)[j]);std::cout << __LINE__ << std::endl;
         // (*h_g_ratio_fold0)[j]->Divide((*h_g_old_fold0)[j], (*h_g_nominal_fold0)[j]);std::cout << __LINE__ << std::endl;
