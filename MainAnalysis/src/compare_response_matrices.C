@@ -137,8 +137,8 @@ int data_mc_comparison(char const* config, const char* output) {
     auto idrg = new interval("#deltaj"s, rdrg);
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
-    auto iptr_final = new interval("p_{T}^{j}"s, rptr);
-    auto iptg_final = new interval("p_{T}^{j}"s, rptg);
+    auto iptr_final = new interval("p_{T}^{j}"s, rptr_final);
+    auto iptg_final = new interval("p_{T}^{j}"s, rptg_final);
 
     auto fdrr = std::bind(&interval::book<TH1F>, idrr, _1, _2, _3);
     auto fptr = std::bind(&interval::book<TH1F>, iptr_final, _1, _2, _3);
