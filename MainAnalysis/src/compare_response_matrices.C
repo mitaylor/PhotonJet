@@ -279,7 +279,7 @@ int data_mc_comparison(char const* config, const char* output) {
     };
 
     auto hb = new pencil();
-    hb->category("type", "nominal", "old", "nominal_previous", "old_previous");
+    hb->category("type", "nominal", "old", "nominal_previous", "old_previous", "ratio");
 
     hb->alias("nominal", "New Extra MC");
     hb->alias("old", "Old Extra MC");
@@ -461,7 +461,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p19->accessory(kinematics);
     apply_style(p19, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold0);
-    h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, ""); });
+    h_r_ratio_fold0->apply([&](TH1* h) { p19->add(h, "ratio"); });
 
     auto p20 = new paper("vacillate_aa_r_jtpt_ratio", hb);
     p20->divide(ihf->size(), -1);
@@ -469,7 +469,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p20->accessory(kinematics);
     apply_style(p20, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_r_ratio_fold1);
-    h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, ""); });
+    h_r_ratio_fold1->apply([&](TH1* h) { p20->add(h, "ratio"); });
 
     auto p21 = new paper("vacillate_aa_g_dr_ratio", hb);
     p21->divide(ihf->size(), -1);
@@ -477,7 +477,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p21->accessory(kinematics);
     apply_style(p21, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold0);
-    h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, ""); });
+    h_g_ratio_fold0->apply([&](TH1* h) { p21->add(h, "ratio"); });
 
     auto p22 = new paper("vacillate_aa_g_jtpt_ratio", hb);
     p22->divide(ihf->size(), -1);
@@ -485,7 +485,7 @@ int data_mc_comparison(char const* config, const char* output) {
     p22->accessory(kinematics);
     apply_style(p22, cms, system_tag);
     title(std::bind(rename_axis, _1, "Old Extra MC / New Extra MC"), h_g_ratio_fold1);
-    h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, ""); });
+    h_g_ratio_fold1->apply([&](TH1* h) { p22->add(h, "ratio"); });
 
     hb->sketch();
 
