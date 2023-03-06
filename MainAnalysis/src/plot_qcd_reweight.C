@@ -37,9 +37,9 @@ int plot_qcd(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto files = conf->get<std::vector<std::string>>("files");
-    auto pthat = conf->get<std::vector<int32_t>>("pthat");
-    auto pthatw = conf->get<std::vector<float>>("pthatw");
-    auto vzw = conf->get<std::vector<float>>("vzw");
+    // auto pthat = conf->get<std::vector<int32_t>>("pthat");
+    // auto pthatw = conf->get<std::vector<float>>("pthatw");
+    // auto vzw = conf->get<std::vector<float>>("vzw");
     auto tag = conf->get<std::string>("tag");
 
     /* manage memory manually */
@@ -74,14 +74,14 @@ int plot_qcd(char const* config, char const* output) {
             t->GetEntry(i);
 
             if ((*pjt->accepts)[0] == 1) {
-                float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
+                // float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
 
-                (*h_pthat)[0]->Fill(pjt->pthat, weight);
-                (*h_njets)[0]->Fill(pjt->ngen, weight);
+                (*h_pthat)[0]->Fill(pjt->pthat, pjt->weight);
+                (*h_njets)[0]->Fill(pjt->ngen, pjt->weight);
 
                 for (int64_t j = 0; j < pjt->ngen; ++j) {
                     if (std::abs((*pjt->geneta)[j]) < 1.6) {
-                        (*h_jetpt)[0]->Fill((*pjt->genpt)[j], weight);
+                        (*h_jetpt)[0]->Fill((*pjt->genpt)[j], pjt->weight);
                     }
                 }
             }
