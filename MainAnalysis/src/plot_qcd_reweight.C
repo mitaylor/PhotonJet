@@ -54,9 +54,9 @@ int plot_qcd(char const* config, char const* output) {
     auto fjetpt = std::bind(&interval::book<TH1F>, ijetpt, _1, _2, _3);
     auto fnjets = std::bind(&interval::book<TH1F>, injets, _1, _2, _3);
 
-    auto pthat = new history<TH1F>("pthat"s, "", fpthat, 1, 1);
-    auto jetpt = new history<TH1F>("jetpt"s, "", fjetpt, 1, 1);
-    auto njets = new history<TH1F>("njets"s, "", fnjets, 1, 1);
+    auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, 1, 1);
+    auto h_jetpt = new history<TH1F>("h_jetpt"s, "", fjetpt, 1, 1);
+    auto h_njets = new history<TH1F>("h_njets"s, "", fnjets, 1, 1);
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
     fweight->SetParameters(vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); 
@@ -75,11 +75,11 @@ int plot_qcd(char const* config, char const* output) {
 
             float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
 
-            pthat->Fill(pjt->pthat, weight);
-            njets->Fill(pjt->ngen, weight);
+            h_pthat->Fill(pjt->pthat, weight);
+            h_njets->Fill(pjt->ngen, weight);
 
             for (int64_t j = 0; j < pjt->ngen; ++j) {
-                jetpt->Fill(pjt->ngen, weight);
+                h_jetpt->Fill(pjt->ngen, weight);
             }
         }
     }
@@ -87,9 +87,9 @@ int plot_qcd(char const* config, char const* output) {
     pthat->Scale(1. / pthat->Integral());
 
     in(output, [&]() {
-        pthat->save(tag);
-        njets->save(tag);
-        jetpt->save(tag);
+        h_pthat->save(tag);
+        h_njets->save(tag);
+        h_jetpt->save(tag);
     });
 
     printf("destroying objects..\n");
