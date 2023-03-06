@@ -39,7 +39,7 @@ int plot_qcd(char const* config, char const* output) {
     auto files = conf->get<std::vector<std::string>>("files");
     // auto pthat = conf->get<std::vector<int32_t>>("pthat");
     // auto pthatw = conf->get<std::vector<float>>("pthatw");
-    // auto vzw = conf->get<std::vector<float>>("vzw");
+    auto vzw = conf->get<std::vector<float>>("vzw");
     auto tag = conf->get<std::string>("tag");
 
     /* manage memory manually */
