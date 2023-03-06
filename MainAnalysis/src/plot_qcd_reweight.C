@@ -46,7 +46,7 @@ int plot_qcd(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    auto ipthat = new interval("#pthat"s, 100, 0, 1000);
+    auto ipthat = new interval("pthat"s, 100, 0, 1000);
     auto ijetpt = new interval("jet pT (GeV)"s, 100, 0, 500);
     auto injets = new interval("#jets"s, 100, 0, 25);
 
@@ -79,7 +79,7 @@ int plot_qcd(char const* config, char const* output) {
             (*h_njets)[0]->Fill(pjt->ngen, weight);
 
             for (int64_t j = 0; j < pjt->ngen; ++j) {
-                (*h_jetpt)[0]->Fill(pjt->ngen, weight);
+                (*h_jetpt)[0]->Fill(pjt->genpt, weight);
             }
         }
     }
