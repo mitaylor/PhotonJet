@@ -48,7 +48,7 @@ int plot_qcd(char const* config, char const* output) {
 
     auto ipthat = new interval("pthat"s, 100, 0, 1000);
     auto ijetpt = new interval("jet pT (GeV)"s, 100, 0, 500);
-    auto injets = new interval("#jets"s, 100, 0, 25);
+    auto injets = new interval("#jets"s, 100, 0, 50);
 
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fjetpt = std::bind(&interval::book<TH1F>, ijetpt, _1, _2, _3);
