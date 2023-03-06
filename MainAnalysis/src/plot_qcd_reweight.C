@@ -75,16 +75,18 @@ int plot_qcd(char const* config, char const* output) {
 
             float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
 
-            h_pthat->Fill(pjt->pthat, weight);
-            h_njets->Fill(pjt->ngen, weight);
+            (*h_pthat)[0]->Fill(pjt->pthat, weight);
+            (*h_njets)[0]->Fill(pjt->ngen, weight);
 
             for (int64_t j = 0; j < pjt->ngen; ++j) {
-                h_jetpt->Fill(pjt->ngen, weight);
+                (*h_jetpt)[0]->Fill(pjt->ngen, weight);
             }
         }
     }
 
-    pthat->Scale(1. / pthat->Integral());
+    (*h_pthat)[0]->Scale(1. / (*h_pthat)[0]->Integral());
+    (*h_njets)[0]->Scale(1. / (*h_njets)[0]->Integral());
+    (*h_jetpt)[0]->Scale(1. / (*h_jetpt)[0]->Integral());
 
     in(output, [&]() {
         h_pthat->save(tag);
