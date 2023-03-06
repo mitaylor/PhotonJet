@@ -79,7 +79,7 @@ int plot_qcd(char const* config, char const* output) {
             (*h_njets)[0]->Fill(pjt->ngen, weight);
 
             for (int64_t j = 0; j < pjt->ngen; ++j) {
-                (*h_jetpt)[0]->Fill(pjt->genpt, weight);
+                (*h_jetpt)[0]->Fill((*pjt->genpt)[j], weight);
             }
         }
     }
