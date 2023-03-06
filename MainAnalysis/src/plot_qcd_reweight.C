@@ -48,9 +48,7 @@ int plot_qcd(char const* config, char const* output) {
     TH1::SetDefaultSumw2();
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
-    if (mc_branches && apply_weights) {
-        fweight->SetParameters(vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); 
-    }
+    fweight->SetParameters(vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); 
 
     /* load input */
     for (auto const& file : files) {
