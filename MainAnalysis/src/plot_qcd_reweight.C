@@ -73,14 +73,16 @@ int plot_qcd(char const* config, char const* output) {
 
             t->GetEntry(i);
 
-            float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
+            if ((*pjt->accepts)[0] == 1) {
+                float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
 
-            (*h_pthat)[0]->Fill(pjt->pthat, weight);
-            (*h_njets)[0]->Fill(pjt->ngen, weight);
+                (*h_pthat)[0]->Fill(pjt->pthat, weight);
+                (*h_njets)[0]->Fill(pjt->ngen, weight);
 
-            for (int64_t j = 0; j < pjt->ngen; ++j) {
-                if (std::abs((*pjt->geneta)[j]) < 1.6) {
-                    (*h_jetpt)[0]->Fill((*pjt->genpt)[j], weight);
+                for (int64_t j = 0; j < pjt->ngen; ++j) {
+                    if (std::abs((*pjt->geneta)[j]) < 1.6) {
+                        (*h_jetpt)[0]->Fill((*pjt->genpt)[j], weight);
+                    }
                 }
             }
         }
