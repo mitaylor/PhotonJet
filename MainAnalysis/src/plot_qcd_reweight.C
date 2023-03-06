@@ -40,12 +40,23 @@ int plot_qcd(char const* config, char const* output) {
     auto pthat = conf->get<std::vector<int32_t>>("pthat");
     auto pthatw = conf->get<std::vector<float>>("pthatw");
     auto vzw = conf->get<std::vector<float>>("vzw");
-
-    auto pthat_w = new TH1F("pthat_w", "pthat", 100, 0, 200);
+    auto tag = conf->get<std::string>("tag");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
+
+    auto ipthat = new interval("#pthat"s, 100, 0, 1000);
+    auto ijetpt = new interval("jet pT (GeV)"s, 100, 0, 500);
+    auto injets = new interval("#jets"s, 100, 0, 25);
+
+    auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
+    auto fjetpt = std::bind(&interval::book<TH1F>, ijetpt, _1, _2, _3);
+    auto fnjets = std::bind(&interval::book<TH1F>, injets, _1, _2, _3);
+
+    auto pthat = new history<TH1F>("pthat"s, "", fpthat, 1, 1);
+    auto jetpt = new history<TH1F>("jetpt"s, "", fjetpt, 1, 1);
+    auto njets = new history<TH1F>("njets"s, "", fnjets, 1, 1);
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
     fweight->SetParameters(vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); 
@@ -54,7 +65,7 @@ int plot_qcd(char const* config, char const* output) {
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 0, 0, 0 });
+        auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 1, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
         for (int64_t i = 0; i < nentries; ++i) {
@@ -64,13 +75,22 @@ int plot_qcd(char const* config, char const* output) {
 
             float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
 
-            pthat_w->Fill(pjt->pthat, weight);
+            pthat->Fill(pjt->pthat, weight);
+            njets->Fill(pjt->ngen, weight);
+
+            for (int64_t j = 0; j < pjt->ngen; ++j) {
+                jetpt->Fill(pjt->ngen, weight);
+            }
         }
     }
 
-    pthat_w->Scale(1. / pthat_w->Integral());
+    pthat->Scale(1. / pthat->Integral());
 
-    pthat_w->SaveAs(output);
+    in(output, [&]() {
+        pthat->save(tag);
+        njets->save(tag);
+        jetpt->save(tag);
+    });
 
     printf("destroying objects..\n");
 
