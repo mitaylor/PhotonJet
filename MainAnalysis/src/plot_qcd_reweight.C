@@ -65,7 +65,7 @@ int plot_qcd(char const* config, char const* output) {
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(true, false, false, t, { 1, 0, 0, 0, 1, 0, 0 });
+        auto pjt = new pjtree(true, true, true, t, { 1, 0, 0, 0, 1, 1, 0, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
         for (int64_t i = 0; i < nentries; ++i) {
