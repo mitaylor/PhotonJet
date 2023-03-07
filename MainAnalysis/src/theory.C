@@ -139,7 +139,7 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
-    // p->stack(jewel, "jewel");
+    p->stack(jewel, "jewel");
     // p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
 
     // for (int64_t i = 0; i < 4; ++i) {
