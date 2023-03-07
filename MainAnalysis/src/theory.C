@@ -115,8 +115,8 @@ int congratulate(char const* config, char const* output) {
     p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
-    if (tag == "aa") (*hist)[3]->apply([&](TH1* h) { p->add(h, "aa"); });
-    if (tag == "pp") (*hist)[0]->apply([&](TH1* h) { p->add(h, "pp"); });
+    if (tag == "aa") p->add((*hist)[3], "aa");
+    if (tag == "pp") p->add((*hist)[0], "aa");
 
     // for (int64_t i = 0; i < 4; ++i) {
     //     hist->apply([&](TH1* h, int64_t index) {
