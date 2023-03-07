@@ -94,24 +94,26 @@ int congratulate(char const* config, char const* output) {
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
-        TGraph* gr = new TGraph();
-        gr->SetFillStyle(1001);
-        gr->SetFillColorAlpha(tag == "aa" ? red : blue, 0.48);
+        if (links.count(h)) {
+            TGraph* gr = new TGraph();
+            gr->SetFillStyle(1001);
+            gr->SetFillColorAlpha(tag == "aa" ? red : blue, 0.48);
 
-        for (int i = 1; i <= h->GetNbinsX(); ++i) {
-            if (h->GetBinError(i) == 0) continue;
+            for (int i = 1; i <= h->GetNbinsX(); ++i) {
+                if (h->GetBinError(i) == 0) continue;
 
-            double x = h->GetBinCenter(i);
-            double width = h->GetBinWidth(i);
-            double val = h->GetBinContent(i);
-            double err = links[h]->GetBinContent(i);
+                double x = h->GetBinCenter(i);
+                double width = h->GetBinWidth(i);
+                double val = h->GetBinContent(i);
+                double err = links[h]->GetBinContent(i);
 
-            gr->SetPoint(0, x - (width / 2), val - err);
-            gr->SetPoint(1, x + (width / 2), val - err);
-            gr->SetPoint(2, x + (width / 2), val + err);
-            gr->SetPoint(3, x - (width / 2), val + err);
+                gr->SetPoint(0, x - (width / 2), val - err);
+                gr->SetPoint(1, x + (width / 2), val - err);
+                gr->SetPoint(2, x + (width / 2), val + err);
+                gr->SetPoint(3, x - (width / 2), val + err);
 
-            gr->DrawClone("f");
+                gr->DrawClone("f");
+            }
         }
     };
 
