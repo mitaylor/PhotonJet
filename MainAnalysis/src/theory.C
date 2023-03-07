@@ -101,14 +101,15 @@ int congratulate(char const* config, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, 0.70, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.65, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
 
     /* prepare papers */
     auto p = new paper(prefix + "_" + tag + "_theory_comparison", hb);
-    apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
+    if (tag == "aa") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
+    if (tag == "pp") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->jewellery(box);
@@ -128,14 +129,12 @@ int congratulate(char const* config, char const* output) {
         h->SetLineColor(1);
         h->SetMarkerStyle(25);
         h->SetMarkerSize(0.60);
-        h->SetMarkerColor(blue);
     };
 
     auto aa_style = [](TH1* h) {
         h->SetLineColor(1);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
-        h->SetMarkerColor(red);
     };
 
     hb->style("pp", pp_style);
