@@ -17,6 +17,7 @@
 #include "TColor.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TH1F.h"
 #include "TH1D.h"
 #include "TLatex.h"
 #include "TLine.h"
@@ -74,12 +75,14 @@ int congratulate(char const* config, char const* output) {
 
     /* get theory predictions */ 
     TFile* file_theory = new TFile(theory_input.data(), "read");
-    auto jewel = (TH1D*) file_theory->Get(jewel_figure.data());
-    auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
-    
-    std::cout << jewel->GetNbinsX() << std::endl;
-    std::cout << pyquen->GetNbinsX() << std::endl;
-    std::cout << (*hist)[0]->GetNbinsX() << std::endl;
+    auto jewel_d = (TH1D*) file_theory->Get(jewel_figure.data());
+    auto pyquen_d = (TH1D*) file_theory->Get(pyquen_figure.data());
+
+    TH1F* jewel;
+    TH1F* pyquen;
+
+    jewel->Copy(jewel_d);
+    pyquen->Copy(pyquen_d);
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
