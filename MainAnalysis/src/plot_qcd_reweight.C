@@ -75,15 +75,18 @@ int plot_qcd(char const* config, char const* output) {
 
             if ((*pjt->accepts)[0] == 1) {
                 // float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
+                int nref = 0;
 
                 (*h_pthat)[0]->Fill(pjt->pthat, pjt->weight);
-                (*h_njets)[0]->Fill(pjt->nref, pjt->weight);
 
                 for (int64_t j = 0; j < pjt->nref; ++j) {
-                    if (std::abs((*pjt->jteta)[j]) < 1.6 && (*pjt->jtpt)[j] > 10) {
+                    if (std::abs((*pjt->jteta)[j]) < 1.6 && (*pjt->jtpt)[j] > 5) {
                         (*h_jetpt)[0]->Fill((*pjt->jtpt)[j], pjt->weight);
+                        nref++;
                     }
                 }
+
+                (*h_njets)[0]->Fill(nref, pjt->weight);
             }
         }
     }
