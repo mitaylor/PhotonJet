@@ -107,7 +107,8 @@ int congratulate(char const* config, char const* output) {
     if (tag == "aa") hb->alias("jewel", "Jewel PbPb 0-10%");
     if (tag == "pp") hb->alias("jewel", "Jewel pp");
     if (tag == "aa") hb->alias("pyquen", "Pyquen PbPb 0-10%");
-    if (tag == "pp") hb->alias("pyquen", "Pyquen pp");std::cout << __LINE__ << std::endl;
+    if (tag == "pp") hb->alias("pyquen", "Pyquen pp");
+    std::cout << __LINE__ << std::endl;
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -131,7 +132,7 @@ int congratulate(char const* config, char const* output) {
 
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
-    if (tag == "pp") p->add((*hist)[0], "aa");std::cout << __LINE__ << std::endl;
+    if (tag == "pp") p->add((*hist)[0], "aa");
     p->stack(jewel, "jewel");std::cout << __LINE__ << std::endl;
     p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
 
