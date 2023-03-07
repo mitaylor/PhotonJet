@@ -59,50 +59,50 @@ int plot_qcd(char const* config) {
     std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, pos, "Inclusive centrality");
-            l->DrawLatexNDC(0.135, pos-0.05, "Selected photons");
-            l->DrawLatexNDC(0.135, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, pos, "Inclusive centrality");
+            l->DrawLatexNDC(0.865, pos-0.05, "Selected photons");
+            l->DrawLatexNDC(0.865, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
         }
     };
 
     std::function<void(int64_t, float)> jet_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, pos, "Inclusive centrality");
-            l->DrawLatexNDC(0.135, pos-0.05, "Jets associated with selected photons");
-            l->DrawLatexNDC(0.135, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.135, pos-0.1, "Reconstructed p_{T}^{j} > 5 GeV");
+            l->DrawLatexNDC(0.865, pos, "Inclusive centrality");
+            l->DrawLatexNDC(0.865, pos-0.05, "Jets associated with selected photons");
+            l->DrawLatexNDC(0.865, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, pos-0.15, "Reconstructed p_{T}^{j} > 5 GeV");
         }
     };
 
     std::function<void(int64_t, float)> gen_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, pos, "Inclusive centrality");
-            l->DrawLatexNDC(0.135, pos-0.05, "Generator-level jets associated with selected photons");
-            l->DrawLatexNDC(0.135, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.135, pos-0.1, "Reconstructed p_{T}^{j} > 5 GeV");
+            l->DrawLatexNDC(0.865, pos, "Inclusive centrality");
+            l->DrawLatexNDC(0.865, pos-0.05, "Generator-level jets associated with selected photons");
+            l->DrawLatexNDC(0.865, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, pos-0.15, "Reconstructed p_{T}^{j} > 5 GeV");
         }
     };
 
     std::function<void(int64_t, float)> evt_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, pos, "Inclusive centrality");
-            l->DrawLatexNDC(0.135, pos-0.05, "Events with selected photons");
-            l->DrawLatexNDC(0.135, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, pos, "Inclusive centrality");
+            l->DrawLatexNDC(0.865, pos-0.05, "Events with selected photons");
+            l->DrawLatexNDC(0.865, pos-0.1, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
         }
     };
 
@@ -114,37 +114,37 @@ int plot_qcd(char const* config) {
 
     auto c1 = new paper("aa_mc_miniaod_aod_selected_pthat_comparison", hb);
     apply_style(c1, cms, system_tag);
-    c1->accessory(std::bind(evt_kinematics, _1, 0.85));
+    c1->accessory(std::bind(evt_kinematics, _1, 0.75));
     c1->add((*m_h_pthat)[0], "nominal_miniaod");
     c1->stack((*a_h_pthat)[0], "nominal_aod");
 
     auto c2 = new paper("aa_mc_miniaod_aod_selected_phopt_comparison", hb);
     apply_style(c2, cms, system_tag);
-    c2->accessory(std::bind(pho_kinematics, _1, 0.85));
+    c2->accessory(std::bind(pho_kinematics, _1, 0.75));
     c2->add((*m_h_phopt)[0], "nominal_miniaod");
     c2->stack((*a_h_phopt)[0], "nominal_aod");
 
     auto c3 = new paper("aa_mc_miniaod_aod_selected_njets_comparison", hb);
     apply_style(c3, cms, system_tag);
-    c3->accessory(std::bind(jet_kinematics, _1, 0.85));
+    c3->accessory(std::bind(jet_kinematics, _1, 0.75));
     c3->add((*m_h_njets)[0], "nominal_miniaod");
     c3->stack((*a_h_njets)[0], "nominal_aod");
 
     auto c4 = new paper("aa_mc_miniaod_aod_selected_jetpt_comparison", hb);
     apply_style(c4, cms, system_tag);
-    c4->accessory(std::bind(jet_kinematics, _1, 0.85));
+    c4->accessory(std::bind(jet_kinematics, _1, 0.75));
     c4->add((*m_h_jetpt)[0], "nominal_miniaod");
     c4->stack((*a_h_jetpt)[0], "nominal_aod");
 
     auto c5 = new paper("aa_mc_miniaod_aod_selected_nrefs_comparison", hb);
     apply_style(c5, cms, system_tag);
-    c5->accessory(std::bind(gen_kinematics, _1, 0.85));
+    c5->accessory(std::bind(gen_kinematics, _1, 0.75));
     c5->add((*m_h_nrefs)[0], "nominal_miniaod");
     c5->stack((*a_h_nrefs)[0], "nominal_aod");
 
     auto c6 = new paper("aa_mc_miniaod_aod_selected_refpt_comparison", hb);
     apply_style(c6, cms, system_tag);
-    c6->accessory(std::bind(gen_kinematics, _1, 0.85));
+    c6->accessory(std::bind(gen_kinematics, _1, 0.75));
     c6->add((*m_h_refpt)[0], "nominal_miniaod");
     c6->stack((*a_h_refpt)[0], "nominal_aod");
 
