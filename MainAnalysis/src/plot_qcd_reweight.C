@@ -49,14 +49,20 @@ int plot_qcd(char const* config, char const* output) {
     auto ipthat = new interval("pthat"s, 50, 0, 1000);
     auto ijetpt = new interval("jet pT (GeV)"s, 50, 0, 500);
     auto injets = new interval("#jets"s, 50, 0, 50);
+    auto iphopt = new interval("photon pT (GeV)"s, 50, 0, 250);
 
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fjetpt = std::bind(&interval::book<TH1F>, ijetpt, _1, _2, _3);
     auto fnjets = std::bind(&interval::book<TH1F>, injets, _1, _2, _3);
+    auto fphopt = std::bind(&interval::book<TH1F>, iphopt, _1, _2, _3);
 
     auto h_pthat = new history<TH1F>("h_pthat"s, "", fpthat, 1, 1);
     auto h_jetpt = new history<TH1F>("h_jetpt"s, "", fjetpt, 1, 1);
     auto h_njets = new history<TH1F>("h_njets"s, "", fnjets, 1, 1);
+
+    auto h_refpt = new history<TH1F>("h_refpt"s, "", fjetpt, 1, 1);
+    auto h_nrefs = new history<TH1F>("h_nrefs"s, "", fnjets, 1, 1);
+    auto h_phopt = new history<TH1F>("h_phopt"s, "", fphopt, 1, 1);
 
     TF1* fweight = new TF1("fweight", "(gaus(0))/(gaus(3))");
     fweight->SetParameters(vzw[0], vzw[1], vzw[2], vzw[3], vzw[4], vzw[5]); 
@@ -107,29 +113,44 @@ int plot_qcd(char const* config, char const* output) {
             if (isolation > 2.099277) { continue; }
 
             float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
+
+            int njet = 0;
             int nref = 0;
 
             (*h_pthat)[0]->Fill(pjt->pthat, weight);
+            (*h_phopt)[0]->Fill(leading_pt, weight);
 
             for (int64_t j = 0; j < pjt->nref; ++j) {
                 if (std::abs((*pjt->jteta)[j]) < 1.6 && (*pjt->jtpt)[j] > 5) {
                     (*h_jetpt)[0]->Fill((*pjt->jtpt)[j], weight);
-                    nref++;
+                    njet++;
+
+                    if ((*pjt->refpt)[j] > 0) { 
+                        (*h_refpt)[0]->Fill((*pjt->refpt)[j], weight);
+                        nref++; 
+                    }
                 }
             }
 
-            (*h_njets)[0]->Fill(nref, weight);
+            (*h_njets)[0]->Fill(njet, weight);
+            (*h_nrefs)[0]->Fill(nref, weight);
         }
     }
 
     (*h_pthat)[0]->Scale(1. / (*h_pthat)[0]->Integral());
     (*h_njets)[0]->Scale(1. / (*h_njets)[0]->Integral());
     (*h_jetpt)[0]->Scale(1. / (*h_jetpt)[0]->Integral());
+    (*h_nrefs)[0]->Scale(1. / (*h_nrefs)[0]->Integral());
+    (*h_refpt)[0]->Scale(1. / (*h_refpt)[0]->Integral());
+    (*h_phopt)[0]->Scale(1. / (*h_phopt)[0]->Integral());
 
     in(output, [&]() {
         h_pthat->save(tag);
         h_njets->save(tag);
         h_jetpt->save(tag);
+        h_nrefs->save(tag);
+        h_refpt->save(tag);
+        h_phopt->save(tag);
     });
 
     printf("destroying objects..\n");
