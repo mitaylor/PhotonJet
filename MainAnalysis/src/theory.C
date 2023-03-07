@@ -81,8 +81,8 @@ int congratulate(char const* config, char const* output) {
     TH1F* jewel;
     TH1F* pyquen;
 
-    jewel->Copy(jewel_d);
-    pyquen->Copy(pyquen_d);
+    jewel->Copy(&jewel_d);
+    pyquen->Copy(&pyquen_d);
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
