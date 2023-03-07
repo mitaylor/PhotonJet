@@ -81,7 +81,7 @@ int congratulate(char const* config, char const* output) {
     auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
 
     file_theory->Close();
-    float xbins = { 0, 0.015, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2, 0.3 };
+    float xbins[11] = { 0, 0.015, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2, 0.3 };
     auto jewel_test = new TH1F("jewel_test", "", 10, xbins);
     auto pyquen_test = new TH1F("pyquen_test", "", 10, xbins);
 
