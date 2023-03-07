@@ -79,8 +79,8 @@ int congratulate(char const* config, char const* output) {
     TFile* file_theory = new TFile(theory_input.data(), "read");
     auto jewel = (TH1D*) file_theory->Get(jewel_figure.data());
     auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
-    file_theory->Close();
 
+    file_theory->Close();
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
@@ -139,8 +139,10 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
-    p->stack(jewel, "jewel");
-    p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
+    jewel->Draw("same");
+    pyquen->Draw("same");
+    // p->stack(jewel, "jewel");
+    // p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
 
     // for (int64_t i = 0; i < 4; ++i) {
     //     hist->apply([&](TH1* h, int64_t index) {
@@ -160,22 +162,22 @@ int congratulate(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    auto jewel_style = [](TH1* h) {
-        h->SetMarkerColor(51);
-        h->SetMarkerStyle(39);
-        h->SetMarkerSize(0.60);
-    };
+    // auto jewel_style = [](TH1* h) {
+    //     h->SetMarkerColor(51);
+    //     h->SetMarkerStyle(39);
+    //     h->SetMarkerSize(0.60);
+    // };
 
-    auto pyquen_style = [](TH1* h) {
-        h->SetMarkerColor(74);
-        h->SetMarkerStyle(47);
-        h->SetMarkerSize(0.60);
-    };
+    // auto pyquen_style = [](TH1* h) {
+    //     h->SetMarkerColor(74);
+    //     h->SetMarkerStyle(47);
+    //     h->SetMarkerSize(0.60);
+    // };
 
     hb->style("pp", pp_style);std::cout << __LINE__ << std::endl;
     hb->style("aa", aa_style);
-    hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
-    hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
+    // hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
+    // hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
     hb->sketch();std::cout << __LINE__ << std::endl;
 
     p->draw("pdf");std::cout << __LINE__ << std::endl;
