@@ -139,7 +139,7 @@ int congratulate(char const* config, char const* output) {
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
     p->stack(jewel, "jewel");
-    p->stack(pyquen, "pyquen");
+    p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
 
     // for (int64_t i = 0; i < 4; ++i) {
     //     hist->apply([&](TH1* h, int64_t index) {
@@ -171,13 +171,13 @@ int congratulate(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    hb->style("pp", pp_style);
+    hb->style("pp", pp_style);std::cout << __LINE__ << std::endl;
     hb->style("aa", aa_style);
-    hb->style("jewel", jewel_style);
-    hb->style("pyquen", pyquen_style);
-    hb->sketch();
+    hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
+    hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
+    hb->sketch();std::cout << __LINE__ << std::endl;
 
-    p->draw("pdf");
+    p->draw("pdf");std::cout << __LINE__ << std::endl;
 
     in(output, []() {});
 
