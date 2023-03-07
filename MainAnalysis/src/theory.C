@@ -85,6 +85,13 @@ int congratulate(char const* config, char const* output) {
     auto jewel_test = new TH1F("jewel_test", "", 10, xbins);
     auto pyquen_test = new TH1F("pyquen_test", "", 10, xbins);
 
+    for (int i = 1; i <= jewel_test->GetNbinsX(); ++i) {
+        jewel_test->SetBinContent(i, jewel->GetBinContent(i));
+        jewel_test->SetBinError(i, jewel->GetBinError(i));
+        pyquen_test->SetBinContent(i, pyquen->GetBinContent(i));
+        pyquen_test->SetBinError(i, pyquen->GetBinError(i));
+    }
+
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
         TGraph* gr = new TGraph();
@@ -163,22 +170,22 @@ int congratulate(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    // auto jewel_style = [](TH1* h) {
-    //     h->SetMarkerColor(51);
-    //     h->SetMarkerStyle(39);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto jewel_style = [](TH1* h) {
+        h->SetMarkerColor(51);
+        h->SetMarkerStyle(39);
+        h->SetMarkerSize(0.60);
+    };
 
-    // auto pyquen_style = [](TH1* h) {
-    //     h->SetMarkerColor(74);
-    //     h->SetMarkerStyle(47);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto pyquen_style = [](TH1* h) {
+        h->SetMarkerColor(74);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
 
     hb->style("pp", pp_style);std::cout << __LINE__ << std::endl;
     hb->style("aa", aa_style);
-    // hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
-    // hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
+    hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
+    hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
     hb->sketch();std::cout << __LINE__ << std::endl;
 
     jewel->Draw("same");
