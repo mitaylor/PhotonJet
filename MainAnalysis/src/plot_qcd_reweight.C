@@ -46,9 +46,9 @@ int plot_qcd(char const* config, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    auto ipthat = new interval("pthat"s, 100, 0, 1000);
-    auto ijetpt = new interval("jet pT (GeV)"s, 100, 0, 500);
-    auto injets = new interval("#jets"s, 100, 0, 50);
+    auto ipthat = new interval("pthat"s, 50, 0, 1000);
+    auto ijetpt = new interval("jet pT (GeV)"s, 50, 0, 500);
+    auto injets = new interval("#jets"s, 50, 0, 50);
 
     auto fpthat = std::bind(&interval::book<TH1F>, ipthat, _1, _2, _3);
     auto fjetpt = std::bind(&interval::book<TH1F>, ijetpt, _1, _2, _3);
@@ -65,7 +65,7 @@ int plot_qcd(char const* config, char const* output) {
     for (auto const& file : files) {
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(true, true, true, t, { 1, 0, 0, 0, 1, 1, 0, 0, 0 });
+        auto pjt = new pjtree(true, true, true, t, { 1, 1, 1, 1, 1, 1, 0, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
         for (int64_t i = 0; i < nentries; ++i) {
@@ -73,21 +73,52 @@ int plot_qcd(char const* config, char const* output) {
 
             t->GetEntry(i);
 
-            if ((*pjt->accepts)[0] == 1) {
-                // float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
-                int nref = 0;
+            int64_t leading = -1;
+            float leading_pt = 0;
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if ((*pjt->phoEt)[j] <= 30) { continue; }
+                if (std::abs((*pjt->phoSCEta)[j]) >= 1.442) { continue; }
+                if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
 
-                (*h_pthat)[0]->Fill(pjt->pthat, pjt->weight);
+                auto pho_et = (*pjt->phoEtErNew)[j];
+                if (pho_et < 40) { continue; }
 
-                for (int64_t j = 0; j < pjt->nref; ++j) {
-                    if (std::abs((*pjt->jteta)[j]) < 1.6 && (*pjt->jtpt)[j] > 5) {
-                        (*h_jetpt)[0]->Fill((*pjt->jtpt)[j], pjt->weight);
-                        nref++;
-                    }
+                if (pho_et > leading_pt) {
+                    leading = j;
+                    leading_pt = pho_et;
                 }
-
-                (*h_njets)[0]->Fill(nref, pjt->weight);
             }
+
+            /* require leading photon */
+            if (leading < 0) { continue; }
+
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392
+                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < 0)
+                continue;
+
+            /* hem failure region exclusion */
+            if (in_pho_failure_region(pjt, leading)) { continue; }
+
+            /* isolation requirement */
+            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
+                    + (*pjt->pho_hcalRechitIsoR3)[leading]
+                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            
+            if (isolation > iso_max) { continue; }
+
+            // float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
+            int nref = 0;
+
+            (*h_pthat)[0]->Fill(pjt->pthat, pjt->weight);
+
+            for (int64_t j = 0; j < pjt->nref; ++j) {
+                if (std::abs((*pjt->jteta)[j]) < 1.6 && (*pjt->jtpt)[j] > 5) {
+                    (*h_jetpt)[0]->Fill((*pjt->jtpt)[j], pjt->weight);
+                    nref++;
+                }
+            }
+
+            (*h_njets)[0]->Fill(nref, pjt->weight);
         }
     }
 
