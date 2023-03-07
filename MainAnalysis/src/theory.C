@@ -78,7 +78,8 @@ int congratulate(char const* config, char const* output) {
     auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
     
     std::cout << jewel->GetNbinsX() << std::endl;
-     std::cout << pyquen->GetNbinsX() << std::endl;
+    std::cout << pyquen->GetNbinsX() << std::endl;
+    std::cout << (*hist)[0]->GetNbinsX() << std::endl;
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
@@ -136,7 +137,7 @@ int congratulate(char const* config, char const* output) {
 
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
-    if (tag == "pp") p->add((*hist)[0], "aa");
+    if (tag == "pp") p->add((*hist)[0], "pp");
     p->stack(jewel, "jewel");
     p->stack(pyquen, "pyquen");
 
