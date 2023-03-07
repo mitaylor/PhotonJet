@@ -77,15 +77,9 @@ int congratulate(char const* config, char const* output) {
 
     /* get theory predictions */ 
     TFile* file_theory = new TFile(theory_input.data(), "read");
-    auto jewel_d = (TH1D*) file_theory->Get(jewel_figure.data());
-    auto pyquen_d = (TH1D*) file_theory->Get(pyquen_figure.data());
+    auto jewel = (TH1D*) file_theory->Get(jewel_figure.data());
+    auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
     file_theory->Close();
-
-    TH1F* jewel;
-    TH1F* pyquen;
-
-    jewel->Copy(*jewel_d);
-    pyquen->Copy(*pyquen_d);
 
 
     /* uncertainty box */
