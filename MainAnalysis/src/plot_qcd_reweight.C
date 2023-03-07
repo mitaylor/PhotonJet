@@ -104,7 +104,7 @@ int plot_qcd(char const* config, char const* output) {
                     + (*pjt->pho_hcalRechitIsoR3)[leading]
                     + (*pjt->pho_trackIsoR3PtCut20)[leading];
             
-            if (isolation > iso_max) { continue; }
+            if (isolation > 2.099277) { continue; }
 
             // float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
             int nref = 0;
