@@ -137,13 +137,15 @@ int congratulate(char const* config, char const* output) {
     p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
-    p->add(jewel, "aa");
-    // if (tag == "aa") p->add((*hist)[3], "aa");
-    // if (tag == "pp") p->add((*hist)[0], "pp");
+    if (tag == "aa") p->add((*hist)[3], "aa");
+    if (tag == "pp") p->add((*hist)[0], "pp");
 
-    std::cout << jewel->GetNbinsX() << std::endl;
-    std::cout << pyquen->GetNbinsX() << std::endl;
-    std::cout << (*hist)[0]->GetNbinsX() << std::endl;
+    for (int i = 1; i <= jewel->GetNbinsX(); ++i) {
+        std::cout << "jewel: " << jewel->GetBinContent(i) << std::endl;
+        std::cout << "pyquen: " << pyquen->GetBinContent(i) << std::endl;
+        std::cout << "data: " << (*hist)[0]->GetBinContent(i) << std::endl;
+    }
+    
     // p->stack(jewel, "jewel");
     // p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
 
