@@ -38,8 +38,13 @@ int congratulate(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto data_input = conf->get<std::string>("data_input");
-    auto tag = conf->get<std::string>("tag");
     auto figure = conf->get<std::string>("figure");
+
+    auto theory_input = conf->get<std::string>("theory_input");
+    auto jewel_figure = conf->get<std::string>("jewel_figure");
+    auto pyquen_figure = conf->get<std::string>("pyquen_figure");
+
+    auto tag = conf->get<std::string>("tag");
     auto prefix = conf->get<std::string>("prefix");
 
     auto xmin = conf->get<float>("xmin");
@@ -66,6 +71,11 @@ int congratulate(char const* config, char const* output) {
     std::unordered_map<TH1*, TH1*> links;
     hist->apply([&](TH1* h, int64_t index) { links[h] = (*syst)[index]; });
 
+    /* get theory predictions */
+    TFile* file_theory = new TFile(theory_input.data(), "read");
+    auto jewel = (TH1*) file_theory->Get(jewel_figure.data());
+    auto pyquen = (TH1*) file_theory->Get(pyquen_figure.data());
+
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
         TGraph* gr = new TGraph();
@@ -91,9 +101,13 @@ int congratulate(char const* config, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("system", "pp", "aa");
+    hb->category("system", "pp", "aa", "jewel", "pyquen");
     hb->alias("aa", "PbPb 0-10%");
     hb->alias("pp", "pp");
+    if (tag == "aa") hb->alias("jewel", "Jewel PbPb 0-10%");
+    if (tag == "pp") hb->alias("jewel", "Jewel pp");
+    if (tag == "aa") hb->alias("pyquen", "Pyquen PbPb 0-10%");
+    if (tag == "pp") hb->alias("pyquen", "Pyquen pp");
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -108,8 +122,8 @@ int congratulate(char const* config, char const* output) {
 
     /* prepare papers */
     auto p = new paper(prefix + "_" + tag + "_theory_comparison", hb);
-    if (tag == "aa") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
-    if (tag == "pp") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
+    if (tag == "pp") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
+    if (tag == "aa") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->jewellery(box);
@@ -118,6 +132,8 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "aa");
+    p->stack(jewel, "jewel");
+    p->stack(pyquen, "pyquen");
 
     // for (int64_t i = 0; i < 4; ++i) {
     //     hist->apply([&](TH1* h, int64_t index) {
@@ -137,8 +153,22 @@ int congratulate(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
+    auto jewel_style = [](TH1* h) {
+        h->SetMarkerColor(51);
+        h->SetMarkerStyle(39);
+        h->SetMarkerSize(0.60);
+    };
+
+    auto pyquen_style = [](TH1* h) {
+        h->SetMarkerColor(74);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
+
     hb->style("pp", pp_style);
     hb->style("aa", aa_style);
+    hb->style("jewel", jewel_style);
+    hb->style("pyquen", pyquen_style);
     hb->sketch();
 
     p->draw("pdf");
