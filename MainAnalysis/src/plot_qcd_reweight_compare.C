@@ -35,6 +35,7 @@ int plot_qcd(char const* config) {
     TH1::SetDefaultSumw2();
 
     TFile* min = new TFile(mini.data(), "read");
+    TFile* ain = new TFile(aod.data(), "read");
 
     auto m_h_pthat = new history<TH1F>(min, "aa_filtered_h_pthat"s);
     auto m_h_jetpt = new history<TH1F>(min, "aa_filtered_h_jetpt"s);
@@ -44,13 +45,13 @@ int plot_qcd(char const* config) {
     auto m_h_nrefs = new history<TH1F>(min, "aa_filtered_h_nrefs"s);
     auto m_h_phopt = new history<TH1F>(min, "aa_filtered_h_phopt"s);
 
-    auto a_h_pthat = new history<TH1F>(min, "aa_aod_filtered_h_pthat"s);
-    auto a_h_jetpt = new history<TH1F>(min, "aa_aod_filtered_h_jetpt"s);
-    auto a_h_njets = new history<TH1F>(min, "aa_aod_filtered_h_njets"s);
+    auto a_h_pthat = new history<TH1F>(ain, "aa_aod_filtered_h_pthat"s);
+    auto a_h_jetpt = new history<TH1F>(ain, "aa_aod_filtered_h_jetpt"s);
+    auto a_h_njets = new history<TH1F>(ain, "aa_aod_filtered_h_njets"s);
 
-    auto a_h_refpt = new history<TH1F>(min, "aa_aod_filtered_h_refpt"s);
-    auto a_h_nrefs = new history<TH1F>(min, "aa_aod_filtered_h_nrefs"s);
-    auto a_h_phopt = new history<TH1F>(min, "aa_aod_filtered_h_phopt"s);
+    auto a_h_refpt = new history<TH1F>(ain, "aa_aod_filtered_h_refpt"s);
+    auto a_h_nrefs = new history<TH1F>(ain, "aa_aod_filtered_h_nrefs"s);
+    auto a_h_phopt = new history<TH1F>(ain, "aa_aod_filtered_h_phopt"s);
 
     auto system_tag = "PbPb  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
