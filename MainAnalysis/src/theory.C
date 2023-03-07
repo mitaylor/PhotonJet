@@ -17,6 +17,7 @@
 #include "TColor.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TH1D.h"
 #include "TLatex.h"
 #include "TLine.h"
 
@@ -71,10 +72,13 @@ int congratulate(char const* config, char const* output) {
     std::unordered_map<TH1*, TH1*> links;
     hist->apply([&](TH1* h, int64_t index) { links[h] = (*syst)[index]; });
 
-    /* get theory predictions */ std::cout << __LINE__ << std::endl;
-    TFile* file_theory = new TFile(theory_input.data(), "read");std::cout << __LINE__ << std::endl;
-    auto jewel = (TH1*) file_theory->Get(jewel_figure.data());std::cout << __LINE__ << std::endl;
-    auto pyquen = (TH1*) file_theory->Get(pyquen_figure.data());std::cout << __LINE__ << std::endl;
+    /* get theory predictions */ 
+    TFile* file_theory = new TFile(theory_input.data(), "read");
+    auto jewel = (TH1D*) file_theory->Get(jewel_figure.data());
+    auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
+    
+    std::cout << jewel->GetNbinsX() << std::endl;
+     std::cout << pyquen->GetNbinsX() << std::endl;
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
@@ -100,15 +104,15 @@ int congratulate(char const* config, char const* output) {
     };
 
     /* prepare plots */
-    auto hb = new pencil();std::cout << __LINE__ << std::endl;
+    auto hb = new pencil();
     hb->category("system", "pp", "aa", "jewel", "pyquen");
     hb->alias("aa", "PbPb 0-10%");
-    hb->alias("pp", "pp");std::cout << __LINE__ << std::endl;
+    hb->alias("pp", "pp");
     if (tag == "aa") hb->alias("jewel", "Jewel PbPb 0-10%");
     if (tag == "pp") hb->alias("jewel", "Jewel pp");
     if (tag == "aa") hb->alias("pyquen", "Pyquen PbPb 0-10%");
     if (tag == "pp") hb->alias("pyquen", "Pyquen pp");
-    std::cout << __LINE__ << std::endl;
+    
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -121,20 +125,20 @@ int congratulate(char const* config, char const* output) {
         }
     };
 
-    /* prepare papers */std::cout << __LINE__ << std::endl;
+    /* prepare papers */
     auto p = new paper(prefix + "_" + tag + "_theory_comparison", hb);
     if (tag == "pp") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
     if (tag == "aa") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->jewellery(box);
-    p->divide(-1, 1);std::cout << __LINE__ << std::endl;
+    p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "aa");
-    p->stack(jewel, "jewel");std::cout << __LINE__ << std::endl;
-    p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
+    p->stack(jewel, "jewel");
+    p->stack(pyquen, "pyquen");
 
     // for (int64_t i = 0; i < 4; ++i) {
     //     hist->apply([&](TH1* h, int64_t index) {
