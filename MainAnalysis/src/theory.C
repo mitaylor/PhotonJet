@@ -81,6 +81,9 @@ int congratulate(char const* config, char const* output) {
     auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
 
     file_theory->Close();
+    float xbins = { 0, 0.015, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2, 0.3 };
+    auto jewel_test = new TH1F("jewel_test", "", 10, xbins);
+    auto pyquen_test = new TH1F("pyquen_test", "", 10, xbins);
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
@@ -139,21 +142,14 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
+    p->stack(jewel_test, "jewel");
+    p->stack(pyquen_test, "pyquen");std::cout << __LINE__ << std::endl;
 
     for (int i = 1; i <= jewel->GetNbinsX(); ++i) {
         std::cout << "jewel: " << jewel->GetBinContent(i) << std::endl;
         std::cout << "pyquen: " << pyquen->GetBinContent(i) << std::endl;
         std::cout << "data: " << (*hist)[0]->GetBinContent(i) << std::endl;
     }
-    
-    // p->stack(jewel, "jewel");
-    // p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
-
-    // for (int64_t i = 0; i < 4; ++i) {
-    //     hist->apply([&](TH1* h, int64_t index) {
-    //         s->stack(i + index + 1, h, "ss");
-    //     });
-    // }
 
     auto pp_style = [](TH1* h) {
         h->SetLineColor(1);
