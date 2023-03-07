@@ -139,8 +139,6 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
-    jewel->Draw("same");
-    pyquen->Draw("same");
     // p->stack(jewel, "jewel");
     // p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
 
@@ -179,6 +177,9 @@ int congratulate(char const* config, char const* output) {
     // hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
     // hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
     hb->sketch();std::cout << __LINE__ << std::endl;
+
+    jewel->Draw("same");
+    pyquen->Draw("same");
 
     p->draw("pdf");std::cout << __LINE__ << std::endl;
 
