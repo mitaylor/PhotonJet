@@ -69,6 +69,8 @@ int congratulate(char const* config, char const* output) {
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
     auto syst = new history<TH1F>(file_data, syst_stub + figure);
 
+    file_data->Close();
+
     /* link histograms, uncertainties */
     std::unordered_map<TH1*, TH1*> links;
     hist->apply([&](TH1* h, int64_t index) { links[h] = (*syst)[index]; });
@@ -83,6 +85,8 @@ int congratulate(char const* config, char const* output) {
 
     jewel->Copy(*jewel_d);
     pyquen->Copy(*pyquen_d);
+
+    file_theory->Close();
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
