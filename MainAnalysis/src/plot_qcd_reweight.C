@@ -37,8 +37,8 @@ int plot_qcd(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto files = conf->get<std::vector<std::string>>("files");
-    // auto pthat = conf->get<std::vector<int32_t>>("pthat");
-    // auto pthatw = conf->get<std::vector<float>>("pthatw");
+    auto pthat = conf->get<std::vector<int32_t>>("pthat");
+    auto pthatw = conf->get<std::vector<float>>("pthatw");
     auto vzw = conf->get<std::vector<float>>("vzw");
     auto tag = conf->get<std::string>("tag");
 
@@ -106,19 +106,19 @@ int plot_qcd(char const* config, char const* output) {
             
             if (isolation > 2.099277) { continue; }
 
-            // float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
+            float weight = fweight->Eval(pjt->vz) * weight_for(pthat, pthatw, pjt->pthat) * pjt->weight;
             int nref = 0;
 
-            (*h_pthat)[0]->Fill(pjt->pthat, pjt->weight);
+            (*h_pthat)[0]->Fill(pjt->pthat, weight);
 
             for (int64_t j = 0; j < pjt->nref; ++j) {
                 if (std::abs((*pjt->jteta)[j]) < 1.6 && (*pjt->jtpt)[j] > 5) {
-                    (*h_jetpt)[0]->Fill((*pjt->jtpt)[j], pjt->weight);
+                    (*h_jetpt)[0]->Fill((*pjt->jtpt)[j], weight);
                     nref++;
                 }
             }
 
-            (*h_njets)[0]->Fill(nref, pjt->weight);
+            (*h_njets)[0]->Fill(nref, weight);
         }
     }
 
