@@ -142,7 +142,6 @@ int congratulate(char const* config, char const* output) {
 
     std::cout << jewel->GetNbinsX() << std::endl;
     std::cout << pyquen->GetNbinsX() << std::endl;
-    std::cout << (*hist)[3]->GetNbinsX() << std::endl;
     std::cout << (*hist)[0]->GetNbinsX() << std::endl;
     // p->stack(jewel, "jewel");
     // p->stack(pyquen, "pyquen");std::cout << __LINE__ << std::endl;
