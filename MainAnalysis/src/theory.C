@@ -81,16 +81,6 @@ int congratulate(char const* config, char const* output) {
     auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
 
     file_theory->Close();
-    float xbins[11] = { 0, 0.015, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2, 0.3 };
-    auto jewel_test = new TH1F("jewel_test", "", 10, xbins);
-    auto pyquen_test = new TH1F("pyquen_test", "", 10, xbins);
-
-    for (int i = 1; i <= jewel_test->GetNbinsX(); ++i) {
-        jewel_test->SetBinContent(i, jewel->GetBinContent(i));
-        jewel_test->SetBinError(i, jewel->GetBinError(i));
-        pyquen_test->SetBinContent(i, pyquen->GetBinContent(i));
-        pyquen_test->SetBinError(i, pyquen->GetBinError(i));
-    }
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
@@ -151,14 +141,8 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
-    p->stack(jewel_test, "jewel");
-    // p->stack(pyquen_test, "pyquen");std::cout << __LINE__ << std::endl;
-
-    for (int i = 1; i <= jewel_test->GetNbinsX(); ++i) {
-        std::cout << "jewel: " << jewel_test->GetBinContent(i) << std::endl;
-        std::cout << "pyquen: " << pyquen_test->GetBinContent(i) << std::endl;
-        std::cout << "data: " << (*hist)[0]->GetBinContent(i) << std::endl;
-    }
+    p->stack(jewel, "jewel");
+    p->stack(pyquen, "pyquen");
 
     auto pp_style = [](TH1* h) {
         h->SetLineColor(1);
@@ -172,28 +156,28 @@ int congratulate(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    // auto jewel_style = [](TH1* h) {
-    //     h->SetMarkerColor(51);
-    //     h->SetMarkerStyle(39);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto jewel_style = [](TH1* h) {
+        h->SetMarkerColor(51);
+        h->SetMarkerStyle(39);
+        h->SetMarkerSize(0.60);
+    };
 
-    // auto pyquen_style = [](TH1* h) {
-    //     h->SetMarkerColor(74);
-    //     h->SetMarkerStyle(47);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto pyquen_style = [](TH1* h) {
+        h->SetMarkerColor(74);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
 
-    hb->style("pp", pp_style);std::cout << __LINE__ << std::endl;
+    hb->style("pp", pp_style);
     hb->style("aa", aa_style);
-    // hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
-    // hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
-    hb->sketch();std::cout << __LINE__ << std::endl;
+    hb->style("jewel", jewel_style);
+    hb->style("pyquen", pyquen_style);
+    hb->sketch();
 
     jewel->Draw("same");
     pyquen->Draw("same");
 
-    p->draw("pdf");std::cout << __LINE__ << std::endl;
+    p->draw("pdf");
 
     in(output, []() {});
 
