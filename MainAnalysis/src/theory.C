@@ -150,11 +150,11 @@ int congratulate(char const* config, char const* output) {
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
     p->stack(jewel_test, "jewel");
-    p->stack(pyquen_test, "pyquen");std::cout << __LINE__ << std::endl;
+    // p->stack(pyquen_test, "pyquen");std::cout << __LINE__ << std::endl;
 
-    for (int i = 1; i <= jewel->GetNbinsX(); ++i) {
-        std::cout << "jewel: " << jewel->GetBinContent(i) << std::endl;
-        std::cout << "pyquen: " << pyquen->GetBinContent(i) << std::endl;
+    for (int i = 1; i <= jewel_test->GetNbinsX(); ++i) {
+        std::cout << "jewel: " << jewel_test->GetBinContent(i) << std::endl;
+        std::cout << "pyquen: " << pyquen_test->GetBinContent(i) << std::endl;
         std::cout << "data: " << (*hist)[0]->GetBinContent(i) << std::endl;
     }
 
@@ -170,22 +170,22 @@ int congratulate(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    auto jewel_style = [](TH1* h) {
-        h->SetMarkerColor(51);
-        h->SetMarkerStyle(39);
-        h->SetMarkerSize(0.60);
-    };
+    // auto jewel_style = [](TH1* h) {
+    //     h->SetMarkerColor(51);
+    //     h->SetMarkerStyle(39);
+    //     h->SetMarkerSize(0.60);
+    // };
 
-    auto pyquen_style = [](TH1* h) {
-        h->SetMarkerColor(74);
-        h->SetMarkerStyle(47);
-        h->SetMarkerSize(0.60);
-    };
+    // auto pyquen_style = [](TH1* h) {
+    //     h->SetMarkerColor(74);
+    //     h->SetMarkerStyle(47);
+    //     h->SetMarkerSize(0.60);
+    // };
 
     hb->style("pp", pp_style);std::cout << __LINE__ << std::endl;
     hb->style("aa", aa_style);
-    hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
-    hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
+    // hb->style("jewel", jewel_style);std::cout << __LINE__ << std::endl;
+    // hb->style("pyquen", pyquen_style);std::cout << __LINE__ << std::endl;
     hb->sketch();std::cout << __LINE__ << std::endl;
 
     jewel->Draw("same");
