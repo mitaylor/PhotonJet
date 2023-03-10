@@ -91,7 +91,7 @@ int narrate(char const* config, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                pho_et = (*pjt->phoEtErNew)[j];
+                auto pho_et = (*pjt->phoEtErNew)[j];
 
                 if (pho_et < photon_pt_min) { continue; }
 
@@ -208,7 +208,7 @@ int narrate(char const* config, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "         p_{T}^{#gamma} > " << photon_pt_min << " GeV";
+    cms += "         p_{T}^{#gamma} > "s << photon_pt_min << " GeV"s;
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
