@@ -35,6 +35,12 @@ int narrate(char const* config, char const* output) {
     auto eta_min = conf->get<std::vector<double>>("eta_min");
     auto eta_max = conf->get<std::vector<double>>("eta_max");
     auto bound_string = conf->get<std::vector<std::string>>("bound_string");
+
+    auto const photon_pt_min = conf->get<float>("photon_pt_min");
+    auto const hovere_max = conf->get<float>("hovere_max");
+    auto const see_min = conf->get<float>("see_min");
+    auto const see_max = conf->get<float>("see_max");
+    auto const iso_max = conf->get<float>("iso_max");
     
     auto rho_range = conf->get<std::vector<double>>("rho_range");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -81,24 +87,32 @@ int narrate(char const* config, char const* output) {
             int64_t leading = -1;
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 40) { continue; }
+                if ((*pjt->phoEt)[j] <= 30) { continue; }
                 if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
-                if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                if ((*pjt->phoEt)[j] > leading_pt) {
+                pho_et = (*pjt->phoEtErNew)[j];
+
+                if (pho_et < photon_pt_min) { continue; }
+
+                if (pho_et > leading_pt) {
                     leading = j;
-                    leading_pt = (*pjt->phoEt)[j];
+                    leading_pt = pho_et;
                 }
             }
 
             if (leading < 0) { continue; }
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
+
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
+                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
+                continue;
+
             if (in_pho_failure_region(pjt, leading)) { continue; }
 
             float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                + (*pjt->pho_hcalRechitIsoR3)[leading]
-                + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > 2.099277) { continue; }
+                    + (*pjt->pho_hcalRechitIsoR3)[leading]
+                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > iso_max) { continue; }
 
             for (size_t j = 0; j < eta_min.size(); ++j) {
                 auto eta_x = static_cast<int64_t>(j);
@@ -130,24 +144,32 @@ int narrate(char const* config, char const* output) {
             int64_t leading = -1;
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 40) { continue; }
+                if ((*pjt->phoEt)[j] <= 30) { continue; }
                 if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
-                if ((*pjt->phoHoverE)[j] > 0.119947) { continue; }
+                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                if ((*pjt->phoEt)[j] > leading_pt) {
+                pho_et = (*pjt->phoEtErNew)[j];
+
+                if (pho_et < photon_pt_min) { continue; }
+
+                if (pho_et > leading_pt) {
                     leading = j;
-                    leading_pt = (*pjt->phoEt)[j];
+                    leading_pt = pho_et;
                 }
             }
 
             if (leading < 0) { continue; }
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > 0.010392) { continue; }
+
+            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
+                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
+                continue;
+
             if (in_pho_failure_region(pjt, leading)) { continue; }
 
             float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                + (*pjt->pho_hcalRechitIsoR3)[leading]
-                + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > 2.099277) { continue; }
+                    + (*pjt->pho_hcalRechitIsoR3)[leading]
+                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
+            if (isolation > iso_max) { continue; }
 
             for (size_t j = 0; j < eta_min.size(); ++j) {
                 for (size_t k = 0; k < dhf.size()-1; ++k) {
@@ -186,7 +208,7 @@ int narrate(char const* config, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "         p_{T}^{#gamma} > 40 GeV";
+    cms += "         p_{T}^{#gamma} > " << photon_pt_min << " GeV";
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };

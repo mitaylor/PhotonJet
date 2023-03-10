@@ -158,12 +158,14 @@ int congratulate(char const* config, char const* output) {
 
     auto jewel_style = [](TH1* h) {
         h->SetMarkerColor(51);
+        h->SetLineColor(51);
         h->SetMarkerStyle(39);
         h->SetMarkerSize(0.60);
     };
 
     auto pyquen_style = [](TH1* h) {
         h->SetMarkerColor(74);
+        h->SetLineColor(74);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
