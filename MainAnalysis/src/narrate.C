@@ -148,7 +148,7 @@ int narrate(char const* config, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                pho_et = (*pjt->phoEtErNew)[j];
+                auto pho_et = (*pjt->phoEtErNew)[j];
 
                 if (pho_et < photon_pt_min) { continue; }
 
