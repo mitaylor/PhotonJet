@@ -28,23 +28,22 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const red = TColor::GetColor("#f2777a");
-static auto const blue = TColor::GetColor("#6699cc");
+static auto const data = TColor::GetColor("#5790fc");
+// static auto const colors[5] = { TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-int congratulate(char const* config, char const* output) {
+int theory(char const* config, char const* output) {
     auto conf = new configurer(config);
 
     auto data_input = conf->get<std::string>("data_input");
     auto figure = conf->get<std::string>("figure");
 
-    auto theory_input = conf->get<std::string>("theory_input");
-    auto jewel_figure = conf->get<std::string>("jewel_figure");
-    auto pyquen_figure = conf->get<std::string>("pyquen_figure");
+    auto theory_inputs = conf->get<std::vector<std::string>>("theory_inputs");
+    auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
 
     auto tag = conf->get<std::string>("tag");
     auto prefix = conf->get<std::string>("prefix");
@@ -76,18 +75,20 @@ int congratulate(char const* config, char const* output) {
     hist->apply([&](TH1* h, int64_t index) { links[h] = (*syst)[index]; });
 
     /* get theory predictions */ 
-    TFile* file_theory = new TFile(theory_input.data(), "read");
-    auto jewel = (TH1D*) file_theory->Get(jewel_figure.data());
-    auto pyquen = (TH1D*) file_theory->Get(pyquen_figure.data());
+    std::vector<TFile*> theory_files(10);
+    std::vector<TH1*> theory_hists(10);
 
-    file_theory->Close();
+    for (size_t i = 0; i < theory_inputs.size(); ++i) {
+        theory_files[i] = new TFile(theory_inputs[i].data(), "read");
+        theory_hists[i] = (TH1*) theory_files[i]->Get(theory_figures[i].data());
+    }
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
         if (links.count(h)) {
             TGraph* gr = new TGraph();
             gr->SetFillStyle(1001);
-            gr->SetFillColorAlpha(tag == "aa" ? red : blue, 0.48);
+            gr->SetFillColorAlpha(data, 0.48);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 if (h->GetBinError(i) == 0) continue;
@@ -109,13 +110,15 @@ int congratulate(char const* config, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("system", "pp", "aa", "jewel", "pyquen");
+    hb->category("system", "pp", "aa", "jewel", "pyquen", "pyquen_wide", "pythia");
     hb->alias("aa", "PbPb 0-10%");
     hb->alias("pp", "pp");
     if (tag == "aa") hb->alias("jewel", "Jewel PbPb 0-10%");
     if (tag == "pp") hb->alias("jewel", "Jewel pp");
-    if (tag == "aa") hb->alias("pyquen", "Pyquen PbPb 0-10%");
+    if (tag == "aa") hb->alias("pyquen_wide", "Pyquen Wide PbPb 0-10%");
     if (tag == "pp") hb->alias("pyquen", "Pyquen pp");
+    if (tag == "aa") hb->alias("pyquen", "Pyquen PbPb 0-10%");
+    if (tag == "pp") hb->alias("pythia", "PYTHIA pp");
     
 
     auto kinematics = [&](int64_t index) {
@@ -141,8 +144,10 @@ int congratulate(char const* config, char const* output) {
     /* draw histograms with uncertainties */
     if (tag == "aa") p->add((*hist)[3], "aa");
     if (tag == "pp") p->add((*hist)[0], "pp");
-    p->stack(jewel, "jewel");
-    p->stack(pyquen, "pyquen");
+
+    for (size_t i = 0; i < theory_inputs.size(); ++i) {
+        p->stack(theory_hists[i], theory_legends[i]);
+    }
 
     auto pp_style = [](TH1* h) {
         h->SetLineColor(1);
@@ -152,6 +157,7 @@ int congratulate(char const* config, char const* output) {
 
     auto aa_style = [](TH1* h) {
         h->SetLineColor(1);
+        h->SetMarkerColor(51);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
     };
@@ -176,9 +182,6 @@ int congratulate(char const* config, char const* output) {
     hb->style("pyquen", pyquen_style);
     hb->sketch();
 
-    jewel->Draw("same");
-    pyquen->Draw("same");
-
     p->draw("pdf");
 
     in(output, []() {});
@@ -188,7 +191,7 @@ int congratulate(char const* config, char const* output) {
 
 int main(int argc, char* argv[]) {
     if (argc == 3)
-        return congratulate(argv[1], argv[2]);
+        return theory(argv[1], argv[2]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
