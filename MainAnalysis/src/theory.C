@@ -158,29 +158,30 @@ int theory(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    // auto jewel_style = [](TH1* h) {
-    //     h->SetMarkerColor(colors[0]);
-    //     h->SetLineColor(colors[0]);
-    //     h->SetFillColorAlpha(colors[0], 0.25);
-    //     h->SetMarkerStyle(20);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto jewel_style = [](TH1* h) {
+        h->SetMarkerColor(colors[0]);
+        h->SetLineColor(colors[0]);
+        h->SetFillColorAlpha(colors[0], 0.25);
+        h1->SetFillStyle(3003);
+        h->SetMarkerStyle(20);
+        h->SetMarkerSize(0.60);
+    };
 
-    // auto pyquen_style = [](TH1* h) {
-    //     h->SetMarkerColor(colors[1]);
-    //     h->SetLineColor(colors[1]);
-    //     h->SetFillColorAlpha(colors[1], 0.25);
-    //     h->SetMarkerStyle(47);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto pyquen_style = [](TH1* h) {
+        h->SetMarkerColor(colors[1]);
+        h->SetLineColor(colors[1]);
+        h->SetFillColorAlpha(colors[1], 0.25);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
 
-    // auto pyquen_wide_style = [](TH1* h) {
-    //     h->SetMarkerColor(colors[2]);
-    //     h->SetLineColor(colors[2]);
-    //     h->SetFillColorAlpha(colors[2], 0.25);
-    //     h->SetMarkerStyle(47);
-    //     h->SetMarkerSize(0.60);
-    // };
+    auto pyquen_wide_style = [](TH1* h) {
+        h->SetMarkerColor(colors[2]);
+        h->SetLineColor(colors[2]);
+        h->SetFillColorAlpha(colors[2], 0.25);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
 
     auto pythia_style = [](TH1* h) {
         h->SetMarkerColor(colors[3]);
