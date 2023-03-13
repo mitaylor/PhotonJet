@@ -74,7 +74,7 @@ auto coordinates = [](float x0, float x1, float y1, float dy) {
 
 auto default_legend_style = [](TLegend* l, int font, float size) {
     l->SetBorderSize(0);
-    // l->SetFillStyle(0);
+    l->SetFillStyle(0);
     l->SetTextFont(font);
     l->SetTextSize(size);
 };
