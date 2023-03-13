@@ -28,8 +28,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const data = TColor::GetColor("#5790fc");
-// static auto const colors[5] = { TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
+static auto const data = TColor::GetColor("#000000");
+static auto const colors[6] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -159,29 +159,30 @@ int theory(char const* config, char const* output) {
     };
 
     auto jewel_style = [](TH1* h) {
-        h->SetMarkerColor(51);
-        h->SetLineColor(51);
-        h->SetMarkerStyle(39);
+        h->SetMarkerColor(colors[0]);
+        h->SetLineColor(colors[0]);
+        h->SetFillColorAlpha(colors[0], 0.25);
+        h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
     };
 
     auto pyquen_style = [](TH1* h) {
         h->SetMarkerColor(74);
-        h->SetLineColor(74);
+        h->SetLineColor(colors[1]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
 
     auto pyquen_wide_style = [](TH1* h) {
         h->SetMarkerColor(74);
-        h->SetLineColor(74);
+        h->SetLineColor(colors[2]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
 
     auto pythia_style = [](TH1* h) {
         h->SetMarkerColor(74);
-        h->SetLineColor(74);
+        h->SetLineColor(colors[3]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
