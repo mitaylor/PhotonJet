@@ -148,7 +148,7 @@ int theory(char const* config, char const* output) {
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         p->stack(theory_hists[i], theory_legends[i]);
-        p->adjust(theory_hists[i], "LE", "L");
+        p->adjust(theory_hists[i], "LE", "PL");
     }
 
     auto data_style = [](TH1* h) {
