@@ -162,7 +162,7 @@ int theory(char const* config, char const* output) {
         h->SetMarkerColor(colors[0]);
         h->SetLineColor(colors[0]);
         h->SetFillColorAlpha(colors[0], 0.25);
-        h1->SetFillStyle(3003);
+        h->SetFillStyle(3003);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
     };
