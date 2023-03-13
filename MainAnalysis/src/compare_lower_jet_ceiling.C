@@ -36,6 +36,7 @@ int compare_after_unfolding(char const* config, const char* output) {
 
     auto input_new = conf->get<std::string>("input_new");
     auto input_old = conf->get<std::string>("input_old");
+    auto tag = conf->get<std::string>("tag");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -48,13 +49,13 @@ int compare_after_unfolding(char const* config, const char* output) {
     TFile* f_new = new TFile(input_new.data(), "read");
     TFile* f_old = new TFile(input_old.data(), "read");
 
-    auto h_new_dr = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold0");
+    auto h_new_dr = new history<TH1F>(f_new, tag + "_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
     h_new_dr->rename("aa_new_dr");
-    auto h_old_dr = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold0");
+    auto h_old_dr = new history<TH1F>(f_old, tag + "_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
     h_old_dr->rename("aa_old_dr");
-    auto h_new_jtpt = new history<TH1F>(f_new, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold1");
+    auto h_new_jtpt = new history<TH1F>(f_new, tag + "_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
     h_new_jtpt->rename("aa_new_jtpt");
-    auto h_old_jtpt = new history<TH1F>(f_old, "aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold1");
+    auto h_old_jtpt = new history<TH1F>(f_old, tag + "_nominal_s_pure_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
     h_old_jtpt->rename("aa_old_jtpt");
 
     normalise_to_unity(h_new_dr, h_old_dr, h_new_jtpt, h_old_jtpt);
