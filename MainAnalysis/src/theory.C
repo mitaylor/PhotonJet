@@ -158,29 +158,29 @@ int theory(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    auto jewel_style = [](TH1* h) {
-        h->SetMarkerColor(colors[0]);
-        h->SetLineColor(colors[0]);
-        h->SetFillColorAlpha(colors[0], 0.25);
-        h->SetMarkerStyle(20);
-        h->SetMarkerSize(0.60);
-    };
+    // auto jewel_style = [](TH1* h) {
+    //     h->SetMarkerColor(colors[0]);
+    //     h->SetLineColor(colors[0]);
+    //     h->SetFillColorAlpha(colors[0], 0.25);
+    //     h->SetMarkerStyle(20);
+    //     h->SetMarkerSize(0.60);
+    // };
 
-    auto pyquen_style = [](TH1* h) {
-        h->SetMarkerColor(colors[1]);
-        h->SetLineColor(colors[1]);
-        h->SetFillColorAlpha(colors[1], 0.25);
-        h->SetMarkerStyle(47);
-        h->SetMarkerSize(0.60);
-    };
+    // auto pyquen_style = [](TH1* h) {
+    //     h->SetMarkerColor(colors[1]);
+    //     h->SetLineColor(colors[1]);
+    //     h->SetFillColorAlpha(colors[1], 0.25);
+    //     h->SetMarkerStyle(47);
+    //     h->SetMarkerSize(0.60);
+    // };
 
-    auto pyquen_wide_style = [](TH1* h) {
-        h->SetMarkerColor(colors[2]);
-        h->SetLineColor(colors[2]);
-        h->SetFillColorAlpha(colors[2], 0.25);
-        h->SetMarkerStyle(47);
-        h->SetMarkerSize(0.60);
-    };
+    // auto pyquen_wide_style = [](TH1* h) {
+    //     h->SetMarkerColor(colors[2]);
+    //     h->SetLineColor(colors[2]);
+    //     h->SetFillColorAlpha(colors[2], 0.25);
+    //     h->SetMarkerStyle(47);
+    //     h->SetMarkerSize(0.60);
+    // };
 
     auto pythia_style = [](TH1* h) {
         h->SetMarkerColor(colors[3]);
@@ -192,9 +192,9 @@ int theory(char const* config, char const* output) {
 
     hb->style("pp", data_style);
     hb->style("aa", data_style);
-    hb->style("jewel", jewel_style);
-    hb->style("pyquen", pyquen_style);
-    hb->style("pyquen_wide", pyquen_wide_style);
+    hb->style("jewel", pythia_style);
+    hb->style("pyquen", pythia_style);
+    hb->style("pyquen_wide", pythia_style);
     hb->style("pythia", pythia_style);
     hb->sketch();
 
