@@ -94,7 +94,7 @@ int jubilate(char const* config, char const* output) {
     a_mix_pjet_f_jpt->rename("a_raw_mix_pjet_f_jpt");
 
     /* shrink to remove overflow photon pt bin */
-    auto shape = nevt->shape();
+    auto shape = n_nevt->shape();
     shape[0] = shape[0] - 1;
 
     auto wrap = [&](history<TH1F>*& h) {
