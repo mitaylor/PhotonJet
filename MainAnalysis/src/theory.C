@@ -28,8 +28,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static TColor const data = TColor::GetColor("#000000");
-static TColor const colors[6] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
+static int const data = TColor::GetColor("#000000");
+static int const colors[6] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
