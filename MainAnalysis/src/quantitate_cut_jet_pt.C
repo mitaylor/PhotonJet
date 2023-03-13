@@ -199,7 +199,7 @@ int quantitate(char const* config, char const* output) {
 
     /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
     std::vector<int64_t> osr{ 0, 0, 1, 2 };
-    std::vector<int64_t> osg{ 0, 0, 3, 1 };
+    std::vector<int64_t> osg{ 0, 0, 1, 3 };
 
     if (fine) {
         for (auto os : osr) os *= 2;
