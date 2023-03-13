@@ -70,11 +70,11 @@ int compare_before_unfolding(char const* config, const char* output) {
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.135, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->SetTextSize(12);
+            l->DrawLatexNDC(0.865, 0.70, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.65, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
 
