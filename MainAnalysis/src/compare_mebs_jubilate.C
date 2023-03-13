@@ -1,0 +1,182 @@
+#include "../include/lambdas.h"
+#include "../include/specifics.h"
+
+#include "../git/config/include/configurer.h"
+
+#include "../git/history/include/interval.h"
+#include "../git/history/include/multival.h"
+#include "../git/history/include/history.h"
+
+#include "../git/paper-and-pencil/include/paper.h"
+#include "../git/paper-and-pencil/include/pencil.h"
+
+#include "../git/tricks-and-treats/include/overflow_angles.h"
+#include "../git/tricks-and-treats/include/trunk.h"
+
+#include "TFile.h"
+#include "TH1.h"
+
+using namespace std::literals::string_literals;
+using namespace std::placeholders;
+
+template <typename... T>
+void scale_bin_width(T&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1., "width"); }), 0)... };
+}
+ 
+template <typename... T>
+void normalise_to_unity(T&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1. / obj->Integral("width")); }), 0)... };
+}
+
+int jubilate(char const* config, char const* output) {
+    auto conf = new configurer(config);
+
+    auto input_nominal = conf->get<std::string>("input_nominal");
+    auto input_altered = conf->get<std::string>("input_altered");
+
+    auto system = conf->get<std::string>("system");
+    auto tag = conf->get<std::string>("tag");
+
+    auto rdr = conf->get<std::vector<float>>("dr_range");
+    auto rjpt = conf->get<std::vector<float>>("jpt_range");
+
+    auto dpt = conf->get<std::vector<float>>("pt_diff");
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
+
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto background = conf->get<bool>("background");
+
+    auto is_paper = conf->get<bool>("paper");
+
+    /* convert to integral angle units (cast to double) */
+
+    auto ihf = new interval(dhf);
+
+    /* load history objects */
+    TFile* fn = new TFile(input.data(), "read");
+
+    TH1::SetDefaultSumw2();
+
+    history<TH1F>* n_nevt;
+    history<TH1F>* n_pjet_f_dr;
+    history<TH1F>* n_pjet_f_jpt;
+    history<TH1F>* n_mix_pjet_f_dr;
+    history<TH1F>* n_mix_pjet_f_jpt;
+
+    history<TH1F>* a_nevt;
+    history<TH1F>* a_pjet_f_dr;
+    history<TH1F>* a_pjet_f_jpt;
+    history<TH1F>* a_mix_pjet_f_dr;
+    history<TH1F>* a_mix_pjet_f_jpt;
+
+    n_nevt = new history<TH1F>(fn, "raw_nevt");
+    n_nevt->rename("n_raw_nevt");
+    n_pjet_f_dr = new history<TH1F>(fn, "raw_pjet_f_dr");
+    n_pjet_f_dr->rename("n_raw_pjet_f_dr");
+    n_pjet_f_jpt = new history<TH1F>(fn, "raw_pjet_f_jpt");
+    n_pjet_f_jpt->rename("n_raw_pjet_f_jpt");
+    n_mix_pjet_f_dr = new history<TH1F>(fn, "raw_mix_pjet_f_dr");
+    n_mix_pjet_f_dr->rename("n_raw_mix_pjet_f_dr");
+    n_mix_pjet_f_jpt = new history<TH1F>(v, "raw_mix_pjet_f_jpt");
+    n_mix_pjet_f_jpt->rename("n_raw_mix_pjet_f_jpt");
+
+    a_nevt = new history<TH1F>(fn, "raw_nevt");
+    a_nevt->rename("a_raw_nevt");
+    a_pjet_f_dr = new history<TH1F>(fn, "raw_pjet_f_dr");
+    a_pjet_f_dr->rename("a_raw_pjet_f_dr");
+    a_pjet_f_jpt = new history<TH1F>(fn, "raw_pjet_f_jpt");
+    a_pjet_f_jpt->rename("a_raw_pjet_f_jpt");
+    a_mix_pjet_f_dr = new history<TH1F>(fn, "raw_mix_pjet_f_dr");
+    a_mix_pjet_f_dr->rename("a_raw_mix_pjet_f_dr");
+    a_mix_pjet_f_jpt = new history<TH1F>(v, "raw_mix_pjet_f_jpt");
+    a_mix_pjet_f_jpt->rename("a_raw_mix_pjet_f_jpt");
+
+    /* shrink to remove overflow photon pt bin */
+    auto shape = nevt->shape();
+    shape[0] = shape[0] - 1;
+
+    auto wrap = [&](history<TH1F>*& h) {
+        h = h->shrink("s", shape, { 0, 0 }); };
+
+    wrap(n_nevt);
+    wrap(n_pjet_f_dr);
+    wrap(n_pjet_f_jpt);
+    wrap(n_mix_pjet_f_dr);
+    wrap(n_mix_pjet_f_jpt);
+
+    wrap(a_nevt);
+    wrap(a_pjet_f_dr);
+    wrap(a_pjet_f_jpt);
+    wrap(a_mix_pjet_f_dr);
+    wrap(a_mix_pjet_f_jpt);
+
+    /* draw figures */
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
+
+    auto pthf_info = [&](int64_t index) {
+        stack_text(index, 0.75, 0.04, n_nevt, pt_info, hf_info); };
+
+    auto hb = new pencil();
+    hb->category("system", "mebs_nominal", "mebs_altered");
+    hb->category("type", "raw", "mix");
+    hb->alias("mebs_nominal", "10% HF Energy Matching");
+    hb->alias("mebs_altered", "Subtracted pfEnergy Matching");
+
+    hb->set_binary("type");
+
+    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
+    cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6, ";
+    cms += "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
+
+    auto c3 = new paper(tag + "_mebs_mixing_dr_d_pthf", hb);
+    apply_style(c3, cms, system_tag, -1., 24.);
+    c3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
+    c3->accessory(pthf_info);
+    c3->divide(-1 , ihf->size());
+
+    auto c4 = new paper(tag + "_mebs_mixing_jpt_d_pthf", hb);
+    apply_style(c4, cms, system_tag, -0.007, 0.07);
+    c4->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
+    c4->accessory(pthf_info);
+    c4->divide(-1 , ihf->size());
+
+    for (int64_t i = 0; i < n_nevt->size(); ++i) {
+        c3->add((*n_pjet_f_dr)[i], "mebs_nominal", "raw");
+        c3->stack((*n_mix_pjet_f_dr)[i], "mebs_nominal", "mix");
+        c3->stack((*a_pjet_f_dr)[i], "mebs_altered", "raw");
+        c3->stack((*a_mix_pjet_f_dr)[i], "mebs_altered", "mix");
+
+        c4->add((*n_pjet_f_jpt)[i], "mebs_nominal", "raw");
+        c4->stack((*n_mix_pjet_f_jpt)[i], "mebs_nominal", "mix");
+        c4->stack((*a_pjet_f_jpt)[i], "mebs_altered", "raw");
+        c4->stack((*a_mix_pjet_f_jpt)[i], "mebs_altered", "mix");
+    }
+
+    hb->sketch();
+
+    for (auto const& c : { c3, c4 })
+        c->draw("pdf");
+
+    /* save output */
+    in(output, []() {});
+
+    return 0;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc == 3)
+        return jubilate(argv[1], argv[2]);
+
+    printf("usage: %s [config] [output]\n", argv[0]);
+    return 1;
+}
