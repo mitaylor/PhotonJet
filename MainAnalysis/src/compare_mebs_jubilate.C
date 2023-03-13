@@ -48,8 +48,6 @@ int jubilate(char const* config, char const* output) {
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto background = conf->get<bool>("background");
-
     auto is_paper = conf->get<bool>("paper");
 
     /* convert to integral angle units (cast to double) */
