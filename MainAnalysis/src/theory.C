@@ -44,6 +44,7 @@ int theory(char const* config, char const* output) {
 
     auto theory_inputs = conf->get<std::vector<std::string>>("theory_inputs");
     auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
+    auto theory_legends = conf->get<std::vector<std::string>>("theory_legends");
 
     auto tag = conf->get<std::string>("tag");
     auto prefix = conf->get<std::string>("prefix");
