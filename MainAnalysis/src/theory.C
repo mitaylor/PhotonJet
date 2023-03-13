@@ -193,9 +193,9 @@ int theory(char const* config, char const* output) {
 
     hb->style("pp", data_style);
     hb->style("aa", data_style);
-    hb->style("jewel", pythia_style);
-    hb->style("pyquen", pythia_style);
-    hb->style("pyquen_wide", pythia_style);
+    hb->style("jewel", jewel_style);
+    hb->style("pyquen", pyquen_style);
+    hb->style("pyquen_wide", pyquen_wide_style);
     hb->style("pythia", pythia_style);
     hb->sketch();
 
