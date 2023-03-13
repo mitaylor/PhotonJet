@@ -148,7 +148,7 @@ int theory(char const* config, char const* output) {
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         p->stack(theory_hists[i], theory_legends[i]);
-        p->adjust(theory_hists[i], "3", "f");
+        // p->adjust(theory_hists[i], "3", "f");
     }
 
     auto data_style = [](TH1* h) {
@@ -167,21 +167,21 @@ int theory(char const* config, char const* output) {
     };
 
     auto pyquen_style = [](TH1* h) {
-        h->SetMarkerColor(74);
+        h->SetMarkerColor(colors[1]);
         h->SetLineColor(colors[1]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
 
     auto pyquen_wide_style = [](TH1* h) {
-        h->SetMarkerColor(74);
+        h->SetMarkerColor(colors[2]);
         h->SetLineColor(colors[2]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
 
     auto pythia_style = [](TH1* h) {
-        h->SetMarkerColor(74);
+        h->SetMarkerColor(colors[3]);
         h->SetLineColor(colors[3]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
@@ -193,6 +193,11 @@ int theory(char const* config, char const* output) {
     hb->style("pyquen", pyquen_style);
     hb->style("pyquen_wide", pyquen_wide_style);
     hb->style("pythia", pythia_style);
+
+    for (size_t i = 0; i < theory_inputs.size(); ++i) {
+        p->adjust(theory_hists[i], "3", "f");
+    }
+
     hb->sketch();
 
     p->draw("pdf");
