@@ -128,8 +128,8 @@ int theory(char const* config, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.70, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.65, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, 0.65, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.60, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
     };
 
@@ -148,17 +148,12 @@ int theory(char const* config, char const* output) {
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         p->stack(theory_hists[i], theory_legends[i]);
+        p->adjust(theory_hists[i], "3", "f");
     }
 
-    auto pp_style = [](TH1* h) {
+    auto data_style = [](TH1* h) {
         h->SetLineColor(1);
-        h->SetMarkerStyle(25);
-        h->SetMarkerSize(0.60);
-    };
-
-    auto aa_style = [](TH1* h) {
-        h->SetLineColor(1);
-        h->SetMarkerColor(51);
+        h->SetMarkerColor(data);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
     };
@@ -177,8 +172,22 @@ int theory(char const* config, char const* output) {
         h->SetMarkerSize(0.60);
     };
 
-    hb->style("pp", pp_style);
-    hb->style("aa", aa_style);
+    auto pyquen_wide_style = [](TH1* h) {
+        h->SetMarkerColor(74);
+        h->SetLineColor(74);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
+
+    auto pythia_style = [](TH1* h) {
+        h->SetMarkerColor(74);
+        h->SetLineColor(74);
+        h->SetMarkerStyle(47);
+        h->SetMarkerSize(0.60);
+    };
+
+    hb->style("pp", data_style);
+    hb->style("aa", data_style);
     hb->style("jewel", jewel_style);
     hb->style("pyquen", pyquen_style);
     hb->sketch();
