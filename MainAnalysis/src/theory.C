@@ -148,7 +148,7 @@ int theory(char const* config, char const* output) {
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         p->stack(theory_hists[i], theory_legends[i]);
-        p->adjust(theory_hists[i], "LF2", "pl");
+        p->adjust(theory_hists[i], "LE", "L");
     }
 
     auto data_style = [](TH1* h) {
@@ -161,7 +161,6 @@ int theory(char const* config, char const* output) {
     auto jewel_style = [](TH1* h) {
         h->SetMarkerColor(colors[0]);
         h->SetLineColor(colors[0]);
-        h->SetFillColorAlpha(colors[0], 0.25);
         h->SetFillStyle(3003);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
@@ -170,7 +169,6 @@ int theory(char const* config, char const* output) {
     auto pyquen_style = [](TH1* h) {
         h->SetMarkerColor(colors[1]);
         h->SetLineColor(colors[1]);
-        h->SetFillColorAlpha(colors[1], 0.25);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
@@ -178,7 +176,6 @@ int theory(char const* config, char const* output) {
     auto pyquen_wide_style = [](TH1* h) {
         h->SetMarkerColor(colors[2]);
         h->SetLineColor(colors[2]);
-        h->SetFillColorAlpha(colors[2], 0.25);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
@@ -186,7 +183,6 @@ int theory(char const* config, char const* output) {
     auto pythia_style = [](TH1* h) {
         h->SetMarkerColor(colors[3]);
         h->SetLineColor(colors[3]);
-        h->SetFillColorAlpha(colors[3], 0.25);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
     };
