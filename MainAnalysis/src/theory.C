@@ -28,7 +28,9 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const data = TColor::GetColor("#000000");
+static TColor const data = TColor::GetColor("#000000");
+static TColor const colors[6] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
+
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
@@ -148,8 +150,6 @@ int theory(char const* config, char const* output) {
         p->stack(theory_hists[i], theory_legends[i]);
         p->adjust(theory_hists[i], "3", "f");
     }
-
-    auto const colors[6] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"),  TColor::GetColor("#e42536"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
 
     auto data_style = [](TH1* h) {
         h->SetLineColor(1);
