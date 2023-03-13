@@ -127,7 +127,7 @@ int theory(char const* config, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
+            l->SetTextSize(10);
             l->DrawLatexNDC(0.865, 0.65, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
             l->DrawLatexNDC(0.865, 0.60, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
         }
@@ -163,7 +163,7 @@ int theory(char const* config, char const* output) {
         h->SetLineColor(colors[0]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[0]);
-        h->SetMarkerStyle(20);
+        h->SetMarkerStyle(22);
         h->SetMarkerSize(0.60);
     };
 
@@ -172,7 +172,7 @@ int theory(char const* config, char const* output) {
         h->SetLineColor(colors[1]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[1]);
-        h->SetMarkerStyle(47);
+        h->SetMarkerStyle(48);
         h->SetMarkerSize(0.60);
     };
 
@@ -190,7 +190,7 @@ int theory(char const* config, char const* output) {
         h->SetLineColor(colors[3]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[3]);
-        h->SetMarkerStyle(47);
+        h->SetMarkerStyle(45);
         h->SetMarkerSize(0.60);
     };
 
