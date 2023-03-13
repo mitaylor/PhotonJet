@@ -61,7 +61,7 @@ int compare_after_unfolding(char const* config, const char* output) {
 
     
     /* set up figures */
-    auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
+    auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     auto hf_info = [&](int64_t index) {
