@@ -55,7 +55,8 @@ int jubilate(char const* config, char const* output) {
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    TFile* fn = new TFile(input.data(), "read");
+    TFile* fn = new TFile(input_nominal.data(), "read");
+    TFile* fa = new TFile(input_altered.data(), "read");
 
     TH1::SetDefaultSumw2();
 
@@ -79,18 +80,18 @@ int jubilate(char const* config, char const* output) {
     n_pjet_f_jpt->rename("n_raw_pjet_f_jpt");
     n_mix_pjet_f_dr = new history<TH1F>(fn, "raw_mix_pjet_f_dr");
     n_mix_pjet_f_dr->rename("n_raw_mix_pjet_f_dr");
-    n_mix_pjet_f_jpt = new history<TH1F>(v, "raw_mix_pjet_f_jpt");
+    n_mix_pjet_f_jpt = new history<TH1F>(fn, "raw_mix_pjet_f_jpt");
     n_mix_pjet_f_jpt->rename("n_raw_mix_pjet_f_jpt");
 
-    a_nevt = new history<TH1F>(fn, "raw_nevt");
+    a_nevt = new history<TH1F>(fa, "raw_nevt");
     a_nevt->rename("a_raw_nevt");
-    a_pjet_f_dr = new history<TH1F>(fn, "raw_pjet_f_dr");
+    a_pjet_f_dr = new history<TH1F>(fa, "raw_pjet_f_dr");
     a_pjet_f_dr->rename("a_raw_pjet_f_dr");
-    a_pjet_f_jpt = new history<TH1F>(fn, "raw_pjet_f_jpt");
+    a_pjet_f_jpt = new history<TH1F>(fa, "raw_pjet_f_jpt");
     a_pjet_f_jpt->rename("a_raw_pjet_f_jpt");
-    a_mix_pjet_f_dr = new history<TH1F>(fn, "raw_mix_pjet_f_dr");
+    a_mix_pjet_f_dr = new history<TH1F>(fa, "raw_mix_pjet_f_dr");
     a_mix_pjet_f_dr->rename("a_raw_mix_pjet_f_dr");
-    a_mix_pjet_f_jpt = new history<TH1F>(v, "raw_mix_pjet_f_jpt");
+    a_mix_pjet_f_jpt = new history<TH1F>(fa, "raw_mix_pjet_f_jpt");
     a_mix_pjet_f_jpt->rename("a_raw_mix_pjet_f_jpt");
 
     /* shrink to remove overflow photon pt bin */
