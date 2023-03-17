@@ -62,13 +62,13 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf);
 
     /* set histogram contents */
-    for (int64_t i = 0; i < ihf.size(); ++i) {
+    for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
             auto index = mpthf->index_for(x{j, i});
-            (*photon_pt_data)[i]->SetBinContent((*h_data_nevt)[index]->GetBinContent());
-            (*photon_pt_data)[i]->SetBinError((*h_data_nevt)[index]->GetBinError());
-            (*photon_pt_mc)[i]->SetBinContent((*h_mc_nevt)[index]->GetBinContent());
-            (*photon_pt_mc)[i]->SetBinError((*h_mc_nevt)[index]->GetBinError());
+            (*photon_pt_data)[i]->SetBinContent((*h_data_nevt)[index]->GetBinContent(1));
+            (*photon_pt_data)[i]->SetBinError((*h_data_nevt)[index]->GetBinError(1));
+            (*photon_pt_mc)[i]->SetBinContent((*h_mc_nevt)[index]->GetBinContent(1));
+            (*photon_pt_mc)[i]->SetBinError((*h_mc_nevt)[index]->GetBinError(1));
         }
     }
 
