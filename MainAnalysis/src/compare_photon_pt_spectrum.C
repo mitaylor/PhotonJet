@@ -65,11 +65,12 @@ std::cout << (*photon_pt_data)[0]->GetNbinsX() << " " << ipt->size() << std::end
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
+            std::cout << i << " " << j << std::endl;
             auto index = mpthf->index_for(x{j, i});
-            (*photon_pt_data)[i]->SetBinContent(j, (*h_data_nevt)[index]->GetBinContent(1));
-            (*photon_pt_data)[i]->SetBinError(j, (*h_data_nevt)[index]->GetBinError(1));
-            (*photon_pt_mc)[i]->SetBinContent(j, (*h_mc_nevt)[index]->GetBinContent(1));
-            (*photon_pt_mc)[i]->SetBinError(j, (*h_mc_nevt)[index]->GetBinError(1));
+            (*photon_pt_data)[i]->SetBinContent(j+1, (*h_data_nevt)[index]->GetBinContent(1));
+            (*photon_pt_data)[i]->SetBinError(j+1, (*h_data_nevt)[index]->GetBinError(1));
+            (*photon_pt_mc)[i]->SetBinContent(j+1, (*h_mc_nevt)[index]->GetBinContent(1));
+            (*photon_pt_mc)[i]->SetBinError(j+1, (*h_mc_nevt)[index]->GetBinError(1));
         }
     }
 std::cout << __LINE__ << std::endl;
