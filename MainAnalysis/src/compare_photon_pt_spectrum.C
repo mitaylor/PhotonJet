@@ -28,7 +28,7 @@ void title(std::function<void(TH1*)> f, T*&... args) {
 template <typename... T>
 void normalise_to_unity(T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1. / obj->Integral("width")); }), 0)... };
+        obj->Scale(1. / obj->Integral()); }), 0)... };
 }
 
 int compare_photon_pt_spectrum(char const* config, const char* output) {
@@ -60,13 +60,10 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 
     auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf->size());
     auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf->size());
-std::cout << __LINE__ << std::endl;
-std::cout << (*photon_pt_data)[0]->GetNbinsX() << " " << ipt->size() << std::endl;
+
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
-            std::cout << i << " " << j << std::endl;
-            std::cout << mpthf->index_for(x{j, i}) << std::endl;
             auto index = mpthf->index_for(x{j, i});
             (*photon_pt_data)[i]->SetBinContent(j+1, (*h_data_nevt)[index]->GetBinContent(1));
             (*photon_pt_data)[i]->SetBinError(j+1, (*h_data_nevt)[index]->GetBinError(1));
@@ -74,16 +71,16 @@ std::cout << (*photon_pt_data)[0]->GetNbinsX() << " " << ipt->size() << std::end
             (*photon_pt_mc)[i]->SetBinError(j+1, (*h_mc_nevt)[index]->GetBinError(1));
         }
     }
-std::cout << __LINE__ << std::endl;
+
     normalise_to_unity(photon_pt_data, photon_pt_mc);
-std::cout << __LINE__ << std::endl;
+
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
-std::cout << __LINE__ << std::endl;
+
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.70, "Cent. %i - %i%%", dcent, true); };
-std::cout << __LINE__ << std::endl;
+
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             TLatex* l = new TLatex();
@@ -93,7 +90,7 @@ std::cout << __LINE__ << std::endl;
             l->DrawLatexNDC(0.865, 0.70, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
         }
     };
-std::cout << __LINE__ << std::endl;
+
     auto hb = new pencil();
     hb->category("type", "data", "mc");
 
