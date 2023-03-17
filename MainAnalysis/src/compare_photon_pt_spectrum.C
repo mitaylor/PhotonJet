@@ -99,7 +99,7 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     if (tag == "aa") hb->alias("mc", "PbPb MC");
     else             hb->alias("mc", "pp MC");
 
-    auto p1 = new paper(tag + "_photon_pt_comparison", hb);
+    auto p1 = new paper("photon_pt_comparison_" + tag, hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
