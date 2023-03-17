@@ -66,6 +66,7 @@ std::cout << (*photon_pt_data)[0]->GetNbinsX() << " " << ipt->size() << std::end
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
             std::cout << i << " " << j << std::endl;
+            std::cout << mpthf->index_for(x{j, i}) << std::endl;
             auto index = mpthf->index_for(x{j, i});
             (*photon_pt_data)[i]->SetBinContent(j+1, (*h_data_nevt)[index]->GetBinContent(1));
             (*photon_pt_data)[i]->SetBinError(j+1, (*h_data_nevt)[index]->GetBinError(1));
