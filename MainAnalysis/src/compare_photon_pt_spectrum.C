@@ -94,8 +94,10 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto hb = new pencil();
     hb->category("type", "data", "mc");
 
-    hb->alias("data", tag + " Data");
-    hb->alias("mc", tag + " MC");
+    if (tag == "aa") hb->alias("data", "PbPb Data");
+    else             hb->alias("data", "pp Data");
+    if (tag == "aa") hb->alias("mc", "PbPb MC");
+    else             hb->alias("mc", "pp MC");
 
     auto p1 = new paper(tag + "_photon_pt_comparison", hb);
     p1->divide(ihf->size(), -1);
