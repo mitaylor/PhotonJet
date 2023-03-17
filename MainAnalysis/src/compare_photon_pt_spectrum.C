@@ -61,7 +61,7 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf->size());
     auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf->size());
 std::cout << __LINE__ << std::endl;
-std::cout << (*photon_pt_data)[i]->GetNbinsX() << " " << dpt->size() << std::endl;
+std::cout << (*photon_pt_data)[i]->GetNbinsX() << " " << ipt->size() << std::endl;
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
