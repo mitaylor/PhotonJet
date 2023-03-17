@@ -45,43 +45,6 @@ int populate(char const* config, char const* output) {
     auto group = conf->get<std::string>("group");
     auto labels = conf->get<std::vector<std::string>>("labels");
 
-    // auto rjpt = conf->get<std::vector<float>>("jpt_range");
-    // auto rdphi = conf->get<std::vector<float>>("dphi_range");
-    // auto rdr = conf->get<std::vector<float>>("dr_range");
-
-    // auto rrdr = conf->get<std::vector<float>>("rdr_range");
-    // auto rrdphi = conf->get<std::vector<float>>("rdphi_range");
-    // auto rrpt = conf->get<std::vector<float>>("rpt_range");
-
-    // auto dpt = conf->get<std::vector<float>>("pt_diff");
-    // auto dhf = conf->get<std::vector<float>>("hf_diff");
-
-    /* convert to integral angle units (cast to double) */
-    // convert_in_place_pi(rdphi);
-
-    // auto ipt = new interval(dpt);
-    // auto ihf = new interval(dhf);
-
-    // auto mpthf = new multival(dpt, dhf);
-
-    // auto incl = new interval(""s, 1, 0.f, 9999.f);
-    // auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
-    // auto idr = new interval("#deltaj"s, rdr);
-    // auto ijpt = new interval("p_{T}^{j}"s, rjpt);
-
-    // auto mdr = new multival(rrdr, rrpt);
-    // auto mdphi = new multival(rrdphi, rrpt);
-
-    // auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-    // auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
-    // auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
-    // auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
-
-    // auto frdr = [&](int64_t, std::string const& name, std::string const&) {
-    //     return new TH1F(name.data(), ";index;", mdr->size(), 0, mdr->size()); };
-    // auto frdphi = [&](int64_t, std::string const& name, std::string const&) {
-    //     return new TH1F(name.data(), ";index;", mdphi->size(), 0, mdphi->size()); };
-
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
