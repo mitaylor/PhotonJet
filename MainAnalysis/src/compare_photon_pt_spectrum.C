@@ -45,22 +45,23 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 
     /* load history objects */
     TFile* f_data = new TFile(input_data.data(), "read");
-    TFile* f_mc = new TFile(input_mc.data(), "read"); std::cout << __LINE__ << std::endl;
+    TFile* f_mc = new TFile(input_mc.data(), "read"); 
 
-    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");std::cout << __LINE__ << std::endl;
-    h_data_nevt->rename("h_data_nevt");std::cout << __LINE__ << std::endl;
-    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");std::cout << __LINE__ << std::endl;
-    h_mc_nevt->rename("h_mc_nevt");std::cout << __LINE__ << std::endl;
+    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
+    h_data_nevt->rename("h_data_nevt");
+    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
+    h_mc_nevt->rename("h_mc_nevt");
 
     /* create intervals and multivals */
     auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
     auto ipt = new interval(dpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
-std::cout << __LINE__ << std::endl;
+
     auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf->size());
     auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf->size());
 std::cout << __LINE__ << std::endl;
+std::cout << (*photon_pt_data)[i]->GetNbinsX() << " " << dpt->size() << std::endl;
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
