@@ -65,10 +65,10 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
             auto index = mpthf->index_for(x{j, i});
-            (*photon_pt_data)[i]->SetBinContent((*h_data_nevt)[index]->GetBinContent(1));
-            (*photon_pt_data)[i]->SetBinError((*h_data_nevt)[index]->GetBinError(1));
-            (*photon_pt_mc)[i]->SetBinContent((*h_mc_nevt)[index]->GetBinContent(1));
-            (*photon_pt_mc)[i]->SetBinError((*h_mc_nevt)[index]->GetBinError(1));
+            (*photon_pt_data)[i]->SetBinContent(j, (*h_data_nevt)[index]->GetBinContent(1));
+            (*photon_pt_data)[i]->SetBinError(j, (*h_data_nevt)[index]->GetBinError(1));
+            (*photon_pt_mc)[i]->SetBinContent(j, (*h_mc_nevt)[index]->GetBinContent(1));
+            (*photon_pt_mc)[i]->SetBinError(j, (*h_mc_nevt)[index]->GetBinError(1));
         }
     }
 
