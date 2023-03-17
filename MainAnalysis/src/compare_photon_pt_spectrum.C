@@ -58,8 +58,8 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto ipt = new interval(dpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
-    auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf);
-    auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf);
+    auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf->size());
+    auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf->size());
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
