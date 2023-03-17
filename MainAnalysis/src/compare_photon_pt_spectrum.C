@@ -45,22 +45,22 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 
     /* load history objects */
     TFile* f_data = new TFile(input_data.data(), "read");
-    TFile* f_mc = new TFile(input_mc.data(), "read");
+    TFile* f_mc = new TFile(input_mc.data(), "read"); std::cout << __LINE__ << std::endl;
 
-    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
-    h_data_nevt->rename("h_data_nevt");
-    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
-    h_mc_nevt->rename("h_mc_nevt");
+    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");std::cout << __LINE__ << std::endl;
+    h_data_nevt->rename("h_data_nevt");std::cout << __LINE__ << std::endl;
+    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");std::cout << __LINE__ << std::endl;
+    h_mc_nevt->rename("h_mc_nevt");std::cout << __LINE__ << std::endl;
 
     /* create intervals and multivals */
     auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
     auto ipt = new interval(dpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
-
+std::cout << __LINE__ << std::endl;
     auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf->size());
     auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf->size());
-
+std::cout << __LINE__ << std::endl;
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
@@ -71,16 +71,16 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
             (*photon_pt_mc)[i]->SetBinError(j, (*h_mc_nevt)[index]->GetBinError(1));
         }
     }
-
+std::cout << __LINE__ << std::endl;
     normalise_to_unity(photon_pt_data, photon_pt_mc);
-
+std::cout << __LINE__ << std::endl;
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
-
+std::cout << __LINE__ << std::endl;
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.70, "Cent. %i - %i%%", dcent, true); };
-
+std::cout << __LINE__ << std::endl;
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             TLatex* l = new TLatex();
@@ -90,7 +90,7 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
             l->DrawLatexNDC(0.865, 0.70, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
         }
     };
-
+std::cout << __LINE__ << std::endl;
     auto hb = new pencil();
     hb->category("type", "data", "mc");
 
