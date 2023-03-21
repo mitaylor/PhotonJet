@@ -18,6 +18,7 @@
 #include "TTree.h"
 #include "TH1.h"
 #include "TH2F.h"
+#include "TMath.h"
 
 #include <memory>
 #include <string>
@@ -37,25 +38,31 @@ int plot_hem(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     /* options */
-    auto heavyion = conf->get<bool>("heavyion");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto apply_er = conf->get<bool>("apply_er");
     auto apply_jes_flex = conf->get<bool>("apply_jes_flex");
     auto apply_jes_stat = conf->get<bool>("apply_jes_stat");
-    auto filter = conf->get<bool>("filter");
 
     /* selections */
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
+    auto selections = conf->get<std::string>("selections");
+    auto sel = new configurer(selections);
 
-    auto const jet_pt_min = conf->get<float>("jet_pt_min");
-    auto const jet_eta_abs = conf->get<float>("jet_eta_abs");
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_min = sel->get<float>("see_min");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
+
+    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto heavyion = sel->get<bool>("heavyion");
 
     /* create histograms */
-
     auto photonEtaPhi = new TH2F("photon_eta_phi_nosel",";#eta;#phi",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
     auto photonSelectedEtaPhi = new TH2F("photon_eta_phi_sel",";#eta;#phi",100,-photon_eta_abs,photon_eta_abs,100,-3.15,3.15);
     auto jetEtaPhi = new TH2F("jet_eta_phi_nosel",";#eta;#phi",100,-jet_eta_abs,jet_eta_abs,100,-3.15,3.15);
@@ -101,7 +108,6 @@ int plot_hem(char const* config, char const* output) {
                 jetEtaPhi->Fill(jet_eta, jet_phi);
             }  
 
-
             int64_t leading = -1;
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
@@ -113,9 +119,8 @@ int plot_hem(char const* config, char const* output) {
                 float pho_et = (*pjt->phoEt)[j];
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
-                if (filter && pho_et/(*pjt->phoEt)[j] > 1.2) { continue; }
                 
-                if (pho_et <= 40) { continue; }
+                if (pho_et <= photon_pt_min) { continue; }
                 if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 if (pho_et > leading_pt) {
@@ -179,6 +184,10 @@ int plot_hem(char const* config, char const* output) {
 
                 auto jet_phi = (*pjt->jtphi)[j];
 
+                auto photon_jet_dphi = std::abs(photon_phi - convert_radian(jet_phi));
+
+                if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
+
                 /* hem failure region exclusion */
                 if (heavyion && !in_jet_failure_region(pjt,j)) { jetSelectedEtaPhiEx->Fill(jet_eta, jet_phi); }
 
@@ -195,28 +204,30 @@ int plot_hem(char const* config, char const* output) {
 
     std::function<void(int64_t, float)> jet_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
-            // char buffer[128] = { '\0' };
-            // sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            auto jet_selections = "anti-k_{T} R = 0.3, p_{T}^{jet} > "s + std::to_string(jet_pt_min) + " GeV, |#eta^{jet}| < "s + std::to_string(jet_eta_abs);
+            auto photon_selections = "p_{T}^{#gamma} > "s + std::to_string(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + std::to_string(photon_eta_abs) + 
+                ", #Delta#phi_{j#gamma} < " + std::to_string(dphi_min_numerator) + "#pi/"s + std::to_string(dphi_min_denominator);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, pos, "jets associated with selected photons");
-            l->DrawLatexNDC(0.865, pos-0.06, "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6");
-            l->DrawLatexNDC(0.865, pos-0.12, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
+            l->DrawLatexNDC(0.865, pos-0.06, jet_selections.data());
+            l->DrawLatexNDC(0.865, pos-0.12, photon_selections.data());
         }
     };
 
     std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
-            // char buffer[128] = { '\0' };
-            // sprintf(buffer, "anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6");
+            auto photon_selections = "p_{T}^{#gamma} > "s + std::to_string(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + std::to_string(photon_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, pos, "selected photons");
-            l->DrawLatexNDC(0.865, pos-0.06, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
+            l->DrawLatexNDC(0.865, pos-0.06, photon_selections.data());
         }
     };
 

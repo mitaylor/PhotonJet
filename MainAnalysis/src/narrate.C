@@ -46,8 +46,6 @@ int narrate(char const* config, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto is_paper = conf->get<bool>("paper");
-
     TH1::SetDefaultSumw2();
     
     auto ihf = new interval(dhf);
@@ -206,8 +204,7 @@ int narrate(char const* config, char const* output) {
 
     /* draw rho distributions */
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    auto cms = "#bf{#scale[1.4]{CMS}}"s;
-    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
     cms += "         p_{T}^{#gamma} > "s + std::to_string(photon_pt_min) + " GeV"s;
 
     auto hf_info = [&](int64_t index) {
