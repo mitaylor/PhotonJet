@@ -23,7 +23,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int narrate(char const* config, char const* output) {
+int narrate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto data = conf->get<std::vector<std::string>>("data");
@@ -35,16 +35,19 @@ int narrate(char const* config, char const* output) {
     auto eta_min = conf->get<std::vector<double>>("eta_min");
     auto eta_max = conf->get<std::vector<double>>("eta_max");
     auto bound_string = conf->get<std::vector<std::string>>("bound_string");
-
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
     
     auto rho_range = conf->get<std::vector<double>>("rho_range");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    /* selections */
+    auto sel = new configurer(selections);
+
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_min = sel->get<float>("see_min");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
 
     TH1::SetDefaultSumw2();
     
@@ -266,8 +269,9 @@ int narrate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return narrate(argv[1], argv[2]);
+    if (argc == 4)
+        return narrate(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }

@@ -28,7 +28,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int plot_hem(char const* config, char const* output) {
+int plot_hem(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::vector<std::string>>("input");
@@ -37,14 +37,12 @@ int plot_hem(char const* config, char const* output) {
 
     auto tag = conf->get<std::string>("tag");
 
-    /* options */
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto apply_er = conf->get<bool>("apply_er");
     auto apply_jes_flex = conf->get<bool>("apply_jes_flex");
     auto apply_jes_stat = conf->get<bool>("apply_jes_stat");
 
     /* selections */
-    auto selections = conf->get<std::string>("selections");
     auto sel = new configurer(selections);
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
@@ -320,9 +318,9 @@ int plot_hem(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return plot_hem(argv[1], argv[2]);
+    if (argc == 4)
+        return plot_hem(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
