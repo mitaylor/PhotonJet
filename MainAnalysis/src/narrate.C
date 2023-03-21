@@ -1,6 +1,7 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -44,7 +45,7 @@ int narrate(char const* config, char const* selections, char const* output) {
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
-    
+
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
@@ -210,7 +211,7 @@ int narrate(char const* config, char const* selections, char const* output) {
     /* draw rho distributions */
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
-    cms += "         p_{T}^{#gamma} > "s + std::to_string(photon_pt_min) + " GeV"s;
+    cms += "         p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV"s;
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };

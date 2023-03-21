@@ -51,10 +51,14 @@ float res(float c, float s, float n, float pt) {
     return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
 }
 
-void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, float pho_cor,
-               float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
-               float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi, interval* idr, TRandom3* rng,
-               bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
+void fill_axes(pjtree* pjt, 
+               std::vector<int64_t>& pthf_x, std::vector<float>& weights, 
+               float pho_cor, float photon_eta, int64_t photon_phi, 
+               bool exclude, 
+               bool jet_cor, float jet_pt_min, float jet_eta_abs,
+               float dphi_min_numerator, float dphi_min_denominator,
+               multival* mdphi, multival* mdr, interval* idphi, interval* idr, 
+               TRandom3* rng, bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_es_f_dphi,
                memory<TH1F>* pjet_wta_f_dphi,
@@ -76,7 +80,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         if (jet_pt <= jet_pt_min) { continue; }
 
         auto jet_eta = (*pjt->jteta)[j];
-        if (std::abs(jet_eta) >= 1.6) { continue; }
+        if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
 
         auto jet_phi = convert_radian((*pjt->jtphi)[j]);
 
@@ -120,7 +124,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         }
 
         /* require back-to-back jets */
-        if (photon_jet_dphi < 0.875_pi) { continue; }
+        if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         double jt_deta = jet_eta - jet_wta_eta;
         double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
@@ -191,23 +195,12 @@ int populate(char const* config, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     /* options */
-    auto heavyion = conf->get<bool>("heavyion");
     auto gen_iso = conf->get<bool>("generator_isolation");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
     auto filtered = conf->get<bool>("filtered");
     auto no_jes = conf->get<bool>("no_jes");
-
-    /* selections */
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
-    auto const gen_iso_max = conf->get<float>("gen_iso_max");
-    auto const jet_pt_min = conf->get<float>("jet_pt_min");
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdphi = conf->get<std::vector<float>>("dphi_range");
@@ -222,6 +215,27 @@ int populate(char const* config, char const* output) {
 
     auto const hf_interval = conf->get<float>("hf_interval");
     auto const hf_offset = conf->get<float>("hf_offset");
+
+    /* selections */
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_min = sel->get<float>("see_min");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
+    auto const gen_iso_max = sel->get<float>("gen_iso_max");
+
+    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
@@ -552,7 +566,8 @@ int populate(char const* config, char const* output) {
 
                     fill_axes(pjtm, pthf_x, weights, pho_cor,
                             photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                            jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                            jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
+                            mdphi, mdr, idphi, idr, rng,
                             smear, smear_fits_aa, smear_fits_pp, cent, nmix,
                             mix_pjet_es_f_dphi, mix_pjet_wta_f_dphi, 
                             mix_pjet_f_dr, mix_pjet_f_jpt,
@@ -568,7 +583,8 @@ int populate(char const* config, char const* output) {
 
             fill_axes(pjt, pthf_x, weights, pho_cor,
                 photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                jet_pt_min, mdphi, mdr, idphi, idr, rng,
+                jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
+                mdphi, mdr, idphi, idr, rng,
                 smear, smear_fits_aa, smear_fits_pp, cent, nevt,
                 pjet_es_f_dphi, pjet_wta_f_dphi, 
                 pjet_f_dr, pjet_f_jpt,

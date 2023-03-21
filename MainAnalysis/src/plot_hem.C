@@ -1,6 +1,7 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -46,7 +47,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
-    
+
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
@@ -204,9 +205,9 @@ int plot_hem(char const* config, char const* selections, char const* output) {
 
     std::function<void(int64_t, float)> jet_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
-            auto jet_selections = "anti-k_{T} R = 0.3, p_{T}^{jet} > "s + std::to_string(jet_pt_min) + " GeV, |#eta^{jet}| < "s + std::to_string(jet_eta_abs);
-            auto photon_selections = "p_{T}^{#gamma} > "s + std::to_string(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + std::to_string(photon_eta_abs) + 
-                ", #Delta#phi_{j#gamma} < " + std::to_string(dphi_min_numerator) + "#pi/"s + std::to_string(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, p_{T}^{jet} > "s + to_text(jet_pt_min) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+            auto photon_selections = "p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs) + 
+                ", #Delta#phi_{j#gamma} < " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
@@ -220,7 +221,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
 
     std::function<void(int64_t, float)> pho_kinematics = [&](int64_t x, float pos) {
         if (x > 0) {
-            auto photon_selections = "p_{T}^{#gamma} > "s + std::to_string(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + std::to_string(photon_eta_abs);
+            auto photon_selections = "p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-nominal() {
+run() {
     tag=$1
 
     ./bin/fabulate_angle_smeared configs/fabulate/new/fabulate_${tag}_test.conf \
@@ -12,5 +12,5 @@ nominal() {
 samples=(pp_angle_smear_0_10 pp_angle_smear_10_30 pp_angle_smear_30_50 pp_angle_smear_50_90)
 
 for sample in ${samples[@]}; do
-    nominal $sample
+    run $sample
 done
