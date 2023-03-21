@@ -4,7 +4,7 @@
 #include <string>
 
 std::string to_text(float number) {
-    string input_string = std::to_string(number);
+    auto input_string = std::to_string(number);
     auto decimal = input_string.find('.');
 
     std::string output_string;
