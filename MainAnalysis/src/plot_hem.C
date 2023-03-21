@@ -45,6 +45,8 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     /* selections */
     auto sel = new configurer(selections);
 
+    auto set = sel->get<std::string>("set");
+    
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");

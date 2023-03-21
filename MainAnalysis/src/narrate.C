@@ -44,6 +44,7 @@ int narrate(char const* config, char const* selections, char const* output) {
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
+    
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
