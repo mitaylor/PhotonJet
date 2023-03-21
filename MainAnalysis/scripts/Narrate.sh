@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
+set=$1
 
-histogram() {
+run_aa() {
     tag=$1
-    echo $tag
-    echo "./bin/narrate configs/narrate/preapproval/narrate_${tag}.conf data/preapproval/narrate_${tag}.root"
+
+    ./bin/narrate configs/narrate/preapproval/narrate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/narrate_${tag}.root > log/narrate_${tag}.root 2>&1 &
 }
 
-# samples=(aa paper_aa aa_extra paper_aa_extra)
-samples=(aa_extra)
+samples=(aa aa_extra)
 
 for sample in ${samples[@]}; do
-    histogram ${sample}
+    run_aa ${sample} ${set}
 
     for syst in cent_down cent_up; do
-        histogram ${sample}_${syst}
+        run_aa ${sample}_${syst} ${set}
     done
 done
