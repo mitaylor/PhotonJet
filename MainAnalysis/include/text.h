@@ -9,7 +9,7 @@ std::string to_text(float number) {
 
     std::string output_string;
 
-    for (int i = input_string.size() - 1; i >= 0; i--) {
+    for (size_t i = input_string.size() - 1; i >= 0; i--) {
         if (i > decimal && input_string[i] == '0' && output_string.size() == 0) { continue; }
         if (input_string[i] == '.' && output_string.size() == 0) { continue; }
 
