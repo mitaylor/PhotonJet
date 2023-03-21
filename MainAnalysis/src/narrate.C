@@ -43,6 +43,7 @@ int narrate(char const* config, char const* selections, char const* output) {
     /* selections */
     auto sel = new configurer(selections);
 
+    auto set = sel->get<std::string>("set");
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
@@ -217,7 +218,7 @@ int narrate(char const* config, char const* selections, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data", "MC");
         
-        auto c1 = new paper(tag + "_rho_distribution_" + bound_string[i], hb);
+        auto c1 = new paper(set + "_" + tag + "_rho_distribution_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size()/2, -1);
@@ -240,7 +241,7 @@ int narrate(char const* config, char const* selections, char const* output) {
         auto hb = new pencil();
         hb->category("type", "Data/MC");
         
-        auto c1 = new paper(tag + "_rho_weight_" + bound_string[i], hb);
+        auto c1 = new paper(set + "_" + tag + "_rho_weight_" + bound_string[i], hb);
         apply_style(c1, cms, system_tag);
         c1->accessory(hf_info);
         c1->divide(ihf->size()/2, -1);

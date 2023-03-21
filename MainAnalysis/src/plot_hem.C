@@ -233,7 +233,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     hb->category("type", "data");
     hb->alias("data", "");
 
-    auto c1 = new paper(tag + "_photon_distribution", hb);
+    auto c1 = new paper(set + "_" + tag + "_photon_distribution", hb);
     apply_style(c1, cms, system_tag);
     c1->divide(2, -1);
     c1->accessory(std::bind(pho_kinematics, _1, 0.85));
@@ -263,7 +263,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     c1->adjust(photonSelectedEtaPhiEx, "colz", "");
 
 
-    auto c2 = new paper(tag + "_jet_distribution", hb);
+    auto c2 = new paper(set + "_" + tag + "_jet_distribution", hb);
     apply_style(c2, cms, system_tag);
     c2->divide(2, -1);
     c2->accessory(std::bind(jet_kinematics, _1, 0.85));
