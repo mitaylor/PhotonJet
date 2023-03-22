@@ -181,8 +181,8 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
-    auto const see_min = sel->get<float>("see_min");
-    auto const see_max = sel->get<float>("see_max");
+    auto see_min = sel->get<float>("see_min");
+    auto see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
     auto const gen_iso_max = sel->get<float>("gen_iso_max");
 
@@ -199,6 +199,11 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rrdr = sel->get<std::vector<float>>("rdr_range");
     auto rrpt = sel->get<std::vector<float>>("rpt_range");
 
+    /* fix sigma eta eta range for background distributions */
+    if (tag == "bkg") see_min = 0.012;
+    if (tag == "bkg") see_max = 0.02;
+
+    /* make histograms */
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
 
