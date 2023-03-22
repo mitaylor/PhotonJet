@@ -38,6 +38,15 @@ double get_avg_rho(T* pjt, double eta_min, double eta_max) {
     else return -1;
 }
 
+bool in_pho_failure_region(float phoEta, float phoPhi) {
+    auto ex_1 = phoEta < -1.3 && 
+                phoPhi < -0.7 && phoPhi > -1.6;
+    auto ex_2 = phoEta < 1.5 && phoEta > 0.1 &&
+                phoPhi < 1.0 && phoPhi > 0.2;
+
+    return ex_1 || ex_2;
+}
+
 template <typename T>
 bool in_pho_failure_region(T* t, int64_t i) {
     auto ex_1 = (*t->phoEta)[i] < -1.3 && 
@@ -58,6 +67,17 @@ float pho_failure_region_fraction(float eta_abs) {
     }
     
     return (area)/(eta_abs * 2 * 3.14159 * 2);
+}
+
+bool in_jet_failure_region(float jetEta, float jetPhi) {
+    auto ex_1 = jetEta < -1.3 && 
+                jetPhi < -0.8 && jetPhi > -1.7;
+    auto ex_2 = jetEta < 1.5 && jetEta > -0.5 &&
+                jetPhi < 1.0 && jetPhi > 0;
+    auto ex_3 = jetEta < 1.6 && jetEta > 1.5 &&
+                jetPhi < -1.0 && jetPhi > -1.5;
+
+    return ex_1 || ex_2 || ex_3;
 }
 
 template <typename T>

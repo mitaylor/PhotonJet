@@ -22,26 +22,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-bool in_pho_failure_region(float phoEta, float phoPhi) {
-    auto ex_1 = phoEta < -1.3 && 
-                phoPhi < -0.7 && phoPhi > -1.6;
-    auto ex_2 = phoEta < 1.5 && phoEta > 0.1 &&
-                phoPhi < 1.0 && phoPhi > 0.2;
-
-    return ex_1 || ex_2;
-}
-
-bool in_jet_failure_region(float jetEta, float jetPhi) {
-    auto ex_1 = jetEta < -1.3 && 
-                jetPhi < -0.8 && jetPhi > -1.7;
-    auto ex_2 = jetEta < 1.5 && jetEta > -0.5 &&
-                jetPhi < 1.0 && jetPhi > 0;
-    auto ex_3 = jetEta < 1.6 && jetEta > 1.5 &&
-                jetPhi < -1.0 && jetPhi > -1.5;
-
-    return ex_1 || ex_2 || ex_3;
-}
-
 int beneficiate(char const* output) {
     std::string tag = "aa";
 
