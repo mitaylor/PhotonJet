@@ -259,7 +259,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     c1->add(photonSelectedEtaPhi);
     c1->adjust(photonSelectedEtaPhi, "colz", "");
 
-    photonSelectedEtaPhiEx->Scale(1/photonSelectedEtaPhiEx->Integral());
+    photonSelectedEtaPhiEx->Scale(1/photonSelectedEtaPhi->Integral());
     photonSelectedEtaPhiEx->SetMinimum(0);
     photonSelectedEtaPhiEx->SetMaximum(0.00025);
     c1->add(photonSelectedEtaPhiEx);
@@ -289,7 +289,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     c2->add(jetSelectedEtaPhi);
     c2->adjust(jetSelectedEtaPhi, "colz", "");
 
-    jetSelectedEtaPhiEx->Scale(1/jetSelectedEtaPhiEx->Integral());
+    jetSelectedEtaPhiEx->Scale(1/jetSelectedEtaPhi->Integral());
     jetSelectedEtaPhiEx->SetMinimum(0);
     jetSelectedEtaPhiEx->SetMaximum(0.00025);
     c2->add(jetSelectedEtaPhiEx);

@@ -164,7 +164,7 @@ void fill_axes(pjtree* pjt,
     }
 }
 
-int populate(char const* config, char const* output) {
+int populate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::vector<std::string>>("input");
@@ -691,9 +691,9 @@ int populate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return populate(argv[1], argv[2]);
+    if (argc == 4)
+        return populate(argv[1], argv[2, argv[3]]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
