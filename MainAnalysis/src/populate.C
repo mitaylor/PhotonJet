@@ -200,9 +200,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rrdr = sel->get<std::vector<float>>("rdr_range");
     auto rrpt = sel->get<std::vector<float>>("rpt_range");
 
-    /* convert to integral angle units (cast to double) */
-    convert_in_place_pi(rdphi);
-
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
 
