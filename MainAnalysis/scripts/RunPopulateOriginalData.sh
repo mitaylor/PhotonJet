@@ -19,5 +19,5 @@ for i in ${!files[@]}; do
     echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
     cat ../configs/populate/preapproval-parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
 
-    nohup ../bin/populate nohup/${tag}_${index[i]}.conf /data/submit/mitay/populate/${tag}_${index[i]}.root  > nohup/log/${tag}_${index[i]}.txt 2>&1 &
+    nohup ../bin/populate_original nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/populate/${set}/${tag}_original_${index[i]}.root  > nohup/log/${set}_${tag}_original_${index[i]}.txt 2>&1 &
 done

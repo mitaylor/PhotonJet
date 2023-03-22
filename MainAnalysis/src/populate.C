@@ -41,17 +41,17 @@ float res(float c, float s, float n, float pt) {
     return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
 }
 
-void fill_axes(pjtree* pjt, 
-               std::vector<int64_t>& pthf_x, std::vector<float>& weights, 
-               float pho_cor, float photon_eta, int64_t photon_phi, 
-               bool exclude, 
-               bool jet_cor, float jet_pt_min, float jet_eta_abs,
-               float dphi_min_numerator, float dphi_min_denominator,
-               multival* mdr, interval* idphi, interval* idr, 
-               TRandom3* rng, bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
+void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, float pho_cor,
+               float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
+               float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi, interval* idr, TRandom3* rng,
+               bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
                memory<TH1F>* nevt,
+               memory<TH1F>* pjet_es_f_dphi,
+               memory<TH1F>* pjet_wta_f_dphi,
                memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt,
+               memory<TH1F>* pjet_es_u_dphi,
+               memory<TH1F>* pjet_wta_u_dphi,
                memory<TH1F>* pjet_u_dr,
                history<TH2F>* acceptance, history<TH2F>* total) {
     
@@ -85,7 +85,6 @@ void fill_axes(pjtree* pjt,
         double corr = 1;
         if (exclude) {
             auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
-            std::cout << dphi_x << std::endl;
             auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
             corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; }
@@ -194,7 +193,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
-    auto rdphi = sel->get<std::vector<float>>("dphi_range");
+    auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
     auto rdr = sel->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram and also the smearing application
 
     auto rrdr = sel->get<std::vector<float>>("rdr_range");
@@ -497,9 +496,6 @@ int populate(char const* config, char const* selections, char const* output) {
                     tms->GetEntry(m);
 
                     int interval_m = pfSum_m / hf_interval;
-
-                    // std::cout << "Nominal: " << pfsum << " (" << interval << ")\t MB: " << pfSum_m << " (" << intervalm << ")" << std::endl;
-                    // std::cout << "Nominal: " << pjt->hiHF << "\t MB: " << pjtm->hiHF << std::endl;
                     if (interval_m != interval) { continue; }
 
                     tm->GetEntry(m);
