@@ -85,6 +85,7 @@ void fill_axes(pjtree* pjt,
         double corr = 1;
         if (exclude) {
             auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
+            std::cout << dphi_x << std::endl;
             auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
             corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
             if (corr < 1) { std::cout << "error" << std::endl; }
@@ -201,9 +202,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* convert to integral angle units (cast to double) */
     convert_in_place_pi(rdphi);
-    for(auto t : rdphi) {
-        std::cout << t << std::endl;
-    }
 
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
