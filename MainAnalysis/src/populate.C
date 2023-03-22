@@ -41,17 +41,17 @@ float res(float c, float s, float n, float pt) {
     return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
 }
 
-void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, float pho_cor,
-               float photon_eta, int64_t photon_phi, bool exclude, bool jet_cor,
-               float jet_pt_min, multival* mdphi, multival* mdr, interval* idphi, interval* idr, TRandom3* rng,
-               bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
+void fill_axes(pjtree* pjt, 
+               std::vector<int64_t>& pthf_x, std::vector<float>& weights, 
+               float pho_cor, float photon_eta, int64_t photon_phi, 
+               bool exclude, 
+               bool jet_cor, float jet_pt_min, float jet_eta_abs,
+               float dphi_min_numerator, float dphi_min_denominator,
+               multival* mdr, interval* idphi, interval* idr, 
+               TRandom3* rng, bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
                memory<TH1F>* nevt,
-               memory<TH1F>* pjet_es_f_dphi,
-               memory<TH1F>* pjet_wta_f_dphi,
                memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt,
-               memory<TH1F>* pjet_es_u_dphi,
-               memory<TH1F>* pjet_wta_u_dphi,
                memory<TH1F>* pjet_u_dr,
                history<TH2F>* acceptance, history<TH2F>* total) {
     
