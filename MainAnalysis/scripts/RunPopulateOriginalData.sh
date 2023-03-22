@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-tag=$1
-n=$2
+set=$1
+tag=$2
+n=$3
 
 ls /data/submit/mitay/photons/condor/regulate_aa_data_* > files
 # ls /data/submit/mitay/photons/regulate_aa_qcd_weighted_* > files
