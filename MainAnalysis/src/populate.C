@@ -692,7 +692,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
 int main(int argc, char* argv[]) {
     if (argc == 4)
-        return populate(argv[1], argv[2, argv[3]]);
+        return populate(argv[1], argv[2], argv[3]);
 
     printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
