@@ -253,13 +253,14 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     // c1->add(photonEtaPhiEx);
     // c1->adjust(photonEtaPhiEx, "colz", "");
 
+    photonSelectedEtaPhiEx->Scale(1/photonSelectedEtaPhi->Integral());
     photonSelectedEtaPhi->Scale(1/photonSelectedEtaPhi->Integral());
+    
     photonSelectedEtaPhi->SetMinimum(0);
     photonSelectedEtaPhi->SetMaximum(0.00025);
     c1->add(photonSelectedEtaPhi);
     c1->adjust(photonSelectedEtaPhi, "colz", "");
 
-    photonSelectedEtaPhiEx->Scale(1/photonSelectedEtaPhi->Integral());
     photonSelectedEtaPhiEx->SetMinimum(0);
     photonSelectedEtaPhiEx->SetMaximum(0.00025);
     c1->add(photonSelectedEtaPhiEx);
@@ -283,13 +284,14 @@ int plot_hem(char const* config, char const* selections, char const* output) {
     // c2->add(jetEtaPhiEx);
     // c2->adjust(jetEtaPhiEx, "colz", "");
 
+    jetSelectedEtaPhiEx->Scale(1/jetSelectedEtaPhi->Integral());
     jetSelectedEtaPhi->Scale(1/jetSelectedEtaPhi->Integral());
+
     jetSelectedEtaPhi->SetMinimum(0);
     jetSelectedEtaPhi->SetMaximum(0.00025);
     c2->add(jetSelectedEtaPhi);
     c2->adjust(jetSelectedEtaPhi, "colz", "");
 
-    jetSelectedEtaPhiEx->Scale(1/jetSelectedEtaPhi->Integral());
     jetSelectedEtaPhiEx->SetMinimum(0);
     jetSelectedEtaPhiEx->SetMaximum(0.00025);
     c2->add(jetSelectedEtaPhiEx);
