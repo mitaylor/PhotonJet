@@ -203,7 +203,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto eff_label = sel->get<std::string>("eff_label");
 
     auto rho_file = sel->get<std::string>("rho_file");
-    auto rho_label = conf->get<std::string>("rho_label"); // get from the original configuration file
+    auto rho_label = sel->get<std::string>("rho_label");
 
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
