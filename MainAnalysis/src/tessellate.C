@@ -211,7 +211,7 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
     return std::make_tuple(p0, p1, p0_err, p1_err, chisq, ndof);
 }
 
-int tessellate(char const* config, char const* output) {
+int tessellate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto data = conf->get<std::vector<std::string>>("data");
@@ -441,8 +441,9 @@ int tessellate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return tessellate(argv[1], argv[2]);
+    if (argc == 4)
+        return tessellate(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }
