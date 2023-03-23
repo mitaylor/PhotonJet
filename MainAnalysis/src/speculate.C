@@ -26,7 +26,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int speculate(char const* config, char const* output) {
+int speculate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
@@ -177,8 +177,9 @@ int speculate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return speculate(argv[1], argv[2]);
+    if (argc == 4)
+        return speculate(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }

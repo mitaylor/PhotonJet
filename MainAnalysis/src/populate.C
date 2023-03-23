@@ -140,9 +140,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto smear_input_pp = conf->get<std::string>("smear_input_pp");
     auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
-    
-    auto eff = conf->get<std::string>("eff");
-    auto eff_label = conf->get<std::string>("eff_label");
 
     auto rho = conf->get<std::string>("rho");
     auto rho_label = conf->get<std::string>("rho_label");
@@ -164,6 +161,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
+    auto correct_efficiency = conf->get<bool>("correct_efficiency");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -198,6 +196,9 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto rrdr = sel->get<std::vector<float>>("rdr_range");
     auto rrpt = sel->get<std::vector<float>>("rpt_range");
+
+    auto eff_file = sel->get<std::string>("eff_file");
+    auto eff_label = sel->get<std::string>("eff_label");
 
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
@@ -268,8 +269,8 @@ int populate(char const* config, char const* selections, char const* output) {
     TFile* fe;
     history<TH1F>* efficiency = nullptr;
 
-    if (!eff.empty()) {
-        fe = new TFile(eff.data(), "read");
+    if (correct_efficiency) {
+        fe = new TFile(eff_file.data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
     }
 
@@ -432,7 +433,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto weight = pjt->w;
 
-            if (!eff.empty() && leading_pt < 70) {
+            if (correct_efficiency && leading_pt < 70) {
                 auto bin = (*efficiency)[1]->FindBin(leading_pt);
                 auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
                 if (corr < 1) { std::cout << "error" << std::endl; return -1; }
