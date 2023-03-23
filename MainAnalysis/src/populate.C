@@ -163,7 +163,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto no_jes = conf->get<bool>("no_jes");
     auto correct_efficiency = conf->get<bool>("correct_efficiency");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto const hf_interval = conf->get<float>("hf_interval");
@@ -196,6 +195,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto rrdr = sel->get<std::vector<float>>("rdr_range");
     auto rrpt = sel->get<std::vector<float>>("rpt_range");
+
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto eff_file = sel->get<std::string>("eff_file");
     auto eff_label = sel->get<std::string>("eff_label");
