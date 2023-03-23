@@ -38,17 +38,23 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-int populate(char const* config, char const* output) {
+int populate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
+    auto base = conf->get<std::string>("base");
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto group = conf->get<std::string>("group");
     auto labels = conf->get<std::vector<std::string>>("labels");
 
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
-        file = new TFile(input.data(), "read");
+        auto file_name = base + "/" + set + "/" + input;
+        file = new TFile(file_name.data(), "read");
     }, files, inputs);
 
     /* prepare output */
