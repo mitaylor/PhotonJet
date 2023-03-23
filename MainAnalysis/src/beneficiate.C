@@ -98,8 +98,8 @@ int beneficiate(char const* selections, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 2)
-        return beneficiate(argv[1]);
+    if (argc == 3)
+        return beneficiate(argv[1], argv[2]);
 
     printf("usage: %s [output]\n", argv[0]);
     return 1;
