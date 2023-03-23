@@ -364,11 +364,13 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
+            auto photon_selections = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.79, "|#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.135, 0.79, photon_selections.data());
         }
     };
 
