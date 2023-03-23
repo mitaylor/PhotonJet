@@ -1,6 +1,7 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -29,7 +30,7 @@ using namespace std::placeholders;
 
 void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
                multival* mpthf, TTree* t, pjtree* p, bool heavyion, bool apply_er,
-               float pt_min, float eta_max, float hovere_max, float hf_min, float hf_max,
+               float pt_min, float photon_eta_abs, float hovere_max, float hf_min, float hf_max,
                float iso_max, float noniso_min, float noniso_max) {
     printf("fill data\n");
 
@@ -48,7 +49,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
             auto pho_et = (*p->phoEt)[j];
 
             if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
+            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
             
             if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
@@ -86,7 +87,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
 void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
                  multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
-                 bool heavyion, bool apply_er, float pt_min, float eta_max, 
+                 bool heavyion, bool apply_er, float pt_min, float photon_eta_abs, 
                  float hovere_max, float hf_min, float hf_max, float iso_max,
                  float noniso_min, float noniso_max, float gen_iso_max, float offset, 
                  history<TH1F>* rho_weighting) {
@@ -107,7 +108,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
             auto pho_et = (*p->phoEt)[j];
 
             if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= eta_max) { continue; }
+            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
             
             if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
@@ -142,7 +143,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         std::vector<float> weight(ihf->size(), p->w);
 
         if (rho_weighting != nullptr) {
-            auto avg_rho = get_avg_rho(p,-eta_max,eta_max);
+            auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
 
             for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
                 auto bin = (*rho_weighting)[hf_x]->FindBin(avg_rho);
@@ -242,7 +243,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto gen_iso_max = sel->get<float>("gen_iso_max");
     auto see_max = sel->get<float>("see_max");
     auto pt_min = sel->get<float>("photon_pt_min");
-    auto eta_max = sel->get<float>("photon_eta_abs");
+    auto photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto hovere_max = sel->get<float>("hovere_max");
     auto iso_max = sel->get<float>("iso_max");
 
@@ -300,7 +301,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
-                pt_min, eta_max, hovere_max, hf_min, hf_max, iso_max, 
+                pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
                 noniso_min, noniso_max);
     }
 
@@ -312,7 +313,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
-                    heavyion, apply_er, pt_min, eta_max, 
+                    heavyion, apply_er, pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
                     noniso_min, noniso_max, gen_iso_max, offset, 
                     rho_weighting);
