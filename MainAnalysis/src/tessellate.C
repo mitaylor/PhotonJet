@@ -88,7 +88,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
                  multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
                  bool heavyion, bool apply_er, float pt_min, float eta_max, 
                  float hovere_max, float hf_min, float hf_max, float iso_max,
-                 float noniso_min, float noniso_max, float geniso_max, float offset, 
+                 float noniso_min, float noniso_max, float gen_iso_max, float offset, 
                  history<TH1F>* rho_weighting) {
     printf("fill signal\n");
 
@@ -137,7 +137,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
 
         /* gen isolation requirement */
         float isolation = (*p->mcCalIsoDR04)[gen_index];
-        if (isolation > geniso_max) { continue; }
+        if (isolation > gen_iso_max) { continue; }
 
         std::vector<float> weight(ihf->size(), p->w);
 
@@ -219,30 +219,37 @@ int tessellate(char const* config, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
-    auto heavyion = conf->get<bool>("heavyion");
     auto apply_er = conf->get<bool>("apply_er");
+    auto apply_rho_weighting = conf->get<bool>("apply_rho_weighting");
 
-    auto rho = conf->get<std::string>("rho");
-    auto rho_label = conf->get<std::string>("rho_label");
-
-    auto pt_min = conf->get<float>("pt_min");
-    auto eta_max = conf->get<float>("eta_max");
-    auto hovere_max = conf->get<float>("hovere_max");
-    auto iso_max = conf->get<float>("iso_max");
     auto noniso_min = conf->get<float>("noniso_min");
     auto noniso_max = conf->get<float>("noniso_max");
-    auto geniso_max = conf->get<float>("geniso_max");
-    auto see_max = conf->get<float>("see_max");
 
     auto offset = conf->get<float>("offset");
     auto rsee = conf->get<std::vector<float>>("rsee");
     auto rfit = conf->get<std::vector<float>>("rfit");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto is_paper = conf->get<bool>("paper");
+    /* selections */
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto gen_iso_max = sel->get<float>("gen_iso_max");
+    auto see_max = sel->get<float>("see_max");
+    auto pt_min = sel->get<float>("photon_pt_min");
+    auto eta_max = sel->get<float>("photon_eta_abs");
+    auto hovere_max = sel->get<float>("hovere_max");
+    auto iso_max = sel->get<float>("iso_max");
+
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
+    auto rho_file = sel->get<std::string>("rho_file");
+    auto rho_label = conf->get<std::string>("rho_label"); // get from the original configuration file
 
     auto dpt_short = dpt;
     dpt_short.pop_back();
@@ -279,8 +286,8 @@ int tessellate(char const* config, char const* output) {
     TFile* fr;
     history<TH1F>* rho_weighting = nullptr;
 
-    if (!rho.empty()) {
-        fr = new TFile(rho.data(), "read");
+    if (apply_rho_weighting) {
+        fr = new TFile(rho_file.data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
@@ -307,7 +314,7 @@ int tessellate(char const* config, char const* output) {
         fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
                     heavyion, apply_er, pt_min, eta_max, 
                     hovere_max, hf_min, hf_max, iso_max, 
-                    noniso_min, noniso_max, geniso_max, offset, 
+                    noniso_min, noniso_max, gen_iso_max, offset, 
                     rho_weighting);
     }
 
@@ -368,10 +375,8 @@ int tessellate(char const* config, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
-    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-    // cms += "                  |#eta^{#gamma}| < 1.44";
 
-    auto c1 = new paper(tag + "_purity", hb);
+    auto c1 = new paper(set + "_" + tag + "_purity", hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->accessory(purity_info);
