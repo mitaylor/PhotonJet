@@ -17,11 +17,11 @@ run_aa() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    run_pp ${sample} ${set}
+    run_pp ${sample}
 done
 
 samples=(aa aa_no_correction)
 
 for sample in ${samples[@]}; do
-    run_aa ${sample} ${set}
+    run_aa ${sample}
 done

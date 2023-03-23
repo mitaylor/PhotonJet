@@ -34,19 +34,24 @@ int speculate(char const* config, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
-    auto heavyion = conf->get<bool>("heavyion");
     auto mc_branches = conf->get<bool>("mc_branches");
     auto ele_rej = conf->get<bool>("ele_rej");
     auto apply_er = conf->get<bool>("apply_er");
-    auto filter = conf->get<bool>("filter");
-
-    auto const eta_abs = conf->get<float>("eta_abs");
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
 
     auto rpt = conf->get<std::vector<float>>("pt_range");
+
+    auto sel = new configurer(selections);
+
+    /* selections */
+    auto set = sel->get<std::string>("set");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_min = sel->get<float>("see_min");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
 
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
@@ -72,13 +77,12 @@ int speculate(char const* config, char const* output) {
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if (std::abs((*p->phoSCEta)[j]) >= eta_abs) { continue; }
+            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
             if (pho_et > 30 && heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
             if (pho_et > 30 && !heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
-            if (filter && pho_et/(*p->phoEt)[j] > 1.2) { continue; }
 
             if (pho_et > leading_pt) {
                 leading = j;
@@ -156,7 +160,7 @@ int speculate(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("sample", "pp", "PbPb");
 
-    auto c1 = new paper(tag + "_efficiency", hb);
+    auto c1 = new paper(set + "_" + tag + "_efficiency", hb);
     apply_style(c1, cms, system_tag, 0., 1.2);
     c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 

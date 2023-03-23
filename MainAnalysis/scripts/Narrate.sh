@@ -10,9 +10,9 @@ run_aa() {
 samples=(aa aa_extra)
 
 for sample in ${samples[@]}; do
-    run_aa ${sample} ${set}
+    run_aa ${sample}
 
     for syst in cent_down cent_up; do
-        run_aa ${sample}_${syst} ${set}
+        run_aa ${sample}_${syst}
     done
 done
