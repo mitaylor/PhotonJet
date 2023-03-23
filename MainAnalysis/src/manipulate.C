@@ -26,7 +26,7 @@ int manipulate(char const* config, char const* selections, char const* output) {
 
     auto sel = new configurer(selections);
 
-    auto base = conf->get<std::string>("base");
+    auto base = sel->get<std::string>("base");
 
     /* manage meory manually */
     TH1::AddDirectory(false);
