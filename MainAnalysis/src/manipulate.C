@@ -14,7 +14,7 @@
 
 using namespace std::literals::string_literals;
 
-int manipulate(char const* config, char const* output) {
+int manipulate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto purity = conf->get<std::string>("purity");
@@ -24,12 +24,16 @@ int manipulate(char const* config, char const* output) {
     auto labels = conf->get<std::vector<std::string>>("labels");
     auto tag = conf->get<std::string>("tag");
 
+    auto sel = new configurer(selections);
+
+    auto base = conf->get<std::string>("base");
+
     /* manage meory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* load input */
-    TFile* fp = new TFile(purity.data(), "read");
+    TFile* fp = new TFile((base + purity).data(), "read");
 
     auto purities = new history<TH1F>(fp, type);
     auto impurities = new history<TH1F>(*purities, "im"s);
@@ -45,7 +49,7 @@ int manipulate(char const* config, char const* output) {
 
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
-        file = new TFile(input.data(), "read");
+        file = new TFile((base + input).data(), "read");
     }, files, inputs);
 
     /* prepare output */
@@ -76,9 +80,9 @@ int manipulate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return manipulate(argv[1], argv[2]);
+    if (argc == 4)
+        return manipulate(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
