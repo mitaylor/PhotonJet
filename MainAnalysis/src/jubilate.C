@@ -37,6 +37,11 @@ int jubilate(char const* config, char const* selections, char const* output) {
     /* selections */
     auto sel = new configurer(selections);
 
+    auto set = sel->get<std::string>("set");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
@@ -108,15 +113,15 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
     cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > "s + to_text(jet_pt_min) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs) + ", ";
-    cms += "|#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} < 7#pi/8";
+    cms += "|#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} < " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
-    auto c1 = new paper(tag + "_mixing_dr_d_pthf", hb);
+    auto c1 = new paper(set + "_" + tag + "_mixing_dr_d_pthf", hb);
     apply_style(c1, cms, system_tag, -1., 24.);
     c1->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     c1->accessory(pthf_info);
     c1->divide(-1 , ihf->size());
 
-    auto c2 = new paper(tag + "_mixing_jpt_d_pthf", hb);
+    auto c2 = new paper(set + "_" + tag + "_mixing_jpt_d_pthf", hb);
     apply_style(c2, cms, system_tag, -0.007, 0.07);
     c2->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     c2->accessory(pthf_info);
