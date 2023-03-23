@@ -38,7 +38,7 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-int populate(char const* config, char const* selections, char const* output) {
+int combine_populate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto base = conf->get<std::string>("base");
@@ -121,8 +121,8 @@ int populate(char const* config, char const* selections, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return populate(argv[1], argv[2]);
+    if (argc == 4)
+        return combine_populate(argv[1], argv[2], argv[3]);
 
     printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
