@@ -23,16 +23,20 @@ using namespace std::placeholders;
 int jubilate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
+    auto base = conf->get<std::string>("base");
+
     auto input = conf->get<std::string>("input");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto background = conf->get<bool>("background");
+
+    auto rdr = conf->get<std::vector<float>>("dr_range");
+    auto rjpt = conf->get<std::vector<float>>("jpt_range");
 
     /* selections */
     auto sel = new configurer(selections);
@@ -47,13 +51,13 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
-    auto rdr = sel->get<std::vector<float>>("dr_range");
-    auto rjpt = sel->get<std::vector<float>>("jpt_range");
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    TFile* f = new TFile(input.data(), "read");
+    auto file_name = base + "/" + set + "/" + input;
+    TFile* f = new TFile(file_name.data(), "read");
 
     TH1::SetDefaultSumw2();
 
