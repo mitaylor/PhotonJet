@@ -4,12 +4,14 @@ set=$1
 
 run_pp() {
     tag=$1
+    echo $tag
 
     ./bin/combine_populate configs/combine_populate/combine_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/populate_${tag}.root
 }
 
-run_pp() {
+run_aa() {
     tag=$1
+    echo $tag
 
     ./bin/combine_populate configs/combine_populate/combine_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/populate_${tag}.root
 }
