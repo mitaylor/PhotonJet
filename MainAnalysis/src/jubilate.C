@@ -23,8 +23,6 @@ using namespace std::placeholders;
 int jubilate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
-    auto base = conf->get<std::string>("base");
-
     auto input = conf->get<std::string>("input");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
@@ -42,6 +40,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -56,8 +55,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    auto file_name = base + "/" + set + "/" + input;
-    TFile* f = new TFile(file_name.data(), "read");
+    TFile* f = new TFile((base + input).data(), "read");
 
     TH1::SetDefaultSumw2();
 

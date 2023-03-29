@@ -57,16 +57,16 @@ bool in_pho_failure_region(T* t, int64_t i) {
     return ex_1 || ex_2;
 }
 
-float pho_failure_region_fraction(float eta_abs) {
+float pho_failure_region_fraction(float phoEta) {
     float area = 0;
-    if (eta_abs > 1.3) {
-        area += (-1.3 + eta_abs) * (-0.7 + 1.6);
+    if (phoEta > 1.3) {
+        area += (-1.3 + phoEta) * (-0.7 + 1.6);
     }
-    if (eta_abs > 0.1) {
-        area += (eta_abs -  0.1) * (1.0 - 0.2);
+    if (phoEta > 0.1) {
+        area += (phoEta - 0.1) * (1.0 - 0.2);
     }
     
-    return (area)/(eta_abs * 2 * 3.14159 * 2);
+    return (area)/(phoEta * 2 * 3.14159 * 2);
 }
 
 bool in_jet_failure_region(float jetEta, float jetPhi) {
