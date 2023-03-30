@@ -36,7 +36,7 @@ void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-int accumulate(char const* config, char const* output) {
+int accumulate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
