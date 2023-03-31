@@ -198,7 +198,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
-        c = new paper(set + "_" + tag + "_dr_" + suffix, hb); std::cout << rows << std::endl;
+        c = new paper(set + "_" + tag + "_dr_" + suffix, hb);
         c->divide(-1, rows);
         c->accessory(text);
 
