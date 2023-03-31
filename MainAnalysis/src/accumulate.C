@@ -48,6 +48,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto sel = new configurer(selections);
 
@@ -68,7 +69,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
-    auto ihf = new interval(dcent);
+    auto ihf = new interval(dhf);
 
     auto mdr = new multival(rrdr, rrpt);
 
