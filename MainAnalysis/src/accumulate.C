@@ -47,7 +47,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
-    auto dcent = conf->get<std::vector<float>>("cent_diff");
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto sel = new configurer(selections);
 
@@ -187,15 +187,13 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     hb->ditto("es", "na");
 
-    std::cout << __LINE__ << std::endl;
-
     auto suffixes = { "d_pthf"s, "d_pt"s, "d_hf"s };
     auto texts = std::vector<std::function<void(int64_t)>> {
         pthf_info, std::bind(pt_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
 
     std::vector<paper*> c1(3, nullptr);
     std::vector<paper*> c2(3, nullptr);
-    std::vector<paper*> c3(3, nullptr);std::cout << __LINE__ << std::endl;
+    std::vector<paper*> c3(3, nullptr);
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -209,7 +207,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     pjet_f_dr->apply([&](TH1* h) { c1[0]->add(h, system); });
     pjet_f_dr_d_pt->apply([&](TH1* h) { c1[1]->add(h, system); });
-    pjet_f_dr_d_hf->apply([&](TH1* h) { c1[2]->add(h, system); });std::cout << __LINE__ << std::endl;
+    pjet_f_dr_d_hf->apply([&](TH1* h) { c1[2]->add(h, system); });
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -221,7 +219,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         c->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     }, c2, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
-    pjet_f_jpt->apply([&](TH1* h) { c2[0]->add(h, system); });std::cout << __LINE__ << std::endl;
+    pjet_f_jpt->apply([&](TH1* h) { c2[0]->add(h, system); });
     pjet_f_jpt_d_pt->apply([&](TH1* h) { c2[1]->add(h, system); });
     pjet_f_jpt_d_hf->apply([&](TH1* h) { c2[2]->add(h, system); });
 
@@ -235,16 +233,16 @@ int accumulate(char const* config, char const* selections, char const* output) {
         c->accessory(std::bind(line_at, _1, 0.f, 0, mdr->size()));
     }, c3, x{ ihf->size(), 1L, 1L }, suffixes, texts);
 
-    pjet_u_dr->apply([&](TH1* h) { c3[0]->add(h, system); });std::cout << __LINE__ << std::endl;
+    pjet_u_dr->apply([&](TH1* h) { c3[0]->add(h, system); });
     pjet_u_dr_d_pt->apply([&](TH1* h) { c3[1]->add(h, system); });
     pjet_u_dr_d_hf->apply([&](TH1* h) { c3[2]->add(h, system); });
-std::cout << __LINE__ << std::endl;
+
     hb->set_binary("system");
-    hb->sketch();std::cout << __LINE__ << std::endl;
+    hb->sketch();
 
     for (auto const& c : { c1, c2, c3 })
         for (auto p : c) { p->draw("pdf"); }
-std::cout << __LINE__ << std::endl;
+
     return 0;
 }
 
