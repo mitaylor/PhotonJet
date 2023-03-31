@@ -30,6 +30,6 @@ for sample in ${samples[@]}; do
     run_aa $sample
 
     for syst in qcd qcd_gen_iso wo_ele_rej tight_purity loose_purity cent_up cent_down; do
-        run_pp ${sample}_${syst}
+        run_aa ${sample}_${syst}
     done
 done
