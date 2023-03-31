@@ -101,15 +101,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
         h = h->shrink("s", shape, std::vector<int64_t>(h->dims(), 0));
     };
 
-    auto discard_low = [](history<TH1F>*& h, int64_t axis) {
-        auto shape = h->shape();
-        shape[axis] = shape[axis] - 2;
-        std::vector<int64_t> offsets(h->dims(), 0);
-        offsets[axis] = 2;
-
-        h = h->shrink("s", shape, offsets);
-    };
-
     discard(nevt, 0);
     discard(pjet_f_dr, 0);
     discard(pjet_f_jpt, 0);
