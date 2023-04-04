@@ -141,9 +141,15 @@ int populate(char const* config, char const* selections, char const* output) {
     auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
 
-    auto acc = conf->get<std::string>("acc");
+    auto acc_file = conf->get<std::string>("acc_file");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
+
+    auto eff_file = conf->get<std::string>("eff_file");
+    auto eff_label = conf->get<std::string>("eff_label");
+
+    auto rho_file = conf->get<std::string>("rho_file");
+    auto rho_label = conf->get<std::string>("rho_label");
 
     auto modulo = conf->get<int64_t>("modulo");
     auto parity = conf->get<bool>("parity");
@@ -159,9 +165,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
 
-    auto correct_efficiency = conf->get<bool>("correct_efficiency");
-    auto apply_rho_weighting = conf->get<bool>("apply_rho_weighting");
-
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto const hf_interval = conf->get<float>("hf_interval");
@@ -171,6 +174,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
     auto heavyion = sel->get<bool>("heavyion");
 
@@ -198,12 +202,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto alter_base = conf->get<std::string>("alter_base"); // get offset to paths from the original configuration file
-
-    auto eff_file = sel->get<std::string>("eff_file");
-    auto eff_label = sel->get<std::string>("eff_label");
-
-    auto rho_file = sel->get<std::string>("rho_file");
-    auto rho_label = sel->get<std::string>("rho_label");
 
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
@@ -274,8 +272,8 @@ int populate(char const* config, char const* selections, char const* output) {
     TFile* fe;
     history<TH1F>* efficiency = nullptr;
 
-    if (correct_efficiency) {
-        fe = new TFile((alter_base + eff_file).data(), "read");
+    if (!eff_file.empty()) {
+        fe = new TFile((alter_base + base + eff_file).data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
     }
 
@@ -283,8 +281,8 @@ int populate(char const* config, char const* selections, char const* output) {
     TFile* fr;
     history<TH1F>* rho_weighting = nullptr;
 
-    if (apply_rho_weighting) {
-        fr = new TFile((alter_base + rho_file).data(), "read");
+    if (!rho_file.empty()) {
+        fr = new TFile((alter_base + base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
@@ -293,8 +291,8 @@ int populate(char const* config, char const* selections, char const* output) {
     history<TH2F>* acceptance = nullptr;
     history<TH2F>* total = nullptr;
 
-    if (!acc.empty()) {
-        fa = new TFile(acc.data(), "read");
+    if (!acc_file.empty()) {
+        fa = new TFile(acc_file.data(), "read");
         acceptance = new history<TH2F>(fa, acc_label_acc);
         total = new history<TH2F>(fa, acc_label_ref);
     }
@@ -349,8 +347,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
             t->GetEntry(i);
 
-            if (!apply_rho_weighting && pjt->hiHF <= dhf.front()) { continue; }
-            if (!apply_rho_weighting && pjt->hiHF >= dhf.back()) { continue; }
+            if (rho_file.empty() && pjt->hiHF <= dhf.front()) { continue; }
+            if (rho_file.empty() && pjt->hiHF >= dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
 
             int64_t leading = -1;
@@ -428,7 +426,7 @@ int populate(char const* config, char const* selections, char const* output) {
             auto hf_x = ihf->index_for(hf);
 
             std::vector<int64_t> pthf_x;
-            if (apply_rho_weighting) {
+            if (!rho_file.empty()) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
                 }
@@ -438,7 +436,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto weight = pjt->w;
 
-            if (correct_efficiency && leading_pt < 70) {
+            if (!eff_file.empty() && leading_pt < 70) {
                 auto bin = (*efficiency)[1]->FindBin(leading_pt);
                 auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
                 if (corr < 1) { std::cout << "error" << std::endl; return -1; }
@@ -446,7 +444,7 @@ int populate(char const* config, char const* selections, char const* output) {
             }
 
             std::vector<float> weights;
-            if (apply_rho_weighting) {
+            if (!rho_file.empty()) {
                 auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
 
                 for (int64_t k = 0; k < ihf->size(); ++k) {

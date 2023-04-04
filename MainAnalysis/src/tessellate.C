@@ -220,8 +220,10 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
+    auto rho_file = conf->get<std::string>("rho_file");
+    auto rho_label = conf->get<std::string>("rho_label");
+
     auto apply_er = conf->get<bool>("apply_er");
-    auto apply_rho_weighting = conf->get<bool>("apply_rho_weighting");
 
     auto noniso_min = conf->get<float>("noniso_min");
     auto noniso_max = conf->get<float>("noniso_max");
@@ -248,9 +250,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto iso_max = sel->get<float>("iso_max");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
-
-    auto rho_file = sel->get<std::string>("rho_file");
-    auto rho_label = conf->get<std::string>("rho_label"); // get from the original configuration file
 
     auto dpt_short = dpt;
     dpt_short.pop_back();
@@ -287,7 +286,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     TFile* fr;
     history<TH1F>* rho_weighting = nullptr;
 
-    if (apply_rho_weighting) {
+    if (!rho_file.empty()) {
         fr = new TFile(rho_file.data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
