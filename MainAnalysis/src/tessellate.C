@@ -401,6 +401,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
             auto entries = std::get<0>(res);
             auto fraction = std::get<1>(res);
             auto chisq = std::get<4>(res);
+            auto ndof = std::get<5>(res);
 
             pfit->Scale(entries * fraction / pfit->Integral());
             pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
@@ -420,6 +421,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
             (*purity)[i]->SetBinContent(1, 1. - nbkg / ntot);
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
             printf("chisq: %.3f\n", chisq);
+            printf("chisq: %.3f\n", ndof);
         }
         else {
             (*purity)[i]->SetBinContent(1, 1);
