@@ -84,10 +84,11 @@ int populate(char const* config, char const* selections, char const* output) {
     /* make histograms */
     auto ipt = new interval("photon p_{T}", dpt);
     auto ihf = new interval(dhf);
+    auto mhf = new multival(ihf);
 
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
-    auto photon_pt_spectrum = new memory<TH1F>("pt_spectrum"s, "", fpt, ihf);
+    auto photon_pt_spectrum = new memory<TH1F>("pt_spectrum"s, "", fpt, mhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
