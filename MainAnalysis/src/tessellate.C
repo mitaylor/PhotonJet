@@ -421,7 +421,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
             (*purity)[i]->SetBinContent(1, 1. - nbkg / ntot);
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
             printf("chisq: %.3f\n", chisq);
-            printf("chisq: %.3f\n", ndof);
+            printf("chisq: %d\n", ndof);
         }
         else {
             (*purity)[i]->SetBinContent(1, 1);
