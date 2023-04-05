@@ -89,7 +89,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto const see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
