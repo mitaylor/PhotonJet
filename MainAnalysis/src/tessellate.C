@@ -239,6 +239,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
     auto heavyion = sel->get<bool>("heavyion");
 
@@ -287,7 +288,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     history<TH1F>* rho_weighting = nullptr;
 
     if (!rho_file.empty()) {
-        fr = new TFile(rho_file.data(), "read");
+        fr = new TFile((base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
