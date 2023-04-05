@@ -42,10 +42,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto input = conf->get<std::vector<std::string>>("input");
 
-    auto acc_file = conf->get<std::string>("acc_file");
-    auto acc_label_ref = conf->get<std::string>("acc_label_ref");
-    auto acc_label_acc = conf->get<std::string>("acc_label_acc");
-
     auto eff_file = conf->get<std::string>("eff_file");
     auto eff_label = conf->get<std::string>("eff_label");
 
@@ -91,7 +87,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
-    auto photon_pt_spectrum = new memory<TH1F>("pt_spectrum"s, "", fdr, ihf);
+    auto photon_pt_spectrum = new memory<TH1F>("pt_spectrum"s, "", fpt, ihf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -115,17 +111,6 @@ int populate(char const* config, char const* selections, char const* output) {
     if (!rho_file.empty()) {
         fr = new TFile((base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
-    }
-
-    /* load acceptance weighting for HI */
-    TFile* fa;
-    history<TH2F>* acceptance = nullptr;
-    history<TH2F>* total = nullptr;
-
-    if (!acc_file.empty()) {
-        fa = new TFile(acc_file.data(), "read");
-        acceptance = new history<TH2F>(fa, acc_label_acc);
-        total = new history<TH2F>(fa, acc_label_ref);
     }
 
     /* add weight for the number of photons, based on the fraction that are excluded by area */
@@ -254,7 +239,7 @@ int populate(char const* config, char const* selections, char const* output) {
             }
 
             zip([&](auto const& index, auto const& weight) {
-                (*nevt)[index]->Fill(1., weight * pho_cor);
+                (*photon_pt_spectrum)[index]->Fill(leading_pt, weight * pho_cor);
             }, hf_x, weights);
             
             tentries++;
