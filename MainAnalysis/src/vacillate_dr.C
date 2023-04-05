@@ -42,6 +42,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tag = conf->get<std::string>("tag");
 
+    auto eff_file = conf->get<std::string>("eff_file");
+    auto eff_label = conf->get<std::string>("eff_label");
+
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
