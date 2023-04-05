@@ -58,8 +58,8 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
-    auto rrdr = sel->get<std::vector<float>>("rdr_range");
-    auto rrpt = sel->get<std::vector<float>>("rpt_range");
+    auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rptr = sel->get<std::vector<float>>("ptr_range");
 
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
@@ -71,7 +71,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto ihf = new interval(dhf);
 
-    auto mdr = new multival(rrdr, rrpt);
+    auto mdr = new multival(rdrr, rptr);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -166,7 +166,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     cms += " #it{#scale[1.2]{Preliminary}}"s;
     cms += "                                                                   ";
     cms += "                                                                   ";
-    cms += "anti-k_{T} R = 0.3, p_{T}^{jet} > "s + to_text(jet_pt_min) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs) + ", ";
+    cms += "anti-k_{T} R = 0.3, p_{T}^{jet} > "s + to_text(jet_pt_min) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
     cms += ", p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} > "s + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {

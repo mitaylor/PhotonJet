@@ -82,12 +82,12 @@ void fill_axes(pjtree* pjt,
         if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         /* do acceptance weighting */
-        double corr = 1;
+        double cor = 1;
         if (exclude) {
             auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
             auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
-            corr = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-            if (corr < 1) { std::cout << "error" << std::endl; }
+            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+            if (cor < 1) { std::cout << "error" << std::endl; }
         }
 
         double jt_deta = jet_eta - jet_wta_eta;
@@ -120,9 +120,9 @@ void fill_axes(pjtree* pjt,
 
         zip([&](auto const& index, auto const& weight) {
             if (jet_pt < 200 && jet_pt > jet_pt_min) {
-                (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), corr * weight);
-                (*pjet_f_jpt)[index]->Fill(jet_pt, corr * weight);
-                (*pjet_f_dr)[index]->Fill(jt_dr, corr * weight);
+                (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), cor * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
+                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
             }
         }, pthf_x, weights);
     }
@@ -192,8 +192,8 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
     auto rdr = sel->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram and also the smearing application
 
-    auto rrdr = sel->get<std::vector<float>>("rdr_range");
-    auto rrpt = sel->get<std::vector<float>>("rpt_range");
+    auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rptr = sel->get<std::vector<float>>("ptr_range");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
@@ -214,7 +214,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto idr = new interval("#deltaj"s, rdr);
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
 
-    auto mdr = new multival(rrdr, rrpt);
+    auto mdr = new multival(rdrr, rptr);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
@@ -423,19 +423,19 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (!eff_file.empty() && leading_pt < 70) {
                 auto bin = (*efficiency)[1]->FindBin(leading_pt);
-                auto corr = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
-                if (corr < 1) { std::cout << "error" << std::endl; return -1; }
-                weight *= corr;
+                auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
+                if (cor < 1) { std::cout << "error" << std::endl; return -1; }
+                weight *= cor;
             }
 
             std::vector<float> weights;
             if (!rho_file.empty()) {
-                auto avg_rho = get_avg_rho(pjt,-photon_eta_abs,photon_eta_abs);
+                auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
 
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
-                    auto corr = (*rho_weighting)[k]->GetBinContent(bin);
-                    weights.push_back(weight * corr);
+                    auto cor = (*rho_weighting)[k]->GetBinContent(bin);
+                    weights.push_back(weight * cor);
                 }
             } else {
                 weights.push_back(weight);
