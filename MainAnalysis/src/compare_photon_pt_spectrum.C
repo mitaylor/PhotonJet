@@ -113,7 +113,8 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     p1->draw("pdf");
 
     in(output, [&]() {
-        h_data_nevt->save();
+        photon_pt_data->save();
+        photon_pt_mc->save();
     });
 
     return 0;
