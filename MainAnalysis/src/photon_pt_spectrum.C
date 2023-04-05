@@ -125,7 +125,7 @@ int populate(char const* config, char const* selections, char const* output) {
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        for (int64_t i = 0, m = 0; i < nentries; ++i) {
+        for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
             t->GetEntry(i);
@@ -203,8 +203,6 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (electron) { continue; }
             }
 
-            auto pt_x = ipt->index_for(leading_pt);
-
             double hf = pjt->hiHF;
 
             std::vector<int64_t> hf_x;
@@ -241,8 +239,6 @@ int populate(char const* config, char const* selections, char const* output) {
             zip([&](auto const& index, auto const& weight) {
                 (*photon_pt_spectrum)[index]->Fill(leading_pt, weight * pho_cor);
             }, hf_x, weights);
-            
-            tentries++;
         }
 
         f->Close();
