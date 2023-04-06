@@ -53,9 +53,9 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     TFile* f_data = new TFile(input_data.data(), "read");
     TFile* f_mc = new TFile(input_mc.data(), "read"); 
 
-    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
+    auto h_data_nevt = new history<TH1F>(f_data, "raw_nevt");
     h_data_nevt->rename("h_data_nevt");
-    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
+    auto h_mc_nevt = new history<TH1F>(f_mc, "raw_nevt");
     h_mc_nevt->rename("h_mc_nevt");
 
     /* create intervals and multivals */
@@ -109,7 +109,7 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     if (tag == "aa") hb->alias("mc", "PbPb MC");
     else             hb->alias("mc", "pp MC");
 
-    auto p1 = new paper("photon_pt_comparison_accumulate_" + tag, hb);
+    auto p1 = new paper("photon_pt_comparison_populate_" + tag, hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
