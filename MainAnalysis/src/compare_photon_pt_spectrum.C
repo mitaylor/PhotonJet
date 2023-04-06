@@ -31,6 +31,12 @@ void normalise_to_unity(T*&... args) {
         obj->Scale(1. / obj->Integral()); }), 0)... };
 }
 
+template <typename... T>
+void scale_bin_width(T*... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1., "width"); }), 0)... };
+}
+
 int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto conf = new configurer(config);
 
@@ -39,7 +45,6 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 
     auto tag = conf->get<std::string>("tag");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -47,10 +52,10 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     TFile* f_data = new TFile(input_data.data(), "read");
     TFile* f_mc = new TFile(input_mc.data(), "read"); 
 
-    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
-    h_data_nevt->rename("h_data_nevt");
-    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
-    h_mc_nevt->rename("h_mc_nevt");
+    auto h_data = new history<TH1F>(f_data, "raw_pt_spectrum");
+    h_data->rename("h_data");
+    auto h_mc = new history<TH1F>(f_mc, "raw_pt_spectrum");
+    h_mc->rename("h_mc");
 
     /* create intervals and multivals */
     auto mpthf = new multival(dpt, dhf);
@@ -58,21 +63,14 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto ipt = new interval(dpt);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
-    auto photon_pt_data = new history<TH1F>("photon_pt_data"s, "", fpt, ihf->size());
-    auto photon_pt_mc = new history<TH1F>("photon_pt_mc"s, "", fpt, ihf->size());
+    auto h_data = new history<TH1F>("h_data"s, "", fpt, ihf->size());
+    auto h_mc = new history<TH1F>("h_mc"s, "", fpt, ihf->size());
 
-    /* set histogram contents */
-    for (int64_t i = 0; i < ihf->size(); ++i) {
-        for (int j = 0; j < (*photon_pt_data)[i]->GetNbinsX(); ++j) {
-            auto index = mpthf->index_for(x{j, i});
-            (*photon_pt_data)[i]->SetBinContent(j+1, (*h_data_nevt)[index]->GetBinContent(1));
-            (*photon_pt_data)[i]->SetBinError(j+1, (*h_data_nevt)[index]->GetBinError(1));
-            (*photon_pt_mc)[i]->SetBinContent(j+1, (*h_mc_nevt)[index]->GetBinContent(1));
-            (*photon_pt_mc)[i]->SetBinError(j+1, (*h_mc_nevt)[index]->GetBinError(1));
-        }
-    }
+    scale_bin_width(h_data, h_mc);
+    normalise_to_unity(h_data, h_mc);
 
-    normalise_to_unity(photon_pt_data, photon_pt_mc);
+    h_data->GetXaxis()->SetRangeUser(40, 200);
+    h_mc->GetXaxis()->SetRangeUser(40, 200);
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
@@ -105,16 +103,16 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag);
     
-    photon_pt_data->apply([&](TH1* h) { p1->add(h, "data"); });
-    photon_pt_mc->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mc"); });
+    h_data->apply([&](TH1* h) { p1->add(h, "data"); });
+    h_mc->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mc"); });
 
     hb->sketch();
 
     p1->draw("pdf");
 
     in(output, [&]() {
-        photon_pt_data->save();
-        photon_pt_mc->save();
+        h_data->save();
+        h_mc->save();
     });
 
     return 0;
