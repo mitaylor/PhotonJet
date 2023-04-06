@@ -58,14 +58,8 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     h_mc->rename("h_mc");
 
     /* create intervals and multivals */
-    auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
-    auto ipt = new interval(dpt);
-    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
-
-    auto h_data = new history<TH1F>("h_data"s, "", fpt, ihf->size());
-    auto h_mc = new history<TH1F>("h_mc"s, "", fpt, ihf->size());
-
+    
     scale_bin_width(h_data, h_mc);
     normalise_to_unity(h_data, h_mc);
 
