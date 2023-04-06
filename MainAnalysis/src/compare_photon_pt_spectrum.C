@@ -59,12 +59,12 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
-    
+
     scale_bin_width(h_data, h_mc);
     normalise_to_unity(h_data, h_mc);
 
-    h_data->GetXaxis()->SetRangeUser(40, 200);
-    h_mc->GetXaxis()->SetRangeUser(40, 200);
+    h_data->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
+    h_mc->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
