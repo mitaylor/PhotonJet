@@ -12,11 +12,11 @@ run_aa() {
 samples=(aa_qcd)
 
 for sample in ${samples[@]}; do
-    run_aa regulate_${sample}_raw
-    run_aa regulate_${sample}_bkg
+    run_aa populate_${sample}_raw
+    run_aa populate_${sample}_bkg
 
     # for syst in gen_iso no_ex; do
-    #     run_aa regulate_${sample}_${syst}_raw
-    #     run_aa regulate_${sample}_${syst}_bkg
+    #     run_aa populate_${sample}_${syst}_raw
+    #     run_aa populate_${sample}_${syst}_bkg
     # done
 done
