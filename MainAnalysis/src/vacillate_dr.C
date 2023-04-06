@@ -42,9 +42,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tag = conf->get<std::string>("tag");
 
-    auto eff_file = conf->get<std::string>("eff_file");
-    auto eff_label = conf->get<std::string>("eff_label");
-
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
@@ -141,15 +138,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
-    /* load efficiency correction */
-    TFile* fe;
-    history<TH1F>* efficiency = nullptr;
-
-    if (!eff_file.empty()) {
-        fe = new TFile((base + eff_file).data(), "read");
-        efficiency = new history<TH1F>(fe, eff_label);
-    }
 
     /* load centrality weighting for MC */
     TFile* frho;
@@ -284,14 +272,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* fill event weight */
             auto weight = p->w;
-
-            if (!eff_file.empty() && leading_pt < 70) {
-                auto bin = (*efficiency)[1]->FindBin(leading_pt);
-                auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
-                if (cor < 1) { std::cout << "error" << std::endl; return -1; }
-                weight *= cor;
-            }
-
             std::vector<float> weights(ihf->size(), weight);
             
             if (heavyion) {
