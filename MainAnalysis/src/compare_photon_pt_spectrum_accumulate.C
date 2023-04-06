@@ -47,9 +47,14 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     TFile* f_data = new TFile(input_data.data(), "read");
     TFile* f_mc = new TFile(input_mc.data(), "read"); 
 
-    auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
+    // auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
+    // h_data_nevt->rename("h_data_nevt");
+    // auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
+    // h_mc_nevt->rename("h_mc_nevt");
+
+    auto h_data_nevt = new history<TH1F>(f_data, "raw_nevt");
     h_data_nevt->rename("h_data_nevt");
-    auto h_mc_nevt = new history<TH1F>(f_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
+    auto h_mc_nevt = new history<TH1F>(f_mc, "raw_nevt");
     h_mc_nevt->rename("h_mc_nevt");
 
     /* create intervals and multivals */
