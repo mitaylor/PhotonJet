@@ -39,9 +39,10 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 
     auto tag = conf->get<std::string>("tag");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    std::vector<float> dpt { 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200 };
 
     /* load history objects */
     TFile* f_data = new TFile(input_data.data(), "read");

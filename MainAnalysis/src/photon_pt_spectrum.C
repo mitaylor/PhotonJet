@@ -75,7 +75,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const iso_max = sel->get<float>("iso_max");
     auto const gen_iso_max = sel->get<float>("gen_iso_max");
 
-    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+    std::vector<float> dpt { 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200 };
 
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
