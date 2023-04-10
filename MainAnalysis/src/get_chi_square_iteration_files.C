@@ -45,7 +45,7 @@ TH2F* variance(TH1* flat, multival const* m) {
 }
 
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets, bool fine) {
+           std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
@@ -99,13 +99,12 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     delete [] list;
     delete cov;
 
-    if (fine) hfold->Rebin();
     hfold->Scale(1., "width");
 
     return hfold;
 }
 
-int quantitate(char const* config, char const* output) {
+int get_chi_square_iteration_files(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -114,12 +113,17 @@ int quantitate(char const* config, char const* output) {
     auto before_label = conf->get<std::string>("before_label");
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
 
-    auto fine = conf->get<bool>("fine");
-
     auto afters = conf->get<std::vector<std::string>>("afters");
 
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rptr = sel->get<std::vector<float>>("ptr_range");
+
+    auto osr = sel->get<std::vector<int64_t>>("osr");
 
     /* create intervals and multivals */
     auto idrr = new interval("#deltaj"s, rdrr);
@@ -127,22 +131,15 @@ int quantitate(char const* config, char const* output) {
 
     auto mr = new multival(*idrr, *iptr);
 
-    /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
-    std::vector<int64_t> osr{ 0, 0, 1, 2 };
-
-    if (fine) {
-        for (auto os : osr) os *= 2;
-    }
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* fbefore = new TFile(before.data(), "read");
+    TFile* fbefore = new TFile((base + before).data(), "read");
 
     std::vector<TFile*> fafters(afters.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
-        fafter = new TFile(after.data(), "read");
+        fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
     }, fafters, afters);
 
     /* prepare output */
@@ -158,8 +155,8 @@ int quantitate(char const* config, char const* output) {
     auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
 
     for (int64_t i = 0; i < hin->size(); ++i) {
-        (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr, fine);
-        (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr, fine);
+        (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
+        (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
     }
 
     normalise_to_unity(side0, side1);
@@ -182,8 +179,8 @@ int quantitate(char const* config, char const* output) {
                     std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
                     auto HRefolded = (TH1F*) fafters[j]->Get(name.data());
 
-                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr, fine);
-                    (*refold1)[j] = fold(HRefolded, nullptr, mr, 1, osr, fine);
+                    (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
+                    (*refold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
         }
 
         normalise_to_unity(refold0, refold1);
@@ -201,9 +198,9 @@ int quantitate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return quantitate(argv[1], argv[2]);
+    if (argc == 4)
+        return get_chi_square_iteration_files(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
