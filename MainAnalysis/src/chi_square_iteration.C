@@ -21,9 +21,6 @@
 #include <vector>
 #include <iostream>
 
-//nominal_s_pure_raw_sub_pjet_u_dr_sum0_side0
-//nominal_s_pure_raw_sub_pjet_u_dr_sum0_refold0_iteration
-
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 

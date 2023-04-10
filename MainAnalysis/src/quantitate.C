@@ -46,7 +46,7 @@ TH2F* variance(TH1* flat, multival const* m) {
 }
 
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets, bool fine) {
+           std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
@@ -100,14 +100,13 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     delete [] list;
     delete cov;
 
-    if (fine) hfold->Rebin();
     hfold->Scale(1., "width");
 
     return hfold;
 }
 
 TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets, bool fine) {
+           std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
@@ -158,13 +157,12 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
 
     delete [] list;
 
-    if (fine) hfold->Rebin();
     hfold->Scale(1., "width");
 
     return hfold;
 }
 
-int quantitate(char const* config, char const* output) {
+int quantitate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -174,18 +172,24 @@ int quantitate(char const* config, char const* output) {
     auto before_figures = conf->get<std::vector<std::string>>("before_figures");
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
     
-    auto set = conf->get<std::vector<float>>("set");
-    auto fine = conf->get<bool>("fine");
+    auto fix = conf->get<std::vector<float>>("fix");
 
     auto afters = conf->get<std::vector<std::string>>("afters");
 
     auto regularization = conf->get<std::string>("regularization");
 
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
+    auto sel = new configurer(selections);
 
-    auto rdrg = conf->get<std::vector<float>>("drg_range");
-    auto rptg = conf->get<std::vector<float>>("ptg_range");
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+    auto rptr = sel->get<std::vector<float>>("ptr_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
+
+    auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     /* create intervals and multivals */
     auto idrr = new interval("#deltaj"s, rdrr);
@@ -197,27 +201,18 @@ int quantitate(char const* config, char const* output) {
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
 
-    /* set offsets for folding pre and post unfolding so that jets between 30-120 are used */
-    std::vector<int64_t> osr{ 0, 0, 1, 2 };
-    std::vector<int64_t> osg{ 0, 0, 1, 1 };
-
-    if (fine) {
-        for (auto os : osr) os *= 2;
-        for (auto os : osg) os *= 2;
-    }
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* fbefore = new TFile(before.data(), "read");
+    TFile* fbefore = new TFile((base + before).data(), "read");
 
     std::vector<TFile*> fafters(afters.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
-        fafter = new TFile(after.data(), "read");
+        fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
     }, fafters, afters);
 
-    TFile* fiter = new TFile(regularization.data(), "read");
+    TFile* fiter = new TFile((base + regularization).data(), "read");
     auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);
 
     /* prepare output from pre-unfolded data */
@@ -242,8 +237,8 @@ int quantitate(char const* config, char const* output) {
         auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
 
         for (int64_t i = 0; i < hin->size(); ++i) {
-            (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr, fine);
-            (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr, fine);
+            (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
+            (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
         }
 
         normalise_to_unity(side0, side1);
@@ -292,7 +287,7 @@ int quantitate(char const* config, char const* output) {
             }
         }
 
-        if (set.size() == choice.size()) { choice[i] = set[i]; }
+        if (fix.size() == choice.size()) { choice[i] = fix[i]; }
 
         std::cout << std::endl << choice[i] << std::endl;
     }
@@ -308,20 +303,19 @@ int quantitate(char const* config, char const* output) {
         auto HMeasured = (TH1F*) fafters[j]->Get("HMCMeasured");
 
         (*unfolded)[j] = HUnfoldedBayes;
-        (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg, fine);
-        (*unfolded_fold1)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg, fine);
+        (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
+        (*unfolded_fold1)[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
 
         (*refolded)[j] = HRefolded;
-        (*refolded_fold0)[j] = fold((*refolded)[j], nullptr, mr, 0, osr, fine);
-        (*refolded_fold1)[j] = fold((*refolded)[j], nullptr, mr, 1, osr, fine);
+        (*refolded_fold0)[j] = fold((*refolded)[j], nullptr, mr, 0, osr);
+        (*refolded_fold1)[j] = fold((*refolded)[j], nullptr, mr, 1, osr);
 
         (*measured)[j] = HMeasured;
-        (*measured_fold0)[j] = fold((*measured)[j], nullptr, mr, 0, osr, fine);
-        (*measured_fold1)[j] = fold((*measured)[j], nullptr, mr, 1, osr, fine);
+        (*measured_fold0)[j] = fold((*measured)[j], nullptr, mr, 0, osr);
+        (*measured_fold1)[j] = fold((*measured)[j], nullptr, mr, 1, osr);
     }
 
-    normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1, 
-        measured_fold0, measured_fold1);
+    normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1, measured_fold0, measured_fold1);
 
     unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
@@ -353,9 +347,9 @@ int quantitate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return quantitate(argv[1], argv[2]);
+    if (argc == 4)
+        return quantitate(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
