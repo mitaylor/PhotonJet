@@ -39,7 +39,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
     auto sel = new configurer(selections);
 
-    // auto set = sel->get<std::string>("set");
+    auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
@@ -148,7 +148,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
         stack_text(index, 0.25, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    auto p1 = new paper(label + "_chi_square", hb);
+    auto p1 = new paper(set + "_" + label + "_chi_square", hb);
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
