@@ -27,7 +27,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int data_iteration_study(char const* config, char const* output) {
+int chi_square_itertaion(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -35,19 +35,27 @@ int data_iteration_study(char const* config, char const* output) {
 
     auto base_label = conf->get<std::string>("base_label");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto label = conf->get<std::string>("label");
 
-    auto mpthf = new multival(dpt, dhf);
+    auto sel = new configurer(selections);
+
+    // auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
+    vector<float> rpt = { dpt[0], dpt[dpt.size() - 2]};
+
+    auto mpthf = new multival(rpt, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* f = new TFile(input.data(), "read");
+    TFile* f = new TFile((base + input).data(), "read");
 
     auto base0 = new history<TH1F>(f, tag + "_"s + base_label + "_side0");
     auto base1 = new history<TH1F>(f, tag + "_"s + base_label + "_side1");
@@ -134,7 +142,7 @@ int data_iteration_study(char const* config, char const* output) {
     cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
@@ -160,9 +168,11 @@ int data_iteration_study(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return data_iteration_study(argv[1], argv[2]);
+int main(int argc, char* argv[]) {
+    if (argc == 4)
+        return chi_square_itertaion(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
+}
 }
