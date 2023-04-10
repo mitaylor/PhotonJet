@@ -21,7 +21,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int vary_response_matrix(char const* config, const char* output) {
+int vary_response_matrix(char const* config, char const* selections, const char* output) {
     auto conf = new configurer(config);
 
     auto input_truth = conf->get<std::string>("input_truth");
@@ -31,23 +31,13 @@ int vary_response_matrix(char const* config, const char* output) {
 
     auto tag = conf->get<std::string>("tag");
 
-    auto rdr = conf->get<std::vector<float>>("drg_range");
-    auto rpt = conf->get<std::vector<float>>("ptg_range");
+    auto sel = new configurer(selections);
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
-    auto dhf = conf->get<std::vector<float>>("hf_diff");
-    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
-
-    /* create intervals and multivals */
-    // auto ipt= new interval(rpt);
-    // auto idr = new interval(rdr);
-    // auto mg = new multival(rdr, rpt);
-
-    // auto ihf = new interval(dhf);
-    // auto mpthf = new multival(dpt, dhf);
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
     /* load history objects */
-    TFile* ftruth = new TFile(input_truth.data(), "read");
+    TFile* ftruth = new TFile((base + input_truth).data(), "read");
 
     auto h_truth_g = new history<TH1F>(ftruth, tag + "_"s + truth_label_g);
     auto h_truth_r = new history<TH1F>(ftruth, tag + "_"s + truth_label_r);
@@ -82,9 +72,9 @@ int vary_response_matrix(char const* config, const char* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return vary_response_matrix(argv[1], argv[2]);
+    if (argc == 4)
+        return vary_response_matrix(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
