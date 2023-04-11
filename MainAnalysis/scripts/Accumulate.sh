@@ -34,6 +34,8 @@ run_aa() {
 #     done
 # done
 
+samples=(aa)
+
 for sample in ${samples[@]}; do
     for syst in mebs qcd_mebs; do
         run_aa ${sample}_${syst}
