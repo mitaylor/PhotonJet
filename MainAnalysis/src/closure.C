@@ -85,9 +85,9 @@ int closure(char const* config, char const* selections, const char* output) {
     if (label.size() == 0) label = tag;
 
     /* load history objects */
-    TFile* fdata = new TFile((base + input_data.data()), "read");
-    TFile* fqcd = new TFile((base + input_qcd.data()), "read");
-    TFile* ftruth = new TFile((base + input_truth.data()), "read");
+    TFile* fdata = new TFile((base + input_data).data(), "read");
+    TFile* fqcd = new TFile((base + input_qcd).data(), "read");
+    TFile* ftruth = new TFile((base + input_truth).data(), "read");
 
     auto h_r_data_before = new history<TH1F>(fdata, tag + "_"s + r_data_before_label);
     auto h_r_data_after = new history<TH1F>(fdata, tag + "_"s + r_data_after_label);
