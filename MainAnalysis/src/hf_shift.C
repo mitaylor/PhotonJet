@@ -28,7 +28,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int hf_shift(char const* config, char const* output) {
+int hf_shift(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto hp_input = conf->get<std::vector<std::string>>("hp_input");
@@ -36,12 +36,15 @@ int hf_shift(char const* config, char const* output) {
 
     auto tag = conf->get<std::string>("tag");
 
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
+    auto sel = new configurer(selections);
 
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
+    auto set = sel->get<std::string>("set");
+
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
 
     TH1::SetDefaultSumw2();
     
@@ -275,36 +278,35 @@ int hf_shift(char const* config, char const* output) {
     /* draw distributions */
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV"s; 
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
-    // cms += "         p_{T}^{#gamma} > 40 GeV";
 
     auto hb = new pencil();
     hb->category("type", "Pythia+Hydjet", "Hydjet"); 
 
-    auto c3 = new paper(tag + "_pythia_hydjet_hf_v_ncoll", hb); 
+    auto c3 = new paper(set + "_" + tag + "_pythia_hydjet_hf_v_ncoll", hb); 
     apply_style(c3, cms, system_tag);
     c3->set(paper::flags::logz);
     c3->add((*hp_hn)[0], "Pythia+Hydjet");
     c3->adjust((*hp_hn)[0], "col", "");
 
-    auto c4 = new paper(tag + "_hydjet_hf_v_ncoll", hb);
+    auto c4 = new paper(set + "_" + tag + "_hydjet_hf_v_ncoll", hb);
     apply_style(c4, cms, system_tag);
     c4->set(paper::flags::logz);
     c4->add((*mb_hn)[0], "Hydjet");
     c4->adjust((*mb_hn)[0], "col", "");
 
-    auto c5 = new paper(tag + "_pythia_hydjet_rho_v_ncoll", hb); 
+    auto c5 = new paper(set + "_" + tag + "_pythia_hydjet_rho_v_ncoll", hb); 
     apply_style(c5, cms, system_tag);
     c5->set(paper::flags::logz);
     c5->add((*hp_rn)[0], "Pythia+Hydjet");
     c5->adjust((*hp_rn)[0], "col", "");
 
-    auto c6 = new paper(tag + "_hydjet_rho_v_ncoll", hb);
+    auto c6 = new paper(set + "_" + tag + "_hydjet_rho_v_ncoll", hb);
     apply_style(c6, cms, system_tag);
     c6->set(paper::flags::logz);
     c6->add((*mb_rn)[0], "Hydjet");
     c6->adjust((*mb_rn)[0], "col", "");
 
-    auto c8 = new paper(tag + "_comp_hf_v_ncoll", hb);
+    auto c8 = new paper(set + "_" + tag + "_comp_hf_v_ncoll", hb);
     c8->divide(1, -1);
     apply_style(c8, cms, system_tag);
     c8->add((*mb_hn_p)[0], "Hydjet");
@@ -312,7 +314,7 @@ int hf_shift(char const* config, char const* output) {
     c8->add(hp_hn_h);
     c8->accessory(hn_fit_info);
 
-    auto c9 = new paper(tag + "_comp_rho_v_ncoll", hb);
+    auto c9 = new paper(set + "_" + tag + "_comp_rho_v_ncoll", hb);
     c9->divide(1, -1);
     apply_style(c9, cms, system_tag);
     c9->add((*mb_rn_p)[0], "Hydjet");
@@ -358,8 +360,9 @@ int hf_shift(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return hf_shift(argv[1], argv[2]);
+    if (argc == 4)
+        return hf_shift(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }
