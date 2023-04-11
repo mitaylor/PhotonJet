@@ -71,7 +71,6 @@ int closure(char const* config, char const* selections, const char* output) {
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
