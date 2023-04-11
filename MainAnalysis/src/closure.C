@@ -163,7 +163,7 @@ int closure(char const* config, char const* selections, const char* output) {
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, 0.71, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.65, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.65, jet_selections.data());
         }
     };
 
@@ -184,7 +184,7 @@ int closure(char const* config, char const* selections, const char* output) {
     hb->alias("matrix", "Response Matrix Reco");
 
     /* (1) unfolded MC vs reco truth dr */
-    auto p1 = new paper(set + "_" + label + "_dj_unfolded_mc_vs_truth_reco_iso", hb);
+    auto p1 = new paper(set + "_" + label + "_dj_unfolded_mc_vs_truth_gen_iso", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -192,10 +192,10 @@ int closure(char const* config, char const* selections, const char* output) {
     p1->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
     
     h_r_qcd_after->apply([&](TH1* h) { p1->add(h, "qcd_after"); });
-    h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_reco_iso"); });
+    h_r_truth_gen_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen_iso"); });
     
     /* (2) unfolded MC vs reco truth jtpt */
-    auto p2 = new paper(set + "_" + label + "_jtpt_unfolded_mc_vs_truth_reco_iso", hb);
+    auto p2 = new paper(set + "_" + label + "_jtpt_unfolded_mc_vs_truth_gen_iso", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
@@ -203,7 +203,7 @@ int closure(char const* config, char const* selections, const char* output) {
     p2->accessory(std::bind(line_at, _1, 0.f, bjet_pt[0], bjet_pt[1]));
     
     h_j_qcd_after->apply([&](TH1* h) { p2->add(h, "qcd_after"); });
-    h_j_truth_reco_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_reco_iso"); });
+    h_j_truth_gen_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen_iso"); });
 
     /* (3) data vs refolded data */
     auto p3 = new paper(set + "_" + label + "_refolding_test", hb);
