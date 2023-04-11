@@ -31,7 +31,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int estimate_hf(char const* config, char const* output) {
+int estimate_hf(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::vector<std::string>>("input");
@@ -42,14 +42,18 @@ int estimate_hf(char const* config, char const* output) {
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto apply_er = conf->get<bool>("apply_er");
 
-    auto const photon_pt_min = conf->get<float>("photon_pt_min");
-    auto const photon_eta_abs = conf->get<float>("photon_eta_abs");
+    auto sel = new configurer(selections);
 
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_max = conf->get<float>("see_max");
-    auto const iso_max = conf->get<float>("iso_max");
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
+
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     /* create histograms */
     int max_hf = 70000;
@@ -211,7 +215,7 @@ int estimate_hf(char const* config, char const* output) {
     auto hb = new pencil();
     hb->category("type", "Data", "MC");
     
-    auto c1 = new paper(tag + "_estimated_hf_nvtx_1", hb);
+    auto c1 = new paper(set + "_" + tag + "_estimated_hf_nvtx_1", hb);
     apply_style(c1, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c1->accessory(pt_info);
@@ -227,7 +231,7 @@ int estimate_hf(char const* config, char const* output) {
     c1->draw("pdf");
 
     if (type == "MC") {
-        auto c2 = new paper(tag + "_estimated_hf_npu_0", hb);
+        auto c2 = new paper(set + "_" + tag + "_estimated_hf_npu_0", hb);
         apply_style(c2, "", "pp #sqrt{s} = 5.02 TeV"s);
 
         c2->accessory(pt_info);
@@ -242,7 +246,7 @@ int estimate_hf(char const* config, char const* output) {
         c2->draw("pdf");
     }
 
-    auto c3 = new paper(tag + "_nvtx_hf", hb);
+    auto c3 = new paper(set + "_" + tag + "_nvtx_hf", hb);
     apply_style(c3, "", "pp #sqrt{s} = 5.02 TeV"s);
 
     c3->add((*nvtx)[0], type);
@@ -251,7 +255,7 @@ int estimate_hf(char const* config, char const* output) {
     c3->draw("pdf");
 
     if (type == "MC") {
-        auto c4 = new paper(tag + "_npu_hf", hb);
+        auto c4 = new paper(set + "_" + tag + "_npu_hf", hb);
         apply_style(c4, "", "pp #sqrt{s} = 5.02 TeV"s);
 
         c4->add((*npu)[0], type);
@@ -259,7 +263,7 @@ int estimate_hf(char const* config, char const* output) {
         hb->sketch();
         c4->draw("pdf");
 
-        auto c5 = new paper(tag + "_npv_hf", hb);
+        auto c5 = new paper(set + "_" + tag + "_npv_hf", hb);
         apply_style(c5, "", "pp #sqrt{s} = 5.02 TeV"s);
 
         c5->add((*npv)[0], type);
@@ -274,9 +278,9 @@ int estimate_hf(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return estimate_hf(argv[1], argv[2]);
+    if (argc == 4)
+        return estimate_hf(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
