@@ -25,7 +25,7 @@ void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-int data_mc_comparison(char const* config, const char* output) {
+int closure(char const* config, char const* selections, const char* output) {
     auto conf = new configurer(config);
 
     auto input_data = conf->get<std::string>("input_data");
@@ -59,6 +59,11 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
     auto heavyion = sel->get<bool>("heavyion");
 
@@ -310,9 +315,9 @@ int data_mc_comparison(char const* config, const char* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return data_mc_comparison(argv[1], argv[2]);
+    if (argc == 4)
+        return closure(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
