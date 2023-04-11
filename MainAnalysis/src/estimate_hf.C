@@ -54,6 +54,7 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
     auto const iso_max = sel->get<float>("iso_max");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+    dpt.pop_back();
 
     /* create histograms */
     int max_hf = 70000;
