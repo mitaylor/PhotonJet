@@ -122,16 +122,16 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-int create_truth_gen_reco(char const* config, char const* output) {
+int truth_gen_reco(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tag = conf->get<std::string>("tag");
 
-    auto rho = conf->get<std::string>("rho");
+    auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
-    auto acc = conf->get<std::string>("acc");
+    auto acc_file = conf->get<std::string>("acc_file");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
 
@@ -141,39 +141,51 @@ int create_truth_gen_reco(char const* config, char const* output) {
     auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
 
-    auto dr_diff = conf->get<std::vector<float>>("dr_diff");
-
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
-    auto heavyion = conf->get<bool>("heavyion");
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
     auto ele_rej = conf->get<bool>("ele_rej");
 
-    auto jet_eta_max = conf->get<float>("jet_eta_max");
-    auto photon_pt_min = conf->get<float>("photon_pt_min");
-    auto photon_eta_max = conf->get<float>("photon_eta_max");
-    auto hovere_max = conf->get<float>("hovere_max");
-    auto see_min = conf->get<float>("see_min");
-    auto see_max = conf->get<float>("see_max");
-    auto iso_max = conf->get<float>("iso_max");
-
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rdrg = conf->get<std::vector<float>>("drg_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
-    auto rptg = conf->get<std::vector<float>>("ptg_range");
-    auto rdphi = conf->get<std::vector<float>>("dphi_range");
-
     auto dhf = conf->get<std::vector<float>>("hf_diff");
+
+    /* selections */
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_min = sel->get<float>("see_min");
+    auto const see_max = sel->get<float>("see_max");
+    auto const iso_max = sel->get<float>("iso_max");
+
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+    auto rptr = sel->get<std::vector<float>>("ptr_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
+
+    auto rdr = sel->get<std::vector<float>>("dr_range");
+    auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
+
+    auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     /* prepare histograms */
     auto ihf = new interval(dhf);
-    auto isdr = new interval("#deltaj"s, dr_diff);
+    auto isdr = new interval("#deltaj"s, rdr);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
-    std::array<int64_t, 4> osr = { 0, 0, 1, 3 };
-    std::array<int64_t, 4> osg = { 0, 0, 1, 1 };
 
     auto mr = new multival(rdrr, rptr);
     auto mg = new multival(rdrg, rptg);
@@ -214,8 +226,8 @@ int create_truth_gen_reco(char const* config, char const* output) {
     TFile* frho;
     history<TH1F>* rho_weighting = nullptr;
 
-    if (!rho.empty()) {
-        frho = new TFile(rho.data(), "read");
+    if (!rho_file.empty()) {
+        frho = new TFile((base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(frho, rho_label);
     }
 
@@ -224,8 +236,8 @@ int create_truth_gen_reco(char const* config, char const* output) {
     history<TH2F>* acceptance = nullptr;
     history<TH2F>* total = nullptr;
 
-    if (!acc.empty()) {
-        fa = new TFile(acc.data(), "read");
+    if (!acc_file.empty()) {
+        fa = new TFile(acc_file.data(), "read");
         acceptance = new history<TH2F>(fa, acc_label_acc);
         total = new history<TH2F>(fa, acc_label_ref);
     }
@@ -272,7 +284,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
             float leading_pt = 0;
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if ((*p->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*p->phoSCEta)[j]) >= photon_eta_max) { continue; }
+                if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
                 auto pho_et = (*p->phoEt)[j];
@@ -342,11 +354,10 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
             /* fill event weight */
             auto weight = p->w;
-
             std::vector<float> weights(ihf->size(), weight);
             
             if (heavyion) {
-                auto avg_rho = get_avg_rho(p, -photon_eta_max, photon_eta_max);
+                auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
 
                 for (int64_t j = 0; j < ihf->size(); ++j) {
                     auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
@@ -369,7 +380,7 @@ int create_truth_gen_reco(char const* config, char const* output) {
                 auto reco_eta = (*p->jteta)[j];
                 auto reco_phi = (*p->jtphi)[j];
 
-                if (std::abs(reco_eta) >= jet_eta_max) { continue; }
+                if (std::abs(reco_eta) >= jet_eta_abs) { continue; }
 
                 auto pj_deta = photon_eta - reco_eta;
                 auto pj_dphi = revert_radian(std::abs(photon_phi - convert_radian(reco_phi)));
@@ -377,12 +388,11 @@ int create_truth_gen_reco(char const* config, char const* output) {
 
                 if (pj_dr < 0.4) { continue; }
 
-                if (heavyion && in_jet_failure_region(p, j))
-                    continue;
+                if (heavyion && in_jet_failure_region(p, j)) { continue; }
 
                 /* require back-to-back jets */
-                if (std::abs(photon_phi - convert_radian(reco_phi)) < 0.875_pi)
-                    continue;
+                if (std::abs(photon_phi - convert_radian(reco_phi)) < convert_pi(dphi_min_numerator/dphi_min_denominator))
+                    { continue; }
 
                 /* do acceptance weighting */
                 double cor = 1;
@@ -516,8 +526,9 @@ int create_truth_gen_reco(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return create_truth_gen_reco(argv[1], argv[2]);
+    if (argc == 4)
+        return truth_gen_reco(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }
