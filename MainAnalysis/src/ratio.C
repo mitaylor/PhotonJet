@@ -52,6 +52,8 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto sel = new configurer(selections);
+
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
