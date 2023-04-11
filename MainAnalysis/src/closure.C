@@ -56,18 +56,17 @@ int data_mc_comparison(char const* config, const char* output) {
 
     auto tag = conf->get<std::string>("tag");
     auto label = conf->get<std::string>("label");
-    auto heavyion = conf->get<bool>("heavyion");
 
-    auto rdr = conf->get<std::vector<float>>("dr_range");
-    auto rpt = conf->get<std::vector<float>>("pt_range");
-
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto rdr = sel->get<std::vector<float>>("dr_bounds");
+    auto rpt = sel->get<std::vector<float>>("jet_pt_bounds");
+
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
-    // auto mpthf = new multival(dpt, dhf);
 
     if (label.size() == 0) label = tag;
 

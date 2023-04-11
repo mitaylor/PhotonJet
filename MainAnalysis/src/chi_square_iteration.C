@@ -42,9 +42,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
-
-    std::vector<float> rpt = { dpt[0], dpt[dpt.size() - 2]};
+    auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
     auto mpthf = new multival(rpt, dhf);
 
