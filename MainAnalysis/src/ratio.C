@@ -77,7 +77,7 @@ int ratio(char const* config, char const* selections, char const* output) {
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
-        file = new TFile(((base + input).data(), "read");
+        file = new TFile((base + input).data(), "read");
     }, files, inputs);
 
     /* load histograms */
