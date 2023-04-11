@@ -34,7 +34,7 @@ void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-int ratio(char const* config, char const* output) {
+int ratio(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
@@ -48,13 +48,23 @@ int ratio(char const* config, char const* output) {
     auto ymaxs = conf->get<std::vector<float>>("ymax");
     auto oflows = conf->get<std::vector<bool>>("oflow");
 
-    // auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    // auto is_paper = conf->get<bool>("paper");
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
 
-    // auto ipt = new interval(dpt);
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+
+    auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
+    auto bdr = sel->get<std::vector<float>>("dr_bounds");
+    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+
     auto ihf = new interval(dhf);
 
     /* manage memory manually */
@@ -64,7 +74,7 @@ int ratio(char const* config, char const* output) {
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
-        file = new TFile(input.data(), "read");
+        file = new TFile(((base + input).data(), "read");
     }, files, inputs);
 
     /* load histograms */
@@ -90,12 +100,16 @@ int ratio(char const* config, char const* output) {
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, 0.42, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
         }
     };
 
@@ -199,7 +213,7 @@ int ratio(char const* config, char const* output) {
         if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
 
         /* prepare papers */
-        auto s = new paper(prefix + "_ratio_" + figure, hb);
+        auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
         s->accessory(std::bind(aa_info, _1, hists[0]));
@@ -243,9 +257,9 @@ int ratio(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return ratio(argv[1], argv[2]);
+    if (argc == 4)
+        return ratio(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }

@@ -15,7 +15,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int granulate(char const* config, char const* output) {
+int granulate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto file = conf->get<std::string>("file");
@@ -32,18 +32,24 @@ int granulate(char const* config, char const* output) {
     auto use_rstubs = conf->get<std::vector<bool>>("ref_stubs");
     auto use_vstubs = conf->get<std::vector<bool>>("var_stubs");
 
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* load input files */
-    TFile* f = new TFile(file.data(), "read");
+    TFile* f = new TFile((base + file).data(), "read");
 
     std::vector<TFile*> frefs(refs.size(), nullptr);
     std::vector<TFile*> fvars(vars.size(), nullptr);
+    
     zip([&](auto& fref, auto& fvar, auto const& ref, auto const& var) {
-        fref = new TFile(ref.data(), "read");
-        fvar = new TFile(var.data(), "read");
+        fref = new TFile((base + ref).data(), "read");
+        fvar = new TFile((base + var).data(), "read");
     }, frefs, fvars, refs, vars);
 
     /* prepare output */
@@ -92,8 +98,9 @@ int granulate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return granulate(argv[1], argv[2]);
+    if (argc == 4)
+        return granulate(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }

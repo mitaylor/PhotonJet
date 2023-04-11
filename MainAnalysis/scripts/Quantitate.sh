@@ -27,7 +27,7 @@ samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
 for sample in ${samples[@]}; do
     run_pp ${sample}
 
-    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up; do # stat_matrix prior_down prior_up
+    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up stat_matrix prior_down prior_up; do # stat_matrix prior_down prior_up
         run_pp ${sample}_${syst}
     done
 done
@@ -37,7 +37,7 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa ${sample}
 
-    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up cent_up cent_down; do # stat_matrix prior_down prior_up
+    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up cent_up cent_down stat_matrix prior_down prior_up; do # stat_matrix prior_down prior_up
         run_aa ${sample}_${syst}
     done
 done

@@ -29,7 +29,7 @@ void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-int obnubilate(char const* config, char const* output) {
+int obnubilate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto ref = conf->get<std::string>("ref");
@@ -47,22 +47,36 @@ int obnubilate(char const* config, char const* output) {
     auto ranges = conf->get<std::vector<float>>("ranges");
     auto groups = conf->get<std::vector<int32_t>>("groups");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto is_paper = conf->get<bool>("paper");
+
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+
+    auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
+    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* open input files */
-    TFile* f = new TFile(ref.data(), "read");
+    TFile* f = new TFile((base + ref).data(), "read");
 
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
-        file = new TFile(input.data(), "read");
+        file = new TFile((base + input).data(), "read");
     }, files, inputs);
 
     /* prepare plots */
@@ -92,12 +106,16 @@ int obnubilate(char const* config, char const* output) {
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.41, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.37, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->DrawLatexNDC(0.865, 0.41, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
         }
     };
 
@@ -113,11 +131,11 @@ int obnubilate(char const* config, char const* output) {
     zip([&](auto const& figure, auto cols, auto range) {
         auto stub = "_"s + figure;
 
-        auto c1 = new paper(tag + "_var"s + stub, hb);
+        auto c1 = new paper(set + "_" + tag + "_var"s + stub, hb);
         apply_style(c1, cms, system_tag, std::bind(shader, _1, range));
         c1->divide(cols, -1);
 
-        auto c2 = new paper(tag + "_var_unfolding"s + stub, hb);
+        auto c2 = new paper(set + "_" + tag + "_var_unfolding"s + stub, hb);
         apply_style(c2, cms, system_tag, std::bind(shader, _1, range));
         c2->divide(cols, -1);
 
@@ -264,8 +282,9 @@ int obnubilate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return obnubilate(argv[1], argv[2]);
+    if (argc == 4)
+        return obnubilate(argv[1], argv[2], argv[3]);
 
-    return 0;
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }
