@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
