@@ -32,9 +32,7 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hcorrel
     multival* mpthf, float photon_pt_min, float iso_max, float gen_iso_max, float see_max, float see_min) {
 
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
-        || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
-
-        std::cout << see_min << " " << see_max << std::endl;
+        && (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
 
         /* hem failure region exclusion */
         if (!heavyion || !in_pho_failure_region(p, index)) { 
