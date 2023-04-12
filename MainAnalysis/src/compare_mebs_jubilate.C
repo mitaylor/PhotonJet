@@ -31,7 +31,7 @@ void normalise_to_unity(T&... args) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
 }
 
-int jubilate(char const* config, char const* output) {
+int jubilate(char const* config, char char const* selections, const* output) {
     auto conf = new configurer(config);
 
     auto input_nominal = conf->get<std::string>("input_nominal");
@@ -43,20 +43,31 @@ int jubilate(char const* config, char const* output) {
     auto rdr = conf->get<std::vector<float>>("dr_range");
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto is_paper = conf->get<bool>("paper");
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set")
+    auto base = sel->get<std::string>("base");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     /* convert to integral angle units (cast to double) */
 
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    TFile* fn = new TFile(input_nominal.data(), "read");
-    TFile* fa = new TFile(input_altered.data(), "read");
+    TFile* fn = new TFile((base + input_nominal).data(), "read");
+    TFile* fa = new TFile((base + input_altered).data(), "read");
 
     TH1::SetDefaultSumw2();
 
@@ -132,18 +143,17 @@ int jubilate(char const* config, char const* output) {
     hb->set_binary("type");
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
-    auto cms = "#bf{#scale[1.4]{CMS}}"s;
-    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-    cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > 15 GeV, |#eta^{jet}| < 1.6, ";
-    cms += "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8";
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+    cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > "s + to_text(jet_pt_min) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs) + ", ";
+    cms += "|#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
-    auto c3 = new paper(tag + "_mebs_mixing_dr_d_pthf", hb);
+    auto c3 = new paper(set + "_" + tag + "_mebs_mixing_dr_d_pthf", hb);
     apply_style(c3, cms, system_tag, -1., 24.);
     c3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     c3->accessory(pthf_info);
     c3->divide(-1 , ihf->size());
 
-    auto c4 = new paper(tag + "_mebs_mixing_jpt_d_pthf", hb);
+    auto c4 = new paper(set + "_" + tag + "_mebs_mixing_jpt_d_pthf", hb);
     apply_style(c4, cms, system_tag, -0.007, 0.07);
     c4->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     c4->accessory(pthf_info);
@@ -173,9 +183,9 @@ int jubilate(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return jubilate(argv[1], argv[2]);
+    if (argc == 4)
+        return jubilate(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }

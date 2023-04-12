@@ -31,22 +31,35 @@ void normalise_to_unity(T*&... args) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
 }
 
-int compare_before_unfolding(char const* config, const char* output) {
+int compare_before_unfolding(char const* config, char const* selections, const char* output) {
     auto conf = new configurer(config);
 
     auto input_eff = conf->get<std::string>("input_eff");
     auto input_noeff = conf->get<std::string>("input_noeff");
 
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     /* create intervals and multivals */
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    TFile* f_eff = new TFile(input_eff.data(), "read");
-    TFile* f_noeff = new TFile(input_noeff.data(), "read");
+    TFile* f_eff = new TFile((base + input_eff).data(), "read");
+    TFile* f_noeff = new TFile((base + input_noeff).data(), "read");
 
     auto h_eff_dr = new history<TH1F>(f_eff, "aa_nominal_s_pure_raw_sub_pjet_f_dr_sum0");
     auto h_noeff_dr = new history<TH1F>(f_noeff, "aa_nominal_mebs_s_pure_raw_sub_pjet_f_dr_sum0");
@@ -65,12 +78,15 @@ int compare_before_unfolding(char const* config, const char* output) {
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(12);
-            l->DrawLatexNDC(0.865, 0.70, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.65, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.70, photon_selections.data());
         }
     };
 
@@ -80,7 +96,7 @@ int compare_before_unfolding(char const* config, const char* output) {
     hb->alias("eff", "10% HF Energy Matching");
     hb->alias("noeff", "Subtracted pfEnergy Matching");
 
-    auto p1 = new paper("accumulate_aa_mebs_dr_comparison", hb);
+    auto p1 = new paper(set + "_accumulate_aa_mebs_dr_comparison", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -89,7 +105,7 @@ int compare_before_unfolding(char const* config, const char* output) {
     h_eff_dr->apply([&](TH1* h) { p1->add(h, "eff"); });
     h_noeff_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "noeff"); });
 
-    auto p2 = new paper("accumulate_aa_mebs_jtpt_comparison", hb);
+    auto p2 = new paper(set + "_accumulate_aa_mebs_jtpt_comparison", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
@@ -111,9 +127,9 @@ int compare_before_unfolding(char const* config, const char* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return compare_before_unfolding(argv[1], argv[2]);
+    if (argc == 4)
+        return compare_before_unfolding(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
