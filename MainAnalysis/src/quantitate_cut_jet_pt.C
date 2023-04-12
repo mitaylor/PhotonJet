@@ -184,17 +184,19 @@ int quantitate(char const* config, char const* selections, char const* output) {
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
         (*unfolded)[j] = HUnfoldedBayes;
-
+        std::cout << __LINE << std::endl;
         for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
+            std::cout << i << " " << j << std::endl;
             osg[3] = cut[i];
 
             (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold0");
             (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold1");
+            std::cout << __LINE << std::endl;
         }
     }
-
+    std::cout << __LINE << std::endl;
     normalise_to_unity(unfolded_fold0, unfolded_fold1);
-
+    std::cout << __LINE << std::endl;
     unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
     unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
