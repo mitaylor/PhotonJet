@@ -117,8 +117,8 @@ int narrate(char const* config, char const* selections) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.42, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.75, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.50, jet_selections.data());
         }
     };
 
