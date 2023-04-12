@@ -44,6 +44,8 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto type = conf->get<std::string>("type");
+
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -102,7 +104,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     hb->alias("nominal", "10% HF Energy Matching");
     hb->alias("mebs", "Subtracted pfEnergy Matching");
 
-    auto p1 = new paper(set + "_quantitate_aa_mebs_dr_comparison", hb);
+    auto p1 = new paper(set + "_" + type + "_quantitate_aa_mebs_dr_comparison", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -111,7 +113,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     h_nominal_dr->apply([&](TH1* h) { p1->add(h, "nominal"); });
     h_mebs_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mebs"); });
 
-    auto p2 = new paper(set + "_quantitate_aa_mebs_jtpt_comparison", hb);
+    auto p2 = new paper(set + "_" + type + "_quantitate_aa_mebs_jtpt_comparison", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
