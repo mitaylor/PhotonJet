@@ -89,6 +89,12 @@ int narrate(char const* config, char const* selections) {
         pp_3_unfolded_fold1[i]->rename(label + "_" + std::to_string(i) + "_" + std::to_string(3) + "_fold1"s);
     }
 
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
+
+    auto aa_info = [&](int64_t index, history<TH1F>* h) {
+        stack_text(index, 0.73, 0.04, h, hf_info); };
+
     auto hb = new pencil();
     hb->category("system", "pp", "aa");
 
@@ -102,11 +108,13 @@ int narrate(char const* config, char const* selections) {
     auto p2 = new paper(set + "_compare_jet_cut_jpt", hb);
     apply_style(p2, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.05);
     p2->divide(ihf->size(), -1);
-    p2->accessory(std::bind(line_at, _1, 0.f, 0, 120));
 
     for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
         aa_unfolded_fold0[i]->apply([&](TH1* h) { p1->add(h, "aa"); });
         aa_unfolded_fold1[i]->apply([&](TH1* h) { p2->add(h, "aa"); });
+
+        p1->accessory(std::bind(aa_info, _1, aa_unfolded_fold0[i]));
+        p1=2->accessory(std::bind(aa_info, _1, aa_unfolded_fold1[i]));
 
         pp_0_unfolded_fold0[i]->apply([&](TH1* h, int64_t index) { p1->stack(i*4 + index + 1, h, "pp"); });
         pp_0_unfolded_fold1[i]->apply([&](TH1* h, int64_t index) { p2->stack(i*4 + index + 1, h, "pp"); });
