@@ -86,6 +86,7 @@ int regression_checks(char const* config, char const* selections, char const* ou
 
     auto heavyion = conf->get<bool>("heavyion");
     auto gen = conf->get<bool>("gen");
+    auto bkg = conf->get<bool>("bkg");
 
     auto dpt = conf->get<std::vector<float>>("photon_pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -97,10 +98,13 @@ int regression_checks(char const* config, char const* selections, char const* ou
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
-    auto const see_min = sel->get<float>("see_min");
-    auto const see_max = sel->get<float>("see_max");
+    auto see_min = sel->get<float>("see_min");
+    auto see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
     auto gen_iso_max = sel->get<float>("gen_iso_max");
+
+    if (bkg) see_min = 0.012;
+    if (bkg) see_max = 0.02;
 
     auto mpthf = new multival(dpt, dhf);
     auto hf_min = dhf.front();
