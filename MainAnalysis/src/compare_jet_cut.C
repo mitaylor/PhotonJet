@@ -63,6 +63,11 @@ int narrate(char const* config, char const* selections, char const* output) {
         pp_unfolded_fold1[i] = new history<TH1F>(f_pp, "pp_" + label + std::to_string(i) + "_fold1");
     }
 
+    auto hb = new pencil();
+    hb->category("system", "pp", "aa");
+
+    hb->alias("aa", "PbPb");
+
     auto p1 = new paper(set + "_compare_jet_cut_dr", hb);
     apply_style(p1, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, -2, 27);
     p1->divide(ihf->size(), -1);
@@ -72,10 +77,10 @@ int narrate(char const* config, char const* selections, char const* output) {
     p2->divide(ihf->size(), -1);
 
     for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
-        aa_unfolded_fold0[i]->apply( p1->add(h, "aa"); )
-        aa_unfolded_fold1[i]->apply( p2->add(h, "aa"); )
-        pp_unfolded_fold0[i]->apply( p1->stack(h, "pp"); )
-        pp_unfolded_fold1[i]->apply( p2->stack(h, "pp"); )
+        aa_unfolded_fold0[i]->apply([&](TH1* h) { p1->add(h, "aa"); };
+        aa_unfolded_fold1[i]->apply([&](TH1* h) { p2->add(h, "aa"); };
+        pp_unfolded_fold0[i]->apply([&](TH1* h) { p1->stack(h, "pp"); };
+        pp_unfolded_fold1[i]->apply([&](TH1* h) { p2->stack(h, "pp"); };
     }
     
     hb->sketch();
