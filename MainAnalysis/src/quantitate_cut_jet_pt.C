@@ -246,10 +246,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
             osg[3] = cut[i];
-
-            (*unfolded)[i][j] = HUnfoldedBayes;
-            (*unfolded_fold0)[i][j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
-            (*unfolded_fold1)[i][j] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
+            
+            (*unfolded)[unfolded->index_for(x{i,j})] = HUnfoldedBayes;
+            (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
+            (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
         }
     }
 
