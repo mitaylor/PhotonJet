@@ -121,7 +121,7 @@ int regression_checks(char const* config, char const* selections, char const* ou
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto p = new pjtree(true, true, false, t, { 1, 1, 1, 1, 0, 1, 0 });
+        auto p = new pjtree(true, false, false, t, { 1, 1, 1, 1, 0, 0, 0, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
         if (max_entries) nentries = std::min(nentries, max_entries);
@@ -212,7 +212,7 @@ int regression_checks(char const* config, char const* selections, char const* ou
     cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     auto hb = new pencil();
-    hb->category("type", "Uncorrected", "Corrected v1", "Corrected v2");
+    hb->category("type", "Uncorrected", "Corrected");
 
     auto type = gen ? "gen"s : "reco"s;
 
