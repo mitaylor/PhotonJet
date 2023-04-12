@@ -24,7 +24,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int narrate(char const* config, char const* selections, char const* output) {
+int narrate(char const* config, char const* selections) {
     auto conf = new configurer(config);
 
     auto input_aa = conf->get<std::string>("input_aa");
@@ -94,9 +94,9 @@ int narrate(char const* config, char const* selections, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
-        return narrate(argv[1], argv[2], argv[3]);
+    if (argc == 3)
+        return narrate(argv[1], argv[2]);
 
-    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections]\n", argv[0]);
     return 1;
 }
