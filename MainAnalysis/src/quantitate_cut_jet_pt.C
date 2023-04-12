@@ -183,11 +183,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
-        (*unfolded)[i] = HUnfoldedBayes;
+        (*unfolded)[j] = HUnfoldedBayes;
 
         for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
             osg[3] = cut[i];
-            
+
             (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold0");
             (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold1");
         }
