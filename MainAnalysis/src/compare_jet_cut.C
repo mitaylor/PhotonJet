@@ -97,17 +97,16 @@ int narrate(char const* config, char const* selections) {
     auto p1 = new paper(set + "_compare_jet_cut_dr", hb);
     apply_style(p1, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, -2, 27);
     p1->divide(ihf->size(), -1);
+    p1->accessory(std::bind(line_at, _1, 0.f, 0, 0.3));
 
     auto p2 = new paper(set + "_compare_jet_cut_jpt", hb);
-    apply_style(p2, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.03);
+    apply_style(p2, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.05);
     p2->divide(ihf->size(), -1);
+    p2->accessory(std::bind(line_at, _1, 0.f, 0, 120));
 
     for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
         aa_unfolded_fold0[i]->apply([&](TH1* h) { p1->add(h, "aa"); });
         aa_unfolded_fold1[i]->apply([&](TH1* h) { p2->add(h, "aa"); });
-
-        // pp_0_unfolded_fold0[i]->apply([&](TH1* h) { p1->stack(h, "pp"); });
-        // pp_0_unfolded_fold1[i]->apply([&](TH1* h) { p2->stack(h, "pp"); });
 
         pp_0_unfolded_fold0[i]->apply([&](TH1* h, int64_t index) { p1->stack(i*4 + index + 1, h, "pp"); });
         pp_0_unfolded_fold1[i]->apply([&](TH1* h, int64_t index) { p2->stack(i*4 + index + 1, h, "pp"); });
