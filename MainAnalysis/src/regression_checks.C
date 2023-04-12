@@ -34,6 +34,8 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hcorrel
     if ((*p->phoSigmaIEtaIEta_2012)[index] < see_max
         || (*p->phoSigmaIEtaIEta_2012)[index] > see_min) {
 
+        std::cout << see_min << " " << see_max << std::endl;
+
         /* hem failure region exclusion */
         if (!heavyion || !in_pho_failure_region(p, index)) { 
 
