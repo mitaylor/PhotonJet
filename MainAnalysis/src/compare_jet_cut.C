@@ -108,7 +108,7 @@ int narrate(char const* config, char const* selections) {
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             int64_t i = rptg.size() - index/4 - 1;
-            
+
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
             auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(rptg[1]) + "p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
@@ -131,10 +131,12 @@ int narrate(char const* config, char const* selections) {
     apply_style(p1, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, -2, 27);
     p1->divide(ihf->size(), -1);
     p1->accessory(std::bind(line_at, _1, 0.f, 0, 0.3));
+    p1->accessory(kinematics);
 
     auto p2 = new paper(set + "_compare_jet_cut_jpt", hb);
     apply_style(p2, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.05);
     p2->divide(ihf->size(), -1);
+    p2->accessory(kinematics);
 
     for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
         aa_unfolded_fold0[i]->apply([&](TH1* h) { p1->add(h, "aa"); });
