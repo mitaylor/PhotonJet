@@ -60,10 +60,10 @@ std::cout << __LINE__ << std::endl;
     std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
         std::cout << "aa_"s + label + std::to_string(i) + "_fold0"s << std::endl;
-        aa_unfolded_fold0[i] = new history<TH1F>(f_aa, "aa_"s + label + std::to_string(i) + "_fold0"s);std::cout << __LINE__ << std::endl;
-        aa_unfolded_fold1[i] = new history<TH1F>(f_aa, "aa_"s + label + std::to_string(i) + "_fold1"s);std::cout << __LINE__ << std::endl;
-        pp_unfolded_fold0[i] = new history<TH1F>(f_pp, "pp_"s + label + std::to_string(i) + "_fold0"s);std::cout << __LINE__ << std::endl;
-        pp_unfolded_fold1[i] = new history<TH1F>(f_pp, "pp_"s + label + std::to_string(i) + "_fold1"s);std::cout << __LINE__ << std::endl;
+        aa_unfolded_fold0[i] = new history<TH1F>(f_aa, "aa_"s + label + "_" + std::to_string(i) + "_fold0"s);std::cout << __LINE__ << std::endl;
+        aa_unfolded_fold1[i] = new history<TH1F>(f_aa, "aa_"s + label + "_" + std::to_string(i) + "_fold1"s);std::cout << __LINE__ << std::endl;
+        pp_unfolded_fold0[i] = new history<TH1F>(f_pp, "pp_"s + label + "_" + std::to_string(i) + "_fold0"s);std::cout << __LINE__ << std::endl;
+        pp_unfolded_fold1[i] = new history<TH1F>(f_pp, "pp_"s + label + "_" + std::to_string(i) + "_fold1"s);std::cout << __LINE__ << std::endl;
     }
 
     auto hb = new pencil();
