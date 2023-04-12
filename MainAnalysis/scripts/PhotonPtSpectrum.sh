@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set=pho_40
+set=$1
 
 run_pp() {
     tag=$1
