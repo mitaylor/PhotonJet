@@ -32,7 +32,7 @@ void normalise_to_unity(T&... args) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
 }
 
-int jubilate(char const* config, char char const* selections, const* output) {
+int jubilate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input_nominal = conf->get<std::string>("input_nominal");
