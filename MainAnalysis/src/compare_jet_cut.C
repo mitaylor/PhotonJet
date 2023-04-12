@@ -102,23 +102,33 @@ int narrate(char const* config, char const* selections) {
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        int64_t i = rptg.size() - x/4 - 2;
+
+        auto jet_range = to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV"s;
+
+        TLatex* l = new TLatex();
+        l->SetTextFont(43);
+        l->SetTextSize(13);
+        l->DrawLatexNDC(0.135, pos, jet_range.data());
+    };
+
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, hf_info); };
+        stack_text(index, 0.73, 0.04, h, hf_info, pt_info); };
+
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
-            int64_t i = rptg.size() - index/4 - 2;
-
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+            auto jet_selections = "anti-k_{T} R = 0.3, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.75, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.50, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.65, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.60, jet_selections.data());
         }
     };
 
