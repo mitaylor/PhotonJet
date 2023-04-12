@@ -219,8 +219,9 @@ int regression_checks(char const* config, char const* selections, char const* ou
     hb->category("type", "Uncorrected", "Corrected");
 
     auto type = gen ? "gen"s : "reco"s;
+    auto region = bkg ? "bkg"s : "sig"s;
 
-    auto c1 = new paper(tag + "_photon_energy_resolution_" + type + "_" + to_text(photon_pt_min), hb);
+    auto c1 = new paper(tag + "_photon_energy_resolution_" + type + "_" + to_text(photon_pt_min) + "_" + region, hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->accessory(mean_info);
@@ -231,12 +232,12 @@ int regression_checks(char const* config, char const* selections, char const* ou
         c1->stack((*hscale_corrected)[i], "Corrected");
     }
 
-    auto c2 = new paper(tag + "_photon_energy_regression_" + type + "_" + to_text(photon_pt_min), hb);
+    auto c2 = new paper(tag + "_photon_energy_regression_" + type + "_" + to_text(photon_pt_min) + "_" + region, hb);
     apply_style(c2, cms, system_tag);
     c2->add(hcorrelation);
     c2->adjust(hcorrelation, "colz", "");
 
-    auto c3 = new paper(tag + "_photon_energy_regression_selected_" + type + "_" + to_text(photon_pt_min), hb);
+    auto c3 = new paper(tag + "_photon_energy_regression_selected_" + type + "_" + to_text(photon_pt_min) + "_" + region, hb);
     apply_style(c3, cms, system_tag);
     c3->add(hcorrelation_selected);
     c3->adjust(hcorrelation_selected, "colz", "");
