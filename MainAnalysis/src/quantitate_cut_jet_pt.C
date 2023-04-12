@@ -145,9 +145,18 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare the post-unfolded data */
-    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) cut.size());
-    auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) cut.size(), (int64_t) afters.size());
-    auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) cut.size(), (int64_t) afters.size());
+    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
+
+    std::vector<history<TH1F>*> unfolded_fold0(cut.size(), nullptr);
+    std::vector<history<TH1F>*> unfolded_fold1(cut.size(), nullptr);
+
+    for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
+        auto name0 = "unfolded_"s + std::to_string(i) + "fold0"s;
+        auto name1 = "unfolded_"s + std::to_string(i) + "fold1"s;
+
+        unfolded_fold0[i] = new history<TH1F>(name0.data(), "", null<TH1F>, (int64_t) afters.size());
+        unfolded_fold1[i] = new history<TH1F>(name1.data(), "", null<TH1F>, (int64_t) afters.size());
+    }
 
     /* determine the number of iterations to use */
     std::vector<int64_t> choice(chi_square->size(), 1);
@@ -184,26 +193,27 @@ int quantitate(char const* config, char const* selections, char const* output) {
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
         (*unfolded)[j] = HUnfoldedBayes;
-        std::cout << __LINE__ << std::endl;
+
         for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
-            std::cout << i << " " << j << std::endl;
             osg[3] = cut[i];
 
-            (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold0");
-            (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold1");
-            std::cout << __LINE__ << std::endl;
+            (*unfolded_fold0[i])[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold0");
+            (*unfolded_fold1[i])[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold1");
         }
     }
-    std::cout << __LINE__ << std::endl;
-    // normalise_to_unity(unfolded_fold0, unfolded_fold1);
-    std::cout << __LINE__ << std::endl;
-    unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
-    unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
-    unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
 
+    for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
+        normalise_to_unity(unfolded_fold0[i], unfolded_fold1[i]);
+
+        unfolded_fold0[i]->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_"s + std::to_string(i) + "_fold0"s);
+        unfolded_fold1[i]->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_"s + std::to_string(i) + "_fold1"s);
+
+        unfolded_fold0[i]->save();
+        unfolded_fold1[i]->save();
+    }
+
+    unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
     unfolded->save();
-    unfolded_fold0->save();
-    unfolded_fold1->save();
 
     fout->Close();
 
