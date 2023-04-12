@@ -45,69 +45,8 @@ TH2F* variance(TH1* flat, multival const* m) {
     return cov;
 }
 
-TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
-    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
-        { offsets[axis << 1], offsets[(axis << 1) + 1] });
-
-    auto shape = m->shape();
-
-    auto front = std::vector<int64_t>(m->dims(), 0);
-    auto back = std::vector<int64_t>(m->dims(), 0);
-    for (int64_t i = 0; i < m->dims(); ++i) {
-        front[i] = offsets[i << 1];
-        back[i] = shape[i] - offsets[(i << 1) + 1];
-    }
-
-    auto size = back[axis] - front[axis];
-    auto list = new std::vector<int64_t>[size];
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto indices = m->indices_for(i);
-
-        bool flag = false;
-        zip([&](int64_t index, int64_t f, int64_t b) {
-            flag = flag || index < f || index >= b;
-        }, indices, front, back);
-        if (flag) { continue; }
-
-        auto index = indices[axis] - front[axis];
-        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
-            + flat->GetBinContent(i + 1));
-
-        list[index].push_back(i);
-    }
-
-    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
-
-    for (int64_t i = 0; i < size; ++i) {
-        auto indices = list[i];
-        int64_t count = indices.size();
-
-        auto error = 0.;
-        for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j] + 1;
-            for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k] + 1;
-                error = error + cov->GetBinContent(j_x, k_x);
-            }
-        }
-
-        hfold->SetBinError(i + 1, std::sqrt(error));
-    }
-
-    delete [] list;
-    delete cov;
-
-    hfold->Scale(1., "width");
-
-    return hfold;
-}
-
 TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
+           std::vector<int64_t>& offsets, std::string name) {
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
 
@@ -206,7 +145,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare the post-unfolded data */
-    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) cut.size(), (int64_t) afters.size());
+    auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) cut.size());
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) cut.size(), (int64_t) afters.size());
     auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) cut.size(), (int64_t) afters.size());
 
@@ -237,29 +176,28 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::cout << std::endl << choice[i] << std::endl;
     }
 
-    for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
-        for (int64_t j = 0; j < (int64_t) fafters.size(); ++j) {
-            std::cout << i << " " << j << std::endl;
-            std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
-            std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
-            std::cout << __LINE__ << std::endl;
-            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
-            std::cout << __LINE__ << std::endl;
+    for (int64_t j = 0; j < (int64_t) fafters.size(); ++j) {
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
+
+        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
+        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
+
+        (*unfolded)[i] = HUnfoldedBayes;
+
+        for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
             osg[3] = cut[i];
-            std::cout << __LINE__ << std::endl;
-            (*unfolded)[unfolded->index_for(x{i,j})] = HUnfoldedBayes;
-            (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
-            (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
-            std::cout << __LINE__ << std::endl;
+            
+            (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold0");
+            (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg, std::to_string(i) + "_" + std::to_string(j) + "_fold1");
         }
     }
+
+    normalise_to_unity(unfolded_fold0, unfolded_fold1);
 
     unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
     unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
-
-    normalise_to_unity(unfolded_fold0, unfolded_fold1);
 
     unfolded->save();
     unfolded_fold0->save();
