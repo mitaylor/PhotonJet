@@ -237,8 +237,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::cout << std::endl << choice[i] << std::endl;
     }
 
-    for (size_t i = 0; i < cut.size(); ++i) { 
-        for (size_t j = 0; j < fafters.size(); ++j) {
+    for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
+        for (int64_t j = 0; j < (int64_t) fafters.size(); ++j) {
             std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
             std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
 
@@ -246,7 +246,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
             osg[3] = cut[i];
-            
+
             (*unfolded)[unfolded->index_for(x{i,j})] = HUnfoldedBayes;
             (*unfolded_fold0)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
             (*unfolded_fold1)[unfolded->index_for(x{i,j})] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
