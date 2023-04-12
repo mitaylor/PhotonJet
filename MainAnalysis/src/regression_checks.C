@@ -112,8 +112,8 @@ int regression_checks(char const* config, char const* selections, char const* ou
     auto hscale = new memory<TH1F>("photon_energy_scale"s, "counts", fratio, mpthf);
     auto hscale_corrected = new memory<TH1F>("photon_energy_scale_cor"s, "counts", fratio, mpthf);
 
-    auto hcorrelation = new TH2F("photon_enery_correlation", "", 60, photon_pt_min, 80, 60, 40, 150);
-    auto hcorrelation_selected = new TH2F("photon_enery_correlation_selected", "", 60, photon_pt_min, 80, 60, 40, 150);
+    auto hcorrelation = new TH2F("photon_enery_correlation", ";phoEt;phoEtEr", 60, photon_pt_min, 80, 60, 40, 150);
+    auto hcorrelation_selected = new TH2F("photon_enery_correlation_selected", ";phoEt;phoEtEr", 60, photon_pt_min, 80, 60, 40, 150);
 
     /* iterate */
     for (auto const& file : input) {
