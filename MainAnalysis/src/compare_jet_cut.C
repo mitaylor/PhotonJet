@@ -114,7 +114,7 @@ int narrate(char const* config, char const* selections) {
         aa_unfolded_fold1[i]->apply([&](TH1* h) { p2->add(h, "aa"); });
 
         p1->accessory(std::bind(aa_info, _1, aa_unfolded_fold0[i]));
-        p1=2->accessory(std::bind(aa_info, _1, aa_unfolded_fold1[i]));
+        p2->accessory(std::bind(aa_info, _1, aa_unfolded_fold1[i]));
 
         pp_0_unfolded_fold0[i]->apply([&](TH1* h, int64_t index) { p1->stack(i*4 + index + 1, h, "pp"); });
         pp_0_unfolded_fold1[i]->apply([&](TH1* h, int64_t index) { p2->stack(i*4 + index + 1, h, "pp"); });
