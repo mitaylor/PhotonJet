@@ -104,6 +104,7 @@ int narrate(char const* config, char const* selections) {
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         int64_t i = rptg.size() - x/4 - 2;
+        std::cout << x << " " << i << std::endl;
 
         auto jet_range = to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV"s;
 
