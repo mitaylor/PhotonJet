@@ -117,8 +117,8 @@ int narrate(char const* config, char const* selections) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.65, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.60, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.62, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.58, jet_selections.data());
 
             auto jet_range = to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV";
 

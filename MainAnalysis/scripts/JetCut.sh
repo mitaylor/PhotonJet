@@ -25,3 +25,5 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa ${sample}
 done
+
+./bin/compare_jet_cut configs/jet_cut/jet_cut.conf configs/analysis/${set}/analysis_aa.conf 
