@@ -123,7 +123,7 @@ int narrate(char const* config, char const* selections) {
             auto jet_range = to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV";
 
             l->SetTextAlign(11);
-            l->DrawLatexNDC(0.135, 0.69, jet_selections.data());
+            l->DrawLatexNDC(0.135, 0.69, jet_range.data());
         }
     };
 
