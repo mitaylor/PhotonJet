@@ -2,15 +2,29 @@
 
 set=$1
 
+run_pp() {
+    tag=$1
+
+    ./bin/compare_photon_pt_spectrum_accumulate configs/test/compare_photon_pt_spectrum_accumulate_pp.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/compare_photon_pt_spectrum_accumulate_pp.root
+    ./bin/compare_photon_pt_spectrum_populate configs/test/compare_photon_pt_spectrum_populate_pp.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/compare_photon_pt_spectrum_populate_pp.root
+    ./bin/compare_photon_pt_spectrum configs/test/compare_photon_pt_spectrum_pp_nominal.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/compare_photon_pt_spectrum_pp_nominal.root
+    ./bin/compare_photon_pt_spectrum configs/test/compare_photon_pt_spectrum_pp_no_eff.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/compare_photon_pt_spectrum_pp_no_eff.root
+}
+
 run_aa() {
     tag=$1
 
-    ./bin/compare_mebs_jubilate configs/test/compare_mebs_jubilate.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_mebs_jubilate.root
-    ./bin/compare_mebs_before_unfolding configs/test/compare_mebs_before_unfolding.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_mebs_before_unfolding.root
-    ./bin/closure configs/closure/closure_aa_mebs.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/closure_aa_mebs.root
-    ./bin/compare_mebs_after_unfolding configs/test/compare_mebs_after_unfolding_data.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_mebs_after_unfolding_data.root
-    ./bin/compare_mebs_after_unfolding configs/test/compare_mebs_after_unfolding_qcd.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_mebs_after_unfolding_qcd.root
+    ./bin/compare_photon_pt_spectrum_accumulate configs/test/compare_photon_pt_spectrum_accumulate_aa.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_photon_pt_spectrum_accumulate_aa.root
+    ./bin/compare_photon_pt_spectrum_populate configs/test/compare_photon_pt_spectrum_populate_aa.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_photon_pt_spectrum_populate_aa.root
+    ./bin/compare_photon_pt_spectrum configs/test/compare_photon_pt_spectrum_aa_nominal.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_photon_pt_spectrum_aa_nominal.root
+    ./bin/compare_photon_pt_spectrum configs/test/compare_photon_pt_spectrum_aa_no_eff.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/compare_photon_pt_spectrum_aa_no_eff.root
 }
+
+samples=(pp)
+
+for sample in ${samples[@]}; do
+    run_pp ${sample}
+done
 
 samples=(aa)
 
