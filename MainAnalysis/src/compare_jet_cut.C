@@ -107,11 +107,11 @@ int narrate(char const* config, char const* selections) {
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
-            int64_t i = rptg.size() - index/4 - 1;
+            int64_t i = rptg.size() - index/4 - 2;
 
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(rptg[1]) + "p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
