@@ -45,6 +45,16 @@ int narrate(char const* config, char const* selections) {
 
     auto osg = sel->get<std::vector<int64_t>>("osg");
 
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+
+    auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
+    auto bdr = sel->get<std::vector<float>>("dr_bounds");
+
     /* load history objects */
     auto ihf = new interval(dhf);
 
@@ -94,6 +104,23 @@ int narrate(char const* config, char const* selections) {
 
     auto aa_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
+
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            int64_t i = rptg.size() - index/4 - 1;
+            
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(rptg[1]) + "p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.42, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
+        }
+    };
 
     auto hb = new pencil();
     hb->category("system", "pp", "aa");
