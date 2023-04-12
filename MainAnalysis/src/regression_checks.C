@@ -48,8 +48,8 @@ void fill_hist(pjtree* p, int type, int index, memory<TH1F>* hist, TH2F* hcorrel
                 if (type == 2 && !heavyion) phoEt = (*p->phoEtEr)[index];
                 if (type == 2 && heavyion) phoEt = (*p->phoEtErNew)[index];
 
-                if (heavyion && type == 1)  hcorrelation->Fill((*p->phoEt)[j], (*p->phoEtErNew)[j], p->weight);
-                if (!heavyion && type == 1) hcorrelation->Fill((*p->phoEt)[j], (*p->phoEtEr)[j], p->weight);
+                if (heavyion && type == 1)  hcorrelation->Fill((*p->phoEt)[index], (*p->phoEtErNew)[index], p->weight);
+                if (!heavyion && type == 1) hcorrelation->Fill((*p->phoEt)[index], (*p->phoEtEr)[index], p->weight);
 
                 int64_t gen_index = (*p->pho_genMatchedIndex)[index];
 
@@ -125,7 +125,7 @@ int regression_checks(char const* config, char const* selections, char const* ou
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
         if (max_entries) nentries = std::min(nentries, max_entries);
-        
+
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % 100000 == 0)
                 printf("entry: %li/%li\n", i, nentries);
