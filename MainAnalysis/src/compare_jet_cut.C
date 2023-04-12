@@ -46,6 +46,8 @@ int narrate(char const* config, char const* selections, char const* output) {
     auto osg = sel->get<std::vector<int64_t>>("osg");
 
     /* load history objects */
+    auto ihf = new interval(dhf);
+
     TFile* f_aa = new TFile((base + input_aa).data(), "read");
     TFile* f_pp = new TFile((base + input_pp).data(), "read"); 
 
@@ -77,10 +79,10 @@ int narrate(char const* config, char const* selections, char const* output) {
     p2->divide(ihf->size(), -1);
 
     for (int64_t i = 0; i < (int64_t) cut.size(); ++i) { 
-        aa_unfolded_fold0[i]->apply([&](TH1* h) { p1->add(h, "aa"); };
-        aa_unfolded_fold1[i]->apply([&](TH1* h) { p2->add(h, "aa"); };
-        pp_unfolded_fold0[i]->apply([&](TH1* h) { p1->stack(h, "pp"); };
-        pp_unfolded_fold1[i]->apply([&](TH1* h) { p2->stack(h, "pp"); };
+        aa_unfolded_fold0[i]->apply([&](TH1* h) { p1->add(h, "aa"); });
+        aa_unfolded_fold1[i]->apply([&](TH1* h) { p2->add(h, "aa"); });
+        pp_unfolded_fold0[i]->apply([&](TH1* h) { p1->stack(h, "pp"); });
+        pp_unfolded_fold1[i]->apply([&](TH1* h) { p2->stack(h, "pp"); });
     }
     
     hb->sketch();
