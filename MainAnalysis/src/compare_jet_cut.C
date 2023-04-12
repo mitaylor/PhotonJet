@@ -120,7 +120,7 @@ int narrate(char const* config, char const* selections) {
             l->DrawLatexNDC(0.865, 0.65, photon_selections.data());
             l->DrawLatexNDC(0.865, 0.60, jet_selections.data());
 
-            jet_range = to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV";
+            auto jet_range = to_text(rptg[1]) + " < p_{T}^{jet} < "s + to_text(rptg[i]) + " GeV";
 
             l->SetTextAlign(11);
             l->DrawLatexNDC(0.135, 0.69, jet_selections.data());
