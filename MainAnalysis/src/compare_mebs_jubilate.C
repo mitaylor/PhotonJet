@@ -49,7 +49,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
     auto sel = new configurer(selections);
 
-    auto set = sel->get<std::string>("set")
+    auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
