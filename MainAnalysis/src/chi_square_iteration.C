@@ -97,7 +97,6 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
     for (int i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
-        double total = 0;
         int max_iteration = 1;
 
         for (int j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
@@ -105,8 +104,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
             if (top == 0) { continue; }
 
-            if (top * 0.98 < min) {
-                total += top;
+            if (top < min) {
                 min = top;
                 max_iteration = j;
             }
@@ -115,8 +113,15 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             }
         }
 
-        total -= min * max_iteration;
-        std::cout << std::endl << max_iteration << " " << total << " ";
+        std::cout << max_iteration << " ";
+
+        double total = 0;
+
+        for (int j = 0; j <= max_iteration; ++j) {
+            total += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1) - min;
+        }
+
+        std::cout << total << " ";
 
         double sum = 0;
 
@@ -132,7 +137,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             }
         }
 
-        std::cout << std::endl << choice[i] << std::endl;
+        std::cout << choice[i] << std::endl;
     }
 
     auto minimum = [&](int64_t index) {

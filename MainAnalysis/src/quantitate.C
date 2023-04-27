@@ -270,7 +270,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     for (int i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
-        double total = 0;
         int max_iteration = 1;
 
         for (int j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
@@ -278,8 +277,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
             if (top == 0) { continue; }
 
-            if (top * 0.98 < min) {
-                total += top;
+            if (top < min) {
                 min = top;
                 max_iteration = j;
             }
@@ -288,12 +286,20 @@ int quantitate(char const* config, char const* selections, char const* output) {
             }
         }
 
-        std::cout << std::endl << max_iteration << " ";
+        std::cout << max_iteration << " ";
+
+        double total = 0;
+
+        for (int j = 0; j <= max_iteration; ++j) {
+            total += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1) - min;
+        }
+
+        std::cout << total << " ";
 
         double sum = 0;
 
         for (int j = 0; j <= max_iteration; ++j) {
-            sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+            sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1) - min;
 
             if (j > 0 && sum/total < 0.9) {
                 min = j;
@@ -304,7 +310,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
             }
         }
 
-        std::cout << std::endl << choice[i] << std::endl;
+        std::cout << choice[i] << std::endl;
     }
 
     for (size_t j = 0; j < fafters.size(); ++j) {
