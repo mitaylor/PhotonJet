@@ -291,7 +291,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         double sum = 0;
 
         for (int j = 0; j <= max_iteration; ++j) {
-            auto sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+            sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (sum/total < 0.9) {
                 min = j;
