@@ -277,7 +277,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
             if (top == 0) { continue; }
 
-            if (top < min) {
+            if (top < min * 0.98) {
                 min = top;
                 max_iteration = j;
             }
