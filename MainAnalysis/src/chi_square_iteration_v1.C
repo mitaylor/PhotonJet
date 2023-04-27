@@ -85,7 +85,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             if (!(unc < 20)) { continue; }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
-            (*chi_square)[j]->SetBinError(iterations[i] + 1, 0);
+            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
         }
     }
 
@@ -97,37 +97,24 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
     for (int i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
-        double total = 0;
-        int max_iteration = 1;
 
         for (int j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (top == 0) { continue; }
 
-            if (top < min * 0.98) {
-                total += top;
+            std::cout << top << " ";
+
+            if (top < min) {
                 min = top;
-                max_iteration = j;
-            }
-            else {
-                break;
-            }
-        }
-
-        double sum = 0;
-
-        for (int j = 0; j <= max_iteration; ++j) {
-            auto sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
-
-            if (sum/total < 0.9) {
-                min = j;
                 choice[i] = j;
             }
             else {
                 break;
             }
         }
+
+        // if (set.size() == choice.size()) { choice[i] = set[i]; }
 
         std::cout << std::endl << choice[i] << std::endl;
     }

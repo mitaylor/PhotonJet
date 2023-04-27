@@ -266,41 +266,28 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto measured_fold1 = new history<TH1F>("measured_fold1", "", null<TH1F>, (int64_t) afters.size());
 
     /* determine the number of iterations to use */
-    std::vector<int> choice(chi_square->size(), 1);
+    std::vector<int64_t> choice(chi_square->size(), 1);
 
-    for (int i = 0; i < chi_square->size(); ++i) {
+    for (int64_t i = 0; i < chi_square->size(); ++i) {
         double min = 99999999999;
-        double total = 0;
-        int max_iteration = 1;
 
-        for (int j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
+        for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (top == 0) { continue; }
 
-            if (top < min * 0.98) {
-                total += top;
+            std::cout << top << " ";
+
+            if (top < min) {
                 min = top;
-                max_iteration = j;
-            }
-            else {
-                break;
-            }
-        }
-
-        double sum = 0;
-
-        for (int j = 0; j <= max_iteration; ++j) {
-            auto sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
-
-            if (sum/total < 0.9) {
-                min = j;
                 choice[i] = j;
             }
             else {
                 break;
             }
         }
+
+        if (fix.size() == choice.size()) { choice[i] = fix[i]; }
 
         std::cout << std::endl << choice[i] << std::endl;
     }
