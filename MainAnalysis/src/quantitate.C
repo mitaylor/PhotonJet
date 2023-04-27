@@ -288,6 +288,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
             }
         }
 
+        std::cout << std::endl << max_iteration << " ";
+
         double sum = 0;
 
         for (int j = 0; j <= max_iteration; ++j) {
