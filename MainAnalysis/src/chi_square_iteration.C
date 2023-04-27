@@ -123,7 +123,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             total += top - min;
         }
 
-        std::cout << total << " ";
+        std::cout << total << std::endl;
 
         double sum = 0;
 
@@ -131,6 +131,8 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
             if (top == 0) { continue; }
             sum += top - min;
+
+            std::cout << sum << " " << total << std::endl;
 
             if (j > 0 && sum/total < 0.9) {
                 min = j;
@@ -141,7 +143,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             }
         }
 
-        std::cout << choice[i] << std::endl;
+        std::cout << choice[i] << std::endl << std::endl;
     }
 
     auto minimum = [&](int64_t index) {
