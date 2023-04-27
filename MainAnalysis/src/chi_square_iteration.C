@@ -104,7 +104,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
             if (top == 0) { continue; }
 
-            if (top < min * 0.98) {
+            if (top < min) {
                 min = top;
                 max_iteration = j;
             }
@@ -118,7 +118,9 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
         double total = 0;
 
         for (int j = 0; j <= max_iteration; ++j) {
-            total += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1) - min;
+            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+            if (top == 0) { continue; }
+            total += top - min;
         }
 
         std::cout << total << " ";
@@ -126,7 +128,9 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
         double sum = 0;
 
         for (int j = 0; j <= max_iteration; ++j) {
-            sum += (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1) - min;
+            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+            if (top == 0) { continue; }
+            sum += top - min;
 
             if (j > 0 && sum/total < 0.9) {
                 min = j;
