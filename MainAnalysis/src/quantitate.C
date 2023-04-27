@@ -306,7 +306,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
             sum += top - min;
 
             if (j > 0 && sum/total < 0.9) {
-                min = j;
                 choice[i] = j;
             }
             else {

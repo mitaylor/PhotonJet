@@ -135,7 +135,6 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             std::cout << sum << " " << total << std::endl;
 
             if (j > 0 && sum/total < 0.9) {
-                min = j;
                 choice[i] = j;
             }
             else {
