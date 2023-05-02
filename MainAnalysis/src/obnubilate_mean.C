@@ -163,7 +163,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         total->apply([](TH1* h) { h->Reset("MICES"); });
  std::cout << __LINE__ << std::endl;
         for (size_t k = 0; k < batches.size(); ++k) {
-            means.push_back(new history<TH1F>("mean_"s + to_text(k), "", fmean, 1));
+            means.push_back(new history<TH1F>("mean_"s + to_text(k), "", fmean, 1)); std::cout << __LINE__ << std::endl;
             title(std::bind(rename_axis, _1, "<#deltaj>"), means[k]);
  std::cout << __LINE__ << std::endl;
             for (int64_t i = 0; i < batches[k]->size(); ++i) {
