@@ -198,7 +198,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         std::cout << std::endl;
         for (int64_t i = 0; i < (*total)[0]->GetNbinsX(); ++i) {
-            float difference = (*total)[0]->GetBinContent(i + 1) - (*base_mean)[0]->GetBinContent(i + 1);
+            float difference = (*total)[0]->GetBinContent(i + 1);
                 printf("%.4f ", difference);
         }
         std::cout << std::endl;
