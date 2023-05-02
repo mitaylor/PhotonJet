@@ -196,6 +196,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         total->apply(sqrt_);
 
+        std::cout << std::endl;
         for (int64_t i = 0; i < total->size(); ++i) {
             float difference = (*total)[0]->GetBinContent(i + 1) - (*base_mean)[0]->GetBinContent(i + 1);
                 printf("%.3f ", difference);
