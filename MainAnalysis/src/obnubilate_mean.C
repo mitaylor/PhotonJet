@@ -161,11 +161,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         auto total = new history<TH1F>(*base_mean, "total");
         title(std::bind(rename_axis, _1, "<#deltaj>"), total);
         total->apply([](TH1* h) { h->Reset("MICES"); });
- std::cout << __LINE__ << std::endl;
+
         for (size_t k = 0; k < batches.size(); ++k) {
-            means[k] = new history<TH1F>("mean_"s + to_text(k), "", fmean, 1); std::cout << __LINE__ << std::endl;
+            means[k] = new history<TH1F>("mean_"s + to_text(k), "", fmean, 1);
             title(std::bind(rename_axis, _1, "<#deltaj>"), means[k]);
- std::cout << __LINE__ << std::endl;
+
             for (int64_t i = 0; i < batches[k]->size(); ++i) {
                 (*(means[k]))[0]->SetBinContent(i + 1, (*(batches[k]))[i]->GetMean());
                 (*(means[k]))[0]->SetBinError(i + 1, (*(batches[k]))[i]->GetMeanError());
@@ -178,7 +178,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             means[k]->add(*base_mean, -1);
             means[k]->apply(square_);
         }
- std::cout << __LINE__ << std::endl;
+
         zip([&](auto const& mean, auto group) {
             if (group == static_cast<int32_t>(sets.size())) {
                 sets.push_back(new history<TH1F>(*mean, "set"));
