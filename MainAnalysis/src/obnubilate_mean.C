@@ -170,7 +170,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 (*(means[k]))[0]->SetBinError(i + 1, (*(batches[k]))[i]->GetMeanError());
 
                 float difference = (*(means[k]))[0]->GetBinContent(i + 1) - (*base_mean)[0]->GetBinContent(i + 1);
-                printf("%.2f ", difference);
+                printf("%.3f ", difference);
             }
             std::cout << std::endl;
 
@@ -198,7 +198,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         for (int64_t i = 0; i < total->size(); ++i) {
             float difference = (*total)[0]->GetBinContent(i + 1) - (*base_mean)[0]->GetBinContent(i + 1);
-                printf("%.2f ", difference);
+                printf("%.3f ", difference);
         }
         std::cout << std::endl;
 
