@@ -88,10 +88,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     /* lambdas */
     std::function<void(TH1*)> square_ = [](TH1* h) {
         for_contents([](std::array<double, 1> v) {
-            return v[0] * v[0]; }, h); };
+            return std::abs(v[0] * v[0]); }, h); };
     std::function<void(TH1*)> sqrt_ = [](TH1* h) {
         for_contents([](std::array<double, 1> v) {
-            return std::sqrt(v[0]); }, h); };
+            return std::abs(std::sqrt(v[0])); }, h); };
 
     auto shader = [&](TH1* h, float max) {
         default_formatter(h, 0., max);
@@ -131,10 +131,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         auto stub = "_"s + figure;
 
         auto c1 = new paper(set + "_" + tag + "_mean_var"s + stub, hb);
-        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.05));
+        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.005));
 
         auto c2 = new paper(set + "_" + tag + "_mean_var_unfolding"s + stub, hb);
-        apply_style(c2, cms, system_tag, std::bind(shader, _1, 0.05));
+        apply_style(c2, cms, system_tag, std::bind(shader, _1, 0.005));
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
 
