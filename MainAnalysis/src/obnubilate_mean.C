@@ -143,7 +143,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         std::vector<history<TH1F>*> means(inputs.size(), nullptr);
         auto incl = new interval("Centrality"s, 4, 0.f, 4.f);
-        auto frho = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+        auto fmean = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
         auto base_mean = new history<TH1F>("mean_base"s, "", fmean, 1);
         title(std::bind(rename_axis, _1, "<#deltaj>"), base_mean);
@@ -162,7 +162,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         title(std::bind(rename_axis, _1, "<#deltaj>"), total);
         total->apply([](TH1* h) { h->Reset("MICES"); });
 
-        for (int64_t k = 0; k < batches->size(); ++k) {
+        for (int64_t k = 0; k < batches.size(); ++k) {
             means.push_back(new history<TH1F>("mean_"s + to_text(k), "", fmean, 1));
             title(std::bind(rename_axis, _1, "<#deltaj>"), means[k]);
 
@@ -224,7 +224,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 });
             }
 
-            batch->save(tag);
+            mean->save(tag);
         }, means, legend_keys, plots);
 
         /* add info text */
