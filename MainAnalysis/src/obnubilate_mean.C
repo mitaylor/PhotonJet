@@ -44,7 +44,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto legends = conf->get<std::vector<std::string>>("legends");
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto ranges = conf->get<std::vector<float>>("ranges");
     auto groups = conf->get<std::vector<int32_t>>("groups");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -128,14 +127,14 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     /* calculate variations */
-    zip([&](auto const& figure, auto range) {
+    zip([&](auto const& figure) {
         auto stub = "_"s + figure;
 
         auto c1 = new paper(set + "_" + tag + "_mean_var"s + stub, hb);
-        apply_style(c1, cms, system_tag, std::bind(shader, _1, range));
+        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.05));
 
         auto c2 = new paper(set + "_" + tag + "_mean_var_unfolding"s + stub, hb);
-        apply_style(c2, cms, system_tag, std::bind(shader, _1, range));
+        apply_style(c2, cms, system_tag, std::bind(shader, _1, 0.05));
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
 
@@ -244,7 +243,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         c1->draw("pdf");
         c2->draw("pdf");
-    }, figures, ranges);
+    }, figures);
 
     fout->Close();
 
