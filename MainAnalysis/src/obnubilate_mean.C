@@ -141,7 +141,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         std::vector<history<TH1F>*> sets;
 
         std::vector<history<TH1F>*> means(inputs.size(), nullptr);
-        auto incl = new interval("Centrality"s, 4, 0.f, 4.f);
+        auto incl = new interval("Centrality"s, base->size(), 0.f, (float) base->size());
         auto fmean = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
         auto base_mean = new history<TH1F>("mean_base"s, "", fmean, 1);
