@@ -100,6 +100,22 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         h->SetLineWidth(1);
     };
 
+    // auto transform_axis = [](TH1* obj, std::function<float(int64_t)> f) {
+    //     obj->GetXaxis()->SetLabelOffset(999);
+    //     obj->GetXaxis()->SetTickLength(0);
+
+    //     auto xmin = obj->GetBinLowEdge(1);
+    //     auto xmax = obj->GetBinLowEdge(obj->GetNbinsX() + 1);
+    //     auto ymin = obj->GetMinimumStored();
+
+    //     auto axis = new TGaxis(xmin, ymin, xmax, ymin, f(xmin), f(xmax));
+    //     axis->Draw();
+    // };
+
+    // auto redraw_axis = [&](TH1* h, int64_t) {
+    //     transform_axis(h, [](int64_t val) -> float {
+    //         return std::abs(revert_radian(val)); }); };
+
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
@@ -203,6 +219,17 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }
         std::cout << std::endl;
 
+        /* format histogram */
+        if (tag == "aa") {
+            (*total)[0]->ChangeLabel(1,-1,-1,-1,-1,-1,"50-90%");
+            (*total)[0]->ChangeLabel(2,-1,-1,-1,-1,-1,"30-50%");
+            (*total)[0]->ChangeLabel(3,-1,-1,-1,-1,-1,"10-30%");
+            (*total)[0]->ChangeLabel(4,-1,-1,-1,-1,-1,"0-10%");
+        }
+        else {
+            (*total)[0]->ChangeLabel(1,-1,-1,-1,-1,-1,"pp");
+        }
+
         /* add plots */
         auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
         auto style2 = [&](TH1* h) { c2->adjust(h, "hist", "f"); };
@@ -232,6 +259,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         c1->accessory(kinematics);
         c2->accessory(hf_info); 
         c2->accessory(kinematics);
+        c1->jewellery(redraw_axis);
+        c2->jewellery(redraw_axis);
 
         /* save histograms */
         for (auto const& set : sets)
