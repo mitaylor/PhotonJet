@@ -113,7 +113,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                                 0,
                                 h->GetBinWidth(i + 1) + h->GetBinLowEdge(i + 1),
                                 h->GetBinContent(i + 1));
-            b->SetFillColor(colours[i]);
+            b->SetFillColorAlpha(colours[i], 0.8);
             b->Draw();
         }
     };
@@ -221,6 +221,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
             }
             (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
+            (*means)[i]->GetXaxis()->SetTicks("-");
         }
 
         /* add plots */
