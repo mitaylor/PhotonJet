@@ -111,13 +111,13 @@ std::cout << __LINE__ << std::endl;
     for (size_t i = 0; i < hists.size(); ++i) {
         hists[i] = new history<TH1F>("hist"s + to_text(i), "", fincl, 1);
         systs[i] = new history<TH1F>("syst"s + to_text(i), "", fincl, 1);
-
+std::cout << __LINE__ << std::endl;
         title(std::bind(rename_axis, _1, "<#deltaj>"), hists[i]);
-
+std::cout << __LINE__ << std::endl;
         for (int64_t j = 0; j < (*hists[i])[0]->GetNbinsX(); ++j) {
             (*hists[i])[0]->SetBinContent((j + 1)*2, (*hist_inputs[i])[j]->GetBinContent(1));
             (*hists[i])[0]->SetBinError((j + 1)*2, (*hist_inputs[i])[j]->GetBinError(1));
-
+std::cout << __LINE__ << std::endl;
             (*systs[i])[0]->SetBinContent((j + 1)*2, (*syst_inputs[i])[j]->GetBinContent(1));
         }
     }
