@@ -90,7 +90,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     };
 
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+        info_text(index, 0.85, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -99,11 +99,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.85, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.80, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.80, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.75, jet_selections.data());
         }
     };
 
