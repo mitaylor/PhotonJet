@@ -89,6 +89,17 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         h->SetLineWidth(1);
     };
 
+    auto box = [&](TH1* h, int64_t) {
+        for (int64_t i = 0; i < h->GetNbinsX(); ++i) {
+            TBox *b = new TBox(h->GetBinLowEdge(i + 1),
+                                0,
+                                h->GetBinWidth(i + 1) + h->GetBinLowEdge(i + 1),
+                                h->GetBinContent(i + 1));
+            b->SetFillColor(colours[i]);
+            b->Draw();
+        }
+    };
+
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.85, "Cent. %i - %i%%", dcent, true); };
 
@@ -102,8 +113,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.80, photon_selections.data());
-            l->DrawLatexNDC(0.135, 0.75, jet_selections.data());
+            l->DrawLatexNDC(0.135, 0.78, photon_selections.data());
+            l->DrawLatexNDC(0.135, 0.73, jet_selections.data());
         }
     };
 
@@ -204,6 +215,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         /* add info text */
         c1->accessory(hf_info); 
         c1->accessory(kinematics);
+        c1->jewellery(box);
 
         /* save histograms */
         base->save(tag);
