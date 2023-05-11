@@ -89,13 +89,30 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         h->SetLineWidth(1);
     };
 
+    std::vector<int32_t> const colours = {
+        TColor::GetColor("#515151"),
+        TColor::GetColor("#f2777a"),
+        TColor::GetColor("#f99157"),
+        TColor::GetColor("#ffcc66"),
+        TColor::GetColor("#99cc99"),
+        TColor::GetColor("#6699cc"),
+        TColor::GetColor("#f005ec"),
+        TColor::GetColor("#28b09c"),
+        TColor::GetColor("#1bfa02"),
+        TColor::GetColor("#736238"),
+        TColor::GetColor("#fa0505"),
+        TColor::GetColor("#ffb600"),
+        TColor::GetColor("#fa0505"),
+        TColor::GetColor("#ffff00"),
+    };
+
     auto box = [&](TH1* h, int64_t) {
         for (int64_t i = 0; i < h->GetNbinsX(); ++i) {
             TBox *b = new TBox(h->GetBinLowEdge(i + 1),
                                 0,
                                 h->GetBinWidth(i + 1) + h->GetBinLowEdge(i + 1),
                                 h->GetBinContent(i + 1));
-            b->SetFillColor(pencil::colours[i]);
+            b->SetFillColor(colours[i]);
             b->Draw();
         }
     };
