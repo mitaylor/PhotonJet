@@ -58,17 +58,17 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
-    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds"); std::cout << __LINE__ << std::endl;
+    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds"); 
 
     /* manage memory manually */
     TH1::AddDirectory(false);
-    TH1::SetDefaultSumw2();std::cout << __LINE__ << std::endl;
+    TH1::SetDefaultSumw2();
 
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile((base + input).data(), "read");
-    }, files, inputs);std::cout << __LINE__ << std::endl;
+    }, files, inputs);
 
     /* prepare plots */
     auto hb = new pencil();
@@ -76,7 +76,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     hb->alias("aa", "PbPb");
     if (smeared) hb->alias("pp", "pp (smeared)");
-std::cout << __LINE__ << std::endl;
+
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -91,47 +91,55 @@ std::cout << __LINE__ << std::endl;
             l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
         }
     };
-std::cout << __LINE__ << std::endl;
+
     /* get histograms */
     std::vector<history<TH1F>*> hist_inputs(5, nullptr);
     std::vector<history<TH1F>*> syst_inputs(5, nullptr);
-std::cout << __LINE__ << std::endl;
+
     zip([&](auto& hist_input, auto& syst_input, auto const file,
             auto const& tag) {
         hist_input = new history<TH1F>(file, tag + "_base_mean");
         syst_input = new history<TH1F>(file, tag + "_syst_mean");
     }, hist_inputs, syst_inputs, files, tags);
-std::cout << __LINE__ << std::endl;
+
     std::vector<history<TH1F>*> hists(2, nullptr);
     std::vector<history<TH1F>*> systs(2, nullptr);
-std::cout << __LINE__ << std::endl;
+
     auto incl = new interval(""s, 9, 0.f, 9.f);
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-std::cout << __LINE__ << std::endl;
+
     for (size_t i = 0; i < hists.size(); ++i) {
         hists[i] = new history<TH1F>("hist"s + to_text(i), "", fincl, 1);
         systs[i] = new history<TH1F>("syst"s + to_text(i), "", fincl, 1);
-std::cout << __LINE__ << std::endl;
+
         title(std::bind(rename_axis, _1, "<#deltaj>"), hists[i]);
-std::cout << __LINE__ << std::endl;
-        for (int64_t j = 0; j < hist_inputs[i]->size(); ++j) {
-            (*hists[i])[0]->SetBinContent((j + 1)*2, (*hist_inputs[i])[j]->GetBinContent(1));
-            (*hists[i])[0]->SetBinError((j + 1)*2, (*hist_inputs[i])[j]->GetBinError(1));
-std::cout << __LINE__ << std::endl;
-            (*systs[i])[0]->SetBinContent((j + 1)*2, (*syst_inputs[i])[j]->GetBinContent(1));
-        }
     }
-std::cout << __LINE__ << std::endl;
+
+    for (int64_t j = 0; j < hist_inputs[0]->size(); ++j) {
+        (*hists[0])[0]->SetBinContent((j + 1)*2, (*hist_inputs[0])[j]->GetBinContent(1));
+        (*hists[0])[0]->SetBinError((j + 1)*2, (*hist_inputs[0])[j]->GetBinError(1));
+
+        (*systs[0])[0]->SetBinContent((j + 1)*2, (*syst_inputs[0])[j]->GetBinContent(1));
+    }
+
+    for (int64_t j = 0; j < hist_inputs[0]->size(); ++j) {
+        (*hists[1])[0]->SetBinContent((j + 1)*2, (*hist_inputs[j + 1])[0]->GetBinContent(1));
+        (*hists[1])[0]->SetBinError((j + 1)*2, (*hist_inputs[j + 1])[0]->GetBinError(1));
+
+        (*systs[1])[0]->SetBinContent((j + 1)*2, (*syst_inputs[j + 1])[0]->GetBinContent(1));
+    }
+
+
     /* link histograms, uncertainties */
     std::unordered_map<TH1*, TH1*> links;
     zip([&](auto hist, auto syst) {
         hist->apply([&](TH1* h, int64_t index) {
             links[h] = (*syst)[index]; });
     }, hists, systs);
-std::cout << __LINE__ << std::endl;
+
     std::unordered_map<TH1*, int32_t> colours;
     hists[0]->apply([&](TH1* h) { colours[h] = 1; });
-std::cout << __LINE__ << std::endl;
+
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
         TGraph* gr = new TGraph();
@@ -154,23 +162,23 @@ std::cout << __LINE__ << std::endl;
             gr->DrawClone("f");
         }
     };
-std::cout << __LINE__ << std::endl;
+
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean", hb);
     apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.1);
     s->accessory(kinematics);
     s->jewellery(box);
-std::cout << __LINE__ << std::endl;
+
     /* draw histograms with uncertainties */
     s->add((*hists[0])[0], "aa");
     s->stack((*hists[1])[0], "pp");
-std::cout << __LINE__ << std::endl;
+
     auto pp_style = [](TH1* h) {
         h->SetLineColor(1);
         h->SetMarkerStyle(25);
         h->SetMarkerSize(0.60);
     };
-std::cout << __LINE__ << std::endl;
+
     auto aa_style = [](TH1* h) {
         h->SetLineColor(1);
         h->SetMarkerStyle(20);
