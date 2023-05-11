@@ -95,7 +95,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                                 0,
                                 h->GetBinWidth(i + 1) + h->GetBinLowEdge(i + 1),
                                 h->GetBinContent(i + 1));
-            b->SetFillColor(colours[i]);
+            b->SetFillColor(pencil::colours[i]);
             b->Draw();
         }
     };
