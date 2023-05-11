@@ -206,6 +206,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             }
 
             (*means)[i]->SetBinContent(1, std::sqrt(total));
+            (*means)[i]->SetFillColorAlpha(1, 0);
         }
 
         std::cout << std::endl;
@@ -228,7 +229,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
 
         means->apply([&](TH1* h) { 
-            c1->add(h); style1(h); 
+            c1->add(h); // style1(h); 
         });
 
         /* add info text */
