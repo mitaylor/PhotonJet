@@ -172,7 +172,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*hists[0])[0]->GetXaxis()->SetBinLabel(7, " ");
     (*hists[0])[0]->GetXaxis()->SetBinLabel(8, "0-10%");
     (*hists[0])[0]->GetXaxis()->SetBinLabel(9, " ");
-    (*hists[0])[0]->GetXaxis()->SetTicks("-");
+    (*hists[0])[0]->GetXaxis()->->SetTickLength(0);
+    (*hists[0])[0]->GetXaxis()->SetLabelSize(0.35);
 
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean", hb);
