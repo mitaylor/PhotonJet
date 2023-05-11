@@ -102,8 +102,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.80, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.75, jet_selections.data());
+            l->DrawLatexNDC(0.135, 0.80, photon_selections.data());
+            l->DrawLatexNDC(0.135, 0.75, jet_selections.data());
         }
     };
 
