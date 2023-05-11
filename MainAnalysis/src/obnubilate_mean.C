@@ -158,13 +158,14 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         /* calculate the total systematic error */
         for (int64_t i = 0; i < means->size(); ++i) {
-            std::vector<float> sets;
+            std::vector<double> sets;
 
             for (size_t k = 0; k < inputs.size(); ++k) {
+                auto difference = (*means)[i]->GetBinContent(k + 2);
                 if (groups[k] == (int32_t) sets.size()) {
-                    sets.push_back((*means)[i]->GetBinContent(k + 2));
+                    sets.push_back(difference);
                 } else {
-                    sets[groups[k]] = std::max(sets[groups[k]], (*means)[i]->GetBinContent(k + 2));
+                    sets[groups[k]] = std::max(sets[groups[k]], difference);
                 }
 
                 (*means)[i]->SetBinContent(k + 2, std::sqrt(difference));
@@ -188,9 +189,9 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         /* set bin labels */
         for (int64_t i = 0; i < means->size(); ++i) {
             for (size_t k = 0; k < inputs.size(); ++k) {
-                (*means)[i]->SetBinLabel(k + 2, legends[k]);
+                (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k]);
             }
-            (*means)[i]->SetBinLabel(1, "total");
+            (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
         }
 
         /* add plots */
