@@ -120,7 +120,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         auto stub = "_"s + figure;
 
         auto c1 = new paper(set + "_" + tag + "_mean_var"s + stub, hb);
-        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.005));
+        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.003));
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
