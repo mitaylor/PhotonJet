@@ -114,7 +114,7 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
         title(std::bind(rename_axis, _1, "<#deltaj>"), hists[i]);
 std::cout << __LINE__ << std::endl;
-        for (int64_t j = 0; j < 4; ++j) {
+        for (int64_t j = 0; j < hist_inputs[i]->size(); ++j) {
             (*hists[i])[0]->SetBinContent((j + 1)*2, (*hist_inputs[i])[j]->GetBinContent(1));
             (*hists[i])[0]->SetBinError((j + 1)*2, (*hist_inputs[i])[j]->GetBinError(1));
 std::cout << __LINE__ << std::endl;
