@@ -87,8 +87,8 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.42, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.72, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.67, jet_selections.data());
         }
     };
 
@@ -165,7 +165,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean", hb);
-    apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.1);
+    apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 6);
     s->accessory(kinematics);
     s->jewellery(box);
 
