@@ -160,8 +160,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         auto incl = new interval(""s, inputs.size() + 1, 0.f, (float) inputs.size() + 1);
         auto fmean = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
-        auto means = new history<TH1F>("total_base_"s + tag + "_"s + label + "_" + figure, "", fmean, base->size());
-        auto base_mean = new history<TH1F>("mean_base"s, "", fmean, base->size());
+        auto means = new history<TH1F>("syst_mean"s, "", fmean, base->size());
+        auto base_mean = new history<TH1F>("base_mean"s, "", fmean, base->size());
 
         for (int64_t i = 0; i < base->size(); ++i) {
             for (int64_t j = 0; j < (*base_mean)[i]->GetNbinsX(); ++j) {
@@ -237,7 +237,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         c1->jewellery(box);
 
         /* save histograms */
-        base->save(tag);
+        base_mean->save(tag);
         means->save(tag);
 
         hb->sketch();
