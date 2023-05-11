@@ -17,6 +17,7 @@
 #include "TFile.h"
 #include "TH1.h"
 #include "TLatex.h"
+#include "TColor.h"
 
 #include <functional>
 #include <string>
