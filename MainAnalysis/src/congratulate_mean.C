@@ -61,8 +61,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
-    auto ihf = new interval(dhf);
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -104,7 +102,7 @@ int congratulate(char const* config, char const* selections, char const* output)
                 auto const& tag) {
             hist_input = new history<TH1F>(file, tag + "_base_mean");
             syst_input = new history<TH1F>(file, tag + "syst_mean");
-        }, hist_inputs, syst_inputs, files, tagss);
+        }, hist_inputs, syst_inputs, files, tags);
 
         std::vector<history<TH1F>*> hists(2, nullptr);
         std::vector<history<TH1F>*> systs(2, nullptr);
@@ -113,8 +111,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
         for (size_t i = 0; i < hists.size(); ++i) {
-            auto hists[i] = new history<TH1F>("hist"s + to_text(i), "", fincl, 1);
-            auto systs[i] = new history<TH1F>("syst"s + to_text(i), "", fincl, 1);
+            hists[i] = new history<TH1F>("hist"s + to_text(i), "", fincl, 1);
+            systs[i] = new history<TH1F>("syst"s + to_text(i), "", fincl, 1);
 
             title(std::bind(rename_axis, _1, "<#deltaj>"), hists[i]);
 
@@ -184,7 +182,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         hb->style("pp", pp_style);
         hb->style("aa", aa_style);
         hb->sketch();
-        
+
         s->draw("pdf");
     }, figures);
 
