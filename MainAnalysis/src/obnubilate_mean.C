@@ -226,7 +226,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }
 
         /* add plots */
-        auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
+        // auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
 
         means->apply([&](TH1* h) { 
             c1->add(h); // style1(h); 
