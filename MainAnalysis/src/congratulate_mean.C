@@ -163,6 +163,17 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
     };
 
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(1, " ");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(2, "50-90%");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(3, " ");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(4, "30-50%");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(5, " ");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(6, "10-30%");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(7, " ");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(8, "0-10%");
+    (*hists[0])[0]->GetXaxis()->SetBinLabel(9, " ");
+    (*hists[0])[0]->GetXaxis()->SetTicks("-");
+
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean", hb);
     apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, 0, 0.07);
