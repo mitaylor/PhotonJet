@@ -267,14 +267,14 @@ int quantitate(char const* config, char const* selections, char const* output) {
     for (int64_t i = 0; i < chi_square->size(); ++i) {
         choice_minus[i] = 1;
 
-        for (int64_t j = choice_nominal[i]; j > 0; --j) {
+        for (int64_t j = choice_nominal[i] - 1; j > 0; --j) {
             auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
 
             if (top == 0) { continue; }
 
-            if ((top - min_nominal[i]) / min_nominal[i] < 0.05) {
+            if ((top - min_nominal[i]) / min_nominal[i] < 0.05 || choice_minus[i] < j) {
                 min_minus[i] = top;
-                choice_plus[i] = j;
+                choice_minus[i] = j;
             }
             else {
                 break;
