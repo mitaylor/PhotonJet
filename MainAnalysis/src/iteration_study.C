@@ -200,6 +200,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TFile* fiter = new TFile((base + regularization).data(), "read");
     auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);
 
+    /* prepare output file */
+    TFile* fout = new TFile(output, "recreate");
+
     /* prepare the post-unfolded data */
     auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
