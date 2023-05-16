@@ -379,14 +379,16 @@ int quantitate(char const* config, char const* selections, char const* output) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+            auto jet_selections = "anti-k_{T} R = 0.3, "s + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+            auto iterations = to_text(choice_minus[index - 1]) + ", "s + to_text(choice_nominal[index - 1]) + ", "s + to_text(choice_plus[index - 1]);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.71, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.65, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.68, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.63, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.53, iterations.data());
         }
     };
 
@@ -396,7 +398,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     hb->alias("plus", "increased iterations");
     hb->alias("minus", "decreased iterations");
 
-    auto p1 = new paper(set + "_" + label + "_iteration_comparison", hb);
+    auto p1 = new paper(set + "_" + tag + "_" + label + "_iteration_comparison", hb);
     p1->divide(chi_square->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
