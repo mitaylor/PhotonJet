@@ -198,6 +198,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
+    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
 
     /* create intervals and multivals */
@@ -396,7 +397,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     hb->alias("minus", "decreased iterations");
 
     auto p1 = new paper(set + "_" + label + "_iteration_comparison", hb);
-    p1->divide(ihf->size(), -1);
+    p1->divide(chi_square->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag, -2., 27.);
