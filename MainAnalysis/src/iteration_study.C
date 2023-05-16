@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -8,6 +9,9 @@
 
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
+
+#include "../git/paper-and-pencil/include/paper.h"
+#include "../git/paper-and-pencil/include/pencil.h"
 
 #include "TFile.h"
 #include "TTree.h"
