@@ -121,9 +121,9 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return compare_photon_pt_spectrum(argv[1], argv[2]);
+    if (argc == 4)
+        return compare_photon_pt_spectrum(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
