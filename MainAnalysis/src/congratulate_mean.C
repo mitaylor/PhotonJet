@@ -44,8 +44,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto smeared = conf->get<bool>("smeared");
 
-    auto min = conf->get<bool>("min");
-    auto max = conf->get<bool>("max");
+    auto min = conf->get<float>("min");
+    auto max = conf->get<float>("max");
 
     auto suffix = conf->get<std::string>("suffix");
 
