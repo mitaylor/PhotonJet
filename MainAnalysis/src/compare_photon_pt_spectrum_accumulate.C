@@ -89,7 +89,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     scale_bin_width(photon_pt_data, photon_pt_mc);
     normalise_to_unity(photon_pt_data, photon_pt_mc);
 
-    auto photon_pt_ratio = new history<TH1F>(photon_pt_data, "ratio");
+    auto photon_pt_ratio = new history<TH1F>(*photon_pt_data, "ratio"s);
     photon_pt_ratio->rename("photon_pt_ratio");
     photon_pt_ratio->divide(*photon_pt_mc);
 
