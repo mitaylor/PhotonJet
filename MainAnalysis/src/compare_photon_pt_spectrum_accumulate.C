@@ -16,6 +16,7 @@
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TF1.h"
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
@@ -93,7 +94,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     photon_pt_ratio->rename("photon_pt_ratio");
     photon_pt_ratio->divide(*photon_pt_mc);
 
-    photon_pt_ratio->apply([&](TH1* h) { h->Fit(expo); });
+    photon_pt_ratio->apply([&](TH1* h) { h->Fit("expo"); });
 
     auto fit_info = [&](int64_t index) {
         auto photon_pt_ratio_fit = (*photon_pt_ratio)[index-1]->GetFunction("expo");
