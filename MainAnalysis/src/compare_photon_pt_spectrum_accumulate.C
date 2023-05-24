@@ -93,6 +93,24 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     photon_pt_ratio->rename("photon_pt_ratio");
     photon_pt_ratio->divide(*photon_pt_mc);
 
+    photon_pt_ratio->apply([&](TH1* h) { h->Fit(expo); });
+
+    auto fit_info = [&](int64_t index) {
+        auto photon_pt_ratio_fit = (*photon_pt_ratio)[index-1]->GetFunction("expo");
+
+        auto photon_pt_ratio_fit_const = photon_pt_ratio_fit->GetParameter(0);
+        auto photon_pt_ratio_fit_expo = photon_pt_ratio_fit->GetParameter(1);
+
+        char buffer[128] = { '\0' };
+        sprintf(buffer, "%.3fe^(%.3f)", photon_pt_ratio_fit_const, photon_pt_ratio_fit_expo);
+
+        TLatex* hn_mean = new TLatex();
+        hn_mean->SetTextFont(43);
+        hn_mean->SetTextSize(12);
+
+        hn_mean->DrawLatexNDC(0.2, 0.2, buffer);
+    };
+
     photon_pt_data->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
     photon_pt_mc->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
 
@@ -114,7 +132,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     };
 
     auto hb = new pencil();
-    hb->category("type", "data", "mc");
+    hb->category("type", "data", "mc", "ratio");
 
     if (heavyion) hb->alias("data", "PbPb Data");
     else             hb->alias("data", "pp Data");
@@ -126,13 +144,24 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p1->accessory(hf_info);
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag);
+    p1->set(paper::flags::logy);
     
     photon_pt_data->apply([&](TH1* h) { p1->add(h, "data"); });
     photon_pt_mc->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mc"); });
 
+    auto p2 = new paper(set + "_" + tag + "_photon_pt_comparison_accumulate", hb);
+    p2->divide(ihf->size(), -1);
+    p2->accessory(hf_info);
+    p2->accessory(kinematics);
+    apply_style(p2, cms, system_tag);
+    p2->set(paper::flags::logy);
+    
+    photon_pt_ratio->apply([&](TH1* h) { p2->add(h, "ratio"); });
+
     hb->sketch();
 
     p1->draw("pdf");
+    p2->draw("pdf");
 
     in(output, [&]() {
         photon_pt_data->save();
