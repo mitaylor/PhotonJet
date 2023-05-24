@@ -89,6 +89,10 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     scale_bin_width(photon_pt_data, photon_pt_mc);
     normalise_to_unity(photon_pt_data, photon_pt_mc);
 
+    auto photon_pt_ratio = new history<TH1F>(photon_pt_data, "ratio");
+    photon_pt_ratio->rename("photon_pt_ratio");
+    photon_pt_ratio->divide(*photon_pt_mc);
+
     photon_pt_data->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
     photon_pt_mc->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
 
@@ -133,6 +137,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     in(output, [&]() {
         photon_pt_data->save();
         photon_pt_mc->save();
+        photon_pt_ratio->save();
     });
 
     return 0;
