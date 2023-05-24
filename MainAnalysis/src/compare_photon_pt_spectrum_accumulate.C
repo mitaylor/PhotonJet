@@ -37,7 +37,7 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-int compare_photon_pt_spectrum(char const* config, const char* output) {
+int compare_photon_pt_spectrum(char const* config, char const* selections, const char* output) {
     auto conf = new configurer(config);
 
     auto input_data = conf->get<std::string>("input_data");
@@ -49,9 +49,17 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    /* selections */
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
     /* load history objects */
-    TFile* f_data = new TFile(input_data.data(), "read");
-    TFile* f_mc = new TFile(input_mc.data(), "read"); 
+    TFile* f_data = new TFile((base + input_data).data(), "read");
+    TFile* f_mc = new TFile((base + input_mc).data(), "read"); 
 
     auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
     h_data_nevt->rename("h_data_nevt");
@@ -104,12 +112,12 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
     auto hb = new pencil();
     hb->category("type", "data", "mc");
 
-    if (tag == "aa") hb->alias("data", "PbPb Data");
+    if (heavyion) hb->alias("data", "PbPb Data");
     else             hb->alias("data", "pp Data");
-    if (tag == "aa") hb->alias("mc", "PbPb MC");
+    if (heavyion) hb->alias("mc", "PbPb MC");
     else             hb->alias("mc", "pp MC");
 
-    auto p1 = new paper("photon_pt_comparison_accumulate_" + tag, hb);
+    auto p1 = new paper(set + "_" + tag + "_photon_pt_comparison_accumulate", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -131,9 +139,9 @@ int compare_photon_pt_spectrum(char const* config, const char* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return compare_photon_pt_spectrum(argv[1], argv[2]);
+    if (argc == 4)
+        return compare_photon_pt_spectrum(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
