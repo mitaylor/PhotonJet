@@ -150,7 +150,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     photon_pt_data->apply([&](TH1* h) { p1->add(h, "data"); });
     photon_pt_mc->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mc"); });
 
-    auto p2 = new paper(set + "_" + tag + "_photon_pt_comparison_accumulate", hb);
+    auto p2 = new paper(set + "_" + tag + "_photon_pt_comparison_accumulate_ratio", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
