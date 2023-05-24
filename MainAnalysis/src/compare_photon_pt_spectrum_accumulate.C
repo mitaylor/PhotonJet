@@ -103,13 +103,14 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
         auto photon_pt_ratio_fit_expo = photon_pt_ratio_fit->GetParameter(1);
 
         char buffer[128] = { '\0' };
-        sprintf(buffer, "%.3fe^(%.3f)", photon_pt_ratio_fit_const, photon_pt_ratio_fit_expo);
+        sprintf(buffer, "fit: %.3fe^{%.3f}, photon_pt_ratio_fit_const, photon_pt_ratio_fit_expo);
 
-        TLatex* hn_mean = new TLatex();
-        hn_mean->SetTextFont(43);
-        hn_mean->SetTextSize(12);
+        TLatex* l = new TLatex();
+        l->SetTextAlign(31);
+        l->SetTextFont(43);
+        l->SetTextSize(12);
 
-        hn_mean->DrawLatexNDC(0.2, 0.2, buffer);
+        l->DrawLatexNDC(0.865, 0.6, buffer);
     };
 
     photon_pt_data->apply([&](TH1* h) { h->GetXaxis()->SetRangeUser(40, 200); });
