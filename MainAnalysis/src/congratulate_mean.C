@@ -79,8 +79,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto hb = new pencil();
     hb->category("system", "pp", "aa");
 
-    hb->alias("aa", "PbPb");
-    if (smeared) hb->alias("pp", "pp (smeared)");
+    hb->alias("aa", "PbPb 1.69 nb^{-1}");
+    hb->alias("pp", "pp 302 pb^{-1}");
+    if (smeared) hb->alias("pp", "pp 302 pb^{-1} (smeared)");
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -182,7 +183,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean" + suffix, hb);
-    apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, min, max);
+    apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, min, max);
     s->accessory(kinematics);
     s->jewellery(box);
 
