@@ -183,7 +183,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean" + suffix, hb);
-    apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, ""s, min, max);
+    apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, min, max);
     s->accessory(kinematics);
     s->jewellery(box);
 
