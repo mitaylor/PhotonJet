@@ -39,7 +39,7 @@ void scale_bin_width(T*... args) {
 
 void fill_axes(pjtree* pjt, 
                std::vector<int64_t>& hf_x, std::vector<float>& weights, 
-               float pho_cor, float photon_eta, int64_t photon_phi, 
+               float pho_cor, float photon_pt, float photon_eta, int64_t photon_phi, 
                bool exclude, 
                bool jet_cor, float jet_pt_min, float jet_eta_abs,
                float dphi_min_numerator, float dphi_min_denominator,
@@ -48,7 +48,7 @@ void fill_axes(pjtree* pjt,
                history<TH2F>* acceptance, history<TH2F>* total) {
     
     zip([&](auto const& index, auto const& weight) {
-        (*photon_pt_spectrum)[index]->Fill(leading_pt, weight * pho_cor);
+        (*photon_pt_spectrum)[index]->Fill(photon_pt, weight * pho_cor);
     }, hf_x, weights);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
@@ -90,7 +90,7 @@ void fill_axes(pjtree* pjt,
 
         zip([&](auto const& index, auto const& weight) {
             if (jet_pt < 200 && jet_pt > jet_pt_min) {
-                (*photon_jet_pt_spectrum)[index]->Fill(leading_pt, weight * cor * pho_cor);
+                (*photon_jet_pt_spectrum)[index]->Fill(photon_pt, weight * cor * pho_cor);
             }
         }, hf_x, weights);
     }
@@ -156,6 +156,7 @@ int populate(char const* config, char const* selections, char const* output) {
     /* make histograms */
     auto ipt = new interval("photon p_{T}", dpt);
     auto ihf = new interval(dhf);
+    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
@@ -320,7 +321,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 weights.push_back(weight);
             }
 
-            fill_axes(pjt, hf_x, weights, pho_cor,
+            fill_axes(pjt, hf_x, weights, pho_cor, leading_pt,
                 photon_eta, photon_phi, exclude, heavyion && !no_jes,
                 jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
                 idphi, photon_pt_spectrum, photon_jet_pt_spectrum,
