@@ -81,7 +81,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
             if (!(unc < 20)) { continue; }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
-            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
+            // (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
         }
     }
 
