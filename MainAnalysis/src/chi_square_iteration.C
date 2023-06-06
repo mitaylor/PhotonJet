@@ -40,7 +40,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
-    auto base = sel->get<std::string>("base");
+    auto base_path = sel->get<std::string>("base");
 
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
@@ -50,7 +50,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* f = new TFile((base + input).data(), "read");
+    TFile* f = new TFile((base_path + input).data(), "read");
 
     auto base = new history<TH1F>(f, tag + "_"s + base_label);
 
