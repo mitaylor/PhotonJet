@@ -67,10 +67,13 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
         auto refold = new history<TH1F>(f, tag + "_"s + base_label + "_iteration" + std::to_string(iterations[i]));
 
         for (int64_t j = 0; j < base->size(); ++j) {
+
             if (!((*refold)[j]->GetBinError(1) < 100)) { continue; } // adjust
 
             double sum = 0;
             double unc = 0;
+
+            std::cout << (*base)[j]->GetNbinsX() << std::endl;
 
             for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
                 double diff = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
