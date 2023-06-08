@@ -38,6 +38,20 @@ int manipulate(char const* config, char const* selections, char const* output) {
     auto purities = new history<TH1F>(fp, type);
     auto impurities = new history<TH1F>(*purities, "im"s);
 
+    std::vector<TFile*> files(inputs.size(), nullptr);
+    zip([&](auto& file, auto const& input) {
+        file = new TFile((base + input).data(), "read");
+    }, files, inputs);
+
+    /* prepare output */
+    TFile* fout = new TFile(output, "recreate");
+
+    /* load nevt and do purity scaling */
+    auto nevt = new history<TH1F>(files[0], "raw_nevt");
+    nevt->multiply(*purities);
+    nevt->save(tag);
+
+    /* scale purities and impurities for easy use */
     purities->apply([](TH1* h) {
         auto purity = h->GetBinContent(1);
         h->SetBinContent(1, 1. / purity);
@@ -46,14 +60,6 @@ int manipulate(char const* config, char const* selections, char const* output) {
         auto purity = h->GetBinContent(1);
         h->SetBinContent(1, 1. - 1. / purity);
     });
-
-    std::vector<TFile*> files(inputs.size(), nullptr);
-    zip([&](auto& file, auto const& input) {
-        file = new TFile((base + input).data(), "read");
-    }, files, inputs);
-
-    /* prepare output */
-    TFile* fout = new TFile(output, "recreate");
 
     /* load histograms and perform purity subtraction */
     for (auto const& label : labels) {
