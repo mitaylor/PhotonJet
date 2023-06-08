@@ -126,6 +126,8 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_f_jpt_merge = pjet_f_jpt_d_pt->sum(0);
     auto pjet_u_dr_merge = pjet_u_dr_d_pt->sum(0);
 
+    std::cout << pjet_f_dr_merge->dims() << " " << pjet_f_dr_merge->size() << std::endl;
+
     /* normalise by number of signal photons (events) */
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);

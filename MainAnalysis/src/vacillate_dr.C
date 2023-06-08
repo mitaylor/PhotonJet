@@ -401,18 +401,34 @@ int vacillate(char const* config, char const* selections, char const* output) {
         }
     }
 
+    auto n_merge = n->sum(0);
+    auto r_merge = r->sum(0);
+    auto g_merge = g->sum(0);
+    auto cdr_merge = cdr->sum(0);
+    auto cpt_merge = cpt->sum(0);
+    auto c_merge = c->sum(0);
+
     r->divide(*n);
     g->divide(*n);
+
+    r_merge->divide(*n_merge);
+    g_merge->divide(*n_merge);
 
     /* save output */
     in(output, [&]() {
         n->save(tag);
         r->save(tag);
         g->save(tag);
-
         cdr->save(tag);
         cpt->save(tag);
         c->save(tag);
+
+        n_merge->save(tag);
+        r_merge->save(tag);
+        g_merge->save(tag);
+        cdr_merge->save(tag);
+        cpt_merge->save(tag);
+        c_merge->save(tag);
     });
 
     return 0;
