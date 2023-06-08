@@ -40,7 +40,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
-    auto base = sel->get<std::string>("base");
+    auto base_path = sel->get<std::string>("base");
 
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
@@ -50,10 +50,9 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    TFile* f = new TFile((base + input).data(), "read");
+    TFile* f = new TFile((base_path + input).data(), "read");
 
-    auto base0 = new history<TH1F>(f, tag + "_"s + base_label + "_side0");
-    auto base1 = new history<TH1F>(f, tag + "_"s + base_label + "_side1");
+    auto base = new history<TH1F>(f, tag + "_"s + base_label);
 
     /* create histograms */
     std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -62,30 +61,28 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 0, iterations.back()); };
 
-    auto chi_square = new history<TH1F>("chi_square"s, "", func, base0->size());
+    auto chi_square = new history<TH1F>("chi_square"s, "", func, base->size());
 
     for (size_t i = 0; i < iterations.size(); ++i) {
-        auto refold0 = new history<TH1F>(f, tag + "_"s + base_label + "_refold0_iteration" + std::to_string(iterations[i]));
-        auto refold1 = new history<TH1F>(f, tag + "_"s + base_label + "_refold1_iteration" + std::to_string(iterations[i]));
+        auto refold = new history<TH1F>(f, tag + "_"s + base_label + "_iteration" + std::to_string(iterations[i]));
 
-        for (int64_t j = 0; j < base0->size(); ++j) {
-            if (!((*refold0)[j]->GetBinError(1) < 10)) { continue; }
-            if (!((*refold1)[j]->GetBinError(1) < 10)) { continue; }
+        for (int64_t j = 0; j < base->size(); ++j) {
+
+            if (!((*refold)[j]->GetBinError(1) < 100)) { continue; } // adjust
 
             double sum = 0;
             double unc = 0;
 
-            for (int64_t k = 1; k < (*base0)[j]->GetNbinsX(); ++k) {
-                double diff = (*base0)[j]->GetBinContent(k + 1) - (*refold0)[j]->GetBinContent(k + 1);
-                diff += (*base1)[j]->GetBinContent(k + 1) - (*refold1)[j]->GetBinContent(k + 1);
+            for (int64_t k = 1; k < (*base)[j]->GetNbinsX(); ++k) {
+                double diff = (*base)[j]->GetBinContent(k + 1) - (*refold)[j]->GetBinContent(k + 1);
                 sum += diff * diff;
-                unc += (*refold0)[j]->GetBinError(k + 1) + (*refold1)[j]->GetBinError(k + 1);;
+                unc += (*refold)[j]->GetBinError(k + 1);
             }
 
             if (!(unc < 20)) { continue; }
 
             (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
-            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
+            // (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
         }
     }
 

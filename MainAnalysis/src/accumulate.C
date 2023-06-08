@@ -73,6 +73,8 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto mdr = new multival(rdrr, rptr);
 
+    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -118,6 +120,12 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_u_dr_d_pt = pjet_u_dr->sum(1);
     auto pjet_u_dr_d_hf = pjet_u_dr->sum(0);
 
+    auto nevt_merge = nevt_d_pt->sum(0);
+
+    auto pjet_f_dr_merge = pjet_f_dr_d_pt->sum(0);
+    auto pjet_f_jpt_merge = pjet_f_jpt_d_pt->sum(0);
+    auto pjet_u_dr_merge = pjet_u_dr_d_pt->sum(0);
+
     /* normalise by number of signal photons (events) */
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
@@ -130,16 +138,22 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_u_dr_d_pt->divide(*nevt_d_pt);
     pjet_u_dr_d_hf->divide(*nevt_d_hf);
 
+    pjet_f_dr_merge->divide(*nevt_merge);
+    pjet_f_jpt_merge->divide(*nevt_merge);
+    pjet_u_dr_merge->divide(*nevt_merge);
+
     /* normalise to unity */
     normalise_to_unity(
         pjet_f_dr,
         pjet_f_dr_d_pt,
-        pjet_f_dr_d_hf);
+        pjet_f_dr_d_hf, 
+        pjet_f_dr_merge);
 
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
         pjet_f_dr,
         pjet_f_dr_d_pt,
-        pjet_f_dr_d_hf);
+        pjet_f_dr_d_hf, 
+        pjet_f_dr_merge);
 
     /* save histograms */
     in(output, [&]() {
@@ -155,6 +169,10 @@ int accumulate(char const* config, char const* selections, char const* output) {
         pjet_f_jpt_d_hf->save(tag);
         pjet_u_dr_d_pt->save(tag);
         pjet_u_dr_d_hf->save(tag);
+
+        pjet_f_dr_merge->save(tag);
+        pjet_f_jpt_merge->save(tag);
+        pjet_u_dr_merge->save(tag);
     });
 
     /* draw plots */
@@ -175,6 +193,9 @@ int accumulate(char const* config, char const* selections, char const* output) {
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
+    std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", drange, true); };
+
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
 
@@ -188,13 +209,13 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     hb->ditto("es", "na");
 
-    auto suffixes = { "d_pthf"s, "d_pt"s, "d_hf"s };
+    auto suffixes = { "d_pthf"s, "d_pt"s, "d_hf"s, "merge"s };
     auto texts = std::vector<std::function<void(int64_t)>> {
-        pthf_info, std::bind(pt_info, _1, 0.75), std::bind(hf_info, _1, 0.75) };
+        pthf_info, std::bind(pt_info, _1, 0.75), std::bind(hf_info, _1, 0.75), std::bind(range_info, _1, 0.75) };
 
-    std::vector<paper*> c1(3, nullptr);
-    std::vector<paper*> c2(3, nullptr);
-    std::vector<paper*> c3(3, nullptr);
+    std::vector<paper*> c1(4, nullptr);
+    std::vector<paper*> c2(4, nullptr);
+    std::vector<paper*> c3(4, nullptr);
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -204,11 +225,12 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
         apply_style(c, cms, system_tag, -2., 27.);
         c->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
-    }, c1, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+    }, c1, x{ ihf->size(), 1L, 1L, 1L }, suffixes, texts);
 
     pjet_f_dr->apply([&](TH1* h) { c1[0]->add(h, system); });
     pjet_f_dr_d_pt->apply([&](TH1* h) { c1[1]->add(h, system); });
     pjet_f_dr_d_hf->apply([&](TH1* h) { c1[2]->add(h, system); });
+    pjet_f_dr_merge->apply([&](TH1* h) { c1[3]->add(h, system); });
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -218,11 +240,12 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
         apply_style(c, cms, system_tag, -0.001, 0.02);
         c->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
-    }, c2, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+    }, c2, x{ ihf->size(), 1L, 1L, 1L }, suffixes, texts);
 
     pjet_f_jpt->apply([&](TH1* h) { c2[0]->add(h, system); });
     pjet_f_jpt_d_pt->apply([&](TH1* h) { c2[1]->add(h, system); });
     pjet_f_jpt_d_hf->apply([&](TH1* h) { c2[2]->add(h, system); });
+    pjet_f_jpt_merge->apply([&](TH1* h) { c2[3]->add(h, system); });
 
     zip([&](paper*& c, int64_t rows, std::string const& suffix,
             std::function<void(int64_t)> text) {
@@ -232,11 +255,12 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
         apply_style(c, cms, system_tag, -0.01, 0.07);
         c->accessory(std::bind(line_at, _1, 0.f, 0, mdr->size()));
-    }, c3, x{ ihf->size(), 1L, 1L }, suffixes, texts);
+    }, c3, x{ ihf->size(), 1L, 1L, 1L }, suffixes, texts);
 
     pjet_u_dr->apply([&](TH1* h) { c3[0]->add(h, system); });
     pjet_u_dr_d_pt->apply([&](TH1* h) { c3[1]->add(h, system); });
     pjet_u_dr_d_hf->apply([&](TH1* h) { c3[2]->add(h, system); });
+    pjet_u_dr_merge->apply([&](TH1* h) { c3[3]->add(h, system); });
 
     hb->set_binary("system");
     hb->sketch();
