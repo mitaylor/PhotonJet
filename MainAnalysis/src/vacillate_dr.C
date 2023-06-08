@@ -401,12 +401,19 @@ int vacillate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    auto n_merge = n->sum(0);
-    auto r_merge = r->sum(0);
-    auto g_merge = g->sum(0);
-    auto cdr_merge = cdr->sum(0);
-    auto cpt_merge = cpt->sum(0);
-    auto c_merge = c->sum(0);
+    auto n_merge = n->extend("merge", 0, 1)->sum(1);
+    auto r_merge = r->extend("merge", 0, 1)->sum(1);
+    auto g_merge = g->extend("merge", 0, 1)->sum(1);
+    auto cdr_merge = cdr->extend("merge", 0, 1)->sum(1);
+    auto cpt_merge = cpt->extend("merge", 0, 1)->sum(1);
+    auto c_merge = c->extend("merge", 0, 1)->sum(1);
+
+    n_merge->rename("n_merge");
+    r_merge->rename("r_merge");
+    g_merge->rename("g_merge");
+    cdr_merge->rename("cdr_merge");
+    cpt_merge->rename("cpt_merge");
+    c_merge->rename("c_merge");
 
     r->divide(*n);
     g->divide(*n);
