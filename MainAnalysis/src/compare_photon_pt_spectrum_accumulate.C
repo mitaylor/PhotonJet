@@ -90,9 +90,10 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     scale_bin_width(photon_pt_data, photon_pt_mc);
     normalise_to_unity(photon_pt_data, photon_pt_mc);
 
-    auto photon_pt_ratio = new history<TH1F>(*photon_pt_data, "ratio"s);
-    photon_pt_ratio->rename("photon_pt_ratio");
-    photon_pt_ratio->divide(*photon_pt_mc);
+    auto photon_pt_ratio = new history<TH1F>("photon_pt_ratio"s, "", fpt, ihf->size());
+    for (size_t i = 0; i < ihf->size(); ++i) {
+        (*rho_ratio)[i]->Divide((*photon_pt_data)[i], (*photon_pt_mc)[i]);
+    }
 
     photon_pt_ratio->apply([&](TH1* h) { h->Fit("expo"); });
 
