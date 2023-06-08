@@ -112,7 +112,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
     /* integrate histograms */
     auto nevt_d_pt = nevt->sum(1);
     auto nevt_d_hf = nevt->sum(0);
-
     auto pjet_f_dr_d_pt = pjet_f_dr->sum(1);
     auto pjet_f_dr_d_hf = pjet_f_dr->sum(0);
     auto pjet_f_jpt_d_pt = pjet_f_jpt->sum(1);
@@ -121,12 +120,14 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_u_dr_d_hf = pjet_u_dr->sum(0);
 
     auto nevt_merge = nevt_d_pt->extend("merge", 0, 1)->sum(1);
-
     auto pjet_f_dr_merge = pjet_f_dr_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_f_jpt_merge = pjet_f_jpt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_dr_merge = pjet_u_dr_d_hf->extend("merge", 0, 1)->sum(1);
 
-    std::cout << pjet_f_dr_merge->dims() << " " << pjet_f_dr_merge->size() << std::endl;
+    nevt_merge->rename(label + "_raw_nevt_merge"s);
+    pjet_f_dr_merge->rename(label + "_raw_sub_pjet_f_dr_merge"s);
+    pjet_f_jpt_merge->rename(label + "_raw_sub_pjet_f_jpt_merge"s);
+    pjet_u_dr_merge->rename(label + "_raw_sub_pjet_u_dr_merge"s);
 
     /* normalise by number of signal photons (events) */
     pjet_f_dr->divide(*nevt);
