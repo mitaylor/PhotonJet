@@ -120,11 +120,11 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_u_dr_d_pt = pjet_u_dr->sum(1);
     auto pjet_u_dr_d_hf = pjet_u_dr->sum(0);
 
-    auto nevt_merge = nevt_d_pt->extend("merge", 0, 1)->sum(0);
+    auto nevt_merge = nevt_d_pt->extend("merge", 0, 1)->sum(1);
 
-    auto pjet_f_dr_merge = pjet_f_dr_d_hf->extend("merge", 0, 1)->sum(0);
-    auto pjet_f_jpt_merge = pjet_f_jpt_d_hf->extend("merge", 0, 1)->sum(0);
-    auto pjet_u_dr_merge = pjet_u_dr_d_hf->extend("merge", 0, 1)->sum(0);
+    auto pjet_f_dr_merge = pjet_f_dr_d_hf->extend("merge", 0, 1)->sum(1);
+    auto pjet_f_jpt_merge = pjet_f_jpt_d_hf->extend("merge", 0, 1)->sum(1);
+    auto pjet_u_dr_merge = pjet_u_dr_d_hf->extend("merge", 0, 1)->sum(1);
 
     std::cout << pjet_f_dr_merge->dims() << " " << pjet_f_dr_merge->size() << std::endl;
 
