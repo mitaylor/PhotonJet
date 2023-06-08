@@ -158,7 +158,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p2->accessory(kinematics);
     p2->accessory(fit_info);
     apply_style(p2, cms, system_tag);
-    p2->set(paper::flags::logy);
+    // p2->set(paper::flags::logy);
     
     photon_pt_ratio->apply([&](TH1* h) { p2->add(h, "ratio"); });
 
