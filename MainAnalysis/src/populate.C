@@ -120,9 +120,9 @@ void fill_axes(pjtree* pjt,
 
         zip([&](auto const& index, auto const& weight) {
             if (jet_pt < 200 && jet_pt > jet_pt_min) {
-                (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), cor * weight);
-                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
-                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
+                (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), cor * weight * pho_cor);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight * pho_cor);
+                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight * pho_cor);
             }
         }, pthf_x, weights);
     }
