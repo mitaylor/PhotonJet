@@ -68,7 +68,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
+        stack_text(index, 0.75, 0.04, see_data, pt_info, hf_info); };
 
     auto hb = new pencil();
     hb->category("system", "pp", "PbPb");
