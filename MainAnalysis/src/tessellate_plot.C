@@ -82,7 +82,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     cms += "|#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
     auto c1 = new paper(set + "_" + tag + "_tessellate_templates", hb);
-    apply_style(c1, cms, system_tag, -1., 24.);
+    apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->divide(-1 , ihf->size());
 
