@@ -71,10 +71,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         stack_text(index, 0.75, 0.04, see_data, pt_info, hf_info); };
 
     auto hb = new pencil();
-    hb->category("system", "pp", "PbPb");
     hb->category("type", "MC", "data");
-
-    hb->set_binary("type");
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -90,8 +87,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
         (*see_data)[i]->Scale(1. / (*see_data)[i]->Integral());
         (*see_sig)[i]->Scale(1. / (*see_sig)[i]->Integral());
 
-        c1->add((*see_data)[i], system, "data");
-        c1->stack((*see_sig)[i], system, "MC");
+        c1->add((*see_sig)[i], "MC");
+        c1->stack((*see_data)[i], "data");
     }
 
     hb->sketch();
