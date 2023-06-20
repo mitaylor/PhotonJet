@@ -13,6 +13,7 @@
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
+#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
@@ -30,7 +31,8 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
-               multival* mpthf, TTree* t, pjtree* p, bool heavyion, bool apply_er,
+               multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p,
+                bool heavyion, bool apply_er,
                float pt_min, float photon_eta_abs, float hovere_max, float hf_min, float hf_max,
                float iso_max, float noniso_min, float noniso_max, 
                history<TH1F>* rho_weighting, history<TH1F>* efficiency, bool mc) {
@@ -355,7 +357,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         TTree* td = (TTree*)fd->Get("pj");
         auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0, 0});
 
-        fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
+        fill_data(see_data, see_bkg, mpthf, ipt, ihf, td, pd, heavyion, apply_er,
                 pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
                 noniso_min, noniso_max, rho_weighting, efficiency, mc);
     }
