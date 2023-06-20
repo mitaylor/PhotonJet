@@ -357,7 +357,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
         fill_data(see_data, see_bkg, mpthf, ipt, ihf, td, pd, heavyion, apply_er,
                 pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
-                noniso_min, noniso_max, rho_weighting, efficiency, mc);
+                noniso_min, noniso_max, rho_weighting, efficiency, mc && heavyion);
     }
 
     for (auto const& file : signal) {
