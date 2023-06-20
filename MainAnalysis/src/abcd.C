@@ -245,10 +245,10 @@ int tessellate(char const* config, char const* selections, char const* output) {
             c1->add((*sfrac)[i]);
             c1->adjust((*sfrac)[i], "colz text", "");
 
-            auto A = sfrac->GetBinContent(1, 1);
-            auto B = sfrac->GetBinContent(3, 1);
-            auto C = sfrac->GetBinContent(1, 2);
-            auto D = sfrac->GetBinContent(3, 2);
+            auto A = (*sfrac)[i]->GetBinContent(1, 1);
+            auto B = (*sfrac)[i]->GetBinContent(3, 1);
+            auto C = (*sfrac)[i]->GetBinContent(1, 2);
+            auto D = (*sfrac)[i]->GetBinContent(3, 2);
 
             (*purity)[i]->SetBinContent(1, 1. - B*C / (A*D));
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
