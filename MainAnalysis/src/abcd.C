@@ -145,8 +145,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto ipt = new interval(dpt);
     auto mpthf = new multival(dpt, dhf);
 
-    auto bsee = {rsee[1], see_max, rsee[2]};
-    auto bsumiso = {-100., iso_max, noniso_min, noniso_max};
+    std::vector<float> bsee = {rsee[1], see_max, rsee[2]};
+    std::vector<float> bsumiso = {-100, iso_max, noniso_min, noniso_max};
 
     auto incl = new interval(""s, 1, 0., 1.);
     auto isumiso = new interval("SumIso (GeV)"s, bsumiso);
