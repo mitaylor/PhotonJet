@@ -95,7 +95,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         }
 
         // efficiency and rho weighting corrections
-        auto weight = pjt->w;
+        auto weight = p->w;
 
         if (efficiency != nullptr && leading_pt < 70) {
             auto bin = (*efficiency)[1]->FindBin(leading_pt);
@@ -106,7 +106,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         std::vector<float> weights;
         if (mc) {
-            auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
+            auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
 
             for (int64_t k = 0; k < ihf->size(); ++k) {
                 auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
