@@ -14,6 +14,7 @@
 #include "../git/paper-and-pencil/include/pencil.h"
 
 #include "../git/tricks-and-treats/include/trunk.h"
+#include "../git/tricks-and-treats/include/zip.h"
 
 #include "TF1.h"
 #include "TFile.h"
@@ -99,7 +100,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         if (efficiency != nullptr && leading_pt < 70) {
             auto bin = (*efficiency)[1]->FindBin(leading_pt);
             auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
-            if (cor < 1) { std::cout << "error" << std::endl; return -1; }
+            if (cor < 1) { std::cout << "error" << std::endl; return; }
             weight *= cor;
         }
 
