@@ -229,7 +229,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
-    auto c1 = new paper(set + "_" + tag + "_purity", hb);
+    auto c1 = new paper(set + "_" + tag + "_abcd_purity", hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->accessory(purity_info);
