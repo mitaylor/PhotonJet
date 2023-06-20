@@ -152,7 +152,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto isumiso = new interval("SumIso (GeV)"s, bsumiso);
     auto isee = new interval("#sigma_{#eta#eta}"s, bsee);
 
-    auto mfrac = new multival(isumiso, isee);
+    auto mfrac = new multival(*isumiso, *isee);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto ffrac = std::bind(&multival::book<TH2F>, mfrac, _1, _2, _3);
