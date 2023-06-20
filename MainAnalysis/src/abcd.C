@@ -34,8 +34,7 @@ using namespace std::placeholders;
 
 void fill_data(memory<TH2F>* sfrac, multival* mpthf, TTree* t, pjtree* p, 
                  bool heavyion, bool apply_er, float pt_min, float photon_eta_abs, 
-                 float hovere_max, float hf_min, float hf_max, float iso_max,
-                 float noniso_min, float noniso_max, history<TH1F>* efficiency) {
+                 float hovere_max, float hf_min, float hf_max, history<TH1F>* efficiency) {
     printf("fill data\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -77,9 +76,6 @@ void fill_data(memory<TH2F>* sfrac, multival* mpthf, TTree* t, pjtree* p,
         float isolation = (*p->pho_ecalClusterIsoR3)[leading]
             + (*p->pho_hcalRechitIsoR3)[leading]
             + (*p->pho_trackIsoR3PtCut20)[leading];
-
-        // if ((isolation > iso_max && isolation < noniso_min)
-        //     || isolation > noniso_max) { continue; }
 
         // efficiency correction
         auto weight = p->w;
@@ -152,8 +148,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
-    rsee = {rsee[1], see_max, rsee[2]};
-    rsumiso = {-100, iso_max, noniso_min, noniso_max};
+    auto rsee = {rsee[1], see_max, rsee[2]};
+    auto rsumiso = {-100., iso_max, noniso_min, noniso_max};
 
     auto incl = new interval(""s, 1, 0., 1.);
     auto isumiso = new interval("SumIso (GeV)"s, rsumiso);
@@ -189,7 +185,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto p = new pjtree(false, false, heavyion, t, { 1, 0, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_data(sfrac, mpthf, t, p, heavyion, apply_er, pt_min, photon_eta_abs, 
-            hovere_max, hf_min, hf_max, iso_max, noniso_min, noniso_max, efficiency);
+            hovere_max, hf_min, hf_max, efficiency);
     }
 
     auto hb = new pencil();
