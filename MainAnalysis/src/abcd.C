@@ -20,6 +20,7 @@
 #include "TF1.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TH2.h"
 #include "TLatex.h"
 #include "TTree.h"
 
@@ -264,7 +265,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
         }
     }
-    
+
     hb->sketch();
     c1->draw("pdf");
 
