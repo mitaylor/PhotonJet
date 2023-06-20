@@ -44,8 +44,8 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         t->GetEntry(i);
 
-        if (p->hiHF <= hf_min) { continue; }
-        if (p->hiHF > hf_max) { continue; }
+        if (!mc && p->hiHF <= hf_min) { continue; }
+        if (!mc && p->hiHF > hf_max) { continue; }
 
         int64_t leading = -1;
         float leading_pt = 0;
