@@ -83,9 +83,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         // determine indices of photon pT and centrality to fill
         auto pt_x = ipt->index_for(leading_pt);
-
-        double hf = pjt->hiHF;
-        auto hf_x = ihf->index_for(hf);
+        auto hf_x = ihf->index_for(p->hiHF);
 
         std::vector<int64_t> pthf_x;
         if (mc) {
