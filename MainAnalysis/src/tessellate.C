@@ -31,7 +31,8 @@ using namespace std::placeholders;
 void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
                multival* mpthf, TTree* t, pjtree* p, bool heavyion, bool apply_er,
                float pt_min, float photon_eta_abs, float hovere_max, float hf_min, float hf_max,
-               float iso_max, float noniso_min, float noniso_max) {
+               float iso_max, float noniso_min, float noniso_max, 
+               history<TH1F>* rho_weighting, history<TH1F>* efficiency, bool mc) {
     printf("fill data\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -77,9 +78,49 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         if ((isolation > iso_max && isolation < noniso_min)
             || isolation > noniso_max) { continue; }
 
+        // determine indices of photon pT and centrality to fill
+        auto pt_x = ipt->index_for(leading_pt);
+
+        double hf = pjt->hiHF;
+        auto hf_x = ihf->index_for(hf);
+
+        std::vector<int64_t> pthf_x;
+        if (mc) {
+            for (int64_t k = 0; k < ihf->size(); ++k) {
+                pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
+            }
+        } else {
+            pthf_x.push_back(mpthf->index_for(x{pt_x, hf_x}));
+        }
+
+        // efficiency and rho weighting corrections
+        auto weight = pjt->w;
+
+        if (efficiency != nullptr && leading_pt < 70) {
+            auto bin = (*efficiency)[1]->FindBin(leading_pt);
+            auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
+            if (cor < 1) { std::cout << "error" << std::endl; return -1; }
+            weight *= cor;
+        }
+
+        std::vector<float> weights;
+        if (mc) {
+            auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
+
+            for (int64_t k = 0; k < ihf->size(); ++k) {
+                auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
+                auto cor = (*rho_weighting)[k]->GetBinContent(bin);
+                weights.push_back(weight * cor);
+            }
+        } else {
+            weights.push_back(weight);
+        }
+
         auto const& see = isolation > iso_max ? see_noniso : see_iso;
-        int64_t index = mpthf->index_for(v{leading_pt, p->hiHF});
-        (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading], p->w);
+
+        zip([&](auto const& index, auto const& weight) {
+            (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading], weight);
+        }, pthf_x, weights);
     }
 
     printf("\n");
@@ -220,10 +261,14 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
+    auto eff_file = conf->get<std::string>("eff_file");
+    auto eff_label = conf->get<std::string>("eff_label");
+
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
     auto apply_er = conf->get<bool>("apply_er");
+    auto mc = conf->get<bool>("mc");
 
     auto noniso_min = conf->get<float>("noniso_min");
     auto noniso_max = conf->get<float>("noniso_max");
@@ -283,6 +328,15 @@ int tessellate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
+    /* load efficiency correction */
+    TFile* fe;
+    history<TH1F>* efficiency = nullptr;
+
+    if (!eff_file.empty()) {
+        fe = new TFile((base + eff_file).data(), "read");
+        efficiency = new history<TH1F>(fe, eff_label);
+    }
+
     /* load centrality weighting for MC */
     TFile* fr;
     history<TH1F>* rho_weighting = nullptr;
@@ -302,7 +356,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
         fill_data(see_data, see_bkg, mpthf, td, pd, heavyion, apply_er,
                 pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
-                noniso_min, noniso_max);
+                noniso_min, noniso_max, rho_weighting, efficiency, mc);
     }
 
     for (auto const& file : signal) {
