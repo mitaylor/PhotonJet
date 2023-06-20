@@ -109,12 +109,10 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto rho_label = conf->get<std::string>("rho_label");
 
     auto apply_er = conf->get<bool>("apply_er");
-    auto mc = conf->get<bool>("mc");
 
     auto noniso_min = conf->get<float>("noniso_min");
     auto noniso_max = conf->get<float>("noniso_max");
 
-    auto offset = conf->get<float>("offset");
     auto rsee = conf->get<std::vector<float>>("rsee");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -145,15 +143,14 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     /* prepare histograms */
     auto ipt = new interval(dpt);
-    auto ihf = new interval(dhf);
     auto mpthf = new multival(dpt, dhf);
 
-    auto rsee = {rsee[1], see_max, rsee[2]};
-    auto rsumiso = {-100., iso_max, noniso_min, noniso_max};
+    auto bsee = {rsee[1], see_max, rsee[2]};
+    auto bsumiso = {-100., iso_max, noniso_min, noniso_max};
 
     auto incl = new interval(""s, 1, 0., 1.);
-    auto isumiso = new interval("SumIso (GeV)"s, rsumiso);
-    auto isee = new interval("#sigma_{#eta#eta}"s, rsee);
+    auto isumiso = new interval("SumIso (GeV)"s, bsumiso);
+    auto isee = new interval("#sigma_{#eta#eta}"s, bsee);
 
     auto mfrac = new multival(isumiso, isee);
 
