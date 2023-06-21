@@ -47,6 +47,7 @@ int narrate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
     auto const see_max = sel->get<float>("see_max");
@@ -97,7 +98,7 @@ int narrate(char const* config, char const* selections, char const* output) {
 
                 auto pho_et = (*pjt->phoEtErNew)[j];
 
-                if (pho_et < photon_pt_min) { continue; }
+                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
 
                 if (pho_et > leading_pt) {
                     leading = j;
