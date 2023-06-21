@@ -155,7 +155,7 @@ int narrate(char const* config, char const* selections, char const* output) {
 
                 auto pho_et = (*pjt->phoEtErNew)[j];
 
-                if (pho_et < photon_pt_min) { continue; }
+                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
 
                 if (pho_et > leading_pt) {
                     leading = j;

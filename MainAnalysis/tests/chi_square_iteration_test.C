@@ -1,3 +1,5 @@
+// use the 2D flat distribution instead of dj and jetpt separately
+
 #include "../include/lambdas.h"
 
 #include "../git/config/include/configurer.h"
