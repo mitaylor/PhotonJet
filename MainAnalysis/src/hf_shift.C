@@ -41,6 +41,7 @@ int hf_shift(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_max = sel->get<float>("see_max");
@@ -103,7 +104,8 @@ int hf_shift(char const* config, char const* selections, char const* output) {
 
                 auto pho_et = (*hp_pjt->phoEtErNew)[j];
 
-                if (pho_et < photon_pt_min) { continue; }
+                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
+                
                 if (pho_et > leading_pt) {
                     leading = j;
                     leading_pt = pho_et;
