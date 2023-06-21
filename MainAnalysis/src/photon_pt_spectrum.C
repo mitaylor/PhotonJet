@@ -143,12 +143,7 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
-    auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
-
-    auto rdrr = sel->get<std::vector<float>>("drr_range");
-    auto rptr = sel->get<std::vector<float>>("ptr_range");
-
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto alter_base = conf->get<std::string>("alter_base"); // get offset to paths from the original configuration file
@@ -156,6 +151,7 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     /* make histograms */
     dpt.pop_back();
 
+    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
     auto ipt = new interval("p_{T}^{#gamma}"s, dpt);
     auto ihf = new interval(dhf);
 
@@ -365,8 +361,6 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
 
                     ++k;
                 }
-
-                tentries++;
             }
         }
 
