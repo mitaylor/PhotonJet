@@ -80,6 +80,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto heavyion = sel->get<bool>("heavyion");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
@@ -212,7 +213,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
 
-                if (pho_et < photon_pt_min) { continue; }
+                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
 
                 if (pho_et > leading_pt) {
                     leading = j;
