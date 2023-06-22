@@ -64,7 +64,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto heavyion = sel->get<bool>("heavyion");
+    // auto heavyion = sel->get<bool>("heavyion");
 
     auto dpt = sel->get<std::vector<float>>("pt_diff");
 
