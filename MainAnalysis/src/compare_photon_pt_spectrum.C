@@ -66,7 +66,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     // auto heavyion = sel->get<bool>("heavyion");
 
-    auto dpt = sel->get<std::vector<float>>("pt_diff");
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     /* load history objects */
     TFile* f_data = new TFile((base + input_data).data(), "read"); std::cout << __LINE__ << std::endl;
