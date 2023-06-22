@@ -111,26 +111,26 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     /* create intervals and multivals */
     dpt.pop_back();
-    auto mpthf = new multival(dpt, dhf);
-    auto ihf = new interval(dhf);
-    auto ipt = new interval(dpt);
+    auto mpthf = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
+    auto ihf = new interval(dhf);std::cout << __LINE__ << std::endl;
+    auto ipt = new interval(dpt);std::cout << __LINE__ << std::endl;
 
-    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
+    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);std::cout << __LINE__ << std::endl;
 
-    auto h_data_construct_accumulate = new history<TH1F>("h_data_construct_accumulate"s, "", fpt, ihf->size());
-    auto h_mc_construct_accumulate = new history<TH1F>("h_mc_construct_accumulate"s, "", fpt, ihf->size());
+    auto h_data_construct_accumulate = new history<TH1F>("h_data_construct_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_mc_construct_accumulate = new history<TH1F>("h_mc_construct_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
 
-    auto h_data_construct_accumulate_jet = new history<TH1F>("h_data_construct_accumulate_jet"s, "", fpt, ihf->size());
-    auto h_mc_construct_accumulate_jet = new history<TH1F>("h_mc_construct_accumulate_jet"s, "", fpt, ihf->size());
+    auto h_data_construct_accumulate_jet = new history<TH1F>("h_data_construct_accumulate_jet"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_mc_construct_accumulate_jet = new history<TH1F>("h_mc_construct_accumulate_jet"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
 
-    auto h_data_construct_accumulate_jet_sub = new history<TH1F>("h_data_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
-    auto h_mc_construct_accumulate_jet_sub = new history<TH1F>("h_mc_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
+    auto h_data_construct_accumulate_jet_sub = new history<TH1F>("h_data_construct_accumulate_jet_sub"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_mc_construct_accumulate_jet_sub = new history<TH1F>("h_mc_construct_accumulate_jet_sub"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
 
-    auto h_data_accumulate = new history<TH1F>("h_data_accumulate"s, "", fpt, ihf->size());
-    auto h_mc_accumulate = new history<TH1F>("h_mc_accumulate"s, "", fpt, ihf->size());
+    auto h_data_accumulate = new history<TH1F>("h_data_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_mc_accumulate = new history<TH1F>("h_mc_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
 
-    auto h_data_populate = new history<TH1F>("h_data_populate"s, "", fpt, ihf->size());
-    auto h_mc_populate = new history<TH1F>("h_mc_populate"s, "", fpt, ihf->size());
+    auto h_data_populate = new history<TH1F>("h_data_populate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_mc_populate = new history<TH1F>("h_mc_populate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
@@ -175,7 +175,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
             (*h_mc_populate)[i]->SetBinError(j+1, (*h_mc_populate_nevt)[index]->GetBinError(1));
         }
     }
-
+std::cout << __LINE__ << std::endl;
     scale_bin_width(h_data_construct_populate, h_mc_construct_populate);
     scale_bin_width(h_data_construct_populate_jet, h_mc_construct_populate_jet);
     scale_bin_width(h_data_construct_populate_jet_sub, h_mc_construct_populate_jet_sub);
