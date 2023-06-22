@@ -110,8 +110,10 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf"); std::cout << __LINE__ << std::endl;
 
     /* create intervals and multivals */
-    dpt.pop_back();
     auto mpthf = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
+    
+    dpt.pop_back();
+
     auto ihf = new interval(dhf);std::cout << __LINE__ << std::endl;
     auto ipt = new interval(dpt);std::cout << __LINE__ << std::endl;
 
@@ -134,7 +136,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
-        for (int j = 0; j < (*h_data_accumulate_nevt)[i]->GetNbinsX(); ++j) {
+        for (int j = 0; j < ipt->size(); ++j) {
             auto index = mpthf->index_for(x{j, i});
 
             (*h_data_construct_accumulate)[i]->SetBinContent(j+1, 
