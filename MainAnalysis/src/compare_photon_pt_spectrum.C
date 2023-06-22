@@ -110,10 +110,11 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf"); std::cout << __LINE__ << std::endl;
 
     /* create intervals and multivals */
-    auto mpthf = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
+    auto mpthf_long = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
 
     dpt.pop_back();
 
+    auto mpthf_trunc = new multival(dpt, dhf);
     auto ihf = new interval(dhf);std::cout << __LINE__ << std::endl;
     auto ipt = new interval(dpt);std::cout << __LINE__ << std::endl;
 
@@ -139,50 +140,52 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     std::cout << h_data_populate->size() << " " << (*h_data_accumulate)[0]->GetNbinsX() << std::endl;
     std::cout << h_data_accumulate_nevt->size() << std::endl;
     std::cout << h_data_populate_nevt->size() << std::endl;
+    std::cout << mpthf_long->size() << std::endl;
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < ipt->size(); ++j) {
-            auto index = mpthf->index_for(x{j, i});
+            auto index_long = mpthf_long->index_for(x{j, i});
+            auto index_trunc = mpthf_trunc->index_for(x{j, i});
             
-            std::cout << i << " " << j << " " << index << std::endl;
+            std::cout << i << " " << j << " " << index_long << std::endl;
 
             (*h_data_construct_accumulate)[i]->SetBinContent(j+1, 
-                    (*h_data_construct_populate)[i]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
+                    (*h_data_construct_populate)[i]->GetBinContent(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
             (*h_data_construct_accumulate)[i]->SetBinError(j+1, 
-                    (*h_data_construct_populate)[i]->GetBinError(j+1) * (*h_data_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
+                    (*h_data_construct_populate)[i]->GetBinError(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
             (*h_mc_construct_accumulate)[i]->SetBinContent(j+1, 
-                    (*h_mc_construct_populate)[i]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
+                    (*h_mc_construct_populate)[i]->GetBinContent(j+1) * (*h_mc_purity)[index_long]->GetBinContent(1));
             (*h_mc_construct_accumulate)[i]->SetBinError(j+1, 
-                    (*h_mc_construct_populate)[i]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
-            std::cout << i << " " << j << " " << index << std::endl;
+                    (*h_mc_construct_populate)[i]->GetBinError(j+1) * (*h_mc_purity)[index_long]->GetBinContent(1));
+
             (*h_data_construct_accumulate_jet)[i]->SetBinContent(j+1, 
-                    (*h_data_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));
+                    (*h_data_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
             (*h_data_construct_accumulate_jet)[i]->SetBinError(j+1, 
-                    (*h_data_construct_populate_jet)[i]->GetBinError(j+1) * (*h_data_purity)[index]->GetBinContent(1));
+                    (*h_data_construct_populate_jet)[i]->GetBinError(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
             (*h_mc_construct_accumulate_jet)[i]->SetBinContent(j+1, 
-                    (*h_mc_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
+                    (*h_mc_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_mc_purity)[index_long]->GetBinContent(1));
             (*h_mc_construct_accumulate_jet)[i]->SetBinError(j+1, 
-                    (*h_mc_construct_populate_jet)[i]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
-            std::cout << i << " " << j << " " << index << std::endl;
+                    (*h_mc_construct_populate_jet)[i]->GetBinError(j+1) * (*h_mc_purity)[index_long]->GetBinContent(1));
+
             (*h_data_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
-                    (*h_data_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));
+                    (*h_data_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
             (*h_data_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
-                    (*h_data_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_data_purity)[index]->GetBinContent(1));
+                    (*h_data_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
             (*h_mc_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
-                    (*h_mc_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
+                    (*h_mc_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_mc_purity)[index_long]->GetBinContent(1));
             (*h_mc_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
-                    (*h_mc_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
-            std::cout << i << " " << j << " " << index << std::endl;
-            (*h_data_accumulate)[i]->SetBinContent(j+1, (*h_data_accumulate_nevt)[index]->GetBinContent(1));
-            (*h_data_accumulate)[i]->SetBinError(j+1, (*h_data_accumulate_nevt)[index]->GetBinError(1));
-            (*h_mc_accumulate)[i]->SetBinContent(j+1, (*h_mc_accumulate_nevt)[index]->GetBinContent(1));
-            (*h_mc_accumulate)[i]->SetBinError(j+1, (*h_mc_accumulate_nevt)[index]->GetBinError(1));
-            std::cout << i << " " << j << " " << index << std::endl;
-            (*h_data_populate)[i]->SetBinContent(j+1, (*h_data_populate_nevt)[index]->GetBinContent(1));
-            (*h_data_populate)[i]->SetBinError(j+1, (*h_data_populate_nevt)[index]->GetBinError(1));
-            (*h_mc_populate)[i]->SetBinContent(j+1, (*h_mc_populate_nevt)[index]->GetBinContent(1));
-            (*h_mc_populate)[i]->SetBinError(j+1, (*h_mc_populate_nevt)[index]->GetBinError(1));
+                    (*h_mc_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_mc_purity)[index_long]->GetBinContent(1));
+
+            (*h_data_accumulate)[i]->SetBinContent(j+1, (*h_data_accumulate_nevt)[index_trunc]->GetBinContent(1));
+            (*h_data_accumulate)[i]->SetBinError(j+1, (*h_data_accumulate_nevt)[index_trunc]->GetBinError(1));
+            (*h_mc_accumulate)[i]->SetBinContent(j+1, (*h_mc_accumulate_nevt)[index_trunc]->GetBinContent(1));
+            (*h_mc_accumulate)[i]->SetBinError(j+1, (*h_mc_accumulate_nevt)[index_trunc]->GetBinError(1));
+
+            (*h_data_populate)[i]->SetBinContent(j+1, (*h_data_populate_nevt)[index_long]->GetBinContent(1));
+            (*h_data_populate)[i]->SetBinError(j+1, (*h_data_populate_nevt)[index_long]->GetBinError(1));
+            (*h_mc_populate)[i]->SetBinContent(j+1, (*h_mc_populate_nevt)[index_long]->GetBinContent(1));
+            (*h_mc_populate)[i]->SetBinError(j+1, (*h_mc_populate_nevt)[index_long]->GetBinError(1));
         }
     }
 std::cout << __LINE__ << std::endl;
