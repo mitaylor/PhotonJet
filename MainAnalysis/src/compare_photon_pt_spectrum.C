@@ -151,8 +151,8 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
                     (*h_data_construct_populate)[index]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
             // (*h_data_construct_accumulate)[i]->SetBinError(j+1, 
             //         (*h_data_construct_populate)[index]->GetBinError(j+1) * (*h_data_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
-            // (*h_mc_construct_accumulate)[i]->SetBinContent(j+1, 
-            //         (*h_mc_construct_populate)[index]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
+            (*h_mc_construct_accumulate)[i]->SetBinContent(j+1, 
+                    (*h_mc_construct_populate)[index]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
             // (*h_mc_construct_accumulate)[i]->SetBinError(j+1, 
             //         (*h_mc_construct_populate)[index]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));std::cout << __LINE__ << std::endl;
             // std::cout << i << " " << j << " " << index << std::endl;
