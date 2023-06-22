@@ -69,45 +69,45 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto dpt = sel->get<std::vector<float>>("pt_diff");
 
     /* load history objects */
-    TFile* f_data = new TFile((base + input_data).data(), "read");
+    TFile* f_data = new TFile((base + input_data).data(), "read"); std::cout << __LINE__ << std::endl;
     TFile* f_mc = new TFile((base + input_mc).data(), "read");
 
-    TFile* f_accumulate_data = new TFile((base + input_accumulate_data).data(), "read");
+    TFile* f_accumulate_data = new TFile((base + input_accumulate_data).data(), "read"); std::cout << __LINE__ << std::endl;
     TFile* f_accumulate_mc = new TFile((base + input_accumulate_mc).data(), "read");
 
-    TFile* f_populate_data = new TFile((base + input_populate_data).data(), "read");
+    TFile* f_populate_data = new TFile((base + input_populate_data).data(), "read"); std::cout << __LINE__ << std::endl;
     TFile* f_populate_mc = new TFile((base + input_populate_mc).data(), "read");
 
-    TFile* f_purity_data = new TFile((base + input_purity_data).data(), "read");
+    TFile* f_purity_data = new TFile((base + input_purity_data).data(), "read"); std::cout << __LINE__ << std::endl;
     TFile* f_purity_mc = new TFile((base + input_purity_mc).data(), "read");
 
-    auto h_data_construct_populate = new history<TH1F>(f_data, "raw_spectrum_photon");
+    auto h_data_construct_populate = new history<TH1F>(f_data, "raw_spectrum_photon"); std::cout << __LINE__ << std::endl;
     h_data_construct_populate->rename("h_data_construct_populate");
-    auto h_mc_construct_populate = new history<TH1F>(f_mc, "raw_spectrum_photon");
+    auto h_mc_construct_populate = new history<TH1F>(f_mc, "raw_spectrum_photon"); std::cout << __LINE__ << std::endl;
     h_mc_construct_populate->rename("h_mc_construct_populate");
 
-    auto h_data_construct_populate_jet = new history<TH1F>(f_data, "raw_spectrum_photon_jet");
+    auto h_data_construct_populate_jet = new history<TH1F>(f_data, "raw_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
     h_data_construct_populate_jet->rename("h_data_construct_populate_jet");
-    auto h_mc_construct_populate_jet = new history<TH1F>(f_mc, "raw_spectrum_photon_jet");
+    auto h_mc_construct_populate_jet = new history<TH1F>(f_mc, "raw_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
     h_mc_construct_populate_jet->rename("h_mc_construct_populate_jet");
 
-    auto h_data_construct_populate_jet_sub = new history<TH1F>(f_data, "raw_sub_spectrum_photon_jet");
+    auto h_data_construct_populate_jet_sub = new history<TH1F>(f_data, "raw_sub_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
     h_data_construct_populate_jet_sub->rename("h_data_construct_populate_jet_sub");
-    auto h_mc_construct_populate_jet_sub = new history<TH1F>(f_mc, "raw_sub_spectrum_photon_jet");
+    auto h_mc_construct_populate_jet_sub = new history<TH1F>(f_mc, "raw_sub_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
     h_mc_construct_populate_jet_sub->rename("h_mc_construct_populate_jet_sub");
 
-    auto h_data_accumulate_nevt = new history<TH1F>(f_accumulate_data, tag + "_nominal_s_pure_raw_nevt");
+    auto h_data_accumulate_nevt = new history<TH1F>(f_accumulate_data, tag + "_nominal_s_pure_raw_nevt"); std::cout << __LINE__ << std::endl;
     h_data_accumulate_nevt->rename("h_data_accumulate_nevt");
-    auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
+    auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, tag + "_qcd_nominal_s_pure_raw_nevt"); std::cout << __LINE__ << std::endl;
     h_mc_accumulate_nevt->rename("h_mc_accumulate_nevt");
 
-    auto h_data_populate_nevt = new history<TH1F>(f_populate_data, tag + "_raw_nevt");
+    auto h_data_populate_nevt = new history<TH1F>(f_populate_data, tag + "_raw_nevt"); std::cout << __LINE__ << std::endl;
     h_data_populate_nevt->rename("h_data_populate_nevt");
-    auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, tag + "_raw_nevt");
+    auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, tag + "_raw_nevt"); std::cout << __LINE__ << std::endl;
     h_mc_populate_nevt->rename("h_mc_populate_nevt");
 
-    auto h_data_purity = new history<TH1F>(f_purity_data, tag + "_pthf");
-    auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf");
+    auto h_data_purity = new history<TH1F>(f_purity_data, tag + "_pthf"); std::cout << __LINE__ << std::endl;
+    auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf"); std::cout << __LINE__ << std::endl;
 
     /* create intervals and multivals */
     dpt.pop_back();
