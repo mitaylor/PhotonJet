@@ -111,7 +111,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     /* create intervals and multivals */
     auto mpthf = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
-    
+
     dpt.pop_back();
 
     auto ihf = new interval(dhf);std::cout << __LINE__ << std::endl;
@@ -134,10 +134,16 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_data_populate = new history<TH1F>("h_data_populate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
     auto h_mc_populate = new history<TH1F>("h_mc_populate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
 
+    std::cout << h_data_construct_accumulate->size() << " " << (*h_data_construct_accumulate)[0]->GetNbinsX() << std::endl;
+    std::cout << h_data_accumulate->size() << " " << (*h_data_accumulate)[0]->GetNbinsX() << std::endl;
+    std::cout << h_data_accumulate_nevt->size() << std::endl;
+
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < ipt->size(); ++j) {
             auto index = mpthf->index_for(x{j, i});
+            
+            std::cout << i << " " << j << " " << index << std::endl;
 
             (*h_data_construct_accumulate)[i]->SetBinContent(j+1, 
                     (*h_data_construct_populate)[index]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));
