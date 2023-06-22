@@ -136,7 +136,9 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     std::cout << h_data_construct_accumulate->size() << " " << (*h_data_construct_accumulate)[0]->GetNbinsX() << std::endl;
     std::cout << h_data_accumulate->size() << " " << (*h_data_accumulate)[0]->GetNbinsX() << std::endl;
+    std::cout << h_data_populate->size() << " " << (*h_data_accumulate)[0]->GetNbinsX() << std::endl;
     std::cout << h_data_accumulate_nevt->size() << std::endl;
+    std::cout << h_data_populate_nevt->size() << std::endl;
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
@@ -153,7 +155,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
                     (*h_mc_construct_populate)[index]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
             (*h_mc_construct_accumulate)[i]->SetBinError(j+1, 
                     (*h_mc_construct_populate)[index]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
-
+            std::cout << i << " " << j << " " << index << std::endl;
             (*h_data_construct_accumulate_jet)[i]->SetBinContent(j+1, 
                     (*h_data_construct_populate_jet)[index]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));
             (*h_data_construct_accumulate_jet)[i]->SetBinError(j+1, 
@@ -162,7 +164,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
                     (*h_mc_construct_populate_jet)[index]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
             (*h_mc_construct_accumulate_jet)[i]->SetBinError(j+1, 
                     (*h_mc_construct_populate_jet)[index]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
-
+            std::cout << i << " " << j << " " << index << std::endl;
             (*h_data_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
                     (*h_data_construct_populate_jet_sub)[index]->GetBinContent(j+1) * (*h_data_purity)[index]->GetBinContent(1));
             (*h_data_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
@@ -171,12 +173,12 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
                     (*h_mc_construct_populate_jet_sub)[index]->GetBinContent(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
             (*h_mc_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
                     (*h_mc_construct_populate_jet_sub)[index]->GetBinError(j+1) * (*h_mc_purity)[index]->GetBinContent(1));
-
+            std::cout << i << " " << j << " " << index << std::endl;
             (*h_data_accumulate)[i]->SetBinContent(j+1, (*h_data_accumulate_nevt)[index]->GetBinContent(1));
             (*h_data_accumulate)[i]->SetBinError(j+1, (*h_data_accumulate_nevt)[index]->GetBinError(1));
             (*h_mc_accumulate)[i]->SetBinContent(j+1, (*h_mc_accumulate_nevt)[index]->GetBinContent(1));
             (*h_mc_accumulate)[i]->SetBinError(j+1, (*h_mc_accumulate_nevt)[index]->GetBinError(1));
-
+            std::cout << i << " " << j << " " << index << std::endl;
             (*h_data_populate)[i]->SetBinContent(j+1, (*h_data_populate_nevt)[index]->GetBinContent(1));
             (*h_data_populate)[i]->SetBinError(j+1, (*h_data_populate_nevt)[index]->GetBinError(1));
             (*h_mc_populate)[i]->SetBinContent(j+1, (*h_mc_populate_nevt)[index]->GetBinContent(1));
