@@ -68,13 +68,9 @@ int combine_spectrum(char const* config, char const* selections, char const* out
 
         for (size_t i = 1; i < files.size(); ++i) {
             auto hist_add = new history<TH1F>(files[i], name);
-
             *hist += *hist_add;
-
-            delete hist_add;
         }
 
-        scale_bin_width(hist);
         hist->save();
     }
 
