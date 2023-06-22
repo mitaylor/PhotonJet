@@ -60,7 +60,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     /* load history objects */
     TFile* f_data = new TFile((base + input_data).data(), "read");
-    TFile* f_mc = new TFile((base + input_mc).data(), "read"); 
+    TFile* f_mc = new TFile((base + input_mc).data(), "read");
 
     auto h_data_nevt = new history<TH1F>(f_data, tag + "_nominal_s_pure_raw_nevt");
     h_data_nevt->rename("h_data_nevt");
