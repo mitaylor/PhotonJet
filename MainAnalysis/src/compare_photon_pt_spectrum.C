@@ -101,9 +101,9 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, tag + "_qcd_nominal_s_pure_raw_nevt"); std::cout << __LINE__ << std::endl;
     h_mc_accumulate_nevt->rename("h_mc_accumulate_nevt");
 
-    auto h_data_populate_nevt = new history<TH1F>(f_populate_data, tag + "_raw_nevt"); std::cout << __LINE__ << std::endl;
+    auto h_data_populate_nevt = new history<TH1F>(f_populate_data, "raw_nevt"); std::cout << __LINE__ << std::endl;
     h_data_populate_nevt->rename("h_data_populate_nevt");
-    auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, tag + "_raw_nevt"); std::cout << __LINE__ << std::endl;
+    auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, "raw_nevt"); std::cout << __LINE__ << std::endl;
     h_mc_populate_nevt->rename("h_mc_populate_nevt");
 
     auto h_data_purity = new history<TH1F>(f_purity_data, tag + "_pthf"); std::cout << __LINE__ << std::endl;
