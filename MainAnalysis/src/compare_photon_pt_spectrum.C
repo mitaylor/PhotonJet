@@ -254,9 +254,8 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     apply_style(p2, cms, system_tag);
     
     h_data_construct_accumulate->apply([&](TH1* h) { p2->add(h, "data"); });
-    // h_mc_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "analysis_mc"); });
+    h_mc_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "analysis_mc"); });
     h_mc_construct_vacillate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "prior_mc"); });
-    h_ratio->apply([&](TH1* h) { p2->add(h, "ratio"); });
 
     auto p3 = new paper(set + "_" + purity_label + "_populate_photon_jet_spectra", hb);
     p3->divide(ihf->size(), -1);
@@ -304,6 +303,13 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_mc_construct_accumulate_jet_sub->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "analysis_mc"); });
     h_mc_construct_vacillate_jet->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "prior_mc"); });
 
+    auto p7 = new paper(set + "_" + purity_label + "_photon_spectra_ratio", hb);
+    p7->divide(ihf->size(), -1);
+    p7->accessory(hf_info);
+    p7->accessory(kinematics);
+    apply_style(p7, cms, system_tag);
+    h_ratio->apply([&](TH1* h) { p7->add(h, "ratio"); });
+
     hb->sketch();
 
     p1->draw("pdf");
@@ -312,6 +318,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p4->draw("pdf");
     p5->draw("pdf");
     p6->draw("pdf");
+    p7->draw("pdf");
 
     in(output, [&]() {
         h_data_construct_populate->save();
