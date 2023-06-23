@@ -69,86 +69,77 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     /* load history objects */
-    TFile* f_data = new TFile((base + input_data).data(), "read"); std::cout << __LINE__ << std::endl;
+    TFile* f_data = new TFile((base + input_data).data(), "read");
     TFile* f_mc = new TFile((base + input_mc).data(), "read");
 
-    TFile* f_accumulate_data = new TFile((base + input_accumulate_data).data(), "read"); std::cout << __LINE__ << std::endl;
+    TFile* f_accumulate_data = new TFile((base + input_accumulate_data).data(), "read");
     TFile* f_accumulate_mc = new TFile((base + input_accumulate_mc).data(), "read");
 
-    TFile* f_populate_data = new TFile((base + input_populate_data).data(), "read"); std::cout << __LINE__ << std::endl;
+    TFile* f_populate_data = new TFile((base + input_populate_data).data(), "read");
     TFile* f_populate_mc = new TFile((base + input_populate_mc).data(), "read");
 
-    TFile* f_purity_data = new TFile((base + input_purity_data).data(), "read"); std::cout << __LINE__ << std::endl;
+    TFile* f_purity_data = new TFile((base + input_purity_data).data(), "read");
     TFile* f_purity_mc = new TFile((base + input_purity_mc).data(), "read");
 
-    auto h_data_construct_populate = new history<TH1F>(f_data, "raw_spectrum_photon"); std::cout << __LINE__ << std::endl;
+    auto h_data_construct_populate = new history<TH1F>(f_data, "raw_spectrum_photon");
     h_data_construct_populate->rename("h_data_construct_populate");
-    auto h_mc_construct_populate = new history<TH1F>(f_mc, "raw_spectrum_photon"); std::cout << __LINE__ << std::endl;
+    auto h_mc_construct_populate = new history<TH1F>(f_mc, "raw_spectrum_photon");
     h_mc_construct_populate->rename("h_mc_construct_populate");
 
-    auto h_data_construct_populate_jet = new history<TH1F>(f_data, "raw_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
+    auto h_data_construct_populate_jet = new history<TH1F>(f_data, "raw_spectrum_photon_jet");
     h_data_construct_populate_jet->rename("h_data_construct_populate_jet");
-    auto h_mc_construct_populate_jet = new history<TH1F>(f_mc, "raw_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
+    auto h_mc_construct_populate_jet = new history<TH1F>(f_mc, "raw_spectrum_photon_jet");
     h_mc_construct_populate_jet->rename("h_mc_construct_populate_jet");
 
-    auto h_data_construct_populate_jet_sub = new history<TH1F>(f_data, "raw_sub_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
+    auto h_data_construct_populate_jet_sub = new history<TH1F>(f_data, "raw_sub_spectrum_photon_jet");
     h_data_construct_populate_jet_sub->rename("h_data_construct_populate_jet_sub");
-    auto h_mc_construct_populate_jet_sub = new history<TH1F>(f_mc, "raw_sub_spectrum_photon_jet"); std::cout << __LINE__ << std::endl;
+    auto h_mc_construct_populate_jet_sub = new history<TH1F>(f_mc, "raw_sub_spectrum_photon_jet");
     h_mc_construct_populate_jet_sub->rename("h_mc_construct_populate_jet_sub");
 
-    auto h_data_accumulate_nevt = new history<TH1F>(f_accumulate_data, tag + "_nominal_s_pure_raw_nevt"); std::cout << __LINE__ << std::endl;
+    auto h_data_accumulate_nevt = new history<TH1F>(f_accumulate_data, tag + "_nominal_s_pure_raw_nevt");
     h_data_accumulate_nevt->rename("h_data_accumulate_nevt");
-    auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, tag + "_qcd_nominal_s_pure_raw_nevt"); std::cout << __LINE__ << std::endl;
+    auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
     h_mc_accumulate_nevt->rename("h_mc_accumulate_nevt");
 
-    auto h_data_populate_nevt = new history<TH1F>(f_populate_data, "raw_nevt"); std::cout << __LINE__ << std::endl;
+    auto h_data_populate_nevt = new history<TH1F>(f_populate_data, "raw_nevt");
     h_data_populate_nevt->rename("h_data_populate_nevt");
-    auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, "raw_nevt"); std::cout << __LINE__ << std::endl;
+    auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, "raw_nevt");
     h_mc_populate_nevt->rename("h_mc_populate_nevt");
 
-    auto h_data_purity = new history<TH1F>(f_purity_data, tag + "_pthf"); std::cout << __LINE__ << std::endl;
-    auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf"); std::cout << __LINE__ << std::endl;
+    auto h_data_purity = new history<TH1F>(f_purity_data, tag + "_pthf");
+    auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf");
 
     /* create intervals and multivals */
-    auto mpthf_long = new multival(dpt, dhf);std::cout << __LINE__ << std::endl;
+    auto mpthf_long = new multival(dpt, dhf);
 
     dpt.pop_back();
 
     auto mpthf_trunc = new multival(dpt, dhf);
-    auto ihf = new interval(dhf);std::cout << __LINE__ << std::endl;
-    auto ipt = new interval(dpt);std::cout << __LINE__ << std::endl;
+    auto ihf = new interval(dhf);
+    auto ipt = new interval(dpt);
 
-    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);std::cout << __LINE__ << std::endl;
+    auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
-    auto h_data_construct_accumulate = new history<TH1F>("h_data_construct_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
-    auto h_mc_construct_accumulate = new history<TH1F>("h_mc_construct_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_data_construct_accumulate = new history<TH1F>("h_data_construct_accumulate"s, "", fpt, ihf->size());
+    auto h_mc_construct_accumulate = new history<TH1F>("h_mc_construct_accumulate"s, "", fpt, ihf->size());
 
-    auto h_data_construct_accumulate_jet = new history<TH1F>("h_data_construct_accumulate_jet"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
-    auto h_mc_construct_accumulate_jet = new history<TH1F>("h_mc_construct_accumulate_jet"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_data_construct_accumulate_jet = new history<TH1F>("h_data_construct_accumulate_jet"s, "", fpt, ihf->size());
+    auto h_mc_construct_accumulate_jet = new history<TH1F>("h_mc_construct_accumulate_jet"s, "", fpt, ihf->size());
 
-    auto h_data_construct_accumulate_jet_sub = new history<TH1F>("h_data_construct_accumulate_jet_sub"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
-    auto h_mc_construct_accumulate_jet_sub = new history<TH1F>("h_mc_construct_accumulate_jet_sub"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_data_construct_accumulate_jet_sub = new history<TH1F>("h_data_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
+    auto h_mc_construct_accumulate_jet_sub = new history<TH1F>("h_mc_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
 
-    auto h_data_accumulate = new history<TH1F>("h_data_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
-    auto h_mc_accumulate = new history<TH1F>("h_mc_accumulate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
+    auto h_data_accumulate = new history<TH1F>("h_data_accumulate"s, "", fpt, ihf->size());
+    auto h_mc_accumulate = new history<TH1F>("h_mc_accumulate"s, "", fpt, ihf->size());
 
-    auto h_data_populate = new history<TH1F>("h_data_populate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
-    auto h_mc_populate = new history<TH1F>("h_mc_populate"s, "", fpt, ihf->size());std::cout << __LINE__ << std::endl;
-
-    std::cout << h_data_construct_accumulate->size() << " " << (*h_data_construct_accumulate)[0]->GetNbinsX() << std::endl;
-    std::cout << h_data_accumulate->size() << " " << (*h_data_accumulate)[0]->GetNbinsX() << std::endl;
-    std::cout << h_data_populate->size() << " " << (*h_data_accumulate)[0]->GetNbinsX() << std::endl;
-    std::cout << h_data_accumulate_nevt->size() << std::endl;
-    std::cout << h_data_populate_nevt->size() << std::endl;
-    std::cout << mpthf_long->size() << std::endl;
+    auto h_data_populate = new history<TH1F>("h_data_populate"s, "", fpt, ihf->size());
+    auto h_mc_populate = new history<TH1F>("h_mc_populate"s, "", fpt, ihf->size());
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int j = 0; j < ipt->size(); ++j) {
             auto index_long = mpthf_long->index_for(x{j, i});
             auto index_trunc = mpthf_trunc->index_for(x{j, i});
-            
-            std::cout << i << " " << j << " " << index_long << std::endl;
 
             (*h_data_construct_accumulate)[i]->SetBinContent(j+1, 
                     (*h_data_construct_populate)[i]->GetBinContent(j+1) * (*h_data_purity)[index_long]->GetBinContent(1));
@@ -188,7 +179,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
             (*h_mc_populate)[i]->SetBinError(j+1, (*h_mc_populate_nevt)[index_long]->GetBinError(1));
         }
     }
-std::cout << __LINE__ << std::endl;
+
     scale_bin_width(h_data_construct_populate, h_mc_construct_populate);
     scale_bin_width(h_data_construct_populate_jet, h_mc_construct_populate_jet);
     scale_bin_width(h_data_construct_populate_jet_sub, h_mc_construct_populate_jet_sub);
@@ -225,7 +216,7 @@ std::cout << __LINE__ << std::endl;
     };
 
     auto hb = new pencil();
-    hb->category("type", "data", "mc", "construct_data", "construct_mc");
+    hb->category("type", "data", "mc");
 
     auto p1 = new paper(set + "_" + tag + "_populate_photon_spectra", hb);
     p1->divide(ihf->size(), -1);
@@ -233,10 +224,8 @@ std::cout << __LINE__ << std::endl;
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag);
     
-    h_data_populate->apply([&](TH1* h) { p1->add(h, "data"); });
-    h_mc_populate->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mc"); });
-    h_data_construct_populate->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "construct_data"); });
-    h_mc_construct_populate->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "construct_mc"); });
+    h_data_construct_populate->apply([&](TH1* h) { p1->add(h, "data"); });
+    h_mc_construct_populate->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "mc"); });
 
     auto p2 = new paper(set + "_" + tag + "_accumulate_photon_spectra", hb);
     p2->divide(ihf->size(), -1);
@@ -244,15 +233,53 @@ std::cout << __LINE__ << std::endl;
     p2->accessory(kinematics);
     apply_style(p2, cms, system_tag);
     
-    h_data_accumulate->apply([&](TH1* h) { p2->add(h, "data"); });
-    h_mc_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "mc"); });
-    h_data_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "construct_data"); });
-    h_mc_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "construct_mc"); });
+    h_data_construct_accumulate->apply([&](TH1* h) { p2->add(h, "data"); });
+    h_mc_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "mc"); });
+
+    auto p3 = new paper(set + "_" + tag + "_populate_photon_jet_spectra", hb);
+    p3->divide(ihf->size(), -1);
+    p3->accessory(hf_info);
+    p3->accessory(kinematics);
+    apply_style(p3, cms, system_tag);
+    
+    h_data_construct_populate_jet->apply([&](TH1* h) { p3->add(h, "data"); });
+    h_mc_construct_populate_jet->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "mc"); });
+
+    auto p4 = new paper(set + "_" + tag + "_accumulate_photon_jet_spectra", hb);
+    p4->divide(ihf->size(), -1);
+    p4->accessory(hf_info);
+    p4->accessory(kinematics);
+    apply_style(p4, cms, system_tag);
+    
+    h_data_construct_accumulate_jet->apply([&](TH1* h) { p4->add(h, "data"); });
+    h_mc_construct_accumulate_jet->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "mc"); });
+
+    auto p5 = new paper(set + "_" + tag + "_populate_photon_jet_sub_spectra", hb);
+    p5->divide(ihf->size(), -1);
+    p5->accessory(hf_info);
+    p5->accessory(kinematics);
+    apply_style(p5, cms, system_tag);
+    
+    h_data_construct_populate_jet_sub->apply([&](TH1* h) { p5->add(h, "data"); });
+    h_mc_construct_populate_jet_sub->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "mc"); });
+
+    auto p6 = new paper(set + "_" + tag + "_accumulate_photon_jet_sub_spectra", hb);
+    p6->divide(ihf->size(), -1);
+    p6->accessory(hf_info);
+    p6->accessory(kinematics);
+    apply_style(p6, cms, system_tag);
+    
+    h_data_construct_accumulate_jet_sub->apply([&](TH1* h) { p6->add(h, "data"); });
+    h_mc_construct_accumulate_jet_sub->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "mc"); });
 
     hb->sketch();
 
     p1->draw("pdf");
     p2->draw("pdf");
+    p3->draw("pdf");
+    p4->draw("pdf");
+    p5->draw("pdf");
+    p6->draw("pdf");
 
     in(output, [&]() {
         h_data_construct_populate->save();
