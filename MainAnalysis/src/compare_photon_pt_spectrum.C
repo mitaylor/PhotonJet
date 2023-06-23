@@ -208,7 +208,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     normalise_to_unity(h_data_populate, h_mc_populate);
 
     /* create ratio */
-    auto h_ratio = new history<TH1F>("h_data_populate"s, "", fpt, ihf->size());
+    auto h_ratio = new history<TH1F>("h_ratio"s, "", fpt, ihf->size());
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_ratio)[i]->Divide((*h_data_construct_accumulate)[i], (*h_mc_construct_vacillate)[i]);
