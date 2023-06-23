@@ -223,7 +223,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
-            if (leading_pt > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
@@ -354,10 +353,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
                 auto g_x = mg->index_for(v{gdr, gen_pt});
 
-                for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*g)[k]->Fill(g_x, weights[k] * cor); }
-
                 if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
+                    for (int64_t k = 0; k < ihf->size(); ++k) {
+                        (*g)[k]->Fill(g_x, weights[k] * cor); }
+
                     auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});

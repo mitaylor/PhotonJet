@@ -12,6 +12,9 @@
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
+#include "../include/JetCorrector.h"
+#include "../include/JetUncertainty.h"
+
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1.h"
@@ -47,48 +50,99 @@ void fill_axes(pjtree* pjt,
                bool exclude, bool jet_cor, float jet_pt_min, float jet_eta_abs,
                float dphi_min_numerator, float dphi_min_denominator,
                interval* idphi, history<TH1F>* spectrum_photon_jet,
-               history<TH2F>* acceptance, history<TH2F>* total) {
-
+               history<TH2F>* acceptance, history<TH2F>* total, bool mc, 
+               SingleJetCorrector* JERSF) {
+    
     for (int64_t j = 0; j < pjt->nref; ++j) {
-        auto jet_pt = (*pjt->jtpt)[j];
-        if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
-        
-        if (jet_pt <= jet_pt_min && jet_pt >= 200) { continue; }
+        /* reco level jet */
+        if (!mc) {
+            auto jet_pt = jet_cor ? (*pjt->jtptCor)[j] : (*pjt->jtpt)[j];
+            auto jet_eta = (*pjt->jteta)[j];
+            auto jet_phi = convert_radian((*pjt->jtphi)[j]);
 
-        auto jet_eta = (*pjt->jteta)[j];
-        if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
+            if (jet_pt <= jet_pt_min && jet_pt >= 200) { continue; }
 
-        auto jet_phi = convert_radian((*pjt->jtphi)[j]);
+            if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
 
-        /* hem failure region exclusion */
-        if (exclude && in_jet_failure_region(pjt,j)) { continue; }
+            /* hem failure region exclusion */
+            if (exclude && in_jet_failure_region(pjt,j)) { continue; }
 
-        auto jet_wta_eta = (*pjt->WTAeta)[j];
-        auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
+            auto jet_wta_eta = (*pjt->WTAeta)[j];
+            auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
 
-        auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
+            auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
 
-        /* require back-to-back jets */
-        if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
+            /* require back-to-back jets */
+            if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-        /* do acceptance weighting */
-        double cor = 1;
-        if (exclude) {
-            auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
-            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
-            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-            if (cor < 1) { std::cout << "error" << std::endl; }
+            /* do acceptance weighting */
+            double cor = 1;
+            if (exclude) {
+                auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
+                auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+                cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+                if (cor < 1) { std::cout << "error" << std::endl; }
+            }
+
+            double jt_deta = jet_eta - jet_wta_eta;
+            double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
+            double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
+
+            if (jt_dr > 0.3) { continue; }
+
+            zip([&](auto const& index, auto const& weight) {
+                (*spectrum_photon_jet)[index]->Fill(photon_pt, cor * weight);
+            }, hf_x, weights);
         }
 
-        double jt_deta = jet_eta - jet_wta_eta;
-        double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
-        double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
+        /* gen level jet */
+        if (mc) {
+            auto gen_pt = (*pjt->refpt)[j];
+            auto gen_eta = (*pjt->refeta)[j];
+            auto gen_phi = (*pjt->refphi)[j];
 
-        if (jt_dr > 0.3) { continue; }
+            if (gen_pt <= jet_pt_min && gen_pt >= 200) { continue; }
 
-        zip([&](auto const& index, auto const& weight) {
-            (*spectrum_photon_jet)[index]->Fill(photon_pt, cor * weight);
-        }, hf_x, weights);
+            auto reco_pt = jet_cor ? (*pjt->jtptCor)[j] : (*pjt->jtpt)[j];
+            auto reco_eta = (*p->jteta)[j];
+            auto reco_phi = convert_radian((*pjt->jtphi)[j]);
+
+            if (reco_pt <= jet_pt_min && reco_pt >= 200) { continue; }
+
+            if (std::abs(reco_eta) >= jet_eta_abs) { continue; }
+
+            if (exclude && in_jet_failure_region(pjt,j)) { continue; }
+
+            auto photon_jet_dphi = std::abs(photon_phi - reco_phi);
+
+            /* require back-to-back jets */
+            if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
+
+            /* correct jet pt for data/MC JER difference */
+            JERSF->SetJetPT(reco_pt);
+            JERSF->SetJetEta(reco_eta);
+            JERSF->SetJetPhi(reco_phi);
+
+            auto jer_scale_factors = JERSF->GetParameters();
+
+            auto jer_scale = jer_scale_factors[0];
+            reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt;
+
+            auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
+
+            /* do acceptance weighting */
+            double cor = 1;
+            if (exclude) {
+                auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
+                auto bin = (*total)[dphi_x]->FindBin(reco_eta, photon_eta);
+                cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+                if (cor < 1) { std::cout << "error" << std::endl; }
+            }
+
+            zip([&](auto const& index, auto const& weight) {
+                (*spectrum_photon_jet)[index]->Fill(photon_pt, cor * weight);
+            }, hf_x, weights);
+        }
     }
 }
 
@@ -108,12 +162,14 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
+    auto jersf = conf->get<std::string>("jersf");
+
     auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
 
     /* options */
-    auto gen_iso = conf->get<bool>("generator_isolation");
+    auto mc = conf->get<bool>("mc");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
@@ -161,6 +217,9 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     auto spectrum_photon_jet = new history<TH1F>("spectrum_photon_jet"s, "", fpt, ihf->size());
     auto mix_spectrum_photon_jet = new history<TH1F>("mix_spectrum_photon_jet"s, "", fpt, ihf->size());
 
+    auto mc_spectrum_photon = new history<TH1F>("mc_spectrum_photon"s, "", fpt, ihf->size());
+    auto mc_spectrum_photon_jet = new history<TH1F>("mc_spectrum_photon_jet"s, "", fpt, ihf->size());
+
     /* random number for mb selection */
     auto rng = new TRandom3(144);
 
@@ -171,7 +230,7 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     int index_m = rng->Integer(mb.size());
     TFile* fm = new TFile(mb[index_m].data(), "read");
     TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+    auto pjtm = new pjtree(mc, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
     int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
 
     printf("iterate..\n");
@@ -205,6 +264,9 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
         total = new history<TH2F>(fa, acc_label_ref);
     }
 
+    /* get data/MC resolution correction */
+    auto JERSF = new SingleJetCorrector(jersf);
+
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
@@ -214,7 +276,8 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
+        auto pjt = new pjtree(mc, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
+        
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0, m = 0; i < nentries; ++i) {
@@ -320,6 +383,7 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
                 weights.push_back(weight);
             }
 
+            /* without gen level isolation applied */
             zip([&](auto const& index, auto const& weight) {
                 (*spectrum_photon)[index]->Fill(leading_pt, weight * pho_cor);
             }, hf_x, weights);
@@ -327,8 +391,8 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
             fill_axes(pjt, hf_x, weights, photon_eta, photon_phi, 
                     leading_pt, exclude, heavyion && !no_jes,
                     jet_pt_min, jet_eta_abs, dphi_min_numerator, 
-                    dphi_min_denominator, idphi,
-                    spectrum_photon_jet, acceptance, total);
+                    dphi_min_denominator, idphi, spectrum_photon_jet, 
+                    acceptance, total, 0, JERSF);
 
             if (mix > 0) {
                 /* mixing events in minimum bias */
@@ -344,7 +408,7 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
                         index_m = rng->Integer(mb.size());
                         fm = new TFile(mb[index_m].data(), "read");
                         tm = (TTree*)fm->Get("pj");
-                        pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+                        pjtm = new pjtree(mc, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
 
                         mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
                     }
@@ -356,11 +420,31 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
                     fill_axes(pjtm, hf_x, weights, photon_eta, photon_phi, 
                             leading_pt, exclude, heavyion && !no_jes,
                             jet_pt_min, jet_eta_abs, dphi_min_numerator, 
-                            dphi_min_denominator, idphi, 
-                            mix_spectrum_photon_jet, acceptance, total);
+                            dphi_min_denominator, idphi, mix_spectrum_photon_jet, 
+                            acceptance, total, 0, JERSF);
 
                     ++k;
                 }
+            }
+
+            /* with gen level isolation applied */
+            int gen_index;
+
+            if (mc) {
+                gen_index = (*p->pho_genMatchedIndex)[leading];
+                if (gen_index == -1) { continue; }
+                
+                if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
+
+                zip([&](auto const& index, auto const& weight) {
+                    (*mc_spectrum_photon)[index]->Fill(leading_pt, weight * pho_cor);
+                }, hf_x, weights);
+
+                fill_axes(pjt, hf_x, weights, photon_eta, photon_phi, 
+                    leading_pt, exclude, heavyion && !no_jes,
+                    jet_pt_min, jet_eta_abs, dphi_min_numerator, 
+                    dphi_min_denominator, idphi, mc_spectrum_photon_jet, 
+                    acceptance, total, 1, JERSF);
             }
         }
 
@@ -388,6 +472,9 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
         spectrum_photon_jet->save(tag);
         mix_spectrum_photon_jet->save(tag);
         sub_spectrum_photon_jet->save(tag);
+
+        mc_spectrum_photon->save(tag);
+        mc_spectrum_photon_jet->save(tag);
     });
 
     printf("destroying objects..\n");
