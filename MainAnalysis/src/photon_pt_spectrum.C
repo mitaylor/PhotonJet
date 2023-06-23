@@ -98,13 +98,11 @@ void fill_axes(pjtree* pjt,
         /* gen level jet */
         if (mc) {
             auto gen_pt = (*pjt->refpt)[j];
-            auto gen_eta = (*pjt->refeta)[j];
-            auto gen_phi = (*pjt->refphi)[j];
 
             if (gen_pt <= jet_pt_min && gen_pt >= 200) { continue; }
 
             auto reco_pt = jet_cor ? (*pjt->jtptCor)[j] : (*pjt->jtpt)[j];
-            auto reco_eta = (*p->jteta)[j];
+            auto reco_eta = (*pjt->jteta)[j];
             auto reco_phi = convert_radian((*pjt->jtphi)[j]);
 
             if (reco_pt <= jet_pt_min && reco_pt >= 200) { continue; }
@@ -127,8 +125,6 @@ void fill_axes(pjtree* pjt,
 
             auto jer_scale = jer_scale_factors[0];
             reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt;
-
-            auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
 
             /* do acceptance weighting */
             double cor = 1;
@@ -431,10 +427,10 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
             int gen_index;
 
             if (mc) {
-                gen_index = (*p->pho_genMatchedIndex)[leading];
+                gen_index = (*pjt->pho_genMatchedIndex)[leading];
                 if (gen_index == -1) { continue; }
                 
-                if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
+                if ((*pjt->mcCalIsoDR04)[gen_index] > 5) { continue; }
 
                 zip([&](auto const& index, auto const& weight) {
                     (*mc_spectrum_photon)[index]->Fill(leading_pt, weight * pho_cor);
