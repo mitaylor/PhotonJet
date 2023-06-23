@@ -187,6 +187,11 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
         }
     }
 
+    /* create merged histograms */
+    auto h_data_construct_accumulate_merge = h_data_construct_accumulate->extend("merge", 0, 1)->sum(1);
+    auto h_mc_construct_vacillate_merge = h_mc_construct_vacillate->extend("merge", 0, 1)->sum(1);
+
+    /* normalize */
     scale_bin_width(h_data_construct_populate, h_mc_construct_populate);
     scale_bin_width(h_data_construct_populate_jet, h_mc_construct_populate_jet);
     scale_bin_width(h_data_construct_populate_jet_sub, h_mc_construct_populate_jet_sub);
@@ -209,10 +214,13 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     /* create ratio */
     auto h_ratio = new history<TH1F>("h_ratio"s, "", fpt, ihf->size());
+    auto h_ratio_merge = new history<TH1F>("h_ratio_merge"s, "", fpt, ihf->size());
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*h_ratio)[i]->Divide((*h_data_construct_accumulate)[i], (*h_mc_construct_vacillate)[i]);
     }
+
+    (*h_ratio_merge)[0]->Divide((*h_data_construct_accumulate_merge)[0], (*h_mc_construct_vacillate_merge)[0]);
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
@@ -310,6 +318,22 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     apply_style(p7, cms, system_tag);
     h_ratio->apply([&](TH1* h) { p7->add(h, "ratio"); });
 
+    auto p8 = new paper(set + "_" + purity_label + "_accumulate_photon_jet_spectra_merge", hb);
+    p8->set(paper::flags::logy);
+    p8->set(paper::flags::logx);
+    p8->accessory(hf_info);
+    p8->accessory(kinematics);
+    apply_style(p8, cms, system_tag);
+    
+    h_data_construct_accumulate_merge->apply([&](TH1* h) { p8->add(h, "data"); });
+    h_mc_construct_vacillate_merge->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "analysis_mc"); });
+
+    auto p9 = new paper(set + "_" + purity_label + "_photon_spectra_ratio_merge", hb);
+    p9->accessory(hf_info);
+    p9->accessory(kinematics);
+    apply_style(p9, cms, system_tag);
+    h_ratio_merge->apply([&](TH1* h) { p9->add(h, "ratio"); });
+
     hb->sketch();
 
     p1->draw("pdf");
@@ -319,6 +343,8 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p5->draw("pdf");
     p6->draw("pdf");
     p7->draw("pdf");
+    p8->draw("pdf");
+    p9->draw("pdf");
 
     in(output, [&]() {
         h_data_construct_populate->save();
