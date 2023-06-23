@@ -281,6 +281,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     
     h_data_construct_populate_jet_sub->apply([&](TH1* h) { p5->add(h, "data"); });
     h_mc_construct_populate_jet_sub->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "analysis_mc"); });
+    h_mc_construct_vacillate_jet->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "prior_mc"); });
 
     auto p6 = new paper(set + "_" + tag + "_accumulate_photon_jet_sub_spectra", hb);
     p6->divide(ihf->size(), -1);
