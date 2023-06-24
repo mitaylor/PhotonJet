@@ -324,7 +324,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     apply_style(p7, cms, system_tag);
     h_ratio->apply([&](TH1* h) { p7->add(h, "ratio"); });
 
-    auto p8 = new paper(set + "_" + purity_label + "_accumulate_photon_jet_spectra_merge", hb);
+    auto p8 = new paper(set + "_" + purity_label + "_accumulate_photon_spectra_merge", hb);
     p8->set(paper::flags::logy);
     p8->set(paper::flags::logx);
     p8->accessory(range_info);
