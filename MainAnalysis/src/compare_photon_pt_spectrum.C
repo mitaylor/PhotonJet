@@ -201,6 +201,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     scale_bin_width(h_mc_construct_vacillate, h_mc_construct_vacillate_jet);
     scale_bin_width(h_data_accumulate, h_mc_accumulate);
     scale_bin_width(h_data_populate, h_mc_populate);
+    scale_bin_width(h_data_construct_accumulate_merge, h_mc_construct_vacillate_merge)
 
     normalise_to_unity(h_data_construct_populate, h_mc_construct_populate);
     normalise_to_unity(h_data_construct_populate_jet, h_mc_construct_populate_jet);
@@ -211,6 +212,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     normalise_to_unity(h_mc_construct_vacillate, h_mc_construct_vacillate_jet);
     normalise_to_unity(h_data_accumulate, h_mc_accumulate);
     normalise_to_unity(h_data_populate, h_mc_populate);
+    normalise_to_unity(h_data_construct_accumulate_merge, h_mc_construct_vacillate_merge);
 
     /* create ratio */
     auto h_ratio = new history<TH1F>("h_ratio"s, "", fpt, ihf->size());
@@ -228,6 +230,10 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.70, "Cent. %i - %i%%", dcent, true); };
+
+    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+    auto range_info = [&](int64_t index) {
+        info_text(index, 0.70, "Cent. %i - %i%%", drange, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -321,7 +327,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto p8 = new paper(set + "_" + purity_label + "_accumulate_photon_jet_spectra_merge", hb);
     p8->set(paper::flags::logy);
     p8->set(paper::flags::logx);
-    p8->accessory(hf_info);
+    p8->accessory(range_info);
     p8->accessory(kinematics);
     apply_style(p8, cms, system_tag);
     
@@ -329,7 +335,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_mc_construct_vacillate_merge->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "analysis_mc"); });
 
     auto p9 = new paper(set + "_" + purity_label + "_photon_spectra_ratio_merge", hb);
-    p9->accessory(hf_info);
+    p9->accessory(range_info);
     p9->accessory(kinematics);
     apply_style(p9, cms, system_tag);
     h_ratio_merge->apply([&](TH1* h) { p9->add(h, "ratio"); });
