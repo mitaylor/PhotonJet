@@ -201,7 +201,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     scale_bin_width(h_mc_construct_vacillate, h_mc_construct_vacillate_jet);
     scale_bin_width(h_data_accumulate, h_mc_accumulate);
     scale_bin_width(h_data_populate, h_mc_populate);
-    scale_bin_width(h_data_construct_accumulate_merge, h_mc_construct_vacillate_merge)
+    scale_bin_width(h_data_construct_accumulate_merge, h_mc_construct_vacillate_merge);
 
     normalise_to_unity(h_data_construct_populate, h_mc_construct_populate);
     normalise_to_unity(h_data_construct_populate_jet, h_mc_construct_populate_jet);
