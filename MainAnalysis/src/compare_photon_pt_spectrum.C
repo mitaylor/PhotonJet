@@ -331,14 +331,14 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p8->accessory(kinematics);
     apply_style(p8, cms, system_tag);
     
-    h_data_construct_accumulate_merge->apply([&](TH1* h) { p8->add(h, "data"); });
-    h_mc_construct_vacillate_merge->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "analysis_mc"); });
+    (*h_data_construct_accumulate_merge)[0]->add(h, "data");
+    (*h_mc_construct_vacillate_merge)[0]->stack(h, "prior_mc");
 
     auto p9 = new paper(set + "_" + purity_label + "_photon_spectra_ratio_merge", hb);
     p9->accessory(range_info);
     p9->accessory(kinematics);
     apply_style(p9, cms, system_tag);
-    h_ratio_merge->apply([&](TH1* h) { p9->add(h, "ratio"); });
+    (*h_ratio_merge)[0]->add(h, "ratio");
 
     hb->sketch();
 
@@ -375,6 +375,10 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
         h_data_accumulate->save();
         h_mc_accumulate->save();
+
+        h_data_construct_accumulate_merge->save();
+        h_mc_construct_vacillate_merge->save();
+        h_ratio_merge->save();
     });
 
     return 0;
