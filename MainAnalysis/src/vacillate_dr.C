@@ -69,6 +69,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto jer_up = conf->get<bool>("jer_up");
     auto mc = conf->get<bool>("mc");
 
+    auto photon_pt_weight = conf->get<float>("photon_pt_weight");
+
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     /* selections */
@@ -284,8 +286,19 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
             }
 
+            /* weight photon pT spectrum */
+            if (photon_pt_weight.size() > 0) {
+                for (int64_t j = 0; j < ihf->size(); ++j) {
+                    weights[j] *= leading_pt * photon_pt_weight[1] + photon_pt_weight[0];
+                }
+            }
+
+            /* add weight for the number of photons, based on the fraction that are excluded by area */
+            auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
+
+            /* fill histogram */
             for (int64_t j = 0; j < ihf->size(); ++j) {
-                (*n)[j]->Fill(1., weights[j]); }
+                (*n)[j]->Fill(1., weights[j] * pho_cor); }
 
             /* map reco jet to gen jet */
             std::unordered_map<float, int64_t> genid;
