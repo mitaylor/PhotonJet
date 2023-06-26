@@ -60,7 +60,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto cent = conf->get<int64_t>("cent");
 
     auto mc_file = conf->get<std::string>("mc_file");
-    auto mc_file = conf->get<std::string>("mc_label");
+    auto mc_label = conf->get<std::string>("mc_label");
 
     auto data_file = conf->get<std::string>("data_file");
     auto data_label = conf->get<std::string>("data_label");
@@ -150,25 +150,25 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     /* load data and MC for weighting MC */
     TFile* fdata;
-    history<TH1F>* data = nullptr;
+    history<TH1F>* data_dist = nullptr;
 
     TFile* fmc;
-    history<TH1F>* mc = nullptr;
+    history<TH1F>* mc_dist = nullptr;
 
     auto data_weighting = new history<TH1F>("data_weighting"s, "data/MC", fr, ihf->size());
 
     if (!mc_file.empty() && !data_file.empty()) {
         fdata = new TFile((base + data_file).data(), "read");
-        data = new history<TH1F>(fdata, data_label);
+        data_dist = new history<TH1F>(fdata, data_label);
 
         fmc = new TFile((base + mc_file).data(), "read");
-        mc = new history<TH1F>(fmc, mc_label);
+        mc_dist = new history<TH1F>(fmc, mc_label);
 
         for (size_t i = 0; i < ihf->size(); ++i) {
-            (*data)[i]->Scale(1. / (*data)[i]->Integral());
-            (*mc)[i]->Scale(1. / (*mc)[i]->Integral());
+            (*data_dist)[i]->Scale(1. / (*data_dist)[i]->Integral());
+            (*mc_dist)[i]->Scale(1. / (*mc_dist)[i]->Integral());
 
-            (*data_weighting)[i]->Divide((*data)[i], (*mc)[i]);
+            (*data_weighting)[i]->Divide((*data_dist)[i], (*mc_dist)[i]);
         }
 
         data_weighting->apply([&](TH1* h) {
