@@ -13,7 +13,7 @@ samples=(pp)
 for sample in ${samples[@]}; do
     run_pp ${sample}
 
-    for syst in qcd er; do
+    for syst in qcd er qcd_er; do
         run_pp ${sample}_${syst}
     done
 done

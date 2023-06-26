@@ -6,10 +6,10 @@ n=$2
 run_aa() {
     tag=$1
 
-    ./RunPopulateOriginalData.sh ${set} ${tag} ${n}
+    ./RunPopulateOriginalMC.sh ${set} ${tag} ${n}
 }
 
-samples=(aa)
+samples=(aa_qcd)
 
 for sample in ${samples[@]}; do
     for syst in no_er; do
