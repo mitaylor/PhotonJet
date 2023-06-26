@@ -12,7 +12,7 @@ run_pp() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    for syst in er es_up es_down; do
+    for syst in qcd_er; do
         run_pp ${sample}_${syst}
     done
 done
