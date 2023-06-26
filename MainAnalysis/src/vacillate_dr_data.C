@@ -59,6 +59,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
 
+    auto mc_file = conf->get<std::string>("mc_file");
+    auto mc_file = conf->get<std::string>("mc_label");
+
+    auto data_file = conf->get<std::string>("data_file");
+    auto data_label = conf->get<std::string>("data_label");
+
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
@@ -141,6 +147,36 @@ int vacillate(char const* config, char const* selections, char const* output) {
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
+
+    /* load data and MC for weighting MC */
+    TFile* fdata;
+    history<TH1F>* data = nullptr;
+
+    TFile* fmc;
+    history<TH1F>* mc = nullptr;
+
+    auto data_weighting = new history<TH1F>("data_weighting"s, "data/MC", fr, ihf->size());
+
+    if (!mc_file.empty() && !data_file.empty()) {
+        fdata = new TFile((base + data_file).data(), "read");
+        data = new history<TH1F>(fdata, data_label);
+
+        fmc = new TFile((base + mc_file).data(), "read");
+        mc = new history<TH1F>(fmc, mc_label);
+
+        for (size_t i = 0; i < ihf->size(); ++i) {
+            (*data)[i]->Scale(1. / (*data)[i]->Integral());
+            (*mc)[i]->Scale(1. / (*mc)[i]->Integral());
+
+            (*data_weighting)[i]->Divide((*data)[i], (*mc)[i]);
+        }
+
+        data_weighting->apply([&](TH1* h) {
+            for (int i = 1; i <= h->GetNbinsX(); ++i) {
+                if (h->GetBinContent(i) < 0) h->SetBinContent(i, 0);
+            }
+        });
+    }
 
     /* load centrality weighting for MC */
     TFile* frho;
@@ -367,12 +403,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 auto g_x = mg->index_for(v{gdr, gen_pt});
 
                 if (reco_pt > rptr.front() && reco_pt < rptr.back()) {
-                    for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*g)[k]->Fill(g_x, weights[k] * cor); }
-
                     auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
+
+                    auto data_weight = (!mc_file.empty() && !data_file.empty()) ? data_weighting->GetBinContent(data_weighting->FindBin(r_x)) : 1;
+
+                    for (int64_t k = 0; k < ihf->size(); ++k) {
+                        (*g)[k]->Fill(g_x, weights[k] * cor * data_weight); }
 
                     if (smear) {
                         if (rdr > 0.3) { continue; }
@@ -398,10 +436,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     }
                     
                     for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*r)[k]->Fill(r_x, weights[k] * cor);
-                        (*cdr)[k]->Fill(rdr, gdr, weights[k] * cor);
-                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor);
-                        (*c)[k]->Fill(r_x, g_x, weights[k] * cor);
+                        (*r)[k]->Fill(r_x, weights[k] * cor * data_weight);
+                        (*cdr)[k]->Fill(rdr, gdr, weights[k] * cor * data_weight);
+                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor * data_weight);
+                        (*c)[k]->Fill(r_x, g_x, weights[k] * cor * data_weight);
                     }
                 } else {
                     /* missed */
