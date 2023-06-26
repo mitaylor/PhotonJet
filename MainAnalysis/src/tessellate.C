@@ -131,8 +131,8 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
                  multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
                  bool heavyion, bool apply_er, float pt_min, float photon_eta_abs, 
                  float hovere_max, float hf_min, float hf_max, float iso_max,
-                 float noniso_min, float noniso_max, float gen_iso_max, std::vector<float> offsets, 
-                 std::vector<float> widths, history<TH1F>* rho_weighting) {
+                 float noniso_min, float noniso_max, float gen_iso_max, float offset, 
+                 history<TH1F>* rho_weighting) {
     printf("fill signal\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -198,10 +198,8 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
 
         for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
-            auto sigma_eta_eta = (*p->phoSigmaIEtaIEta_2012)[leading];
-            sigma_eta_eta = widths[pthf_x]*(sigma_eta_eta + offsets[pthf_x]);
 
-            (*see)[pthf_x]->Fill(sigma_eta_eta, weight[hf_x]);
+            (*see)[pthf_x]->Fill((*p->phoSigmaIEtaIEta_2012)[leading] + offset, weight[hf_x]);
 
             /* isolation requirement */
             float recoiso = (*p->pho_ecalClusterIsoR3)[leading]
@@ -276,6 +274,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto noniso_min = conf->get<float>("noniso_min");
     auto noniso_max = conf->get<float>("noniso_max");
 
+    auto offset = conf->get<float>("offset");
     auto rsee = conf->get<std::vector<float>>("rsee");
     auto rfit = conf->get<std::vector<float>>("rfit");
 
@@ -320,7 +319,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto fsee = std::bind(&interval::book<TH1F>, isee, _1, _2, _3);
 
     auto see_data = new memory<TH1F>("see_data"s, "counts", fsee, mpthf);
-    auto see_sig_initial = new memory<TH1F>("see_sig_initial"s, "counts", fsee, mpthf);
     auto see_sig = new memory<TH1F>("see_sig"s, "counts", fsee, mpthf);
     auto see_bkg = new memory<TH1F>("see_bkg"s, "counts", fsee, mpthf);
 
@@ -362,53 +360,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
                 noniso_min, noniso_max, rho_weighting, efficiency, mc && heavyion);
     }
 
-    /* fill signal with MC */
-    std::vector<float> offsets(mpthf->size(), 0);
-    std::vector<float> widths(mpthf->size(), 1);
-
-    for (auto const& file : signal) {
-        std::cout << file << std::endl;
-        
-        TFile* fs = new TFile(file.data(), "read");
-        TTree* ts = (TTree*)fs->Get("pj");
-        auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
-
-        fill_signal(see_sig_initial, sfrac, mpthf, ipt, ihf, ts, ps, 
-                    heavyion, apply_er, pt_min, photon_eta_abs, 
-                    hovere_max, hf_min, hf_max, iso_max, 
-                    noniso_min, noniso_max, gen_iso_max, offsets, 
-                    widths, rho_weighting);
-    }
-
-    /* alter signal template to match data std and mean between 0 and 0.01 */
-    for (int64_t i = 0; i < mpthf->size(); ++i) {
-        auto res = fit_templates((*see_data)[i], (*see_sig_initial)[i], (*see_bkg)[i], rfit);
-
-        auto stub = "p_"s + (*see_data)[i]->GetName();
-        auto pfit = (TH1F*)(*see_sig_initial)[i]->Clone((stub + "f").data());
-        auto pbkg = (TH1F*)(*see_bkg)[i]->Clone((stub + "b").data());
-
-        auto entries = std::get<0>(res);
-        auto fraction = std::get<1>(res);
-
-        pfit->Scale(entries * fraction / pfit->Integral());
-        pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
-
-        pfit->Add(pbkg);
-
-        (*see_data)[i]->GetXaxis()->SetRangeUser(0.008, 0.01);
-        pfit->GetXaxis()->SetRangeUser(0.008, 0.01);
-
-        widths[i] = (*see_data)[i]->GetRMS() / pfit->GetRMS();
-        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - pfit->GetMean();
-
-        std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
-                  << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
-
-        (*see_data)[i]->GetXaxis()->SetRange(0, 0);
-        pfit->GetXaxis()->SetRange(0, 0);
-    }
-    
     for (auto const& file : signal) {
         std::cout << file << std::endl;
         
@@ -419,8 +370,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
         fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
                     heavyion, apply_er, pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
-                    noniso_min, noniso_max, gen_iso_max, offsets, 
-                    widths, rho_weighting);
+                    noniso_min, noniso_max, gen_iso_max, offset, 
+                    rho_weighting);
     }
 
     auto hb = new pencil();
@@ -490,6 +441,18 @@ int tessellate(char const* config, char const* selections, char const* output) {
     c1->accessory(kinematics);
     c1->divide(ipt->size() - 1, -1);
 
+    auto formatter = [](TH1* obj) {
+        obj->SetAxisRange(0.005, 0.015, "X");
+    };
+
+    auto c2 = new paper(set + "_" + tag + "_purity_zoom", hb);
+    apply_style(c2, cms, system_tag);
+    c2->accessory(pthf_info);
+    c2->format(formatter);
+    c2->accessory(purity_info);
+    c2->accessory(kinematics);
+    c2->divide(ipt->size() - 1, -1);
+
     printf("fit templates\n");
 
     for (int64_t i = 0; i < mpthf->size(); ++i) {
@@ -519,13 +482,20 @@ int tessellate(char const* config, char const* selections, char const* output) {
             c1->adjust(pfit, "hist f", "lf");
             c1->adjust(pbkg, "hist f", "lf");
 
+            c2->add((*see_data)[i], "data");
+            c2->stack(pfit, "sig");
+            c2->stack(pbkg, "bkg");
+
+            c2->adjust(pfit, "hist f", "lf");
+            c2->adjust(pbkg, "hist f", "lf");
+
             auto ntot = pfit->Integral(1, pfit->FindBin(see_max));
             auto nbkg = pbkg->Integral(1, pbkg->FindBin(see_max));
 
             (*purity)[i]->SetBinContent(1, 1. - nbkg / ntot);
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
             printf("chisq: %.3f\n", chisq);
-            printf("chisq: %d\n", ndof);
+            printf("ndof: %d\n", ndof);
         }
         else {
             (*purity)[i]->SetBinContent(1, 1);
@@ -535,6 +505,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     hb->sketch();
     c1->draw("pdf");
+    c2->draw("pdf");
 
     /* save purities */
     in(output, [&]() {
