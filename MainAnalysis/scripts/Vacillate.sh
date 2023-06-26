@@ -37,7 +37,7 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa ${sample}
 
-    for syst in qcd qcd_gen_iso jer_up jeu_up jeu_down wo_ele_rej cent_down cent_up purity_loose purity_tight; do
+    for syst in qcd qcd_gen_iso jer_up jeu_up jeu_down wo_ele_rej cent_down cent_up purity_loose purity_tight small; do
         run_aa ${sample}_${syst}
     done
 done
