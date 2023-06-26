@@ -164,7 +164,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
         fmc = new TFile((base + mc_file).data(), "read");
         mc_dist = new history<TH1F>(fmc, mc_label);
 
-        for (size_t i = 0; i < ihf->size(); ++i) {
+        for (int64_t i = 0; i < ihf->size(); ++i) {
             (*data_dist)[i]->Scale(1. / (*data_dist)[i]->Integral());
             (*mc_dist)[i]->Scale(1. / (*mc_dist)[i]->Integral());
 
@@ -407,10 +407,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                    auto data_weight = (!mc_file.empty() && !data_file.empty()) ? data_weighting->GetBinContent(data_weighting->FindBin(r_x)) : 1;
+                    std::vector<float> data_weight(ihf->size());
 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*g)[k]->Fill(g_x, weights[k] * cor * data_weight); }
+                        data_weight[k] = (!mc_file.empty() && !data_file.empty()) ? (*data_weighting)[k]->GetBinContent((*data_weighting)[k]->FindBin(r_x)) : 1;
+                    }
+
+                    for (int64_t k = 0; k < ihf->size(); ++k) {
+                        (*g)[k]->Fill(g_x, weights[k] * cor * data_weight[k]); }
 
                     if (smear) {
                         if (rdr > 0.3) { continue; }
@@ -436,10 +440,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     }
                     
                     for (int64_t k = 0; k < ihf->size(); ++k) {
-                        (*r)[k]->Fill(r_x, weights[k] * cor * data_weight);
-                        (*cdr)[k]->Fill(rdr, gdr, weights[k] * cor * data_weight);
-                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor * data_weight);
-                        (*c)[k]->Fill(r_x, g_x, weights[k] * cor * data_weight);
+                        (*r)[k]->Fill(r_x, weights[k] * cor * data_weight[k]);
+                        (*cdr)[k]->Fill(rdr, gdr, weights[k] * cor * data_weight[k]);
+                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor * data_weight[k]);
+                        (*c)[k]->Fill(r_x, g_x, weights[k] * cor * data_weight[k]);
                     }
                 } else {
                     /* missed */
