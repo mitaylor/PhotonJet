@@ -363,8 +363,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
     }
 
     /* fill signal with MC */
-    std::vector<float> offsets(mpthf->size()) = {0};
-    std::vector<float> widths(mpthf->size()) = {1};
+    std::vector<float> offsets(mpthf->size(), 0);
+    std::vector<float> widths(mpthf->size(), 1);
 
     for (auto const& file : signal) {
         std::cout << file << std::endl;
