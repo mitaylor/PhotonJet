@@ -131,8 +131,8 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
                  multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
                  bool heavyion, bool apply_er, float pt_min, float photon_eta_abs, 
                  float hovere_max, float hf_min, float hf_max, float iso_max,
-                 float noniso_min, float noniso_max, float gen_iso_max, std::vector<float> offsets, 
-                 std::vector<float> widths, history<TH1F>* rho_weighting) {
+                 float noniso_min, float noniso_max, float gen_iso_max, float offset, 
+                 history<TH1F>* rho_weighting) {
     printf("fill signal\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -198,10 +198,8 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
 
         for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
-            auto sigma_eta_eta = (*p->phoSigmaIEtaIEta_2012)[leading];
-            sigma_eta_eta = widths[pthf_x]*(sigma_eta_eta + offsets[pthf_x]);
 
-            (*see)[pthf_x]->Fill(sigma_eta_eta, weight[hf_x]);
+            (*see)[pthf_x]->Fill((*p->phoSigmaIEtaIEta_2012)[leading] + offset, weight[hf_x]);
 
             /* isolation requirement */
             float recoiso = (*p->pho_ecalClusterIsoR3)[leading]
@@ -233,11 +231,13 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
         float nsig = tsig->GetBinContent(tsig->FindBin(x[0]));
         float nbkg = tbkg->GetBinContent(tbkg->FindBin(x[0]));
 
-        return p[0] * (nsig * p[1] + nbkg * (1 - p[1]));
+        auto mean = tsig->GetMean();
+
+        return p[0] * (nsig * TMath::Gaus(mean, p[2]) * p[1] + nbkg * (1 - p[1]));
     };
 
-    TF1* f = new TF1(("f"s + stub).data(), evaluate, range[0], range[1], 2);
-    f->SetParameters(tdata->Integral(), 0.8);
+    TF1* f = new TF1(("f"s + stub).data(), evaluate, range[0], range[1], 3);
+    f->SetParameters(tdata->Integral(), 0.8, 0.015);
     f->SetParLimits(1, 0., 1.);
 
     tdata->Fit(("f"s + stub).data(), "L0Q", "", range[0], range[1]);
@@ -246,14 +246,16 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
 
     auto p0 = f->GetParameter(0);
     auto p1 = f->GetParameter(1);
+    auto p2 = f->GetParameter(2);
 
     auto p0_err = f->GetParError(0);
     auto p1_err = f->GetParError(1);
+    auto p2_err = f->GetParError(2);
 
     auto chisq = f->GetChisquare();
     auto ndof = f->GetNDF();
 
-    return std::make_tuple(p0, p1, p0_err, p1_err, chisq, ndof);
+    return std::make_tuple(p0, p1, p2, p0_err, p1_err, p2_err, chisq, ndof);
 }
 
 int tessellate(char const* config, char const* selections, char const* output) {
@@ -276,6 +278,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto noniso_min = conf->get<float>("noniso_min");
     auto noniso_max = conf->get<float>("noniso_max");
 
+    auto offset = conf->get<float>("offset");
     auto rsee = conf->get<std::vector<float>>("rsee");
     auto rfit = conf->get<std::vector<float>>("rfit");
 
@@ -314,7 +317,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto incl = new interval(""s, 1, 0., 1.);
     auto itwo = new interval(""s, 2, 0., 2.);
     auto isee = new interval("#sigma_{#eta#eta}"s, rsee[0], rsee[1], rsee[2]);
-    auto isee_cut = new interval("#sigma_{#eta#eta}"s, rsee[0], rsee[1], rsee[2]);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto ftwo = std::bind(&interval::book<TH1F>, itwo, _1, _2, _3);
@@ -362,10 +364,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
                 noniso_min, noniso_max, rho_weighting, efficiency, mc && heavyion);
     }
 
-    /* fill signal with MC */
-    std::vector<float> offsets(mpthf->size()) = {0};
-    std::vector<float> widths(mpthf->size()) = {1};
-
     for (auto const& file : signal) {
         std::cout << file << std::endl;
         
@@ -376,37 +374,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
         fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
                     heavyion, apply_er, pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
-                    noniso_min, noniso_max, gen_iso_max, offsets, 
-                    widths, rho_weighting);
-    }
-
-    /* alter signal template to match data std and mean between 0 and 0.01 */
-    for (int64_t i = 0; i < mpthf->size(); ++i) {
-        (*see_data)[i]->GetXaxis()->SetRange(0, h->FindBin(see_max));
-        (*see_sig)[i]->GetXaxis()->SetRange(0, h->FindBin(see_max));
-
-        widths[i] = (*see_data)[i]->GetRMS() / (*see_sig)[i]->GetRMS();
-        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - (*see_sig)[i]->GetMean();
-
-        std::cout << "offset: " << (*see_data)[i]->GetMean() - (*see_sig)[i]->GetMean() 
-                  << ", width: " << widths[i] << std::endl;
-
-        (*see_data)[i]->GetXaxis()->SetRange(0, h->GetNbinsX());
-        (*see_sig)[i]->GetXaxis()->SetRange(0, h->GetNbinsX());
-    }
-    
-    for (auto const& file : signal) {
-        std::cout << file << std::endl;
-        
-        TFile* fs = new TFile(file.data(), "read");
-        TTree* ts = (TTree*)fs->Get("pj");
-        auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
-
-        fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
-                    heavyion, apply_er, pt_min, photon_eta_abs, 
-                    hovere_max, hf_min, hf_max, iso_max, 
-                    noniso_min, noniso_max, gen_iso_max, offsets, 
-                    widths, rho_weighting);
+                    noniso_min, noniso_max, gen_iso_max, offset, 
+                    rho_weighting);
     }
 
     auto hb = new pencil();
@@ -490,8 +459,21 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
             auto entries = std::get<0>(res);
             auto fraction = std::get<1>(res);
-            auto chisq = std::get<4>(res);
-            auto ndof = std::get<5>(res);
+            auto mean = pfit->GetMean();
+            auto std = std::get<2>(res);
+            auto chisq = std::get<6>(res);
+            auto ndof = std::get<7>(res);
+
+            std::cout << "mean: " << mean << ", std: " << std << std::endl;
+
+            for (int i = 1; i <= pfit->GetNbinsX(); ++i) {
+                std::cout << "bin " << i << ": " << pfit->GetBinContent(i) << " ";
+
+                pfit->SetBinContent(i, pfit->GetBinContent(i)*TMath::Gaus(mean, std));
+                pfit->SetBinError(i, pfit->GetBinError(i)*TMath::Gaus(mean, std));
+
+                std::cout << pfit->GetBinContent(i) << std::endl;
+            }
 
             pfit->Scale(entries * fraction / pfit->Integral());
             pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
