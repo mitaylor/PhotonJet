@@ -143,7 +143,7 @@ set=$1
 # AATightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_tight_purity.root \
     --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_tight_purity.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseReco aa_r_0 \
@@ -154,7 +154,7 @@ set=$1
     --Output Output/${set}/AATightPurity0.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_tight_purity.root \
     --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_1 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_tight_purity.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseReco aa_r_1 \
@@ -165,7 +165,7 @@ set=$1
     --Output Output/${set}/AATightPurity1.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_tight_purity.root \
     --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_2 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_tight_purity.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseReco aa_r_2 \
@@ -176,7 +176,7 @@ set=$1
     --Output Output/${set}/AATightPurity2.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_tight_purity.root \
     --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_3 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_tight_purity.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseReco aa_r_3 \
@@ -189,7 +189,7 @@ set=$1
 # AALoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_loose_purity.root \
     --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_loose_purity.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseReco aa_r_0 \
@@ -200,7 +200,7 @@ set=$1
     --Output Output/${set}/AALoosePurity0.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_loose_purity.root \
     --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_1 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_loose_purity.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseReco aa_r_1 \
@@ -211,7 +211,7 @@ set=$1
     --Output Output/${set}/AALoosePurity1.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_loose_purity.root \
     --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_2 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_loose_purity.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseReco aa_r_2 \
@@ -222,7 +222,7 @@ set=$1
     --Output Output/${set}/AALoosePurity2.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_loose_purity.root \
     --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_3 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_loose_purity.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseReco aa_r_3 \
@@ -675,7 +675,7 @@ set=$1
 # PPTightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_tight_purity.root \
     --DataHistogram pp_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_tight_purity.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseReco pp_r_0 \
@@ -688,7 +688,7 @@ set=$1
 # PPLoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_loose_purity.root \
     --DataHistogram pp_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_loose_purity.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseReco pp_r_0 \
@@ -792,7 +792,7 @@ set=$1
 # PPTightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_50_90_tight_purity.root \
     --DataHistogram pp_smear_50_90_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_50_90.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_50_90_tight_purity.root \
     --ResponseHistogram pp_smear_50_90_c_0 \
     --ResponseTruth pp_smear_50_90_g_0 \
     --ResponseReco pp_smear_50_90_r_0 \
@@ -805,7 +805,7 @@ set=$1
 # PPLoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_50_90_loose_purity.root \
     --DataHistogram pp_smear_50_90_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_50_90.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_50_90_loose_purity.root \
     --ResponseHistogram pp_smear_50_90_c_0 \
     --ResponseTruth pp_smear_50_90_g_0 \
     --ResponseReco pp_smear_50_90_r_0 \
@@ -909,7 +909,7 @@ set=$1
 # PPTightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_30_50_tight_purity.root \
     --DataHistogram pp_smear_30_50_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_30_50.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_30_50_tight_purity.root \
     --ResponseHistogram pp_smear_30_50_c_0 \
     --ResponseTruth pp_smear_30_50_g_0 \
     --ResponseReco pp_smear_30_50_r_0 \
@@ -922,7 +922,7 @@ set=$1
 # PPLoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_30_50_loose_purity.root \
     --DataHistogram pp_smear_30_50_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_30_50.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_30_50_loose_purity.root \
     --ResponseHistogram pp_smear_30_50_c_0 \
     --ResponseTruth pp_smear_30_50_g_0 \
     --ResponseReco pp_smear_30_50_r_0 \
@@ -1026,7 +1026,7 @@ set=$1
 # PPTightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_10_30_tight_purity.root \
     --DataHistogram pp_smear_10_30_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_10_30.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_10_30_tight_purity.root \
     --ResponseHistogram pp_smear_10_30_c_0 \
     --ResponseTruth pp_smear_10_30_g_0 \
     --ResponseReco pp_smear_10_30_r_0 \
@@ -1039,7 +1039,7 @@ set=$1
 # PPLoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_10_30_loose_purity.root \
     --DataHistogram pp_smear_10_30_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_10_30.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_10_30_loose_purity.root \
     --ResponseHistogram pp_smear_10_30_c_0 \
     --ResponseTruth pp_smear_10_30_g_0 \
     --ResponseReco pp_smear_10_30_r_0 \
@@ -1143,7 +1143,7 @@ set=$1
 # PPTightPurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_0_10_tight_purity.root \
     --DataHistogram pp_smear_0_10_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_0_10.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_0_10_tight_purity.root \
     --ResponseHistogram pp_smear_0_10_c_0 \
     --ResponseTruth pp_smear_0_10_g_0 \
     --ResponseReco pp_smear_0_10_r_0 \
@@ -1156,7 +1156,7 @@ set=$1
 # PPLoosePurity: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_0_10_loose_purity.root \
     --DataHistogram pp_smear_0_10_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_sum0_0 \
-    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_0_10.root \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_0_10_loose_purity.root \
     --ResponseHistogram pp_smear_0_10_c_0 \
     --ResponseTruth pp_smear_0_10_g_0 \
     --ResponseReco pp_smear_0_10_r_0 \
