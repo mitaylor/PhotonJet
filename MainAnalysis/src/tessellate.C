@@ -320,6 +320,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto fsee = std::bind(&interval::book<TH1F>, isee, _1, _2, _3);
 
     auto see_data = new memory<TH1F>("see_data"s, "counts", fsee, mpthf);
+    auto see_sig_initial = new memory<TH1F>("see_sig_initial"s, "counts", fsee, mpthf);
     auto see_sig = new memory<TH1F>("see_sig"s, "counts", fsee, mpthf);
     auto see_bkg = new memory<TH1F>("see_bkg"s, "counts", fsee, mpthf);
 
@@ -372,7 +373,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         TTree* ts = (TTree*)fs->Get("pj");
         auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
 
-        fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
+        fill_signal(see_sig_initial, sfrac, mpthf, ipt, ihf, ts, ps, 
                     heavyion, apply_er, pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
                     noniso_min, noniso_max, gen_iso_max, offsets, 
@@ -380,18 +381,37 @@ int tessellate(char const* config, char const* selections, char const* output) {
     }
 
     /* alter signal template to match data std and mean between 0 and 0.01 */
+
+    printf("fit templates\n");
+
     for (int64_t i = 0; i < mpthf->size(); ++i) {
+        auto res = fit_templates((*see_data)[i], (*see_sig_initial)[i], (*see_bkg)[i], rfit);
+
+        auto stub = "p_"s + (*see_data)[i]->GetName();
+        auto pfit = (TH1F*)(*see_sig_initial)[i]->Clone((stub + "f").data());
+        auto pbkg = (TH1F*)(*see_bkg)[i]->Clone((stub + "b").data());
+
+        auto entries = std::get<0>(res);
+        auto fraction = std::get<1>(res);
+        auto chisq = std::get<4>(res);
+        auto ndof = std::get<5>(res);
+
+        pfit->Scale(entries * fraction / pfit->Integral());
+        pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
+
+        pfit->Add(pbkg);
+
         (*see_data)[i]->GetXaxis()->SetRange(0, (*see_data)[i]->FindBin(see_max));
-        (*see_sig)[i]->GetXaxis()->SetRange(0, (*see_sig)[i]->FindBin(see_max));
+        pfit->GetXaxis()->SetRange(0, pfit->FindBin(see_max));
 
-        widths[i] = (*see_data)[i]->GetRMS() / (*see_sig)[i]->GetRMS();
-        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - (*see_sig)[i]->GetMean();
+        widths[i] = (*see_data)[i]->GetRMS() / pfit->GetRMS();
+        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - pfit->GetMean();
 
-        std::cout << "offset: " << (*see_data)[i]->GetMean() - (*see_sig)[i]->GetMean() 
+        std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
                   << ", width: " << widths[i] << std::endl;
 
         (*see_data)[i]->GetXaxis()->SetRange(0, 0);
-        (*see_sig)[i]->GetXaxis()->SetRange(0, 0);
+        pfit->GetXaxis()->SetRange(0, 0);
     }
     
     for (auto const& file : signal) {
