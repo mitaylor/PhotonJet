@@ -231,11 +231,13 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
         float nsig = tsig->GetBinContent(tsig->FindBin(x[0]));
         float nbkg = tbkg->GetBinContent(tbkg->FindBin(x[0]));
 
-        return p[0] * (nsig * p[1] + nbkg * (1 - p[1]));
+        auto mean = tsig->GetMean();
+
+        return p[0] * (nsig * TMath::gaus(mean, p[2]) * p[1] + nbkg * (1 - p[1]));
     };
 
-    TF1* f = new TF1(("f"s + stub).data(), evaluate, range[0], range[1], 2);
-    f->SetParameters(tdata->Integral(), 0.8);
+    TF1* f = new TF1(("f"s + stub).data(), evaluate, range[0], range[1], 3);
+    f->SetParameters(tdata->Integral(), 0.8, 0.1);
     f->SetParLimits(1, 0., 1.);
 
     tdata->Fit(("f"s + stub).data(), "L0Q", "", range[0], range[1]);
@@ -244,14 +246,16 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
 
     auto p0 = f->GetParameter(0);
     auto p1 = f->GetParameter(1);
+    auto p2 = f->GetParameter(2);
 
     auto p0_err = f->GetParError(0);
     auto p1_err = f->GetParError(1);
+    auto p2_err = f->GetParError(2);
 
     auto chisq = f->GetChisquare();
     auto ndof = f->GetNDF();
 
-    return std::make_tuple(p0, p1, p0_err, p1_err, chisq, ndof);
+    return std::make_tuple(p0, p1, p2, p0_err, p1_err, p2_err, chisq, ndof);
 }
 
 int tessellate(char const* config, char const* selections, char const* output) {
@@ -455,8 +459,17 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
             auto entries = std::get<0>(res);
             auto fraction = std::get<1>(res);
-            auto chisq = std::get<4>(res);
-            auto ndof = std::get<5>(res);
+            auto mean = pfit->GetMean();
+            auto std = std::get<2>(res);
+            auto chisq = std::get<6>(res);
+            auto ndof = std::get<7>(res);
+
+            std::cout << "mean: " << mean << ", std: " << std << std::endl;
+
+            for (int i = 1; i <= pfit->GetNbinsX(); ++i) {
+                pfit->SetBinContent(pfit->GetBinContent()*TMath::gaus(mean, std));
+                pfit->SetBinError(pfit->GetBinError()*TMath::gaus(mean, std));
+            }
 
             pfit->Scale(entries * fraction / pfit->Integral());
             pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
