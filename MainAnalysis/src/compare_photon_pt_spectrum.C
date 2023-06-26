@@ -227,12 +227,12 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     /* fit ratios */
     h_ratio->apply([&](TH1* h) {
         TF1* f = new TF1("fit", "pol1");
-        h->Fit(label.data());
+        h->Fit("fit");
     });
 
     h_ratio_merge->apply([&](TH1* h) {
         TF1* f = new TF1("fit_merge", "pol1");
-        h->Fit(label.data());
+        h->Fit("fit_merge");
     });
 
     /* set up figures */
