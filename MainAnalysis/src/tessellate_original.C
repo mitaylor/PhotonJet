@@ -441,8 +441,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
     c1->accessory(kinematics);
     c1->divide(ipt->size() - 1, -1);
 
-    auto formatter = [](TH1* obj, double min, double max) {
-        obj->SetAxisRange(min, max, "X");
+    auto formatter = [](TH1* obj) {
+        obj->SetAxisRange(0.005, 0.015, "X");
     };
 
     auto c2 = new paper(set + "_" + tag + "_purity_zoom", hb);
