@@ -467,8 +467,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
             std::cout << "mean: " << mean << ", std: " << std << std::endl;
 
             for (int i = 1; i <= pfit->GetNbinsX(); ++i) {
-                pfit->SetBinContent(pfit->GetBinContent()*TMath::Gaus(mean, std));
-                pfit->SetBinError(pfit->GetBinError()*TMath::Gaus(mean, std));
+                pfit->SetBinContent(i, pfit->GetBinContent(i)*TMath::Gaus(mean, std));
+                pfit->SetBinError(i, pfit->GetBinError(i)*TMath::Gaus(mean, std));
             }
 
             pfit->Scale(entries * fraction / pfit->Integral());
