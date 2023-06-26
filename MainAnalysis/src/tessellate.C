@@ -381,9 +381,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     }
 
     /* alter signal template to match data std and mean between 0 and 0.01 */
-
-    printf("fit templates\n");
-
     for (int64_t i = 0; i < mpthf->size(); ++i) {
         auto res = fit_templates((*see_data)[i], (*see_sig_initial)[i], (*see_bkg)[i], rfit);
 
@@ -393,8 +390,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
         auto entries = std::get<0>(res);
         auto fraction = std::get<1>(res);
-        auto chisq = std::get<4>(res);
-        auto ndof = std::get<5>(res);
 
         pfit->Scale(entries * fraction / pfit->Integral());
         pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
