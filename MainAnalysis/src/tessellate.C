@@ -233,7 +233,7 @@ auto fit_templates(TH1F* hdata, TH1F* hsig, TH1F* hbkg,
 
         auto mean = tsig->GetMean();
 
-        return p[0] * (nsig * TMath::gaus(mean, p[2]) * p[1] + nbkg * (1 - p[1]));
+        return p[0] * (nsig * TMath::Gaus(mean, p[2]) * p[1] + nbkg * (1 - p[1]));
     };
 
     TF1* f = new TF1(("f"s + stub).data(), evaluate, range[0], range[1], 3);
@@ -467,8 +467,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
             std::cout << "mean: " << mean << ", std: " << std << std::endl;
 
             for (int i = 1; i <= pfit->GetNbinsX(); ++i) {
-                pfit->SetBinContent(pfit->GetBinContent()*TMath::gaus(mean, std));
-                pfit->SetBinError(pfit->GetBinError()*TMath::gaus(mean, std));
+                pfit->SetBinContent(pfit->GetBinContent()*TMath::Gaus(mean, std));
+                pfit->SetBinError(pfit->GetBinError()*TMath::Gaus(mean, std));
             }
 
             pfit->Scale(entries * fraction / pfit->Integral());
