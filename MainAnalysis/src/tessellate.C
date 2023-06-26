@@ -381,8 +381,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     /* alter signal template to match data std and mean between 0 and 0.01 */
     for (int64_t i = 0; i < mpthf->size(); ++i) {
-        (*see_data)[i]->GetXaxis()->SetRange(0, see_data->FindBin(see_max));
-        (*see_sig)[i]->GetXaxis()->SetRange(0, see_sig->FindBin(see_max));
+        (*see_data)[i]->GetXaxis()->SetRange(0, (*see_data)[i]->FindBin(see_max));
+        (*see_sig)[i]->GetXaxis()->SetRange(0, (*see_sig)[i]->FindBin(see_max));
 
         widths[i] = (*see_data)[i]->GetRMS() / (*see_sig)[i]->GetRMS();
         offsets[i] = (*see_data)[i]->GetMean() / widths[i] - (*see_sig)[i]->GetMean();
@@ -390,8 +390,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
         std::cout << "offset: " << (*see_data)[i]->GetMean() - (*see_sig)[i]->GetMean() 
                   << ", width: " << widths[i] << std::endl;
 
-        (*see_data)[i]->GetXaxis()->SetRange(0, see_data->GetNbinsX());
-        (*see_sig)[i]->GetXaxis()->SetRange(0, see_sig->GetNbinsX());
+        (*see_data)[i]->GetXaxis()->SetRange(0, 0);
+        (*see_sig)[i]->GetXaxis()->SetRange(0, 0);
     }
     
     for (auto const& file : signal) {
