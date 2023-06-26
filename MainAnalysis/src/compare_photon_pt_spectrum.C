@@ -231,6 +231,11 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     h_ratio_merge->apply([&](TH1* h) {
         h->Fit("pol1");
+        auto intercept = h->GetFunction("pol1")->GetParameter(0);
+        auto slope = h->GetFunction("pol1")->GetParameter(1);
+
+        std::cout << "slope: " << slope << std::endl;
+        std::cout << "intercept: " << intercept << std::endl;
     });
 
     /* set up figures */
