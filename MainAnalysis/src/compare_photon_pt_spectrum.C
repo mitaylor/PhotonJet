@@ -224,6 +224,17 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     (*h_ratio_merge)[0]->Divide((*h_data_construct_accumulate_merge)[0], (*h_mc_construct_vacillate_merge)[0]);
 
+    /* fit ratios */
+    h_ratio->apply([&](TH1* h, int64_t index) {
+        TF1* f = new TF1("fit", "pol1");
+        h->Fit(label.data(), "Q", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
+    });
+
+    h_ratio_merge->apply([&](TH1* h, int64_t index) {
+        TF1* f = new TF1("fit_merge", "pol1");
+        h->Fit(label.data(), "Q", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
+    });
+
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
