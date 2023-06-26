@@ -151,6 +151,8 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
+    auto pt_shift = conf->get<float>("pt_shift");
+
     auto modulo = conf->get<int64_t>("modulo");
     auto parity = conf->get<bool>("parity");
 
@@ -362,6 +364,8 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
+                pho_et += pt_shift;
+
                 if (pho_et < photon_pt_min) { continue; }
 
                 if (pho_et > leading_pt) {
@@ -436,8 +440,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto weight = pjt->w;
 
-            if (!eff_file.empty() && leading_pt < 70) {
-                auto bin = (*efficiency)[1]->FindBin(leading_pt);
+            if (!eff_file.empty() && leading_pt - pt_shift < 70) {
+                auto bin = (*efficiency)[1]->FindBin(leading_pt - pt_shift);
                 auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
                 if (cor < 1) { std::cout << "error" << std::endl; return -1; }
                 weight *= cor;
