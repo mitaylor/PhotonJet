@@ -314,7 +314,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto incl = new interval(""s, 1, 0., 1.);
     auto itwo = new interval(""s, 2, 0., 2.);
     auto isee = new interval("#sigma_{#eta#eta}"s, rsee[0], rsee[1], rsee[2]);
-    auto isee_cut = new interval("#sigma_{#eta#eta}"s, rsee[0], rsee[1], rsee[2]);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto ftwo = std::bind(&interval::book<TH1F>, itwo, _1, _2, _3);
@@ -382,8 +381,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     /* alter signal template to match data std and mean between 0 and 0.01 */
     for (int64_t i = 0; i < mpthf->size(); ++i) {
-        (*see_data)[i]->GetXaxis()->SetRange(0, h->FindBin(see_max));
-        (*see_sig)[i]->GetXaxis()->SetRange(0, h->FindBin(see_max));
+        (*see_data)[i]->GetXaxis()->SetRange(0, see_data->FindBin(see_max));
+        (*see_sig)[i]->GetXaxis()->SetRange(0, see_sig->FindBin(see_max));
 
         widths[i] = (*see_data)[i]->GetRMS() / (*see_sig)[i]->GetRMS();
         offsets[i] = (*see_data)[i]->GetMean() / widths[i] - (*see_sig)[i]->GetMean();
@@ -391,8 +390,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
         std::cout << "offset: " << (*see_data)[i]->GetMean() - (*see_sig)[i]->GetMean() 
                   << ", width: " << widths[i] << std::endl;
 
-        (*see_data)[i]->GetXaxis()->SetRange(0, h->GetNbinsX());
-        (*see_sig)[i]->GetXaxis()->SetRange(0, h->GetNbinsX());
+        (*see_data)[i]->GetXaxis()->SetRange(0, see_data->GetNbinsX());
+        (*see_sig)[i]->GetXaxis()->SetRange(0, see_sig->GetNbinsX());
     }
     
     for (auto const& file : signal) {
