@@ -69,7 +69,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto jer_up = conf->get<bool>("jer_up");
     auto mc = conf->get<bool>("mc");
 
-    auto photon_pt_weight = conf->get<float>("photon_pt_weight");
+    auto photon_pt_weight = conf->get<std::vector<float>>("photon_pt_weight");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
@@ -294,7 +294,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             }
 
             /* add weight for the number of photons, based on the fraction that are excluded by area */
-            auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
+            auto pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
             /* fill histogram */
             for (int64_t j = 0; j < ihf->size(); ++j) {
