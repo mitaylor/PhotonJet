@@ -53,7 +53,8 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto input_purity_data = conf->get<std::string>("input_purity_data");
     auto input_purity_mc = conf->get<std::string>("input_purity_mc");
 
-    auto purity_label = conf->get<std::string>("purity_label");
+    auto purity_label_data = conf->get<std::string>("purity_label_data");
+    auto purity_label_mc = conf->get<std::string>("purity_label_mc");
 
     auto tag = conf->get<std::string>("tag");
 
@@ -113,8 +114,8 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_mc_populate_nevt = new history<TH1F>(f_populate_mc, "raw_nevt");
     h_mc_populate_nevt->rename("h_mc_populate_nevt");
 
-    auto h_data_purity = new history<TH1F>(f_purity_data, purity_label + "_pthf");
-    auto h_mc_purity = new history<TH1F>(f_purity_mc, tag + "_qcd_pthf");
+    auto h_data_purity = new history<TH1F>(f_purity_data, purity_label_data + "_pthf");
+    auto h_mc_purity = new history<TH1F>(f_purity_mc, purity_label_mc + "_pthf");
 
     /* create intervals and multivals */
     auto mpthf_long = new multival(dpt, dhf);
@@ -262,7 +263,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto hb = new pencil();
     hb->category("type", "data", "analysis_mc", "prior_mc", "ratio");
 
-    auto p1 = new paper(set + "_" + purity_label + "_populate_photon_spectra", hb);
+    auto p1 = new paper(set + "_" + purity_label_data + "_populate_photon_spectra", hb);
     p1->divide(ihf->size(), -1);
     p1->set(paper::flags::logy);
     p1->set(paper::flags::logx);
@@ -273,7 +274,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_data_construct_populate->apply([&](TH1* h) { p1->add(h, "data"); });
     h_mc_construct_populate->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "analysis_mc"); });
 
-    auto p2 = new paper(set + "_" + purity_label + "_accumulate_photon_spectra", hb);
+    auto p2 = new paper(set + "_" + purity_label_data + "_accumulate_photon_spectra", hb);
     p2->divide(ihf->size(), -1);
     p2->set(paper::flags::logy);
     p2->set(paper::flags::logx);
@@ -285,7 +286,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_mc_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "analysis_mc"); });
     h_mc_construct_vacillate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "prior_mc"); });
 
-    auto p3 = new paper(set + "_" + purity_label + "_populate_photon_jet_spectra", hb);
+    auto p3 = new paper(set + "_" + purity_label_data + "_populate_photon_jet_spectra", hb);
     p3->divide(ihf->size(), -1);
     p3->set(paper::flags::logy);
     p3->set(paper::flags::logx);
@@ -296,7 +297,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_data_construct_populate_jet->apply([&](TH1* h) { p3->add(h, "data"); });
     h_mc_construct_populate_jet->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "analysis_mc"); });
 
-    auto p4 = new paper(set + "_" + purity_label + "_accumulate_photon_jet_spectra", hb);
+    auto p4 = new paper(set + "_" + purity_label_data + "_accumulate_photon_jet_spectra", hb);
     p4->divide(ihf->size(), -1);
     p4->set(paper::flags::logy);
     p4->set(paper::flags::logx);
@@ -308,7 +309,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_mc_construct_accumulate_jet->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "analysis_mc"); });
     h_mc_construct_vacillate_jet->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "prior_mc"); });
 
-    auto p5 = new paper(set + "_" + purity_label + "_populate_photon_jet_sub_spectra", hb);
+    auto p5 = new paper(set + "_" + purity_label_data + "_populate_photon_jet_sub_spectra", hb);
     p5->divide(ihf->size(), -1);
     p5->set(paper::flags::logy);
     p5->set(paper::flags::logx);
@@ -319,7 +320,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_data_construct_populate_jet_sub->apply([&](TH1* h) { p5->add(h, "data"); });
     h_mc_construct_populate_jet_sub->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "analysis_mc"); });
 
-    auto p6 = new paper(set + "_" + purity_label + "_accumulate_photon_jet_sub_spectra", hb);
+    auto p6 = new paper(set + "_" + purity_label_data + "_accumulate_photon_jet_sub_spectra", hb);
     p6->divide(ihf->size(), -1);
     p6->set(paper::flags::logy);
     p6->set(paper::flags::logx);
@@ -331,14 +332,14 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     h_mc_construct_accumulate_jet_sub->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "analysis_mc"); });
     h_mc_construct_vacillate_jet->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "prior_mc"); });
 
-    auto p7 = new paper(set + "_" + purity_label + "_photon_spectra_ratio", hb);
+    auto p7 = new paper(set + "_" + purity_label_data + "_photon_spectra_ratio", hb);
     p7->divide(ihf->size(), -1);
     p7->accessory(hf_info);
     p7->accessory(kinematics);
     apply_style(p7, cms, system_tag);
     h_ratio->apply([&](TH1* h) { p7->add(h, "ratio"); });
 
-    auto p8 = new paper(set + "_" + purity_label + "_accumulate_photon_spectra_merge", hb);
+    auto p8 = new paper(set + "_" + purity_label_data + "_accumulate_photon_spectra_merge", hb);
     p8->set(paper::flags::logy);
     p8->set(paper::flags::logx);
     p8->accessory(range_info);
@@ -347,7 +348,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p8->add((*h_data_construct_accumulate_merge)[0], "data");
     p8->stack((*h_mc_construct_vacillate_merge)[0], "prior_mc");
 
-    auto p9 = new paper(set + "_" + purity_label + "_photon_spectra_ratio_merge", hb);
+    auto p9 = new paper(set + "_" + purity_label_data + "_photon_spectra_ratio_merge", hb);
     p9->accessory(range_info);
     p9->accessory(kinematics);
     apply_style(p9, cms, system_tag);
