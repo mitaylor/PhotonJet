@@ -155,8 +155,6 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
                 if (!electron) { continue; }
 
-                std::cout << "electron 1" << std::endl;
-
                 for (int64_t k = j + 1; k < p->nPho; ++k) {
                     if ((*p->phoEt)[k] < 15) //15
                         continue;
@@ -190,8 +188,6 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     }
 
                     if (!electron) { continue; }
-
-                    std::cout << "electron 2" << std::endl;
 
                     float phoEt_j = (*p->phoEt)[j];
                     if ((*p->phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*p->phoEtErNew)[j];
