@@ -51,19 +51,19 @@ double f_double_sided_crystal_ball(double* x, double* params) {
     return n * A2 * TMath::Power(B2 + u, -n2);
 }
 
-double f_cms_shape(double* x, double* params) {
-    double x0 = x[0];
-    double n = params[0];
-    double alpha = params[1];
-    double beta = params[2];
-    double gamma = params[3];
+// double f_cms_shape(double* x, double* params) {
+//     double x0 = x[0];
+//     double n = params[0];
+//     double alpha = params[1];
+//     double beta = params[2];
+//     double gamma = params[3];
 
-    return n * TMath::Erfc((alpha - x0) * beta)
-        * TMath::Exp((91.1876 - x0) * gamma);
-}
+//     return n * TMath::Erfc((alpha - x0) * beta)
+//         * TMath::Exp((91.1876 - x0) * gamma);
+// }
 
 double f_combined(double* x, double* params) {
-    return f_double_sided_crystal_ball(x, params) + f_cms_shape(x, &params[7]);
+    return f_double_sided_crystal_ball(x, params); //+ f_cms_shape(x, &params[7]);
 }
 
 static std::string index_to_string(int64_t i, int64_t j) {
@@ -124,7 +124,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
             std::vector<float> masses;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
-                if ((*p->phoEt)[j] < 15) //15
+                if ((*p->phoEt)[j] < 20) //15
                     continue;
                 if (std::abs((*p->phoSCEta)[j]) > 1.4442)
                     continue;
@@ -156,13 +156,11 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                 if (!electron) { continue; }
 
                 for (int64_t k = j + 1; k < p->nPho; ++k) {
-                    if ((*p->phoEt)[k] < 15) //15
+                    if ((*p->phoEt)[k] < 20) //15
                         continue;
                     if (std::abs((*p->phoSCEta)[k]) > 1.4442)
                         continue;
                     if (heavyion && in_pho_failure_region(p, k))
-                        continue;
-                    if ((*p->phoEt)[k] < 40 && (*p->phoEt)[j] < 40)
                         continue;
 
                     if ((*p->phoHoverE)[k] > hovere_max) { continue; }
@@ -222,7 +220,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     }
 
     TF1** fits[1] = { new TF1*[ihf->size()] };
-    TF1** fbkg[1] = { new TF1*[ihf->size()] };
+    // TF1** fbkg[1] = { new TF1*[ihf->size()] };
 
     for (int64_t i = 0; i < 1; ++i) {
         for (int64_t j = 0; j < ihf->size(); ++j) {
@@ -241,13 +239,13 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
             conf->set<float>("mean_"s + istr, fits[i][j]->GetParameter(1));
             conf->set<float>("sigma_"s + istr, fits[i][j]->GetParameter(2));
 
-            fbkg[i][j] = new TF1(("f_bkg_"s + istr).data(),
-                f_cms_shape, 60, 120, 4);
+            // fbkg[i][j] = new TF1(("f_bkg_"s + istr).data(),
+            //    f_cms_shape, 60, 120, 4);
 
             double pars[11] = { 0 };
             fits[i][j]->GetParameters(pars);
-            fbkg[i][j]->SetParameters(&pars[7]);
-            fbkg[i][j]->SetLineStyle(7);
+            // fbkg[i][j]->SetParameters(&pars[7]);
+            // fbkg[i][j]->SetLineStyle(7);
         }
     }
 
@@ -272,7 +270,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
         sprintf(buffer, "sigma: %.2f", sigma);
         info->DrawLatexNDC(0.675, 0.75, buffer);
 
-        fbkg[i][j]->Draw("same");
+        // fbkg[i][j]->Draw("same");
     };
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
@@ -284,7 +282,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.85, "p_{T,1}^{#gamma} > 15 GeV, p_{T,2}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44");
+            l->DrawLatexNDC(0.865, 0.85, "p_{T,1}^{#gamma} > 20 GeV, p_{T,2}^{#gamma} > 20 GeV, |#eta^{#gamma}| < 1.44");
         }
     };
 
