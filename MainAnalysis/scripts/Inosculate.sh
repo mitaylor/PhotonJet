@@ -16,13 +16,13 @@ run_aa() {
     ./bin/inosculate_ele configs/inosculate/preapproval/inosculate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/inosculate_ele_${tag}.root > log/${set}_inosculate_ele_${tag}.txt 2>&1 &
 }
 
-samples=(pp pp_qcd)
+samples=(pp)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(aa aa_qcd)
+samples=(aa)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}

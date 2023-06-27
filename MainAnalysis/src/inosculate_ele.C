@@ -86,10 +86,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     auto set = sel->get<std::string>("set");
 
     auto heavyion = sel->get<bool>("heavyion");
-
     auto const hovere_max = sel->get<float>("hovere_max");
-    auto const see_min = sel->get<float>("see_min");
-    auto const see_max = sel->get<float>("see_max");
 
     auto hf_min = dhf.front();
 
@@ -135,9 +132,9 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     continue;
 
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-                if ((*p->phoSigmaIEtaIEta_2012)[j] > see_max
-                    || (*p->phoSigmaIEtaIEta_2012)[j] < see_min)
-                { continue; }
+                if ((*p->phoSigmaIEtaIEta_2012)[j] > 0.011) { continue; }
+
+                auto pho_phi = convert_radian((*p->phoPhi)[j]);
 
                 bool electron = false;
                 for (int64_t l = 0; l < p->nEle; ++l) {
@@ -147,7 +144,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     if (deta > 0.1) { continue; }
 
                     auto ele_phi = convert_radian((*p->elePhi)[l]);
-                    auto dphi = revert_radian(convert_radian((*p->phoPhi)[j]) - ele_phi);
+                    auto dphi = revert_radian(pho_phi - ele_phi);
                     auto dr2 = deta * deta + dphi * dphi;
 
                     if (dr2 < 0.01 && passes_electron_id<
@@ -157,6 +154,8 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                 }
 
                 if (!electron) { continue; }
+
+                std::cout << "electron 1" << std::endl;
 
                 for (int64_t k = j + 1; k < p->nPho; ++k) {
                     if ((*p->phoEt)[k] < 15) //15
@@ -169,9 +168,9 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                         continue;
 
                     if ((*p->phoHoverE)[k] > hovere_max) { continue; }
-                    if ((*p->phoSigmaIEtaIEta_2012)[k] > see_max
-                        || (*p->phoSigmaIEtaIEta_2012)[k] < see_min)
-                    { continue; }
+                    if ((*p->phoSigmaIEtaIEta_2012)[k] > 0.011) { continue; }
+
+                    auto pho_phi = convert_radian((*p->phoPhi)[k]);
 
                     bool electron = false;
                     for (int64_t l = 0; l < p->nEle; ++l) {
@@ -181,7 +180,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                         if (deta > 0.1) { continue; }
 
                         auto ele_phi = convert_radian((*p->elePhi)[l]);
-                        auto dphi = revert_radian(convert_radian((*p->phoPhi)[k]) - ele_phi);
+                        auto dphi = revert_radian(pho_phi - ele_phi);
                         auto dr2 = deta * deta + dphi * dphi;
 
                         if (dr2 < 0.01 && passes_electron_id<
@@ -192,6 +191,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
                     if (!electron) { continue; }
 
+                    std::cout << "electron 2" << std::endl;
 
                     float phoEt_j = (*p->phoEt)[j];
                     if ((*p->phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*p->phoEtErNew)[j];
