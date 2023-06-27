@@ -12,6 +12,7 @@
 
 #include "../git/tricks-and-treats/include/maglev.h"
 #include "../git/tricks-and-treats/include/trunk.h"
+#include "../git/tricks-and-treats/include/overflow_angles.h"
 
 #include "TF1.h"
 #include "TFile.h"
@@ -142,11 +143,11 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                 for (int64_t l = 0; l < p->nEle; ++l) {
                     if (std::abs((*p->eleSCEta)[l]) > 1.4442) { continue; }
 
-                    auto deta = (*pjt->phoEta)[j] - (*p->eleEta)[l];
+                    auto deta = (*p->phoEta)[j] - (*p->eleEta)[l];
                     if (deta > 0.1) { continue; }
 
                     auto ele_phi = convert_radian((*p->elePhi)[l]);
-                    auto dphi = revert_radian(convert_radian((*pjt->phoPhi)[j]) - ele_phi);
+                    auto dphi = revert_radian(convert_radian((*p->phoPhi)[j]) - ele_phi);
                     auto dr2 = deta * deta + dphi * dphi;
 
                     if (dr2 < 0.01 && passes_electron_id<
@@ -176,11 +177,11 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     for (int64_t l = 0; l < p->nEle; ++l) {
                         if (std::abs((*p->eleSCEta)[l]) > 1.4442) { continue; }
 
-                        auto deta = (*pjt->phoEta)[k] - (*p->eleEta)[l];
+                        auto deta = (*p->phoEta)[k] - (*p->eleEta)[l];
                         if (deta > 0.1) { continue; }
 
                         auto ele_phi = convert_radian((*p->elePhi)[l]);
-                        auto dphi = revert_radian(convert_radian((*pjt->phoPhi)[k]) - ele_phi);
+                        auto dphi = revert_radian(convert_radian((*p->phoPhi)[k]) - ele_phi);
                         auto dr2 = deta * deta + dphi * dphi;
 
                         if (dr2 < 0.01 && passes_electron_id<
