@@ -286,10 +286,9 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 }
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        printf("usage: %s [config] [output]\n", argv[0]);
-        return 1;
-    }
+    if (argc == 4)
+        return inosculate(argv[1], argv[2], argv[3]);
 
-    return inosculate(argv[1], argv[2]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    return 1;
 }
