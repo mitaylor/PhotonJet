@@ -69,20 +69,26 @@ static std::string index_to_string(int64_t i, int64_t j) {
     return std::to_string(i) + "_"s + std::to_string(j);
 }
 
-int64_t inosculate(char const* config, char const* output) {
+int64_t inosculate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::vector<std::string>>("input");
     auto tag = conf->get<std::string>("tag");
-    auto heavyion = conf->get<bool>("heavyion");
     auto use_er = conf->get<bool>("use_er");
-
-    auto const hovere_max = conf->get<float>("hovere_max");
-    auto const see_min = conf->get<float>("see_min");
-    auto const see_max = conf->get<float>("see_max");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+    /* selections */
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto const hovere_max = sel->get<float>("hovere_max");
+    auto const see_min = sel->get<float>("see_min");
+    auto const see_max = sel->get<float>("see_max");
 
     auto hf_min = dhf.front();
 
