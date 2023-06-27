@@ -24,6 +24,14 @@ for sample in ${samples[@]}; do
     done
 done
 
+samples=(pp)
+
+for sample in ${samples[@]}; do
+    for syst in er; do
+        run_pp ${sample}_${syst}
+    done
+done
+
 samples=(aa)
 
 for sample in ${samples[@]}; do
@@ -37,7 +45,7 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    for syst in mebs qcd_mebs; do
+    for syst in mebs qcd_mebs no_er; do
         run_aa ${sample}_${syst}
     done
 done
