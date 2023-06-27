@@ -59,3 +59,5 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa ${sample}
 done
+
+./bin/compare_photon_pt_spectrum_mc configs/compare_photon_pt_spectrum/compare_photon_pt_spectrum_mc.conf configs/analysis/pho_40/analysis_pp.conf data/preapproval/photon_pt_weight_mc.root

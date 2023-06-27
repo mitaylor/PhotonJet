@@ -59,8 +59,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto purity_label_aa = conf->get<std::string>("purity_label_aa");
     auto purity_label_pp = conf->get<std::string>("purity_label_pp");
 
-    auto tag = conf->get<std::string>("tag");
-
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -137,19 +135,19 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
 
     auto h_aa_construct_accumulate = new history<TH1F>("h_aa_construct_accumulate"s, "", fpt, ihf->size());
-    auto h_pp_construct_accumulate = new history<TH1F>("h_pp_construct_accumulate"s, "", fpt, ihf->size());
+    auto h_pp_construct_accumulate = new history<TH1F>("h_pp_construct_accumulate"s, "", fpt, 1);
 
     auto h_aa_construct_accumulate_jet = new history<TH1F>("h_aa_construct_accumulate_jet"s, "", fpt, ihf->size());
-    auto h_pp_construct_accumulate_jet = new history<TH1F>("h_pp_construct_accumulate_jet"s, "", fpt, ihf->size());
+    auto h_pp_construct_accumulate_jet = new history<TH1F>("h_pp_construct_accumulate_jet"s, "", fpt, 1);
 
     auto h_aa_construct_accumulate_jet_sub = new history<TH1F>("h_aa_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
-    auto h_pp_construct_accumulate_jet_sub = new history<TH1F>("h_pp_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
+    auto h_pp_construct_accumulate_jet_sub = new history<TH1F>("h_pp_construct_accumulate_jet_sub"s, "", fpt, 1);
 
     auto h_aa_accumulate = new history<TH1F>("h_aa_accumulate"s, "", fpt, ihf->size());
-    auto h_pp_accumulate = new history<TH1F>("h_pp_accumulate"s, "", fpt, ihf->size());
+    auto h_pp_accumulate = new history<TH1F>("h_pp_accumulate"s, "", fpt, 1);
 
     auto h_aa_populate = new history<TH1F>("h_aa_populate"s, "", fpt, ihf->size());
-    auto h_pp_populate = new history<TH1F>("h_pp_populate"s, "", fpt, ihf->size());
+    auto h_pp_populate = new history<TH1F>("h_pp_populate"s, "", fpt, 1);
 
     /* set histogram contents */
     for (int64_t i = 0; i < ihf->size(); ++i) {
@@ -161,36 +159,48 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
                     (*h_aa_construct_populate)[i]->GetBinContent(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
             (*h_aa_construct_accumulate)[i]->SetBinError(j+1, 
                     (*h_aa_construct_populate)[i]->GetBinError(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
-            (*h_pp_construct_accumulate)[i]->SetBinContent(j+1, 
-                    (*h_pp_construct_populate)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
-            (*h_pp_construct_accumulate)[i]->SetBinError(j+1, 
-                    (*h_pp_construct_populate)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
 
             (*h_aa_construct_accumulate_jet)[i]->SetBinContent(j+1, 
                     (*h_aa_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
             (*h_aa_construct_accumulate_jet)[i]->SetBinError(j+1, 
                     (*h_aa_construct_populate_jet)[i]->GetBinError(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
-            (*h_pp_construct_accumulate_jet)[i]->SetBinContent(j+1, 
-                    (*h_pp_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
-            (*h_pp_construct_accumulate_jet)[i]->SetBinError(j+1, 
-                    (*h_pp_construct_populate_jet)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
 
             (*h_aa_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
                     (*h_aa_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
             (*h_aa_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
                     (*h_aa_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
+
+            (*h_aa_accumulate)[i]->SetBinContent(j+1, (*h_aa_accumulate_nevt)[index_trunc]->GetBinContent(1));
+            (*h_aa_accumulate)[i]->SetBinError(j+1, (*h_aa_accumulate_nevt)[index_trunc]->GetBinError(1));
+
+            (*h_aa_populate)[i]->SetBinContent(j+1, (*h_aa_populate_nevt)[index_long]->GetBinContent(1));
+            (*h_aa_populate)[i]->SetBinError(j+1, (*h_aa_populate_nevt)[index_long]->GetBinError(1));
+        }
+    }
+
+    for (int64_t i = 0; i < 1; ++i) {
+        for (int j = 0; j < ipt->size(); ++j) {
+            auto index_long = mpthf_long->index_for(x{j, i});
+            auto index_trunc = mpthf_trunc->index_for(x{j, i});
+
+            (*h_pp_construct_accumulate)[i]->SetBinContent(j+1, 
+                    (*h_pp_construct_populate)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
+            (*h_pp_construct_accumulate)[i]->SetBinError(j+1, 
+                    (*h_pp_construct_populate)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
+
+            (*h_pp_construct_accumulate_jet)[i]->SetBinContent(j+1, 
+                    (*h_pp_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
+            (*h_pp_construct_accumulate_jet)[i]->SetBinError(j+1, 
+                    (*h_pp_construct_populate_jet)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
+
             (*h_pp_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
                     (*h_pp_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
             (*h_pp_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
                     (*h_pp_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
 
-            (*h_aa_accumulate)[i]->SetBinContent(j+1, (*h_aa_accumulate_nevt)[index_trunc]->GetBinContent(1));
-            (*h_aa_accumulate)[i]->SetBinError(j+1, (*h_aa_accumulate_nevt)[index_trunc]->GetBinError(1));
             (*h_pp_accumulate)[i]->SetBinContent(j+1, (*h_pp_accumulate_nevt)[index_trunc]->GetBinContent(1));
             (*h_pp_accumulate)[i]->SetBinError(j+1, (*h_pp_accumulate_nevt)[index_trunc]->GetBinError(1));
 
-            (*h_aa_populate)[i]->SetBinContent(j+1, (*h_aa_populate_nevt)[index_long]->GetBinContent(1));
-            (*h_aa_populate)[i]->SetBinError(j+1, (*h_aa_populate_nevt)[index_long]->GetBinError(1));
             (*h_pp_populate)[i]->SetBinContent(j+1, (*h_pp_populate_nevt)[index_long]->GetBinContent(1));
             (*h_pp_populate)[i]->SetBinError(j+1, (*h_pp_populate_nevt)[index_long]->GetBinError(1));
         }
@@ -261,72 +271,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto hb = new pencil();
     hb->category("type", "aa", "pp", "ratio");
 
-    auto p1 = new paper(set + "_mc_populate_photon_spectra", hb);
-    p1->divide(ihf->size(), -1);
-    p1->set(paper::flags::logy);
-    p1->set(paper::flags::logx);
-    p1->accessory(hf_info);
-    p1->accessory(kinematics);
-    apply_style(p1, cms, system_tag);
-    
-    h_aa_construct_populate->apply([&](TH1* h) { p1->add(h, "aa"); });
-    h_pp_construct_populate->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "pp"); });
-
-    auto p2 = new paper(set + "_mc_accumulate_photon_spectra", hb);
-    p2->divide(ihf->size(), -1);
-    p2->set(paper::flags::logy);
-    p2->set(paper::flags::logx);
-    p2->accessory(hf_info);
-    p2->accessory(kinematics);
-    apply_style(p2, cms, system_tag);
-    
-    h_aa_construct_accumulate->apply([&](TH1* h) { p2->add(h, "aa"); });
-    h_pp_construct_accumulate->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "pp"); });
-
-    auto p3 = new paper(set + "_mc_populate_photon_jet_spectra", hb);
-    p3->divide(ihf->size(), -1);
-    p3->set(paper::flags::logy);
-    p3->set(paper::flags::logx);
-    p3->accessory(hf_info);
-    p3->accessory(kinematics);
-    apply_style(p3, cms, system_tag);
-    
-    h_aa_construct_populate_jet->apply([&](TH1* h) { p3->add(h, "aa"); });
-    h_pp_construct_populate_jet->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "pp"); });
-
-    auto p4 = new paper(set + "_mc_accumulate_photon_jet_spectra", hb);
-    p4->divide(ihf->size(), -1);
-    p4->set(paper::flags::logy);
-    p4->set(paper::flags::logx);
-    p4->accessory(hf_info);
-    p4->accessory(kinematics);
-    apply_style(p4, cms, system_tag);
-    
-    h_aa_construct_accumulate_jet->apply([&](TH1* h) { p4->add(h, "aa"); });
-    h_pp_construct_accumulate_jet->apply([&](TH1* h, int64_t index) { p4->stack(index + 1, h, "pp"); });
-
-    auto p5 = new paper(set + "_mc_populate_photon_jet_sub_spectra", hb);
-    p5->divide(ihf->size(), -1);
-    p5->set(paper::flags::logy);
-    p5->set(paper::flags::logx);
-    p5->accessory(hf_info);
-    p5->accessory(kinematics);
-    apply_style(p5, cms, system_tag);
-    
-    h_aa_construct_populate_jet_sub->apply([&](TH1* h) { p5->add(h, "aa"); });
-    h_pp_construct_populate_jet_sub->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "pp"); });
-
-    auto p6 = new paper(set + "_mc_accumulate_photon_jet_sub_spectra", hb);
-    p6->divide(ihf->size(), -1);
-    p6->set(paper::flags::logy);
-    p6->set(paper::flags::logx);
-    p6->accessory(hf_info);
-    p6->accessory(kinematics);
-    apply_style(p6, cms, system_tag);
-    
-    h_aa_construct_accumulate_jet_sub->apply([&](TH1* h) { p6->add(h, "aa"); });
-    h_pp_construct_accumulate_jet_sub->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "pp"); });
-
     auto p7 = new paper(set + "_mc_vacillate_photon_spectra_merge", hb);
     p7->set(paper::flags::logy);
     p7->set(paper::flags::logx);
@@ -359,12 +303,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     hb->sketch();
 
-    p1->draw("pdf");
-    p2->draw("pdf");
-    p3->draw("pdf");
-    p4->draw("pdf");
-    p5->draw("pdf");
-    p6->draw("pdf");
     p7->draw("pdf");
     p8->draw("pdf");
     p9->draw("pdf");
