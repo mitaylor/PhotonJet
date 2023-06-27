@@ -251,9 +251,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
-    auto hf_info = [&](int64_t index) {
-        info_text(index, 0.70, "Cent. %i - %i%%", dcent, true); };
-
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
     auto range_info = [&](int64_t index) {
         info_text(index, 0.70, "Cent. %i - %i%%", drange, true); };
