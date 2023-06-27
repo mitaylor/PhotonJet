@@ -47,6 +47,9 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto input_accumulate_data = conf->get<std::string>("input_accumulate_data");
     auto input_accumulate_mc = conf->get<std::string>("input_accumulate_mc");
 
+    auto accumulate_label_data = conf->get<std::string>("accumulate_label_data");
+    auto accumulate_label_mc = conf->get<std::string>("accumulate_label_mc");
+
     auto input_populate_data = conf->get<std::string>("input_populate_data");
     auto input_populate_mc = conf->get<std::string>("input_populate_mc");
 
@@ -104,9 +107,9 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_mc_construct_vacillate_jet = new history<TH1F>(f_mc, "raw_mc_spectrum_photon_jet");
     h_mc_construct_vacillate_jet->rename("h_mc_construct_vacillate_jet");
 
-    auto h_data_accumulate_nevt = new history<TH1F>(f_accumulate_data, tag + "_nominal_s_pure_raw_nevt");
+    auto h_data_accumulate_nevt = new history<TH1F>(f_accumulate_data, accumulate_label_data);
     h_data_accumulate_nevt->rename("h_data_accumulate_nevt");
-    auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, tag + "_qcd_nominal_s_pure_raw_nevt");
+    auto h_mc_accumulate_nevt = new history<TH1F>(f_accumulate_mc, accumulate_label_mc);
     h_mc_accumulate_nevt->rename("h_mc_accumulate_nevt");
 
     auto h_data_populate_nevt = new history<TH1F>(f_populate_data, "raw_nevt");
