@@ -276,6 +276,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto rho_label = conf->get<std::string>("rho_label");
 
     auto apply_er = conf->get<bool>("apply_er");
+    auto apply_es = conf->get<bool>("apply_es");
     auto mc = conf->get<bool>("mc");
 
     auto noniso_min = conf->get<float>("noniso_min");
@@ -295,7 +296,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto base = sel->get<std::string>("base");
 
     auto heavyion = sel->get<bool>("heavyion");
-    auto apply_es = conf->get<bool>("apply_es");
 
     auto gen_iso_max = sel->get<float>("gen_iso_max");
     auto see_max = sel->get<float>("see_max");
