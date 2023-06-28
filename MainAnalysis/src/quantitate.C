@@ -252,7 +252,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }, before_folds);
 
     /* prepare the post-unfolded data */
-
     auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
