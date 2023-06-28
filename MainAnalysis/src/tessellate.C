@@ -35,7 +35,8 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
                 bool heavyion, bool apply_er,
                float pt_min, float photon_eta_abs, float hovere_max, float hf_min, float hf_max,
                float iso_max, float noniso_min, float noniso_max, 
-               history<TH1F>* rho_weighting, history<TH1F>* efficiency, bool mc) {
+               history<TH1F>* rho_weighting, history<TH1F>* efficiency, bool mc, 
+               bool apply_es, std::vector<float> photon_pt_es) {
     printf("fill data\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -44,8 +45,13 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         t->GetEntry(i);
 
-        if (!mc && p->hiHF <= hf_min) { continue; }
-        if (!mc && p->hiHF > hf_max) { continue; }
+        double hf = p->hiHF;
+        auto hf_x = ihf->index_for(hf);
+
+        if (!mc && hf <= hf_min) { continue; }
+        if (!mc && hf > hf_max) { continue; }
+
+        auto photon_es = (apply_es && !mc) ? photon_pt_es[hf_x] : 1;
 
         int64_t leading = -1;
         float leading_pt = 0;
@@ -58,6 +64,8 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
             
             if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
             if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+
+            if (apply_es && !mc) pho_et *= photon_es;
 
             if (pho_et < pt_min) { continue; }
 
@@ -83,7 +91,6 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         // determine indices of photon pT and centrality to fill
         auto pt_x = ipt->index_for(leading_pt);
-        auto hf_x = ihf->index_for(p->hiHF);
 
         std::vector<int64_t> pthf_x;
         if (mc) {
@@ -97,8 +104,8 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         // efficiency and rho weighting corrections
         auto weight = p->w;
 
-        if (efficiency != nullptr && leading_pt < 70) {
-            auto bin = (*efficiency)[1]->FindBin(leading_pt);
+        if (efficiency != nullptr && leading_pt / photon_es < 70) {
+            auto bin = (*efficiency)[1]->FindBin(leading_pt / photon_es);
             auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
             if (cor < 1) { std::cout << "error" << std::endl; return; }
             weight *= cor;
@@ -288,6 +295,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto base = sel->get<std::string>("base");
 
     auto heavyion = sel->get<bool>("heavyion");
+    auto apply_es = conf->get<bool>("apply_es");
 
     auto gen_iso_max = sel->get<float>("gen_iso_max");
     auto see_max = sel->get<float>("see_max");
@@ -297,6 +305,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto iso_max = sel->get<float>("iso_max");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
+    auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
     auto dpt_short = dpt;
     dpt_short.pop_back();
@@ -357,7 +367,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
         fill_data(see_data, see_bkg, mpthf, ipt, ihf, td, pd, heavyion, apply_er,
                 pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
-                noniso_min, noniso_max, rho_weighting, efficiency, mc && heavyion);
+                noniso_min, noniso_max, rho_weighting, efficiency, mc && heavyion,
+                apply_es, photon_pt_es);
     }
 
     for (auto const& file : signal) {

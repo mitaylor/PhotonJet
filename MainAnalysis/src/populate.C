@@ -370,7 +370,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-                if (apply_es) pho_et *= photon_es;
+                pho_et *= photon_es;
 
                 if (pho_et < photon_pt_min) { continue; }
 
