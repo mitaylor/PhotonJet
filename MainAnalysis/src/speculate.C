@@ -37,6 +37,7 @@ int speculate(char const* config, char const* selections, char const* output) {
     auto mc_branches = conf->get<bool>("mc_branches");
     auto ele_rej = conf->get<bool>("ele_rej");
     auto apply_er = conf->get<bool>("apply_er");
+    auto photon_es = conf->get<bool>("photon_es");
 
     auto rpt = conf->get<std::vector<float>>("pt_range");
 
@@ -52,6 +53,8 @@ int speculate(char const* config, char const* selections, char const* output) {
     auto const see_min = sel->get<float>("see_min");
     auto const see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
+
+    auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
     /* load forest */
     TFile* f = new TFile(input.data(), "read");
@@ -83,6 +86,8 @@ int speculate(char const* config, char const* selections, char const* output) {
             float pho_et = (*p->phoEt)[j];
             if (pho_et > 30 && heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
             if (pho_et > 30 && !heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+
+            if (photon_es) pho_et *= photon_pt_es[0]
 
             if (pho_et > leading_pt) {
                 leading = j;

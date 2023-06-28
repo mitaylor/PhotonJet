@@ -14,13 +14,13 @@ run_aa() {
     ./bin/speculate configs/speculate/preapproval/speculate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/speculate_${tag}.root > log/${set}_speculate_${tag}.txt 2>&1 &
 }
 
-samples=(pp pp_er)
+samples=(pp pp_er pp_es)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(aa aa_no_er)
+samples=(aa aa_no_er aa_es)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
