@@ -146,28 +146,30 @@ int get_chi_square_iteration_files(char const* config, char const* selections, c
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare fold from pre-unfolded data */
-    auto stub = "_"s + before_folds[0];
+    for (size_t i = 0; i < before_folds.size(); ++i) {
+        auto stub = "_"s + before_folds[i];
 
-    auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
-    auto shape = hin->shape();
+        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
+        auto shape = hin->shape();
 
-    auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
-    auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
+        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
+        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
 
-    for (int64_t i = 0; i < hin->size(); ++i) {
-        (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
-        (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
+        for (int64_t i = 0; i < hin->size(); ++i) {
+            (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
+            (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
+        }
+
+        normalise_to_unity(side0, side1);
+
+        hin->rename(tag + "_"s + before_label + stub);
+        side0->rename(tag + "_"s + before_label + stub + "_side0"s);
+        side1->rename(tag + "_"s + before_label + stub + "_side1"s);
+
+        hin->save();
+        side0->save();
+        side1->save();
     }
-
-    normalise_to_unity(side0, side1);
-
-    hin->rename(tag + "_"s + before_label + stub);
-    side0->rename(tag + "_"s + before_label + stub + "_side0"s);
-    side1->rename(tag + "_"s + before_label + stub + "_side1"s);
-
-    hin->save();
-    side0->save();
-    side1->save();
 
     /* prepare the refolded data */
     std::vector<int64_t> iteration {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
