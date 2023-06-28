@@ -12,7 +12,7 @@ run_aa() {
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    for syst in no_er; do
+    for syst in es; do
         run_aa populate_${sample}_${syst}_raw
         run_aa populate_${sample}_${syst}_bkg
     done
