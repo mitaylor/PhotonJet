@@ -27,7 +27,7 @@ done
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    for syst in er; do
+    for syst in er es; do
         run_pp ${sample}_${syst}
     done
 done
@@ -37,7 +37,7 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa $sample
 
-    for syst in qcd qcd_gen_iso wo_ele_rej tight_purity loose_purity cent_up cent_down; do
+    for syst in qcd qcd_gen_iso wo_ele_rej tight_purity loose_purity cent_up cent_down es; do
         run_aa ${sample}_${syst}
     done
 done
