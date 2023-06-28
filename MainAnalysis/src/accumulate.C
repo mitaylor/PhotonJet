@@ -124,10 +124,10 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_f_jpt_merge = pjet_f_jpt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_dr_merge = pjet_u_dr_d_hf->extend("merge", 0, 1)->sum(1);
 
-    nevt_merge->rename(label + "_raw_nevt_merge"s);
-    pjet_f_dr_merge->rename(label + "_raw_sub_pjet_f_dr_merge"s);
-    pjet_f_jpt_merge->rename(label + "_raw_sub_pjet_f_jpt_merge"s);
-    pjet_u_dr_merge->rename(label + "_raw_sub_pjet_u_dr_merge"s);
+    nevt_merge->rename("s_" + label + "_raw_nevt_merge"s);
+    pjet_f_dr_merge->rename("s_" + label + "_raw_sub_pjet_f_dr_merge"s);
+    pjet_f_jpt_merge->rename("s_" + label + "_raw_sub_pjet_f_jpt_merge"s);
+    pjet_u_dr_merge->rename("s_" + label + "_raw_sub_pjet_u_dr_merge"s);
 
     /* normalise by number of signal photons (events) */
     pjet_f_dr->divide(*nevt);
