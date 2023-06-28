@@ -45,7 +45,7 @@ run_aa() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    for syst in er; do
+    for syst in es; do
         run_pp ${sample}_${syst}
     done
 done
@@ -53,7 +53,7 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    for syst in no_er; do
+    for syst in es; do
         run_aa ${sample}_${syst}
     done
 done
