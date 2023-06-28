@@ -151,8 +151,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
-    auto pt_shift = conf->get<float>("pt_shift");
-
     auto modulo = conf->get<int64_t>("modulo");
     auto parity = conf->get<bool>("parity");
 
@@ -166,6 +164,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
+    auto apply_es = conf->get<bool>("apply_es");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
@@ -202,6 +201,8 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rptr = sel->get<std::vector<float>>("ptr_range");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
+    auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
     auto alter_base = conf->get<std::string>("alter_base"); // get offset to paths from the original configuration file
 
@@ -349,9 +350,14 @@ int populate(char const* config, char const* selections, char const* output) {
 
             t->GetEntry(i);
 
-            if (rho_file.empty() && pjt->hiHF <= dhf.front()) { continue; }
-            if (rho_file.empty() && pjt->hiHF >= dhf.back()) { continue; }
+            double hf = pjt->hiHF;
+            auto hf_x = ihf->index_for(hf);
+
+            if (rho_file.empty() && hf <= dhf.front()) { continue; }
+            if (rho_file.empty() && hf >= dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
+
+            auto photon_es = (apply_es) ? photon_pt_es[hf_x] : 1;
 
             int64_t leading = -1;
             float leading_pt = 0;
@@ -364,7 +370,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-                pho_et += pt_shift;
+                if (apply_es) pho_et *= photon_es;
 
                 if (pho_et < photon_pt_min) { continue; }
 
@@ -426,9 +432,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto pt_x = ipt->index_for(leading_pt);
 
-            double hf = pjt->hiHF;
-            auto hf_x = ihf->index_for(hf);
-
             std::vector<int64_t> pthf_x;
             if (!rho_file.empty()) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
@@ -440,8 +443,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto weight = pjt->w;
 
-            if (!eff_file.empty() && leading_pt - pt_shift < 70) {
-                auto bin = (*efficiency)[1]->FindBin(leading_pt - pt_shift);
+            if (!eff_file.empty() && leading_pt / photon_es < 70) {
+                auto bin = (*efficiency)[1]->FindBin(leading_pt / photon_es);
                 auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
                 if (cor < 1) { std::cout << "error" << std::endl; return -1; }
                 weight *= cor;
