@@ -244,13 +244,11 @@ int sum_iteration(char const* config, char const* selections, char const* output
     apply_style(p2, cms, system_tag);
     p2->set(paper::flags::logy);
 
-    for (int64_t i = 0; i < preunfold->size(); ++i) {
-        (*sum_merge)[i]->SetMinimum((*sum_diff)[i]->GetMinimum());
+    (*sum_merge)[0]->SetMinimum((*sum_diff)[0]->GetMinimum());
 
-        p2->add((*sum_merge)[0], "total");
-        p2->stack((*sum_stat_merge)[0], "stat");
-        p2->stack((*sum_diff_merge)[0], "diff");
-    }
+    p2->add((*sum_merge)[0], "total");
+    p2->stack((*sum_stat_merge)[0], "stat");
+    p2->stack((*sum_diff_merge)[0], "diff");
 
     hb->sketch();
     p1->draw("pdf");
