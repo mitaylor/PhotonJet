@@ -441,9 +441,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*r)[k]->Fill(r_x, weights[k] * cor * data_weight[k]);
-                        (*cdr)[k]->Fill(rdr, gdr, weights[k] * cor * data_weight[k]);
-                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor * data_weight[k]);
-                        (*c)[k]->Fill(r_x, g_x, weights[k] * cor * data_weight[k]);
+                        (*cdr)[k]->Fill(rdr, gdr, weights[k] * cor);
+                        (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor);
+                        (*c)[k]->Fill(r_x, g_x, weights[k] * cor);
                     }
                 } else {
                     /* missed */

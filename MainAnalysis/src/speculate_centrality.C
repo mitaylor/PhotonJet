@@ -1,6 +1,7 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -165,6 +166,7 @@ int speculate(char const* config, char const* selections, char const* output) {
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         eff[i] = new TGraphAsymmErrors((*numerator)[i], (*denominator)[i], "cl=0.683 b(1,1) mode");
+        eff[i]->SetName()
         eff[i]->GetYaxis()->SetTitle("L1+HLT efficiency");
         eff[i]->GetXaxis()->SetTitle("photon p_{T}");
     }
