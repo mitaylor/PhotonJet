@@ -99,8 +99,8 @@ int sum_iteration(char const* config, char const* selections, char const* output
                 auto stat = (*unfold)[j]->GetBinError(k);
                 auto diff = (*unfold)[j]->GetBinContent(k) - (*unfold_prev)[j]->GetBinContent(k);
 
-                sum_stat += stat * stat;
-                sum_diff += std::abs(diff);
+                sum_stat += std::abs(stat * stat);
+                sum_diff += std::abs(diff * diff);
             }
 
             (*sum)[j]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
