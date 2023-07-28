@@ -48,7 +48,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/AANominalTest3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
-    --DataHistogram aa_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_final_aa_test.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
