@@ -75,11 +75,11 @@ std::cout << __LINE__ << std::endl;
     auto sum_merge = new history<TH1F>("sum_merge"s, "", func, 1);
 std::cout << __LINE__ << std::endl;
     for (size_t i = 1; i < iterations.size(); ++i) {
-        auto unfold = new history<TH1F>(f, tag + "_"s + base_label + "sum0_unfolded" + std::to_string(iterations[i]));
-        auto unfold_merge = new history<TH1F>(f, tag + "_"s + base_label + "merge_unfolded" + std::to_string(iterations[i]));
+        auto unfold = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_unfolded" + std::to_string(iterations[i]));
+        auto unfold_merge = new history<TH1F>(f, tag + "_"s + base_label + "_merge_unfolded" + std::to_string(iterations[i]));
 std::cout << __LINE__ << std::endl;
-        auto unfold_prev = new history<TH1F>(f, tag + "_"s + base_label + "sum0_unfolded" + std::to_string(iterations[i-1]));
-        auto unfold_prev_merge = new history<TH1F>(f, tag + "_"s + base_label + "merge_unfolded" + std::to_string(iterations[i-1]));
+        auto unfold_prev = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_unfolded" + std::to_string(iterations[i-1]));
+        auto unfold_prev_merge = new history<TH1F>(f, tag + "_"s + base_label + "_merge_unfolded" + std::to_string(iterations[i-1]));
 std::cout << __LINE__ << std::endl;
         for (int64_t j = 0; j < unfold->size(); ++j) {
             if (!((*unfold)[j]->GetBinError(1) < 1000)) { continue; }
