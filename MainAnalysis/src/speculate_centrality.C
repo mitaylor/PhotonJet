@@ -78,7 +78,7 @@ int speculate(char const* config, char const* selections, char const* output) {
         t->GetEntry(i);
 
         if (std::abs(p->vz) > 15) { continue; }
-        double hf = pjt->hiHF;
+        double hf = p->hiHF;
         auto hf_x = ihf->index_for(hf);
 
         if (hf < dhf.front()) { continue; }
@@ -163,7 +163,7 @@ int speculate(char const* config, char const* selections, char const* output) {
 
     TGraphAsymmErrors* eff[4];
 
-    for (size_t i = 0; i < ihf->size(); ++i) {
+    for (int64_t i = 0; i < ihf->size(); ++i) {
         eff[i] = new TGraphAsymmErrors((*numerator)[i], (*denominator)[i], "cl=0.683 b(1,1) mode");
         eff[i]->GetYaxis()->SetTitle("L1+HLT efficiency");
         eff[i]->GetXaxis()->SetTitle("photon p_{T}");
@@ -185,7 +185,7 @@ int speculate(char const* config, char const* selections, char const* output) {
     c1->accessory(hf_info);
     c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
-    for (size_t i = 0; i < ihf->size(); ++i) {
+    for (int64_t i = 0; i < ihf->size(); ++i) {
         c1->add(eff[i], system);
     }
 
