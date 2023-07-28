@@ -13,7 +13,7 @@ set=$1
     --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
-    --Output Output/${set}/AANominalTest0.root
+    --Output OutputWeighted/${set}/AANominalTest0.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
     --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_1 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_final_aa_test.root \
@@ -24,7 +24,7 @@ set=$1
     --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
-    --Output Output/${set}/AANominalTest1.root
+    --Output OutputWeighted/${set}/AANominalTest1.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
     --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_2 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_final_aa_test.root \
@@ -35,7 +35,7 @@ set=$1
     --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
-    --Output Output/${set}/AANominalTest2.root
+    --Output OutputWeighted/${set}/AANominalTest2.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
     --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_sum0_3 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_final_aa_test.root \
@@ -46,7 +46,7 @@ set=$1
     --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
-    --Output Output/${set}/AANominalTest3.root
+    --Output OutputWeighted/${set}/AANominalTest3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
     --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_final_aa_test.root \
@@ -57,4 +57,4 @@ set=$1
     --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
-    --Output Output/${set}/AANominalTestMerge.root
+    --Output OutputWeighted/${set}/AANominalTestMerge.root

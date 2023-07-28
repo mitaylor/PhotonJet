@@ -104,63 +104,6 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
-    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
-        { offsets[axis << 1], offsets[(axis << 1) + 1] });
-
-    auto shape = m->shape();
-
-    auto front = std::vector<int64_t>(m->dims(), 0);
-    auto back = std::vector<int64_t>(m->dims(), 0);
-    for (int64_t i = 0; i < m->dims(); ++i) {
-        front[i] = offsets[i << 1];
-        back[i] = shape[i] - offsets[(i << 1) + 1];
-    }
-
-    auto size = back[axis] - front[axis];
-    auto list = new std::vector<int64_t>[size];
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto indices = m->indices_for(i);
-
-        bool flag = false;
-        zip([&](int64_t index, int64_t f, int64_t b) {
-            flag = flag || index < f || index >= b;
-        }, indices, front, back);
-        if (flag) { continue; }
-
-        auto index = indices[axis] - front[axis];
-        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
-            + flat->GetBinContent(i + 1));
-
-        list[index].push_back(i);
-    }
-
-    for (int64_t i = 0; i < size; ++i) {
-        auto indices = list[i];
-        int64_t count = indices.size();
-
-        auto error = 0.;
-        for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j];
-            for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k];
-                error = error + (*covariance)(j_x, k_x);
-            }
-        }
-
-        hfold->SetBinError(i + 1, std::sqrt(error));
-    }
-
-    delete [] list;
-
-    hfold->Scale(1., "width");
-
-    return hfold;
-}
-
 int get_chi_square_iteration_files(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -236,84 +179,51 @@ int get_chi_square_iteration_files(char const* config, char const* selections, c
         21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 200, 250};
 
     for (size_t i = 0; i < iteration.size(); ++i) {
-        auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
-        auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
-        auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
-
-        auto refolded = new history<TH1F>("refolded", "", null<TH1F>, (int64_t) afters.size());
-        auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, (int64_t) afters.size());
-        auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, (int64_t) afters.size());
+        auto refold = new history<TH1F>("refold", "", null<TH1F>, (int64_t) afters.size());
+        auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, (int64_t) afters.size());
+        auto refold1 = new history<TH1F>("refold1", "", null<TH1F>, (int64_t) afters.size());
 
         for (size_t j = 0; j < fafters.size(); ++j) {
-            std::string unfold_name = "HUnfoldedBayes" + std::to_string(iteration[i]);
-            std::string matrix_name = "MUnfoldedBayes" + std::to_string(iteration[i]);
-            std::string refold_name = "HRefoldedBayes" + std::to_string(iteration[i]);
+            std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
+            auto HRefolded = (TH1F*) fafters[j]->Get(name.data());
 
-            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
-            auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
-
-            (*unfolded)[j] = HUnfoldedBayes;
-            (*unfolded_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-            (*unfolded_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
-
-            (*refolded)[j] = HRefolded;
-            (*refolded_fold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
-            (*refolded_fold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
+            (*refold)[j] = HRefolded;
+            (*refold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
+            (*refold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
         }
 
-        normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1);
+        normalise_to_unity(refold0, refold1);
 
-        unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s + std::to_string(iteration[i]));
-        unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s + std::to_string(iteration[i]));
-        unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s + std::to_string(iteration[i]));
+        refold->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_iteration"s + std::to_string(iteration[i]));
+        refold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refold0_iteration"s + std::to_string(iteration[i]));
+        refold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refold1_iteration"s + std::to_string(iteration[i]));
 
-        refolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded"s + std::to_string(iteration[i]));
-        refolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded_fold0"s + std::to_string(iteration[i]));
-        refolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded_fold1"s + std::to_string(iteration[i]));
-
-        unfolded->save();
-        unfolded_fold0->save();
-        unfolded_fold1->save();
-
-        refolded->save();
-        refolded_fold0->save();
-        refolded_fold1->save();
+        refold->save();
+        refold0->save();
+        refold1->save();
     }
 
     for (size_t i = 0; i < iteration.size(); ++i) {
-        auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, 1);
-        auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, 1);
-        auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, 1);
-
-        auto refolded = new history<TH1F>("refolded", "", null<TH1F>, 1);
-        auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, 1);
-        auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, 1);
+        auto refold = new history<TH1F>("refold", "", null<TH1F>, 1);
+        auto refold0 = new history<TH1F>("refold0", "", null<TH1F>, 1);
+        auto refold1 = new history<TH1F>("refold1", "", null<TH1F>, 1);
 
         std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
         auto HRefolded = (TH1F*) fmerge->Get(name.data());
 
-        (*refolded)[j] = HRefolded;
-        (*refolded_fold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
-        (*refolded_fold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
+        (*refold)[0] = HRefolded;
+        (*refold0)[0] = fold(HRefolded, nullptr, mr, 0, osr);
+        (*refold1)[0] = fold(HRefolded, nullptr, mr, 1, osr);
 
-        normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1);
+        normalise_to_unity(refold0, refold1);
 
-        unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded"s + std::to_string(iteration[i]));
-        unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded_fold0"s + std::to_string(iteration[i]));
-        unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded_fold1"s + std::to_string(iteration[i]));
+        refold->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_iteration"s + std::to_string(iteration[i]));
+        refold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refold0_iteration"s + std::to_string(iteration[i]));
+        refold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refold1_iteration"s + std::to_string(iteration[i]));
 
-        refolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded"s + std::to_string(iteration[i]));
-        refolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold0"s + std::to_string(iteration[i]));
-        refolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold1"s + std::to_string(iteration[i]));
-
-        unfolded->save();
-        unfolded_fold0->save();
-        unfolded_fold1->save();
-
-        refolded->save();
-        refolded_fold0->save();
-        refolded_fold1->save();
+        refold->save();
+        refold0->save();
+        refold1->save();
     }
 
     fout->Close();

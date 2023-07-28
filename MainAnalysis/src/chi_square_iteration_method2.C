@@ -57,7 +57,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
     /* create histograms */
     std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-        21, 22, 23, 24, 25};
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 35, 40, 45, 50, 55, 60, 65, 70, 80, 90, 100, 125, 150, 200, 250};
 
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 0, iterations.back()); };
@@ -146,7 +146,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
         stack_text(index, 0.25, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    auto p1 = new paper(set + "_chi_square_" + label, hb);
+    auto p1 = new paper(set + "_" + label + "_chi_square", hb);
 
     p1->divide(chi_square->size(), -1);
     p1->accessory(pthf_info);
