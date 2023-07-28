@@ -166,8 +166,8 @@ int speculate(char const* config, char const* selections, char const* output) {
         eff[i]->SetName(name.c_str());
     }
 
-    auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+    // auto hf_info = [&](int64_t index) {
+    //     info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
