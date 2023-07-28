@@ -61,29 +61,29 @@ int sum_iteration(char const* config, char const* selections, char const* output
     TH1::SetDefaultSumw2();
 
     TFile* f = new TFile((base + input).data(), "read");
-    std::cout << __LINE__ << std::endl;
+    
     auto preunfold = new history<TH1F>(f, tag + "_"s + base_label + "_sum0"s);
-std::cout << __LINE__ << std::endl;
+
     /* create histograms */
     std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25};
-std::cout << __LINE__ << std::endl;
+
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 1, iterations.back()); };
-std::cout << __LINE__ << std::endl;
+
     auto sum = new history<TH1F>("sum"s, "", func, preunfold->size());
     auto sum_merge = new history<TH1F>("sum_merge"s, "", func, 1);
-std::cout << __LINE__ << std::endl;
+
     for (size_t i = 1; i < iterations.size(); ++i) {
         auto unfold = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_unfolded" + std::to_string(iterations[i]));
         auto unfold_merge = new history<TH1F>(f, tag + "_"s + base_label + "_merge_unfolded" + std::to_string(iterations[i]));
-std::cout << __LINE__ << std::endl;
+
         auto unfold_prev = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_unfolded" + std::to_string(iterations[i-1]));
         auto unfold_prev_merge = new history<TH1F>(f, tag + "_"s + base_label + "_merge_unfolded" + std::to_string(iterations[i-1]));
-std::cout << __LINE__ << std::endl;
+
         for (int64_t j = 0; j < unfold->size(); ++j) {
             if (!((*unfold)[j]->GetBinError(1) < 1000)) { continue; }
-std::cout << __LINE__ << std::endl;
+
             double sum_stat = 0;
             double sum_diff = 0;
 
@@ -95,48 +95,48 @@ std::cout << __LINE__ << std::endl;
                 if (indices[1] < osg[2]) {continue; }
                 if (indices[0] > (shape[0] - osg[1])) {continue; }
                 if (indices[1] > (shape[1] - osg[3])) {continue; }
-std::cout << __LINE__ << std::endl;
+
                 auto stat = (*unfold)[j]->GetBinError(k);
                 auto diff = (*unfold)[j]->GetBinContent(k) - (*unfold_prev)[j]->GetBinContent(k);
-std::cout << __LINE__ << std::endl;
+
                 sum_stat += stat * stat;
-                sum_diff += diff * diff;
+                sum_diff += std::abs(diff);
             }
-std::cout << __LINE__ << std::endl;
+
             (*sum)[j]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
             (*sum)[j]->SetBinError(iterations[i] + 1, 0);
         }
-std::cout << __LINE__ << std::endl;
+
         if (!((*unfold_merge)[0]->GetBinError(1) < 1000)) { continue; }
 
         double sum_stat = 0;
         double sum_diff = 0;
-std::cout << __LINE__ << std::endl;
+
         for (int64_t k = 1; k <= (*unfold_merge)[0]->GetNbinsX(); ++k) {
             auto indices = mg->indices_for(k);
             auto shape = mg->shape();
-std::cout << __LINE__ << std::endl;
+
             if (indices[0] < osg[0]) { continue; }
             if (indices[1] < osg[2]) {continue; }
             if (indices[0] > (shape[0] - osg[1])) {continue; }
             if (indices[1] > (shape[1] - osg[3])) {continue; }
-std::cout << __LINE__ << std::endl;
+
             auto stat = (*unfold_merge)[0]->GetBinError(k);
             auto diff = (*unfold_merge)[0]->GetBinContent(k) - (*unfold_prev_merge)[0]->GetBinContent(k);
-std::cout << __LINE__ << std::endl;
+
             sum_stat += stat * stat;
             sum_diff += diff * diff;
         }
-std::cout << __LINE__ << std::endl;
+
         (*sum_merge)[0]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
         (*sum_merge)[0]->SetBinError(iterations[i] + 1, 0);
     }
-std::cout << __LINE__ << std::endl;
+
     in(output, [&]() {
         sum->save("");
         sum_merge->save("");
     });
-std::cout << __LINE__ << std::endl;
+
     std::vector<int> choice(sum->size(), 1);
 
     for (int i = 0; i < sum->size(); ++i) {
