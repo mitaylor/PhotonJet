@@ -72,7 +72,12 @@ int sum_iteration(char const* config, char const* selections, char const* output
         return new TH1F(name.data(), ";iterations;", iterations.back(), 1, iterations.back()); };
 
     auto sum = new history<TH1F>("sum"s, "", func, preunfold->size());
+    auto sum_stat = new history<TH1F>("sum_stat"s, "", func, preunfold->size());
+    auto sum_diff = new history<TH1F>("sum_diff"s, "", func, preunfold->size());
+
     auto sum_merge = new history<TH1F>("sum_merge"s, "", func, 1);
+    auto sum_stat_merge = new history<TH1F>("sum_stat_merge"s, "", func, 1);
+    auto sum_diff_merge = new history<TH1F>("sum_diff_merge"s, "", func, 1);
 
     for (size_t i = 1; i < iterations.size(); ++i) {
         auto unfold = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_unfolded" + std::to_string(iterations[i]));
@@ -84,8 +89,8 @@ int sum_iteration(char const* config, char const* selections, char const* output
         for (int64_t j = 0; j < unfold->size(); ++j) {
             if (!((*unfold)[j]->GetBinError(1) < 1000)) { continue; }
 
-            double sum_stat = 0;
-            double sum_diff = 0;
+            double s_stat = 0;
+            double s_diff = 0;
 
             for (int64_t k = 1; k <= (*unfold)[j]->GetNbinsX(); ++k) {
                 auto indices = mg->indices_for(k);
@@ -99,18 +104,24 @@ int sum_iteration(char const* config, char const* selections, char const* output
                 auto stat = (*unfold)[j]->GetBinError(k);
                 auto diff = (*unfold)[j]->GetBinContent(k) - (*unfold_prev)[j]->GetBinContent(k);
 
-                sum_stat += std::abs(stat * stat);
-                sum_diff += std::abs(diff * diff);
+                s_stat += std::abs(stat * stat);
+                s_diff += std::abs(diff * diff);
             }
 
-            (*sum)[j]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
+            (*sum)[j]->SetBinContent(iterations[i] + 1, s_stat + s_diff);
             (*sum)[j]->SetBinError(iterations[i] + 1, 0);
+
+            (*sum_stat)[j]->SetBinContent(iterations[i] + 1, s_stat);
+            (*sum_stat)[j]->SetBinError(iterations[i] + 1, 0);
+
+            (*sum_diff)[j]->SetBinContent(iterations[i] + 1, s_diff);
+            (*sum_diff)[j]->SetBinError(iterations[i] + 1, 0);
         }
 
         if (!((*unfold_merge)[0]->GetBinError(1) < 1000)) { continue; }
 
-        double sum_stat = 0;
-        double sum_diff = 0;
+        double s_stat = 0;
+        double s_diff = 0;
 
         for (int64_t k = 1; k <= (*unfold_merge)[0]->GetNbinsX(); ++k) {
             auto indices = mg->indices_for(k);
@@ -124,12 +135,18 @@ int sum_iteration(char const* config, char const* selections, char const* output
             auto stat = (*unfold_merge)[0]->GetBinError(k);
             auto diff = (*unfold_merge)[0]->GetBinContent(k) - (*unfold_prev_merge)[0]->GetBinContent(k);
 
-            sum_stat += stat * stat;
-            sum_diff += diff * diff;
+            s_stat += stat * stat;
+            s_diff += diff * diff;
         }
 
-        (*sum_merge)[0]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
+        (*sum_merge)[0]->SetBinContent(iterations[i] + 1, s_stat + s_diff);
         (*sum_merge)[0]->SetBinError(iterations[i] + 1, 0);
+    
+        (*sum_stat_merge)[j]->SetBinContent(iterations[i] + 1, s_stat);
+        (*sum_stat_merge)[j]->SetBinError(iterations[i] + 1, 0);
+
+        (*sum_diff_merge)[j]->SetBinContent(iterations[i] + 1, s_diff);
+        (*sum_diff_merge)[j]->SetBinError(iterations[i] + 1, 0);
     }
 
     in(output, [&]() {
@@ -151,7 +168,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
             if (top < min) {
                 min = top;
-                choice[i] = j;
+                choice[i] = j + 1;
             }
             else {
                 break;
@@ -169,7 +186,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
-        l->DrawLatexNDC(0.135, 0.17, buffer);
+        l->DrawLatexNDC(0.750, 0.17, buffer);
     };
 
     /* set up figures */
@@ -185,9 +202,13 @@ int sum_iteration(char const* config, char const* selections, char const* output
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.25, 0.04, mpthf, pt_info, hf_info); };
+        stack_text(index, 0.865, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
+
+    hb->category("type", "stat", "diff", "total");
+    hb->set_binary("type");
+
     auto p1 = new paper(set + "_sum_" + label, hb);
 
     p1->divide(sum->size(), -1);
@@ -196,7 +217,11 @@ int sum_iteration(char const* config, char const* selections, char const* output
     apply_style(p1, cms, system_tag);
     // p1->set(paper::flags::logx);
 
-    sum->apply([&](TH1* h) { p1->add(h); });
+    for (int64_t i = 0; i < preunfold->size(); ++i) {
+        c1->add((*sum)[i], "total");
+        c1->stack((*sum_stat)[i], "stat");
+        c1->stack((*sum_diff)[i], "diff");
+    }
 
     hb->sketch();
     p1->draw("pdf");
