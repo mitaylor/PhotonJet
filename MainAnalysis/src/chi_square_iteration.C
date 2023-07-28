@@ -186,7 +186,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
-        l->DrawLatexNDC(0.750, 0.17, buffer);
+        l->DrawLatexNDC(0.135, 0.77, buffer);
     };
 
     /* set up figures */
@@ -202,7 +202,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.865, 0.04, mpthf, pt_info, hf_info); };
+        stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
 
