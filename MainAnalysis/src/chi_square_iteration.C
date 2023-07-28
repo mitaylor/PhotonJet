@@ -229,8 +229,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
     p1->set(paper::flags::logy);
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
-        // (*sum)[i]->SetMinimum((*sum_diff)[i]->GetMinimum());
-        std::cout << (*sum_diff)[i]->GetMinimum() << std::endl;
+        (*sum)[i]->SetMinimum((*sum)[i]->GetMinimum() / 10);
 
         p1->add((*sum)[i], "total");
         p1->stack((*sum_stat)[i], "stat");
