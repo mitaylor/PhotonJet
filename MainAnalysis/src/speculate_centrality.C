@@ -184,14 +184,14 @@ int speculate(char const* config, char const* selections, char const* output) {
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         std::string name = "frame_" + to_text(i);
-        auto hframe = frame((*denominator)[0]->GetXaxis(), (*denominator)[0]->GetYaxis());
+        auto hframe = frame((*denominator)[i]->GetXaxis(), (*denominator)[i]->GetYaxis());
         hframe->SetName(name.c_str());
 
         hframe->GetYaxis()->SetTitle("L1+HLT efficiency");
         hframe->GetXaxis()->SetTitle("photon p_{T}");
 
         c1->add(hframe);
-        c1->stack(eff[i], system);
+        // c1->stack(eff[i], system);
     }
 
     hb->sketch();
