@@ -180,15 +180,22 @@ int get_chi_square_iteration_files(char const* config, char const* selections, c
     auto base = sel->get<std::string>("base");
 
     auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
 
     auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     /* create intervals and multivals */
     auto idrr = new interval("#deltaj"s, rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
+    auto idrg = new interval("#deltaj"s, rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
+
     auto mr = new multival(*idrr, *iptr);
+    auto mg = new multival(*idrg, *iptg);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
