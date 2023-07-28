@@ -298,12 +298,21 @@ int get_chi_square_iteration_files(char const* config, char const* selections, c
         auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, 1);
         auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, 1);
 
-        std::string name = "HRefoldedBayes" + std::to_string(iteration[i]);
-        auto HRefolded = (TH1F*) fmerge->Get(name.data());
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(iteration[i]);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(iteration[i]);
+        std::string refold_name = "HRefoldedBayes" + std::to_string(iteration[i]);
 
-        (*refolded)[j] = HRefolded;
-        (*refolded_fold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
-        (*refolded_fold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
+        auto HUnfoldedBayes = (TH1F*) fmerge->Get(unfold_name.data());
+        auto MUnfolded = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+        auto HRefolded = (TH1F*) fmerge->Get(refold_name.data());
+
+        (*unfolded)[0] = HUnfoldedBayes;
+        (*unfolded_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
+        (*unfolded_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+
+        (*refolded)[0] = HRefolded;
+        (*refolded_fold0)[0] = fold(HRefolded, nullptr, mr, 0, osr);
+        (*refolded_fold1)[0] = fold(HRefolded, nullptr, mr, 1, osr);
 
         normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1);
 
