@@ -234,6 +234,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
         (*sum)[i]->SetMinimum(1E-7);
+        (*sum)[i]->SetMaximum(1E-3);
 
         p1->add((*sum)[i], "total");
         p1->stack((*sum_stat)[i], "stat");
@@ -242,13 +243,13 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
     auto p2 = new paper(set + "_iteration_" + label + "_merge", hb);
 
-    p2->divide(sum->size(), -1);
     p2->accessory(ptrange_info);
     p2->accessory(minimum);
     apply_style(p2, cms, system_tag);
     p2->set(paper::flags::logy);
 
     (*sum_merge)[0]->SetMinimum(1E-7);
+    (*sum_merge)[0]->SetMaximum(1E-3);
 
     p2->add((*sum_merge)[0], "total");
     p2->stack((*sum_stat_merge)[0], "stat");
