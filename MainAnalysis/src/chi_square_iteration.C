@@ -24,7 +24,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int chi_square_itertaion(char const* config, char const* selections, char const* output) {
+int sum_iteration(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -42,9 +42,19 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+
+    auto osg = sel->get<std::vector<int64_t>>("osg");
+
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
     auto mpthf = new multival(rpt, dhf);
+
+    auto idrg = new interval("#deltaj"s, rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
+
+    auto mg = new multival(*idrg, *iptg);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -52,54 +62,88 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
     TFile* f = new TFile((base + input).data(), "read");
 
-    auto base0 = new history<TH1F>(f, tag + "_"s + base_label + "_side0");
-    auto base1 = new history<TH1F>(f, tag + "_"s + base_label + "_side1");
+    auto preunfold = new history<TH1F>(f, tag + "_"s + base_label);
 
     /* create histograms */
     std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
         21, 22, 23, 24, 25};
 
     auto func = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";iterations;", iterations.back(), 0, iterations.back()); };
+        return new TH1F(name.data(), ";iterations;", iterations.back(), 1, iterations.back()); };
 
-    auto chi_square = new history<TH1F>("chi_square"s, "", func, base0->size());
+    auto sum = new history<TH1F>("sum"s, "", func, preunfold->size());
+    auto sum_merge = new history<TH1F>("sum_merge"s, "", func, 1);
 
-    for (size_t i = 0; i < iterations.size(); ++i) {
-        auto refold0 = new history<TH1F>(f, tag + "_"s + base_label + "_refold0_iteration" + std::to_string(iterations[i]));
-        auto refold1 = new history<TH1F>(f, tag + "_"s + base_label + "_refold1_iteration" + std::to_string(iterations[i]));
+    for (size_t i = 1; i < iterations.size(); ++i) {
+        auto unfold = new history<TH1F>(f, tag + "_"s + base_label + "sum0_unfolded" + std::to_string(iterations[i]));
+        auto unfold_merge = new history<TH1F>(f, tag + "_"s + base_label + "merge_unfolded" + std::to_string(iterations[i]));
 
-        for (int64_t j = 0; j < base0->size(); ++j) {
-            if (!((*refold0)[j]->GetBinError(1) < 10)) { continue; }
-            if (!((*refold1)[j]->GetBinError(1) < 10)) { continue; }
+        auto unfold_prev = new history<TH1F>(f, tag + "_"s + base_label + "sum0_unfolded" + std::to_string(iterations[i-1]));
+        auto unfold_prev_merge = new history<TH1F>(f, tag + "_"s + base_label + "merge_unfolded" + std::to_string(iterations[i-1]));
 
-            double sum = 0;
-            double unc = 0;
+        for (int64_t j = 0; j < unfold->size(); ++j) {
+            if (!((*unfold)[j]->GetBinError(1) < 1000)) { continue; }
 
-            for (int64_t k = 1; k < (*base0)[j]->GetNbinsX(); ++k) {
-                double diff = (*base0)[j]->GetBinContent(k + 1) - (*refold0)[j]->GetBinContent(k + 1);
-                diff += (*base1)[j]->GetBinContent(k + 1) - (*refold1)[j]->GetBinContent(k + 1);
-                sum += diff * diff;
-                unc += (*refold0)[j]->GetBinError(k + 1) + (*refold1)[j]->GetBinError(k + 1);;
+            double sum_stat = 0;
+            double sum_diff = 0;
+
+            for (int64_t k = 1; k <= (*unfold)[j]->GetNbinsX(); ++k) {
+                auto indices = mg->indices_for(k);
+                auto shape = mg->shape();
+
+                if (indices[0] < osg[0]) { continue; }
+                if (indices[1] < osg[2]) {continue; }
+                if (indices[0] > (shape[0] - osg[1])) {continue; }
+                if (indices[1] > (shape[1] - osg[3])) {continue; }
+
+                auto stat = (*unfold)[j]->GetBinError(k);
+                auto diff = (*unfold)[j]->GetBinContent(k) - (*unfold_prev)[j]->GetBinContent(k);
+
+                sum_stat += stat * stat;
+                sum_diff += diff * diff;
             }
 
-            if (!(unc < 20)) { continue; }
-
-            (*chi_square)[j]->SetBinContent(iterations[i] + 1, sum);
-            (*chi_square)[j]->SetBinError(iterations[i] + 1, unc);
+            (*sum)[j]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
+            (*sum)[j]->SetBinError(iterations[i] + 1, 0);
         }
+
+        if (!((*unfold_merge)[j]->GetBinError(1) < 1000)) { continue; }
+        
+        double sum_stat = 0;
+        double sum_diff = 0;
+
+        for (int64_t k = 1; k <= (*unfold_merge)[j]->GetNbinsX(); ++k) {
+            auto indices = mg->indices_for(k);
+            auto shape = mg->shape();
+
+            if (indices[0] < osg[0]) { continue; }
+            if (indices[1] < osg[2]) {continue; }
+            if (indices[0] > (shape[0] - osg[1])) {continue; }
+            if (indices[1] > (shape[1] - osg[3])) {continue; }
+
+            auto stat = (*unfold_merge)[0]->GetBinError(k);
+            auto diff = (*unfold_merge)[0]->GetBinContent(k) - (*unfold_merge_prev)[0]->GetBinContent(k);
+
+            sum_stat += stat * stat;
+            sum_diff += diff * diff;
+        }
+
+        (*sum_merge)[0]->SetBinContent(iterations[i] + 1, sum_stat + sum_diff);
+        (*sum_merge)[0]->SetBinError(iterations[i] + 1, 0);
     }
 
     in(output, [&]() {
-        chi_square->save("test");
+        sum->save("");
+        sum_merge->save("");
     });
 
-    std::vector<int> choice(chi_square->size(), 1);
+    std::vector<int> choice(sum->size(), 1);
 
-    for (int i = 0; i < chi_square->size(); ++i) {
+    for (int i = 0; i < sum->size(); ++i) {
         double min = 99999999999;
 
-        for (int j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
-            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+        for (int j = 0; j < (*sum)[i]->GetNbinsX(); ++j) {
+            auto top = (*sum)[i]->GetBinContent(j + 1);
 
             if (top == 0) { continue; }
 
@@ -113,8 +157,6 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
                 break;
             }
         }
-
-        // if (set.size() == choice.size()) { choice[i] = set[i]; }
 
         std::cout << std::endl << choice[i] << std::endl;
     }
@@ -146,15 +188,15 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
         stack_text(index, 0.25, 0.04, mpthf, pt_info, hf_info); };
 
     auto hb = new pencil();
-    auto p1 = new paper(set + "_chi_square_" + label, hb);
+    auto p1 = new paper(set + "_sum_" + label, hb);
 
-    p1->divide(chi_square->size(), -1);
+    p1->divide(sum->size(), -1);
     p1->accessory(pthf_info);
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag);
-    p1->set(paper::flags::logx);
+    // p1->set(paper::flags::logx);
 
-    chi_square->apply([&](TH1* h) { p1->add(h); });
+    sum->apply([&](TH1* h) { p1->add(h); });
 
     hb->sketch();
     p1->draw("pdf");
@@ -164,7 +206,7 @@ int chi_square_itertaion(char const* config, char const* selections, char const*
 
 int main(int argc, char* argv[]) {
     if (argc == 4)
-        return chi_square_itertaion(argv[1], argv[2], argv[3]);
+        return sum_iteration(argv[1], argv[2], argv[3]);
 
     printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
