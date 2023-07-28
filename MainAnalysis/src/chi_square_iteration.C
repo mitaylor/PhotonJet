@@ -207,7 +207,10 @@ int sum_iteration(char const* config, char const* selections, char const* output
     auto hb = new pencil();
 
     hb->category("type", "stat", "diff", "total");
-    hb->set_binary("type");
+
+    hb->alias("total", "Total");
+    hb->alias("stat", "#sigma^2_{stat}");
+    hb->alias("diff", "#sigma^2_{iter}");
 
     auto p1 = new paper(set + "_sum_" + label, hb);
 
