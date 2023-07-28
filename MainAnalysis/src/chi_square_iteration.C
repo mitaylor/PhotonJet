@@ -218,7 +218,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
     p1->accessory(pthf_info);
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag);
-    // p1->set(paper::flags::logx);
+    p1->set(paper::flags::logy);
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
         p1->add((*sum)[i], "total");
