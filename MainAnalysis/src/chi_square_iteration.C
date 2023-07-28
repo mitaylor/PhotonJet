@@ -110,14 +110,14 @@ int sum_iteration(char const* config, char const* selections, char const* output
                 s_diff += std::abs(diff * diff);
             }
 
-            (*sum)[j]->SetBinContent(iterations[i] + 1, s_stat + s_diff);
-            (*sum)[j]->SetBinError(iterations[i] + 1, 0);
+            (*sum)[j]->SetBinContent(iterations[i], s_stat + s_diff);
+            (*sum)[j]->SetBinError(iterations[i], 0);
 
-            (*sum_stat)[j]->SetBinContent(iterations[i] + 1, s_stat);
-            (*sum_stat)[j]->SetBinError(iterations[i] + 1, 0);
+            (*sum_stat)[j]->SetBinContent(iterations[i], s_stat);
+            (*sum_stat)[j]->SetBinError(iterations[i], 0);
 
-            (*sum_diff)[j]->SetBinContent(iterations[i] + 1, s_diff);
-            (*sum_diff)[j]->SetBinError(iterations[i] + 1, 0);
+            (*sum_diff)[j]->SetBinContent(iterations[i], s_diff);
+            (*sum_diff)[j]->SetBinError(iterations[i], 0);
         }
 
         if (!((*unfold_merge)[0]->GetBinError(1) < 1000)) { continue; }
@@ -141,19 +141,23 @@ int sum_iteration(char const* config, char const* selections, char const* output
             s_diff += diff * diff;
         }
 
-        (*sum_merge)[0]->SetBinContent(iterations[i] + 1, s_stat + s_diff);
-        (*sum_merge)[0]->SetBinError(iterations[i] + 1, 0);
+        (*sum_merge)[0]->SetBinContent(iterations[i], s_stat + s_diff);
+        (*sum_merge)[0]->SetBinError(iterations[i], 0);
     
-        (*sum_stat_merge)[0]->SetBinContent(iterations[i] + 1, s_stat);
-        (*sum_stat_merge)[0]->SetBinError(iterations[i] + 1, 0);
+        (*sum_stat_merge)[0]->SetBinContent(iterations[i], s_stat);
+        (*sum_stat_merge)[0]->SetBinError(iterations[i], 0);
 
-        (*sum_diff_merge)[0]->SetBinContent(iterations[i] + 1, s_diff);
-        (*sum_diff_merge)[0]->SetBinError(iterations[i] + 1, 0);
+        (*sum_diff_merge)[0]->SetBinContent(iterations[i], s_diff);
+        (*sum_diff_merge)[0]->SetBinError(iterations[i], 0);
     }
 
     in(output, [&]() {
         sum->save("");
+        sum_stat->save("");
+        sum_diff->save("");
         sum_merge->save("");
+        sum_stat_merge->save("");
+        sum_diff_merge->save("");
     });
 
     std::vector<int> choice(sum->size(), 1);
@@ -161,8 +165,8 @@ int sum_iteration(char const* config, char const* selections, char const* output
     for (int i = 0; i < sum->size(); ++i) {
         double min = 99999999999;
 
-        for (int j = 0; j < (*sum)[i]->GetNbinsX(); ++j) {
-            auto top = (*sum)[i]->GetBinContent(j + 1);
+        for (int j = 1; j <= (*sum)[i]->GetNbinsX(); ++j) {
+            auto top = (*sum)[i]->GetBinContent(j);
 
             if (top == 0) { continue; }
 
@@ -170,7 +174,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
             if (top < min) {
                 min = top;
-                choice[i] = j + 1;
+                choice[i] = j;
             }
             else {
                 break;
@@ -229,7 +233,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
     p1->set(paper::flags::logy);
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
-        // (*sum)[i]->SetMinimum((*sum)[i]->GetMinimum() / 10);
+        (*sum)[i]->SetMinimum(1E-6);
 
         p1->add((*sum)[i], "total");
         p1->stack((*sum_stat)[i], "stat");
