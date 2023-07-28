@@ -230,6 +230,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
         // (*sum)[i]->SetMinimum((*sum_diff)[i]->GetMinimum());
+        std::cout << (*sum_diff)[i]->GetMinimum() << std::endl;
 
         p1->add((*sum)[i], "total");
         p1->stack((*sum_stat)[i], "stat");
