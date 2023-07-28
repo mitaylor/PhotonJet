@@ -166,8 +166,8 @@ int speculate(char const* config, char const* selections, char const* output) {
         eff[i]->SetName(name.c_str());
     }
 
-    // auto hf_info = [&](int64_t index) {
-    //     info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+    auto hf_info = [&](int64_t index) {
+        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -179,8 +179,8 @@ int speculate(char const* config, char const* selections, char const* output) {
     auto c1 = new paper(set + "_" + tag + "_efficiency", hb);
     apply_style(c1, cms, system_tag, 0., 1.2);
     c1->divide(ihf->size(), -1);
-    // c1->accessory(hf_info);
-    // c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
+    c1->accessory(hf_info);
+    c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         std::string name = "frame_" + to_text(i);
@@ -191,7 +191,7 @@ int speculate(char const* config, char const* selections, char const* output) {
         hframe->GetXaxis()->SetTitle("photon p_{T}");
 
         c1->add(hframe);
-        // c1->stack(eff[i], system);
+        c1->stack(eff[i], system);
     }
 
     hb->sketch();
