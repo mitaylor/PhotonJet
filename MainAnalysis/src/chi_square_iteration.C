@@ -56,6 +56,8 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
     auto mg = new multival(*idrg, *iptg);
 
+    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -203,6 +205,12 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
+    
+    auto range_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", drange, true); };
+
+    auto ptrange_info = [&](int64_t index) {
+        stack_text(index, 0.85, 0.04, mpthf, pt_info, range_info); };
 
     auto hb = new pencil();
 
@@ -212,22 +220,41 @@ int sum_iteration(char const* config, char const* selections, char const* output
     hb->alias("stat", "#sigma^{2}_{stat}");
     hb->alias("diff", "#sigma^{2}_{iter}");
 
-    auto p1 = new paper(set + "_sum_" + label, hb);
+    auto p1 = new paper(set + "_iteration_" + label, hb);
 
     p1->divide(sum->size(), -1);
     p1->accessory(pthf_info);
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag);
-    // p1->set(paper::flags::logy);
+    p1->set(paper::flags::logy);
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
+        (*sum)[i]->SetMinimum((*sum_diff)[i]->GetMinimum());
+
         p1->add((*sum)[i], "total");
         p1->stack((*sum_stat)[i], "stat");
         p1->stack((*sum_diff)[i], "diff");
     }
 
+    auto p2 = new paper(set + "_iteration_" + label + "_merge", hb);
+
+    p2->divide(sum->size(), -1);
+    p2->accessory(ptrange_info);
+    p2->accessory(minimum);
+    apply_style(p2, cms, system_tag);
+    p2->set(paper::flags::logy);
+
+    for (int64_t i = 0; i < preunfold->size(); ++i) {
+        (*sum_merge)[i]->SetMinimum((*sum_diff)[i]->GetMinimum());
+
+        p2->add((*sum_merge)[0], "total");
+        p2->stack((*sum_stat_merge)[0], "stat");
+        p2->stack((*sum_diff_merge)[0], "diff");
+    }
+
     hb->sketch();
     p1->draw("pdf");
+    p2->draw("pdf");
 
     return 0;
 }
