@@ -209,8 +209,8 @@ int sum_iteration(char const* config, char const* selections, char const* output
     hb->category("type", "stat", "diff", "total");
 
     hb->alias("total", "Total");
-    hb->alias("stat", "{#sigma}^{2}_{stat}");
-    hb->alias("diff", "{#sigma}^{2}_{iter}");
+    hb->alias("stat", "#sigma^{2}_{stat}");
+    hb->alias("diff", "#sigma^{2}_{iter}");
 
     auto p1 = new paper(set + "_sum_" + label, hb);
 
