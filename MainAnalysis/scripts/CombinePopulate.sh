@@ -46,7 +46,7 @@ for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(aa_raw aa_bkg aa_qcd_raw aa_qcd_bkg aa_qcd_gen_iso_raw aa_qcd_gen_iso_bkg aa_wo_ele_rej_raw aa_wo_ele_rej_bkg aa_cent_down_raw aa_cent_down_bkg aa_cent_up_raw aa_cent_up_bkg aa_no_eff_raw aa_no_eff_bkg aa_qcd_no_er_raw aa_qcd_no_er_bkg aa_no_er_raw aa_no_er_bkg aa_es_raw aa_es_bkg)
+samples=(aa_raw aa_bkg aa_qcd_raw aa_qcd_bkg aa_qcd_gen_iso_raw aa_qcd_gen_iso_bkg aa_wo_ele_rej_raw aa_wo_ele_rej_bkg aa_cent_down_raw aa_cent_down_bkg aa_cent_up_raw aa_cent_up_bkg aa_no_eff_raw aa_no_eff_bkg aa_no_er_raw aa_no_er_bkg aa_es_raw aa_es_bkg)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}

@@ -236,23 +236,23 @@ int sum_iteration(char const* config, char const* selections, char const* output
         p1->stack((*sum_diff)[i], "diff");
     }
 
-    auto p2 = new paper(set + "_iteration_" + label + "_merge", hb);
+    // auto p2 = new paper(set + "_iteration_" + label + "_merge", hb);
 
-    p2->divide(sum->size(), -1);
-    p2->accessory(ptrange_info);
-    p2->accessory(minimum);
-    apply_style(p2, cms, system_tag);
-    p2->set(paper::flags::logy);
+    // p2->divide(sum->size(), -1);
+    // p2->accessory(ptrange_info);
+    // p2->accessory(minimum);
+    // apply_style(p2, cms, system_tag);
+    // p2->set(paper::flags::logy);
 
-    (*sum_merge)[0]->SetMinimum((*sum_diff)[0]->GetMinimum());
+    // (*sum_merge)[0]->SetMinimum((*sum_diff_merge)[0]->GetMinimum());
 
-    p2->add((*sum_merge)[0], "total");
-    p2->stack((*sum_stat_merge)[0], "stat");
-    p2->stack((*sum_diff_merge)[0], "diff");
+    // p2->add((*sum_merge)[0], "total");
+    // p2->stack((*sum_stat_merge)[0], "stat");
+    // p2->stack((*sum_diff_merge)[0], "diff");
 
     hb->sketch();
     p1->draw("pdf");
-    p2->draw("pdf");
+    // p2->draw("pdf");
 
     return 0;
 }
