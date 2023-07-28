@@ -107,12 +107,12 @@ int sum_iteration(char const* config, char const* selections, char const* output
             (*sum)[j]->SetBinError(iterations[i] + 1, 0);
         }
 
-        if (!((*unfold_merge)[j]->GetBinError(1) < 1000)) { continue; }
-        
+        if (!((*unfold_merge)[0]->GetBinError(1) < 1000)) { continue; }
+
         double sum_stat = 0;
         double sum_diff = 0;
 
-        for (int64_t k = 1; k <= (*unfold_merge)[j]->GetNbinsX(); ++k) {
+        for (int64_t k = 1; k <= (*unfold_merge)[0]->GetNbinsX(); ++k) {
             auto indices = mg->indices_for(k);
             auto shape = mg->shape();
 
@@ -122,7 +122,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
             if (indices[1] > (shape[1] - osg[3])) {continue; }
 
             auto stat = (*unfold_merge)[0]->GetBinError(k);
-            auto diff = (*unfold_merge)[0]->GetBinContent(k) - (*unfold_merge_prev)[0]->GetBinContent(k);
+            auto diff = (*unfold_merge)[0]->GetBinContent(k) - (*unfold_prev_merge)[0]->GetBinContent(k);
 
             sum_stat += stat * stat;
             sum_diff += diff * diff;
