@@ -67,8 +67,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
     auto preunfold = new history<TH1F>(f, tag + "_"s + base_label + "_sum0"s);
 
     /* create histograms */
-    std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-        21, 22, 23, 24, 25};
+    std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 1, iterations.back()); };
@@ -244,7 +243,6 @@ int sum_iteration(char const* config, char const* selections, char const* output
     auto p2 = new paper(set + "_iteration_" + label + "_merge", hb);
 
     p2->accessory(ptrange_info);
-    p2->accessory(minimum);
     apply_style(p2, cms, system_tag);
     p2->set(paper::flags::logy);
 
