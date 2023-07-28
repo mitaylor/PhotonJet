@@ -206,11 +206,11 @@ int sum_iteration(char const* config, char const* selections, char const* output
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
     
-    std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "Cent. %i - %i%%", drange, true); };
+    // std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
+    //     info_text(x, pos, "Cent. %i - %i%%", drange, true); };
 
-    auto ptrange_info = [&](int64_t index) {
-        stack_text(index, 0.85, 0.04, mpthf, pt_info, range_info); };
+    // auto ptrange_info = [&](int64_t index) {
+    //     stack_text(index, 0.85, 0.04, mpthf, pt_info, range_info); };
 
     auto hb = new pencil();
 
