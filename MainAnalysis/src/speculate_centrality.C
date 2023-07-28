@@ -158,17 +158,12 @@ int speculate(char const* config, char const* selections, char const* output) {
     }
 
     /* calculate efficiency */
-    // auto hframe = frame((*denominator)[0]->GetXaxis(), (*denominator)[0]->GetYaxis());
-    // hframe->GetYaxis()->SetTitle("L1+HLT efficiency");
-    // hframe->GetXaxis()->SetTitle("photon p_{T}");
-
     TGraphAsymmErrors* eff[4];
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
+        std::string name = "graph_" + to_text(i);
         eff[i] = new TGraphAsymmErrors((*numerator)[i], (*denominator)[i], "cl=0.683 b(1,1) mode");
-        eff[i]->SetName(to_text(i).c_str());
-        eff[i]->GetYaxis()->SetTitle("L1+HLT efficiency");
-        eff[i]->GetXaxis()->SetTitle("photon p_{T}");
+        eff[i]->SetName(name.c_str());
     }
 
     auto hf_info = [&](int64_t index) {
@@ -188,7 +183,15 @@ int speculate(char const* config, char const* selections, char const* output) {
     c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
-        c1->add(eff[i], system);
+        std::string name = "frame_" + to_text(i);
+        auto hframe = frame((*denominator)[0]->GetXaxis(), (*denominator)[0]->GetYaxis());
+        hframe->SetName(name.c_str());
+
+        hframe->GetYaxis()->SetTitle("L1+HLT efficiency");
+        hframe->GetXaxis()->SetTitle("photon p_{T}");
+
+        c1->add(hframe);
+        c1->stack(eff[i], system);
     }
 
     hb->sketch();
