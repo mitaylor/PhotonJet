@@ -142,11 +142,11 @@ int sum_iteration(char const* config, char const* selections, char const* output
         (*sum_merge)[0]->SetBinContent(iterations[i] + 1, s_stat + s_diff);
         (*sum_merge)[0]->SetBinError(iterations[i] + 1, 0);
     
-        (*sum_stat_merge)[j]->SetBinContent(iterations[i] + 1, s_stat);
-        (*sum_stat_merge)[j]->SetBinError(iterations[i] + 1, 0);
+        (*sum_stat_merge)[0]->SetBinContent(iterations[i] + 1, s_stat);
+        (*sum_stat_merge)[0]->SetBinError(iterations[i] + 1, 0);
 
-        (*sum_diff_merge)[j]->SetBinContent(iterations[i] + 1, s_diff);
-        (*sum_diff_merge)[j]->SetBinError(iterations[i] + 1, 0);
+        (*sum_diff_merge)[0]->SetBinContent(iterations[i] + 1, s_diff);
+        (*sum_diff_merge)[0]->SetBinError(iterations[i] + 1, 0);
     }
 
     in(output, [&]() {
@@ -218,9 +218,9 @@ int sum_iteration(char const* config, char const* selections, char const* output
     // p1->set(paper::flags::logx);
 
     for (int64_t i = 0; i < preunfold->size(); ++i) {
-        c1->add((*sum)[i], "total");
-        c1->stack((*sum_stat)[i], "stat");
-        c1->stack((*sum_diff)[i], "diff");
+        p1->add((*sum)[i], "total");
+        p1->stack((*sum_stat)[i], "stat");
+        p1->stack((*sum_diff)[i], "diff");
     }
 
     hb->sketch();
