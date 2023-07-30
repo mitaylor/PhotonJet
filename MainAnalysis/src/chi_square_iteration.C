@@ -67,7 +67,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
     auto preunfold = new history<TH1F>(f, tag + "_"s + base_label + "_sum0"s);
 
     /* create histograms */
-    std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iterations;", iterations.back(), 1, iterations.back()); };
