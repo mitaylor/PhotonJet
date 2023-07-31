@@ -7,8 +7,8 @@ run_pp() {
 
     echo ${tag}
 
-    ./bin/get_chi_square_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/data_iteration_${tag}.root
-    ./bin/chi_square_iteration configs/chi_square_iteration/chi_square_iteration_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/iteration_${tag}.root
+    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/data_iteration_${tag}.root
+    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/iteration_${tag}.root
     ./bin/quantitate configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/quantitate_${tag}.root
 }
 
@@ -17,8 +17,8 @@ run_aa() {
 
     echo ${tag}
 
-    ./bin/get_chi_square_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/data_iteration_${tag}.root
-    ./bin/chi_square_iteration configs/chi_square_iteration/chi_square_iteration_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/iteration_${tag}.root
+    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/data_iteration_${tag}.root
+    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/iteration_${tag}.root
     ./bin/quantitate configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/quantitate_${tag}.root
 }
 
