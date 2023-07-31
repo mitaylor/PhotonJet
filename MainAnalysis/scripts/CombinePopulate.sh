@@ -22,25 +22,25 @@ for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(pp_smear_0_10_raw pp_smear_0_10_bkg pp_smear_0_10_qcd_raw pp_smear_0_10_qcd_bkg pp_smear_0_10_qcd_gen_iso_raw pp_smear_0_10_qcd_gen_iso_bkg pp_smear_0_10_wo_ele_rej_raw pp_smear_0_10_wo_ele_rej_bkg)
+samples=(pp_smear_0_10_raw pp_smear_0_10_bkg pp_smear_0_10_qcd_raw pp_smear_0_10_qcd_bkg pp_smear_0_10_qcd_gen_iso_raw pp_smear_0_10_qcd_gen_iso_bkg pp_smear_0_10_wo_ele_rej_raw pp_smear_0_10_wo_ele_rej_bkg pp_smear_0_10_es_raw pp_smear_0_10_es_bkg)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(pp_smear_10_30_raw pp_smear_10_30_bkg pp_smear_10_30_qcd_raw pp_smear_10_30_qcd_bkg pp_smear_10_30_qcd_gen_iso_raw pp_smear_10_30_qcd_gen_iso_bkg pp_smear_10_30_wo_ele_rej_raw pp_smear_10_30_wo_ele_rej_bkg)
+samples=(pp_smear_10_30_raw pp_smear_10_30_bkg pp_smear_10_30_qcd_raw pp_smear_10_30_qcd_bkg pp_smear_10_30_qcd_gen_iso_raw pp_smear_10_30_qcd_gen_iso_bkg pp_smear_10_30_wo_ele_rej_raw pp_smear_10_30_wo_ele_rej_bkg pp_smear_10_30_es_raw pp_smear_10_30_es_bkg)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(pp_smear_30_50_raw pp_smear_30_50_bkg pp_smear_30_50_qcd_raw pp_smear_30_50_qcd_bkg pp_smear_30_50_qcd_gen_iso_raw pp_smear_30_50_qcd_gen_iso_bkg pp_smear_30_50_wo_ele_rej_raw pp_smear_30_50_wo_ele_rej_bkg)
+samples=(pp_smear_30_50_raw pp_smear_30_50_bkg pp_smear_30_50_qcd_raw pp_smear_30_50_qcd_bkg pp_smear_30_50_qcd_gen_iso_raw pp_smear_30_50_qcd_gen_iso_bkg pp_smear_30_50_wo_ele_rej_raw pp_smear_30_50_wo_ele_rej_bkg pp_smear_30_50_es_raw pp_smear_30_50_es_bkg)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(pp_smear_50_90_raw pp_smear_50_90_bkg pp_smear_50_90_qcd_raw pp_smear_50_90_qcd_bkg pp_smear_50_90_qcd_gen_iso_raw pp_smear_50_90_qcd_gen_iso_bkg pp_smear_50_90_wo_ele_rej_raw pp_smear_50_90_wo_ele_rej_bkg)
+samples=(pp_smear_50_90_raw pp_smear_50_90_bkg pp_smear_50_90_qcd_raw pp_smear_50_90_qcd_bkg pp_smear_50_90_qcd_gen_iso_raw pp_smear_50_90_qcd_gen_iso_bkg pp_smear_50_90_wo_ele_rej_raw pp_smear_50_90_wo_ele_rej_bkg pp_smear_50_90_es_raw pp_smear_50_90_es_bkg)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
