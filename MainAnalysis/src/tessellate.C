@@ -445,7 +445,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
-    auto c1 = new paper(set + "_" + tag + "_purity", hb);
+    auto c1 = new paper(set + "_purity_" + tag, hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->accessory(purity_info);
@@ -456,7 +456,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         obj->SetAxisRange(0.005, 0.015, "X");
     };
 
-    auto c2 = new paper(set + "_" + tag + "_purity_zoom", hb);
+    auto c2 = new paper(set + "_purity_" + tag + "_zoom", hb);
     apply_style(c2, cms, system_tag);
     c2->accessory(pthf_info);
     c2->format(formatter);

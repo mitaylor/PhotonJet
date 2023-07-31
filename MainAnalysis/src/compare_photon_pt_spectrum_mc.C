@@ -268,7 +268,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto hb = new pencil();
     hb->category("type", "aa", "pp", "ratio");
 
-    auto p7 = new paper(set + "_mc_vacillate_photon_spectra_merge", hb);
+    auto p7 = new paper(set + "_mc_photon_spectra_vacillate_merge", hb);
     p7->set(paper::flags::logy);
     p7->set(paper::flags::logx);
     p7->accessory(range_info);
@@ -277,7 +277,7 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p7->add((*h_aa_construct_vacillate_merge)[0], "aa");
     p7->stack((*h_pp_construct_vacillate_merge)[0], "pp");
     
-    auto p8 = new paper(set + "_mc_accumulate_photon_spectra_merge", hb);
+    auto p8 = new paper(set + "_mc_photon_spectra_accumulate_merge", hb);
     p8->set(paper::flags::logy);
     p8->set(paper::flags::logx);
     p8->accessory(range_info);
@@ -286,13 +286,13 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     p8->add((*h_aa_construct_accumulate_merge)[0], "aa");
     p8->stack((*h_pp_construct_accumulate_merge)[0], "pp");
 
-    auto p9 = new paper(set + "_mc_accumulate_photon_spectra_ratio_merge", hb);
+    auto p9 = new paper(set + "_mc_photon_spectra_accumulate_merge_ratio", hb);
     p9->accessory(range_info);
     p9->accessory(kinematics);
     apply_style(p9, cms, system_tag);
     p9->add((*h_accumulate_ratio_merge)[0], "ratio");
 
-    auto p10 = new paper(set + "_mc_vacillate_photon_spectra_ratio_merge", hb);
+    auto p10 = new paper(set + "_mc_photon_spectra_vacillate_merge_ratio", hb);
     p10->accessory(range_info);
     p10->accessory(kinematics);
     apply_style(p10, cms, system_tag);

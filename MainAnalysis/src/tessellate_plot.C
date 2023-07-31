@@ -78,7 +78,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     cms += "                  anti-k_{T} R = 0.3, p_{T}^{jet} > "s + to_text(jet_pt_min) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs) + ", ";
     cms += "|#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
-    auto c1 = new paper(set + "_" + tag + "_tessellate_templates", hb);
+    auto c1 = new paper(set + "_tessellate_templates_" + tag, hb);
     apply_style(c1, cms, system_tag);
     c1->accessory(pthf_info);
     c1->divide(-1 , ihf->size());
