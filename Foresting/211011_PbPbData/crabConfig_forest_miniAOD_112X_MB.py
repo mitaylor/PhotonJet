@@ -1,7 +1,7 @@
-# OutputBase = '/store/user/mitaylor/PhotonJet'
-OutputBase = '/store/group/phys_heavyions/mitaylor/PhotonJet'
+OutputBase = '/store/user/mitaylor/PhotonJet'
+# OutputBase = '/store/group/phys_heavyions/mitaylor/PhotonJet'
 DatasetName = '/HIMinimumBias4/HIRun2018A-PbPb18_MiniAODv1-v1/MINIAOD'
-Tag = '20230203PbPbMB'
+Tag = '20230730PbPbMB'
 
 from WMCore.Configuration import Configuration
 config = Configuration()
@@ -26,7 +26,7 @@ config.Data.outLFNDirBase = OutputBase + DatasetName
 config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/HI/PromptReco/Cert_326381-327564_HI_PromptReco_Collisions18_JSON.txt'
 
 config.section_("Site")
-# config.Site.storageSite = 'T2_US_MIT'
-config.Site.storageSite = 'T2_CH_CERN'
+config.Site.storageSite = 'T2_US_MIT'
+# config.Site.storageSite = 'T2_CH_CERN'
 config.Site.ignoreGlobalBlacklist = True
 config.Site.whitelist = ['T2_US_Vanderbilt']
