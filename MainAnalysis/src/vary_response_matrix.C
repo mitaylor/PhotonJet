@@ -43,6 +43,10 @@ int vary_response_matrix(char const* config, char const* selections, const char*
     auto h_truth_r = new history<TH1F>(ftruth, tag + "_"s + truth_label_r);
     auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);
 
+    auto h_truth_g_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_g + "_merge");
+    auto h_truth_r_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_r + "_merge");
+    auto h_truth_c_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_c + "_merge");
+
     auto size = h_truth_c->size();
 
     auto rng = new TRandom3(180);
@@ -62,10 +66,27 @@ int vary_response_matrix(char const* config, char const* selections, const char*
         }
     }
 
+    for (int64_t j = 0; j < (*h_truth_c_merge)[i]->GetNbinsX(); ++j) {
+        for (int64_t k = 0; k < (*h_truth_c_merge)[i]->GetNbinsY(); ++k) {
+            auto center = (*h_truth_c_merge)[i]->GetBinContent(j + 1, k + 1);
+            auto error = (*h_truth_c_merge)[i]->GetBinError(j + 1, k + 1);
+
+            if (center == 0) { continue; }
+            auto new_center = center + rng->Gaus(0, error/2);
+
+            if (new_center > 0) (*h_truth_c_merge)[i]->SetBinContent(j + 1, k + 1, new_center);
+            else                (*h_truth_c_merge)[i]->SetBinContent(j + 1, k + 1, 0);
+        }
+    }
+
     in(output, [&]() {
         h_truth_g->save();
         h_truth_r->save();
         h_truth_c->save();
+
+        h_truth_g_merge->save();
+        h_truth_r_merge->save();
+        h_truth_c_merge->save();
     });
 
     return 0;

@@ -48,7 +48,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/AANominalMEBS3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_mebs.root \
-    --DataHistogram aa_nominal_mebs_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_nominal_mebs_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -105,7 +105,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/AAQCDMEBS3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_qcd_mebs.root \
-    --DataHistogram aa_qcd_nominal_mebs_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_qcd_nominal_mebs_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
