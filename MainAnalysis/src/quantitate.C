@@ -357,17 +357,17 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto HRefolded = (TH1F*) fmerge->Get(refold_name.data());
     auto HMeasured = (TH1F*) fmerge->Get("HMCMeasured");
 
-    (*unfolded_merge)[j] = HUnfoldedBayes;
-    (*unfolded_merge_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-    (*unfolded_merge_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+    (*unfolded_merge)[0] = HUnfoldedBayes;
+    (*unfolded_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
+    (*unfolded_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
 
-    (*refolded_merge)[j] = HRefolded;
-    (*refolded_merge_fold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
-    (*refolded_merge_fold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
+    (*refolded_merge)[0] = HRefolded;
+    (*refolded_merge_fold0)[0] = fold(HRefolded, nullptr, mr, 0, osr);
+    (*refolded_merge_fold1)[0] = fold(HRefolded, nullptr, mr, 1, osr);
 
-    (*measured_merge)[j] = HMeasured;
-    (*measured_merge_fold0)[j] = fold(HMeasured, nullptr, mr, 0, osr);
-    (*measured_merge_fold1)[j] = fold(HMeasured, nullptr, mr, 1, osr);
+    (*measured_merge)[0] = HMeasured;
+    (*measured_merge_fold0)[0] = fold(HMeasured, nullptr, mr, 0, osr);
+    (*measured_merge_fold1)[0] = fold(HMeasured, nullptr, mr, 1, osr);
 
     /* normalize folded histograms */
     normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1, measured_fold0, measured_fold1);
