@@ -43,9 +43,9 @@ int vary_response_matrix(char const* config, char const* selections, const char*
     auto h_truth_r = new history<TH1F>(ftruth, tag + "_"s + truth_label_r);
     auto h_truth_c = new history<TH1F>(ftruth, tag + "_"s + truth_label_c);
 
-    auto h_truth_g_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_g + "_merge");
-    auto h_truth_r_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_r + "_merge");
-    auto h_truth_c_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_c + "_merge");
+    auto h_truth_g_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_g + "_merge"s);
+    auto h_truth_r_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_r + "_merge"s);
+    auto h_truth_c_merge = new history<TH1F>(ftruth, tag + "_"s + truth_label_c + "_merge"s);
 
     auto size = h_truth_c->size();
 
