@@ -97,23 +97,23 @@ int sum_iteration(char const* config, char const* selections, char const* output
             (*sum)[j]->SetBinError(iterations[i], unc);
         }
 
-        if (!((*refold_merge_fold0)[j]->GetBinError(1) < 10)) { continue; }
-        if (!((*refold_merge_fold1)[j]->GetBinError(1) < 10)) { continue; }
+        if (!((*refold_merge_fold0)[0]->GetBinError(1) < 10)) { continue; }
+        if (!((*refold_merge_fold1)[0]->GetBinError(1) < 10)) { continue; }
 
         double chi2 = 0;
         double unc = 0;
 
-        for (int64_t k = 1; k < (*base_merge_fold0)[j]->GetNbinsX(); ++k) {
-            double diff = (*base_merge_fold0)[j]->GetBinContent(k + 1) - (*refold_merge_fold0)[j]->GetBinContent(k + 1);
-            diff += (*base_merge_fold1)[j]->GetBinContent(k + 1) - (*refold_merge_fold1)[j]->GetBinContent(k + 1);
+        for (int64_t k = 1; k < (*base_merge_fold0)[0]->GetNbinsX(); ++k) {
+            double diff = (*base_merge_fold0)[0]->GetBinContent(k + 1) - (*refold_merge_fold0)[0]->GetBinContent(k + 1);
+            diff += (*base_merge_fold1)[0]->GetBinContent(k + 1) - (*refold_merge_fold1)[0]->GetBinContent(k + 1);
             chi2 += diff * diff;
-            unc += (*refold_merge_fold0)[j]->GetBinError(k + 1) + (*refold_merge_fold1)[j]->GetBinError(k + 1);;
+            unc += (*refold_merge_fold0)[0]->GetBinError(k + 1) + (*refold_merge_fold1)[0]->GetBinError(k + 1);;
         }
 
         if (!(unc < 20)) { continue; }
 
-        (*sum_merge)[j]->SetBinContent(iterations[i], chi2);
-        (*sum_merge)[j]->SetBinError(iterations[i], unc);
+        (*sum_merge)[0]->SetBinContent(iterations[i], chi2);
+        (*sum_merge)[0]->SetBinError(iterations[i], unc);
     }
 
     in(output, [&]() {
