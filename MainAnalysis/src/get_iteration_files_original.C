@@ -104,7 +104,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-int get_chi_square_iteration_files(char const* config, char const* selections, char const* output) {
+int get_iteration_files(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -204,28 +204,28 @@ int get_chi_square_iteration_files(char const* config, char const* selections, c
     }
 
     for (size_t i = 0; i < iteration.size(); ++i) {
-        auto refolded = new history<TH1F>("refolded", "", null<TH1F>, 1);
-        auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, 1);
-        auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, 1);
+        auto refolded_merge = new history<TH1F>("refolded_merge", "", null<TH1F>, 1);
+        auto refolded_merge_fold0 = new history<TH1F>("refolded_merge_fold0", "", null<TH1F>, 1);
+        auto refolded_merge_fold1 = new history<TH1F>("refolded_merge_fold1", "", null<TH1F>, 1);
 
         std::string refold_name = "HRefoldedBayes" + std::to_string(iteration[i]);
         auto HRefolded = (TH1F*) fmerge->Get(refold_name.data());
 
 
-        (*refolded)[0] = HRefolded;
-        (*refolded_fold0)[0] = fold(HRefolded, nullptr, mr, 0, osr);
-        (*refolded_fold1)[0] = fold(HRefolded, nullptr, mr, 1, osr);
+        (*refolded_merge)[0] = HRefolded;
+        (*refolded_merge_fold0)[0] = fold(HRefolded, nullptr, mr, 0, osr);
+        (*refolded_merge_fold1)[0] = fold(HRefolded, nullptr, mr, 1, osr);
 
-        normalise_to_unity(refolded_fold0, refolded_fold1);
+        normalise_to_unity(refolded_merge_fold0, refolded_merge_fold1);
 
 
-        refolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded"s + std::to_string(iteration[i]));
-        refolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold0"s + std::to_string(iteration[i]));
-        refolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold1"s + std::to_string(iteration[i]));
+        refolded_merge->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded"s + std::to_string(iteration[i]));
+        refolded_merge_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold0"s + std::to_string(iteration[i]));
+        refolded_merge_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold1"s + std::to_string(iteration[i]));
 
-        refolded->save();
-        refolded_fold0->save();
-        refolded_fold1->save();
+        refolded_merge->save();
+        refolded_merge_fold0->save();
+        refolded_merge_fold1->save();
     }
 
     fout->Close();
@@ -235,7 +235,7 @@ int get_chi_square_iteration_files(char const* config, char const* selections, c
 
 int main(int argc, char* argv[]) {
     if (argc == 4)
-        return get_chi_square_iteration_files(argv[1], argv[2], argv[3]);
+        return get_iteration_files(argv[1], argv[2], argv[3]);
 
     printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
