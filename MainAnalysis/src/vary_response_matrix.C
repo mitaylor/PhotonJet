@@ -66,16 +66,16 @@ int vary_response_matrix(char const* config, char const* selections, const char*
         }
     }
 
-    for (int64_t j = 0; j < (*h_truth_c_merge)[i]->GetNbinsX(); ++j) {
-        for (int64_t k = 0; k < (*h_truth_c_merge)[i]->GetNbinsY(); ++k) {
-            auto center = (*h_truth_c_merge)[i]->GetBinContent(j + 1, k + 1);
-            auto error = (*h_truth_c_merge)[i]->GetBinError(j + 1, k + 1);
+    for (int64_t j = 0; j < (*h_truth_c_merge)[0]->GetNbinsX(); ++j) {
+        for (int64_t k = 0; k < (*h_truth_c_merge)[0]->GetNbinsY(); ++k) {
+            auto center = (*h_truth_c_merge)[0]->GetBinContent(j + 1, k + 1);
+            auto error = (*h_truth_c_merge)[0]->GetBinError(j + 1, k + 1);
 
             if (center == 0) { continue; }
             auto new_center = center + rng->Gaus(0, error/2);
 
-            if (new_center > 0) (*h_truth_c_merge)[i]->SetBinContent(j + 1, k + 1, new_center);
-            else                (*h_truth_c_merge)[i]->SetBinContent(j + 1, k + 1, 0);
+            if (new_center > 0) (*h_truth_c_merge)[0]->SetBinContent(j + 1, k + 1, new_center);
+            else                (*h_truth_c_merge)[0]->SetBinContent(j + 1, k + 1, 0);
         }
     }
 
