@@ -756,6 +756,19 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/PPNominal0.root
 
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_es.root \
+    --DataHistogram pp_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp.root \
+    --ResponseHistogram pp_c_0 \
+    --ResponseTruth pp_g_0 \
+    --ResponseReco pp_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/${set}/PPES0.root
+
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_wo_ele_rej.root \
     --DataHistogram pp_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
@@ -872,6 +885,19 @@ set=$1
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/PPSmear90Nominal0.root
+
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_50_90.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/${set}/PPSmear90ES0.root
 
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_50_90_wo_ele_rej.root \
@@ -990,6 +1016,19 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/PPSmear50Nominal0.root
 
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_30_50.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/${set}/PPSmear50ES0.root
+
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_30_50_wo_ele_rej.root \
     --DataHistogram pp_smear_30_50_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
@@ -1107,6 +1146,19 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/PPSmear30Nominal0.root
 
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_10_30.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/${set}/PPSmear30ES0.root
+
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_10_30_wo_ele_rej.root \
     --DataHistogram pp_smear_10_30_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
@@ -1223,6 +1275,19 @@ set=$1
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output Output/${set}/PPSmear10Nominal0.root
+
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_pp_smear_0_10.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output Output/${set}/PPSmear10ES0.root
 
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_0_10_wo_ele_rej.root \

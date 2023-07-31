@@ -48,7 +48,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AANominal3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
-    --DataHistogram aa_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -58,6 +58,63 @@ set=$1
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AANominalMerge.root
+
+# AAES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_es.root \
+    --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa.root \
+    --ResponseHistogram aa_c_0 \
+    --ResponseTruth aa_g_0 \
+    --ResponseReco aa_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/AAES0.root
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_es.root \
+    --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_sum0_1 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa.root \
+    --ResponseHistogram aa_c_1 \
+    --ResponseTruth aa_g_1 \
+    --ResponseReco aa_r_1 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/AAES1.root
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_es.root \
+    --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_sum0_2 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa.root \
+    --ResponseHistogram aa_c_2 \
+    --ResponseTruth aa_g_2 \
+    --ResponseReco aa_r_2 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/AAES2.root
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_es.root \
+    --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_sum0_3 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa.root \
+    --ResponseHistogram aa_c_3 \
+    --ResponseTruth aa_g_3 \
+    --ResponseReco aa_r_3 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/AAES3.root
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_es.root \
+    --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_merge_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa.root \
+    --ResponseHistogram aa_c_merge_0 \
+    --ResponseTruth aa_g_merge_0 \
+    --ResponseReco aa_r_merge_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/AAESMerge.root
 
 # AAWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_wo_ele_rej.root \
@@ -105,7 +162,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AAWithoutEleRej3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_wo_ele_rej.root \
-    --DataHistogram aa_wo_ele_rej_pure_wo_ele_rej_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_wo_ele_rej.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -162,7 +219,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AATightPurity3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_tight_purity.root \
-    --DataHistogram aa_tight_purity_pure_tight_purity_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_tight_purity.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -219,7 +276,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AALoosePurity3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_loose_purity.root \
-    --DataHistogram aa_loose_purity_pure_loose_purity_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_loose_purity.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -276,7 +333,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AAQCD3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_qcd.root \
-    --DataHistogram aa_qcd_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_qcd.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -333,7 +390,7 @@ set=$1
 #     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
 #     --Output OutputWeighted/${set}/AAQCDAll3.root
 # ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_qcd.root \
-#     --DataHistogram aa_qcd_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+#     --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
 #     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_qcd_all.root \
 #     --ResponseHistogram aa_c_merge_0 \
 #     --ResponseTruth aa_g_merge_0 \
@@ -390,7 +447,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AAQCDGenIso3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_qcd_gen_iso.root \
-    --DataHistogram aa_qcd_gen_iso_pure_gen_iso_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_qcd_gen_iso.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -447,7 +504,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AAJEUUp3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
-    --DataHistogram aa_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_jeu_up.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -504,7 +561,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AAJEUDown3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
-    --DataHistogram aa_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_jeu_down.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -561,7 +618,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AAJERUp3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa.root \
-    --DataHistogram aa_nominal_pure_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_jer_up.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -618,7 +675,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AACentUp3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_cent_up.root \
-    --DataHistogram aa_cent_up_pure_cent_up_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_cent_up.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -675,7 +732,7 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/AACentDown3.root
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_aa_cent_down.root \
-    --DataHistogram aa_cent_down_pure_cent_down_raw_sub_pjet_u_dr_merge_0 \
+    --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_merge_0 \
     --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_aa_cent_down.root \
     --ResponseHistogram aa_c_merge_0 \
     --ResponseTruth aa_g_merge_0 \
@@ -698,6 +755,19 @@ set=$1
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/PPNominal0.root
+
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_es.root \
+    --DataHistogram pp_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_pp.root \
+    --ResponseHistogram pp_c_0 \
+    --ResponseTruth pp_g_0 \
+    --ResponseReco pp_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/PPES0.root
 
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_wo_ele_rej.root \
@@ -816,6 +886,19 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/PPSmear90Nominal0.root
 
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_50_90.root \
+    --DataHistogram pp_smear_50_90_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_pp_smear_50_90.root \
+    --ResponseHistogram pp_smear_50_90_c_0 \
+    --ResponseTruth pp_smear_50_90_g_0 \
+    --ResponseReco pp_smear_50_90_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/PPSmear90ES0.root
+
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_50_90_wo_ele_rej.root \
     --DataHistogram pp_smear_50_90_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
@@ -932,6 +1015,19 @@ set=$1
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/PPSmear50Nominal0.root
+
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_30_50.root \
+    --DataHistogram pp_smear_30_50_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_pp_smear_30_50.root \
+    --ResponseHistogram pp_smear_30_50_c_0 \
+    --ResponseTruth pp_smear_30_50_g_0 \
+    --ResponseReco pp_smear_30_50_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/PPSmear50ES0.root
 
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_30_50_wo_ele_rej.root \
@@ -1050,6 +1146,19 @@ set=$1
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/PPSmear30Nominal0.root
 
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_10_30.root \
+    --DataHistogram pp_smear_10_30_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_pp_smear_10_30.root \
+    --ResponseHistogram pp_smear_10_30_c_0 \
+    --ResponseTruth pp_smear_10_30_g_0 \
+    --ResponseReco pp_smear_10_30_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/PPSmear30ES0.root
+
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_10_30_wo_ele_rej.root \
     --DataHistogram pp_smear_10_30_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_sum0_0 \
@@ -1166,6 +1275,19 @@ set=$1
     --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
     --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
     --Output OutputWeighted/${set}/PPSmear10Nominal0.root
+
+# PPES: Execute
+./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_0_10.root \
+    --DataHistogram pp_smear_0_10_es_s_pure_es_raw_sub_pjet_u_dr_sum0_0 \
+    --Response ../../MainAnalysis/data/preapproval/${set}/vacillate_weight_pp_smear_0_10.root \
+    --ResponseHistogram pp_smear_0_10_c_0 \
+    --ResponseTruth pp_smear_0_10_g_0 \
+    --ResponseReco pp_smear_0_10_r_0 \
+    --PrimaryRecoBins 0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3 \
+    --BinningRecoBins 20,30,35,40,45,50,55,60,70,80,90,100,120,150,200 \
+    --PrimaryGenBins 0,0.015,0.03,0.045,0.06,0.08,0.1,0.12,0.15,0.2,0.3 \
+    --BinningGenBins 20,30,40,50,60,70,80,100,120,200 \
+    --Output OutputWeighted/${set}/PPSmear10ES0.root
 
 # PPWithoutEleRej: Execute
 ./Execute --Data ../../MainAnalysis/data/preapproval/${set}/accumulate_pp_smear_0_10_wo_ele_rej.root \
