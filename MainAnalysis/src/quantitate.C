@@ -282,11 +282,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<int64_t> choice(sum->size(), 1);
     int64_t choice_merge = 1;
 
-    for (int64_t i = 0; i < sum->size(); ++i) {
+    for (int i = 0; i < sum->size(); ++i) {
         double min = 99999999999;
 
-        for (int64_t j = 0; j < (*sum)[i]->GetNbinsX(); ++j) {
-            auto top = (*sum)[i]->GetBinContent(j + 1) + (*sum)[i]->GetBinError(j + 1);
+        for (int j = 1; j <= (*sum)[i]->GetNbinsX(); ++j) {
+            auto top = (*sum)[i]->GetBinContent(j);
 
             if (top == 0) { continue; }
 
@@ -306,8 +306,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     double min = 99999999999;
 
-    for (int64_t j = 0; j < (*sum_merge)[0]->GetNbinsX(); ++j) {
-        auto top = (*sum_merge)[0]->GetBinContent(j + 1) + (*sum_merge)[0]->GetBinError(j + 1);
+    for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
+        auto top = (*sum_merge)[0]->GetBinContent(j);
 
         if (top == 0) { continue; }
 
