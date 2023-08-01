@@ -72,6 +72,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto ihf = new interval(dhf);
 
+    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -102,8 +104,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
-    auto aa_info = [&](int64_t index, history<TH1F>* h) {
+    std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", drange, true); };
+
+    auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
+
+    auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
+        stack_text(index, 0.73, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -187,24 +195,26 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto a = new paper(set + "_" + prefix+ "_results_aa_" + figure, hb);
         apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        a->accessory(std::bind(aa_info, _1, hists[0]));
+        if (hists[0]->size() == ihf->size()) { a->accessory(std::bind(aa_hf_info, _1, hists[0])); }
+        else { a->accessory(std::bind(aa_range_info, _1, hists[0])); }
         a->accessory(kinematics);
         a->jewellery(box);
-        a->divide(ihf->size()/2, -1);
+        iif (hists[0]->size() == ihf->size()) { a->divide(hists[0]->size()/2, -1); }
 
         auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        s->accessory(std::bind(aa_info, _1, hists[0]));
+        if (hists[0]->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, hists[0])); }
+        else { s->accessory(std::bind(aa_range_info, _1, hists[0])); }
         s->accessory(kinematics);
         s->jewellery(box);
-        s->divide(ihf->size()/2, -1);
+        if (hists[0]->size() == ihf->size()) { s->divide(hists[0]->size()/2, -1); }
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { a->add(h, "aa"); s->add(h, "aa"); });
         hists[1]->apply([&](TH1* h) { p->add(h, "pp"); });
 
-        for (int64_t i = 0; i < 4; ++i) {
+        for (int64_t i = 0; i < hists[0]->size(); ++i) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "ss");
             });
