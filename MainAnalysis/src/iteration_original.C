@@ -70,7 +70,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
     auto sum = new history<TH1F>("sum"s, "", func, base_fold0->size());
     auto sum_merge = new history<TH1F>("sum_merge"s, "", func, 1);
 
-    for (size_t i = 1; i < iterations.size(); ++i) {
+    for (size_t i = 0; i < iterations.size(); ++i) {
         auto refold_fold0 = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_refolded_fold0" + std::to_string(iterations[i]));
         auto refold_fold1 = new history<TH1F>(f, tag + "_"s + base_label + "_sum0_refolded_fold1" + std::to_string(iterations[i]));
 
