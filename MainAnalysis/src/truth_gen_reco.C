@@ -477,17 +477,17 @@ int truth_gen_reco(char const* config, char const* selections, char const* outpu
     auto r_reco_iso_matched_merge = r_reco_iso_matched->extend("merge", 0, 1)->sum(1);
     auto r_reco_iso_unmatched_merge = r_reco_iso_unmatched->extend("merge", 0, 1)->sum(1);
 
-    auto h_r_truth_gen_iso_merge = h_r_truth_gen_iso->extend("merge", 0, 1)->sum(1);
-    auto h_r_truth_reco_iso_merge = h_r_truth_reco_iso->extend("merge", 0, 1)->sum(1);
-    auto h_r_reco_gen_iso_merge = h_r_reco_gen_iso->extend("merge", 0, 1)->sum(1);
-    auto h_r_reco_reco_iso_matched_merge = h_r_reco_reco_iso_matched->extend("merge", 0, 1)->sum(1);
-    auto h_r_reco_reco_iso_unmatched_merge = h_r_reco_reco_iso_unmatched->extend("merge", 0, 1)->sum(1);
+    auto h_r_truth_gen_iso_merge = new history<TH1F>("h_r_truth_gen_iso_merge", "", null<TH1F>, 1);
+    auto h_r_truth_reco_iso_merge = new history<TH1F>("h_r_truth_reco_iso_merge", "", null<TH1F>, 1);
+    auto h_r_reco_gen_iso_merge = new history<TH1F>("h_r_reco_gen_iso_merge", "", null<TH1F>, 1);
+    auto h_r_reco_reco_iso_matched_merge = new history<TH1F>("h_r_reco_reco_iso_matched_merge", "", null<TH1F>, 1);
+    auto h_r_reco_reco_iso_unmatched_merge = new history<TH1F>("h_r_reco_reco_iso_unmatched_merge", "", null<TH1F>, 1);
 
-    auto h_j_truth_gen_iso_merge = h_j_truth_gen_iso->extend("merge", 0, 1)->sum(1);
-    auto h_j_truth_reco_iso_merge = h_j_truth_reco_iso->extend("merge", 0, 1)->sum(1);
-    auto h_j_reco_gen_iso_merge = h_j_reco_gen_iso->extend("merge", 0, 1)->sum(1);
-    auto h_j_reco_reco_iso_matched_merge = h_j_reco_reco_iso_matched->extend("merge", 0, 1)->sum(1);
-    auto h_j_reco_reco_iso_unmatched_merge = h_j_reco_reco_iso_unmatched->extend("merge", 0, 1)->sum(1);
+    auto h_j_truth_gen_iso_merge = new history<TH1F>("h_j_truth_gen_iso_merge", "", null<TH1F>, 1);
+    auto h_j_truth_reco_iso_merge = new history<TH1F>("h_j_truth_reco_iso_merge", "", null<TH1F>, 1);
+    auto h_j_reco_gen_iso_merge = new history<TH1F>("h_j_reco_gen_iso_merge", "", null<TH1F>, 1);
+    auto h_j_reco_reco_iso_matched_merge = new history<TH1F>("h_j_reco_reco_iso_matched_merge", "", null<TH1F>, 1);
+    auto h_j_reco_reco_iso_unmatched_merge = new history<TH1F>("h_j_reco_reco_iso_unmatched_merge", "", null<TH1F>, 1);
 
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
