@@ -307,7 +307,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     double min = 99999999999;
 
     for (int64_t j = 0; j < (*sum_merge)[0]->GetNbinsX(); ++j) {
-        auto top = (*sum_merge)[0]->GetBinContent(j + 1) + (*sum_merge)[0]->GetBinError(j + 1);
+        auto top = (*sum_merge)[0]->GetBinContent(j) + (*sum_merge)[0]->GetBinError(j);
 
         if (top == 0) { continue; }
 
