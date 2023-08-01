@@ -264,11 +264,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }, batches, legend_keys, plots);
 
         /* add info text */
-        if (total->size() == dcent.size() - 1) { c1->accessory(hf_info); }
+        if (total->size() == 4) { c1->accessory(hf_info); }
         else  { c1->accessory(range_info); }
         c1->accessory(kinematics);
 
-        if (total->size() == dcent.size() - 1) { c2->accessory(hf_info); }
+        if (total->size() == 4) { c2->accessory(hf_info); }
         else  { c2->accessory(range_info); }
         c2->accessory(kinematics);
 
