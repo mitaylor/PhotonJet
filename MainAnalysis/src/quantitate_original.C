@@ -266,17 +266,17 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto measured_fold0 = new history<TH1F>("measured_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto measured_fold1 = new history<TH1F>("measured_fold1", "", null<TH1F>, (int64_t) afters.size());
 
-    auto unfolded_merge = new history<TH1F>("unfolded_merge", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_merge_fold0 = new history<TH1F>("unfolded_merge_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_merge_fold1 = new history<TH1F>("unfolded_merge_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_merge = new history<TH1F>("unfolded_merge", "", null<TH1F>, 1);
+    auto unfolded_merge_fold0 = new history<TH1F>("unfolded_merge_fold0", "", null<TH1F>, 1);
+    auto unfolded_merge_fold1 = new history<TH1F>("unfolded_merge_fold1", "", null<TH1F>, 1);
 
-    auto refolded_merge = new history<TH1F>("refolded_merge", "", null<TH1F>, (int64_t) afters.size());
-    auto refolded_merge_fold0 = new history<TH1F>("refolded_merge_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto refolded_merge_fold1 = new history<TH1F>("refolded_merge_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto refolded_merge = new history<TH1F>("refolded_merge", "", null<TH1F>, 1);
+    auto refolded_merge_fold0 = new history<TH1F>("refolded_merge_fold0", "", null<TH1F>, 1);
+    auto refolded_merge_fold1 = new history<TH1F>("refolded_merge_fold1", "", null<TH1F>, 1);
 
-    auto measured_merge = new history<TH1F>("measured_merge", "", null<TH1F>, (int64_t) afters.size());
-    auto measured_merge_fold0 = new history<TH1F>("measured_merge_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto measured_merge_fold1 = new history<TH1F>("measured_merge_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto measured_merge = new history<TH1F>("measured_merge", "", null<TH1F>, 1);
+    auto measured_merge_fold0 = new history<TH1F>("measured_merge_fold0", "", null<TH1F>, 1);
+    auto measured_merge_fold1 = new history<TH1F>("measured_merge_fold1", "", null<TH1F>, 1);
 
     /* determine the number of iterations to use */
     std::vector<int64_t> choice(sum->size(), 1);
