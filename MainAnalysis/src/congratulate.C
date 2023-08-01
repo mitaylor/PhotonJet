@@ -199,7 +199,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         else { a->accessory(std::bind(aa_range_info, _1, hists[0])); }
         a->accessory(kinematics);
         a->jewellery(box);
-        iif (hists[0]->size() == ihf->size()) { a->divide(hists[0]->size()/2, -1); }
+        if (hists[0]->size() == ihf->size()) { a->divide(hists[0]->size()/2, -1); }
 
         auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
