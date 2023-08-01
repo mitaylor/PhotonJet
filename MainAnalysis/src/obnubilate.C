@@ -68,6 +68,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
+    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -104,6 +106,9 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+
+    auto range_info = [&](int64_t index) {
+        info_text(index, 0.75, "Cent. %i - %i%%", drange, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -259,9 +264,12 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }, batches, legend_keys, plots);
 
         /* add info text */
-        c1->accessory(hf_info); 
+        if (total->size() == dcent.size() - 1) { c1->accessory(hf_info); }
+        else  { c1->accessory(range_info); }
         c1->accessory(kinematics);
-        c2->accessory(hf_info); 
+
+        if (total->size() == dcent.size() - 1) { c2->accessory(hf_info); }
+        else  { c2->accessory(range_info); }
         c2->accessory(kinematics);
 
         /* save histograms */

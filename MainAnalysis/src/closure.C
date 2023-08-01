@@ -184,7 +184,7 @@ int closure(char const* config, char const* selections, const char* output) {
     hb->alias("matrix", "Response Matrix Reco");
 
     /* (1) unfolded MC vs reco truth dr */
-    auto p1 = new paper(set + "_" + label + "_dj_unfolded_mc_vs_truth_gen_iso", hb);
+    auto p1 = new paper(set + "_" + label + "_closure_dj_unfolded_mc_vs_truth_gen_iso", hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -195,7 +195,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_r_truth_gen_iso->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth_gen_iso"); });
     
     /* (2) unfolded MC vs reco truth jtpt */
-    auto p2 = new paper(set + "_" + label + "_jtpt_unfolded_mc_vs_truth_gen_iso", hb);
+    auto p2 = new paper(set + "_" + label + "_closure_jtpt_unfolded_mc_vs_truth_gen_iso", hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
@@ -206,7 +206,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_j_truth_gen_iso->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth_gen_iso"); });
 
     /* (3) data vs refolded data */
-    auto p3 = new paper(set + "_" + label + "_refolding_test", hb);
+    auto p3 = new paper(set + "_" + label + "_closure_refolding_test", hb);
     p3->divide(ihf->size(), -1);
     p3->accessory(hf_info);
     p3->accessory(kinematics);
@@ -217,7 +217,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_r_data_circle->apply([&](TH1* h, int64_t index) { p3->stack(index + 1, h, "data_circle"); });
 
     /* (5) matched vs unmatched dr */
-    auto p5 = new paper(set + "_" + label + "_dj_matched_unmatched", hb);
+    auto p5 = new paper(set + "_" + label + "_closure_dj_matched_unmatched", hb);
     p5->divide(ihf->size(), -1);
     p5->accessory(hf_info);
     p5->accessory(kinematics);
@@ -228,7 +228,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_r_reco_reco_iso_unmatched->apply([&](TH1* h, int64_t index) { p5->stack(index + 1, h, "reco_unmatched"); });
 
     /* (6) matched vs unmatched jtpt */
-    auto p6 = new paper(set + "_" + label + "_jtpt_matched_unmatched", hb);
+    auto p6 = new paper(set + "_" + label + "_closure_jtpt_matched_unmatched", hb);
     p6->divide(ihf->size(), -1);
     p6->accessory(hf_info);
     p6->accessory(kinematics);
@@ -239,7 +239,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_j_reco_reco_iso_unmatched->apply([&](TH1* h, int64_t index) { p6->stack(index + 1, h, "reco_unmatched"); });
 
     /* (7) MC vs reco truth dr */
-    auto p7 = new paper(set + "_" + label + "_dj_mc_vs_reco", hb);
+    auto p7 = new paper(set + "_" + label + "_closure_dj_mc_vs_reco", hb);
     p7->divide(ihf->size(), -1);
     p7->accessory(hf_info);
     p7->accessory(kinematics);
@@ -251,7 +251,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_r_r->apply([&](TH1* h, int64_t index) { p7->stack(index + 1, h, "matrix"); });
 
     /* (8) MC vs reco truth jtpt */
-    auto p8 = new paper(set + "_" + label + "_jtpt_mc_vs_reco", hb);
+    auto p8 = new paper(set + "_" + label + "_closure_jtpt_mc_vs_reco", hb);
     p8->divide(ihf->size(), -1);
     p8->accessory(hf_info);
     p8->accessory(kinematics);
@@ -263,7 +263,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_j_r->apply([&](TH1* h, int64_t index) { p8->stack(index + 1, h, "matrix"); });
 
     /* (9) qcd vs refolded qcd */
-    auto p9 = new paper(set + "_" + label + "_dj_qcd_refolding_test", hb);
+    auto p9 = new paper(set + "_" + label + "_closure_dj_qcd_refolding_test", hb);
     p9->divide(ihf->size(), -1);
     p9->accessory(hf_info);
     p9->accessory(kinematics);
@@ -274,7 +274,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_r_qcd_circle->apply([&](TH1* h, int64_t index) { p9->stack(index + 1, h, "qcd_circle"); });
 
     /* (10) qcd vs refolded qcd */
-    auto p10 = new paper(set + "_" + label + "_jtpt_qcd_refolding_test", hb);
+    auto p10 = new paper(set + "_" + label + "_closure_jtpt_qcd_refolding_test", hb);
     p10->divide(ihf->size(), -1);
     p10->accessory(hf_info);
     p10->accessory(kinematics);
@@ -285,7 +285,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_j_qcd_circle->apply([&](TH1* h, int64_t index) { p10->stack(index + 1, h, "qcd_circle"); });
 
     /* (11) truth reco iso vs truth gen iso */
-    auto p11 = new paper(set + "_" + label + "_dj_reco_iso_vs_gen_iso", hb);
+    auto p11 = new paper(set + "_" + label + "_closure_dj_reco_iso_vs_gen_iso", hb);
     p11->divide(ihf->size(), -1);
     p11->accessory(hf_info);
     p11->accessory(kinematics);
@@ -298,7 +298,7 @@ int closure(char const* config, char const* selections, const char* output) {
     h_r_truth_reco_iso->apply([&](TH1* h, int64_t index) { p11->stack(index + 1, h, "truth_reco_iso"); });
 
     /* (12) truth reco iso vs truth gen iso */
-    auto p12 = new paper(set + "_" + label + "_jtpt_reco_iso_vs_gen_iso", hb);
+    auto p12 = new paper(set + "_" + label + "_closure_jtpt_reco_iso_vs_gen_iso", hb);
     p12->divide(ihf->size(), -1);
     p12->accessory(hf_info);
     p12->accessory(kinematics);
