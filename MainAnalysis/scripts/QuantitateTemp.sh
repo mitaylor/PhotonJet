@@ -25,9 +25,7 @@ run_aa() {
 samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
 
 for sample in ${samples[@]}; do
-    run_pp ${sample}
-
-    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up es; do
+    for syst in es; do
         run_pp ${sample}_${syst}
     done
 done
@@ -35,17 +33,7 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    run_aa ${sample}
-
-    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up cent_up cent_down es; do
-        run_aa ${sample}_${syst}
-    done
-done
-
-samples=(aa)
-
-for sample in ${samples[@]}; do
-    for syst in mebs qcd_mebs; do
+    for syst in es; do
         run_aa ${sample}_${syst}
     done
 done
