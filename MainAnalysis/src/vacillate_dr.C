@@ -225,6 +225,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
+            if (leading_pt > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
