@@ -212,7 +212,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     auto minv = new history<TH1F>("mass"s, "counts"s, fmass, shape);
 
     /* load inputs */
-    vector<string> files;
+    std::vector<std::string> files;
     GetFiles(input.c_str(), files);
 
     TChain egmChain("ggHiNtuplizerGED/EventTree");
