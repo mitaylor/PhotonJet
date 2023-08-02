@@ -356,7 +356,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
         entries0 = (*unfolded)[0]->GetEntries(); entries1 = (*unfolded)[1]->GetEntries(); entries2 = (*unfolded)[2]->GetEntries(); entries3 = (*unfolded)[3]->GetEntries();
 
         (*unfolded_merge)[0] = (TH1F*) (*unfolded)[0]->Clone("unfolded_merge");
-        // (*unfolded_merge)[0]->Add((*unfolded)[0], (*unfolded)[1], entries0, entries1);
+        std::cout << entries0 << " " << entries1 << std::endl;
+        (*unfolded_merge)[0]->Add((*unfolded)[0], (*unfolded)[1], entries0, entries1);
         // (*unfolded_merge)[0]->Add((*unfolded)[2], entries2);
         // (*unfolded_merge)[0]->Add((*unfolded)[3], entries3);
         // (*unfolded_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
