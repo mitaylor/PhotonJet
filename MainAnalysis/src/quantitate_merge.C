@@ -173,6 +173,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
 
     auto afters = conf->get<std::vector<std::string>>("afters");
+    auto merge = conf->get<std::string>("merge");
 
     auto regularization = conf->get<std::string>("regularization");
 
@@ -210,8 +211,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
         fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
     }, fafters, afters);
 
+    auto fmerge = new TFile(("unfolded/" + set + "/" + merge).data(), "read");
+
     TFile* fiter = new TFile((base + regularization).data(), "read");
     auto sum = new history<TH1F>(fiter, "sum"s);
+    auto sum_merge = new history<TH1F>(fiter, "sum_merge"s);
 
     /* prepare output from pre-unfolded data */
     TFile* fout = new TFile(output, "recreate");
@@ -276,6 +280,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* determine the number of iterations to use */
     std::vector<int64_t> choice(sum->size(), 1);
+    int64_t choice_merge = 1;
 
     for (int i = 0; i < sum->size(); ++i) {
         double min = 99999999999;
@@ -298,6 +303,26 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         std::cout << std::endl << choice[i] << std::endl;
     }
+
+    double min = 99999999999;
+
+    for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
+        auto top = (*sum_merge)[0]->GetBinContent(j);
+
+        if (top == 0) { continue; }
+
+        std::cout << top << " ";
+
+        if (top < min) {
+            min = top;
+            choice_merge = j;
+        }
+        else {
+            break;
+        }
+    }
+
+    std::cout << std::endl << choice_merge << std::endl;
 
     /* extract chosen histograms */
     for (size_t j = 0; j < fafters.size(); ++j) {
