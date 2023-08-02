@@ -79,7 +79,7 @@ static std::string index_to_string(int64_t i, int64_t j) {
     return std::to_string(i) + "_"s + std::to_string(j);
 }
 
-void GetFiles(char const* input, vector<string>& files) {
+void GetFiles(char const* input, std::vector<string>& files) {
     TSystemDirectory dir(input, input);
     TList *list = dir.GetListOfFiles();
 
@@ -104,7 +104,7 @@ void GetFiles(char const* input, vector<string>& files) {
     return;
 }
 
-void FillChain(TChain& chain, vector<string>& files) {
+void FillChain(TChain& chain, std::vector<string>& files) {
     for (auto file : files) {
         chain.Add(file.c_str());
     }
@@ -359,7 +359,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
         std::sort(masses.begin(), masses.end(), [](float a, float b) {
             return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
-            
+
         (*minv)[x{0, hf_x}]->Fill(masses[0], 1);
     }
 
