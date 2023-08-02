@@ -96,7 +96,7 @@ void GetFiles(char const* input, std::vector<std::string>& files) {
             }
             else if ((fname.find(".root") != std::string::npos)) {
                 files.push_back(std::string(input) + fname);
-                cout << files.back() << endl;
+                std::cout << files.back() << std::endl;
             }
         }
     }
