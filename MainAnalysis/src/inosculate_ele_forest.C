@@ -251,7 +251,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     for (Long64_t i = 0; i < nentries; i++) {
         egmReader.Next(); evtReader.Next();
 
-        if (i % 100000 == 0) { printf("entry: %li/%li\n", i, nentries); }
+        if (i % 100000 == 0) { std::cout << i << "/" nentries << std::endl; }
 
         if (*hiHF <= hf_min) { continue; }
 
@@ -263,8 +263,8 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                 continue;
             if (std::abs((*phoSCEta)[j]) > 1.4442)
                 continue;
-            if (heavyion && in_pho_failure_region(p, j))
-                continue;
+            // if (heavyion && in_pho_failure_region(p, j))
+            //     continue; // FIX
 
             if ((*phoHoverE)[j] > hovere_max) { continue; }
             if ((*phoSigmaIEtaIEta_2012)[j] > 0.011) { continue; }
@@ -288,7 +288,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                         (*eleHoverEBc)[l], (*eleSigmaIEtaIEta_2012)[l], 
                         (*eledEtaSeedAtVtx)[l], (*eledPhiAtVtx)[l],
                         (*eleEoverPInv)[l], *hiBin, heavyion)) {
-}
+
                     electron = true; break;
                 }
             }
@@ -300,8 +300,8 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     continue;
                 if (std::abs((*phoSCEta)[k]) > 1.4442)
                     continue;
-                if (heavyion && in_pho_failure_region(p, k))
-                    continue;
+                // if (heavyion && in_pho_failure_region(p, k))
+                //     continue; //FIX
 
                 if ((*phoHoverE)[k] > hovere_max) { continue; }
                 if ((*phoSigmaIEtaIEta_2012)[k] > 0.011) { continue; }
