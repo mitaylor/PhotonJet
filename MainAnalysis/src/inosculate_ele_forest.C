@@ -248,7 +248,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     /* read in information from TTrees */
     Long64_t nentries = egmReader.GetEntries(true);
 
-    for (Long64_t i = 0; i < nentries; i++) {
+    for (Long64_t i = 0; i < 1700000; i++) {
         egmReader.Next(); evtReader.Next();
 
         if (i % 100000 == 0) { std::cout << i << "/" << nentries << std::endl; }
