@@ -359,7 +359,8 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
         std::sort(masses.begin(), masses.end(), [](float a, float b) {
             return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
-        (*minv)[x{0, hf_x}]->Fill(masses[0], weight);
+            
+        (*minv)[x{0, hf_x}]->Fill(masses[0], 1);
     }
 
     TF1** fits[1] = { new TF1*[ihf->size()] };
