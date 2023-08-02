@@ -183,7 +183,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
     auto input = conf->get<std::string>("input");
     auto tag = conf->get<std::string>("tag");
-    auto use_er = conf->get<bool>("use_er");
+    // auto use_er = conf->get<bool>("use_er");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
