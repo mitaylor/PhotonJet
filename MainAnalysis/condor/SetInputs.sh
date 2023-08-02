@@ -15,11 +15,26 @@
 ##############################################################################
 ##############################################################################
 
-# regulate_pp_qcd_15 unfiltered
+# regulate_aa_zee
 ./SubmitJobs.sh \
-"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM/QCDPhoton_pThat-15_TuneCP5_5p02TeV_pythia8/20220825PPMCUF15/220826_051550/" \
-"regulate_pp_eff.conf" \
-"regulate_pp_eff"
+"/eos/cms/store/group/phys_heavyions/chenyi/PbPb2018/Forest/DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/HINPbPbSpring21MiniAOD-mva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/20230501_ZHadronMCDY/230501_155504/" \
+"regulate_aa_zee.conf" \
+"regulate_aa_zee"
+
+# regulate_pp_zee
+./SubmitJobs.sh \
+"/eos/cms/store/group/phys_heavyions/chenyi/PbPb2018/Forest/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV-v2/AODSIM/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/20230408_ZHadronMLLWithMuTreePP/230408_215932/" \
+"regulate_pp_zee.conf" \
+"regulate_pp_zee"
+
+##############################################################################
+##############################################################################
+
+# # regulate_pp_qcd_15 unfiltered
+# ./SubmitJobs.sh \
+# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM/QCDPhoton_pThat-15_TuneCP5_5p02TeV_pythia8/20220825PPMCUF15/220826_051550/" \
+# "regulate_pp_eff.conf" \
+# "regulate_pp_eff"
 
 # # regulate_aa_mb_data
 # ./SubmitJobs.sh \
