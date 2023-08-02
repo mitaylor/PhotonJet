@@ -166,7 +166,8 @@ bool passes_basic_electron_selections(float eleMissHits, float eleIP3D) {
 }
 
 template <det T, wp U, typename V>
-bool passes_electron_id(float eleMissHits, float eleIP3D, float eleHoverEBc, int hiBin, bool heavyion) {
+bool passes_electron_id(float eleMissHits, float eleIP3D, float eleHoverEBc, float eleSigmaIEtaIEta_2012,
+    float eledEtaSeedAtVtx, float eledPhiAtVtx, float eleEoverPInv, int hiBin, bool heavyion) {
     if (!passes_basic_electron_selections(eleMissHits, eleIP3D)) { return false; }
 
     auto iptype = heavyion ? (hiBin < 60 ? ip::cent : ip::peri) : ip::incl;
