@@ -62,9 +62,9 @@ int narrate(char const* config, char const* selections, char const* output) {
     auto dim_1_size = static_cast<int64_t>(eta_min.size());
     auto dim_2_size = static_cast<int64_t>(dhf.size()-1);
 
-    auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, 1);
-    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size, 1);
-    auto rho_ratio = new history<TH1F>("rho_ratio"s, "", frho, dim_1_size, 1);
+    auto rho_data = new history<TH1F>("rho_data"s, "", frho, dim_1_size, dim_2_size);
+    auto rho_mc = new history<TH1F>("rho_mc"s, "", frho, dim_1_size, dim_2_size);
+    auto rho_ratio = new history<TH1F>("rho_ratio"s, "", frho, dim_1_size, dim_2_size);
 
     auto rho_data_merge = new history<TH1F>("rho_data_merge"s, "", frho, dim_1_size, 1);
     auto rho_mc_merge = new history<TH1F>("rho_mc_merge"s, "", frho, dim_1_size, 1);
@@ -206,7 +206,7 @@ int narrate(char const* config, char const* selections, char const* output) {
             (*rho_data)[index]->SetMaximum(10);
             (*rho_data)[index]->SetMinimum(1E-7);
             (*rho_mc)[index]->SetMaximum(10);
-            (*rho_mce)[index]->SetMinimum(1E-7);
+            (*rho_mc)[index]->SetMinimum(1E-7);
 
             (*rho_ratio)[index]->Divide((*rho_data)[index], (*rho_mc)[index]);
             (*rho_ratio)[index]->SetMaximum(100);
