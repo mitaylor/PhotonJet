@@ -70,7 +70,6 @@ int narrate(char const* config, char const* selections, char const* output) {
     auto rho_mc_merge = new history<TH1F>("rho_mc_merge"s, "", frho, dim_1_size, 1);
     auto rho_ratio_merge = new history<TH1F>("rho_ratio_merge"s, "", frho, dim_1_size, 1);
 
-
     for (auto const& file : data) {
         std::cout << file << std::endl;
 
@@ -128,6 +127,7 @@ int narrate(char const* config, char const* selections, char const* output) {
                 auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
 
                 (*rho_data)[rho_data->index_for(x{eta_x,hf_x})]->Fill(avg_rho);
+                (*rho_data_merge)[eta_x]->Fill(avg_rho);
             }
         }
     }
@@ -188,6 +188,7 @@ int narrate(char const* config, char const* selections, char const* output) {
                     auto avg_rho = get_avg_rho(pjt, eta_min[j], eta_max[j]);
 
                     (*rho_mc)[index]->Fill(avg_rho, pjt->w);
+                    (*rho_mc_merge)[eta_x]->Fill(avg_rho, pjt->w);
                 }
             }
         }
@@ -205,12 +206,26 @@ int narrate(char const* config, char const* selections, char const* output) {
             (*rho_data)[index]->SetMaximum(10);
             (*rho_data)[index]->SetMinimum(1E-7);
             (*rho_mc)[index]->SetMaximum(10);
-            (*rho_mc)[index]->SetMinimum(1E-7);
+            (*rho_mce)[index]->SetMinimum(1E-7);
 
             (*rho_ratio)[index]->Divide((*rho_data)[index], (*rho_mc)[index]);
             (*rho_ratio)[index]->SetMaximum(100);
             (*rho_ratio)[index]->SetMinimum(1E-3);
         }
+
+        auto eta_x = static_cast<int64_t>(i);
+
+        (*rho_data_merge)[eta_x]->Scale(1. / (*rho_data_merge)[eta_x]->Integral());
+        (*rho_mc_merge)[eta_x]->Scale(1. / (*rho_mc_merge)[eta_x]->Integral());
+
+        (*rho_data_merge)[eta_x]->SetMaximum(10);
+        (*rho_data_merge)[eta_x]->SetMinimum(1E-7);
+        (*rho_mc_merge)[eta_x]->SetMaximum(10);
+        (*rho_mc_merge)[eta_x]->SetMinimum(1E-7);
+
+        (*rho_ratio_merge)[eta_x]->Divide((*rho_data_merge)[eta_x], (*rho_mc_merge)[eta_x]);
+        (*rho_ratio_merge)[eta_x]->SetMaximum(100);
+        (*rho_ratio_merge)[eta_x]->SetMinimum(1E-3);
     }
 
     /* draw rho distributions */
@@ -240,8 +255,17 @@ int narrate(char const* config, char const* selections, char const* output) {
             c1->stack((*rho_data)[index], "Data");
         }
 
+        auto c2 = new paper(set + "_" + tag + "_rho_distribution_merge_" + bound_string[i], hb);
+        apply_style(c2, cms, system_tag);
+        // c2->accessory(hf_info);
+        c2->set(paper::flags::logy);
+
+        c2->add((*rho_mc_merge)[static_cast<int64_t>(i)], "MC");
+        c2->stack((*rho_data_merge)[static_cast<int64_t>(i)], "Data");
+
         hb->sketch();
         c1->draw("pdf");
+        c2->draw("pdf");
     }
 
     for (size_t i = 0; i < eta_min.size(); ++i) {
@@ -262,8 +286,16 @@ int narrate(char const* config, char const* selections, char const* output) {
             c1->add((*rho_ratio)[index], "Data/MC");
         }
 
+        auto c2 = new paper(set + "_" + tag + "_rho_weight_merge_" + bound_string[i], hb);
+        apply_style(c2, cms, system_tag);
+        // c2->accessory(hf_info);
+        c2->set(paper::flags::logy);
+
+        c2->add((*rho_ratio_merge)[static_cast<int64_t>(i)], "Data/MC");
+
         hb->sketch();
         c1->draw("pdf");
+        c2->draw("pdf");
     }
 
     /* save output */
@@ -271,6 +303,10 @@ int narrate(char const* config, char const* selections, char const* output) {
         rho_data->save(tag);
         rho_mc->save(tag);
         rho_ratio->save(tag);
+
+        rho_data_merge->save(tag);
+        rho_mc_merge->save(tag);
+        rho_ratio_merge->save(tag);
     });
 
     return 0;
