@@ -236,7 +236,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     TTreeReaderValue<std::vector<float>> eledEtaSeedAtVtx(egmReader, "eledEtaSeedAtVtx");
     TTreeReaderValue<std::vector<float>> eledPhiAtVtx(egmReader, "eledPhiAtVtx");
     TTreeReaderValue<std::vector<float>> eleEoverPInv(egmReader, "eleEoverPInv");
-    TTreeReaderValue<std::vector<float>> eleMissHits(egmReader, "eleMissHits");
+    TTreeReaderValue<std::vector<int>> eleMissHits(egmReader, "eleMissHits");
     TTreeReaderValue<std::vector<float>> eleIP3D(egmReader, "eleIP3D");
 
     TChain evtChain("hiEvtAnalyzer/HiTree");
