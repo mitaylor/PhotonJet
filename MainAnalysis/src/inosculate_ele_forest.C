@@ -251,7 +251,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
     for (Long64_t i = 0; i < nentries; i++) {
         egmReader.Next(); evtReader.Next();
 
-        if (i % 100000 == 0) { std::cout << i << "/" nentries << std::endl; }
+        if (i % 100000 == 0) { std::cout << i << "/" << nentries << std::endl; }
 
         if (*hiHF <= hf_min) { continue; }
 
@@ -333,12 +333,12 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                 if (!electron) { continue; }
 
                 float phoEt_j = (*phoEt)[j];
-                if ((*phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*phoEtErNew)[j];
-                if ((*phoEt)[j] > 30 && !heavyion && use_er) phoEt_j = (*phoEtEr)[j];
+                // if ((*phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*phoEtErNew)[j];
+                // if ((*phoEt)[j] > 30 && !heavyion && use_er) phoEt_j = (*phoEtEr)[j];
 
                 float phoEt_k = (*phoEt)[k];
-                if ((*phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*phoEtErNew)[k];
-                if ((*phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*phoEtEr)[k];
+                // if ((*phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*phoEtErNew)[k];
+                // if ((*phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*phoEtEr)[k];
 
                 /* double electron invariant mass */
                 auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
