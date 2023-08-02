@@ -79,23 +79,23 @@ static std::string index_to_string(int64_t i, int64_t j) {
     return std::to_string(i) + "_"s + std::to_string(j);
 }
 
-void GetFiles(char const* input, std::vector<string>& files) {
+void GetFiles(char const* input, std::vector<std::string>& files) {
     TSystemDirectory dir(input, input);
     TList *list = dir.GetListOfFiles();
 
     if (list) {
         TSystemFile *file;
-        string fname;
+        std::string fname;
         TIter next(list);
         while ((file = (TSystemFile*) next())) {
             fname = file->GetName();
 
-            if (file->IsDirectory() && (fname.find(".") == string::npos)) {
-                string newDir = string(input) + fname + "/";
+            if (file->IsDirectory() && (fname.find(".") == std::string::npos)) {
+                std::string newDir = std::string(input) + fname + "/";
                 GetFiles(newDir.c_str(), files);
             }
-            else if ((fname.find(".root") != string::npos)) {
-                files.push_back(string(input) + fname);
+            else if ((fname.find(".root") != std::string::npos)) {
+                files.push_back(std::string(input) + fname);
                 cout << files.back() << endl;
             }
         }
@@ -104,7 +104,7 @@ void GetFiles(char const* input, std::vector<string>& files) {
     return;
 }
 
-void FillChain(TChain& chain, std::vector<string>& files) {
+void FillChain(TChain& chain, std::vector<std::string>& files) {
     for (auto file : files) {
         chain.Add(file.c_str());
     }
