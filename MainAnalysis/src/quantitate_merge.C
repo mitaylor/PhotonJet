@@ -349,66 +349,66 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }
 
     normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1, measured_fold0, measured_fold1);
-
+    std::cout << __LINE__ << std::endl;
     if (fafters.size() == 4) {
         int entries0, entries1, entries2, entries3;
-        
+        std::cout << __LINE__ << std::endl;
         entries0 = (*unfolded)[0]->GetEntries(); entries1 = (*unfolded)[1]->GetEntries(); entries2 = (*unfolded)[2]->GetEntries(); entries3 = (*unfolded)[3]->GetEntries();
-
-        (*unfolded_merge)[0]->Add((*unfolded)[0], (*unfolded)[1], entries0, entries1);
-        (*unfolded_merge)[0]->Add((*unfolded)[2], entries2);
-        (*unfolded_merge)[0]->Add((*unfolded)[3], entries3);
-        (*unfolded_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
+        (*unfolded_merge)[0]->Add((*unfolded)[0], (*unfolded)[1], entries0, entries1);std::cout << __LINE__ << std::endl;
+        (*unfolded_merge)[0]->Add((*unfolded)[2], entries2);std::cout << __LINE__ << std::endl;
+        (*unfolded_merge)[0]->Add((*unfolded)[3], entries3);std::cout << __LINE__ << std::endl;
+        (*unfolded_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
         entries0 = (*unfolded_fold0)[0]->GetEntries(); entries1 = (*unfolded_fold0)[1]->GetEntries(); entries2 = (*unfolded_fold0)[2]->GetEntries(); entries3 = (*unfolded_fold0)[3]->GetEntries();
 
         (*unfolded_merge_fold0)[0]->Add((*unfolded_fold0)[0], (*unfolded_fold0)[1], entries0, entries1);
         (*unfolded_merge_fold0)[0]->Add((*unfolded_fold0)[2], entries2);
         (*unfolded_merge_fold0)[0]->Add((*unfolded_fold0)[3], entries3);
         (*unfolded_merge_fold0)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*unfolded_fold1)[0]->GetEntries(); entries1 = (*unfolded_fold1)[1]->GetEntries(); entries2 = (*unfolded_fold1)[2]->GetEntries(); entries3 = (*unfolded_fold1)[3]->GetEntries();
 
         (*unfolded_merge_fold1)[0]->Add((*unfolded_fold1)[0], (*unfolded_fold1)[1], entries0, entries1);
         (*unfolded_merge_fold1)[0]->Add((*unfolded_fold1)[2], entries2);
         (*unfolded_merge_fold1)[0]->Add((*unfolded_fold1)[3], entries3);
         (*unfolded_merge_fold1)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*refolded)[0]->GetEntries(); entries1 = (*refolded)[1]->GetEntries(); entries2 = (*refolded)[2]->GetEntries(); entries3 = (*refolded)[3]->GetEntries();
 
         (*refolded_merge)[0]->Add((*refolded)[0], (*refolded)[1], entries0, entries1);
         (*refolded_merge)[0]->Add((*refolded)[2], entries2);
         (*refolded_merge)[0]->Add((*refolded)[3], entries3);
         (*refolded_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*refolded_fold0)[0]->GetEntries(); entries1 = (*refolded_fold0)[1]->GetEntries(); entries2 = (*refolded_fold0)[2]->GetEntries(); entries3 = (*refolded_fold0)[3]->GetEntries();
 
         (*refolded_merge_fold0)[0]->Add((*refolded_fold0)[0], (*refolded_fold0)[1], entries0, entries1);
         (*refolded_merge_fold0)[0]->Add((*refolded_fold0)[2], entries2);
         (*refolded_merge_fold0)[0]->Add((*refolded_fold0)[3], entries3);
         (*refolded_merge_fold0)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*refolded_fold1)[0]->GetEntries(); entries1 = (*refolded_fold1)[1]->GetEntries(); entries2 = (*refolded_fold1)[2]->GetEntries(); entries3 = (*refolded_fold1)[3]->GetEntries();
 
         (*refolded_merge_fold1)[0]->Add((*refolded_fold1)[0], (*refolded_fold1)[1], entries0, entries1);
         (*refolded_merge_fold1)[0]->Add((*refolded_fold1)[2], entries2);
         (*refolded_merge_fold1)[0]->Add((*refolded_fold1)[3], entries3);
         (*refolded_merge_fold1)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*measured)[0]->GetEntries(); entries1 = (*measured)[1]->GetEntries(); entries2 = (*measured)[2]->GetEntries(); entries3 = (*measured)[3]->GetEntries();
 
         (*measured_merge)[0]->Add((*measured)[0], (*measured)[1], entries0, entries1);
         (*measured_merge)[0]->Add((*measured)[2], entries2);
         (*measured_merge)[0]->Add((*measured)[3], entries3);
         (*measured_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*measured_fold0)[0]->GetEntries(); entries1 = (*measured_fold0)[1]->GetEntries(); entries2 = (*measured_fold0)[2]->GetEntries(); entries3 = (*measured_fold0)[3]->GetEntries();
 
         (*measured_merge_fold0)[0]->Add((*measured_fold0)[0], (*measured_fold0)[1], entries0, entries1);
         (*measured_merge_fold0)[0]->Add((*measured_fold0)[2], entries2);
         (*measured_merge_fold0)[0]->Add((*measured_fold0)[3], entries3);
         (*measured_merge_fold0)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
-
+std::cout << __LINE__ << std::endl;
         entries0 = (*measured_fold1)[0]->GetEntries(); entries1 = (*measured_fold1)[1]->GetEntries(); entries2 = (*measured_fold1)[2]->GetEntries(); entries3 = (*measured_fold1)[3]->GetEntries();
 
         (*measured_merge_fold1)[0]->Add((*measured_fold1)[0], (*measured_fold1)[1], entries0, entries1);
@@ -437,9 +437,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*measured_merge_fold0)[0] = fold(HMeasured, nullptr, mr, 0, osr);
         (*measured_merge_fold1)[0] = fold(HMeasured, nullptr, mr, 1, osr);
     }
-
-    normalise_to_unity(unfolded_merge_fold0, unfolded_merge_fold1, refolded_merge_fold0, refolded_merge_fold1);
-
+std::cout << __LINE__ << std::endl;
+    normalise_to_unity(unfolded_merge_fold0, unfolded_merge_fold1, refolded_merge_fold0, refolded_merge_fold1, measured_merge_fold0, measured_merge_fold1);
+std::cout << __LINE__ << std::endl;
     /* rename histograms */
     unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
@@ -452,7 +452,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     measured->rename(tag + "_r");
     measured_fold0->rename(tag + "_r_fold0");
     measured_fold1->rename(tag + "_r_fold1");
-
+std::cout << __LINE__ << std::endl;
     unfolded_merge->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded"s);
     unfolded_merge_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded_fold0"s);
     unfolded_merge_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded_fold1"s);
@@ -464,7 +464,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     measured_merge->rename(tag + "_r_merge");
     measured_merge_fold0->rename(tag + "_r_merge_fold0");
     measured_merge_fold1->rename(tag + "_r_merge_fold1");
-
+std::cout << __LINE__ << std::endl;
     /* save histograms */
     unfolded->save();
     unfolded_fold0->save();
@@ -477,7 +477,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     measured->save();
     measured_fold0->save();
     measured_fold1->save();
-
+std::cout << __LINE__ << std::endl;
     unfolded_merge->save();
     unfolded_merge_fold0->save();
     unfolded_merge_fold1->save();
