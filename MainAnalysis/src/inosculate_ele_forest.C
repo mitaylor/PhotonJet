@@ -16,6 +16,15 @@
 
 #include "TF1.h"
 #include "TFile.h"
+#include "TTreeReader.h"
+#include "TTreeReaderValue.h"
+#include "TTreeReaderArray.h"
+
+#include "TDirectory.h"
+#include "TSystemDirectory.h"
+#include "TSystemFile.h"
+#include "TChain.h"
+
 #include "TLatex.h"
 #include "TMath.h"
 #include "TRandom3.h"
