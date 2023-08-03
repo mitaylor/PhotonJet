@@ -207,7 +207,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     if (!rho_file.empty()) {
         frho = new TFile((base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(frho, rho_label);
-        rho_weighting_merge = new history<TH1F>(f_rho, rho_label + "_merge"s);
+        rho_weighting_merge = new history<TH1F>(frho, rho_label + "_merge"s);
     }
 
     /* load acceptance weighting for HI */
