@@ -280,19 +280,18 @@ int quantitate(char const* config, char const* selections, char const* output) {
     double min = 99999999999;
 
     for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
-            auto top = (*sum_merge)[0]->GetBinContent(j);
+        auto top = (*sum_merge)[0]->GetBinContent(j);
 
-            if (top == 0) { continue; }
+        if (top == 0) { continue; }
 
-            std::cout << top << " ";
+        std::cout << top << " ";
 
-            if (top < min) {
-                min = top;
-                choice_merge = j;
-            }
-            else {
-                break;
-            }
+        if (top < min) {
+            min = top;
+            choice_merge = j;
+        }
+        else {
+            break;
         }
 
         std::cout << std::endl << choice_merge << std::endl;
@@ -414,35 +413,17 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*unfolded_minus_merge_fold1)[0]->Add((*unfolded_minus_fold1)[3], entries3);
         (*unfolded_minus_merge_fold1)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
     } else {
-        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge);
+        (*unfolded_nominal_merge)[0] = (TH1F*) (*unfolded_nominal)[0]->Clone("unfolded_nominal_merge");
+        (*unfolded_nominal_merge_fold0)[0] = (TH1F*) (*unfolded_nominal_fold0)[0]->Clone("unfolded_nominal_merge_fold0");
+        (*unfolded_nominal_merge_fold1)[0] = (TH1F*) (*unfolded_nominal_fold1)[0]->Clone("unfolded_nominal_merge_fold1");
 
-        auto HUnfoldedBayes = (TH1F*) fmerge->Get(unfold_name.data());
-        auto MUnfolded = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+        (*unfolded_plus_merge)[0] = (TH1F*) (*unfolded_plus)[0]->Clone("unfolded_plus_merge");
+        (*unfolded_plus_merge_fold0)[0] = (TH1F*) (*unfolded_plus_fold0)[0]->Clone("unfolded_plus_merge_fold0");
+        (*unfolded_plus_merge_fold1)[0] = (TH1F*) (*unfolded_plus_fold1)[0]->Clone("unfolded_plus_merge_fold1");
 
-        (*unfolded_nominal_merge)[0] = HUnfoldedBayes;
-        (*unfolded_nominal_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-        (*unfolded_nominal_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
-
-        unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge + 1);
-        matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge + 1);
-
-        auto HUnfoldedBayesPlus = (TH1F*) fmerge->Get(unfold_name.data());
-        auto MUnfoldedPlus = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
-
-        (*unfolded_plus_merge)[0] = HUnfoldedBayesPlus;
-        (*unfolded_plus_merge_fold0)[0] = fold_mat(HUnfoldedBayesPlus, MUnfoldedPlus, mg, 0, osg);
-        (*unfolded_plus_merge_fold1)[0] = fold_mat(HUnfoldedBayesPlus, MUnfoldedPlus, mg, 1, osg);
-
-        unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge - 1);
-        matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge - 1);
-
-        auto HUnfoldedBayesMinus = (TH1F*) fmerge->Get(unfold_name.data());
-        auto MUnfoldedMinus = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
-
-        (*unfolded_minus_merge)[0] = HUnfoldedBayesMinus;
-        (*unfolded_minus_merge_fold0)[0] = fold_mat(HUnfoldedBayesMinus, MUnfoldedMinus, mg, 0, osg);
-        (*unfolded_minus_merge_fold1)[0] = fold_mat(HUnfoldedBayesMinus, MUnfoldedMinus, mg, 1, osg);
+        (*unfolded_minus_merge)[0] = (TH1F*) (*unfolded_minus)[0]->Clone("unfolded_minus_merge");
+        (*unfolded_minus_merge_fold0)[0] = (TH1F*) (*unfolded_minus_fold0)[0]->Clone("unfolded_minus_merge_fold0");
+        (*unfolded_minus_merge_fold1)[0] = (TH1F*) (*unfolded_minus_fold1)[0]->Clone("unfolded_minus_merge_fold1");
     }
 
     unfolded_nominal->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
