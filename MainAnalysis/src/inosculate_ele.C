@@ -119,6 +119,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
             // if ((*p->accepts)[0] == 0) { continue; }
 
             if (p->hiHF <= hf_min) { continue; }
+            if (hf_x == ihf->size()) { continue; }
 
             auto hf_x = ihf->index_for(p->hiHF);
             std::vector<float> masses;
