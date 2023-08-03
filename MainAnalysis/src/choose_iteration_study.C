@@ -217,8 +217,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
         fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
     }, fafters, afters);
 
-    auto fmerge = new TFile(("unfolded/" + set + "/" + merge).data(), "read");
-
     TFile* fiter = new TFile((base + regularization).data(), "read");
     auto sum = new history<TH1F>(fiter, "sum"s);
     auto sum_merge = new history<TH1F>(fiter, "sum_merge"s);
