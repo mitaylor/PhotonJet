@@ -252,14 +252,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto unfolded_minus_merge_fold1 = new history<TH1F>("unfolded_minus_merge_fold1", "", null<TH1F>, 1);
 
     /* determine the number of iterations to use */
-    std::vector<int64_t> choice_nominal(sum->size(), 1);
-    std::vector<int64_t> choice_plus(sum->size(), 1);
-    std::vector<int64_t> choice_minus(sum->size(), 1);
-    int64_t choice_nominal_merge = 1;
-    int64_t choice_plus_merge = 1;
-    int64_t choice_minus_merge = 1;
+    std::vector<int64_t> choice(sum->size(), 1);
+    int64_t choice_merge = 1;
 
-    /* find nominal choice */
     for (int i = 0; i < sum->size(); ++i) {
         double min = 99999999999;
 
@@ -272,61 +267,38 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
             if (top < min) {
                 min = top;
-                choice_nominal[i] = j;
+                choice[i] = j;
             }
             else {
                 break;
             }
         }
 
-        std::cout << std::endl << choice_nominal[i] << std::endl;
+        std::cout << std::endl << choice[i] << std::endl;
     }
 
-    /* find deviation in choice within 1 iteration */
-    for (int64_t i = 0; i < chi_square->size(); ++i) {
-        choice_plus[i] = choice_nominal[i];
+    double min = 99999999999;
 
-        for (int64_t j = choice_nominal[i]; j < (*chi_square)[i]->GetNbinsX(); ++j) {
-            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+    for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
+        auto top = (*sum_merge)[0]->GetBinContent(j);
 
-            if (top == 0) { continue; }
+        if (top == 0) { continue; }
 
-            if ((top - min_nominal[i]) / min_nominal[i] < 0.05) {
-                min_plus[i] = top;
-                choice_plus[i] = j;
-            }
-            else {
-                break;
-            }
+        std::cout << top << " ";
+
+        if (top < min) {
+            min = top;
+            choice_merge = j;
         }
-
-        std::cout << std::endl << choice_plus[i] << std::endl;
-    }
-
-    /* find deviation in choice within 5% */
-    for (int64_t i = 0; i < chi_square->size(); ++i) {
-        choice_minus[i] = 1;
-
-        for (int64_t j = choice_nominal[i] - 1; j > 0; --j) {
-            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
-
-            if (top == 0) { continue; }
-
-            if ((top - min_nominal[i]) / min_nominal[i] < 0.05 || choice_minus[i] < j) {
-                min_minus[i] = top;
-                choice_minus[i] = j;
-            }
-            else {
-                break;
-            }
+        else {
+            break;
         }
-
-        std::cout << std::endl << choice_minus[i] << std::endl;
     }
 
+    /* extract chosen histograms */
     for (size_t j = 0; j < fafters.size(); ++j) {
-        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice_nominal[j]);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice_nominal[j]);
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
@@ -337,8 +309,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice_plus[j]);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice_plus[j]);
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j] + 1);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j] + 1);
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
@@ -349,8 +321,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice_minus[j]);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice_minus[j]);
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j] - 1);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j] - 1);
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
@@ -360,7 +332,115 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*unfolded_minus_fold1)[j] = fold_mat((*unfolded_minus)[j], MUnfolded, mg, 1, osg);
     }
 
-    normalise_to_unity(unfolded_nominal_fold0, unfolded_nominal_fold1, unfolded_plus_fold0, unfolded_plus_fold1, unfolded_minus_fold0, unfolded_minus_fold1);
+    normalise_to_unity(unfolded_nominal_fold0, unfolded_nominal_fold1);
+    normalise_to_unity(unfolded_plus_fold0, unfolded_plus_fold1);
+    normalise_to_unity(unfolded_minus_fold0, unfolded_minus_fold1);
+
+    if (fafters.size() == 4) {
+        double entries0, entries1, entries2, entries3;
+        
+        entries0 = (*unfolded_nominal)[0]->GetEntries(); entries1 = (*unfolded_nominal)[1]->GetEntries(); entries2 = (*unfolded_nominal)[2]->GetEntries(); entries3 = (*unfolded_nominal)[3]->GetEntries();
+
+        (*unfolded_nominal_merge)[0] = (TH1F*) (*unfolded_nominal)[0]->Clone("unfolded_nominal_merge");
+        (*unfolded_nominal_merge)[0]->Add((*unfolded_nominal)[0], (*unfolded_nominal)[1], entries0, entries1);
+        (*unfolded_nominal_merge)[0]->Add((*unfolded_nominal)[2], entries2);
+        (*unfolded_nominal_merge)[0]->Add((*unfolded_nominal)[3], entries3);
+        (*unfolded_nominal_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_nominal_fold0)[0]->GetEntries(); entries1 = (*unfolded_nominal_fold0)[1]->GetEntries(); entries2 = (*unfolded_nominal_fold0)[2]->GetEntries(); entries3 = (*unfolded_nominal_fold0)[3]->GetEntries();
+
+        (*unfolded_nominal_merge_fold0)[0] = (TH1F*) (*unfolded_nominal_fold0)[0]->Clone("unfolded_nominal_merge_fold0");
+        (*unfolded_nominal_merge_fold0)[0]->Add((*unfolded_nominal_fold0)[0], (*unfolded_nominal_fold0)[1], entries0, entries1);
+        (*unfolded_nominal_merge_fold0)[0]->Add((*unfolded_nominal_fold0)[2], entries2);
+        (*unfolded_nominal_merge_fold0)[0]->Add((*unfolded_nominal_fold0)[3], entries3);
+        (*unfolded_nominal_merge_fold0)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_nominal_fold1)[0]->GetEntries(); entries1 = (*unfolded_nominal_fold1)[1]->GetEntries(); entries2 = (*unfolded_nominal_fold1)[2]->GetEntries(); entries3 = (*unfolded_nominal_fold1)[3]->GetEntries();
+
+        (*unfolded_nominal_merge_fold1)[0] = (TH1F*) (*unfolded_nominal_fold1)[0]->Clone("unfolded_nominal_merge_fold1");
+        (*unfolded_nominal_merge_fold1)[0]->Add((*unfolded_nominal_fold1)[0], (*unfolded_nominal_fold1)[1], entries0, entries1);
+        (*unfolded_nominal_merge_fold1)[0]->Add((*unfolded_nominal_fold1)[2], entries2);
+        (*unfolded_nominal_merge_fold1)[0]->Add((*unfolded_nominal_fold1)[3], entries3);
+        (*unfolded_nominal_merge_fold1)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_plus)[0]->GetEntries(); entries1 = (*unfolded_plus)[1]->GetEntries(); entries2 = (*unfolded_plus)[2]->GetEntries(); entries3 = (*unfolded_plus)[3]->GetEntries();
+
+        (*unfolded_plus_merge)[0] = (TH1F*) (*unfolded_plus)[0]->Clone("unfolded_plus_merge");
+        (*unfolded_plus_merge)[0]->Add((*unfolded_plus)[0], (*unfolded_plus)[1], entries0, entries1);
+        (*unfolded_plus_merge)[0]->Add((*unfolded_plus)[2], entries2);
+        (*unfolded_plus_merge)[0]->Add((*unfolded_plus)[3], entries3);
+        (*unfolded_plus_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_plus_fold0)[0]->GetEntries(); entries1 = (*unfolded_plus_fold0)[1]->GetEntries(); entries2 = (*unfolded_plus_fold0)[2]->GetEntries(); entries3 = (*unfolded_plus_fold0)[3]->GetEntries();
+
+        (*unfolded_plus_merge_fold0)[0] = (TH1F*) (*unfolded_plus_fold0)[0]->Clone("unfolded_plus_merge_fold0");
+        (*unfolded_plus_merge_fold0)[0]->Add((*unfolded_plus_fold0)[0], (*unfolded_plus_fold0)[1], entries0, entries1);
+        (*unfolded_plus_merge_fold0)[0]->Add((*unfolded_plus_fold0)[2], entries2);
+        (*unfolded_plus_merge_fold0)[0]->Add((*unfolded_plus_fold0)[3], entries3);
+        (*unfolded_plus_merge_fold0)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_plus_fold1)[0]->GetEntries(); entries1 = (*unfolded_plus_fold1)[1]->GetEntries(); entries2 = (*unfolded_plus_fold1)[2]->GetEntries(); entries3 = (*unfolded_plus_fold1)[3]->GetEntries();
+
+        (*unfolded_plus_merge_fold1)[0] = (TH1F*) (*unfolded_plus_fold1)[0]->Clone("unfolded_plus_merge_fold1");
+        (*unfolded_plus_merge_fold1)[0]->Add((*unfolded_plus_fold1)[0], (*unfolded_plus_fold1)[1], entries0, entries1);
+        (*unfolded_plus_merge_fold1)[0]->Add((*unfolded_plus_fold1)[2], entries2);
+        (*unfolded_plus_merge_fold1)[0]->Add((*unfolded_plus_fold1)[3], entries3);
+        (*unfolded_plus_merge_fold1)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_minus)[0]->GetEntries(); entries1 = (*unfolded_minus)[1]->GetEntries(); entries2 = (*unfolded_minus)[2]->GetEntries(); entries3 = (*unfolded_minus)[3]->GetEntries();
+
+        (*unfolded_minus_merge)[0] = (TH1F*) (*unfolded_minus)[0]->Clone("unfolded_minus_merge");
+        (*unfolded_minus_merge)[0]->Add((*unfolded_minus)[0], (*unfolded_minus)[1], entries0, entries1);
+        (*unfolded_minus_merge)[0]->Add((*unfolded_minus)[2], entries2);
+        (*unfolded_minus_merge)[0]->Add((*unfolded_minus)[3], entries3);
+        (*unfolded_minus_merge)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_minus_fold0)[0]->GetEntries(); entries1 = (*unfolded_minus_fold0)[1]->GetEntries(); entries2 = (*unfolded_minus_fold0)[2]->GetEntries(); entries3 = (*unfolded_minus_fold0)[3]->GetEntries();
+
+        (*unfolded_minus_merge_fold0)[0] = (TH1F*) (*unfolded_minus_fold0)[0]->Clone("unfolded_minus_merge_fold0");
+        (*unfolded_minus_merge_fold0)[0]->Add((*unfolded_minus_fold0)[0], (*unfolded_minus_fold0)[1], entries0, entries1);
+        (*unfolded_minus_merge_fold0)[0]->Add((*unfolded_minus_fold0)[2], entries2);
+        (*unfolded_minus_merge_fold0)[0]->Add((*unfolded_minus_fold0)[3], entries3);
+        (*unfolded_minus_merge_fold0)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+
+        entries0 = (*unfolded_minus_fold1)[0]->GetEntries(); entries1 = (*unfolded_minus_fold1)[1]->GetEntries(); entries2 = (*unfolded_minus_fold1)[2]->GetEntries(); entries3 = (*unfolded_minus_fold1)[3]->GetEntries();
+
+        (*unfolded_minus_merge_fold1)[0] = (TH1F*) (*unfolded_minus_fold1)[0]->Clone("unfolded_minus_merge_fold1");
+        (*unfolded_minus_merge_fold1)[0]->Add((*unfolded_minus_fold1)[0], (*unfolded_minus_fold1)[1], entries0, entries1);
+        (*unfolded_minus_merge_fold1)[0]->Add((*unfolded_minus_fold1)[2], entries2);
+        (*unfolded_minus_merge_fold1)[0]->Add((*unfolded_minus_fold1)[3], entries3);
+        (*unfolded_minus_merge_fold1)[0]->Scale(1/(entries0 + entries1 + entries2 + entries3));
+    } else {
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge);
+
+        auto HUnfoldedBayes = (TH1F*) fmerge->Get(unfold_name.data());
+        auto MUnfolded = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+
+        (*unfolded_nominal_merge)[0] = HUnfoldedBayes;
+        (*unfolded_nominal_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
+        (*unfolded_nominal_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+
+        unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge + 1);
+        matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge + 1);
+
+        HUnfoldedBayes = (TH1F*) fmerge->Get(unfold_name.data());
+        MUnfolded = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+
+        (*unfolded_plus_merge)[0] = HUnfoldedBayes;
+        (*unfolded_plus_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
+        (*unfolded_plus_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+
+        unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge - 1);
+        matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge - 1);
+
+        HUnfoldedBayes = (TH1F*) fmerge->Get(unfold_name.data());
+        MUnfolded = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+
+        (*unfolded_minus_merge)[0] = HUnfoldedBayes;
+        (*unfolded_minus_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
+        (*unfolded_minus_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+    }
 
     unfolded_nominal->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_nominal"s);
     unfolded_nominal_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_nominal_fold0"s);
@@ -374,9 +454,42 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded_minus_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_minus_fold0"s);
     unfolded_minus_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_minus_fold1"s);
 
+    unfolded_nominal_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_nominal"s);
+    unfolded_nominal_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_nominal_fold0"s);
+    unfolded_nominal_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_nominal_fold1"s);
+
+    unfolded_plus_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_plus"s);
+    unfolded_plus_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_plus_fold0"s);
+    unfolded_plus_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_plus_fold1"s);
+
+    unfolded_minus_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_minus"s);
+    unfolded_minus_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_minus_fold0"s);
+    unfolded_minus_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_minus_fold1"s);
+
+
     unfolded_nominal->save();
     unfolded_nominal_fold0->save();
     unfolded_nominal_fold1->save();
+
+    unfolded_plus->save();
+    unfolded_plus_fold0->save();
+    unfolded_plus_fold1->save();
+
+    unfolded_minus->save();
+    unfolded_minus_fold0->save();
+    unfolded_minus_fold1->save();
+
+    unfolded_nominal_merge->save();
+    unfolded_nominal_merge_fold0->save();
+    unfolded_nominal_merge_fold1->save();
+
+    unfolded_plus_merge->save();
+    unfolded_plus_merge_fold0->save();
+    unfolded_plus_merge_fold1->save();
+
+    unfolded_minus_merge->save();
+    unfolded_minus_merge_fold0->save();
+    unfolded_minus_merge_fold1->save();
 
     fout->Close();
 
@@ -393,7 +506,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
             auto jet_selections = "anti-k_{T} R = 0.3, "s + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
-            auto iterations = "iterations: "s + to_text(choice_minus[index - 1]) + ", "s + to_text(choice_nominal[index - 1]) + ", "s + to_text(choice_plus[index - 1]);
+            auto iterations = "iterations: "s + to_text(choice[index - 1] - 1) + ", "s + to_text(choice[index - 1]) + ", "s + to_text(choice[index - 1] + 1);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
@@ -421,8 +534,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded_nominal_fold0->apply([&](TH1* h) { p1->add(h, "nominal"); });
 
     for (int64_t i = 0; i < chi_square->size(); ++i) {
-        if (choice_plus[i] != choice_nominal[i]) p1->stack(i + 1, (*unfolded_plus_fold0)[i], "plus");
-        if (choice_minus[i] != choice_nominal[i]) p1->stack(i + 1, (*unfolded_minus_fold0)[i], "minus");
+        p1->stack(i + 1, (*unfolded_plus_fold0)[i], "plus");
+        p1->stack(i + 1, (*unfolded_minus_fold0)[i], "minus");
     }
 
     auto p2 = new paper(set + "_" + tag + "_" + label + "_jtpt_iteration_comparison", hb);
@@ -435,8 +548,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded_nominal_fold1->apply([&](TH1* h) { p2->add(h, "nominal"); });
 
     for (int64_t i = 0; i < chi_square->size(); ++i) {
-        if (choice_plus[i] != choice_nominal[i]) p2->stack(i + 1, (*unfolded_plus_fold1)[i], "plus");
-        if (choice_minus[i] != choice_nominal[i]) p2->stack(i + 1, (*unfolded_minus_fold1)[i], "minus");
+        p2->stack(i + 1, (*unfolded_plus_fold1)[i], "plus");
+        p2->stack(i + 1, (*unfolded_minus_fold1)[i], "minus");
     }
 
     hb->sketch();
