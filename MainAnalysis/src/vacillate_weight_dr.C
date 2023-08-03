@@ -144,6 +144,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
 
+    auto n_merge = new history<TH1F>("n_merge"s, "events", fn, 1);
+    auto r_merge = new history<TH1F>("r_merge"s, "counts", fr, 1);
+    auto g_merge = new history<TH1F>("g_merge"s, "counts", fg, 1);
+    auto c_merge = new history<TH2F>("c_merge"s, "counts", fc, 1);
+
+    auto cdr_merge = new history<TH2F>("cdr_merge"s, "counts", fcdr, 1);
+    auto cpt_merge = new history<TH2F>("cpt_merge"s, "counts", fcpt, 1);
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -159,10 +167,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     if (!mc_file.empty() && !data_file.empty()) {
         fdata = new TFile((base + data_file).data(), "read");
-        data_dist = new history<TH1F>(fdata, data_label);
+        data_dist = new history<TH1F>(fdata, data_label + "_sum0");
+        data_dist_merge = new history<TH1F>(fdata, data_label + "_merge");
 
         fmc = new TFile((base + mc_file).data(), "read");
         mc_dist = new history<TH1F>(fmc, mc_label);
+        mc_dist_merge = new history<TH1F>(fmc, mc_label + "_merge");
 
         for (int64_t i = 0; i < ihf->size(); ++i) {
             (*data_dist)[i]->Scale(1. / (*data_dist)[i]->Integral());
@@ -171,7 +181,18 @@ int vacillate(char const* config, char const* selections, char const* output) {
             (*data_weighting)[i]->Divide((*data_dist)[i], (*mc_dist)[i]);
         }
 
+        (*data_dist_merge)[0]->Scale(1. / (*data_dist_merge)[0]->Integral());
+        (*mc_dist_merge)[0]->Scale(1. / (*mc_dist_merge)[0]->Integral());
+
+        (*data_weighting_merge)[0]->Divide((*data_dist_merge)[0], (*mc_dist)[0]);
+
         data_weighting->apply([&](TH1* h) {
+            for (int i = 1; i <= h->GetNbinsX(); ++i) {
+                if (h->GetBinContent(i) < 0) h->SetBinContent(i, 0);
+            }
+        });
+
+        data_weighting_merge->apply([&](TH1* h) {
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 if (h->GetBinContent(i) < 0) h->SetBinContent(i, 0);
             }
@@ -181,10 +202,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
     /* load centrality weighting for MC */
     TFile* frho;
     history<TH1F>* rho_weighting = nullptr;
+    history<TH1F>* rho_weighting_merge = nullptr;
 
     if (!rho_file.empty()) {
         frho = new TFile((base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(frho, rho_label);
+        rho_weighting_merge = new history<TH1F>(f_rho, rho_label + "_merge"s);
     }
 
     /* load acceptance weighting for HI */
@@ -261,6 +284,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
+            if (leading_pt > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
@@ -311,6 +335,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             /* fill event weight */
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
+            float weights_merge;
             
             if (heavyion) {
                 auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
@@ -320,6 +345,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto cor = (*rho_weighting)[j]->GetBinContent(bin);
                     weights[j] *= cor;
                 }
+
+                auto bin = (*rho_weighting_merge)[0]->FindBin(avg_rho);
+                auto cor = (*rho_weighting_merge)[0]->GetBinContent(bin);
+                weights_merge *= cor;
             }
 
             /* weight photon pT spectrum */
@@ -327,6 +356,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 for (int64_t j = 0; j < ihf->size(); ++j) {
                     weights[j] *= leading_pt * photon_pt_weight[1] + photon_pt_weight[0];
                 }
+
+                weights_merge *= leading_pt * photon_pt_weight[1] + photon_pt_weight[0];
             }
 
             /* add weight for the number of photons, based on the fraction that are excluded by area */
@@ -335,6 +366,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
             /* fill histogram */
             for (int64_t j = 0; j < ihf->size(); ++j) {
                 (*n)[j]->Fill(1., weights[j] * pho_cor); }
+            
+            (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
 
             /* map reco jet to gen jet */
             std::unordered_map<float, int64_t> genid;
@@ -408,13 +441,18 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
                     std::vector<float> data_weight(ihf->size());
+                    float data_weight_merge;
 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         data_weight[k] = (!mc_file.empty() && !data_file.empty()) ? (*data_weighting)[k]->GetBinContent((*data_weighting)[k]->FindBin(r_x)) : 1;
                     }
 
+                    data_weight_merge = (!mc_file.empty() && !data_file.empty()) ? (*data_weighting_merge)[0]->GetBinContent((*data_weighting_merge)[0]->FindBin(r_x)) : 1;
+
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*g)[k]->Fill(g_x, weights[k] * cor * data_weight[k]); }
+
+                    (*g_merge)[0]->Fill(g_x, weights_merge * cor * data_weight_merge);
 
                     if (smear) {
                         if (rdr > 0.3) { continue; }
@@ -445,30 +483,24 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         (*cpt)[k]->Fill(reco_pt, gen_pt, weights[k] * cor);
                         (*c)[k]->Fill(r_x, g_x, weights[k] * cor);
                     }
+
+                    (*r_merge)[0]->Fill(r_x, weights_merge * cor * data_weight_merge);
+                    (*cdr_merge)[0]->Fill(rdr, gdr, weights_merge * cor);
+                    (*cpt_merge)[0]->Fill(reco_pt, gen_pt, weights_merge * cor);
+                    (*c_merge)[0]->Fill(r_x, g_x, weights_merge * cor);
                 } else {
                     /* missed */
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*cpt)[k]->Fill(-1, gen_pt, weights[k] * cor);
                         (*c)[k]->Fill(-1, g_x, weights[k] * cor);
                     }
+
+                    (*cdr_merge)[0]->Fill(-1, gen_pt, weights_merge * cor);
+                    (*c_merge)[0]->Fill(-1, g_x, weights_merge * cor);
                 }
             }
         }
     }
-
-    auto n_merge = n->extend("merge", 0, 1)->sum(1);
-    auto r_merge = r->extend("merge", 0, 1)->sum(1);
-    auto g_merge = g->extend("merge", 0, 1)->sum(1);
-    auto cdr_merge = cdr->extend("merge", 0, 1)->sum(1);
-    auto cpt_merge = cpt->extend("merge", 0, 1)->sum(1);
-    auto c_merge = c->extend("merge", 0, 1)->sum(1);
-
-    n_merge->rename("n_merge");
-    r_merge->rename("r_merge");
-    g_merge->rename("g_merge");
-    cdr_merge->rename("cdr_merge");
-    cpt_merge->rename("cpt_merge");
-    c_merge->rename("c_merge");
 
     r->divide(*n);
     g->divide(*n);
