@@ -442,29 +442,30 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*unfolded_minus_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
     }
 
-    unfolded_nominal->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_nominal"s);
-    unfolded_nominal_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_nominal_fold0"s);
-    unfolded_nominal_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_nominal_fold1"s);
+    unfolded_nominal->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
+    raw_sub_pjet_u_dr_sum0_unfolded_fold0
+    unfolded_nominal_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
+    unfolded_nominal_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
 
-    unfolded_plus->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_plus"s);
-    unfolded_plus_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_plus_fold0"s);
-    unfolded_plus_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_plus_fold1"s);
+    unfolded_plus->rename(tag + "_"s + label + "_iteration_plus_raw_sub_pjet_u_dr_sum0_unfolded"s);
+    unfolded_plus_fold0->rename(tag + "_"s + label + "_iteration_plus_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
+    unfolded_plus_fold1->rename(tag + "_"s + label + "_iteration_plus_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
 
-    unfolded_minus->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_minus"s);
-    unfolded_minus_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_minus_fold0"s);
-    unfolded_minus_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_minus_fold1"s);
+    unfolded_minus->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_sum0_unfolded"s);
+    unfolded_minus_fold0->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
+    unfolded_minus_fold1->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
 
-    unfolded_nominal_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_nominal"s);
-    unfolded_nominal_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_nominal_fold0"s);
-    unfolded_nominal_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_nominal_fold1"s);
+    unfolded_nominal_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded"s);
+    unfolded_nominal_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_fold0"s);
+    unfolded_nominal_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_fold1"s);
 
-    unfolded_plus_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_plus"s);
-    unfolded_plus_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_plus_fold0"s);
-    unfolded_plus_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_plus_fold1"s);
+    unfolded_plus_merge->rename(tag + "_"s + label + "_iteration_plus_raw_sub_pjet_u_dr_merge_unfolded"s);
+    unfolded_plus_merge_fold0->rename(tag + "_"s + label + "_iteration_plus_raw_sub_pjet_u_dr_merge_unfolded_fold0"s);
+    unfolded_plus_merge_fold1->rename(tag + "_"s + label + "_iteration_plus_raw_sub_pjet_u_dr_merge_unfolded_fold1"s);
 
-    unfolded_minus_merge->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_minus"s);
-    unfolded_minus_merge_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_minus_fold0"s);
-    unfolded_minus_merge_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_merge_unfolded_minus_fold1"s);
+    unfolded_minus_merge->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_merge_unfolded"s);
+    unfolded_minus_merge_fold0->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_merge_unfolded_fold0"s);
+    unfolded_minus_merge_fold1->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_merge_unfolded_fold1"s);
 
 
     unfolded_nominal->save();
