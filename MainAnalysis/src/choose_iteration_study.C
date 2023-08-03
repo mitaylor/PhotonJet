@@ -443,7 +443,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }
 
     unfolded_nominal->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
-    raw_sub_pjet_u_dr_sum0_unfolded_fold0
     unfolded_nominal_fold0->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
     unfolded_nominal_fold1->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
 
