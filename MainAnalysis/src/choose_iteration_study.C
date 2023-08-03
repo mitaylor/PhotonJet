@@ -280,19 +280,22 @@ int quantitate(char const* config, char const* selections, char const* output) {
     double min = 99999999999;
 
     for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
-        auto top = (*sum_merge)[0]->GetBinContent(j);
+            auto top = (*sum_merge)[0]->GetBinContent(j);
 
-        if (top == 0) { continue; }
+            if (top == 0) { continue; }
 
-        std::cout << top << " ";
+            std::cout << top << " ";
 
-        if (top < min) {
-            min = top;
-            choice_merge = j;
+            if (top < min) {
+                min = top;
+                choice_merge = j;
+            }
+            else {
+                break;
+            }
         }
-        else {
-            break;
-        }
+
+        std::cout << std::endl << choice_merge << std::endl;
     }
 
     /* extract chosen histograms */
