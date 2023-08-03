@@ -466,7 +466,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded_minus_merge_fold0->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_merge_unfolded_fold0"s);
     unfolded_minus_merge_fold1->rename(tag + "_"s + label + "_iteration_minus_raw_sub_pjet_u_dr_merge_unfolded_fold1"s);
 
-
     unfolded_nominal->save();
     unfolded_nominal_fold0->save();
     unfolded_nominal_fold1->save();
