@@ -214,8 +214,11 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
             if (masses.empty()) { continue; }
 std::cout << __LINE__ << std::endl;
-            std::sort(masses.begin(), masses.end(), [](float a, float b) {
-                return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
+            if (masses.size() > 1) {
+                std::sort(masses.begin(), masses.end(), [](float a, float b) {
+                    return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
+            }
+            std::cout << __LINE__ << std::endl;
             (*minv)[x{0, hf_x}]->Fill(masses[0], 1);std::cout << __LINE__ << std::endl;
         }
     }
