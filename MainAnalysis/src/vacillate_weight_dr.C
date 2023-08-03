@@ -161,6 +161,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     TFile* fmc;
 
     auto data_weighting = new history<TH1F>("data_weighting"s, "data/MC", fr, ihf->size());
+    auto data_weighting_merge = new history<TH1F>("data_weighting_merge"s, "data/MC", fr, 1);
 
     if (!mc_file.empty() && !data_file.empty()) {
         fdata = new TFile((base + data_file).data(), "read");
