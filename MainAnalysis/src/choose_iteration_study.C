@@ -7,11 +7,11 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/history.h"
 
-#include "../git/tricks-and-treats/include/trunk.h"
-#include "../git/tricks-and-treats/include/zip.h"
-
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
+
+#include "../git/tricks-and-treats/include/trunk.h"
+#include "../git/tricks-and-treats/include/zip.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -171,9 +171,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto tag = conf->get<std::string>("tag");
     auto label = conf->get<std::string>("before_label");
-    auto fix = conf->get<std::vector<float>>("fix");
 
     auto afters = conf->get<std::vector<std::string>>("afters");
+    auto merge = conf->get<std::string>("merge");
+
     auto regularization = conf->get<std::string>("regularization");
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -216,8 +217,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
         fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
     }, fafters, afters);
 
+    auto fmerge = new TFile(("unfolded/" + set + "/" + merge).data(), "read");
+
     TFile* fiter = new TFile((base + regularization).data(), "read");
-    auto chi_square = new history<TH1F>(fiter, "test_chi_square"s);
+    auto sum = new history<TH1F>(fiter, "sum"s);
+    auto sum_merge = new history<TH1F>(fiter, "sum_merge"s);
 
     /* prepare output file */
     TFile* fout = new TFile(output, "recreate");
@@ -235,28 +239,39 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto unfolded_minus_fold0 = new history<TH1F>("unfolded_minus_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_minus_fold1 = new history<TH1F>("unfolded_minus_fold1", "", null<TH1F>, (int64_t) afters.size());
 
-    /* determine the number of iterations to use */
-    std::vector<float> min_nominal(chi_square->size(), 1);
-    std::vector<float> min_plus(chi_square->size(), 1);
-    std::vector<float> min_minus(chi_square->size(), 1);
+    auto unfolded_nominal_merge = new history<TH1F>("unfolded_nominal_merge", "", null<TH1F>, 1);
+    auto unfolded_nominal_merge_fold0 = new history<TH1F>("unfolded_nominal_merge_fold0", "", null<TH1F>, 1);
+    auto unfolded_nominal_merge_fold1 = new history<TH1F>("unfolded_nominal_merge_fold1", "", null<TH1F>, 1);
 
-    std::vector<int64_t> choice_nominal(chi_square->size(), 1);
-    std::vector<int64_t> choice_plus(chi_square->size(), 1);
-    std::vector<int64_t> choice_minus(chi_square->size(), 1);
+    auto unfolded_plus_merge = new history<TH1F>("unfolded_plus_merge", "", null<TH1F>, 1);
+    auto unfolded_plus_merge_fold0 = new history<TH1F>("unfolded_plus_merge_fold0", "", null<TH1F>, 1);
+    auto unfolded_plus_merge_fold1 = new history<TH1F>("unfolded_plus_merge_fold1", "", null<TH1F>, 1);
+
+    auto unfolded_minus_merge = new history<TH1F>("unfolded_minus_merge", "", null<TH1F>, 1);
+    auto unfolded_minus_merge_fold0 = new history<TH1F>("unfolded_minus_merge_fold0", "", null<TH1F>, 1);
+    auto unfolded_minus_merge_fold1 = new history<TH1F>("unfolded_minus_merge_fold1", "", null<TH1F>, 1);
+
+    /* determine the number of iterations to use */
+    std::vector<int64_t> choice_nominal(sum->size(), 1);
+    std::vector<int64_t> choice_plus(sum->size(), 1);
+    std::vector<int64_t> choice_minus(sum->size(), 1);
+    int64_t choice_nominal_merge = 1;
+    int64_t choice_plus_merge = 1;
+    int64_t choice_minus_merge = 1;
 
     /* find nominal choice */
-    for (int64_t i = 0; i < chi_square->size(); ++i) {
-        min_nominal[i] = 99999999999;
+    for (int i = 0; i < sum->size(); ++i) {
+        double min = 99999999999;
 
-        for (int64_t j = 0; j < (*chi_square)[i]->GetNbinsX(); ++j) {
-            auto top = (*chi_square)[i]->GetBinContent(j + 1) + (*chi_square)[i]->GetBinError(j + 1);
+        for (int j = 1; j <= (*sum)[i]->GetNbinsX(); ++j) {
+            auto top = (*sum)[i]->GetBinContent(j);
 
             if (top == 0) { continue; }
 
             std::cout << top << " ";
 
-            if (top < min_nominal[i]) {
-                min_nominal[i] = top;
+            if (top < min) {
+                min = top;
                 choice_nominal[i] = j;
             }
             else {
@@ -264,12 +279,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
             }
         }
 
-        if (fix.size() == choice_nominal.size()) { choice_nominal[i] = fix[i]; }
-
         std::cout << std::endl << choice_nominal[i] << std::endl;
     }
 
-    /* find deviation in choice within 5% */
+    /* find deviation in choice within 1 iteration */
     for (int64_t i = 0; i < chi_square->size(); ++i) {
         choice_plus[i] = choice_nominal[i];
 
