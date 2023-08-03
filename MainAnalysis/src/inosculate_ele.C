@@ -121,7 +121,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
             if (p->hiHF <= hf_min) { continue; }
             auto hf_x = ihf->index_for(p->hiHF);
             if (hf_x == ihf->size()) { continue; }
-            
+
             std::vector<float> masses;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
@@ -212,16 +212,15 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
                 
             }
-std::cout << __LINE__ << std::endl;
+
             if (masses.empty()) { continue; }
-std::cout << __LINE__ << std::endl;
+
             if (masses.size() > 1) {
                 std::sort(masses.begin(), masses.end(), [](float a, float b) {
                     return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
             }
-            std::cout << __LINE__ << std::endl;
-            std::cout << hf_x << " " << masses[0] << std::endl;
-            (*minv)[x{0, hf_x}]->Fill(masses[0], 1);std::cout << __LINE__ << std::endl;
+
+            (*minv)[x{0, hf_x}]->Fill(masses[0], 1);
         }
     }
 
