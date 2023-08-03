@@ -104,8 +104,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     zip([&](auto& hist_input, auto& syst_input, auto const file,
             auto const& tag) {
-        hist_input = new history<TH1F>(file, tag + "_base_mean");
-        syst_input = new history<TH1F>(file, tag + "_syst_mean");
+        hist_input = new history<TH1F>(file, tag + "_base_mean_raw_sub_pjet_u_dr_sum0_unfolded_fold0");
+        syst_input = new history<TH1F>(file, tag + "_syst_mean_raw_sub_pjet_u_dr_sum0_unfolded_fold0");
     }, hist_inputs, syst_inputs, files, tags);
 
     std::vector<history<TH1F>*> hists(2, nullptr);
