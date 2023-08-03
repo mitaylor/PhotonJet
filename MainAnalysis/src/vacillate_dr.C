@@ -286,7 +286,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             /* fill event weight */
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
-            float weights_merge;
+            float weights_merge = weight;
             
             if (heavyion) {
                 auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
