@@ -421,21 +421,21 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*unfolded_nominal_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
         (*unfolded_nominal_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
 
-        auto unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge + 1);
-        auto matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge + 1);
+        unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge + 1);
+        matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge + 1);
 
-        HUnfoldedBayesPlus = (TH1F*) fmerge->Get(unfold_name.data());
-        MUnfoldedPlus = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+        auto HUnfoldedBayesPlus = (TH1F*) fmerge->Get(unfold_name.data());
+        auto MUnfoldedPlus = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
 
         (*unfolded_plus_merge)[0] = HUnfoldedBayesPlus;
         (*unfolded_plus_merge_fold0)[0] = fold_mat(HUnfoldedBayesPlus, MUnfoldedPlus, mg, 0, osg);
         (*unfolded_plus_merge_fold1)[0] = fold_mat(HUnfoldedBayesPlus, MUnfoldedPlus, mg, 1, osg);
 
-        auto unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge - 1);
-        auto matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge - 1);
+        unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge - 1);
+        matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge - 1);
 
-        HUnfoldedBayesMinus = (TH1F*) fmerge->Get(unfold_name.data());
-        MUnfoldedMinus = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
+        auto HUnfoldedBayesMinus = (TH1F*) fmerge->Get(unfold_name.data());
+        auto MUnfoldedMinus = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
 
         (*unfolded_minus_merge)[0] = HUnfoldedBayesMinus;
         (*unfolded_minus_merge_fold0)[0] = fold_mat(HUnfoldedBayesMinus, MUnfoldedMinus, mg, 0, osg);
