@@ -525,7 +525,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     hb->alias("minus", "decreased iterations");
 
     auto p1 = new paper(set + "_" + tag + "_" + label + "_dj_iteration_comparison", hb);
-    p1->divide(chi_square->size(), -1);
+    p1->divide(sum->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag, -2., 27.);
@@ -533,13 +533,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     unfolded_nominal_fold0->apply([&](TH1* h) { p1->add(h, "nominal"); });
 
-    for (int64_t i = 0; i < chi_square->size(); ++i) {
+    for (int64_t i = 0; i < sum->size(); ++i) {
         p1->stack(i + 1, (*unfolded_plus_fold0)[i], "plus");
         p1->stack(i + 1, (*unfolded_minus_fold0)[i], "minus");
     }
 
     auto p2 = new paper(set + "_" + tag + "_" + label + "_jtpt_iteration_comparison", hb);
-    p2->divide(chi_square->size(), -1);
+    p2->divide(sum->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
     apply_style(p2, cms, system_tag, -2., 27.);
@@ -547,7 +547,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     unfolded_nominal_fold1->apply([&](TH1* h) { p2->add(h, "nominal"); });
 
-    for (int64_t i = 0; i < chi_square->size(); ++i) {
+    for (int64_t i = 0; i < sum->size(); ++i) {
         p2->stack(i + 1, (*unfolded_plus_fold1)[i], "plus");
         p2->stack(i + 1, (*unfolded_minus_fold1)[i], "minus");
     }
