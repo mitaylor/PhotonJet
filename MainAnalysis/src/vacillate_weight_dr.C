@@ -158,21 +158,18 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     /* load data and MC for weighting MC */
     TFile* fdata;
-    history<TH1F>* data_dist = nullptr;
-
     TFile* fmc;
-    history<TH1F>* mc_dist = nullptr;
 
     auto data_weighting = new history<TH1F>("data_weighting"s, "data/MC", fr, ihf->size());
 
     if (!mc_file.empty() && !data_file.empty()) {
         fdata = new TFile((base + data_file).data(), "read");
-        data_dist = new history<TH1F>(fdata, data_label + "_sum0");
-        data_dist_merge = new history<TH1F>(fdata, data_label + "_merge");
+        auto data_dist = new history<TH1F>(fdata, data_label + "_sum0");
+        auto data_dist_merge = new history<TH1F>(fdata, data_label + "_merge");
 
         fmc = new TFile((base + mc_file).data(), "read");
-        mc_dist = new history<TH1F>(fmc, mc_label);
-        mc_dist_merge = new history<TH1F>(fmc, mc_label + "_merge");
+        auto mc_dist = new history<TH1F>(fmc, mc_label);
+        auto mc_dist_merge = new history<TH1F>(fmc, mc_label + "_merge");
 
         for (int64_t i = 0; i < ihf->size(); ++i) {
             (*data_dist)[i]->Scale(1. / (*data_dist)[i]->Integral());
