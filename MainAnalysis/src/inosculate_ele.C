@@ -114,15 +114,15 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % 100000 == 0) { printf("entry: %li/%li\n", i, nentries); }
-            std::cout << __LINE__ << std::endl;
+            
             t->GetEntry(i);
             // if ((*p->accepts)[0] == 0) { continue; }
-std::cout << __LINE__ << std::endl;
+
             if (p->hiHF <= hf_min) { continue; }
-std::cout << __LINE__ << std::endl;
+
             auto hf_x = ihf->index_for(p->hiHF);
             std::vector<float> masses;
-std::cout << __LINE__ << std::endl;
+
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if ((*p->phoEt)[j] < 20) //15
                     continue;
@@ -130,12 +130,12 @@ std::cout << __LINE__ << std::endl;
                     continue;
                 if (heavyion && in_pho_failure_region(p, j))
                     continue;
-std::cout << __LINE__ << std::endl;
+
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
                 if ((*p->phoSigmaIEtaIEta_2012)[j] > 0.011) { continue; }
-std::cout << __LINE__ << std::endl;
+
                 auto pho_phi = convert_radian((*p->phoPhi)[j]);
-std::cout << __LINE__ << std::endl;
+
                 bool electron = false;
                 for (int64_t l = 0; l < p->nEle; ++l) {
                     if (std::abs((*p->eleSCEta)[l]) > 1.4442) { continue; }
@@ -152,9 +152,9 @@ std::cout << __LINE__ << std::endl;
                             >(p, l, heavyion)) {
                         electron = true; break; }
                 }
-std::cout << __LINE__ << std::endl;
+
                 if (!electron) { continue; }
-std::cout << __LINE__ << std::endl;
+
                 for (int64_t k = j + 1; k < p->nPho; ++k) {
                     if ((*p->phoEt)[k] < 20) //15
                         continue;
@@ -162,12 +162,12 @@ std::cout << __LINE__ << std::endl;
                         continue;
                     if (heavyion && in_pho_failure_region(p, k))
                         continue;
-std::cout << __LINE__ << std::endl;
+
                     if ((*p->phoHoverE)[k] > hovere_max) { continue; }
                     if ((*p->phoSigmaIEtaIEta_2012)[k] > 0.011) { continue; }
-std::cout << __LINE__ << std::endl;
+
                     auto pho_phi = convert_radian((*p->phoPhi)[k]);
-std::cout << __LINE__ << std::endl;
+
                     bool electron = false;
                     for (int64_t l = 0; l < p->nEle; ++l) {
                         if (std::abs((*p->eleSCEta)[l]) > 1.4442) { continue; }
@@ -184,17 +184,17 @@ std::cout << __LINE__ << std::endl;
                                 >(p, l, heavyion)) {
                             electron = true; break; }
                     }
-std::cout << __LINE__ << std::endl;
+
                     if (!electron) { continue; }
 
                     float phoEt_j = (*p->phoEt)[j];
                     if ((*p->phoEt)[j] > 30 && heavyion && use_er) phoEt_j = (*p->phoEtErNew)[j];
                     if ((*p->phoEt)[j] > 30 && !heavyion && use_er) phoEt_j = (*p->phoEtEr)[j];
-std::cout << __LINE__ << std::endl;
+
                     float phoEt_k = (*p->phoEt)[k];
                     if ((*p->phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*p->phoEtErNew)[k];
                     if ((*p->phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*p->phoEtEr)[k];
-std::cout << __LINE__ << std::endl;
+
                     /* double electron invariant mass */
                     auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
                         phoEt_j,
@@ -205,11 +205,11 @@ std::cout << __LINE__ << std::endl;
                         (*p->phoEta)[k],
                         (*p->phoPhi)[k],
                         0.f));
-std::cout << __LINE__ << std::endl;
+
                     masses.push_back(mass);
                 }
 
-                std::cout << __LINE__ << std::endl;
+                
             }
 std::cout << __LINE__ << std::endl;
             if (masses.empty()) { continue; }
@@ -219,6 +219,7 @@ std::cout << __LINE__ << std::endl;
                     return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
             }
             std::cout << __LINE__ << std::endl;
+            std::cout << hf_x << " " << masses[0] << std::endl;
             (*minv)[x{0, hf_x}]->Fill(masses[0], 1);std::cout << __LINE__ << std::endl;
         }
     }
