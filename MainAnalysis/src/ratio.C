@@ -70,6 +70,8 @@ int ratio(char const* config, char const* selections, char const* output) {
 
     auto ihf = new interval(dhf);
 
+    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -98,14 +100,20 @@ int ratio(char const* config, char const* selections, char const* output) {
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
-    auto aa_info = [&](int64_t index, history<TH1F>* h) {
+    std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", drange, true); };
+
+    auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
+
+    auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
+        stack_text(index, 0.73, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + "p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
@@ -186,7 +194,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             }
         } 
 
-        std::unordered_map<TH1*, int32_t> colours; 
+        std::unordered_map<TH1*, int32_t> colours;
         hists[0]->apply([&](TH1* h) { colours[h] = 1; });
 
         /* uncertainty box */
@@ -219,17 +227,18 @@ int ratio(char const* config, char const* selections, char const* output) {
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
-        s->accessory(std::bind(aa_info, _1, hists[0]));
+        if (hists[0]->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, hists[0])); }
+        else { s->accessory(std::bind(aa_range_info, _1, hists[0])); }
         s->accessory(kinematics);
         s->jewellery(box);
-        s->divide(ihf->size()/2, -1);
+        if (hists[0]->size() == ihf->size()) { s->divide(hists[0]->size()/2, -1); }
 
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { 
             h->GetXaxis()->SetRangeUser(xmin, xmax);
             s->add(h, "aa"); 
         });
-        for (int64_t i = 0; i < 4; ++i) {
+        for (int64_t i = 0; i < hists[0]->size(); ++i) {
             hists[i + 1]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "pp");
             });
