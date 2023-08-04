@@ -523,7 +523,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     p2->divide(sum->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
-    apply_style(p2, cms, system_tag, -2., 0.04);
+    apply_style(p2, cms, system_tag, 0, 0.04);
     p2->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
 
     unfolded_nominal_fold1->apply([&](TH1* h) { p2->add(h, "nominal"); });
