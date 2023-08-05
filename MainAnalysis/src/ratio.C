@@ -29,7 +29,7 @@ using namespace std::placeholders;
 
 static auto const red = TColor::GetColor("#f2777a");
 static auto const blue = TColor::GetColor("#6699cc");
-static auto const purple = TColor::GetColor("#AC88A3");
+static auto const grey = TColor::GetColor("#5c5c5c");
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -213,7 +213,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             s->add(h, "r"); 
 
             s->adjust(h, "e2", "plf");
-            h->SetFillColorAlpha(purple, 0.5);
+            h->SetFillColorAlpha(grey, 0.5);
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
