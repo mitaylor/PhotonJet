@@ -234,7 +234,6 @@ int ratio(char const* config, char const* selections, char const* output) {
             h->SetMarkerSize(0.60);
         });
 
-        hb->style("r", ratio_style);
         hb->sketch();
 
         s->draw("pdf");
