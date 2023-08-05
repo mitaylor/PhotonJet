@@ -209,24 +209,24 @@ int congratulate(char const* config, char const* selections, char const* output)
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(kinematics);
         a->jewellery(box);
-        if (aa_stat->size() == ihf->size()) { 
-            a->accessory(std::bind(aa_hf_info, _1, aa_stat)); 
-            a->divide(aa_stat->size()/2, -1);
+        if (hists[0]->size() == ihf->size()) { 
+            a->accessory(std::bind(aa_hf_info, _1, hists[0])); 
+            a->divide(hists[0]->size()/2, -1);
         } else { 
-            a->accessory(std::bind(aa_range_info, _1, aa_stat)); 
+            a->accessory(std::bind(aa_range_info, _1, hists[0])); 
         }
 
         auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(kinematics);
         s->jewellery(box);
-        if (aa_stat->size() == ihf->size()) { 
+        if (hists[0]->size() == ihf->size()) { 
             apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
-            s->accessory(std::bind(aa_hf_info, _1, aa_stat)); 
-            s->divide(aa_stat->size()/2, -1);
+            s->accessory(std::bind(aa_hf_info, _1, hists[0])); 
+            s->divide(hists[0]->size()/2, -1);
         } else { 
             apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
-            s->accessory(std::bind(aa_range_info, _1, aa_stat)); 
+            s->accessory(std::bind(aa_range_info, _1, hists[0])); 
             s->accessory(luminosity);
         }
 
