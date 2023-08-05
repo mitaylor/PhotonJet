@@ -29,7 +29,6 @@ using namespace std::placeholders;
 
 static auto const red = TColor::GetColor("#f2777a");
 static auto const blue = TColor::GetColor("#6699cc");
-static auto const purple = TColor::GetColor("#AC88A3");
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -84,8 +83,8 @@ int ratio(char const* config, char const* selections, char const* output) {
     }, files, inputs);
 
     /* load histograms */
-    std::vector<std::string> base_stubs(2);
-    std::vector<std::string> syst_stubs(2);
+    std::vector<std::string> base_stubs(5);
+    std::vector<std::string> syst_stubs(5);
 
     zip([&](auto& base, auto& syst, auto const& tag) {
         base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
@@ -94,9 +93,9 @@ int ratio(char const* config, char const* selections, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("system", "r");
+    hb->category("system", "pp", "aa");
 
-    hb->alias("r", "PbPb/pp");
+    hb->alias("aa", "PbPb");
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
@@ -138,6 +137,13 @@ int ratio(char const* config, char const* selections, char const* output) {
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
 
+        for (size_t i = 2; i < files.size(); ++i) {
+            std::string name1 = std::to_string(i) + std::string("happy");
+            std::string name2 = std::to_string(i) + std::string("sad");
+            hists[i]->rename(name1);
+            systs[i]->rename(name2);
+        }
+
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
@@ -147,29 +153,26 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[1])[0], "WW") << std::endl;
-            std::cout << "K " << (*hists[0])[i]->KolmogorovTest((*hists[1])[0], "WW") << std::endl;
+            std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[i+1])[0], "WW") << std::endl;
+            std::cout << "K " << (*hists[0])[i]->KolmogorovTest((*hists[i+1])[0], "WW") << std::endl;
 
             for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {  
                 auto aa_hist = (*hists[0])[i];
-                auto pp_hist = (*hists[1])[0];
+                auto pp_hist = (*hists[i+1])[0];
 
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
                 auto aa_err_scale = aa_err/aa_val;
-                auto aa_syst_err_scale = aa_syst_err/aa_val;
 
                 double pp_val = pp_hist->GetBinContent(j);
                 double pp_err = pp_hist->GetBinError(j);
-                double pp_syst_err = links[pp_hist]->GetBinContent(j);
                 auto pp_err_scale = pp_err/pp_val;
-                auto pp_syst_err_scale = pp_syst_err/pp_val;
 
                 auto ratio = aa_val / pp_val;
 
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
-                aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
+                aa_syst_err /= pp_val;
 
                 links[aa_hist]->SetBinContent(j, aa_syst_err);
                 aa_hist->SetBinContent(j, ratio);
@@ -177,11 +180,28 @@ int ratio(char const* config, char const* selections, char const* output) {
             }
         }
 
+        for (int64_t i = 0; i < hists[0]->size(); ++i) {
+            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {
+                auto pp_hist = (*hists[i+1])[0];
+                double pp_val = pp_hist->GetBinContent(j);
+                double pp_syst_err = links[pp_hist]->GetBinContent(j);
+
+                pp_syst_err /= pp_val;
+
+                links[pp_hist]->SetBinContent(j, pp_syst_err);
+                pp_hist->SetBinContent(j, 1);
+                pp_hist->SetBinError(j, 0.00001);
+            }
+        } 
+
+        std::unordered_map<TH1*, int32_t> colours;
+        hists[0]->apply([&](TH1* h) { colours[h] = 1; });
+
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
             gr->SetFillStyle(1001);
-            gr->SetFillColorAlpha(purple, 0.48);
+            gr->SetFillColorAlpha(colours[h] ? red : blue, 0.48);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 if (h->GetBinError(i) == 0) continue;
@@ -216,16 +236,28 @@ int ratio(char const* config, char const* selections, char const* output) {
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { 
             h->GetXaxis()->SetRangeUser(xmin, xmax);
-            s->add(h, "r"); 
+            s->add(h, "aa"); 
         });
+        for (int64_t i = 0; i < hists[0]->size(); ++i) {
+            hists[i + 1]->apply([&](TH1* h, int64_t index) {
+                s->stack(i + index + 1, h, "pp");
+            });
+        }
 
-        auto ratio_style = [](TH1* h) {
+        auto pp_style = [](TH1* h) {
+            h->SetLineColor(1);
+            h->SetMarkerStyle(25);
+            h->SetMarkerSize(0.60);
+        };
+
+        auto aa_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         };
 
-        hb->style("r", ratio_style);
+        hb->style("pp", pp_style);
+        hb->style("aa", aa_style);
         hb->sketch();
 
         s->draw("pdf");
