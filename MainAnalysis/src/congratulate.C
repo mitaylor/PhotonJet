@@ -247,12 +247,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "ss");
+                s->adjust(h, "e2", "plf");
             });
         }
 
         auto pp_style = [](TH1* h) {
             h->SetFillColorAlpha(blue, 0.5);
             h->SetLineColor(blue);
+            h->SetMarkerColor(blue);
             h->SetMarkerStyle(25);
             h->SetMarkerSize(0.60);
         };
@@ -260,6 +262,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto aa_style = [](TH1* h) {
             h->SetFillColorAlpha(red, 0.5);
             h->SetLineColor(red);
+            h->SetMarkerColor(red);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         };
