@@ -126,7 +126,7 @@ int ratio(char const* config, char const* selections, char const* output) {
 
     auto luminosity = [&](int64_t index) {
         if (index > 0) {
-            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}";
+            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
