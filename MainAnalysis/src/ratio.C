@@ -221,11 +221,12 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         ratio_syst->apply([&](TH1* h, int64_t index) {
             s->stack(index + 1, h);
+            s->adjust(h, "e2", "plf");
         });
 
         auto ratio_style = [&](TH1* h) {
             s->adjust(h, "pe", "plf");
-            h->SetFillColorAlpha(purple, 0.48);
+            h->SetFillColorAlpha(purple, 0.25);
             h->SetFillColor(purple);
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
