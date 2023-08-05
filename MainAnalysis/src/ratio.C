@@ -104,10 +104,10 @@ int ratio(char const* config, char const* selections, char const* output) {
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.82, 0.04, h, hf_info); };
+        stack_text(index, 0.835, 0.04, h, hf_info); };
 
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.82, 0.04, h, range_info); };
+        stack_text(index, 0.835, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -121,6 +121,18 @@ int ratio(char const* config, char const* selections, char const* output) {
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, 0.25, photon_selections.data());
             l->DrawLatexNDC(0.865, 0.20, jet_selections.data());
+        }
+    };
+
+    auto luminosity = [&](int64_t index) {
+        if (index > 0) {
+            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}";
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.32, values.data());
         }
     };
 
@@ -180,37 +192,19 @@ int ratio(char const* config, char const* selections, char const* output) {
             }
         }
 
-        // /* uncertainty box */
-        // auto box = [&](TH1* h, int64_t) {
-        //     TGraph* gr = new TGraph();
-        //     gr->SetFillStyle(1001);
-        //     gr->SetFillColorAlpha(purple, 0.48);
-
-        //     for (int i = 1; i <= h->GetNbinsX(); ++i) {
-        //         if (h->GetBinError(i) == 0) continue;
-
-        //         double x = h->GetBinCenter(i);
-        //         double width = h->GetBinWidth(i);
-        //         double val = h->GetBinContent(i);
-        //         double err = links[h]->GetBinContent(i);
-
-        //         gr->SetPoint(0, x - (width / 2), val - err);
-        //         gr->SetPoint(1, x + (width / 2), val - err);
-        //         gr->SetPoint(2, x + (width / 2), val + err);
-        //         gr->SetPoint(3, x - (width / 2), val + err);
-
-        //         gr->DrawClone("f");
-        //     }
-        // };
-
         /* prepare papers */
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
-        if (ratio_stat->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); }
-        else { s->accessory(std::bind(aa_range_info, _1, ratio_stat)); }
+
+        if (ratio_stat->size() == ihf->size()) { 
+            apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+            s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); 
+        } else { 
+            apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
+            s->accessory(std::bind(aa_range_info, _1, ratio_stat)); 
+            s->accessory(luminosity);
+        }
         s->accessory(kinematics);
-        // s->jewellery(box);
         if (ratio_stat->size() == ihf->size()) { s->divide(ratio_stat->size()/2, -1); }
 
         /* draw histograms with uncertainties */
