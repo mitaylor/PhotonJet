@@ -214,29 +214,25 @@ int ratio(char const* config, char const* selections, char const* output) {
         if (ratio_stat->size() == ihf->size()) { s->divide(ratio_stat->size()/2, -1); }
 
         /* draw histograms with uncertainties */
-        ratio_stat->apply([&](TH1* h) { 
+        ratio_syst->apply([&](TH1* h, int64_t index) {
             h->GetXaxis()->SetRangeUser(xmin, xmax);
             s->add(h, "r"); 
-        });
 
-        ratio_syst->apply([&](TH1* h, int64_t index) {
-            s->stack(index + 1, h);
             s->adjust(h, "e2", "plf");
-            h->SetFillColorAlpha(purple, 0.25);
-            h->SetFillColor(purple);
+            h->SetFillColorAlpha(purple, 0.5);
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         });
 
-        auto ratio_style = [&](TH1* h) {
-            s->adjust(h, "pe", "plf");
-            h->SetFillColorAlpha(purple, 0.25);
-            h->SetFillColor(purple);
+        ratio_stat->apply([&](TH1* h, int64_t index) {
+            s->stack(index + 1, h);
+
+            s->adjust(h, "pe", "lf");
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
-        };
+        });
 
         hb->style("r", ratio_style);
         hb->sketch();
