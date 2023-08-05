@@ -214,7 +214,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         if (ratio_stat->size() == ihf->size()) { s->divide(ratio_stat->size()/2, -1); }
 
         /* draw histograms with uncertainties */
-        ratio_syst->apply([&](TH1* h, int64_t index) {
+        ratio_syst->apply([&](TH1* h) {
             h->GetXaxis()->SetRangeUser(xmin, xmax);
             s->add(h, "r"); 
 
