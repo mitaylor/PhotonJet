@@ -72,44 +72,44 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
-
+std::cout << __LINE__ << std::endl;
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
+std::cout << __LINE__ << std::endl;
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile((base + input).data(), "read");
     }, files, inputs);
-
+std::cout << __LINE__ << std::endl;
     /* load histograms */
     std::vector<std::string> base_stubs(2);
     std::vector<std::string> syst_stubs(2);
-
+std::cout << __LINE__ << std::endl;
     zip([&](auto& base, auto& syst, auto const& tag) {
         base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
         syst = tag + "_total_base_" + tag + "_nominal_s_pure_raw_sub_";
     }, base_stubs, syst_stubs, tags);
-
+std::cout << __LINE__ << std::endl;
     /* prepare plots */
     auto hb = new pencil();
     hb->category("system", "r");
-
+std::cout << __LINE__ << std::endl;
     hb->alias("r", "PbPb/pp");
-
+std::cout << __LINE__ << std::endl;
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
-
+std::cout << __LINE__ << std::endl;
     std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
-
+std::cout << __LINE__ << std::endl;
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
-
+std::cout << __LINE__ << std::endl;
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, range_info); };
-
+std::cout << __LINE__ << std::endl;
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -124,7 +124,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
         }
     };
-
+std::cout << __LINE__ << std::endl;
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
         /* get histograms */ 
@@ -176,7 +176,7 @@ int ratio(char const* config, char const* selections, char const* output) {
                 aa_hist->SetBinError(j, aa_err);
             }
         }
-
+std::cout << __LINE__ << std::endl;
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
@@ -199,7 +199,7 @@ int ratio(char const* config, char const* selections, char const* output) {
                 gr->DrawClone("f");
             }
         };
-
+std::cout << __LINE__ << std::endl;
         /* minor adjustments */
         if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
 
@@ -212,25 +212,25 @@ int ratio(char const* config, char const* selections, char const* output) {
         s->accessory(kinematics);
         s->jewellery(box);
         if (hists[0]->size() == ihf->size()) { s->divide(hists[0]->size()/2, -1); }
-
+std::cout << __LINE__ << std::endl;
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { 
             h->GetXaxis()->SetRangeUser(xmin, xmax);
             s->add(h, "r"); 
         });
-
+std::cout << __LINE__ << std::endl;
         auto ratio_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         };
-
+std::cout << __LINE__ << std::endl;
         hb->style("r", ratio_style);
         hb->sketch();
-
+std::cout << __LINE__ << std::endl;
         s->draw("pdf");
     }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
-
+std::cout << __LINE__ << std::endl;
     in(output, []() {});
 
     return 0;
