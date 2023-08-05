@@ -48,7 +48,6 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto xmaxs = conf->get<std::vector<float>>("xmax");
     auto ymins = conf->get<std::vector<float>>("ymin");
     auto ymaxs = conf->get<std::vector<float>>("ymax");
-    auto oflows = conf->get<std::vector<bool>>("oflow");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -125,8 +124,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         }
     };
 
-    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
-            auto integral) {
+    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax) {
         /* get histograms */ 
         std::vector<history<TH1F>*> hists(2, nullptr);
         std::vector<history<TH1F>*> systs(2, nullptr);
@@ -145,6 +143,9 @@ int ratio(char const* config, char const* selections, char const* output) {
                 links[h] = (*syst)[index]; });
         }, hists, systs);
 
+        auto ratio_stat = new history(hists[0], "stat");
+        auto ratio_syst = new history(hists[0], "syst");
+
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
             std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[1])[0], "WW") << std::endl;
@@ -155,71 +156,77 @@ int ratio(char const* config, char const* selections, char const* output) {
                 auto pp_hist = (*hists[1])[0];
 
                 double aa_val = aa_hist->GetBinContent(j);
-                double aa_err = aa_hist->GetBinError(j);
+                double aa_stat_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
-                auto aa_err_scale = aa_err/aa_val;
+                auto aa_stat_err_scale = aa_err/aa_val;
                 auto aa_syst_err_scale = aa_syst_err/aa_val;
 
                 double pp_val = pp_hist->GetBinContent(j);
-                double pp_err = pp_hist->GetBinError(j);
+                double pp_stat_err = pp_hist->GetBinError(j);
                 double pp_syst_err = links[pp_hist]->GetBinContent(j);
-                auto pp_err_scale = pp_err/pp_val;
+                auto pp_stat_err_scale = pp_err/pp_val;
                 auto pp_syst_err_scale = pp_syst_err/pp_val;
 
                 auto ratio = aa_val / pp_val;
 
-                aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
+                aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
                 aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
 
                 links[aa_hist]->SetBinContent(j, aa_syst_err);
-                aa_hist->SetBinContent(j, ratio);
-                aa_hist->SetBinError(j, aa_err);
+                (*ratio_stat)[i]->SetBinContent(j, ratio);
+                (*ratio_stat)[i]->SetBinError(j, aa_stat_err);
+                (*ratio_syst)[i]->SetBinContent(j, ratio);
+                (*ratio_syst)[i]->SetBinError(j, aa_syst_err);
             }
         }
 
-        /* uncertainty box */
-        auto box = [&](TH1* h, int64_t) {
-            TGraph* gr = new TGraph();
-            gr->SetFillStyle(1001);
-            gr->SetFillColorAlpha(purple, 0.48);
+        // /* uncertainty box */
+        // auto box = [&](TH1* h, int64_t) {
+        //     TGraph* gr = new TGraph();
+        //     gr->SetFillStyle(1001);
+        //     gr->SetFillColorAlpha(purple, 0.48);
 
-            for (int i = 1; i <= h->GetNbinsX(); ++i) {
-                if (h->GetBinError(i) == 0) continue;
+        //     for (int i = 1; i <= h->GetNbinsX(); ++i) {
+        //         if (h->GetBinError(i) == 0) continue;
 
-                double x = h->GetBinCenter(i);
-                double width = h->GetBinWidth(i);
-                double val = h->GetBinContent(i);
-                double err = links[h]->GetBinContent(i);
+        //         double x = h->GetBinCenter(i);
+        //         double width = h->GetBinWidth(i);
+        //         double val = h->GetBinContent(i);
+        //         double err = links[h]->GetBinContent(i);
 
-                gr->SetPoint(0, x - (width / 2), val - err);
-                gr->SetPoint(1, x + (width / 2), val - err);
-                gr->SetPoint(2, x + (width / 2), val + err);
-                gr->SetPoint(3, x - (width / 2), val + err);
+        //         gr->SetPoint(0, x - (width / 2), val - err);
+        //         gr->SetPoint(1, x + (width / 2), val - err);
+        //         gr->SetPoint(2, x + (width / 2), val + err);
+        //         gr->SetPoint(3, x - (width / 2), val + err);
 
-                gr->DrawClone("f");
-            }
-        };
-
-        /* minor adjustments */
-        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
+        //         gr->DrawClone("f");
+        //     }
+        // };
 
         /* prepare papers */
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
         apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
-        if (hists[0]->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, hists[0])); }
-        else { s->accessory(std::bind(aa_range_info, _1, hists[0])); }
+        if (ratio_stat->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); }
+        else { s->accessory(std::bind(aa_range_info, _1, ratio_stat)); }
         s->accessory(kinematics);
         s->jewellery(box);
-        if (hists[0]->size() == ihf->size()) { s->divide(hists[0]->size()/2, -1); }
+        if (ratio_stat->size() == ihf->size()) { s->divide(ratio_stat->size()/2, -1); }
 
         /* draw histograms with uncertainties */
-        hists[0]->apply([&](TH1* h) { 
+        ratio_stat->apply([&](TH1* h) { 
             h->GetXaxis()->SetRangeUser(xmin, xmax);
             s->add(h, "r"); 
         });
 
-        auto ratio_style = [](TH1* h) {
+        ratio_syst->apply([&](TH1* h, int64_t index) {
+            s->stack(index + 1, h);
+        });
+
+        auto stat_style = [&](TH1* h) {
+            s->adjust(h, "pe", "plf");
+            h->SetFillColorAlpha(purple, 0.48);
+            h->SetFillColor(purple);
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
@@ -229,7 +236,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         hb->sketch();
 
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
+    }, figures, xmins, xmaxs, ymins, ymaxs);
 
     in(output, []() {});
 
