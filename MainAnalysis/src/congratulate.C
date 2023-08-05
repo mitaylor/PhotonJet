@@ -123,8 +123,8 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.75, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.69, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.70, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.64, jet_selections.data());
         }
     };
 
@@ -136,7 +136,7 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.62, values.data());
+            l->DrawLatexNDC(0.865, 0.57, values.data());
         }
     };
 
@@ -253,16 +253,14 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         auto pp_style = [](TH1* h) {
             h->SetFillColorAlpha(blue, 0.5);
-            h->SetLineColor(blue);
-            h->SetMarkerColor(blue);
+            h->SetLineColor(1);
             h->SetMarkerStyle(25);
             h->SetMarkerSize(0.60);
         };
 
         auto aa_style = [](TH1* h) {
             h->SetFillColorAlpha(red, 0.5);
-            h->SetLineColor(red);
-            h->SetMarkerColor(red);
+            h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         };
