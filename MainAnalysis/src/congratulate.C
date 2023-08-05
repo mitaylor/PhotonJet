@@ -235,19 +235,19 @@ int congratulate(char const* config, char const* selections, char const* output)
             a->add(h, "aa");
             s->add(h, "aa"); 
 
-            a->adjust(h, "e2", "plf");
-            s->adjust(h, "e2", "plf");
+            a->adjust(h, "pe2", "plf");
+            s->adjust(h, "pe2", "plf");
         });
 
         hists[1]->apply([&](TH1* h) {
             p->add(h, "pp");
-            p->adjust(h, "e2", "plf");
+            p->adjust(h, "pe2", "plf");
         });
 
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
             hists[i + 2]->apply([&](TH1* h, int64_t index) {
                 s->stack(i + index + 1, h, "ss");
-                s->adjust(h, "e2", "plf");
+                s->adjust(h, "pe2", "plf");
             });
         }
 
