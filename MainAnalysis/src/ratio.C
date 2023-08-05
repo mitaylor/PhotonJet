@@ -158,13 +158,13 @@ int ratio(char const* config, char const* selections, char const* output) {
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_stat_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
-                auto aa_stat_err_scale = aa_err/aa_val;
+                auto aa_stat_err_scale = aa_stat_err/aa_val;
                 auto aa_syst_err_scale = aa_syst_err/aa_val;
 
                 double pp_val = pp_hist->GetBinContent(j);
                 double pp_stat_err = pp_hist->GetBinError(j);
                 double pp_syst_err = links[pp_hist]->GetBinContent(j);
-                auto pp_stat_err_scale = pp_err/pp_val;
+                auto pp_stat_err_scale = pp_stat_err/pp_val;
                 auto pp_syst_err_scale = pp_syst_err/pp_val;
 
                 auto ratio = aa_val / pp_val;
@@ -210,7 +210,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         if (ratio_stat->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); }
         else { s->accessory(std::bind(aa_range_info, _1, ratio_stat)); }
         s->accessory(kinematics);
-        s->jewellery(box);
+        // s->jewellery(box);
         if (ratio_stat->size() == ihf->size()) { s->divide(ratio_stat->size()/2, -1); }
 
         /* draw histograms with uncertainties */
@@ -223,7 +223,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             s->stack(index + 1, h);
         });
 
-        auto stat_style = [&](TH1* h) {
+        auto ratio_style = [&](TH1* h) {
             s->adjust(h, "pe", "plf");
             h->SetFillColorAlpha(purple, 0.48);
             h->SetFillColor(purple);
