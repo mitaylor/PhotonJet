@@ -250,7 +250,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         });
 
         aa_stat->apply([&](TH1* h, int64_t index) {
-            a->stack(index + 1, h);
+            a->stack(index + 1, h, "aa");
             a->adjust(h, "pe", "lf");
 
             s->stack(index + 1, h);
@@ -272,7 +272,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         });
 
         pp_stat->apply([&](TH1* h, int64_t index) {
-            p->stack(index + 1, h);
+            p->stack(index + 1, h, "pp");
             p->adjust(h, "pe", "lf");
 
             h->SetLineColor(1);
@@ -291,7 +291,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         });
 
         pp_smear_stat->apply([&](TH1* h, int64_t index) {
-            s->stack(index + 1, h);
+            s->stack(index + 1, h, "ss");
             s->adjust(h, "pe", "lf");
 
             h->SetLineColor(1);
