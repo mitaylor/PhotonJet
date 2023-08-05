@@ -249,6 +249,18 @@ int congratulate(char const* config, char const* selections, char const* output)
             h->SetMarkerSize(0.60);
         });
 
+        aa_stat->apply([&](TH1* h, int64_t index) {
+            a->stack(index + 1, h);
+            a->adjust(h, "pe", "lf");
+
+            s->stack(index + 1, h);
+            s->adjust(h, "pe", "lf");
+
+            h->SetLineColor(1);
+            h->SetMarkerStyle(20);
+            h->SetMarkerSize(0.60);
+        });
+
         pp_syst->apply([&](TH1* h) { 
             p->add(h, "pp"); 
             p->adjust(h, "e2", "plf");
@@ -256,6 +268,15 @@ int congratulate(char const* config, char const* selections, char const* output)
             h->SetFillColorAlpha(blue, 0.5);
             h->SetLineColor(1);
             h->SetMarkerStyle(25);
+            h->SetMarkerSize(0.60);
+        });
+
+        pp_stat->apply([&](TH1* h, int64_t index) {
+            p->stack(index + 1, h);
+            p->adjust(h, "pe", "lf");
+
+            h->SetLineColor(1);
+            h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         });
 
@@ -268,6 +289,31 @@ int congratulate(char const* config, char const* selections, char const* output)
             h->SetMarkerStyle(25);
             h->SetMarkerSize(0.60);
         });
+
+        pp_smear_stat->apply([&](TH1* h, int64_t index) {
+            s->stack(index + 1, h);
+            s->adjust(h, "pe", "lf");
+
+            h->SetLineColor(1);
+            h->SetMarkerStyle(20);
+            h->SetMarkerSize(0.60);
+        });
+
+        // auto pp_style = [](TH1* h) {
+        //     h->SetLineColor(1);
+        //     h->SetMarkerStyle(25);
+        //     h->SetMarkerSize(0.60);
+        // };
+
+        // auto aa_style = [](TH1* h) {
+        //     h->SetLineColor(1);
+        //     h->SetMarkerStyle(20);
+        //     h->SetMarkerSize(0.60);
+        // };
+
+        // hb->style("pp", pp_style);
+        // hb->style("aa", aa_style);
+        // hb->style("ss", pp_style);
 
         hb->sketch();
 
