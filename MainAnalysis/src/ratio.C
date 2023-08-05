@@ -104,10 +104,10 @@ int ratio(char const* config, char const* selections, char const* output) {
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.85, 0.04, h, hf_info); };
+        stack_text(index, 0.82, 0.04, h, hf_info); };
 
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.85, 0.04, h, range_info); };
+        stack_text(index, 0.82, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -119,8 +119,8 @@ int ratio(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.30, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.25, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.25, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.20, jet_selections.data());
         }
     };
 
