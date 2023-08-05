@@ -72,44 +72,44 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
-std::cout << __LINE__ << std::endl;
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-std::cout << __LINE__ << std::endl;
+
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile((base + input).data(), "read");
     }, files, inputs);
-std::cout << __LINE__ << std::endl;
+
     /* load histograms */
     std::vector<std::string> base_stubs(2);
     std::vector<std::string> syst_stubs(2);
-std::cout << __LINE__ << std::endl;
+
     zip([&](auto& base, auto& syst, auto const& tag) {
         base = tag + "_base_" + tag + "_nominal_s_pure_raw_sub_";
         syst = tag + "_total_base_" + tag + "_nominal_s_pure_raw_sub_";
     }, base_stubs, syst_stubs, tags);
-std::cout << __LINE__ << std::endl;
+
     /* prepare plots */
     auto hb = new pencil();
     hb->category("system", "r");
-std::cout << __LINE__ << std::endl;
+
     hb->alias("r", "PbPb/pp");
-std::cout << __LINE__ << std::endl;
+
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
-std::cout << __LINE__ << std::endl;
+
     std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
-std::cout << __LINE__ << std::endl;
+
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, hf_info); };
-std::cout << __LINE__ << std::endl;
+
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.73, 0.04, h, range_info); };
-std::cout << __LINE__ << std::endl;
+
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -124,50 +124,50 @@ std::cout << __LINE__ << std::endl;
             l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
         }
     };
-std::cout << __LINE__ << std::endl;
+
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
         /* get histograms */ 
         std::vector<history<TH1F>*> hists(2, nullptr);
         std::vector<history<TH1F>*> systs(2, nullptr);
-std::cout << __LINE__ << std::endl;
+
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
             title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
-std::cout << __LINE__ << std::endl;
+
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });
         }, hists, systs);
-std::cout << __LINE__ << std::endl;
+
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
             std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[1])[0], "WW") << std::endl;
             std::cout << "K " << (*hists[0])[i]->KolmogorovTest((*hists[1])[0], "WW") << std::endl;
-std::cout << __LINE__ << std::endl;
+
             for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {  
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[1])[0];
-std::cout << __LINE__ << std::endl;
+
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
                 auto aa_err_scale = aa_err/aa_val;
                 auto aa_syst_err_scale = aa_syst_err/aa_val;
-std::cout << __LINE__ << std::endl;
+
                 double pp_val = pp_hist->GetBinContent(j);
                 double pp_err = pp_hist->GetBinError(j);
                 double pp_syst_err = links[pp_hist]->GetBinContent(j);
                 auto pp_err_scale = pp_err/pp_val;
                 auto pp_syst_err_scale = pp_syst_err/pp_val;
-std::cout << __LINE__ << std::endl;
+
                 auto ratio = aa_val / pp_val;
-std::cout << __LINE__ << std::endl;
+
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
                 aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
 
@@ -176,7 +176,7 @@ std::cout << __LINE__ << std::endl;
                 aa_hist->SetBinError(j, aa_err);
             }
         }
-std::cout << __LINE__ << std::endl;
+
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
@@ -199,7 +199,7 @@ std::cout << __LINE__ << std::endl;
                 gr->DrawClone("f");
             }
         };
-std::cout << __LINE__ << std::endl;
+
         /* minor adjustments */
         if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
 
@@ -212,25 +212,25 @@ std::cout << __LINE__ << std::endl;
         s->accessory(kinematics);
         s->jewellery(box);
         if (hists[0]->size() == ihf->size()) { s->divide(hists[0]->size()/2, -1); }
-std::cout << __LINE__ << std::endl;
+
         /* draw histograms with uncertainties */
         hists[0]->apply([&](TH1* h) { 
             h->GetXaxis()->SetRangeUser(xmin, xmax);
             s->add(h, "r"); 
         });
-std::cout << __LINE__ << std::endl;
+
         auto ratio_style = [](TH1* h) {
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
         };
-std::cout << __LINE__ << std::endl;
+
         hb->style("r", ratio_style);
         hb->sketch();
-std::cout << __LINE__ << std::endl;
+
         s->draw("pdf");
     }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
-std::cout << __LINE__ << std::endl;
+
     in(output, []() {});
 
     return 0;
