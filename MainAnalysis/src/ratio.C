@@ -128,46 +128,46 @@ std::cout << __LINE__ << std::endl;
     zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
             auto integral) {
         /* get histograms */ 
-        std::vector<history<TH1F>*> hists(5, nullptr);
-        std::vector<history<TH1F>*> systs(5, nullptr);
-
+        std::vector<history<TH1F>*> hists(2, nullptr);
+        std::vector<history<TH1F>*> systs(2, nullptr);
+std::cout << __LINE__ << std::endl;
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
             title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
-
+std::cout << __LINE__ << std::endl;
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
             hist->apply([&](TH1* h, int64_t index) {
                 links[h] = (*syst)[index]; });
         }, hists, systs);
-
+std::cout << __LINE__ << std::endl;
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
             std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[1])[0], "WW") << std::endl;
             std::cout << "K " << (*hists[0])[i]->KolmogorovTest((*hists[1])[0], "WW") << std::endl;
-
+std::cout << __LINE__ << std::endl;
             for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {  
                 auto aa_hist = (*hists[0])[i];
                 auto pp_hist = (*hists[1])[0];
-
+std::cout << __LINE__ << std::endl;
                 double aa_val = aa_hist->GetBinContent(j);
                 double aa_err = aa_hist->GetBinError(j);
                 double aa_syst_err = links[aa_hist]->GetBinContent(j);
                 auto aa_err_scale = aa_err/aa_val;
                 auto aa_syst_err_scale = aa_syst_err/aa_val;
-
+std::cout << __LINE__ << std::endl;
                 double pp_val = pp_hist->GetBinContent(j);
                 double pp_err = pp_hist->GetBinError(j);
                 double pp_syst_err = links[pp_hist]->GetBinContent(j);
                 auto pp_err_scale = pp_err/pp_val;
                 auto pp_syst_err_scale = pp_syst_err/pp_val;
-
+std::cout << __LINE__ << std::endl;
                 auto ratio = aa_val / pp_val;
-
+std::cout << __LINE__ << std::endl;
                 aa_err = ratio * std::sqrt(aa_err_scale * aa_err_scale + pp_err_scale * pp_err_scale);
                 aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
 
