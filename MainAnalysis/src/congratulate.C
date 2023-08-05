@@ -299,21 +299,21 @@ int congratulate(char const* config, char const* selections, char const* output)
             h->SetMarkerSize(0.60);
         });
 
-        // auto pp_style = [](TH1* h) {
-        //     h->SetLineColor(1);
-        //     h->SetMarkerStyle(25);
-        //     h->SetMarkerSize(0.60);
-        // };
+        auto pp_style = [](TH1* h) {
+            h->SetLineColor(1);
+            h->SetMarkerStyle(25);
+            h->SetMarkerSize(0.60);
+        };
 
-        // auto aa_style = [](TH1* h) {
-        //     h->SetLineColor(1);
-        //     h->SetMarkerStyle(20);
-        //     h->SetMarkerSize(0.60);
-        // };
+        auto aa_style = [](TH1* h) {
+            h->SetLineColor(1);
+            h->SetMarkerStyle(20);
+            h->SetMarkerSize(0.60);
+        };
 
-        // hb->style("pp", pp_style);
-        // hb->style("aa", aa_style);
-        // hb->style("ss", pp_style);
+        hb->style("pp", pp_style);
+        hb->style("aa", aa_style);
+        hb->style("ss", pp_style);
 
         hb->sketch();
 
