@@ -268,7 +268,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             h->SetMarkerStyle(25);
             h->SetMarkerSize(0.60);
         });
-        });
 
         hb->sketch();
 
