@@ -27,8 +27,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const red = TColor::GetColor("#f2777a");
-static auto const blue = TColor::GetColor("#6699cc");
+static auto const red = TColor::GetColor("#ff6666");
+static auto const blue = TColor::GetColor("#6666ff");
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -49,7 +49,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto xmaxs = conf->get<std::vector<float>>("xmax");
     auto ymins = conf->get<std::vector<float>>("ymin");
     auto ymaxs = conf->get<std::vector<float>>("ymax");
-    auto oflows = conf->get<std::vector<bool>>("oflow");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -108,10 +107,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, hf_info); };
+        stack_text(index, 0.84, 0.04, h, hf_info); };
 
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.73, 0.04, h, range_info); };
+        stack_text(index, 0.84, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -123,13 +122,24 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.42, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.73, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.67, jet_selections.data());
         }
     };
 
-    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
-            auto integral) {
+    auto luminosity = [&](int64_t index) {
+        if (index > 0) {
+            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.60, values.data());
+        }
+    };
+
+    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax) {
         /* get histograms */
         std::vector<history<TH1F>*> hists(6, nullptr);
         std::vector<history<TH1F>*> systs(6, nullptr);
@@ -141,13 +151,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
 
-        for (size_t i = 2; i < files.size(); ++i) {
-            std::string name1 = std::to_string(i) + std::string("happy");
-            std::string name2 = std::to_string(i) + std::string("sad");
-            hists[i]->rename(name1);
-            systs[i]->rename(name2);
-        }
-
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         zip([&](auto hist, auto syst) {
@@ -155,92 +158,124 @@ int congratulate(char const* config, char const* selections, char const* output)
                 links[h] = (*syst)[index]; });
         }, hists, systs);
 
-        std::unordered_map<TH1*, int32_t> colours;
-        hists[0]->apply([&](TH1* h) { colours[h] = 1; });
+        auto aa_stat = new history<TH1F>(*hists[0], "aa_stat"s);
+        auto aa_syst = new history<TH1F>(*hists[0], "aa_syst"s);
 
-        /* uncertainty box */
-        auto box = [&](TH1* h, int64_t) {
-            TGraph* gr = new TGraph();
-            gr->SetFillStyle(1001);
-            gr->SetFillColorAlpha(colours[h] ? red : blue, 0.48);
+        auto pp_stat = new history<TH1F>(*hists[1], "pp_stat"s);
+        auto pp_syst = new history<TH1F>(*hists[1], "pp_syst"s);
 
-            for (int i = 1; i <= h->GetNbinsX(); ++i) {
-                if (h->GetBinError(i) == 0) continue;
+        auto pp_smear_stat = new history<TH1F>(*hists[0], "pp_smear_stat"s);
+        auto pp_smear_syst = new history<TH1F>(*hists[0], "pp_smear_syst"s);
 
-                double x = h->GetBinCenter(i);
-                double width = h->GetBinWidth(i);
-                double val = h->GetBinContent(i);
-                double err = links[h]->GetBinContent(i);
+        /* set the histograms */
+        for (int64_t i = 0; i < hists[0]->size(); ++i) {
+            for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {  
+                auto aa_hist = (*hists[0])[i];
+                auto pp_hist = (*hists[1])[0];
+                auto pp_smear_hist = (*hists[i + 2])[0];
 
-                gr->SetPoint(0, x - (width / 2), val - err);
-                gr->SetPoint(1, x + (width / 2), val - err);
-                gr->SetPoint(2, x + (width / 2), val + err);
-                gr->SetPoint(3, x - (width / 2), val + err);
+                double aa_val = aa_hist->GetBinContent(j);
+                double aa_stat_err = aa_hist->GetBinError(j);
+                double aa_syst_err = links[aa_hist]->GetBinContent(j);
 
-                gr->DrawClone("f");
+                double pp_val = pp_hist->GetBinContent(j);
+                double pp_stat_err = pp_hist->GetBinError(j);
+                double pp_syst_err = links[pp_hist]->GetBinContent(j);
+
+                double pp_smear_val = pp_smear_hist->GetBinContent(j);
+                double pp_smear_stat_err = pp_smear_hist->GetBinError(j);
+                double pp_smear_syst_err = links[pp_smear_hist]->GetBinContent(j);
+
+                (*aa_stat)[i]->SetBinContent(j, aa_val);
+                (*aa_stat)[i]->SetBinError(j, aa_stat_err);
+                (*aa_syst)[i]->SetBinContent(j, aa_val);
+                (*aa_syst)[i]->SetBinError(j, aa_syst_err);
+
+                (*pp_stat)[0]->SetBinContent(j, pp_val);
+                (*pp_stat)[0]->SetBinError(j, pp_stat_err);
+                (*pp_syst)[0]->SetBinContent(j, pp_val);
+                (*pp_syst)[0]->SetBinError(j, pp_syst_err);
+
+                (*pp_smear_stat)[i]->SetBinContent(j, pp_smear_val);
+                (*pp_smear_stat)[i]->SetBinError(j, pp_smear_stat_err);
+                (*pp_smear_syst)[i]->SetBinContent(j, pp_smear_val);
+                (*pp_smear_syst)[i]->SetBinError(j, pp_smear_syst_err);
             }
-        };
-
-        /* minor adjustments */
-        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
+        }
 
         /* prepare papers */
         auto p = new paper(set + "_" + prefix + "_results_pp_" + figure, hb);
         apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         p->accessory(kinematics);
-        p->jewellery(box);
         p->divide(-1, 1);
 
         auto a = new paper(set + "_" + prefix+ "_results_aa_" + figure, hb);
         apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        if (hists[0]->size() == ihf->size()) { a->accessory(std::bind(aa_hf_info, _1, hists[0])); }
-        else { a->accessory(std::bind(aa_range_info, _1, hists[0])); }
         a->accessory(kinematics);
-        a->jewellery(box);
-        if (hists[0]->size() == ihf->size()) { a->divide(hists[0]->size()/2, -1); }
-
-        auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
-        s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
-        if (hists[0]->size() == ihf->size()) { s->accessory(std::bind(aa_hf_info, _1, hists[0])); }
-        else { s->accessory(std::bind(aa_range_info, _1, hists[0])); }
-        s->accessory(kinematics);
-        s->jewellery(box);
-        if (hists[0]->size() == ihf->size()) { s->divide(hists[0]->size()/2, -1); }
-
-        /* draw histograms with uncertainties */
-        hists[0]->apply([&](TH1* h) { a->add(h, "aa"); s->add(h, "aa"); });
-        hists[1]->apply([&](TH1* h) { p->add(h, "pp"); });
-
-        for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            hists[i + 2]->apply([&](TH1* h, int64_t index) {
-                s->stack(i + index + 1, h, "ss");
-            });
+        if (aa_stat->size() == ihf->size()) { 
+            a->accessory(std::bind(aa_hf_info, _1, aa_stat)); 
+            a->divide(aa_stat->size()/2, -1);
+        } else { 
+            a->accessory(std::bind(aa_range_info, _1, aa_stat)); 
         }
 
-        auto pp_style = [](TH1* h) {
-            h->SetLineColor(1);
-            h->SetMarkerStyle(25);
-            h->SetMarkerSize(0.60);
-        };
+        auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
+        s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
+        s->accessory(kinematics);
 
-        auto aa_style = [](TH1* h) {
+        if (aa_stat->size() == ihf->size()) { 
+            apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+            s->accessory(std::bind(aa_hf_info, _1, aa_stat)); 
+            s->divide(aa_stat->size()/2, -1);
+        } else { 
+            apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
+            s->accessory(std::bind(aa_range_info, _1, aa_stat)); 
+            s->accessory(luminosity);
+        }
+
+        /* draw histograms with uncertainties */
+        aa_syst->apply([&](TH1* h) {
+            a->add(h, "aa");
+            a->adjust(h, "e2", "plf"); 
+             
+            s->add(h, "aa");
+            s->adjust(h, "e2", "plf");
+
+            h->SetFillColorAlpha(red, 0.5);
             h->SetLineColor(1);
             h->SetMarkerStyle(20);
             h->SetMarkerSize(0.60);
-        };
+        });
 
-        hb->style("pp", pp_style);
-        hb->style("aa", aa_style);
-        hb->style("ss", pp_style);
+        pp_syst->apply([&](TH1* h) { 
+            p->add(h, "pp"); 
+            p->adjust(h, "e2", "plf");
+
+            h->SetFillColorAlpha(blue, 0.5);
+            h->SetLineColor(1);
+            h->SetMarkerStyle(25);
+            h->SetMarkerSize(0.60);
+        });
+
+        pp_smear_syst->apply([&](TH1* h, int64_t index) {
+            s->stack(index + 1, h, "ss");
+            s->adjust(h, "e2", "plf");
+
+            h->SetFillColorAlpha(blue, 0.5);
+            h->SetLineColor(1);
+            h->SetMarkerStyle(25);
+            h->SetMarkerSize(0.60);
+        });
+        });
+
         hb->sketch();
 
         p->draw("pdf");
         a->draw("pdf");
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
+    }, figures, xmins, xmaxs, ymins, ymaxs);
 
     in(output, []() {});
 

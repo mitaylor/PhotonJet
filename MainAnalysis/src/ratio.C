@@ -27,8 +27,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const red = TColor::GetColor("#f2777a");
-static auto const blue = TColor::GetColor("#6699cc");
+static auto const red = TColor::GetColor("#ff6666");
+static auto const blue = TColor::GetColor("#6666ff");
 static auto const grey = TColor::GetColor("#5c5c5c");
 
 template <typename... T>
@@ -184,7 +184,6 @@ int ratio(char const* config, char const* selections, char const* output) {
                 aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
                 aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
 
-                links[aa_hist]->SetBinContent(j, aa_syst_err);
                 (*ratio_stat)[i]->SetBinContent(j, ratio);
                 (*ratio_stat)[i]->SetBinError(j, aa_stat_err);
                 (*ratio_syst)[i]->SetBinContent(j, ratio);
@@ -195,17 +194,17 @@ int ratio(char const* config, char const* selections, char const* output) {
         /* prepare papers */
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
         s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s->accessory(kinematics);
 
         if (ratio_stat->size() == ihf->size()) { 
             apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
             s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); 
+            s->divide(ratio_stat->size()/2, -1);
         } else { 
             apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
             s->accessory(std::bind(aa_range_info, _1, ratio_stat)); 
             s->accessory(luminosity);
         }
-        s->accessory(kinematics);
-        if (ratio_stat->size() == ihf->size()) { s->divide(ratio_stat->size()/2, -1); }
 
         /* draw histograms with uncertainties */
         ratio_syst->apply([&](TH1* h) {

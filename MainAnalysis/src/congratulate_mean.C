@@ -27,8 +27,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const red = TColor::GetColor("#f2777a");
-static auto const blue = TColor::GetColor("#6699cc");
+static auto const red = TColor::GetColor("#ff6666");
+static auto const blue = TColor::GetColor("#6666ff");
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
