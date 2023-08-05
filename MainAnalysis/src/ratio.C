@@ -143,8 +143,8 @@ int ratio(char const* config, char const* selections, char const* output) {
                 links[h] = (*syst)[index]; });
         }, hists, systs);
 
-        auto ratio_stat = new history(hists[0], "stat");
-        auto ratio_syst = new history(hists[0], "syst");
+        auto ratio_stat = new history<TH1F>(hists[0], "stat");
+        auto ratio_syst = new history<TH1F>(hists[0], "syst");
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
