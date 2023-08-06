@@ -28,3 +28,6 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa ${sample}
 done
+
+./bin/gather_hybrid configs/gather_theory/gather_hybrid.conf \
+    configs/analysis/pho_40/analysis_aa.conf data/preapproval/pho_40/gather_hybrid.root
