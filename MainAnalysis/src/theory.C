@@ -173,8 +173,8 @@ int theory(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.46, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.40, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.55, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.49, jet_selections.data());
         }
     };
 
@@ -186,7 +186,7 @@ int theory(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.55, values.data());
+            l->DrawLatexNDC(0.865, 0.40, values.data());
         }
     };
 
