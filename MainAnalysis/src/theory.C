@@ -161,44 +161,44 @@ int theory(char const* config, char const* output) {
         h->SetMarkerColor(colors[0]);
         h->SetLineColor(colors[0]);
         h->SetLineWidth(1);
-        h->SetFillColor(colors[0]);
+        h->SetFillColorAlpha(colors[0], 0.5);
         h->SetMarkerStyle(22);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "LE", "PL");
+        p->adjust(h, "E3", "PL");
     };
 
     auto pyquen_style = [&](TH1* h) {
         h->SetMarkerColor(colors[1]);
         h->SetLineColor(colors[1]);
         h->SetLineWidth(1);
-        h->SetFillColor(colors[1]);
+        h->SetFillColorAlpha(colors[1], 0.5);
         h->SetMarkerStyle(48);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "LE", "PL");
+        p->adjust(h, "E3", "PL");
     };
 
     auto pyquen_wide_style = [&](TH1* h) {
         h->SetMarkerColor(colors[2]);
         h->SetLineColor(colors[2]);
         h->SetLineWidth(1);
-        h->SetFillColor(colors[2]);
+        h->SetFillColorAlpha(colors[2], 0.5);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "LE", "PL");
+        p->adjust(h, "E3", "PL");
     };
 
     auto pythia_style = [&](TH1* h) {
         h->SetMarkerColor(colors[3]);
         h->SetLineColor(colors[3]);
         h->SetLineWidth(1);
-        h->SetFillColor(colors[3]);
+        h->SetFillColorAlpha(colors[3], 0.5);
         h->SetMarkerStyle(45);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "LE", "PL");
+        p->adjust(h, "E3", "PL");
     };
 
     hb->style("pp", data_style);
