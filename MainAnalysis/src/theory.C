@@ -41,7 +41,7 @@ static int const colors[8] = {
     TColor::GetColor("#619ed6"),
     };
 
-static int const markers[8] = { 49, 48, 47, 45, 9, 9, 9, 9 };
+static int const markers[8] = { 49, 48, 47, 45, 6, 6, 6, 6 };
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
