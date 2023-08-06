@@ -226,7 +226,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         /* draw histograms with uncertainties */
-        hists[0]->apply([&](TH1* h) { 
+        hists[0]->apply([&](TH1* h) {
             a->add(h, "aa");
             s->add(h, "aa"); 
 
