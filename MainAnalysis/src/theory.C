@@ -209,7 +209,6 @@ int theory(char const* config, char const* selections, char const* output) {
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         p->stack((*theory_hists[i])[0], theory_tags[i]);
-        p->stack((*theory_hists[i])[0]);
     }
 
     auto data_style = [&](TH1* h) {
