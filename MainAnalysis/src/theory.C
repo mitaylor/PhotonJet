@@ -41,7 +41,7 @@ static int const colors[8] = {
     TColor::GetColor("#619ed6"),
     };
 
-static int const markers[4] = { 22, 48, 47, 45 };
+static int const markers[8] = { 22, 48, 47, 45, 9, 9, 9, 9 };
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -62,6 +62,8 @@ int theory(char const* config, char const* selections, char const* output) {
 
     auto theory_legend_styles = conf->get<std::vector<std::string>>("theory_legend_styles");
     auto theory_plot_styles = conf->get<std::vector<std::string>>("theory_plot_styles");
+
+    auto offset = conf->get<int>("offset");
 
     auto tag = conf->get<std::string>("tag");
     auto prefix = conf->get<std::string>("prefix");
@@ -224,10 +226,10 @@ int theory(char const* config, char const* selections, char const* output) {
     };
 
     auto theory_style = [&](TH1* h, int i) {
-        h->SetMarkerColor(colors[i]);
-        h->SetLineColor(colors[i]);
-        h->SetFillColorAlpha(colors[i], 0.5);
-        h->SetMarkerStyle(markers[i]);
+        h->SetMarkerColor(colors[i + offset]);
+        h->SetLineColor(colors[i + offset]);
+        h->SetFillColorAlpha(colors[i + offset], 0.5);
+        h->SetMarkerStyle(markers[i + offset]);
         h->SetMarkerSize(0.60);
 
         p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
