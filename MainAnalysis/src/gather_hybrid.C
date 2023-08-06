@@ -59,7 +59,7 @@ int gather_theory(char const* config, char const* output) {
     /* load input */
     for (size_t i = 0; i < inputs.size(); ++i) {
         std::cout << inputs[i] << std::endl;
-        ifstream f(inputs[i].data());
+        std::ifstream f(inputs[i].data());
 
         pp_hists[i] = new history<TH1F>("pp_dr_"s + labels[i], "", fdr, 1);
         aa_hists[i] = new history<TH1F>("aa_dr_"s + labels[i], "", fdr, 1);
@@ -87,13 +87,15 @@ int gather_theory(char const* config, char const* output) {
             ratio_hist->SetBinError(j, (ratio_up - ratio_down)/2);
         }
 
-        f->Close();
+        f->close();
    }
 
     /* save histograms */
     in(output, [&]() {
-        for (size_t i = 0; i < trees.size(); ++i) {
-            hists[i]->save();
+        for (size_t i = 0; i < inputs.size(); ++i) {
+            pp_hists[i]->save();
+            aa_hists[i]->save();
+            ratio_hists[i]->save();
         }
     });
 
