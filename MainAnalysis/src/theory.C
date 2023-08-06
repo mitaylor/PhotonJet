@@ -193,7 +193,7 @@ int theory(char const* config, char const* selections, char const* output) {
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->jewellery(box);
-    if (heavyion) p->accessory(std::bind(aa_hf_info, _1, (*hist)[3])); 
+    if (heavyion) p->accessory(std::bind(aa_hf_info, _1, hist); 
     p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
