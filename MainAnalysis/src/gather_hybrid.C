@@ -103,9 +103,9 @@ int gather_theory(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
-        return gather_theory(argv[1], argv[2], argv[3]);
+    if (argc == 3)
+        return gather_theory(argv[1], argv[2]);
 
-    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    printf("usage: %s [config] [output]\n", argv[0]);
     return 1;
 }
