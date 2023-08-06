@@ -39,7 +39,6 @@ int gather_theory(char const* config, char const* selections, char const* output
 
     auto input = conf->get<std::string>("input");
     auto trees = conf->get<std::vector<std::string>>("trees");
-    auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     /* selections */
     auto sel = new configurer(selections);
@@ -53,8 +52,6 @@ int gather_theory(char const* config, char const* selections, char const* output
     auto gdr = sel->get<std::vector<float>>("drg_range");
 
     /* make histograms */
-    auto ihf = new interval(dhf);
-
     auto idr = new interval("#deltaj"s, gdr);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
 
