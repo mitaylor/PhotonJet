@@ -152,7 +152,7 @@ int theory(char const* config, char const* output) {
 
     auto data_style = [&](TH1* h) {
         h->SetLineColor(1);
-        h->SetFillColorAlpha(data);
+        h->SetFillColorAlpha(data, 0.5);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
 
