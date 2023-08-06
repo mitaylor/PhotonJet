@@ -29,22 +29,35 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 static auto const data = TColor::GetColor("#5c5c5c");
-static int const colors[5] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
+static int const colors[5] = {
+    TColor::GetColor("#5790fc"), 
+    TColor::GetColor("#f89c20"), 
+    TColor::GetColor("#964a8b"), 
+    TColor::GetColor("#9c9ca1"), 
+    TColor::GetColor("#7a21dd"),
+    };
+
+static int const markers[4] = { 22, 48, 47, 45 };
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-int theory(char const* config, char const* output) {
+int theory(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto data_input = conf->get<std::string>("data_input");
     auto figure = conf->get<std::string>("figure");
+    auto prefix = conf->get<std::string>("prefix");
 
     auto theory_inputs = conf->get<std::vector<std::string>>("theory_inputs");
     auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
+    auto theory_tags = conf->get<std::vector<std::string>>("theory_tags");
     auto theory_legends = conf->get<std::vector<std::string>>("theory_legends");
+
+    auto theory_legend_styles = conf->get<std::vector<std::string>>("theory_legend_styles");
+    auto theory_plot_styles = conf->get<std::vector<std::string>>("theory_plot_styles");
 
     auto tag = conf->get<std::string>("tag");
     auto prefix = conf->get<std::string>("prefix");
@@ -54,20 +67,41 @@ int theory(char const* config, char const* output) {
     auto ymin = conf->get<float>("ymin");
     auto ymax = conf->get<float>("ymax");
 
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+
+    auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
+    auto bdr = sel->get<std::vector<float>>("dr_bounds");
+    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+
+    std::vector<int32_t> dcent = {10, 0};
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* open data file */
-    TFile* file_data = new TFile(data_input.data(), "read");
+    TFile* file_data = new TFile((base + data_input).data(), "read");
 
     /* load histograms */
     std::string base_stub = tag + "_base_"s + tag + "_nominal_s_pure_raw_sub_"s;
     std::string syst_stub = tag + "_total_base_"s + tag + "_nominal_s_pure_raw_sub_"s;
 
     auto hist = new history<TH1F>(file_data, base_stub + figure);
-    title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
     auto syst = new history<TH1F>(file_data, syst_stub + figure);
+
+    title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
 
     file_data->Close();
 
@@ -76,12 +110,12 @@ int theory(char const* config, char const* output) {
     hist->apply([&](TH1* h, int64_t index) { links[h] = (*syst)[index]; });
 
     /* get theory predictions */ 
-    std::vector<TFile*> theory_files(10);
-    std::vector<TH1*> theory_hists(10);
+    std::vector<TFile*> theory_files(theory_inputs.size());
+    std::vector<TH1*> theory_hists(theory_inputs.size());
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
-        theory_files[i] = new TFile(theory_inputs[i].data(), "read");
-        theory_hists[i] = (TH1*) theory_files[i]->Get(theory_figures[i].data());
+        theory_files[i] = new TFile((base + theory_inputs[i]).data(), "read");
+        theory_hists[i] = new history<TH1F>(theory_files[i], theory_figures[i]);
     }
 
     /* uncertainty box */
@@ -111,43 +145,68 @@ int theory(char const* config, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("system", "pp", "aa", "jewel", "pyquen", "pyquen_wide", "pythia");
-    hb->alias("aa", "PbPb 0-10%");
+    hb->category("type", "total", legend_keys);
+
+    zip([&](auto const& tag, auto const& legend) {
+        hb->alias(tag, legend); }, theory_tags, theory_legends);
+
+    hb->alias("aa", "PbPb");
     hb->alias("pp", "pp");
-    if (tag == "aa") hb->alias("jewel", "Jewel PbPb 0-10%");
-    if (tag == "pp") hb->alias("jewel", "Jewel pp");
-    if (tag == "aa") hb->alias("pyquen_wide", "Pyquen Wide PbPb 0-10%");
-    if (tag == "pp") hb->alias("pyquen", "Pyquen pp");
-    if (tag == "aa") hb->alias("pyquen", "Pyquen PbPb 0-10%");
-    if (tag == "pp") hb->alias("pythia", "PYTHIA pp");
     
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
+
+    auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
+        stack_text(index, 0.84, 0.04, h, hf_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(10);
-            l->DrawLatexNDC(0.865, 0.65, "40 < p_{T}^{#gamma} < 200, |#eta^{#gamma}| < 1.44");
-            l->DrawLatexNDC(0.865, 0.60, "anti-k_{T} R = 0.3, 30 < p_{T}^{jet} < 120, |#eta^{jet}| < 1.6");
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.70, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.64, jet_selections.data());
+        }
+    };
+
+    auto luminosity = [&](int64_t index) {
+        if (index > 0) {
+            auto values = heavyion ? "PbPb 1.69 nb^{-1}"s : "pp 302 pb^{-1}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.55, values.data());
         }
     };
 
     /* prepare papers */
-    auto p = new paper(prefix + "_" + tag + "_theory_comparison", hb);
-    if (tag == "pp") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
-    if (tag == "aa") apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
+    auto p = new paper(set + "_theory_comparison_" + prefix + "_" + tag, hb);
+    apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s} = 5.02 TeV"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->jewellery(box);
+    if (heavyion) a->accessory(std::bind(aa_hf_info, _1, (*hist)[3])); 
     p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
-    if (tag == "aa") p->add((*hist)[3], "aa");
-    if (tag == "pp") p->add((*hist)[0], "pp");
+    if (tag == "aa") {
+        p->add((*hist)[3], "aa");
+        p->adjust((*hist)[3], "pe", "plf");
+    }
+    if (tag == "pp") { 
+        p->add((*hist)[0], "pp");
+        p->adjust((*hist)[0], "pe", "plf");
+    }
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
-        p->stack(theory_hists[i], theory_legends[i]);
+        p->stack(theory_hists[i], theory_tags[i]);
     }
 
     auto data_style = [&](TH1* h) {
@@ -159,56 +218,23 @@ int theory(char const* config, char const* output) {
         p->adjust(h, "le", "plf");
     };
 
-    auto jewel_style = [&](TH1* h) {
-        h->SetMarkerColor(colors[0]);
-        h->SetLineColor(colors[0]);
-        h->SetLineWidth(1);
-        h->SetFillColorAlpha(colors[0], 0.5);
-        h->SetMarkerStyle(22);
+    auto theory_style = [&](TH1* h, int i) {
+        h->SetMarkerColor(colors[i]);
+        h->SetLineColor(colors[i]);
+        h->SetFillColorAlpha(colors[i], 0.5);
+        h->SetMarkerStyle(markers[i]);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "le", "pl");
-    };
-
-    auto pyquen_style = [&](TH1* h) {
-        h->SetMarkerColor(colors[1]);
-        h->SetLineColor(colors[1]);
-        h->SetLineWidth(1);
-        h->SetFillColorAlpha(colors[1], 0.5);
-        h->SetMarkerStyle(48);
-        h->SetMarkerSize(0.60);
-
-        p->adjust(h, "le", "pl");
-    };
-
-    auto pyquen_wide_style = [&](TH1* h) {
-        h->SetMarkerColor(colors[2]);
-        h->SetLineColor(colors[2]);
-        h->SetLineWidth(1);
-        h->SetFillColorAlpha(colors[2], 0.5);
-        h->SetMarkerStyle(47);
-        h->SetMarkerSize(0.60);
-
-        p->adjust(h, "e3", "pl");
-    };
-
-    auto pythia_style = [&](TH1* h) {
-        h->SetMarkerColor(colors[3]);
-        h->SetLineColor(colors[3]);
-        h->SetLineWidth(1);
-        h->SetFillColorAlpha(colors[3], 0.5);
-        h->SetMarkerStyle(45);
-        h->SetMarkerSize(0.60);
-
-        p->adjust(h, "e3", "pl");
+        p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
     };
 
     hb->style("pp", data_style);
     hb->style("aa", data_style);
-    hb->style("jewel", jewel_style);
-    hb->style("pyquen", pyquen_style);
-    hb->style("pyquen_wide", pyquen_wide_style);
-    hb->style("pythia", pythia_style);
+
+    for (size_t i = 0; i < theory_inputs.size(); ++i) {
+        hb->style(theory_tags[i], std::bind(theory_style, _1, i));
+    }
+
     hb->sketch();
 
     p->draw("pdf");
@@ -219,9 +245,9 @@ int theory(char const* config, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 3)
-        return theory(argv[1], argv[2]);
+    if (argc == 4)
+        return theory(argv[1], argv[2], argv[3]);
 
-    printf("usage: %s [config] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
 }
