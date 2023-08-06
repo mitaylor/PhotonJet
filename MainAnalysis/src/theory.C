@@ -41,7 +41,7 @@ static int const colors[8] = {
     TColor::GetColor("#619ed6"),
     };
 
-static int const markers[8] = { 22, 48, 47, 45, 9, 9, 9, 9 };
+static int const markers[8] = { 49, 48, 47, 45, 9, 9, 9, 9 };
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -63,7 +63,7 @@ int theory(char const* config, char const* selections, char const* output) {
     auto theory_legend_styles = conf->get<std::vector<std::string>>("theory_legend_styles");
     auto theory_plot_styles = conf->get<std::vector<std::string>>("theory_plot_styles");
 
-    auto offset = conf->get<int>("offset");
+    auto offset = conf->get<int32_t>("offset");
 
     auto tag = conf->get<std::string>("tag");
     auto prefix = conf->get<std::string>("prefix");
