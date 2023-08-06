@@ -148,50 +148,57 @@ int theory(char const* config, char const* output) {
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         p->stack(theory_hists[i], theory_legends[i]);
-        p->adjust(theory_hists[i], "LE", "PL");
     }
 
-    auto data_style = [](TH1* h) {
+    auto data_style = [&](TH1* h) {
         h->SetLineColor(1);
         h->SetMarkerColor(data);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
     };
 
-    auto jewel_style = [](TH1* h) {
+    auto jewel_style = [&](TH1* h) {
         h->SetMarkerColor(colors[0]);
         h->SetLineColor(colors[0]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[0]);
         h->SetMarkerStyle(22);
         h->SetMarkerSize(0.60);
+
+        p->adjust(h, "LE", "PL");
     };
 
-    auto pyquen_style = [](TH1* h) {
+    auto pyquen_style = [&](TH1* h) {
         h->SetMarkerColor(colors[1]);
         h->SetLineColor(colors[1]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[1]);
         h->SetMarkerStyle(48);
         h->SetMarkerSize(0.60);
+
+        p->adjust(h, "LE", "PL");
     };
 
-    auto pyquen_wide_style = [](TH1* h) {
+    auto pyquen_wide_style = [&](TH1* h) {
         h->SetMarkerColor(colors[2]);
         h->SetLineColor(colors[2]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[2]);
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
+
+        p->adjust(h, "LE", "PL");
     };
 
-    auto pythia_style = [](TH1* h) {
+    auto pythia_style = [&](TH1* h) {
         h->SetMarkerColor(colors[3]);
         h->SetLineColor(colors[3]);
         h->SetLineWidth(1);
         h->SetFillColor(colors[3]);
         h->SetMarkerStyle(45);
         h->SetMarkerSize(0.60);
+
+        p->adjust(h, "LE", "PL");
     };
 
     hb->style("pp", data_style);
