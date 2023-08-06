@@ -189,7 +189,7 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
     /* prepare papers */
     auto p = new paper(set + "_theory_comparison_" + type + "_" + tag, hb);
-    apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s} = 5.02 TeV"s, ymin, ymax);
+    apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->accessory(luminosity);
@@ -207,9 +207,10 @@ std::cout << __LINE__ << std::endl;
         p->adjust((*hist)[0], "pe", "plf");
     }
 std::cout << __LINE__ << std::endl;
-    // for (size_t i = 0; i < theory_inputs.size(); ++i) {
-    //     p->stack((*theory_hists[i])[0], theory_tags[i]);
-    // }
+    for (size_t i = 0; i < theory_inputs.size(); ++i) {
+        // p->stack((*theory_hists[i])[0], theory_tags[i]);
+        p->stack((*theory_hists[i])[0]);
+    }
 std::cout << __LINE__ << std::endl;
     auto data_style = [&](TH1* h) {
         h->SetLineColor(1);
