@@ -87,7 +87,7 @@ int gather_theory(char const* config, char const* output) {
             ratio_hist->SetBinError(j, (ratio_up - ratio_down)/2);
         }
 
-        f->close();
+        f.close();
    }
 
     /* save histograms */
