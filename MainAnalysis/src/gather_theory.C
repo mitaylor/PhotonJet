@@ -94,7 +94,7 @@ std::cout << __LINE__ << std::endl;
             if ((float) jetPt > jet_pt_bounds[1]) { continue; }
 
             if ((float) dphi < dphi_min_numerator/dphi_min_denominator * TMath::Pi()) { continue; }
-
+            std::cout << j << " " << photonPt << " " << jetPt << " " << dphi << " " << dj << std::endl;
             (*hists[i])[0]->Fill((float) dj, (float) weight);
         }
 std::cout << __LINE__ << std::endl;
