@@ -65,23 +65,25 @@ int gather_theory(char const* config, char const* selections, char const* output
     TFile* f = new TFile(input.data(), "read");
 
     for (size_t i = 0; i < trees.size(); ++i) {
+        std::cout << trees[i] << std::endl;
+
         TTree* t = (TTree*)f->Get(trees[i].c_str());
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
-
+std::cout << __LINE__ << std::endl;
         hists[i] = new history<TH1F>("dr_"s + trees[i], "", fdr, 1);
-
+std::cout << __LINE__ << std::endl;
         double photonPt;
         double jetPt;
         double dphi;
         double dj;
         double weight;
-
+std::cout << __LINE__ << std::endl;
         t->SetBranchAddress("photonPt", &photonPt);
         t->SetBranchAddress("jetPt", &jetPt);
         t->SetBranchAddress("dphi", &dphi);
         t->SetBranchAddress("dj", &dj);
         t->SetBranchAddress("weight", &weight);
-
+std::cout << __LINE__ << std::endl;
         for (int64_t j = 0; j < nentries; ++j) {
             t->GetEntry(j);
 
@@ -95,9 +97,9 @@ int gather_theory(char const* config, char const* selections, char const* output
 
             (*hists[i])[0]->Fill((float) dj, (float) weight);
         }
-
-        scale_bin_width(hists[i]);
-        normalise_to_unity(hists[i]);
+std::cout << __LINE__ << std::endl;
+        scale_bin_width(hists[i]);std::cout << __LINE__ << std::endl;
+        normalise_to_unity(hists[i]);std::cout << __LINE__ << std::endl;
     }
 
     f->Close();
