@@ -192,6 +192,7 @@ int theory(char const* config, char const* selections, char const* output) {
     apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s} = 5.02 TeV"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
+    p->accessory(luminosity);
     p->jewellery(box);
     if (heavyion) p->accessory(std::bind(aa_hf_info, _1, hist)); 
     p->divide(-1, 1);
