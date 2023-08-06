@@ -96,7 +96,7 @@ int gather_theory(char const* config, char const* selections, char const* output
 
             if ((float) dphi < dphi_min_numerator/dphi_min_denominator * TMath::Pi()) { continue; }
 
-            hists[i]->Fill((float) dj, (float) weight);
+            (*hists[i])[0]->Fill((float) dj, (float) weight);
         }
 
         scale_bin_width(hists[i]);
