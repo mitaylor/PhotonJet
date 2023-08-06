@@ -28,7 +28,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static int const data = TColor::GetColor("#e42536");
+static auto const data = TColor::GetColor("#5c5c5c");
 static int const colors[5] = {TColor::GetColor("#5790fc"), TColor::GetColor("#f89c20"), TColor::GetColor("#964a8b"), TColor::GetColor("#9c9ca1"), TColor::GetColor("#7a21dd"),};
 
 template <typename... T>
@@ -152,9 +152,11 @@ int theory(char const* config, char const* output) {
 
     auto data_style = [&](TH1* h) {
         h->SetLineColor(1);
-        h->SetMarkerColor(data);
+        h->SetFillColorAlpha(data);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);
+
+        p->adjust(h, "le", "plf");
     };
 
     auto jewel_style = [&](TH1* h) {
@@ -165,7 +167,7 @@ int theory(char const* config, char const* output) {
         h->SetMarkerStyle(22);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "E3", "PL");
+        p->adjust(h, "le", "pl");
     };
 
     auto pyquen_style = [&](TH1* h) {
@@ -176,7 +178,7 @@ int theory(char const* config, char const* output) {
         h->SetMarkerStyle(48);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "E3", "PL");
+        p->adjust(h, "le", "pl");
     };
 
     auto pyquen_wide_style = [&](TH1* h) {
@@ -187,7 +189,7 @@ int theory(char const* config, char const* output) {
         h->SetMarkerStyle(47);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "E3", "PL");
+        p->adjust(h, "e3", "pl");
     };
 
     auto pythia_style = [&](TH1* h) {
@@ -198,7 +200,7 @@ int theory(char const* config, char const* output) {
         h->SetMarkerStyle(45);
         h->SetMarkerSize(0.60);
 
-        p->adjust(h, "E3", "PL");
+        p->adjust(h, "e3", "pl");
     };
 
     hb->style("pp", data_style);
