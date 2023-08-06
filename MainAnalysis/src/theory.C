@@ -146,7 +146,7 @@ int theory(char const* config, char const* selections, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("type", "total", theory_tags);
+    hb->category("type", "aa", "pp", theory_tags);
 
     zip([&](auto const& tag, auto const& legend) {
         hb->alias(tag, legend); }, theory_tags, theory_legends);
@@ -208,7 +208,7 @@ int theory(char const* config, char const* selections, char const* output) {
     }
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
-        // p->stack((*theory_hists[i])[0], theory_tags[i]);
+        p->stack((*theory_hists[i])[0], theory_tags[i]);
         p->stack((*theory_hists[i])[0]);
     }
 
