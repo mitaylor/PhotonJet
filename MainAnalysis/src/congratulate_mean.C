@@ -201,8 +201,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     s->jewellery(box);
 
     /* draw histograms with uncertainties */
-    (*hists[0])[0]->GetYaxis->SetMaxDigits(1);
-    
+    (*hists[0])[0]->GetYaxis()->SetMaxDigits(1);
+
     s->add((*hists[0])[0], "aa");
     s->stack((*hists[1])[0], "pp");
 
