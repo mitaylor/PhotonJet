@@ -1,5 +1,6 @@
 #include "../include/lambdas.h"
 #include "../include/specifics.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -145,7 +146,7 @@ int theory(char const* config, char const* selections, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("type", "total", legend_keys);
+    hb->category("type", "total", theory_tags);
 
     zip([&](auto const& tag, auto const& legend) {
         hb->alias(tag, legend); }, theory_tags, theory_legends);
@@ -192,7 +193,7 @@ int theory(char const* config, char const* selections, char const* output) {
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
     p->jewellery(box);
-    if (heavyion) a->accessory(std::bind(aa_hf_info, _1, (*hist)[3])); 
+    if (heavyion) p->accessory(std::bind(aa_hf_info, _1, (*hist)[3])); 
     p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
