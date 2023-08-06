@@ -132,7 +132,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.32, values.data());
+            l->DrawLatexNDC(0.865, 0.34, values.data());
         }
     };
 

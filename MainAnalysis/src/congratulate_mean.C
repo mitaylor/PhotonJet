@@ -79,9 +79,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto hb = new pencil();
     hb->category("system", "pp", "aa");
 
-    hb->alias("aa", "PbPb 1.69 nb^{-1}");
-    hb->alias("pp", "pp 302 pb^{-1}");
-    if (smeared) hb->alias("pp", "pp 302 pb^{-1} (smeared)");
+    hb->alias("aa", "PbPb");
+    hb->alias("pp", "pp");
+    if (smeared) hb->alias("pp", "pp (smeared)");
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -95,6 +95,18 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, 0.72, photon_selections.data());
             l->DrawLatexNDC(0.865, 0.67, jet_selections.data());
+        }
+    };
+
+    auto luminosity = [&](int64_t index) {
+        if (index > 0) {
+            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.865, 0.58, values.data());
         }
     };
 
@@ -185,19 +197,25 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto s = new paper(set + "_" + prefix + "_results_ss_mean" + suffix, hb);
     apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, min, max);
     s->accessory(kinematics);
+    s->accessory(luminosity);
     s->jewellery(box);
 
     /* draw histograms with uncertainties */
     s->add((*hists[0])[0], "aa");
     s->stack((*hists[1])[0], "pp");
 
+    s->adjust((*hists[0])[0], "pe", "plf");
+    s->adjust((*hists[1])[0], "pe", "plf");
+
     auto pp_style = [](TH1* h) {
+        h->SetFillColorAlpha(blue, 0.5);
         h->SetLineColor(1);
         h->SetMarkerStyle(25);
         h->SetMarkerSize(0.60);
     };
 
     auto aa_style = [](TH1* h) {
+        h->SetFillColorAlpha(red, 0.5);
         h->SetLineColor(1);
         h->SetMarkerStyle(20);
         h->SetMarkerSize(0.60);

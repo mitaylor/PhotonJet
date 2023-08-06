@@ -27,8 +27,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const red = TColor::GetColor("#f2777a");
-static auto const blue = TColor::GetColor("#6699cc");
+static auto const red = TColor::GetColor("#ff6666");
+static auto const blue = TColor::GetColor("#6666ff");
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -49,7 +49,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto xmaxs = conf->get<std::vector<float>>("xmax");
     auto ymins = conf->get<std::vector<float>>("ymin");
     auto ymaxs = conf->get<std::vector<float>>("ymax");
-    auto oflows = conf->get<std::vector<bool>>("oflow");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -136,12 +135,11 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.57, values.data());
+            l->DrawLatexNDC(0.865, 0.55, values.data());
         }
     };
 
-    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax,
-            auto integral) {
+    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax) {
         /* get histograms */
         std::vector<history<TH1F>*> hists(6, nullptr);
         std::vector<history<TH1F>*> systs(6, nullptr);
@@ -192,9 +190,6 @@ int congratulate(char const* config, char const* selections, char const* output)
                 gr->DrawClone("f");
             }
         };
-
-        /* minor adjustments */
-        if (integral) { xmin = convert_pi(xmin); xmax = convert_pi(xmax); }
 
         /* prepare papers */
         auto p = new paper(set + "_" + prefix + "_results_pp_" + figure, hb);
@@ -273,7 +268,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         p->draw("pdf");
         a->draw("pdf");
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs, oflows);
+    }, figures, xmins, xmaxs, ymins, ymaxs);
 
     in(output, []() {});
 
