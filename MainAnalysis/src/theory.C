@@ -220,22 +220,22 @@ std::cout << __LINE__ << std::endl;
         p->adjust(h, "le", "plf");
     };
 std::cout << __LINE__ << std::endl;
-    auto theory_style = [&](TH1* h, int i) {
-        h->SetMarkerColor(colors[i]);
-        h->SetLineColor(colors[i]);
-        h->SetFillColorAlpha(colors[i], 0.5);
-        h->SetMarkerStyle(markers[i]);
-        h->SetMarkerSize(0.60);
+    // auto theory_style = [&](TH1* h, int i) {
+    //     h->SetMarkerColor(colors[i]);
+    //     h->SetLineColor(colors[i]);
+    //     h->SetFillColorAlpha(colors[i], 0.5);
+    //     h->SetMarkerStyle(markers[i]);
+    //     h->SetMarkerSize(0.60);
 
-        p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
-    };
+    //     p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
+    // };
 std::cout << __LINE__ << std::endl;
     hb->style("pp", data_style);
     hb->style("aa", data_style);
 std::cout << __LINE__ << std::endl;
-    for (size_t i = 0; i < theory_inputs.size(); ++i) {
-        hb->style(theory_tags[i], std::bind(theory_style, _1, i));
-    }
+    // for (size_t i = 0; i < theory_inputs.size(); ++i) {
+    //     hb->style(theory_tags[i], std::bind(theory_style, _1, i));
+    // }
 std::cout << __LINE__ << std::endl;
     hb->sketch();
 std::cout << __LINE__ << std::endl;
