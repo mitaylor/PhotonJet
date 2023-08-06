@@ -112,7 +112,7 @@ int theory(char const* config, char const* selections, char const* output) {
 
     /* get theory predictions */ 
     std::vector<TFile*> theory_files(theory_inputs.size());
-    std::vector<TH1*> theory_hists(theory_inputs.size());
+    std::vector<history<TH1F>*> theory_hists(theory_inputs.size());
 
     for (size_t i = 0; i < theory_inputs.size(); ++i) {
         theory_files[i] = new TFile((base + theory_inputs[i]).data(), "read");
