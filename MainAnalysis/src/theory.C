@@ -30,12 +30,15 @@ using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
 static auto const data = TColor::GetColor("#5c5c5c");
-static int const colors[5] = {
-    TColor::GetColor("#5790fc"), 
-    TColor::GetColor("#f89c20"), 
-    TColor::GetColor("#964a8b"), 
-    TColor::GetColor("#9c9ca1"), 
-    TColor::GetColor("#7a21dd"),
+static int const colors[8] = {
+    TColor::GetColor("#ffc9ed"), 
+    TColor::GetColor("#b77ea3"), 
+    TColor::GetColor("#f7d027"), 
+    TColor::GetColor("#e48f1b"), 
+    TColor::GetColor("#9cf168"),
+    TColor::GetColor("#6ba547"),
+    TColor::GetColor("#60ceed"),
+    TColor::GetColor("#619ed6"),
     };
 
 static int const markers[4] = { 22, 48, 47, 45 };
@@ -170,8 +173,8 @@ int theory(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.70, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.64, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.46, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.40, jet_selections.data());
         }
     };
 
