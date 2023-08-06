@@ -207,9 +207,9 @@ std::cout << __LINE__ << std::endl;
         p->adjust((*hist)[0], "pe", "plf");
     }
 std::cout << __LINE__ << std::endl;
-    for (size_t i = 0; i < theory_inputs.size(); ++i) {
-        p->stack((*theory_hists[i])[0], theory_tags[i]);
-    }
+    // for (size_t i = 0; i < theory_inputs.size(); ++i) {
+    //     p->stack((*theory_hists[i])[0], theory_tags[i]);
+    // }
 std::cout << __LINE__ << std::endl;
     auto data_style = [&](TH1* h) {
         h->SetLineColor(1);
