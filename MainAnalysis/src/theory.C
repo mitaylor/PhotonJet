@@ -49,7 +49,7 @@ int theory(char const* config, char const* selections, char const* output) {
 
     auto data_input = conf->get<std::string>("data_input");
     auto figure = conf->get<std::string>("figure");
-    auto prefix = conf->get<std::string>("prefix");
+    auto type = conf->get<std::string>("type");
 
     auto theory_inputs = conf->get<std::vector<std::string>>("theory_inputs");
     auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
@@ -187,7 +187,7 @@ int theory(char const* config, char const* selections, char const* output) {
     };
 
     /* prepare papers */
-    auto p = new paper(set + "_theory_comparison_" + prefix + "_" + tag, hb);
+    auto p = new paper(set + "_theory_comparison_" + type + "_" + tag, hb);
     apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s} = 5.02 TeV"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
