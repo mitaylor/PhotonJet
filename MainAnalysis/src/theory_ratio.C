@@ -161,7 +161,7 @@ int theory(char const* config, char const* selections, char const* output) {
     std::vector<history<TH1F>*> theory_hists_pp(theory_inputs_pp.size());
     std::vector<history<TH1F>*> theory_ratios(theory_tags.size());
 
-    for (size_t i = 0; i < theory_inputs_aa.size(); ++i) {
+    for (size_t i = 0; i < theory_tags.size(); ++i) {
         theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
         theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
 
@@ -272,7 +272,7 @@ int theory(char const* config, char const* selections, char const* output) {
     p->add((*hist_ratio)[0], "data");
     p->adjust((*hist_ratio)[0], "pe", "plf");
 
-    for (size_t i = 0; i < theory_inputs.size(); ++i) {
+    for (size_t i = 0; i < theory_tags.size(); ++i) {
         p->stack((*theory_ratios[i])[0], theory_tags[i]);
     }
 
