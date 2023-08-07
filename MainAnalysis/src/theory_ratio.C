@@ -130,24 +130,24 @@ std::cout << __LINE__ << std::endl;
     for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
         auto aa_hist = (*hist_aa)[0];
         auto pp_hist = (*hist_pp)[0];
-
+std::cout << __LINE__ << std::endl;
         double aa_val = aa_hist->GetBinContent(j);
         double aa_stat_err = aa_hist->GetBinError(j);
         double aa_syst_err = links[aa_hist]->GetBinContent(j);
         auto aa_stat_err_scale = aa_stat_err/aa_val;
         auto aa_syst_err_scale = aa_syst_err/aa_val;
-
+std::cout << __LINE__ << std::endl;
         double pp_val = pp_hist->GetBinContent(j);
         double pp_stat_err = pp_hist->GetBinError(j);
         double pp_syst_err = links[pp_hist]->GetBinContent(j);
         auto pp_stat_err_scale = pp_stat_err/pp_val;
         auto pp_syst_err_scale = pp_syst_err/pp_val;
-
+std::cout << __LINE__ << std::endl;
         auto ratio = aa_val / pp_val;
-
+std::cout << __LINE__ << std::endl;
         aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
         aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
-
+std::cout << __LINE__ << std::endl;
         (*hist_ratio)[0]->SetBinContent(j, ratio);
         (*hist_ratio)[0]->SetBinError(j, aa_stat_err);
         links[(*syst_ratio)[0]]->SetBinContent(j, aa_syst_err);
