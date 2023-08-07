@@ -59,9 +59,11 @@ int theory(char const* config, char const* selections, char const* output) {
 
     auto theory_inputs_aa = conf->get<std::vector<std::string>>("theory_inputs_aa");
     auto theory_inputs_pp = conf->get<std::vector<std::string>>("theory_inputs_pp");
+    auto theory_inputs_ratio = conf->get<std::vector<std::string>>("theory_inputs_ratio");
 
     auto theory_figures_aa = conf->get<std::vector<std::string>>("theory_figures_aa");
     auto theory_figures_pp = conf->get<std::vector<std::string>>("theory_figures_pp");
+    auto theory_figures_ratio = conf->get<std::vector<std::string>>("theory_figures_ratio");
 
     auto theory_tags = conf->get<std::vector<std::string>>("theory_tags");
     auto theory_legends = conf->get<std::vector<std::string>>("theory_legends");
@@ -156,38 +158,44 @@ int theory(char const* config, char const* selections, char const* output) {
     /* get theory predictions */ 
     std::vector<TFile*> theory_files_aa(theory_inputs_aa.size());
     std::vector<TFile*> theory_files_pp(theory_inputs_pp.size());
+    std::vector<TFile*> theory_files_ratio(theory_inputs_ratio.size());
 
     std::vector<history<TH1F>*> theory_hists_aa(theory_inputs_aa.size());
     std::vector<history<TH1F>*> theory_hists_pp(theory_inputs_pp.size());
     std::vector<history<TH1F>*> theory_ratios(theory_tags.size());
 
     for (size_t i = 0; i < theory_tags.size(); ++i) {
-        theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
-        theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
+        if (theory_inputs_ratio.size() == 0) {
+            theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
+            theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
 
-        theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i]);
-        theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i]);
+            theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i]);
+            theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i]);
 
-        theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
+            theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
 
-        for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
-            auto aa_hist = (*theory_hists_aa[i])[0];
-            auto pp_hist = (*theory_hists_pp[i])[0];
+            for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
+                auto aa_hist = (*theory_hists_aa[i])[0];
+                auto pp_hist = (*theory_hists_pp[i])[0];
 
-            double aa_val = aa_hist->GetBinContent(j);
-            double aa_stat_err = aa_hist->GetBinError(j);
-            auto aa_stat_err_scale = aa_stat_err/aa_val;
+                double aa_val = aa_hist->GetBinContent(j);
+                double aa_stat_err = aa_hist->GetBinError(j);
+                auto aa_stat_err_scale = aa_stat_err/aa_val;
 
-            double pp_val = pp_hist->GetBinContent(j);
-            double pp_stat_err = pp_hist->GetBinError(j);
-            auto pp_stat_err_scale = pp_stat_err/pp_val;
+                double pp_val = pp_hist->GetBinContent(j);
+                double pp_stat_err = pp_hist->GetBinError(j);
+                auto pp_stat_err_scale = pp_stat_err/pp_val;
 
-            auto ratio = aa_val / pp_val;
+                auto ratio = aa_val / pp_val;
 
-            aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
+                aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
 
-            (*theory_ratios[i])[0]->SetBinContent(j, ratio);
-            (*theory_ratios[i])[0]->SetBinError(j, aa_stat_err);
+                (*theory_ratios[i])[0]->SetBinContent(j, ratio);
+                (*theory_ratios[i])[0]->SetBinError(j, aa_stat_err);
+            }
+        } else {
+            theory_files_ratio[i] = new TFile((base + theory_inputs_ratio[i]).data(), "read");
+            theory_ratios[i] = new history<TH1F>(theory_files_ratio[i], theory_figures_ratio[i]);
         }
     }
 
