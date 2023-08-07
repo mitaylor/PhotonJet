@@ -452,6 +452,14 @@ int tessellate(char const* config, char const* selections, char const* output) {
     c1->accessory(kinematics);
     c1->divide(ipt->size() - 1, -1);
 
+    auto c3 = new paper(set + "_purity_log_" + tag, hb);
+    apply_style(c3, cms, system_tag);
+    c3->accessory(pthf_info);
+    c3->accessory(purity_info);
+    c3->accessory(kinematics);
+    c3->set(paper::flags::logy);
+    c3->divide(ipt->size() - 1, -1);
+
     auto formatter = [](TH1* obj) {
         obj->SetAxisRange(0.005, 0.015, "X");
     };
@@ -463,14 +471,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     c2->accessory(purity_info);
     c2->accessory(kinematics);
     c2->divide(ipt->size() - 1, -1);
-
-    auto c3 = new paper(set + "_purity_log_" + tag, hb);
-    apply_style(c3, cms, system_tag);
-    c3->accessory(pthf_info);
-    c3->accessory(purity_info);
-    c3->accessory(kinematics);
-    c3->set(paper::flags::logy);
-    c3->divide(ipt->size() - 1, -1);
 
     printf("fit templates\n");
 
@@ -501,19 +501,19 @@ int tessellate(char const* config, char const* selections, char const* output) {
             c1->adjust(pfit, "hist f", "lf");
             c1->adjust(pbkg, "hist f", "lf");
 
-            c2->add((*see_data)[i], "data");
-            c2->stack(pfit, "sig");
-            c2->stack(pbkg, "bkg");
-
-            c2->adjust(pfit, "hist f", "lf");
-            c2->adjust(pbkg, "hist f", "lf");
-
             c3->add((*see_data)[i], "data");
             c3->stack(pfit, "sig");
             c3->stack(pbkg, "bkg");
 
             c3->adjust(pfit, "hist f", "lf");
             c3->adjust(pbkg, "hist f", "lf");
+
+            c2->add((*see_data)[i], "data");
+            c2->stack(pfit, "sig");
+            c2->stack(pbkg, "bkg");
+
+            c2->adjust(pfit, "hist f", "lf");
+            c2->adjust(pbkg, "hist f", "lf");
 
             auto ntot = pfit->Integral(1, pfit->FindBin(see_max));
             auto nbkg = pbkg->Integral(1, pbkg->FindBin(see_max));
@@ -531,8 +531,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     hb->sketch();
     c1->draw("pdf");
-    c2->draw("pdf");
     c3->draw("pdf");
+    c2->draw("pdf");
 
     /* save purities */
     in(output, [&]() {
