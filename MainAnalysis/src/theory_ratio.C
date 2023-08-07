@@ -269,6 +269,7 @@ int theory(char const* config, char const* selections, char const* output) {
     p->divide(-1, 1);
 
     /* draw histograms with uncertainties */
+    (*hist_ratio)[0]->GetXaxis()->SetRangeUser(xmin, xmax);
     p->add((*hist_ratio)[0], "data");
     p->adjust((*hist_ratio)[0], "pe", "plf");
 
