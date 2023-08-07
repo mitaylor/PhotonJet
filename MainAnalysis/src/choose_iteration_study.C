@@ -309,8 +309,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }
 
     for (size_t j = 0; j < fafters.size(); ++j) {
-        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j] + 2);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j] + 2);
+        std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j] + 1);
+        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j] + 1);
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
@@ -487,7 +487,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
                 ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
             auto jet_selections = "anti-k_{T} R = 0.3, "s + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
-            auto iterations = "iterations: "s + to_text(choice[index - 1] - 1) + ", "s + to_text(choice[index - 1]) + ", "s + to_text(choice[index - 1] + 2);
+            auto iterations = "iterations: "s + to_text(choice[index - 1] - 1) + ", "s + to_text(choice[index - 1]) + ", "s + to_text(choice[index - 1] + 1);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
