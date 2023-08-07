@@ -259,7 +259,7 @@ int theory(char const* config, char const* selections, char const* output) {
     };
 
     /* prepare papers */
-    auto p = new paper(set + "_theory_comparison_" + type + "_" + tag, hb);
+    auto p = new paper(set + "_theory_comparison_ratio_" + type, hb);
     apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
     p->accessory(kinematics);
