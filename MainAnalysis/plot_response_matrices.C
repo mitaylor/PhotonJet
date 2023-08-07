@@ -145,16 +145,23 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto victim = conf->get<std::string>("victim");
     auto label = conf->get<std::string>("label");
     auto divisions = conf->get<std::vector<int64_t>>("divisions");
-    auto heavyion = conf->get<bool>("heavyion");
-
-    auto rdrr = conf->get<std::vector<float>>("drr_range");
-    auto rptr = conf->get<std::vector<float>>("ptr_range");
 
     auto rfold0 = conf->get<std::vector<float>>("fold0_range");
 
     auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+
+     /* selections */
+    auto sel = new configurer(selections);
+
+    auto set = sel->get<std::string>("set");
+    auto base = sel->get<std::string>("base");
+
+    auto heavyion = sel->get<bool>("heavyion");
+
+    auto rdrr = sel->get<std::vector<float>>("drr_range");
+    auto rptr = sel->get<std::vector<float>>("ptr_range");
 
     auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
