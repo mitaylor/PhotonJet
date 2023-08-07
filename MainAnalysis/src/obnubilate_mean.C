@@ -92,22 +92,22 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     std::vector<int32_t> const colours = {
         TColor::GetColor("#515151"),
-        TColor::GetColor("#f2777a"),
-        TColor::GetColor("#f99157"),
-        TColor::GetColor("#ffcc66"),
-        TColor::GetColor("#99cc99"),
-        TColor::GetColor("#6699cc"),
-        TColor::GetColor("#f005ec"),
-        TColor::GetColor("#28b09c"),
-        TColor::GetColor("#1bfa02"),
-        TColor::GetColor("#736238"),
-        TColor::GetColor("#fa0505"),
-        TColor::GetColor("#ffb600"),
-        TColor::GetColor("#fa0505"),
-        TColor::GetColor("#ffff00"),
-        TColor::GetColor("#515151"),
-        TColor::GetColor("#f2777a"),
-        TColor::GetColor("#f99157"),
+        TColor::GetColor("#FF484E"),
+        TColor::GetColor("#FF9E48"),
+        TColor::GetColor("#FFFA48"),
+        TColor::GetColor("#A9FF48"),
+        TColor::GetColor("#48FF9E"),
+        TColor::GetColor("#48FFFA"),
+        TColor::GetColor("#48A9FF"),
+        TColor::GetColor("#484EFF"),
+        TColor::GetColor("#9E48FF"),
+        TColor::GetColor("#F948FF"),
+        TColor::GetColor("#FF484E"),
+        TColor::GetColor("#FF9E48"),
+        TColor::GetColor("#FFFA48"),
+        TColor::GetColor("#A9FF48"),
+        TColor::GetColor("#9E48FF"),
+        TColor::GetColor("#F948FF")
     };
 
     auto box = [&](TH1* h, int64_t) {
