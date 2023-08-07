@@ -251,10 +251,10 @@ int theory(char const* config, char const* selections, char const* output) {
             auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.77, values.data());
+            l->DrawLatexNDC(0.135, 0.77, values.data());
         }
     };
 
