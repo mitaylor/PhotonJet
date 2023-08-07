@@ -150,7 +150,7 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
         (*hist_ratio)[0]->SetBinContent(j, ratio);
         (*hist_ratio)[0]->SetBinError(j, aa_stat_err);
-        links[(*syst_ratio)[0]]->SetBinContent(j, aa_syst_err);
+        links[(*hist_ratio)[0]]->SetBinContent(j, aa_syst_err);
     }
 std::cout << __LINE__ << std::endl;
     /* get theory predictions */ 
