@@ -42,7 +42,7 @@ int gather_theory(char const* config, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto labels = conf->get<std::vector<std::string>>("labels");
 
-    std::vector<float> gdr = { 0.00, 0.02, 0.04, 0.06, 0.08, 0.10, 0.125, 0.20, 0.30 };
+    std::vector<float> gdr = { 0.00, 0.02, 0.04, 0.06, 0.08, 0.10, 0.125, 0.15, 0.20, 0.30 };
 
     /* make histograms */
     auto idr = new interval("#deltaj"s, gdr);
