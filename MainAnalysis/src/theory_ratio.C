@@ -253,7 +253,7 @@ int theory(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
+            l->SetTextSize(10);
             l->DrawLatexNDC(0.135, 0.77, values.data());
         }
     };
