@@ -132,7 +132,7 @@ TH2F* shade(T* flat, multival const* m, std::array<int64_t, 4> const& offset) {
     return hshade;
 }
 
-int plot_unfolding_inputs(char const* config) {
+int plot_unfolding_inputs(char const* config, char const* selections) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
