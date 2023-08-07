@@ -17,7 +17,7 @@ run_aa() {
         configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/obnubilate_${tag}.root
 }
 
-samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(pp) # pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
