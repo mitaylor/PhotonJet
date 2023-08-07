@@ -20,12 +20,12 @@ static std::vector<int32_t> const colours = {
     TColor::GetColor("#484EFF"),
     TColor::GetColor("#9E48FF"),
     TColor::GetColor("#F948FF"),
-    TColor::GetColor("#FF48AA"),
     TColor::GetColor("#FF484E"),
     TColor::GetColor("#FF9E48"),
     TColor::GetColor("#FFFA48"),
     TColor::GetColor("#A9FF48"),
-    TColor::GetColor("#48FF9E")
+    TColor::GetColor("#9E48FF"),
+    TColor::GetColor("#F948FF")
 };
 
 static std::vector<int32_t> const msolid = { 20, 21, 22, 23, 29, 41 };
