@@ -490,6 +490,14 @@ int tessellate(char const* config, char const* selections, char const* output) {
     c1->accessory(kinematics);
     c1->divide(ipt->size() - 1, -1);
 
+    auto c2 = new paper(set + "_purity_log_" + tag + "_squeeze", hb);
+    apply_style(c2, cms, system_tag);
+    c2->accessory(pthf_info);
+    c2->accessory(purity_info);
+    c2->accessory(kinematics);
+    c2->divide(ipt->size() - 1, -1);
+    c2->set(paper::flags::logy);
+
     printf("fit templates\n");
 
     for (int64_t i = 0; i < mpthf->size(); ++i) {
@@ -519,6 +527,13 @@ int tessellate(char const* config, char const* selections, char const* output) {
             c1->adjust(pfit, "hist f", "lf");
             c1->adjust(pbkg, "hist f", "lf");
 
+            c2->add((*see_data)[i], "data");
+            c2->stack(pfit, "sig");
+            c2->stack(pbkg, "bkg");
+
+            c2->adjust(pfit, "hist f", "lf");
+            c2->adjust(pbkg, "hist f", "lf");
+
             auto ntot = pfit->Integral(1, pfit->FindBin(see_max));
             auto nbkg = pbkg->Integral(1, pbkg->FindBin(see_max));
 
@@ -535,6 +550,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     hb->sketch();
     c1->draw("pdf");
+    c2->draw("pdf");
 
     /* save purities */
     in(output, [&]() {
