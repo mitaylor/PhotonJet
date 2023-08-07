@@ -282,7 +282,6 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto offsets = conf->get<std::vector<float>>("offsets");
     auto widths = conf->get<std::vector<float>>("widths");
 
     /* selections */
@@ -366,6 +365,8 @@ int tessellate(char const* config, char const* selections, char const* output) {
     }
 
     /* fill signal with MC */
+    std::vector<float> offsets(mpthf->size(), 0);
+
     for (auto const& file : signal) {
         std::cout << file << std::endl;
         
@@ -378,6 +379,34 @@ int tessellate(char const* config, char const* selections, char const* output) {
                     hovere_max, hf_min, hf_max, iso_max, 
                     noniso_min, noniso_max, gen_iso_max, offsets, 
                     widths, rho_weighting);
+    }
+
+    /* alter signal template to match data std and mean between 0 and 0.01 */
+    for (int64_t i = 0; i < mpthf->size(); ++i) {
+        auto res = fit_templates((*see_data)[i], (*see_sig_initial)[i], (*see_bkg)[i], rfit);
+
+        auto stub = "p_"s + (*see_data)[i]->GetName();
+        auto pfit = (TH1F*)(*see_sig_initial)[i]->Clone((stub + "f").data());
+        auto pbkg = (TH1F*)(*see_bkg)[i]->Clone((stub + "b").data());
+
+        auto entries = std::get<0>(res);
+        auto fraction = std::get<1>(res);
+
+        pfit->Scale(entries * fraction / pfit->Integral());
+        pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
+
+        pfit->Add(pbkg);
+
+        (*see_data)[i]->GetXaxis()->SetRangeUser(0, 0.01);
+        pfit->GetXaxis()->SetRangeUser(0, 0.01);
+
+        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - pfit->GetMean();
+
+        std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
+                  << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
+
+        (*see_data)[i]->GetXaxis()->SetRange(0, 0);
+        pfit->GetXaxis()->SetRange(0, 0);
     }
     
     for (auto const& file : signal) {
@@ -496,7 +525,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
             (*purity)[i]->SetBinContent(1, 1. - nbkg / ntot);
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
             printf("chisq: %.3f\n", chisq);
-            printf("chisq: %d\n", ndof);
+            printf("ndof: %d\n", ndof);
         }
         else {
             (*purity)[i]->SetBinContent(1, 1);

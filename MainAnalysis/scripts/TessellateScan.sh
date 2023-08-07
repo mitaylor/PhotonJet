@@ -13,7 +13,7 @@ samples=(pp)
 for sample in ${samples[@]}; do
     run_pp ${sample}
 
-    for syst in pp_fine pp_80 pp_85 pp_90 pp_93 pp_95 pp_97; do
+    for syst in pp_fine pp_80 pp_85 pp_90 pp_93 pp_95 pp_97 pp_98 pp_99; do
         run_pp ${syst}
     done
 done
