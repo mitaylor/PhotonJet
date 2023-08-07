@@ -84,8 +84,6 @@ int theory(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto heavyion = sel->get<bool>("heavyion");
-
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
