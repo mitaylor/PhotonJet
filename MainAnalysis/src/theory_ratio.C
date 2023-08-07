@@ -116,7 +116,8 @@ int theory(char const* config, char const* selections, char const* output) {
 
     title(std::bind(rename_axis, _1, "PbPb / pp"), hist_pp);
 
-    file_data->Close();
+    file_aa->Close();
+    file_pp->Close();
 
     /* calculate ratio for data */
     auto hist_ratio = new history<TH1F>(*hist_pp, "ratio"s);
