@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -169,7 +170,6 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
-    auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
 
     auto idrr = new interval("#deltaj", rdrr);
