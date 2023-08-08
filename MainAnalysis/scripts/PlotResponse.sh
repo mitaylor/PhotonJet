@@ -14,12 +14,12 @@ run_aa() {
     ./bin/plot_response_matrices configs/plot_response_matrices/plot_response_matrices_${tag}.conf configs/analysis/${set}/analysis_aa.conf
 }
 
-samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(pp)
 
 for sample in ${samples[@]}; do
     run_pp $sample
 
-    for syst in wo_ele_rej qcd qcd_gen_iso jer_up jeu_up jeu_down loose_purity tight_purity; do
+    for syst in wo_ele_rej qcd qcd_gen_iso jer_up jeu_up jeu_down loose_purity tight_purity smear_0_10 smear_10_30 smear_30_50 smear_50_90; do
         run_pp ${sample}_${syst}
     done
 done
