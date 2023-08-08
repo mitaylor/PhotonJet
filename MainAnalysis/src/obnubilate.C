@@ -58,6 +58,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
+    auto heavyion = sel->get<bool>("heavyion");
+
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
@@ -121,7 +123,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             l->SetTextFont(43);
             l->SetTextSize(13);
             l->DrawLatexNDC(0.865, 0.41, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.37, jet_selections.data());
+            l->DrawLatexNDC(0.865, 0.36, jet_selections.data());
         }
     };
 
@@ -264,12 +266,12 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }, batches, legend_keys, plots);
 
         /* add info text */
-        if (total->size() == 4) { c1->accessory(hf_info); }
-        else  { c1->accessory(range_info); }
+        if (heavyion && total->size() == 4) { c1->accessory(hf_info); }
+        else if (heavyion) { c1->accessory(range_info); }
         c1->accessory(kinematics);
 
-        if (total->size() == 4) { c2->accessory(hf_info); }
-        else  { c2->accessory(range_info); }
+        if (heavyion && total->size() == 4) { c2->accessory(hf_info); }
+        else if (heavyion) { c2->accessory(range_info); }
         c2->accessory(kinematics);
 
         /* save histograms */
