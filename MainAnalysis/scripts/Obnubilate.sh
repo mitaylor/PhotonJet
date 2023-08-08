@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 set=$1
 
 run_pp() {

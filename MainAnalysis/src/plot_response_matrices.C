@@ -113,7 +113,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto input = conf->get<std::string>("input");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
-    auto xlabel = conf->get<std::string>("xlabel");
+    auto type = conf->get<std::string>("type");
 
     auto victim = conf->get<std::string>("victim");
     auto label = conf->get<std::string>("label");
@@ -193,9 +193,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     std::vector<paper*> cs(4, nullptr);
     zip([&](paper*& c, std::string const& title) {
-        c = new paper(set + "_unfolding_dj_" + tag + "_" + title, hb);
+        c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, cms, system_tag);
-        c->accessory(hf_info);
+        if (heavyion) c->accessory(hf_info);
         c->accessory(kinematics);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
