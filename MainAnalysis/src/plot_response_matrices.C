@@ -108,31 +108,6 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-template <typename T>
-TH2F* shade(T* flat, multival const* m, std::vector<int64_t> const& offset) {
-    auto name = std::string(flat->GetName()) + "_shade";
-    auto hshade = m->book<TH2F, 4>(0, name, "", offset);
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto indices = m->indices_for(i);
-        indices[0] = indices[0] - offset[0];
-        indices[1] = indices[1] - offset[2];
-
-        if (indices[0] < 0 || indices[0] >= hshade->GetNbinsX()
-                || indices[1] < 0 || indices[1] >= hshade->GetNbinsY()) {
-            continue; }
-
-        hshade->SetBinContent(indices[0] + 1, indices[1] + 1,
-            flat->GetBinContent(i + 1));
-        hshade->SetBinError(indices[0] + 1, indices[1] + 1,
-            flat->GetBinError(i + 1));
-    }
-
-    hshade->Scale(1., "width");
-
-    return hshade;
-}
-
 int plot_unfolding_inputs(char const* config, char const* selections) {
     auto conf = new configurer(config);
 
@@ -188,7 +163,6 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
 
-    auto shaded = new history<TH2F>(label + "_shade", "", null<TH2F>, ihf->size());
     auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, ihf->size());
     auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, ihf->size());
 
@@ -218,7 +192,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     /* figures */
     auto hb = new pencil();
 
-    std::vector<paper*> cs(5, nullptr);
+    std::vector<paper*> cs(4, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + title, hb);
         apply_style(c, cms, system_tag);
@@ -226,14 +200,13 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(kinematics);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "fold0"s, "fold1"s, "shaded"s });
+        "matrices"s, "victims"s, "fold0"s, "fold1"s });
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* input folds */
-        (*shaded)[i] = shade((*victims)[i], mr, osr);
         (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
         (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
 
@@ -247,9 +220,6 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[1]->add((*victims)[i]);
         cs[2]->add((*side0)[i]);
         cs[3]->add((*side1)[i]);
-
-        cs[4]->add((*shaded)[i]);
-        cs[4]->adjust((*shaded)[i], "colz", "");
     };
 
     hb->sketch();
