@@ -138,17 +138,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto input = conf->get<std::string>("input");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
-    auto type = conf->get<std::string>("type");
-    auto observable = conf->get<std::string>("observable");
     auto xlabel = conf->get<std::string>("xlabel");
 
     auto victim = conf->get<std::string>("victim");
     auto label = conf->get<std::string>("label");
-    auto divisions = conf->get<std::vector<int64_t>>("divisions");
 
-    auto rfold0 = conf->get<std::vector<float>>("fold0_range");
-
-    auto dpt = conf->get<std::vector<float>>("pt_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -160,13 +154,25 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto heavyion = sel->get<bool>("heavyion");
 
+    auto osr = sel->get<std::vector<int64_t>>("osr");
+
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
+
+    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
+    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
+
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+
+    auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
+    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
     auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
 
-    auto idrr = new interval(xlabel, rdrr);
+    auto idrr = new interval("#deltaj", rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
     auto mr = new multival(*idrr, *iptr);
@@ -176,60 +182,54 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TH1::SetDefaultSumw2();
 
     /* load input and victims */
-    TFile* fi = new TFile(input.data(), "read");
+    TFile* fi = new TFile((base + input).data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
 
-    TFile* fv = new TFile(victim.data(), "read");
+    TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
 
-    auto shape = victims->shape();
-
-    auto shaded = new history<TH2F>(label + "_shade", "", null<TH2F>, shape);
-    auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, shape);
-    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, shape);
-
-    std::array<int64_t, 4> osr = { 0, 0, 0, 0 };
+    auto shaded = new history<TH2F>(label + "_shade", "", null<TH2F>, ihf->size());
+    auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, ihf->size());
+    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, ihf->size());
 
     /* info text */
-    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", dpt, false); };
-
-    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
-
-    auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, mpthf, pt_info, hf_info); };
+    auto hf_info = [&](int64_t index) {
+        info_text(index, 0.85, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.75, "anti-k_{T} R = 0.3, p_{T}^{jet} > 20 GeV, |#eta^{jet}| < 1.6");
-            l->DrawLatexNDC(0.865, 0.81, "p_{T}^{#gamma} > 40 GeV, |#eta^{#gamma}| < 1.44, #Delta#phi_{j#gamma} < 7#pi/8");
+            l->DrawLatexNDC(0.865, 0.85, photon_selections.data());
+            l->DrawLatexNDC(0.865, 0.79, jet_selections.data());
         }
     };
 
-    auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}}"s;
-    cms += " #it{#scale[1.2]{Simulation}}"s;
+    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     /* figures */
     auto hb = new pencil();
 
     std::vector<paper*> cs(5, nullptr);
     zip([&](paper*& c, std::string const& title) {
-        c = new paper(tag + "_" + type + "_" + observable + "_" + title, hb);
+        c = new paper(set + "_unfolding_dj_" + tag + "_" + title, hb);
         apply_style(c, cms, system_tag);
-        c->accessory(pthf_info);
+        c->accessory(hf_info);
         c->accessory(kinematics);
-        c->divide(divisions[0], divisions[1]);
+        c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "fold0"s, "fold1"s, "shaded"s });
 
-    cs[2]->format(std::bind(default_formatter, _1, rfold0[0], rfold0[1]));
+    cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
@@ -262,8 +262,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 2)
-        return plot_unfolding_inputs(argv[1]);
+    if (argc == 3)
+        return plot_unfolding_inputs(argv[1], argv[2]);
 
-    return 0;
+    printf("usage: %s [config] [selections]\n", argv[0]);
+    return 1;
 }
