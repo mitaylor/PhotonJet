@@ -109,7 +109,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
 }
 
 template <typename T>
-TH2F* shade(T* flat, multival const* m, std::array<int64_t, 4> const& offset) {
+TH2F* shade(T* flat, multival const* m, std::vector<int64_t> const& offset) {
     auto name = std::string(flat->GetName()) + "_shade";
     auto hshade = m->book<TH2F, 4>(0, name, "", offset);
 
