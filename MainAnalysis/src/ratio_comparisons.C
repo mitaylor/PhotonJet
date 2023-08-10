@@ -235,10 +235,10 @@ int ratio(char const* config, char const* selections, char const* output) {
             s->adjust(h, "pe", "lf");
         });
         
-        ratio_pt_weight->apply([&](TH1* h, int64_t index) {
-            s->stack(index + 1, h, "pt_weight");
-            s->adjust(h, "pe", "lf");
-        });
+        // ratio_pt_weight->apply([&](TH1* h, int64_t index) {
+        //     s->stack(index + 1, h, "pt_weight");
+        //     s->adjust(h, "pe", "lf");
+        // });
 
         ratio_no_weight->apply([&](TH1* h, int64_t index) {
             s->stack(index + 1, h, "no_weight");
