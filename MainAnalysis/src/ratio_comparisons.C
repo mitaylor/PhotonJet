@@ -66,8 +66,6 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
-    auto ihf = new interval(dhf);
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -106,14 +104,8 @@ int ratio(char const* config, char const* selections, char const* output) {
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
-    std::function<void(int64_t, float)> range_info = [&](int64_t x, float pos) {
-        info_text(x, pos, "Cent. %i - %i%%", drange, true); };
-
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
         stack_text(index, 0.84, 0.04, h, hf_info); };
-
-    auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.84, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
