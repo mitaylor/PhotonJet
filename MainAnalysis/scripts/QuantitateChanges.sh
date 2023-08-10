@@ -22,11 +22,10 @@ run_aa() {
     ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/quantitate_${tag}.root
 }
 
-samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(pp) #pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90
 
 for sample in ${samples[@]}; do
-
-    for syst in es; do
+    for syst in no_weight pt_weight final; do
         run_pp ${sample}_${syst}
     done
 done
@@ -34,8 +33,7 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-
-    for syst in es; do
+    for syst in no_weight pt_weight final; do
         run_aa ${sample}_${syst}
     done
 done
