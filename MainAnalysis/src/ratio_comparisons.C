@@ -76,15 +76,15 @@ int ratio(char const* config, char const* selections, char const* output) {
         file = new TFile((base + input).data(), "read");
     }, file_final, input_final);
 
-    std::vector<TFile*> file_pt_weight(input_final.size(), nullptr);
+    std::vector<TFile*> file_pt_weight(input_pt_weight.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile((base + input).data(), "read");
-    }, file_pt_weight, input_final);
+    }, file_pt_weight, input_pt_weight);
 
-    std::vector<TFile*> file_no_weight(input_final.size(), nullptr);
+    std::vector<TFile*> file_no_weight(input_no_weight.size(), nullptr);
     zip([&](auto& file, auto const& input) {
         file = new TFile((base + input).data(), "read");
-    }, file_no_weight, input_final);
+    }, file_no_weight, input_no_weight);
 
     /* load histograms */
     std::vector<std::string> base_stubs(2);
