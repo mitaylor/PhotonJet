@@ -316,8 +316,8 @@ int ratio(char const* config, char const* selections, char const* output) {
             s3->adjust(h, "pe", "lf");
         });
 
-        ratio_no_weight->apply([&](TH1* h, int64_t index) {
-            s3->stack(index + 1, h, "no_weight");
+        ratio_pt_weight->apply([&](TH1* h, int64_t index) {
+            s3->stack(index + 1, h, "pt_weight");
             s3->adjust(h, "pe", "lf");
         });
 
