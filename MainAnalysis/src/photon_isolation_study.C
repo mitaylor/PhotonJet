@@ -68,8 +68,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
-    auto alter_base = conf->get<std::string>("alter_base"); // get offset to paths from the original configuration file
-
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
     if (tag == "bkg") see_max = 0.02;
@@ -102,7 +100,7 @@ int populate(char const* config, char const* selections, char const* output) {
     history<TH1F>* efficiency = nullptr;
 
     if (!eff_file.empty()) {
-        fe = new TFile((alter_base + base + eff_file).data(), "read");
+        fe = new TFile((base + eff_file).data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
     }
 
@@ -111,7 +109,7 @@ int populate(char const* config, char const* selections, char const* output) {
     history<TH1F>* rho_weighting = nullptr;
 
     if (!rho_file.empty()) {
-        fr = new TFile((alter_base + base + rho_file).data(), "read");
+        fr = new TFile((base + rho_file).data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
