@@ -65,7 +65,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto see_min = sel->get<float>("see_min");
     auto see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
-    auto const gen_iso_max = sel->get<float>("gen_iso_max");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
@@ -116,8 +115,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
-
-    if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
     
     /* load input */
     for (auto const& file : input) {
@@ -125,13 +122,11 @@ int populate(char const* config, char const* selections, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
+        auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0, m = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
-
-            if ((i + parity) % modulo != 0) { continue; }
 
             t->GetEntry(i);
 
