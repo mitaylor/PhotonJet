@@ -16,15 +16,15 @@ run_aa() {
     ./bin/photon_isolation_study configs/populate/preapproval-parallel/populate_${tag}_bkg.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/photon_isolation_study_${tag}_bkg.root > log/${set}_photon_isolation_study_${tag}_bkg.txt 2>&1 &
 }
 
-# samples=(pp)
+samples=(pp)
 
-# for sample in ${samples[@]}; do
-#     run_pp ${sample}
+for sample in ${samples[@]}; do
+    run_pp ${sample}
 
-#     for syst in qcd; do
-#         run_pp ${sample}_${syst}
-#     done
-# done
+    for syst in qcd; do
+        run_pp ${sample}_${syst}
+    done
+done
 
 samples=(aa)
 

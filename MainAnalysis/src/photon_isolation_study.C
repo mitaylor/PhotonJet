@@ -64,7 +64,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const hovere_max = sel->get<float>("hovere_max");
     auto see_min = sel->get<float>("see_min");
     auto see_max = sel->get<float>("see_max");
-    // auto const iso_max = sel->get<float>("iso_max");
+    auto const iso_max = sel->get<float>("iso_max");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
@@ -170,7 +170,7 @@ int populate(char const* config, char const* selections, char const* output) {
             float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
                 + (*pjt->pho_hcalRechitIsoR3)[leading]
                 + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            // if (isolation > iso_max) { continue; }
+            if (isolation > iso_max) { continue; }
 
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[leading];
