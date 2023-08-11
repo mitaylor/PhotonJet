@@ -125,7 +125,7 @@ int populate(char const* config, char const* selections, char const* output) {
         auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        for (int64_t i = 0, m = 0; i < nentries; ++i) {
+        for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
             t->GetEntry(i);
@@ -228,10 +228,6 @@ int populate(char const* config, char const* selections, char const* output) {
             } else {
                 weights.push_back(weight);
             }
-
-            fill_axes(pjt, pthf_x, weights, pho_cor,
-                photon_eta, photon_phi, idr, nevt,
-                pjet_f_dr, total);
 
             zip([&](auto const& index, auto const& weight) {
                 (*nevt)[index]->Fill(1., weight * pho_cor);
