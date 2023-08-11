@@ -172,7 +172,7 @@ int populate(char const* config, char const* selections, char const* output) {
             float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
                 + (*pjt->pho_hcalRechitIsoR3)[leading]
                 + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
+            // if (isolation > iso_max) { continue; }
 
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[leading];
