@@ -166,9 +166,9 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         auto ratio_final = new history<TH1F>(*hist_final[0], "stat"s);
         auto ratio_pt_weight = new history<TH1F>(*hist_pt_weight[0], "stat"s);
+        auto ratio_no_weight = new history<TH1F>(*hist_no_weight[0], "stat"s);
         auto ratio_old_iter = new history<TH1F>(*hist_old_iter[0], "stat"s);
         
-
         /* take the ratio */
         for (int64_t i = 0; i < hist_final[0]->size(); ++i) {
             for (int64_t j = 1; j <= (*hist_final[0])[0]->GetNbinsX(); ++j) {  
