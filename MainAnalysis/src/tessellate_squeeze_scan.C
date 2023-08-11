@@ -541,6 +541,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
             printf("purity: %.3f\n", (*purity)[i]->GetBinContent(1));
             printf("chisq: %.3f\n", chisq);
             printf("ndof: %d\n", ndof);
+            std::cout << (*see_data)[i]->Integral(1, (*see_data)[i]->FindBin(see_max)) << ntot << std::endl;
         }
         else {
             (*purity)[i]->SetBinContent(1, 1);
