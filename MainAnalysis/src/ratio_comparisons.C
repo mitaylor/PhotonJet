@@ -38,6 +38,7 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto input_final = conf->get<std::vector<std::string>>("input_final");
     auto input_pt_weight = conf->get<std::vector<std::string>>("input_pt_weight");
     auto input_no_weight = conf->get<std::vector<std::string>>("input_no_weight");
+    auto input_old_iter = conf->get<std::vector<std::string>>("input_old_iter");
 
     auto tags = conf->get<std::vector<std::string>>("tags");
     auto figures = conf->get<std::vector<std::string>>("figures");
@@ -86,6 +87,11 @@ int ratio(char const* config, char const* selections, char const* output) {
         file = new TFile((base + input).data(), "read");
     }, file_no_weight, input_no_weight);
 
+    std::vector<TFile*> file_old_iter(input_old_iter.size(), nullptr);
+    zip([&](auto& file, auto const& input) {
+        file = new TFile((base + input).data(), "read");
+    }, file_old_iter, input_old_iter);
+
     /* load histograms */
     std::vector<std::string> base_stubs(2);
 
@@ -95,11 +101,12 @@ int ratio(char const* config, char const* selections, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("system", "final", "no_weight", "pt_weight");
+    hb->category("system", "final", "no_weight", "pt_weight", "old_iter");
 
     hb->alias("final", "PbPb/pp with pT and #deltaj weights");
     hb->alias("pt_weight", "PbPb/pp with response pT weights");
     hb->alias("no_weight", "PbPb/pp with no response weights");
+    hb->alias("old_iter", "PbPb/pp with old regularization");
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
@@ -127,6 +134,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         std::vector<history<TH1F>*> hist_final(2, nullptr);
         std::vector<history<TH1F>*> hist_pt_weight(2, nullptr);
         std::vector<history<TH1F>*> hist_no_weight(2, nullptr);
+        std::vector<history<TH1F>*> hist_old_iter(2, nullptr);
 
         zip([&](auto& hist, auto const file,
                 auto const& base_stub) {
@@ -149,9 +157,17 @@ int ratio(char const* config, char const* selections, char const* output) {
             title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
         }, hist_no_weight, file_no_weight, base_stubs);
 
+        zip([&](auto& hist, auto const file,
+                auto const& base_stub) {
+            hist = new history<TH1F>(file, base_stub + figure);
+            hist->rename(base_stub + figure + "_old_iter");
+            title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
+        }, hist_old_iter, file_old_iter, base_stubs);
+
         auto ratio_final = new history<TH1F>(*hist_final[0], "stat"s);
         auto ratio_pt_weight = new history<TH1F>(*hist_pt_weight[0], "stat"s);
-        auto ratio_no_weight = new history<TH1F>(*hist_no_weight[0], "stat"s);
+        auto ratio_old_iter = new history<TH1F>(*hist_old_iter[0], "stat"s);
+        
 
         /* take the ratio */
         for (int64_t i = 0; i < hist_final[0]->size(); ++i) {
@@ -220,6 +236,28 @@ int ratio(char const* config, char const* selections, char const* output) {
             }
         }
 
+        for (int64_t i = 0; i < hist_old_iter[0]->size(); ++i) {
+            for (int64_t j = 1; j <= (*hist_old_iter[0])[0]->GetNbinsX(); ++j) {  
+                auto aa_hist = (*hist_old_iter[0])[i];
+                auto pp_hist = (*hist_old_iter[1])[0];
+
+                double aa_val = aa_hist->GetBinContent(j);
+                double aa_stat_err = aa_hist->GetBinError(j);
+                auto aa_stat_err_scale = aa_stat_err/aa_val;
+
+                double pp_val = pp_hist->GetBinContent(j);
+                double pp_stat_err = pp_hist->GetBinError(j);
+                auto pp_stat_err_scale = pp_stat_err/pp_val;
+
+                auto ratio = aa_val / pp_val;
+
+                aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
+
+                (*ratio_old_iter)[i]->SetBinContent(j, ratio);
+                (*ratio_old_iter)[i]->SetBinError(j, aa_stat_err);
+            }
+        }
+
         /* prepare papers */
         auto s1 = new paper(set + "_ratio_comparison_all_" + figure, hb);
         s1->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
@@ -283,11 +321,31 @@ int ratio(char const* config, char const* selections, char const* output) {
             s3->adjust(h, "pe", "lf");
         });
 
+        auto s4 = new paper(set + "_ratio_comparison_final_" + figure, hb);
+        s4->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s4->accessory(kinematics);
+        apply_style(s4, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+        s4->accessory(std::bind(aa_hf_info, _1, ratio_final)); 
+        s4->divide(ratio_final->size()/2, -1);
+        
+        /* draw histograms with uncertainties */
+        ratio_final->apply([&](TH1* h) {
+            h->GetXaxis()->SetRangeUser(xmin, xmax);
+            s4->add(h, "final"); 
+            s4->adjust(h, "pe", "lf");
+        });
+
+        ratio_old_iter->apply([&](TH1* h, int64_t index) {
+            s4->stack(index + 1, h, "old_iter");
+            s4->adjust(h, "pe", "lf");
+        });
+
         hb->sketch();
 
         s1->draw("pdf");
         s2->draw("pdf");
         s3->draw("pdf");
+        s4->draw("pdf");
     }, figures, xmins, xmaxs, ymins, ymaxs);
 
     in(output, []() {});
