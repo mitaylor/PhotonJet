@@ -255,7 +255,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         /* draw histograms with uncertainties */
         ratio_pt_weight->apply([&](TH1* h) {
             h->GetXaxis()->SetRangeUser(xmin, xmax);
-            s2->add(h, "final"); 
+            s2->add(h, "pt_weight"); 
             s2->adjust(h, "pe", "lf");
         });
 
