@@ -221,33 +221,73 @@ int ratio(char const* config, char const* selections, char const* output) {
         }
 
         /* prepare papers */
-        auto s = new paper(set + "_ratio_comparison_" + figure, hb);
-        s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
-        s->accessory(kinematics);
-        apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
-        s->accessory(std::bind(aa_hf_info, _1, ratio_final)); 
-        s->divide(ratio_final->size()/2, -1);
+        auto s1 = new paper(set + "_ratio_comparison_all_" + figure, hb);
+        s1->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s1->accessory(kinematics);
+        apply_style(s1, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+        s1->accessory(std::bind(aa_hf_info, _1, ratio_final)); 
+        s1->divide(ratio_final->size()/2, -1);
         
         /* draw histograms with uncertainties */
         ratio_final->apply([&](TH1* h) {
             h->GetXaxis()->SetRangeUser(xmin, xmax);
-            s->add(h, "final"); 
-            s->adjust(h, "pe", "lf");
+            s1->add(h, "final"); 
+            s1->adjust(h, "pe", "lf");
         });
         
-        // ratio_pt_weight->apply([&](TH1* h, int64_t index) {
-        //     s->stack(index + 1, h, "pt_weight");
-        //     s->adjust(h, "pe", "lf");
-        // });
+        ratio_pt_weight->apply([&](TH1* h, int64_t index) {
+            s1->stack(index + 1, h, "pt_weight");
+            s1->adjust(h, "pe", "lf");
+        });
 
         ratio_no_weight->apply([&](TH1* h, int64_t index) {
-            s->stack(index + 1, h, "no_weight");
-            s->adjust(h, "pe", "lf");
+            s1->stack(index + 1, h, "no_weight");
+            s1->adjust(h, "pe", "lf");
+        });
+
+        auto s2 = new paper(set + "_ratio_comparison_pt_weight_" + figure, hb);
+        s2->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s2->accessory(kinematics);
+        apply_style(s2, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+        s2->accessory(std::bind(aa_hf_info, _1, ratio_final)); 
+        s2->divide(ratio_final->size()/2, -1);
+        
+        /* draw histograms with uncertainties */
+        ratio_pt_weight->apply([&](TH1* h) {
+            h->GetXaxis()->SetRangeUser(xmin, xmax);
+            s2->add(h, "final"); 
+            s2->adjust(h, "pe", "lf");
+        });
+
+        ratio_no_weight->apply([&](TH1* h, int64_t index) {
+            s2->stack(index + 1, h, "no_weight");
+            s2->adjust(h, "pe", "lf");
+        });
+
+        auto s3 = new paper(set + "_ratio_comparison_final_" + figure, hb);
+        s3->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s3->accessory(kinematics);
+        apply_style(s3, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+        s3->accessory(std::bind(aa_hf_info, _1, ratio_final)); 
+        s3->divide(ratio_final->size()/2, -1);
+        
+        /* draw histograms with uncertainties */
+        ratio_final->apply([&](TH1* h) {
+            h->GetXaxis()->SetRangeUser(xmin, xmax);
+            s3->add(h, "final"); 
+            s3->adjust(h, "pe", "lf");
+        });
+
+        ratio_no_weight->apply([&](TH1* h, int64_t index) {
+            s3->stack(index + 1, h, "no_weight");
+            s3->adjust(h, "pe", "lf");
         });
 
         hb->sketch();
 
-        s->draw("pdf");
+        s1->draw("pdf");
+        s2->draw("pdf");
+        s3->draw("pdf");
     }, figures, xmins, xmaxs, ymins, ymaxs);
 
     in(output, []() {});
