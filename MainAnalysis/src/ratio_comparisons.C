@@ -321,7 +321,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             s3->adjust(h, "pe", "lf");
         });
 
-        auto s4 = new paper(set + "_ratio_comparison_final_" + figure, hb);
+        auto s4 = new paper(set + "_ratio_comparison_old_" + figure, hb);
         s4->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
         s4->accessory(kinematics);
         apply_style(s4, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
