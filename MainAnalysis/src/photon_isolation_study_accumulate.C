@@ -44,6 +44,9 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
+    auto xmin = conf->get<float>("xmin");
+    auto xmax = conf->get<float>("xmax");
+
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -126,7 +129,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto pthf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, nevt, pt_info, hf_info); };
+        stack_text(index, 0.75, 0.04, pjet_f_dr_data, pt_info, hf_info); };
 
     auto hb = new pencil();
     hb->category("system", "PbPb", "pp");
@@ -145,12 +148,20 @@ int accumulate(char const* config, char const* selections, char const* output) {
         c->accessory(text);
 
         apply_style(c, cms, system_tag, -2., 27.);
-        c->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     }, c1, x{ ihf->size(), 1L, 1L}, suffixes, texts);
 
-    pjet_f_dr_data->apply([&](TH1* h) { c1[0]->add(h, system, "data"); });
-    pjet_f_dr_d_pt_data->apply([&](TH1* h) { c1[1]->add(h, system, "data"); });
-    pjet_f_dr_d_hf_data->apply([&](TH1* h) { c1[2]->add(h, system, "data"); });
+    pjet_f_dr_data->apply([&](TH1* h) { 
+        h->GetXaxis()->SetRangeUser(xmin, xmax);
+        c1[0]->add(h, system, "data"); 
+    });
+    pjet_f_dr_d_pt_data->apply([&](TH1* h) { 
+        h->GetXaxis()->SetRangeUser(xmin, xmax);
+        c1[1]->add(h, system, "data"); 
+    });
+    pjet_f_dr_d_hf_data->apply([&](TH1* h) { 
+        h->GetXaxis()->SetRangeUser(xmin, xmax);
+        c1[2]->add(h, system, "data"); 
+    });
 
     pjet_f_dr_qcd->apply([&](TH1* h, int64_t index) { c1[0]->stack(index + 1, h, "MC"); });
     pjet_f_dr_d_pt_qcd->apply([&](TH1* h, int64_t index) { c1[1]->stack(index + 1, h, "MC"); });
