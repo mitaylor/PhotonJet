@@ -95,8 +95,6 @@ int populate(char const* config, char const* selections, char const* output) {
     }
 
     auto isumiso = new interval("SumIso"s, nbins, range_min, range_max);
-
-    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fsumiso = std::bind(&interval::book<TH1F>, isumiso, _1, _2, _3);
 
     auto pjet_f_dsumiso = new memory<TH1F>("pjet_f_dr"s,
