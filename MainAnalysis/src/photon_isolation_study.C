@@ -252,7 +252,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* normalise by number of photons (events) */
     pjet_f_dsumiso->apply([&](TH1* h) { 
-        pjet_f_dsumiso->Scale(1. / pjet_f_dsumiso->Integral(1, pjet_f_dsumiso->FindBin(iso_max)));
+        h->Scale(1. / h->Integral(1, h->FindBin(iso_max)));
     });
 
     /* save histograms */
