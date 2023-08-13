@@ -160,9 +160,9 @@ int accumulate(char const* config, char const* selections, char const* output) {
         c1[2]->add(h, system, "data"); 
     });
 
-    pjet_f_dr_qcd->apply([&](TH1* h, int64_t index) { c1[0]->stack(index + 1, h, "MC"); });
-    pjet_f_dr_d_pt_qcd->apply([&](TH1* h, int64_t index) { c1[1]->stack(index + 1, h, "MC"); });
-    pjet_f_dr_d_hf_qcd->apply([&](TH1* h, int64_t index) { c1[2]->stack(index + 1, h, "MC"); });
+    pjet_f_dr_qcd->apply([&](TH1* h, int64_t index) { c1[0]->stack(index + 1, h, system, "MC"); });
+    pjet_f_dr_d_pt_qcd->apply([&](TH1* h, int64_t index) { c1[1]->stack(index + 1, h, system, "MC"); });
+    pjet_f_dr_d_hf_qcd->apply([&](TH1* h, int64_t index) { c1[2]->stack(index + 1, h, system, "MC"); });
 
     hb->set_binary("type");
     hb->sketch();
