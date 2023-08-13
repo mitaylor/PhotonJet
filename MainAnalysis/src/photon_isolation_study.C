@@ -258,6 +258,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* save histograms */
     in(output, [&]() {
+        nevt->save(tag);
         pjet_f_dsumiso->save(tag);
     });
 
