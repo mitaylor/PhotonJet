@@ -144,7 +144,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         c->divide(-1, rows);
         c->accessory(text);
 
-        apply_style(c, cms, system_tag, -2., 27.);
+        apply_style(c, cms, system_tag);
     }, c1, x{ ihf->size(), 1L, 1L}, suffixes, texts);
 
     pjet_f_dr_data->apply([&](TH1* h) { 
