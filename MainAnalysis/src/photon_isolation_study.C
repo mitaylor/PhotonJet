@@ -84,7 +84,7 @@ int populate(char const* config, char const* selections, char const* output) {
     float range_max;
     int nbins;
 
-    if (heayvion) {
+    if (heavyion) {
         range_min = -12*(iso_max+0.00001);
         range_max = 29*(iso_max+0.00001);
         nbins = 205;
