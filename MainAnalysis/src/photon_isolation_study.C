@@ -79,12 +79,25 @@ int populate(char const* config, char const* selections, char const* output) {
     auto mpthf = new multival(dpt, dhf);
 
     auto incl = new interval(""s, 1, 0.f, 9999.f);
-    auto isumiso = new interval("SumIso"s, 200, -40, 100);
+
+    float range_min;
+    float range_max;
+    int nbins;
+
+    if (heayvion) {
+        range_min = -12*(iso_max+0.00001);
+        range_max = 29*(iso_max+0.00001);
+        nbins = 205;
+    } else {
+        range_min = -63*(iso_max+0.00001);
+        range_max = 151*(iso_max+0.00001);
+        nbins = 214;
+    }
+
+    auto isumiso = new interval("SumIso"s, nbins, range_min, range_max);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fsumiso = std::bind(&interval::book<TH1F>, isumiso, _1, _2, _3);
-
-    auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
 
     auto pjet_f_dsumiso = new memory<TH1F>("pjet_f_dr"s,
         "1/N^{#gamma} dN/d#deltaj", fsumiso, mpthf);
@@ -170,7 +183,7 @@ int populate(char const* config, char const* selections, char const* output) {
             float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
                 + (*pjt->pho_hcalRechitIsoR3)[leading]
                 + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
+            // if (isolation > iso_max) { continue; }
 
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[leading];
@@ -230,7 +243,6 @@ int populate(char const* config, char const* selections, char const* output) {
             }
 
             zip([&](auto const& index, auto const& weight) {
-                (*nevt)[index]->Fill(1., weight * pho_cor);
                 (*pjet_f_dsumiso)[index]->Fill(isolation, weight * pho_cor);
             }, pthf_x, weights);
         }
@@ -239,11 +251,12 @@ int populate(char const* config, char const* selections, char const* output) {
     }
 
     /* normalise by number of photons (events) */
-    pjet_f_dsumiso->divide(*nevt);
+    pjet_f_dsumiso->apply([&](TH1* h) { 
+        pjet_f_dsumiso->Scale(1. / pjet_f_dsumiso->Integral(1, pjet_f_dsumiso->FindBin(iso_max)));
+    });
 
     /* save histograms */
     in(output, [&]() {
-        nevt->save(tag);
         pjet_f_dsumiso->save(tag);
     });
 
