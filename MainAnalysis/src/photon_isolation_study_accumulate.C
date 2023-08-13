@@ -39,6 +39,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto label = conf->get<std::string>("label");
     auto system = conf->get<std::string>("system");
+    auto tag = conf->get<std::string>("tag");
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -65,9 +66,9 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     /* load histograms */
     auto pjet_f_dr_data = new history<TH1F>(
-        f, label + "_raw_pjet_f_dr"s);
+        f_data, label + "_raw_pjet_f_dr"s);
     auto pjet_f_dr_qcd = new history<TH1F>(
-        f, label + "_raw_pjet_f_dr"s);
+        f_qcd, label + "_raw_pjet_f_dr"s);
 
     pjet_f_dr_data->rename("data");
     pjet_f_dr_qcd->rename("qcd");
