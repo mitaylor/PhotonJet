@@ -92,9 +92,13 @@ int populate(char const* config, char const* selections, char const* output) {
         nbins = 214;
     }
 
+    auto incl = new interval(""s, 1, 0.f, 9999.f);
+    auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+
     auto isumiso = new interval("SumIso"s, nbins, range_min, range_max);
     auto fsumiso = std::bind(&interval::book<TH1F>, isumiso, _1, _2, _3);
 
+    auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
     auto pjet_f_dsumiso = new memory<TH1F>("pjet_f_dr"s,
         "1/N^{#gamma} dN/d#deltaj", fsumiso, mpthf);
 
@@ -239,6 +243,7 @@ int populate(char const* config, char const* selections, char const* output) {
             }
 
             zip([&](auto const& index, auto const& weight) {
+                (*nevt)[index]->Fill(1, weight * pho_cor);
                 (*pjet_f_dsumiso)[index]->Fill(isolation, weight * pho_cor);
             }, pthf_x, weights);
         }
