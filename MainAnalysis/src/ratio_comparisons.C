@@ -101,12 +101,12 @@ int ratio(char const* config, char const* selections, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("system", "final", "no_weight", "pt_weight", "old_iter");
+    hb->category("system", "final", "old_iter", "no_weight", "pt_weight");
 
-    hb->alias("final", "PbPb/pp with pT and #deltaj weights");
+    hb->alias("final", "Current regularization");
+    hb->alias("old_iter", "Previous regularization");
     hb->alias("pt_weight", "PbPb/pp with response pT weights");
     hb->alias("no_weight", "PbPb/pp with no response weights");
-    hb->alias("old_iter", "PbPb/pp with old regularization");
 
     std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
