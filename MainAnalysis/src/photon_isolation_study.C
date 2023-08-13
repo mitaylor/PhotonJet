@@ -78,8 +78,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto mpthf = new multival(dpt, dhf);
 
-    auto incl = new interval(""s, 1, 0.f, 9999.f);
-
     float range_min;
     float range_max;
     int nbins;
