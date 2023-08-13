@@ -376,12 +376,12 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         hb->sketch();
 
+        s5->draw("pdf");
+        s6->draw("pdf");
         s1->draw("pdf");
         s2->draw("pdf");
         s3->draw("pdf");
         s4->draw("pdf");
-        s5->draw("pdf");
-        s6->draw("pdf");
     }, figures, xmins, xmaxs, ymins, ymaxs);
 
     in(output, []() {});
