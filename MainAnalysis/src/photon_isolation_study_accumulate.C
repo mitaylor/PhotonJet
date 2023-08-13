@@ -52,9 +52,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto const photon_pt_min = sel->get<float>("photon_pt_min");
-    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
-
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto ihf = new interval(dhf);
