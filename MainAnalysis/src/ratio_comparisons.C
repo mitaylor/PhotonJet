@@ -341,9 +341,9 @@ int ratio(char const* config, char const* selections, char const* output) {
         });
 
         auto s5 = new paper(set + "_pp_comparison_old_" + figure, hb);
-        s5->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s5->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s5->accessory(kinematics);
-        apply_style(s5, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
+        apply_style(s5, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "pp 302 pb^{-1}"s, -2, 27);
 
         hist_final[1]->apply([&](TH1* h) {
             h->GetXaxis()->SetRangeUser(xmin, xmax);
@@ -357,9 +357,9 @@ int ratio(char const* config, char const* selections, char const* output) {
         });
 
         auto s6 = new paper(set + "_aa_comparison_old_" + figure, hb);
-        s6->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s6->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s6->accessory(kinematics);
-        apply_style(s6, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}"s, ymin, ymax);
+        apply_style(s6, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}"s, -2, 27);
         s6->accessory(std::bind(aa_hf_info, _1, hist_final[0])); 
         s6->divide(ratio_final->size()/2, -1);
 
