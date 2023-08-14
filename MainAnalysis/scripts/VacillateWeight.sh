@@ -14,7 +14,7 @@ run_aa() {
     echo "nohup ./bin/vacillate_weight_dr configs/vacillate_dr/preapproval/vacillate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/vacillate_weight_${tag}.root > log/${set}_vacillate_weight_${tag}.txt 2>&1 &"
 }
 
-samples=(pp pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90)
+samples=(pp)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
