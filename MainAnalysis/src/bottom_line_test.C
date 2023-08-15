@@ -371,7 +371,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         }
     }
 
-    auto covariance_before_matrix = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements[0]);
+    // auto covariance_before_matrix = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements[0]);
     auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements_I[0]);
     
     
@@ -436,7 +436,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::cout << __LINE__ << std::endl << std::endl;
 
     std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
-    std::cout << covariance_after_matrix_I->GetNrows() << " " << covariance_after_matrix_I->GetNcols() << std::endl << std::endl;
+    std::cout << covariance_after_matrix_I.GetNrows() << " " << covariance_after_matrix_I.GetNcols() << std::endl << std::endl;
     *unfolded_diff_vector *= covariance_after_matrix_I;
 
     std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
