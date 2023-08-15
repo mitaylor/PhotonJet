@@ -289,6 +289,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     data_before_side1->save();
 
     std::vector<double> data_before_elements((*data_before)[0]->GetNbinsX());
+    (*data_before)[0]->Scale(1/(*data_before)[0]->Integral());
 
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
@@ -348,6 +349,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     data_after_side1->save();
 
     std::vector<double> data_after_elements((*data_after)[0]->GetNbinsX());
+    (*data_after)[0]->Scale(1/(*data_after)[0]->Integral());
 
     for (int i = 0; i < (*data_after)[0]->GetNbinsX(); ++i) {
         data_after_elements[i] = (*data_after)[0]->GetBinContent(i+1);
@@ -369,13 +371,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         if (err != 0) {
             covariance_before_elements_I[i*i] = 1/(err * err);
         }
-
-        std::cout << (*data_before)[0]->GetBinContent(i + 1) << " " << (*data_before)[0]->GetBinError(i + 1) << std::endl;
     }
 
     // auto covariance_before_matrix = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements[0]);
     auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements_I[0]);
-    
     
     /* COVARIANCE MATRIX AFTER UNFOLDING */
     std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[0]);
@@ -385,6 +384,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_gen = new history<TH1F>(ftheory, tag + "_"s + theory_label);
 
     std::vector<double> theory_gen_elements((*theory_gen)[0]->GetNbinsX());
+    (*theory_gen)[0]->Scale(1/(*theory_gen)[0]->Integral());
 
     for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
         theory_gen_elements[i] = (*theory_gen)[0]->GetBinContent(i+1);
