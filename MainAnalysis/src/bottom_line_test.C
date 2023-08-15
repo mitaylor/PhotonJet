@@ -294,7 +294,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
     }
 
-    auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &data_before_elements[0]);
+    auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &(data_before_elements[0]));
 
     /* DATA AFTER UNFOLDING */
     auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
