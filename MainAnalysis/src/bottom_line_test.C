@@ -222,6 +222,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto after_file = conf->get<std::vector<std::string>>("after_file");
 
     auto theory_file = conf->get<std::string>("theory_file");
+    auto theory_label = conf->get<std::string>("theory_label");
 
     auto regularization = conf->get<std::string>("regularization");
 
@@ -254,10 +255,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     TFile* fbefore = new TFile((base + before_file).data(), "read");
 
-    std::vector<TFile*> fafters(afters.size(), nullptr);
+    std::vector<TFile*> fafter(after_file.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
         fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
-    }, fafters, afters);
+    }, fafter, after_file);
 
     TFile* fiter = new TFile((base + regularization).data(), "read");
     auto sum = new history<TH1F>(fiter, "sum"s);
@@ -296,9 +297,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &data_before_elements[0]);
 
     /* DATA AFTER UNFOLDING */
-    auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
-    auto data_after_side0 = new history<TH1F>("unfolded_side0", "", null<TH1F>, (int64_t) afters.size());
-    auto data_after_side1 = new history<TH1F>("unfolded_side1", "", null<TH1F>, (int64_t) afters.size());
+    auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
+    auto data_after_side0 = new history<TH1F>("unfolded_side0", "", null<TH1F>, (int64_t) after_file.size());
+    auto data_after_side1 = new history<TH1F>("unfolded_side1", "", null<TH1F>, (int64_t) after_file.size());
 
     std::vector<int64_t> choice(sum->size(), 1);
 
@@ -324,12 +325,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::cout << std::endl << choice[i] << std::endl;
     }
 
-    for (size_t j = 0; j < fafters.size(); ++j) {
+    for (size_t j = 0; j < after_file.size(); ++j) {
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
         std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
 
-        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
+        auto HUnfoldedBayes = (TH1F*) fafter[j]->Get(unfold_name.data());
+        auto MUnfolded = (TMatrixT<double>*) fafter[j]->Get(matrix_name.data());
 
         (*data_after)[j] = HUnfoldedBayes;
         (*data_after_side0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
@@ -355,7 +356,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_after_vector = new TMatrixT<double>(1, (*data_after)[0]->GetNbinsX(), &data_after_elements[0]);
 
     /* RESPONSE MATRIX */
-    auto HResponse = (TH2D*) fafters[0]->Get("HMCResponse");
+    auto HResponse = (TH2D*) fafter[0]->Get("HMCResponse");
 
     /* COVARIANCE MATRIX BEFORE UNFOLDING */
     std::vector<double> covariance_before_elements((*data_before)[0]->GetNbinsX() * (*data_before)[0]->GetNbinsX(), 0);
@@ -369,7 +370,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     /* COVARIANCE MATRIX AFTER UNFOLDING */
     std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[0]);
-    auto covariance_after_matrix = (TMatrixT<double>*) fafters[0]->Get(matrix_name.data());
+    auto covariance_after_matrix = (TMatrixT<double>*) fafter[0]->Get(matrix_name.data());
 
     /* THEORY GEN LEVEL */
     auto theory_gen = new history<TH1F>(ftheory, tag + "_"s + theory_label);
