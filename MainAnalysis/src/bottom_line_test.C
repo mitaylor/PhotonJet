@@ -412,8 +412,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::cout << __LINE__ << std::endl;
     // auto covariance_before_matrix_I = covariance_before_matrix->Invert(); // CHECK
     std::cout << __LINE__ << std::endl;
+    std::cout << smear_diff_vector->GetNrows() << " " << smear_diff_vector->GetNcols() << std::endl;
     *smear_diff_vector *= *covariance_before_matrix_I;
+    std::cout << smear_diff_vector->GetNrows() << " " << smear_diff_vector->GetNcols() << std::endl;
     *smear_diff_vector *= *smear_diff_vector_T;
+    std::cout << smear_diff_vector->GetNrows() << " " << smear_diff_vector->GetNcols() << std::endl;
     std::cout << __LINE__ << std::endl;
 
     std::cout << smear_diff_vector_T->GetNrows() << " " << smear_diff_vector_T->GetNcols() << std::endl;
@@ -429,8 +432,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::cout << __LINE__ << std::endl;
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
     std::cout << __LINE__ << std::endl;
+    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
     *unfolded_diff_vector *= covariance_after_matrix_I;
+    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
     *unfolded_diff_vector *= *unfolded_diff_vector_T;
+    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
     std::cout << __LINE__ << std::endl;
 
     std::cout << unfolded_diff_vector_T->GetNrows() << " " << unfolded_diff_vector_T->GetNcols() << std::endl;
