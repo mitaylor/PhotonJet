@@ -370,7 +370,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_before_elements_I[i*i] = 1/(err * err);
         }
 
-        std::cout << err << std::endl;
+        std::cout << (*data_before)[0]->GetBinContent(i + 1) << " " << (*data_before)[0]->GetBinError(i + 1) << std::endl;
     }
 
     // auto covariance_before_matrix = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements[0]);
