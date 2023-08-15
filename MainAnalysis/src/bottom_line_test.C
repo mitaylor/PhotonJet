@@ -410,13 +410,13 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto smear_diff_vector_T = new TMatrixT<double>(theory_smear->GetNbinsX(), 1);
     smear_diff_vector_T->Transpose(*smear_diff_vector);
 
-    auto step1 = new TMatrixT<double>(1, theory_smear->GetNbinsX());
-    step1->Mult(*smear_diff_vector, *covariance_before_matrix_I);
+    auto step1_smear = new TMatrixT<double>(1, theory_smear->GetNbinsX());
+    step1_smear->Mult(*smear_diff_vector, *covariance_before_matrix_I);
 
-    auto step2 = new TMatrixT<double>(1, 1);
-    step2->Mult(*step1, *smear_diff_vector_T);
+    auto step2_smear = new TMatrixT<double>(1, 1);
+    step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
 
-    std::cout << (*step2)(0,0) << std::endl;
+    std::cout << (*step2_smear)(0,0) << std::endl;
 
     /* CHI SQUARE IN UNFOLDED SPACE */
     auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX());
@@ -427,15 +427,13 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
 
-    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
-    std::cout << covariance_after_matrix_I.GetNrows() << " " << covariance_after_matrix_I.GetNcols() << std::endl << std::endl;
-    *unfolded_diff_vector *= covariance_after_matrix_I;
+    auto step1_unfolded = new TMatrixT<double>(1, *theory_gen)[0]->GetNbinsX());
+    step1_unfolded->Mult(*unfolded_diff_vector, covariance_after_matrix_I);
 
-    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
-    std::cout << unfolded_diff_vector_T->GetNrows() << " " << unfolded_diff_vector_T->GetNcols() << std::endl << std::endl;
-    *unfolded_diff_vector *= *unfolded_diff_vector_T;
+    auto step2_unfolded = new TMatrixT<double>(1, 1);
+    step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
 
-    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
+    std::cout << (*step2_unfolded)(0,0) << std::endl;
 
     fout->Close();
 
