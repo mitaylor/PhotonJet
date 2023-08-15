@@ -288,7 +288,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     data_before_side0->save();
     data_before_side1->save();
 
-    std::vector<float> data_before_elements((*data_before)[0]->GetNbinsX());
+    std::vector<double> data_before_elements((*data_before)[0]->GetNbinsX());
 
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
@@ -347,7 +347,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     data_after_side0->save();
     data_after_side1->save();
 
-    std::vector<float> data_after_elements((*data_after)[0]->GetNbinsX());
+    std::vector<double> data_after_elements((*data_after)[0]->GetNbinsX());
 
     for (int i = 0; i < (*data_after)[0]->GetNbinsX(); ++i) {
         data_after_elements[i] = (*data_after)[0]->GetBinContent(i+1);
@@ -375,7 +375,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* THEORY GEN LEVEL */
     auto theory_gen = new history<TH1F>(ftheory, tag + "_"s + theory_label);
 
-    std::vector<float> theory_gen_elements((*theory_gen)[0]->GetNbinsX());
+    std::vector<double> theory_gen_elements((*theory_gen)[0]->GetNbinsX());
 
     for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
         theory_gen_elements[i] = (*theory_gen)[0]->GetBinContent(i+1);
@@ -386,7 +386,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* THEORY SMEARED */
     auto theory_smear = forward_fold((*theory_gen)[0], HResponse);
 
-    std::vector<float> theory_smear_elements((*theory_smear)[0]->GetNbinsX());
+    std::vector<double> theory_smear_elements((*theory_smear)[0]->GetNbinsX());
 
     for (int i = 0; i < (*theory_smear)[0]->GetNbinsX(); ++i) {
         theory_smear_elements[i] = (*theory_smear)[0]->GetBinContent(i+1);
