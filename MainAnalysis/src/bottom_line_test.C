@@ -364,6 +364,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         auto err = (*data_before)[0]->GetBinError(i + 1);
         covariance_before_elements[i*i] = err * err;
+
+        std::cout << "value: " << covariance_before_elements[i*i] << " " << err << std::endl;
     }
 
     auto covariance_before_matrix = new TMatrixT<double>((*data_before)[0]->GetNbinsX(), (*data_before)[0]->GetNbinsX(), &covariance_before_elements[0]);
@@ -403,12 +405,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto smear_diff_vector_T = new TMatrixT<double>(theory_smear->GetNbinsX(), 1);
     smear_diff_vector_T->Transpose(*smear_diff_vector);
     std::cout << __LINE__ << std::endl;
-    auto covariance_before_matrix_I = covariance_before_matrix->Invert();
+    auto covariance_before_matrix_I = covariance_before_matrix->Invert(); // CHECK
     std::cout << __LINE__ << std::endl;
     *smear_diff_vector_T *= covariance_before_matrix_I;
     *smear_diff_vector_T *= *smear_diff_vector;
     std::cout << __LINE__ << std::endl;
-    std::cout << smear_diff_vector_T->GetNrows() << " " << smear_diff_vector_T->GetNcols () << std::endl;
+    std::cout << smear_diff_vector_T->GetNrows() << " " << smear_diff_vector_T->GetNcols() << std::endl;
+
+    std::cout << smear_diff_vector->GetNrows() << " " << smear_diff_vector->GetNcols() << std::endl;
+    std::cout << smear_diff_vector_T->GetNrows() << " " << smear_diff_vector_T->GetNcols() << std::endl;
+    std::cout << covariance_before_matrix->GetNrows() << " " << covariance_before_matrix->GetNcols() << std::endl;
 
     /* CHI SQUARE IN UNFOLDED SPACE */
     auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX());
@@ -422,7 +428,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     *unfolded_diff_vector_T *= covariance_after_matrix_I;
     *unfolded_diff_vector_T *= *unfolded_diff_vector;
     std::cout << __LINE__ << std::endl;
-    std::cout << unfolded_diff_vector_T->GetNrows() << " " << unfolded_diff_vector_T->GetNcols () << std::endl;
+
+    std::cout << unfolded_diff_vector->GetNrows() << " " << unfolded_diff_vector->GetNcols() << std::endl;
+    std::cout << unfolded_diff_vector_T->GetNrows() << " " << unfolded_diff_vector_T->GetNcols() << std::endl;
+    std::cout << covariance_after_matrix->GetNrows() << " " << covariance_after_matrix->GetNcols() << std::endl;
 
     fout->Close();
 
