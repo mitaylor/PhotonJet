@@ -1,6 +1,6 @@
 OutputBase = '/store/user/mitaylor/PhotonJet'
 # OutputBase = '/store/group/phys_heavyions/mitaylor/PhotonJet'
-DatasetName = '/QCD_pThat-30_EMEnrichedDijet_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV_v1-v1/AODSIM'
+DatasetName = '/QCD_pThat-30_EMEnrichedDijet_TuneCP5_5p02TeV_pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV-v2/AODSIM'
 Tag = '20230802PPEM'
 
 from WMCore.Configuration import Configuration
