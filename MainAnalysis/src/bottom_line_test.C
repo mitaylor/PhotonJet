@@ -294,7 +294,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
     }
 
-    auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &(data_before_elements[0]));
+    auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &data_before_elements[0]);
 
     /* DATA AFTER UNFOLDING */
     auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
@@ -370,7 +370,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     /* COVARIANCE MATRIX AFTER UNFOLDING */
     std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[0]);
-    auto covariance_after_matrix = (TMatrixT<double>*) fafter[0]->Get(matrix_name.data());
+    auto covariance_after_matrix = (TMatrixT<double>*) fafter[0]->Get(covariance_name.data());
 
     /* THEORY GEN LEVEL */
     auto theory_gen = new history<TH1F>(ftheory, tag + "_"s + theory_label);
