@@ -71,8 +71,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
     history<TH1F>* bkg_nevt;
     history<TH1F>* bkg_pjet_f_dr;
     history<TH1F>* bkg_pjet_f_jpt;
-    history<TH1F>* bkg_mix_pjet_f_dr;
-    history<TH1F>* bkg_mix_pjet_f_jpt;
 
     bkg_nevt = new history<TH1F>(f_bkg, "bkg_nevt");
     bkg_sub_pjet_f_dr = new history<TH1F>(f_bkg, "bkg_sub_pjet_f_dr");
