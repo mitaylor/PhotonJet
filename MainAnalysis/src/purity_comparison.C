@@ -69,8 +69,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
     raw_sub_pjet_f_jpt = new history<TH1F>(f_raw, "raw_sub_pjet_f_jpt");
 
     history<TH1F>* bkg_nevt;
-    history<TH1F>* bkg_pjet_f_dr;
-    history<TH1F>* bkg_pjet_f_jpt;
+    history<TH1F>* bkg_sub_pjet_f_dr;
+    history<TH1F>* bkg_sub_pjet_f_jpt;
 
     bkg_nevt = new history<TH1F>(f_bkg, "bkg_nevt");
     bkg_sub_pjet_f_dr = new history<TH1F>(f_bkg, "bkg_sub_pjet_f_dr");
@@ -125,11 +125,11 @@ int jubilate(char const* config, char const* selections, char const* output) {
     c2->divide(-1 , ihf->size());
 
     for (int64_t i = 0; i < raw_nevt->size(); ++i) {
-        c1->add((*raw_sub_pjet_f_dr)[i], system, "raw");
-        c1->stack((*bkg_sub_pjet_f_dr)[i], system, "mix");
+        c1->add((*raw_sub_pjet_f_dr)[i], system, "signal");
+        c1->stack((*bkg_sub_pjet_f_dr)[i], system, "background");
 
-        c2->add((*raw_sub_pjet_f_jpt)[i], system, "raw");
-        c2->stack((*bkg_sub_pjet_f_jpt)[i], system, "mix");
+        c2->add((*raw_sub_pjet_f_jpt)[i], system, "signal");
+        c2->stack((*bkg_sub_pjet_f_jpt)[i], system, "background");
     }
 
     hb->sketch();
