@@ -386,21 +386,21 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* THEORY SMEARED */
     auto theory_smear = forward_fold((*theory_gen)[0], HResponse);
 
-    std::vector<double> theory_smear_elements((*theory_smear)[0]->GetNbinsX());
+    std::vector<double> theory_smear_elements(theory_smear->GetNbinsX());
 
-    for (int i = 0; i < (*theory_smear)[0]->GetNbinsX(); ++i) {
-        theory_smear_elements[i] = (*theory_smear)[0]->GetBinContent(i+1);
+    for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
+        theory_smear_elements[i] = theory_smear->GetBinContent(i+1);
     }
 
-    auto theory_smear_vector = new TMatrixT<double>(1, (*theory_smear)[0]->GetNbinsX(), &theory_smear_elements[0]);
+    auto theory_smear_vector = new TMatrixT<double>(1, theory_smear->GetNbinsX(), &theory_smear_elements[0]);
 
     /* CHI SQUARE IN SMEARED SPACE */
     //data_after_vector data_before_vector covariance_before_matrix covariance_after_matrix theory_gen_vector theory_smear_vector
 
-    auto smear_diff_vector = new TMatrixT<double>(1, (*theory_smear)[0]->GetNbinsX());
+    auto smear_diff_vector = new TMatrixT<double>(1, theory_smear->GetNbinsX());
     smear_diff_vector->Minus(*data_before_vector, *theory_smear_vector);
 
-    auto smear_diff_vector_T = new TMatrixT<double>((*theory_smear)[0]->GetNbinsX(), 1);
+    auto smear_diff_vector_T = new TMatrixT<double>(theory_smear->GetNbinsX(), 1);
     smear_diff_vector_T->Transpose(*smear_diff_vector);
 
     auto covariance_before_matrix_I = covariance_before_matrix->Invert();
@@ -414,7 +414,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX());
     unfolded_diff_vector->Minus(*data_after_vector, *theory_gen_vector);
 
-    auto unfolded_diff_vector_T = new TMatrixT<double>((*theory_smear)[0]->GetNbinsX(), 1);
+    auto unfolded_diff_vector_T = new TMatrixT<double>((*theory_gen)[0]->GetNbinsX(), 1);
     unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
 
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
