@@ -412,7 +412,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::cout << __LINE__ << std::endl;
     // auto covariance_before_matrix_I = covariance_before_matrix->Invert(); // CHECK
     std::cout << __LINE__ << std::endl;
-    *smear_diff_vector *= covariance_before_matrix_I;
+    *smear_diff_vector *= *covariance_before_matrix_I;
     *smear_diff_vector *= *smear_diff_vector_T;
     std::cout << __LINE__ << std::endl;
 
