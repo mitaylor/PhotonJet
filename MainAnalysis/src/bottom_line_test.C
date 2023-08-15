@@ -427,7 +427,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
 
-    auto step1_unfolded = new TMatrixT<double>(1, *theory_gen)[0]->GetNbinsX());
+    auto step1_unfolded = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX());
     step1_unfolded->Mult(*unfolded_diff_vector, covariance_after_matrix_I);
 
     auto step2_unfolded = new TMatrixT<double>(1, 1);
