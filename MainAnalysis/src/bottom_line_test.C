@@ -27,7 +27,7 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
-TH1F *forward_fold(TH1 *HGen, TH2D *HResponse)
+TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
 {
    if(HGen == nullptr || HResponse == nullptr)
       return nullptr;
@@ -44,7 +44,7 @@ TH1F *forward_fold(TH1 *HGen, TH2D *HResponse)
 
    for(int iG = 1; iG <= NGen; iG++)
    {
-      double N = 0;
+      float N = 0;
       for(int iR = 1; iR <= NReco; iR++)
          N = N + HResponse->GetBinContent(iR, iG);
 
@@ -53,21 +53,21 @@ TH1F *forward_fold(TH1 *HGen, TH2D *HResponse)
 
       for(int iR = 1; iR <= NReco; iR++)
       {
-         double T = HResponse->GetBinContent(iR, iG) / N;
-         double G = HGen->GetBinContent(iG);
-         double ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
-         double EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
+         float T = HResponse->GetBinContent(iR, iG) / N;
+         float G = HGen->GetBinContent(iG);
+         float ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
+         float EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
 
          if(HResponse->GetBinContent(iR, iG) == 0)
             ET = 0;
 
-         double V = T * G;
-         double E = sqrt(ET * ET + EG * EG) * V;
+         float V = T * G;
+         float E = sqrt(ET * ET + EG * EG) * V;
 
-         double Current = HResult->GetBinContent(iR);
+         float Current = HResult->GetBinContent(iR);
          HResult->SetBinContent(iR, Current + V);
 
-         double Error = HResult->GetBinError(iR);
+         float Error = HResult->GetBinError(iR);
          Error = sqrt(Error * Error + E * E);
          HResult->SetBinError(iR, Error);
       }
@@ -89,6 +89,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     auto theory_file = conf->get<std::string>("theory_file");
     auto theory_label = conf->get<std::string>("theory_label");
+
+    auto matrix_file = conf->get<std::string>("matrix_file");
 
     auto regularization = conf->get<std::string>("regularization");
 
@@ -112,6 +114,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto sum = new history<TH1F>(fiter, "sum"s);
 
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
+
+    TFile* fmatrix = new TFile((base + matrix_file).data(), "read");
     
     /* DATA BEFORE UNFOLDING */
     TFile* fout = new TFile(output, "recreate");
@@ -150,12 +154,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             }
         }
 
-        choice[i] = iteration;
+        std::cout << iteration << std::endl;
+
+        // choice[i] = iteration;
     }
 
     for (size_t j = 0; j < after_file.size(); ++j) {
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
-        auto HUnfoldedBayes = (TH1F*) fafter[j]->Get(unfold_name.data());
+        auto HUnfoldedBayes = (TH1D*) fafter[j]->Get(unfold_name.data());
         (*data_after)[j] = HUnfoldedBayes;
     }
 
@@ -172,7 +178,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_after_vector = new TMatrixT<double>(1, (*data_after)[index]->GetNbinsX(), &data_after_elements[0]);
     
     /* RESPONSE MATRIX */
-    auto HResponse = (TH2D*) fafter[index]->Get("HMCResponse");
+    auto matrix = new history<TH1F>(fmatrix, tag + "_c"s);
+    // auto HResponse = (TH2D*) fafter[index]->Get("HMCResponse");
     
     /* COVARIANCE MATRIX BEFORE UNFOLDING */
     std::vector<double> covariance_before_elements((*data_before)[index]->GetNbinsX() * (*data_before)[index]->GetNbinsX(), 0);
@@ -191,7 +198,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements_I[0]);
     
     /* COVARIANCE MATRIX AFTER UNFOLDING */
-    std::string covariance_name = "MUnfoldedBayes" + std::to_string(iteration);
+    std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[i]);
     auto covariance_after_matrix = (TMatrixT<double>*) fafter[index]->Get(covariance_name.data());
     
     /* THEORY GEN LEVEL */
@@ -210,7 +217,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_gen_vector = new TMatrixT<double>(1, (*theory_gen)[index]->GetNbinsX(), &theory_gen_elements[0]);
     
     /* THEORY SMEARED */
-    auto theory_smear = forward_fold((*theory_gen)[index], HResponse);
+    auto theory_smear = forward_fold((*theory_gen)[index], (*matrix)[index]);
 
     std::vector<double> theory_smear_elements(theory_smear->GetNbinsX());
     theory_smear->Scale(1/theory_smear->Integral());
