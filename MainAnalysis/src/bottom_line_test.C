@@ -198,7 +198,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements_I[0]);
     
     /* COVARIANCE MATRIX AFTER UNFOLDING */
-    std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[i]);
+    std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[index]);
     auto covariance_after_matrix = (TMatrixT<double>*) fafter[index]->Get(covariance_name.data());
     
     /* THEORY GEN LEVEL */
