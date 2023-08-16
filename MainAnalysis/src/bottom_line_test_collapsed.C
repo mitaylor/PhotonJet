@@ -455,7 +455,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* THEORY SMEARED */
     auto theory_smear = new history<TH1F>(tag + "_"s + theory_label + "_smear"s, "", null<TH1F>, theory_gen->shape());
     
-    for (int i = 0; i < theory_smear->size(); ++i) {
+    for (int i = 0; i < theory_gen->size(); ++i) {
         (*theory_smear)[i] = forward_fold((*theory_gen)[i], (*matrix)[i]);
     }
 
