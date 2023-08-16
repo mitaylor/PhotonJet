@@ -22,6 +22,12 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename T>
+T* null(int64_t, std::string const&, std::string const&) {
+    return nullptr;
+}
+
+
 TH1F *forward_fold(TH1 *HGen, TH2D *HResponse)
 {
    if(HGen == nullptr || HResponse == nullptr)
