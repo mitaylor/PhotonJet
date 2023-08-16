@@ -368,10 +368,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         auto err = (*data_before)[0]->GetBinError(i + 1);
-        covariance_before_elements[i*i] = err * err;
+        covariance_before_elements[i*(*data_before)[0]->GetNbinsX() + i] = err * err;
 
         if (err != 0) {
-            covariance_before_elements_I[i*i] = 1/(err * err);
+            covariance_before_elements_I[i*(*data_before)[0]->GetNbinsX() + i] = 1/(err * err);
         }
     }
 
@@ -422,7 +422,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     smear_diff_vector_T->Transpose(*smear_diff_vector);
 
     for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
-        std::cout << (*covariance_before_matrix_I)(i, 0) << " ";
+        for (int j = 0; i < theory_smear->GetNbinsX(); ++j) {
+            std::cout << (*covariance_before_matrix_I)(i, 0) << " ";
+        }
+        std::endl;
     }
 
     std::cout << std::endl << std::endl;
