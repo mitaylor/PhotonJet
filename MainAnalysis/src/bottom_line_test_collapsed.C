@@ -156,7 +156,6 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
 TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
 {
    if(HGen == nullptr || HResponse == nullptr) {
-      std::cout << "nullptr forward fold" << std::endl;
       return nullptr;
    }
 
@@ -640,6 +639,51 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
 
         std::cout << "unfolded: " << (*step2_unfolded_fold0)(0,0) / 90.0 << " " << (*step2_unfolded_fold1)(0,0) / 90.0 << std::endl << std::endl;
+    }
+
+
+    for (size_t i = 0; i < after_file.size(); ++ i) {
+        std::cout << "centrality " << i << std::endl;
+
+        /* CHI SQUARE IN SMEARED SPACE */
+
+        // fold0
+        double chi2_smear_fold0 = 0;
+
+        for (int j = 0; j < (*data_before_fold0)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_before_fold0)[i]->GetBinContent(j + 1) - (*theory_smear_fold0)[i]->GetBinContent(j + 1);
+            chi2_smear_fold0 += diff * diff / (*data_before_fold0)[i]->GetBinContent(j + 1);
+        }
+
+        // fold1
+        double chi2_smear_fold1 = 0;
+
+        for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_before_fold1)[i]->GetBinContent(j + 1) - (*theory_smear_fold1)[i]->GetBinContent(j + 1);
+            chi2_smear_fold1 += diff * diff / (*data_before_fold1)[i]->GetBinContent(j + 1);
+        }
+
+        std::cout << "smeared: " << chi2_smear_fold0 / 224.0 << " " << chi2_smear_fold1 / 224.0 << std::endl;
+
+        /* CHI SQUARE IN UNFOLDED SPACE */
+
+        // fold0
+        double chi2_unfolded_fold0 = 0;
+
+        for (int j = 0; j < (*data_after_fold0)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_after_fold0)[i]->GetBinContent(j + 1) - (*theory_gen_fold0)[i]->GetBinContent(j + 1);
+            chi2_unfolded_fold0 += diff * diff / (*data_after_fold0)[i]->GetBinContent(j + 1);
+        }
+
+        // fold1
+        double chi2_unfolded_fold1 = 0;
+
+        for (int j = 0; j < (*data_after_fold1)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_after_fold1)[i]->GetBinContent(j + 1) - (*theory_gen_fold1)[i]->GetBinContent(j + 1);
+            chi2_unfolded_fold1 += diff * diff / (*data_after_fold1)[i]->GetBinContent(j + 1);
+        }
+
+        std::cout << "unfolded: " << chi2_unfolded_fold0 / 90.0 << " " << chi2_unfolded_fold1 / 90.0 << std::endl;
     }
 
     fout->Close();
