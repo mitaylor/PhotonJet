@@ -178,7 +178,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_after_vector = new TMatrixT<double>(1, (*data_after)[index]->GetNbinsX(), &data_after_elements[0]);
     
     /* RESPONSE MATRIX */
-    auto matrix = new history<TH1F>(fmatrix, tag + "_c"s);
+    auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
     // auto HResponse = (TH2D*) fafter[index]->Get("HMCResponse");
     
     /* COVARIANCE MATRIX BEFORE UNFOLDING */
