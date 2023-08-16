@@ -417,15 +417,15 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     auto smear_diff_vector = new TMatrixT<double>(1, theory_smear->GetNbinsX());
     smear_diff_vector->Minus(*data_before_vector, *theory_smear_vector);
-
-    for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
-        std::cout << (*data_before_vector)(0, i) << " ";
-    }
-
-    std::cout << std::endl << std::endl;
     
     auto smear_diff_vector_T = new TMatrixT<double>(theory_smear->GetNbinsX(), 1);
     smear_diff_vector_T->Transpose(*smear_diff_vector);
+
+    for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
+        std::cout << (*smear_diff_vector_T)(0, i) << " ";
+    }
+
+    std::cout << std::endl << std::endl;
 
     auto step1_smear = new TMatrixT<double>(1, theory_smear->GetNbinsX());
     step1_smear->Mult(*smear_diff_vector, *covariance_before_matrix_I);
@@ -438,15 +438,15 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* CHI SQUARE IN UNFOLDED SPACE */
     auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX());
     unfolded_diff_vector->Minus(*data_after_vector, *theory_gen_vector);
-
-    for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
-        std::cout << (*unfolded_diff_vector)(0, i) << " ";
-    }
-
-    std::cout << std::endl << std::endl;
     
     auto unfolded_diff_vector_T = new TMatrixT<double>((*theory_gen)[0]->GetNbinsX(), 1);
     unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
+
+    for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
+        std::cout << (*unfolded_diff_vector_T)(0, i) << " ";
+    }
+
+    std::cout << std::endl << std::endl;
     
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
 
