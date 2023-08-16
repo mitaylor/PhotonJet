@@ -278,7 +278,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     data_before_fold0->save();
     data_before_fold1->save();
 
-    std::vector<TMatrixT<double>*> data_before_vector(data_before_fold0->size(), nullptr);
+    std::vector<TMatrixT<double>*> data_before_vector_fold0(data_before_fold0->size(), nullptr);
 
     for (int i = 0; i < data_before_fold0->size(); ++i) {
         std::vector<double> data_before_elements((*data_before_fold0)[i]->GetNbinsX());
@@ -287,7 +287,19 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             data_before_elements[j] = (*data_before_fold0)[i]->GetBinContent(j + 1);
         }
         
-        data_before_vector[i] = new TMatrixT<double>(1, (*data_before_fold0)[i]->GetNbinsX(), &data_before_elements[0]);
+        data_before_vector_fold0[i] = new TMatrixT<double>(1, (*data_before_fold0)[i]->GetNbinsX(), &data_before_elements[0]);
+    }
+
+    std::vector<TMatrixT<double>*> data_before_vector_fold1(data_before_fold1->size(), nullptr);
+
+    for (int i = 0; i < data_before_fold1->size(); ++i) {
+        std::vector<double> data_before_elements((*data_before_fold1)[i]->GetNbinsX());
+
+        for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
+            data_before_elements[j] = (*data_before_fold1)[i]->GetBinContent(j + 1);
+        }
+        
+        data_before_vector_fold1[i] = new TMatrixT<double>(1, (*data_before_fold1)[i]->GetNbinsX(), &data_before_elements[0]);
     }
 
     /* DATA AFTER UNFOLDING */
@@ -340,7 +352,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     data_after_fold0->save();
     data_after_fold1->save();
 
-    std::vector<TMatrixT<double>*> data_after_vector(data_after_fold0->size(), nullptr);
+    std::vector<TMatrixT<double>*> data_after_vector_fold0(data_after_fold0->size(), nullptr);
 
     for (int i = 0; i < data_after_fold0->size(); ++i) {
         std::vector<double> data_after_elements((*data_after_fold0)[i]->GetNbinsX());
@@ -349,7 +361,19 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             data_after_elements[j] = (*data_after_fold0)[i]->GetBinContent(j + 1);
         }
         
-        data_after_vector[i] = new TMatrixT<double>(1, (*data_after_fold0)[i]->GetNbinsX(), &data_after_elements[0]);
+        data_after_vector_fold0[i] = new TMatrixT<double>(1, (*data_after_fold0)[i]->GetNbinsX(), &data_after_elements[0]);
+    }
+
+    std::vector<TMatrixT<double>*> data_after_vector_fold1(data_after_fold1->size(), nullptr);
+
+    for (int i = 0; i < data_after_fold1->size(); ++i) {
+        std::vector<double> data_after_elements((*data_after_fold1)[i]->GetNbinsX());
+
+        for (int j = 0; j < (*data_after_fold1)[i]->GetNbinsX(); ++j) {
+            data_after_elements[j] = (*data_after_fold1)[i]->GetBinContent(j + 1);
+        }
+        
+        data_after_vector_fold1[i] = new TMatrixT<double>(1, (*data_after_fold1)[i]->GetNbinsX(), &data_after_elements[0]);
     }
 
     /* RESPONSE MATRIX */
@@ -357,7 +381,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     matrix->save();
     
     /* COVARIANCE MATRIX BEFORE UNFOLDING */
-    std::vector<TMatrixT<double>*> covariance_before_matrix(data_before_fold0->size(), nullptr);
+    std::vector<TMatrixT<double>*> covariance_before_matrix_fold0(data_before_fold0->size(), nullptr);
 
     for (int i = 0; i < data_before_fold0->size(); ++i) {
         std::vector<double> covariance_before_elements((*data_before_fold0)[i]->GetNbinsX() * (*data_before_fold0)[i]->GetNbinsX(), 0);
@@ -367,14 +391,30 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_before_elements[j * (*data_before_fold0)[i]->GetNbinsX() + j] = err * err;
         }
         
-        std::string name = "covariance_before_" + to_text(i);
+        std::string name = "covariance_before_fold0_" + to_text(i);
 
-        covariance_before_matrix[i] = new TMatrixT<double>((*data_before_fold0)[i]->GetNbinsX(), (*data_before_fold0)[i]->GetNbinsX(), &covariance_before_elements[0]);
-        covariance_before_matrix[i]->Write(name.c_str());
+        covariance_before_matrix_fold0[i] = new TMatrixT<double>((*data_before_fold0)[i]->GetNbinsX(), (*data_before_fold0)[i]->GetNbinsX(), &covariance_before_elements[0]);
+        covariance_before_matrix_fold0[i]->Write(name.c_str());
+    }
+
+    std::vector<TMatrixT<double>*> covariance_before_matrix_fold1(data_before_fold1->size(), nullptr);
+
+    for (int i = 0; i < data_before_fold1->size(); ++i) {
+        std::vector<double> covariance_before_elements((*data_before_fold1)[i]->GetNbinsX() * (*data_before_fold1)[i]->GetNbinsX(), 0);
+
+        for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
+            auto err = (*data_before_fold1)[i]->GetBinError(j + 1);
+            covariance_before_elements[j * (*data_before_fold1)[i]->GetNbinsX() + j] = err * err;
+        }
+        
+        std::string name = "covariance_before_fold1_" + to_text(i);
+
+        covariance_before_matrix_fold1[i] = new TMatrixT<double>((*data_before_fold1)[i]->GetNbinsX(), (*data_before_fold1)[i]->GetNbinsX(), &covariance_before_elements[0]);
+        covariance_before_matrix_fold1[i]->Write(name.c_str());
     }
 
     /* COVARIANCE MATRIX AFTER UNFOLDING */
-    std::vector<TMatrixT<double>*> covariance_after_matrix(data_after_fold0->size(), nullptr);
+    std::vector<TMatrixT<double>*> covariance_after_matrix_fold0(data_after_fold0->size(), nullptr);
 
     for (int i = 0; i < data_after_fold0->size(); ++i) {
         std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[i]);
@@ -388,14 +428,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
                 for (int m = 0; m < iptg->size(); ++m) { // rows
                     for (int n = 0; n < iptg->size(); ++n) { // columns
-                        // cut out underflow
-                        if (m < osg[2]) { continue; }
-                        if (n < osg[2]) { continue; }
-
-                        // cut off overflow
-                        if (m >= (iptg->size() - osg[3])) { continue; }
-                        if (n >= (iptg->size() - osg[3])) { continue; }
-
                         int index_row = m * idrg->size() + j;
                         int index_col = n * idrg->size() + k;
 
@@ -407,10 +439,42 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             }
         }
 
-        std::string name = "covariance_after_" + to_text(i);
+        std::string name = "covariance_after_fold0_" + to_text(i);
 
-        covariance_after_matrix[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_elements[0]);
-        covariance_after_matrix[i]->Write(name.c_str());
+        covariance_after_matrix_fold0[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_elements[0]);
+        covariance_after_matrix_fold0[i]->Write(name.c_str());
+    }
+
+    std::vector<TMatrixT<double>*> covariance_after_matrix_fold1(data_after_fold1->size(), nullptr);
+
+    for (int i = 0; i < data_after_fold1->size(); ++i) {
+        std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[i]);
+        auto covariance_after_matrix_full = (TMatrixT<double>*) fafter[i]->Get(covariance_name.data());
+
+        std::vector<double> covariance_after_elements((*data_after_fold1)[i]->GetNbinsX() * (*data_after_fold1)[i]->GetNbinsX(), 0);
+
+        for (int j = 0; j < iptg->size(); ++j) { // rows
+            for (int k = 0; k < iptg->size(); ++k) { // columns
+                double sum = 0;
+
+                for (int m = 0; m < idrg->size(); ++m) { // rows
+                    for (int n = 0; n < idrg->size(); ++n) { // columns
+
+                        int index_row = j * idrg->size() + m;
+                        int index_col = k * idrg->size() + n;
+
+                        sum += (*covariance_after_matrix_full)(index_row, index_col);
+                    }
+                }
+
+                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum;
+            }
+        }
+
+        std::string name = "covariance_after_fold1_" + to_text(i);
+
+        covariance_after_matrix_fold1[i] = new TMatrixT<double>((*data_after_fold1)[i]->GetNbinsX(), (*data_after_fold1)[i]->GetNbinsX(), &covariance_after_elements[0]);
+        covariance_after_matrix_fold1[i]->Write(name.c_str());
     }
     
     /* THEORY GEN LEVEL */
@@ -432,7 +496,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     theory_gen_fold0->save();
     theory_gen_fold1->save();
 
-    std::vector<TMatrixT<double>*> theory_gen_vector(theory_gen_fold0->size(), nullptr);
+    std::vector<TMatrixT<double>*> theory_gen_vector_fold0(theory_gen_fold0->size(), nullptr);
 
     for (int i = 0; i < theory_gen_fold0->size(); ++i) {
         std::vector<double> theory_gen_elements((*theory_gen_fold0)[i]->GetNbinsX());
@@ -441,7 +505,19 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             theory_gen_elements[j] = (*theory_gen_fold0)[i]->GetBinContent(j + 1);
         }
         
-        theory_gen_vector[i] = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX(), &theory_gen_elements[0]);
+        theory_gen_vector_fold0[i] = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX(), &theory_gen_elements[0]);
+    }
+
+    std::vector<TMatrixT<double>*> theory_gen_vector_fold1(theory_gen_fold1->size(), nullptr);
+
+    for (int i = 0; i < theory_gen_fold1->size(); ++i) {
+        std::vector<double> theory_gen_elements((*theory_gen_fold1)[i]->GetNbinsX());
+
+        for (int j = 0; j < (*theory_gen_fold1)[i]->GetNbinsX(); ++j) {
+            theory_gen_elements[j] = (*theory_gen_fold1)[i]->GetBinContent(j + 1);
+        }
+        
+        theory_gen_vector_fold1[i] = new TMatrixT<double>(1, (*theory_gen_fold1)[i]->GetNbinsX(), &theory_gen_elements[0]);
     }
 
     /* THEORY SMEARED */
@@ -469,7 +545,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     theory_smear_fold0->save();
     theory_smear_fold1->save();
 
-    std::vector<TMatrixT<double>*> theory_smear_vector(theory_smear_fold0->size(), nullptr);
+    std::vector<TMatrixT<double>*> theory_smear_vector_fold0(theory_smear_fold0->size(), nullptr);
 
     for (int i = 0; i < theory_smear_fold0->size(); ++i) {
         std::vector<double> theory_smear_elements((*theory_smear_fold0)[i]->GetNbinsX());
@@ -478,7 +554,19 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             theory_smear_elements[j] = (*theory_smear_fold0)[i]->GetBinContent(j + 1);
         }
         
-        theory_smear_vector[i] = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX(), &theory_smear_elements[0]);
+        theory_smear_vector_fold0[i] = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX(), &theory_smear_elements[0]);
+    }
+
+    std::vector<TMatrixT<double>*> theory_smear_vector_fold1(theory_smear_fold1->size(), nullptr);
+
+    for (int i = 0; i < theory_smear_fold1->size(); ++i) {
+        std::vector<double> theory_smear_elements((*theory_smear_fold1)[i]->GetNbinsX());
+
+        for (int j = 0; j < (*theory_smear_fold1)[i]->GetNbinsX(); ++j) {
+            theory_smear_elements[j] = (*theory_smear_fold1)[i]->GetBinContent(j + 1);
+        }
+        
+        theory_smear_vector_fold1[i] = new TMatrixT<double>(1, (*theory_smear_fold1)[i]->GetNbinsX(), &theory_smear_elements[0]);
     }
     
     /* CHI SQUARE IN SMEARED SPACE */
@@ -486,12 +574,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::cout << "centrality " << i << std::endl;
 
         auto smear_diff_vector = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
-        smear_diff_vector->Minus(*data_before_vector[i], *theory_smear_vector[i]);
+        smear_diff_vector->Minus(*data_before_vector_fold0[i], *theory_smear_vector_fold0[i]);
         
         auto smear_diff_vector_T = new TMatrixT<double>((*theory_smear_fold0)[i]->GetNbinsX(), 1);
         smear_diff_vector_T->Transpose(*smear_diff_vector);
 
-        auto covariance_before_matrix_I = covariance_before_matrix[i]->Invert();
+        auto covariance_before_matrix_I = covariance_before_matrix_fold0[i]->Invert();
 
         auto step1_smear = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
         step1_smear->Mult(*smear_diff_vector, covariance_before_matrix_I);
@@ -503,12 +591,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         /* CHI SQUARE IN UNFOLDED SPACE */
         auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX());
-        unfolded_diff_vector->Minus(*data_after_vector[i], *theory_gen_vector[i]);
+        unfolded_diff_vector->Minus(*data_after_vector_fold0[i], *theory_gen_vector_fold0[i]);
         
         auto unfolded_diff_vector_T = new TMatrixT<double>((*theory_gen_fold0)[i]->GetNbinsX(), 1);
         unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
         
-        auto covariance_after_matrix_I = covariance_after_matrix[i]->Invert();
+        auto covariance_after_matrix_I = covariance_after_matrix_fold0[i]->Invert();
 
         auto step1_unfolded = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX());
         step1_unfolded->Mult(*unfolded_diff_vector, covariance_after_matrix_I);
