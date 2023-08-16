@@ -375,7 +375,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_before_elements[j * (*data_before_fold0)[i]->GetNbinsX() + j] = err * err;
         }
         
+        std::string name = "covariance_before_" + to_text(i);
+
         covariance_before_matrix[i] = new TMatrixT<double>((*data_before_fold0)[i]->GetNbinsX(), (*data_before_fold0)[i]->GetNbinsX(), &covariance_before_elements[0]);
+        covariance_before_matrix[i]->Write(name.c_str());
     }
 
     /* COVARIANCE MATRIX AFTER UNFOLDING */
