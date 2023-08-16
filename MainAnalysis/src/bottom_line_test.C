@@ -445,7 +445,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
 
     for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
-        std::cout << (*covariance_after_matrix_I)(i, 0) << " ";
+        std::cout << (covariance_after_matrix_I)(i, 0) << " ";
     }
 
     std::cout << std::endl << std::endl;
