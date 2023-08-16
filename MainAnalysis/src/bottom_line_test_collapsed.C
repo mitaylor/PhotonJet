@@ -446,7 +446,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 }
 
                 double width_factor = (rdrg[j + 1] - rdrg[j]) * (rdrg[k + 1] - rdrg[k]);
-                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum / width_factor;
+                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum / width_factor / width_factor;
             }
         }
 
@@ -480,7 +480,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 
                 double width_factor = (rptg[j + 1] - rptg[j]) * (rptg[k + 1] - rptg[k]);
 
-                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum / width_factor;
+                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum / width_factor / width_factor;
             }
         }
 
