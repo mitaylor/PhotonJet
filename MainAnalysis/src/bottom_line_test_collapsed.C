@@ -359,6 +359,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     /* RESPONSE MATRIX */
     auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
+    matrix->save();
     
     /* COVARIANCE MATRIX BEFORE UNFOLDING */
     std::vector<TMatrixT<double>*> covariance_before_matrix(data_before_fold0->size(), nullptr);
@@ -467,7 +468,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_smear_fold0)[i] = fold((*theory_smear)[i], nullptr, mr, 0, osr);
         (*theory_smear_fold1)[i] = fold((*theory_smear)[i], nullptr, mr, 1, osr);
     }
-    
+
     theory_smear->rename(tag + "_"s + theory_label + "_smear"s);
     theory_smear_fold0->rename(tag + "_"s + theory_label + "_smear_fold0"s);
     theory_smear_fold1->rename(tag + "_"s + theory_label + "_smear_fold1"s);
