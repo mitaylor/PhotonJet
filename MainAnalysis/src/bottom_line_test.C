@@ -119,7 +119,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     data_before->save();
 
-    int index = 3;
+    int index = 0;
 
     std::vector<double> data_before_elements((*data_before)[index]->GetNbinsX());
     (*data_before)[index]->Scale(1/(*data_before)[index]->Integral());
@@ -128,7 +128,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         data_before_elements[i] = (*data_before)[index]->GetBinContent(i+1);
     }
     
-    auto data_before_vector = new TMatrixT<double>(1, (*data_before)[index]->GetNbinsX(), &data_before_elements[index]);
+    auto data_before_vector = new TMatrixT<double>(1, (*data_before)[index]->GetNbinsX(), &data_before_elements[0]);
     
     /* DATA AFTER UNFOLDING */
     auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
@@ -171,7 +171,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         data_after_elements[i] = (*data_after)[index]->GetBinContent(i+1);
     }
 
-    auto data_after_vector = new TMatrixT<double>(1, (*data_after)[index]->GetNbinsX(), &data_after_elements[index]);
+    auto data_after_vector = new TMatrixT<double>(1, (*data_after)[index]->GetNbinsX(), &data_after_elements[0]);
     
     /* RESPONSE MATRIX */
     auto HResponse = (TH2D*) fafter[index]->Get("HMCResponse");
@@ -190,7 +190,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     }
 
     // auto covariance_before_matrix = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements[index]);
-    auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements_I[index]);
+    auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements_I[0]);
     
     /* COVARIANCE MATRIX AFTER UNFOLDING */
     std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[index]);
@@ -209,7 +209,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     // std::cout << std::endl << std::endl;
 
-    auto theory_gen_vector = new TMatrixT<double>(1, (*theory_gen)[index]->GetNbinsX(), &theory_gen_elements[index]);
+    auto theory_gen_vector = new TMatrixT<double>(1, (*theory_gen)[index]->GetNbinsX(), &theory_gen_elements[0]);
     
     /* THEORY SMEARED */
     auto theory_smear = forward_fold((*theory_gen)[index], HResponse);
@@ -224,7 +224,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     // std::cout << std::endl << std::endl;
 
-    auto theory_smear_vector = new TMatrixT<double>(1, theory_smear->GetNbinsX(), &theory_smear_elements[index]);
+    auto theory_smear_vector = new TMatrixT<double>(1, theory_smear->GetNbinsX(), &theory_smear_elements[0]);
     
     /* CHI SQUARE IN SMEARED SPACE */
     //data_after_vector data_before_vector covariance_before_matrix covariance_after_matrix theory_gen_vector theory_smear_vector
