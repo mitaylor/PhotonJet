@@ -422,7 +422,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     smear_diff_vector_T->Transpose(*smear_diff_vector);
 
     for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
-        std::cout << (*smear_diff_vector_T)(0, i) << " ";
+        std::cout << (*smear_diff_vector)(0, i) << " ";
     }
 
     std::cout << std::endl << std::endl;
@@ -443,7 +443,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
 
     for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
-        std::cout << (*unfolded_diff_vector_T)(0, i) << " ";
+        std::cout << (*unfolded_diff_vector)(0, i) << " ";
     }
 
     std::cout << std::endl << std::endl;
