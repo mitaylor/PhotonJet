@@ -396,6 +396,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_smear = forward_fold((*theory_gen)[0], HResponse);
 
     std::vector<double> theory_smear_elements(theory_smear->GetNbinsX());
+    theory_smear->Scale(1/theory_smear->Integral());
 
     for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
         theory_smear_elements[i] = theory_smear->GetBinContent(i+1);
