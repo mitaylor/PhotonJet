@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -419,8 +420,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum;
             }
         }
-        
+
+        std::string name = "covariance_after_" + to_text(i);
+
         covariance_after_matrix[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_elements[0]);
+        covariance_after_matrix[i]->Write(name.c_str());
     }
     
     /* THEORY GEN LEVEL */
