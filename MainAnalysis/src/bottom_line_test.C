@@ -422,10 +422,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     smear_diff_vector_T->Transpose(*smear_diff_vector);
 
     for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
-        for (int j = 0; i < theory_smear->GetNbinsX(); ++j) {
-            std::cout << (*covariance_before_matrix_I)(i, 0) << " ";
-        }
-        std::endl;
+        std::cout << (*covariance_before_matrix_I)(i, 0) << " ";
     }
 
     std::cout << std::endl << std::endl;
