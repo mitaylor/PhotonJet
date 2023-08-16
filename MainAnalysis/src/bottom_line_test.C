@@ -421,11 +421,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto smear_diff_vector_T = new TMatrixT<double>(theory_smear->GetNbinsX(), 1);
     smear_diff_vector_T->Transpose(*smear_diff_vector);
 
-    for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
-        std::cout << (*covariance_before_matrix_I)(i, 0) << " ";
-    }
+    // for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
+    //     std::cout << (*covariance_before_matrix_I)(i, 0) << " ";
+    // }
 
-    std::cout << std::endl << std::endl;
+    // std::cout << std::endl << std::endl;
 
     auto step1_smear = new TMatrixT<double>(1, theory_smear->GetNbinsX());
     step1_smear->Mult(*smear_diff_vector, *covariance_before_matrix_I);
@@ -444,11 +444,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto covariance_after_matrix_I = covariance_after_matrix->Invert();
 
-    for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
-        std::cout << (covariance_after_matrix_I)(i, 0) << " ";
-    }
+    // for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
+    //     std::cout << (covariance_after_matrix_I)(i, 0) << " ";
+    // }
 
-    std::cout << std::endl << std::endl;
+    // std::cout << std::endl << std::endl;
 
     auto step1_unfolded = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX());
     step1_unfolded->Mult(*unfolded_diff_vector, covariance_after_matrix_I);
