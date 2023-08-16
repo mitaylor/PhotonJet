@@ -145,12 +145,8 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
             }
         }
 
-        std::cout << "error: " << error << std::endl;
-
         hfold->SetBinError(i + 1, std::sqrt(error));
     }
-
-    std::cout << std::endl;
 
     delete [] list;
 
@@ -326,7 +322,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         (*data_after)[j] = HUnfoldedBayes;
         (*data_after)[j]->Scale(1. / (*data_after)[j]->Integral());
-        std::cout << " zero" << std::endl << std::endl;
+
         (*data_after_fold0)[j] = fold_mat((*data_after)[j], MUnfolded, mg, 0, osg);
         (*data_after_fold1)[j] = fold_mat((*data_after)[j], MUnfolded, mg, 1, osg);
     }
@@ -381,15 +377,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         std::vector<double> covariance_after_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
 
-        std::cout << osg[2] << " " << iptg->size() - osg[3] << std::endl;
-
         for (int j = 0; j < idrg->size(); ++j) { // rows
             for (int k = 0; k < idrg->size(); ++k) { // columns
                 double sum = 0;
-
-                // std::cout << "row " << j << ", col " << k << std::endl;
-
-                int count = 0;
 
                 for (int m = 0; m < iptg->size(); ++m) { // rows
                     for (int n = 0; n < iptg->size(); ++n) { // columns
@@ -404,12 +394,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                         int index_row = m * idrg->size() + j;
                         int index_col = n * idrg->size() + k;
 
-                        count++;
                         sum += (*covariance_after_matrix_full)(index_row, index_col);
                     }
                 }
-
-                // std::cout << "sum: " << sum << " " << count << std::endl << std::endl;
 
                 covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum;
             }
