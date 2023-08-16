@@ -95,8 +95,6 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     delete [] list;
     delete cov;
 
-    // hfold->Scale(1., "width");
-
     return hfold;
 }
 
@@ -155,8 +153,6 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
     std::cout << std::endl;
 
     delete [] list;
-
-    // hfold->Scale(1., "width");
 
     return hfold;
 }
@@ -458,6 +454,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     /* THEORY SMEARED */
     auto theory_smear = new history<TH1F>(tag + "_"s + theory_label + "_smear"s, "", null<TH1F>, theory_gen->shape());
+    theory_smear->apply([](TH1* h) { h->Scale(1. / h->Integral()); });
     
     for (int i = 0; i < theory_gen->size(); ++i) {
         (*theory_smear)[i] = forward_fold((*theory_gen)[i], (*matrix)[i]);
