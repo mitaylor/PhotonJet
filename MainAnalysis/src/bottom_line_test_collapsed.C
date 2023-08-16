@@ -162,7 +162,7 @@ TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
       std::cout << "nullptr forward fold" << std::endl;
       return nullptr;
    }
-   
+
    static int Count = 0;
    Count = Count + 1;
 
@@ -392,7 +392,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             for (int k = 0; k < idrg->size(); ++k) { // columns
                 double sum = 0;
 
-                std::cout << "row " << j << ", col " << k << std::endl;
+                // std::cout << "row " << j << ", col " << k << std::endl;
 
                 int count = 0;
 
@@ -414,7 +414,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                     }
                 }
 
-                std::cout << "sum: " << sum << " " << count << std::endl << std::endl;
+                // std::cout << "sum: " << sum << " " << count << std::endl << std::endl;
 
                 covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum;
             }
