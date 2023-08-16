@@ -189,12 +189,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto err = (*data_before)[index]->GetBinError(i + 1);
         covariance_before_elements[i*(*data_before)[index]->GetNbinsX() + i] = err * err;
 
-        if (err != 0) {
+        if (err != 0 && (*data_before)[index]->GetBinContent(i + 1) > 0.00001) {
             covariance_before_elements_I[i*(*data_before)[index]->GetNbinsX() + i] = 1/(err * err);
             
-            if ((*data_before)[index]->GetBinContent(i + 1) < 0.000001) {
-                std::cout << 1/(err * err) << " " << (*data_before)[index]->GetBinError(i + 1) << " " << (*data_before)[index]->GetBinContent(i + 1) << std::endl;
-            }
+            // if ((*data_before)[index]->GetBinContent(i + 1) < 0.00001) {
+                
+            // }
         }
     }
 
