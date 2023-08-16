@@ -327,8 +327,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
         std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
 
-        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
+        auto HUnfoldedBayes = (TH1F*) fafter[j]->Get(unfold_name.data());
+        auto MUnfolded = (TMatrixT<double>*) fafter[j]->Get(matrix_name.data());
 
         (*data_after)[j] = HUnfoldedBayes;
         (*data_after)[j]->Scale(1. / (*data_after)[j]->Integral());
@@ -409,7 +409,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                     }
                 }
 
-                std::cout << "sum: " << sum << " " count << std::endl << std::endl;
+                std::cout << "sum: " << sum << " " << count << std::endl << std::endl;
 
                 covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum;
             }
