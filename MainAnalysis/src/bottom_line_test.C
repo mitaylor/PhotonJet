@@ -191,8 +191,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         if (err != 0) {
             covariance_before_elements_I[i*(*data_before)[index]->GetNbinsX() + i] = 1/(err * err);
+            std::cout << 1/(err * err) << " ";
         }
     }
+
+    std::endl << std::endl;
 
     // auto covariance_before_matrix = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements[index]);
     auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements_I[0]);
