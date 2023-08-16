@@ -77,7 +77,7 @@ TH1F *forward_fold(TH1 *HGen, TH2D *HResponse)
 }
 
 
-int bottom_line_test(char const* config, char const* selections, char const* output) {
+int bottom_line_test(char const* config, char const* selections, char const* output, int index, int iteration) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -119,8 +119,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     data_before->save();
 
-    int index = 3;
-
     std::vector<double> data_before_elements((*data_before)[index]->GetNbinsX());
     (*data_before)[index]->Scale(1/(*data_before)[index]->Integral());
 
@@ -151,6 +149,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 break;
             }
         }
+
+        choice[i] = iteration;
 
         std::cout << choice[i] << std::endl;
     }
@@ -193,7 +193,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto covariance_before_matrix_I = new TMatrixT<double>((*data_before)[index]->GetNbinsX(), (*data_before)[index]->GetNbinsX(), &covariance_before_elements_I[0]);
     
     /* COVARIANCE MATRIX AFTER UNFOLDING */
-    std::string covariance_name = "MUnfoldedBayes" + std::to_string(choice[index]);
+    std::string covariance_name = "MUnfoldedBayes" + std::to_string(iteration);
     auto covariance_after_matrix = (TMatrixT<double>*) fafter[index]->Get(covariance_name.data());
     
     /* THEORY GEN LEVEL */
@@ -278,9 +278,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
-        return bottom_line_test(argv[1], argv[2], argv[3]);
+    if (argc == 6)
+        return bottom_line_test(argv[1], argv[2], argv[3], stoi(argv[4]), stoi(argv[5]));
 
-    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output] [centrality bin] [iteration]\n", argv[0]);
     return 1;
 }
