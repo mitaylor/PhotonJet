@@ -223,8 +223,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto rptr = sel->get<std::vector<float>>("ptr_range");
     auto rptg = sel->get<std::vector<float>>("ptg_range");
 
-    auto osr = sel->get<std::vector<int64_t>>("osr");
-    auto osg = sel->get<std::vector<int64_t>>("osg");
+    // auto osr = sel->get<std::vector<int64_t>>("osr");
+    // auto osg = sel->get<std::vector<int64_t>>("osg");
+
+    std::vector<int64_t> osr {0, 0, 0, 0};
+    std::vector<int64_t> osg {0, 0, 0, 0};
 
     /* create intervals and multivals */
     auto idrr = new interval("#deltaj"s, rdrr);
