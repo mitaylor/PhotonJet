@@ -187,21 +187,12 @@ TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
       {
          float T = HResponse->GetBinContent(iR, iG) / N;
          float G = HGen->GetBinContent(iG);
-         float ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
-         float EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
-
-         if(HResponse->GetBinContent(iR, iG) == 0)
-            ET = 0;
 
          float V = T * G;
-         float E = sqrt(ET * ET + EG * EG) * V;
 
          float Current = HResult->GetBinContent(iR);
          HResult->SetBinContent(iR, Current + V);
-
-         float Error = HResult->GetBinError(iR);
-         Error = sqrt(Error * Error + E * E);
-         HResult->SetBinError(iR, Error);
+         HResult->SetBinError(iR, 0);
       }
    }
 
