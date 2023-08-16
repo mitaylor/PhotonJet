@@ -133,7 +133,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before_vector = new TMatrixT<double>(1, (*data_before)[index]->GetNbinsX(), &data_before_elements[0]);
     
     /* DATA AFTER UNFOLDING */
-    auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
+    auto data_after = new history<TH1D>("unfolded", "", null<TH1D>, (int64_t) after_file.size());
 
     std::vector<int64_t> choice(sum->size(), 1);
 
