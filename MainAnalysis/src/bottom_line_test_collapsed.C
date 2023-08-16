@@ -383,6 +383,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         std::vector<double> covariance_after_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
 
+        std::cout << osg[2] << " " << iptg->size() - osg[3] << std::endl;
+
         for (int j = 0; j < idrg->size(); ++j) { // rows
             for (int k = 0; k < idrg->size(); ++k) { // columns
                 double sum = 0;
