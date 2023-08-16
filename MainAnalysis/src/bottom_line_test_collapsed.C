@@ -486,7 +486,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     }
     
     /* CHI SQUARE IN SMEARED SPACE */
-    for (int i = 0; i < after_file.size(); ++ i) {
+    for (size_t i = 0; i < after_file.size(); ++ i) {
         std::cout << "centrality " << i << std::endl;
 
         auto smear_diff_vector = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
@@ -498,7 +498,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto covariance_before_matrix_I = covariance_before_matrix[i]->Invert();
 
         auto step1_smear = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
-        step1_smear->Mult(*smear_diff_vector, *covariance_before_matrix_I);
+        step1_smear->Mult(*smear_diff_vector, covariance_before_matrix_I);
 
         auto step2_smear = new TMatrixT<double>(1, 1);
         step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
