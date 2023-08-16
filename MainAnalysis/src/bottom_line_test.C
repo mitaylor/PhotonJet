@@ -324,7 +324,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             }
         }
 
-        choice[i] = 15;
+        choice[i] = 30;
         std::cout << choice[i] << std::endl;
     }
 
