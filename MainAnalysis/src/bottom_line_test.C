@@ -323,6 +323,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 break;
             }
         }
+
+        std::cout << choice[i] << std::endl;
     }
 
     for (size_t j = 0; j < after_file.size(); ++j) {
