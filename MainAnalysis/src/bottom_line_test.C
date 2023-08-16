@@ -192,7 +192,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         if (err != 0) {
             covariance_before_elements_I[i*(*data_before)[index]->GetNbinsX() + i] = 1/(err * err);
             
-            if (1/(err * err) > 1000000000) {
+            if ((*data_before)[index]->GetBinContent(i + 1) < 0.000001) {
                 std::cout << 1/(err * err) << " " << (*data_before)[index]->GetBinError(i + 1) << " " << (*data_before)[index]->GetBinContent(i + 1) << std::endl;
             }
         }
