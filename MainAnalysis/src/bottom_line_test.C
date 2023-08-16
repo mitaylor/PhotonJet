@@ -119,7 +119,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     data_before->save();
 
-    int index = 0;
+    int index = 1;
 
     std::vector<double> data_before_elements((*data_before)[index]->GetNbinsX());
     (*data_before)[index]->Scale(1/(*data_before)[index]->Integral());
