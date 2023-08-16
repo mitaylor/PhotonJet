@@ -453,7 +453,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_smear = new history<TH1F>(tag + "_"s + theory_label + "_smear"s, "", null<TH1F>, theory_gen->shape());
     
     for (int i = 0; i < theory_smear->size(); ++i) {
-        theory_smear = forward_fold((*theory_gen)[i], (*matrix)[i]);
+        (*theory_smear)[i] = forward_fold((*theory_gen)[i], (*matrix)[i]);
     }
 
     theory_smear->apply([](TH1* h) { h->Scale(1. / h->Integral()); });
