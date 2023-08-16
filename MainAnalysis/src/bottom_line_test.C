@@ -269,41 +269,22 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     TFile* fout = new TFile(output, "recreate");
 
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
-    auto shape = data_before->shape();
-
-    auto data_before_side0 = new history<TH1F>(tag + "_"s + before_label + "_side0"s, "", null<TH1F>, shape);
-    auto data_before_side1 = new history<TH1F>(tag + "_"s + before_label + "_side1"s, "", null<TH1F>, shape);
-
-    for (int64_t i = 0; i < data_before->size(); ++i) {
-        (*data_before_side0)[i] = fold((*data_before)[i], nullptr, mr, 0, osr);
-        (*data_before_side1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
-    }
-
-    normalise_to_unity(data_before_side0, data_before_side1);
-
-    data_before_side0->rename(tag + "_"s + before_label + "_side0"s);
-    data_before_side1->rename(tag + "_"s + before_label + "_side1"s);
-
     data_before->save();
-    data_before_side0->save();
-    data_before_side1->save();
 
     std::vector<double> data_before_elements((*data_before)[0]->GetNbinsX());
     (*data_before)[0]->Scale(1/(*data_before)[0]->Integral());
 
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
-        // std::cout << data_before_elements[i] << " ";
+        std::cout << (*data_before)[0]->GetBinError(i+1);
     }
 
-    // std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;
     
     auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &data_before_elements[0]);
     
     /* DATA AFTER UNFOLDING */
     auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
-    auto data_after_side0 = new history<TH1F>("unfolded_side0", "", null<TH1F>, (int64_t) after_file.size());
-    auto data_after_side1 = new history<TH1F>("unfolded_side1", "", null<TH1F>, (int64_t) after_file.size());
 
     std::vector<int64_t> choice(sum->size(), 1);
 
@@ -324,41 +305,24 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             }
         }
 
-        choice[i] = 30;
         std::cout << choice[i] << std::endl;
     }
 
     for (size_t j = 0; j < after_file.size(); ++j) {
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
-
         auto HUnfoldedBayes = (TH1F*) fafter[j]->Get(unfold_name.data());
-        auto MUnfolded = (TMatrixT<double>*) fafter[j]->Get(matrix_name.data());
-
         (*data_after)[j] = HUnfoldedBayes;
-        (*data_after_side0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-        (*data_after_side1)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
     }
 
-    normalise_to_unity(data_after_side0, data_after_side1);
-
     data_after->rename(tag + "_"s + before_label + "_unfolded"s);
-    data_after_side0->rename(tag + "_"s + before_label + "_unfolded_side0"s);
-    data_after_side1->rename(tag + "_"s + before_label + "_unfolded_side1"s);
-
     data_after->save();
-    data_after_side0->save();
-    data_after_side1->save();
 
     std::vector<double> data_after_elements((*data_after)[0]->GetNbinsX());
     (*data_after)[0]->Scale(1/(*data_after)[0]->Integral());
 
     for (int i = 0; i < (*data_after)[0]->GetNbinsX(); ++i) {
         data_after_elements[i] = (*data_after)[0]->GetBinContent(i+1);
-        // std::cout << data_after_elements[i] << " ";
     }
-
-    // std::cout << std::endl << std::endl;
 
     auto data_after_vector = new TMatrixT<double>(1, (*data_after)[0]->GetNbinsX(), &data_after_elements[0]);
     
