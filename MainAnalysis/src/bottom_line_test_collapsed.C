@@ -196,7 +196,7 @@ TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
 }
 
 
-int bottom_line_test(char const* config, char const* selections, char const* output) {
+int bottom_line_test(char const* config, char const* selections, char const* output, int iterations) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
@@ -306,6 +306,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 break;
             }
         }
+
+        choice[i] = iterations;
     }
 
     auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) after_file.size());
@@ -520,9 +522,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
-        return bottom_line_test(argv[1], argv[2], argv[3]);
+    if (argc == 5)
+        return bottom_line_test(argv[1], argv[2], argv[3], std::stoi(argv[4]));
 
-    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections] [output] [iterations]\n", argv[0]);
     return 1;
 }
