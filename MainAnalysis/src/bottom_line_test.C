@@ -27,7 +27,6 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
-
 TH1F *forward_fold(TH1 *HGen, TH2D *HResponse)
 {
    if(HGen == nullptr || HResponse == nullptr)
@@ -125,7 +124,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
-        std::cout << (*data_before)[0]->GetBinError(i+1);
+        std::cout << (*data_before)[0]->GetBinError(i+1) * (*data_before)[0]->GetBinError(i+1)  << " ";
     }
 
     std::cout << std::endl << std::endl;
