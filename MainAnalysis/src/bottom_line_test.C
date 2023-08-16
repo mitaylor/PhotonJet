@@ -293,7 +293,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (int i = 0; i < (*data_before)[0]->GetNbinsX(); ++i) {
         data_before_elements[i] = (*data_before)[0]->GetBinContent(i+1);
+        std::cout << data_before_elements[i] << " ";
     }
+
+    std::cout << std::endl << std::endl;
     
     auto data_before_vector = new TMatrixT<double>(1, (*data_before)[0]->GetNbinsX(), &data_before_elements[0]);
     
@@ -312,8 +315,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             if (top == 0) { continue; }
 
-            std::cout << top << " ";
-
             if (top < min) {
                 min = top;
                 choice[i] = j;
@@ -322,8 +323,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 break;
             }
         }
-
-        std::cout << std::endl << choice[i] << std::endl;
     }
 
     for (size_t j = 0; j < after_file.size(); ++j) {
@@ -353,7 +352,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (int i = 0; i < (*data_after)[0]->GetNbinsX(); ++i) {
         data_after_elements[i] = (*data_after)[0]->GetBinContent(i+1);
+        std::cout << data_after_elements[i] << " ";
     }
+
+    std::cout << std::endl << std::endl;
 
     auto data_after_vector = new TMatrixT<double>(1, (*data_after)[0]->GetNbinsX(), &data_after_elements[0]);
     
@@ -388,7 +390,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (int i = 0; i < (*theory_gen)[0]->GetNbinsX(); ++i) {
         theory_gen_elements[i] = (*theory_gen)[0]->GetBinContent(i+1);
+        std::cout << theory_gen_elements[i] << " ";
     }
+
+    std::cout << std::endl << std::endl;
 
     auto theory_gen_vector = new TMatrixT<double>(1, (*theory_gen)[0]->GetNbinsX(), &theory_gen_elements[0]);
     
@@ -400,7 +405,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (int i = 0; i < theory_smear->GetNbinsX(); ++i) {
         theory_smear_elements[i] = theory_smear->GetBinContent(i+1);
+        std::cout << theory_smear_elements[i] << " ";
     }
+
+    std::cout << std::endl << std::endl;
 
     auto theory_smear_vector = new TMatrixT<double>(1, theory_smear->GetNbinsX(), &theory_smear_elements[0]);
     
