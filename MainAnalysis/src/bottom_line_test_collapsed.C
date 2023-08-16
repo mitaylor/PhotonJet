@@ -459,8 +459,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_smear)[i] = forward_fold((*theory_gen)[i], (*matrix)[i]);
     }
 
-    theory_smear->apply([](TH1* h) { h->Scale(1. / h->Integral()); });
-
     auto theory_smear_fold0 = new history<TH1F>(tag + "_"s + theory_label + "_fold0"s, "", null<TH1F>, theory_smear->shape());
     auto theory_smear_fold1 = new history<TH1F>(tag + "_"s + theory_label + "_fold1"s, "", null<TH1F>, theory_smear->shape());
 
