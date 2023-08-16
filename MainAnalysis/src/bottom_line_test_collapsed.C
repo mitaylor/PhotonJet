@@ -441,7 +441,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                     }
                 }
 
-                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum / width_factor;
+                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum;
             }
         }
 
