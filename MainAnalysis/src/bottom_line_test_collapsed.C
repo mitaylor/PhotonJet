@@ -431,7 +431,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                         int index_row = m * idrg->size() + j;
                         int index_col = n * idrg->size() + k;
 
-                        sum += (*covariance_after_matrix_full)(index_row, index_col);
+                        sum += (*covariance_after_matrix_full)(index_row, index_col)*2;
                     }
                 }
 
@@ -463,7 +463,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                         int index_row = j * idrg->size() + m;
                         int index_col = k * idrg->size() + n;
 
-                        sum += (*covariance_after_matrix_full)(index_row, index_col);
+                        sum += (*covariance_after_matrix_full)(index_row, index_col)*2;
                     }
                 }
 
