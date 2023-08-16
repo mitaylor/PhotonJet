@@ -158,9 +158,11 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
 
 TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
 {
-   if(HGen == nullptr || HResponse == nullptr)
+   if(HGen == nullptr || HResponse == nullptr) {
+      std::cout << "nullptr forward fold" << std::endl;
       return nullptr;
-
+   }
+   
    static int Count = 0;
    Count = Count + 1;
 
