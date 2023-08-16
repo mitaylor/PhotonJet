@@ -324,8 +324,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             }
         }
 
+        choice[i] = 100;
         std::cout << choice[i] << std::endl;
-        choice[i] += 1;
     }
 
     for (size_t j = 0; j < after_file.size(); ++j) {
