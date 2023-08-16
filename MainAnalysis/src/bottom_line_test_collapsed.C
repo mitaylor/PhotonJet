@@ -527,6 +527,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     }
 
     theory_smear->apply([](TH1* h) { h->Scale(1. / h->Integral()); });
+    theory_smear->apply([](TH1* h) { 
+        for (int i = 0; i < h->GetNbinsX(); ++i) {
+            h->SetBinError(i + 1, 0);
+        }
+    });
 
     auto theory_smear_fold0 = new history<TH1F>(tag + "_"s + theory_label + "_fold0"s, "", null<TH1F>, theory_smear->shape());
     auto theory_smear_fold1 = new history<TH1F>(tag + "_"s + theory_label + "_fold1"s, "", null<TH1F>, theory_smear->shape());
