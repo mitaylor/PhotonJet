@@ -151,8 +151,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         }
 
         choice[i] = iteration;
-
-        std::cout << choice[i] << std::endl;
     }
 
     for (size_t j = 0; j < after_file.size(); ++j) {
@@ -247,7 +245,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto step2_smear = new TMatrixT<double>(1, 1);
     step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
 
-    std::cout << (*step2_smear)(0,0) << std::endl;
+    std::cout << "smeared: " << (*step2_smear)(0,0) << std::endl;
 
     /* CHI SQUARE IN UNFOLDED SPACE */
     auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen)[index]->GetNbinsX());
@@ -270,7 +268,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto step2_unfolded = new TMatrixT<double>(1, 1);
     step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
 
-    std::cout << (*step2_unfolded)(0,0) << std::endl;
+    std::cout << "unfolded: " << (*step2_unfolded)(0,0) << std::endl;
 
     fout->Close();
 
