@@ -147,8 +147,12 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
             }
         }
 
+        std::cout << "error: " << error << std::endl;
+
         hfold->SetBinError(i + 1, std::sqrt(error));
     }
+
+    std::cout << std::endl;
 
     delete [] list;
 
@@ -326,7 +330,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         (*data_after)[j] = HUnfoldedBayes;
         (*data_after)[j]->Scale(1. / (*data_after)[j]->Integral());
-
+        std::cout << " zero" << std::endl << std::endl;
         (*data_after_fold0)[j] = fold_mat((*data_after)[j], MUnfolded, mg, 0, osg);
         (*data_after_fold1)[j] = fold_mat((*data_after)[j], MUnfolded, mg, 1, osg);
     }
