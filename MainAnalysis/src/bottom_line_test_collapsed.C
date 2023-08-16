@@ -101,8 +101,6 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     delete [] list;
     delete cov;
 
-    hfold->Scale(1., "width");
-
     return hfold;
 }
 
@@ -157,8 +155,6 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
     }
 
     delete [] list;
-
-    hfold->Scale(1., "width");
 
     return hfold;
 }
@@ -445,8 +441,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                     }
                 }
 
-                double width_factor = (rdrg[j + 1] - rdrg[j]) * (rdrg[k + 1] - rdrg[k]);
-                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum / width_factor / width_factor;
+                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum / width_factor;
             }
         }
 
@@ -477,10 +472,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                         sum += (*covariance_after_matrix_full)(index_row, index_col);
                     }
                 }
-                
-                double width_factor = (rptg[j + 1] - rptg[j]) * (rptg[k + 1] - rptg[k]);
 
-                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum / width_factor / width_factor;
+                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum;
             }
         }
 
