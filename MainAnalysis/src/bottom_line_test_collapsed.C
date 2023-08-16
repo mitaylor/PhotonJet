@@ -23,6 +23,12 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename... T>
+void normalise_to_unity(T*&... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1. / obj->Integral("width")); }), 0)... };
+}
+
 template <typename T>
 T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
@@ -95,6 +101,8 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     delete [] list;
     delete cov;
 
+    hfold->Scale(1., "width");
+
     return hfold;
 }
 
@@ -149,6 +157,8 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
     }
 
     delete [] list;
+
+    hfold->Scale(1., "width");
 
     return hfold;
 }
@@ -431,11 +441,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                         int index_row = m * idrg->size() + j;
                         int index_col = n * idrg->size() + k;
 
-                        sum += (*covariance_after_matrix_full)(index_row, index_col)*2;
+                        sum += (*covariance_after_matrix_full)(index_row, index_col);
                     }
                 }
 
-                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum;
+                double width_factor = (drg_range[j + 1] - drg_range[j]) * (drg_range[k + 1] - drg_range[k])
+                covariance_after_elements[j * (*data_after_fold0)[i]->GetNbinsX() + k] = sum / width_factor;
             }
         }
 
@@ -463,11 +474,13 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                         int index_row = j * idrg->size() + m;
                         int index_col = k * idrg->size() + n;
 
-                        sum += (*covariance_after_matrix_full)(index_row, index_col)*2;
+                        sum += (*covariance_after_matrix_full)(index_row, index_col);
                     }
                 }
+                
+                double width_factor = (ptg_range[j + 1] - ptg_range[j]) * (ptg_range[k + 1] - ptg_range[k])
 
-                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum;
+                covariance_after_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum / width_factor;
             }
         }
 
