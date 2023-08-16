@@ -569,42 +569,77 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         theory_smear_vector_fold1[i] = new TMatrixT<double>(1, (*theory_smear_fold1)[i]->GetNbinsX(), &theory_smear_elements[0]);
     }
     
-    /* CHI SQUARE IN SMEARED SPACE */
+    /* CHI SQUARE CALCULATIONS */
     for (size_t i = 0; i < after_file.size(); ++ i) {
         std::cout << "centrality " << i << std::endl;
 
-        auto smear_diff_vector = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
-        smear_diff_vector->Minus(*data_before_vector_fold0[i], *theory_smear_vector_fold0[i]);
+        /* CHI SQUARE IN SMEARED SPACE */
+
+        // fold0
+        auto smear_diff_vector_fold0 = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
+        smear_diff_vector_fold0->Minus(*data_before_vector_fold0[i], *theory_smear_vector_fold0[i]);
         
-        auto smear_diff_vector_T = new TMatrixT<double>((*theory_smear_fold0)[i]->GetNbinsX(), 1);
-        smear_diff_vector_T->Transpose(*smear_diff_vector);
+        auto smear_diff_vector_fold0_T = new TMatrixT<double>((*theory_smear_fold0)[i]->GetNbinsX(), 1);
+        smear_diff_vector_fold0_T->Transpose(*smear_diff_vector_fold0);
 
-        auto covariance_before_matrix_I = covariance_before_matrix_fold0[i]->Invert();
+        auto covariance_before_matrix_fold0_I = covariance_before_matrix_fold0[i]->Invert();
 
-        auto step1_smear = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
-        step1_smear->Mult(*smear_diff_vector, covariance_before_matrix_I);
+        auto step1_smear_fold0 = new TMatrixT<double>(1, (*theory_smear_fold0)[i]->GetNbinsX());
+        step1_smear_fold0->Mult(*smear_diff_vector_fold0, covariance_before_matrix_fold0_I);
 
-        auto step2_smear = new TMatrixT<double>(1, 1);
-        step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
+        auto step2_smear_fold0 = new TMatrixT<double>(1, 1);
+        step2_smear_fold0->Mult(*step1_smear_fold0, *smear_diff_vector_fold0_T);
 
-        std::cout << "smeared: " << (*step2_smear)(0,0) << std::endl;
+        // fold1
+        auto smear_diff_vector_fold1 = new TMatrixT<double>(1, (*theory_smear_fold1)[i]->GetNbinsX());
+        smear_diff_vector_fold1->Minus(*data_before_vector_fold1[i], *theory_smear_vector_fold1[i]);
+        
+        auto smear_diff_vector_fold1_T = new TMatrixT<double>((*theory_smear_fold1)[i]->GetNbinsX(), 1);
+        smear_diff_vector_fold1_T->Transpose(*smear_diff_vector_fold1);
+
+        auto covariance_before_matrix_fold1_I = covariance_before_matrix_fold1[i]->Invert();
+
+        auto step1_smear_fold1 = new TMatrixT<double>(1, (*theory_smear_fold1)[i]->GetNbinsX());
+        step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_before_matrix_fold1_I);
+
+        auto step2_smear_fold1 = new TMatrixT<double>(1, 1);
+        step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
+
+        std::cout << "smeared: " << (*step2_smear_fold0)(0,0) + (*step2_smear_fold1)(0,0) << std::endl;
 
         /* CHI SQUARE IN UNFOLDED SPACE */
-        auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX());
-        unfolded_diff_vector->Minus(*data_after_vector_fold0[i], *theory_gen_vector_fold0[i]);
+
+        // fold0
+        auto unfolded_diff_vector_fold0 = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX());
+        unfolded_diff_vector_fold0->Minus(*data_after_vector_fold0[i], *theory_gen_vector_fold0[i]);
         
-        auto unfolded_diff_vector_T = new TMatrixT<double>((*theory_gen_fold0)[i]->GetNbinsX(), 1);
-        unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
+        auto unfolded_diff_vector_fold0_T = new TMatrixT<double>((*theory_gen_fold0)[i]->GetNbinsX(), 1);
+        unfolded_diff_vector_fold0_T->Transpose(*unfolded_diff_vector_fold0);
         
-        auto covariance_after_matrix_I = covariance_after_matrix_fold0[i]->Invert();
+        auto covariance_after_matrix_fold0_I = covariance_after_matrix_fold0[i]->Invert();
 
-        auto step1_unfolded = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX());
-        step1_unfolded->Mult(*unfolded_diff_vector, covariance_after_matrix_I);
+        auto step1_unfolded_fold0 = new TMatrixT<double>(1, (*theory_gen_fold0)[i]->GetNbinsX());
+        step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_after_matrix_fold0_I);
 
-        auto step2_unfolded = new TMatrixT<double>(1, 1);
-        step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
+        auto step2_unfolded_fold0 = new TMatrixT<double>(1, 1);
+        step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
 
-        std::cout << "unfolded: " << (*step2_unfolded)(0,0) << std::endl << std::endl;
+        // fold1
+        auto unfolded_diff_vector_fold1 = new TMatrixT<double>(1, (*theory_gen_fold1)[i]->GetNbinsX());
+        unfolded_diff_vector_fold1->Minus(*data_after_vector_fold1[i], *theory_gen_vector_fold1[i]);
+        
+        auto unfolded_diff_vector_fold1_T = new TMatrixT<double>((*theory_gen_fold1)[i]->GetNbinsX(), 1);
+        unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
+        
+        auto covariance_after_matrix_fold1_I = covariance_after_matrix_fold1[i]->Invert();
+
+        auto step1_unfolded_fold1 = new TMatrixT<double>(1, (*theory_gen_fold1)[i]->GetNbinsX());
+        step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_after_matrix_fold1_I);
+
+        auto step2_unfolded_fold1 = new TMatrixT<double>(1, 1);
+        step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
+
+        std::cout << "unfolded: " << (*step2_unfolded_fold0)(0,0) + (*step2_unfolded_fold1)(0,0) << std::endl << std::endl;
     }
 
     fout->Close();
