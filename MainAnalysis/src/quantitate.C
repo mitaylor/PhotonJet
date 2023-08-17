@@ -327,7 +327,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         if (top == 0) { continue; }
 
-        std::cout << top << " ";
+        // std::cout << top << " ";
 
         if (top < min) {
             min = top;
@@ -338,7 +338,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    std::cout << std::endl << choice_merge << std::endl;
+    // std::cout << std::endl << choice_merge << std::endl;
 
     /* extract chosen histograms */
     for (size_t j = 0; j < fafters.size(); ++j) {
