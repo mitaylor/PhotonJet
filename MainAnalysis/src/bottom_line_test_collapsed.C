@@ -671,7 +671,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             chi2_smear_fold1 += diff * diff / (*data_before_fold1)[i]->GetBinContent(j + 1);
         }
 
-        std::cout << "smeared: " << chi2_smear_fold0 / (*data_before_fold0)[i]->GetNbinsX() << " " << chi2_smear_fold1 / (*data_before_fold1)[i]->GetNbinsX() << std::endl;
+        std::cout << "smeared: " << chi2_smear_fold0  << " " << chi2_smear_fold1 << std::endl;
 
         /* CHI SQUARE IN UNFOLDED SPACE */
 
@@ -691,7 +691,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             chi2_unfolded_fold1 += diff * diff / (*data_after_fold1)[i]->GetBinContent(j + 1);
         }
 
-        std::cout << "unfolded: " << chi2_unfolded_fold0 / (*data_after_fold0)[i]->GetNbinsX() << " " << chi2_unfolded_fold1 / (*data_after_fold1)[i]->GetNbinsX() << std::endl;
+        std::cout << "unfolded: " << chi2_unfolded_fold0 << " " << chi2_unfolded_fold1  << std::endl;
     }
 
     fout->Close();
