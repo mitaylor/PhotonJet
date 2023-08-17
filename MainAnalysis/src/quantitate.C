@@ -179,7 +179,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto mc = conf->get<bool>("mc");
 
-
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");

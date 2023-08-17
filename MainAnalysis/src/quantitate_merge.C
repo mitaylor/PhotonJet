@@ -177,6 +177,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto regularization = conf->get<std::string>("regularization");
 
+    auto mc = conf->get<bool>("mc");
+
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -290,7 +292,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
             if (top == 0) { continue; }
 
-            std::cout << top << " ";
+            // std::cout << top << " ";
 
             if (top < min) {
                 min = top;
@@ -301,7 +303,20 @@ int quantitate(char const* config, char const* selections, char const* output) {
             }
         }
 
-        std::cout << std::endl << choice[i] << std::endl;
+        // std::cout << std::endl << choice[i] << std::endl;
+    }
+
+    if (!mc) {
+        if (tag == "pp") {
+            choice[0] = 5;
+            std::cout << choice[0] << std::endl;
+        } else {
+            choice[0] = 4;
+            choice[1] = 12;
+            choice[2] = 21;
+            choice[3] = 15;
+            std::cout << choice[3] << std::endl;
+        }
     }
 
     double min = 99999999999;
@@ -311,7 +326,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         if (top == 0) { continue; }
 
-        std::cout << top << " ";
+        // std::cout << top << " ";
 
         if (top < min) {
             min = top;
@@ -322,7 +337,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    std::cout << std::endl << choice_merge << std::endl;
+    // std::cout << std::endl << choice_merge << std::endl;
 
     /* extract chosen histograms */
     for (size_t j = 0; j < fafters.size(); ++j) {
