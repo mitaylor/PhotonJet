@@ -609,7 +609,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto step2_smear_fold1 = new TMatrixT<double>(1, 1);
         step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
 
-        std::cout << "smeared: " << (*step2_smear_fold0)(0,0) / (*data_before_fold0)[i]->GetNbinsX() << " " << (*step2_smear_fold1)(0,0) / (*data_before_fold1)[i]->GetNbinsX() << std::endl;
+        // std::cout << "smeared: " << (*step2_smear_fold0)(0,0) / (*data_before_fold0)[i]->GetNbinsX() << " " << (*step2_smear_fold1)(0,0) / (*data_before_fold1)[i]->GetNbinsX() << std::endl;
+        std::cout << "smeared: " << (*step2_smear_fold0)(0,0) << " " << (*step2_smear_fold1)(0,0) << std::endl;
 
         /* CHI SQUARE IN UNFOLDED SPACE */
 
@@ -643,7 +644,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto step2_unfolded_fold1 = new TMatrixT<double>(1, 1);
         step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
 
-        std::cout << "unfolded: " << (*step2_unfolded_fold0)(0,0) / (*data_after_fold0)[i]->GetNbinsX() << " " << (*step2_unfolded_fold1)(0,0) / (*data_after_fold1)[i]->GetNbinsX() << std::endl << std::endl;
+        // std::cout << "unfolded: " << (*step2_unfolded_fold0)(0,0) / (*data_after_fold0)[i]->GetNbinsX() << " " << (*step2_unfolded_fold1)(0,0) / (*data_after_fold1)[i]->GetNbinsX() << std::endl << std::endl;
+
+        std::cout << "unfolded: " << (*step2_unfolded_fold0)(0,0) << " " << (*step2_unfolded_fold1)(0,0) << std::endl << std::endl;
     }
 
 
