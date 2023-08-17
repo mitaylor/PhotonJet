@@ -768,6 +768,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p1->stack((*chi2_dj_unf)[i], "unfolded");
     }
 
+    std::cout << std::endl << "Iteration choice" << std::endl;
+    for (int64_t i = 0; i < sum->size(); ++i) {
+        for (int j = 0; j < (*chi2_dj_smear)[i]->GetNbinsX(); ++j) {
+            if ((*chi2_dj_unf)[i]->GetBinContent(j + 1) < (*chi2_dj_smear)[i]->GetBinContent(j + 1)) {
+                std::cout << j + 1 << " ";
+                break;
+            }
+        }
+    }
+
     auto p2 = new paper(set + "_iteration_chi_squared_pt_" + tag, hb);
 
     p2->divide(sum->size(), -1);
