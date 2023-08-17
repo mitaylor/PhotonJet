@@ -37,8 +37,6 @@ int sum_iteration(char const* config, char const* selections, char const* output
 
     auto label = conf->get<std::string>("label");
 
-    auto mc = conf->get<bool>("mc");
-
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -182,20 +180,7 @@ int sum_iteration(char const* config, char const* selections, char const* output
             }
         }
 
-        // std::cout << std::endl << choice[i] << std::endl;
-    }
-
-    if (!mc) {
-        if (tag == "pp") {
-            choice[0] = 5;
-            std::cout << choice[0] << std::endl;
-        } else {
-            choice[0] = 4;
-            choice[1] = 12;
-            choice[2] = 21;
-            choice[3] = 15;
-            std::cout << choice[3] << std::endl;
-        }
+        std::cout << std::endl << choice[i] << std::endl;
     }
 
     auto minimum = [&](int64_t index) {
