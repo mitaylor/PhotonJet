@@ -158,41 +158,41 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
 
 TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
 {
-   if(HGen == nullptr || HResponse == nullptr) {
-      return nullptr;
-   }
+    if(HGen == nullptr || HResponse == nullptr) {
+        return nullptr;
+    }
 
-   static int Count = 0;
-   Count = Count + 1;
+    static int Count = 0;
+    Count = Count + 1;
 
-   int NGen = HResponse->GetNbinsY();
-   int NReco = HResponse->GetNbinsX();
+    int NGen = HResponse->GetNbinsY();
+    int NReco = HResponse->GetNbinsX();
 
-   TH1F *HResult = new TH1F(Form("HFold%d", Count), "", NReco, 0, NReco);
+    TH1F *HResult = new TH1F(Form("HFold%d", Count), "", NReco, 0, NReco);
 
-   HResult->Sumw2();
+    HResult->Sumw2();
 
-   for(int iG = 1; iG <= NGen; iG++)
-   {
-      float N = 0;
-      for(int iR = 1; iR <= NReco; iR++)
-         N = N + HResponse->GetBinContent(iR, iG);
+    for(int iG = 1; iG <= NGen; iG++)
+    {
+        float N = 0;
+        for(int iR = 1; iR <= NReco; iR++)
+            N = N + HResponse->GetBinContent(iR, iG);
 
-      if(N == 0)
-         continue;
+        if(N == 0)
+            continue;
 
-      for(int iR = 1; iR <= NReco; iR++)
-      {
-         float T = HResponse->GetBinContent(iR, iG) / N;
-         float G = HGen->GetBinContent(iG);
+        for(int iR = 1; iR <= NReco; iR++)
+        {
+            float T = HResponse->GetBinContent(iR, iG) / N;
+            float G = HGen->GetBinContent(iG);
 
-         float V = T * G;
+            float V = T * G;
 
-         float Current = HResult->GetBinContent(iR);
-         HResult->SetBinContent(iR, Current + V);
-         HResult->SetBinError(iR, 0);
-      }
-   }
+            float Current = HResult->GetBinContent(iR);
+            HResult->SetBinContent(iR, Current + V);
+            HResult->SetBinError(iR, 0);
+        }
+    }
 
    return HResult;
 }
@@ -232,11 +232,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     auto mpthf = new multival(rpt, dhf);
 
-    // auto osr = sel->get<std::vector<int64_t>>("osr");
-    // auto osg = sel->get<std::vector<int64_t>>("osg");  
+    auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");  
 
-    std::vector<int64_t> osr {0, 0, 0, 0};
-    std::vector<int64_t> osg {0, 0, 0, 0};
+    // std::vector<int64_t> osr {0, 0, 0, 0};
+    // std::vector<int64_t> osg {0, 0, 0, 0};
 
     /* create intervals and multivals */
     auto idrr = new interval("#deltaj"s, rdrr);

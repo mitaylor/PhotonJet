@@ -103,6 +103,14 @@ int combine_populate(char const* config, char const* selections, char const* out
 
         scale_bin_width(hist, hist_mix);
 
+        hist->apply([](TH1* h) { 
+            for (int i = 0; i < h->GetNbinsX(); ++i) {
+                if (h->GetBinContent(i + 1) == 0) {
+                    h->SetBinError(i + 1, 1);
+                }
+            }
+        });
+
         hist->divide(*nevt);
         hist_mix->divide(*nevt);
 
