@@ -190,9 +190,9 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }
 
         /* calculate the total systematic error */
+        std::vector<double> sets;
+        
         for (int64_t i = 0; i < means->size(); ++i) {
-            std::vector<double> sets;
-
             for (size_t k = 0; k < inputs.size(); ++k) {
                 auto difference = (*means)[i]->GetBinContent(k + 2);
                 if (groups[k] == (int32_t) sets.size()) {
