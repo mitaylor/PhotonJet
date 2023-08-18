@@ -196,7 +196,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             l->SetTextFont(43);
             l->SetTextSize(11);
             l->DrawLatexNDC(0.14, 0.83, cms.data());
-            l->DrawLatexNDC(0.14, 0.78, system_tag.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
 
@@ -219,7 +219,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
-    cs[0]->set(paper::flags::logz);  
+    // cs[0]->set(paper::flags::logz);  
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* input folds */
