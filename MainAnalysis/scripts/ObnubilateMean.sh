@@ -5,7 +5,7 @@ set=$1
 
 run_pp() {
     tag=$1
-    ./bin/obnubilate_mean configs/obnubilate/preapproval/obnubilate_${tag}.conf \
+    ./bin/obnubilate_mean configs/obnubilate/preapproval/obnubilate_mean_${tag}.conf \
         configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/obnubilate_mean_${tag}.root
 }
 
