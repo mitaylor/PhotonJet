@@ -161,7 +161,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
         }, batches, files, labels);
 
-        auto incl = new interval(""s, inputs.size() + 1, 0.f, (float) inputs.size() + 1);
+        auto incl = new interval(""s, legends.size() + 1, 0.f, (float) legends.size() + 1);
         auto fmean = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
         auto means = new history<TH1F>("syst_mean"s + stub, "", fmean, base->size());
@@ -190,9 +190,9 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }
 
         /* calculate the total systematic error */
-        std::vector<double> sets;
-        
         for (int64_t i = 0; i < means->size(); ++i) {
+            std::vector<double> sets;
+
             for (size_t k = 0; k < inputs.size(); ++k) {
                 auto difference = (*means)[i]->GetBinContent(k + 2);
                 if (groups[k] == (int32_t) sets.size()) {
@@ -221,12 +221,12 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         std::cout << std::endl;
 
         /* set bin labels */
-        for (int64_t i = 0; i < sets->size(); ++i) {
+        for (int64_t i = 0; i < means->size(); ++i) {
             for (size_t k = 0; k < inputs.size(); ++k) {
-                (*sets)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
+                (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
             }
-            (*sets)[i]->GetXaxis()->SetBinLabel(1, "total");
-            (*sets)[i]->GetXaxis()->SetTicks("-");
+            (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
+            (*means)[i]->GetXaxis()->SetTicks("-");
         }
 
         /* add plots */
