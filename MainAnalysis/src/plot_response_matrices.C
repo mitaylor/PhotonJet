@@ -202,8 +202,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.135, 0.85, cms.data());
-            l->DrawLatexNDC(0.135, 0.79, system_tag.data());
+            l->DrawLatexNDC(0.135, 0.83, cms.data());
+            l->DrawLatexNDC(0.135, 0.78, system_tag.data());
         }
     };
 
