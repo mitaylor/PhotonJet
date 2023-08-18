@@ -31,10 +31,10 @@ using namespace std::placeholders;
 
 static auto const data = TColor::GetColor("#5c5c5c");
 static int const colors[8] = {
-    TColor::GetColor("#ffc9ed"), 
-    TColor::GetColor("#b77ea3"), 
-    TColor::GetColor("#f7d027"), 
-    TColor::GetColor("#e48f1b"), 
+    TColor::GetColor("#003f5c"), 
+    TColor::GetColor("#58508d"), 
+    TColor::GetColor("#bc5090"), 
+    TColor::GetColor("#ff6361"),
     TColor::GetColor("#9cf168"),
     TColor::GetColor("#6ba547"),
     TColor::GetColor("#60ceed"),
@@ -163,7 +163,7 @@ int theory(char const* config, char const* selections, char const* output) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.84, 0.04, h, hf_info); };
+        stack_text(index, 0.73, 0.04, h, hf_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -174,30 +174,32 @@ int theory(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.55, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.49, jet_selections.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.86, 0.65, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.60, jet_selections.data());
         }
     };
 
-    auto luminosity = [&](int64_t index) {
+    auto blurb = [&](int64_t index) {
         if (index > 0) {
-            auto values = heavyion ? "PbPb 1.69 nb^{-1}"s : "pp 302 pb^{-1}"s;
+            auto system_tag = heavyion ? "PbPb 1.69 nb^{-1}"s : "pp 302 pb^{-1}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #sqrt{s_{NN}} = 5.02 TeV"s;
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.40, values.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
 
     /* prepare papers */
     auto p = new paper(set + "_theory_comparison_" + type + "_" + tag, hb);
-    apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
+    apply_style(p, ""s, ""s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
     p->accessory(kinematics);
-    p->accessory(luminosity);
+    p->accessory(blurb);
     p->jewellery(box);
     if (heavyion) p->accessory(std::bind(aa_hf_info, _1, hist)); 
     p->divide(-1, 1);
