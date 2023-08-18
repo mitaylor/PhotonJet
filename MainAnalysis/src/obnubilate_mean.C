@@ -130,11 +130,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
+            l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.13, 0.78, photon_selections.data());
-            l->DrawLatexNDC(0.13, 0.72, jet_selections.data());
+            l->DrawLatexNDC(0.86, 0.70, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.65, jet_selections.data());
         }
     };
 
