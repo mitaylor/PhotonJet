@@ -17,6 +17,7 @@
 #include "TFile.h"
 #include "TH1.h"
 #include "TLatex.h"
+#include "TColor.h"
 
 #include <functional>
 #include <string>
@@ -44,8 +45,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto legends = conf->get<std::vector<std::string>>("legends");
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto columns = conf->get<std::vector<int32_t>>("columns");
-    auto ranges = conf->get<std::vector<float>>("ranges");
     auto groups = conf->get<std::vector<int32_t>>("groups");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -58,8 +57,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto heavyion = sel->get<bool>("heavyion");
-
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
@@ -69,8 +66,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
-
-    std::vector<int32_t> drange = { dcent.front(), dcent.back() };
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -86,19 +81,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     /* prepare plots */
     auto hb = new pencil();
-    hb->category("type", "total", legend_keys);
-
-    zip([&](auto const& label, auto const& legend) {
-        hb->alias(label, legend); }, legend_keys, legends);
 
     /* lambdas */
-    std::function<void(TH1*)> square_ = [](TH1* h) {
-        for_contents([](std::array<double, 1> v) {
-            return v[0] * v[0]; }, h); };
-    std::function<void(TH1*)> sqrt_ = [](TH1* h) {
-        for_contents([](std::array<double, 1> v) {
-            return std::sqrt(v[0]); }, h); };
-
     auto shader = [&](TH1* h, float max) {
         default_formatter(h, 0., max);
         auto col = h->GetLineColor();
@@ -106,11 +90,40 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         h->SetLineWidth(1);
     };
 
-    auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+    std::vector<int32_t> const colours = {
+        TColor::GetColor("#515151"),
+        TColor::GetColor("#FF484E"),
+        TColor::GetColor("#FF9E48"),
+        TColor::GetColor("#FFFA48"),
+        TColor::GetColor("#A9FF48"),
+        TColor::GetColor("#48FF9E"),
+        TColor::GetColor("#48FFFA"),
+        TColor::GetColor("#48A9FF"),
+        TColor::GetColor("#484EFF"),
+        TColor::GetColor("#9E48FF"),
+        TColor::GetColor("#F948FF"),
+        TColor::GetColor("#FF484E"),
+        TColor::GetColor("#FF9E48"),
+        TColor::GetColor("#FFFA48"),
+        TColor::GetColor("#A9FF48"),
+        TColor::GetColor("#9E48FF"),
+        TColor::GetColor("#F948FF")
+    };
 
-    auto range_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", drange, true); };
+    auto box = [&](TH1* h, int64_t) {
+        for (int64_t i = 0; i < h->GetNbinsX(); ++i) {
+            TBox *b = new TBox(h->GetBinLowEdge(i + 1),
+                                0,
+                                h->GetBinWidth(i + 1) + h->GetBinLowEdge(i + 1),
+                                h->GetBinContent(i + 1));
+            b->SetFillColorAlpha(colours[i], 0.5);
+            b->SetLineColor(colours[i]);
+            b->Draw("l");
+        }
+    };
+
+    auto hf_info = [&](int64_t index) {
+        info_text(index, 0.85, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -119,11 +132,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.41, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.36, jet_selections.data());
+            l->DrawLatexNDC(0.135, 0.78, photon_selections.data());
+            l->DrawLatexNDC(0.135, 0.72, jet_selections.data());
         }
     };
 
@@ -136,156 +149,106 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     /* calculate variations */
-    zip([&](auto const& figure, auto cols, auto range) {
+    zip([&](auto const& figure) {
         auto stub = "_"s + figure;
 
-        auto c1 = new paper(set + "_" + tag + "_var"s + stub, hb);
-        apply_style(c1, cms, system_tag, std::bind(shader, _1, range));
-        c1->divide(cols, -1);
-
-        auto c2 = new paper(set + "_" + tag + "_var_unfolding"s + stub, hb);
-        apply_style(c2, cms, system_tag, std::bind(shader, _1, range));
-        c2->divide(cols, -1);
+        auto c1 = new paper(set + "_" + tag + "_mean_var"s + stub, hb);
+        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.003));
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
-        title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), base);
-
-        std::vector<history<TH1F>*> sets;
-
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
         zip([&](auto& batch, auto file, auto const& label) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
-            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), batch);
         }, batches, files, labels);
 
-        auto total = new history<TH1F>(*base, "total");
-        title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), total);
-        total->apply([](TH1* h) { h->Reset("MICES"); });
+        auto incl = new interval(""s, inputs.size() + 1, 0.f, (float) inputs.size() + 1);
+        auto fmean = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
-        for (auto const& batch : batches) {
-            batch->add(*base, -1);
+        auto means = new history<TH1F>("syst_mean"s + stub, "", fmean, base->size());
+        auto base_mean = new history<TH1F>("base_mean"s + stub, "", fmean, base->size());
 
-            for (int64_t i = 0; i < batch->size(); ++i) {
-                std::vector<float> differences;
-
-                for (int64_t j = 0; j <= (*batch)[i]->GetNbinsX(); ++j) {
-                    differences.push_back(std::abs((*batch)[i]->GetBinContent(j + 1)));
-                }
-
-                float min = 10000;
-                float max = 0;
-                for (auto difference : differences) {
-                    if (difference < min) { min = difference; }
-                    if (difference > max) { max = difference; }
-                }
-
-                printf("%.2f-%.2f ", min, max);
-            }
-            std::cout << std::endl;
-
-            batch->apply(square_);
-
-            /* apply smoothing */
-            for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 1; j <= 6; ++j) {
-                // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
-                    if (j == 1) {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    }
-                    else if (j == (*batch)[i]->GetNbinsX()) {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    } 
-                    else {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1) + (*batch)[i]->GetBinContent(j + 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    }
-                }
+        for (int64_t i = 0; i < base->size(); ++i) {
+            for (int64_t j = 0; j < (*base_mean)[i]->GetNbinsX(); ++j) {
+                (*base_mean)[i]->SetBinContent(j + 1, (*base)[i]->GetMean());
+                (*base_mean)[i]->SetBinError(j + 1, (*base)[i]->GetMeanError());
             }
         }
 
-        zip([&](auto const& batch, auto group) {
-            if (group == static_cast<int32_t>(sets.size())) {
-                sets.push_back(new history<TH1F>(*batch, "set"));
-            } else {
-                sets[group]->apply([&](TH1* h, int64_t i) {
-                    for_contents([](std::array<double, 2> v) -> float {
-                        return std::max(v[0], v[1]);
-                    }, h, (*batch)[i]); });
+        /* calculate the mean deviation for each systematic */
+        for (size_t k = 0; k < inputs.size(); ++k) {
+            title(std::bind(rename_axis, _1, "<#deltaj>"), means);
+
+            for (int64_t i = 0; i < means->size(); ++i) {
+                float difference = (*(batches[k]))[i]->GetMean() - (*base_mean)[i]->GetBinContent(k + 2);
+
+                (*means)[i]->SetBinContent(k + 2, difference * difference);
+                (*means)[i]->SetBinError(k + 2, 0);
+
+                printf("%.5f ", difference);
+            }
+            std::cout << std::endl;
+        }
+
+        /* calculate the total systematic error */
+        for (int64_t i = 0; i < means->size(); ++i) {
+            std::vector<double> sets;
+
+            for (size_t k = 0; k < inputs.size(); ++k) {
+                auto difference = (*means)[i]->GetBinContent(k + 2);
+                if (groups[k] == (int32_t) sets.size()) {
+                    sets.push_back(difference);
+                } else {
+                    sets[groups[k]] = std::max(sets[groups[k]], difference);
+                }
+
+                (*means)[i]->SetBinContent(k + 2, std::sqrt(difference));
             }
 
-            batch->apply(sqrt_);
-        }, batches, groups);
-
-        for (auto const& set : sets)
-            total->add(*set, 1);
-
-        total->apply(sqrt_);
-
-        for (int64_t i = 0; i < total->size(); ++i) {
-            std::vector<float> differences;
-
-            for (int64_t j = 0; j <= (*total)[i]->GetNbinsX(); ++j) {
-                differences.push_back(std::abs((*total)[i]->GetBinContent(j + 1)));
+            float total = 0;
+            for (auto set : sets) {
+                total += set;
             }
 
-            float min = 10000;
-            float max = 0;
-            for (auto difference : differences) {
-                if (difference < min) { min = difference; }
-                if (difference > max) { max = difference; }
-            }
+            (*means)[i]->SetBinContent(1, std::sqrt(total));
+            (*means)[i]->SetFillColorAlpha(1, 0);
+        }
 
-            printf("%.2f-%.2f ", min, max);
+        std::cout << std::endl;
+        for (int64_t i = 0; i < means->size(); ++i) {
+            float difference = (*means)[i]->GetBinContent(1);
+                printf("%.5f ", difference);
         }
         std::cout << std::endl;
 
-        /* add plots */
-        auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
-        auto style2 = [&](TH1* h) { c2->adjust(h, "hist", "f"); };
+        /* set bin labels */
+        for (int64_t i = 0; i < means->size(); ++i) {
+            for (size_t k = 0; k < inputs.size(); ++k) {
+                (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
+            }
+            (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
+            (*means)[i]->GetXaxis()->SetTicks("-");
+        }
 
-        total->apply([&](TH1* h) { 
-            c1->add(h, "total"); style1(h); 
-            c2->add(h, "total"); style2(h); 
+        /* add plots */
+        // auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
+
+        means->apply([&](TH1* h) { 
+            c1->add(h); // style1(h); 
         });
 
-        zip([&](auto& batch, auto const& label, auto const& plot) {
-            if (plot == 1) {
-                batch->apply([&](TH1* h, int64_t index) {
-                    c1->stack(index + 1, h, label); style1(h);
-                });
-            }
-            else {
-                batch->apply([&](TH1* h, int64_t index) {
-                    c2->stack(index + 1, h, label); style2(h);
-                });
-            }
-
-            batch->save(tag);
-        }, batches, legend_keys, plots);
-
         /* add info text */
-        if (heavyion && total->size() == 4) { c1->accessory(hf_info); }
-        else if (heavyion) { c1->accessory(range_info); }
+        c1->accessory(hf_info); 
         c1->accessory(kinematics);
-
-        if (heavyion && total->size() == 4) { c2->accessory(hf_info); }
-        else if (heavyion) { c2->accessory(range_info); }
-        c2->accessory(kinematics);
+        c1->jewellery(box);
 
         /* save histograms */
-        for (auto const& set : sets)
-            set->save(tag);
-
-        base->save(tag);
-        total->save(tag);
+        base_mean->save(tag);
+        means->save(tag);
 
         hb->sketch();
 
         c1->draw("pdf");
-        c2->draw("pdf");
-    }, figures, columns, ranges);
+    }, figures);
 
     fout->Close();
 
