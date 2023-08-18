@@ -217,6 +217,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
 
+        (*matrices)[i]->GetZaxis()->SetTitle("counts");
+
         /* figures */
         cs[0]->add((*matrices)[i]);
         cs[0]->adjust((*matrices)[i], "colz", "");
