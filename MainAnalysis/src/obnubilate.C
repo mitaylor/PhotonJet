@@ -102,8 +102,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto shader = [&](TH1* h, float max) {
         default_formatter(h, 0., max);
         // auto col = h->GetLineColor();
-        // h->SetFillColorAlpha(col, 0.32);
-        h->SetLineWidth(1);
+        // h->SetFillColorAlpha(col, 0.32); 
     };
 
     // auto hf_info = [&](int64_t index) {
