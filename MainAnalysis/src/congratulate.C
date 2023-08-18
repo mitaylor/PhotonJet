@@ -107,10 +107,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.3, 0.04, h, hf_info); };
+        stack_text(index, 0.73, 0.04, h, hf_info); };
 
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.3, 0.04, h, range_info); };
+        stack_text(index, 0.73, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -130,8 +130,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto blurb = [&](int64_t index) {
         if (index > 0) {
             auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
-            auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
-            auto cms = "#bf{#scale[1.4]{CMS}}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #sqrt{s_{NN}} = 5.02 TeV"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
@@ -139,7 +138,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextSize(11);
             l->DrawLatexNDC(0.14, 0.83, cms.data());
             l->DrawLatexNDC(0.14, 0.77, system_tag.data());
-            l->DrawLatexNDC(0.14, 0.73, energy.data());
         }
     };
 
@@ -147,7 +145,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (index > 0) {
             auto system_tag = "pp 302 pb^{-1}"s;
             auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
-            auto cms = "#bf{#scale[1.4]{CMS}}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #sqrt{s_{NN}} = 5.02 TeV"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
@@ -155,7 +153,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextSize(11);
             l->DrawLatexNDC(0.14, 0.83, cms.data());
             l->DrawLatexNDC(0.14, 0.77, system_tag.data());
-            l->DrawLatexNDC(0.14, 0.73, energy.data());
         }
     };
 
@@ -163,7 +160,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (index > 0) {
             auto system_tag = "PbPb 1.69 nb^{-1}"s;
             auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
-            auto cms = "#bf{#scale[1.4]{CMS}}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #sqrt{s_{NN}} = 5.02 TeV"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
@@ -171,7 +168,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextSize(11);
             l->DrawLatexNDC(0.14, 0.83, cms.data());
             l->DrawLatexNDC(0.14, 0.77, system_tag.data());
-            l->DrawLatexNDC(0.14, 0.73, energy.data());
         }
     };
 
