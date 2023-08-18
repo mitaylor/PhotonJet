@@ -185,7 +185,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         }
     };
 
-    auto kinematics = [&](int64_t index) {
+    auto blurb = [&](int64_t index) {
         if (index > 0) {
             std::string system_tag = "#sqrt{s_{NN}} = 5.02 TeV"s;
             system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
@@ -211,6 +211,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         apply_style(c, "", "");
         if (heavyion) c->accessory(hf_info);
         c->accessory(kinematics);
+        c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "fold0"s, "fold1"s });
