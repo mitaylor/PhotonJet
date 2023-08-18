@@ -93,15 +93,15 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.86, 0.70, photon_selections.data());
-            l->DrawLatexNDC(0.86, 0.65, jet_selections.data());
+            l->DrawLatexNDC(0.86, 0.65, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.60, jet_selections.data());
         }
     };
 
     auto blurb = [&](int64_t index) {
         if (index > 0) {
             auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}, "s;
-            system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
             auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
             TLatex* l = new TLatex();
@@ -110,6 +110,7 @@ int congratulate(char const* config, char const* selections, char const* output)
             l->SetTextSize(11);
             l->DrawLatexNDC(0.14, 0.83, cms.data());
             l->DrawLatexNDC(0.14, 0.77, system_tag.data());
+            l->DrawLatexNDC(0.14, 0.73, energy.data());
         }
     };
 
