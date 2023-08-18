@@ -129,7 +129,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto hf_info = [&](int64_t index, int64_t cent) {
         if (index > 0) {
-            auto text = "Cent. "s + dcent[cent + 1] + " - " + dcent[cent] + "%";
+            std::string text = "Cent. "s + dcent[cent + 1] + " - " + dcent[cent] + "%";
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
@@ -143,7 +143,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto range_info = [&](int64_t index) {
         if (index > 0) {
-            auto text = "Cent. "s + drange[1] + " - " + drange[0] + "%";
+            std::string text = "Cent. "s + drange[1] + " - " + drange[0] + "%";
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
@@ -174,8 +174,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             apply_style(cs[i], "", "", std::bind(shader, _1, range));
             cs[i]->divide(2, -1);
 
-            if (heavyion && cols*cols == 4) { c2->accessory(std::bind(hf_info, _0, i)); }
-            else if (heavyion) { c2->accessory(range_info); }
+            if (heavyion && cols*cols == 4) { cs[i]->accessory(std::bind(hf_info, _0, i)); }
+            else if (heavyion) { cs[i]->accessory(range_info); }
 
             cs[i]->accessory(kinematics);
         }
