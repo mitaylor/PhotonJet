@@ -179,15 +179,26 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
+            l->SetTextSize(11);
             l->DrawLatexNDC(0.865, 0.21, photon_selections.data());
             l->DrawLatexNDC(0.865, 0.15, jet_selections.data());
         }
     };
 
-    std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
-    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
+    auto kinematics = [&](int64_t index) {
+        if (index > 0) {
+            std::string system_tag = "#sqrt{s_{NN}} = 5.02 TeV"s;
+            system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(42);
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.135, 0.865, cms.data());
+            l->DrawLatexNDC(0.135, 0.765, system_tag.data());
+        }
+    };
 
     /* figures */
     auto hb = new pencil();
@@ -197,7 +208,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     std::vector<paper*> cs(4, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
-        apply_style(c, cms, system_tag);
+        apply_style(c, "", "");
         if (heavyion) c->accessory(hf_info);
         c->accessory(kinematics);
         c->divide(ihf->size()/2, -1);
