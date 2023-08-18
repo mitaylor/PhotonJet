@@ -267,8 +267,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             batch->apply(sqrt_);
         }, batches, groups);
 
-        for (auto const& set : sets)
+        for (auto const& set : sets) {
             total->add(*set, 1);
+            set->apply(sqrt_);
+        }
 
         total->apply(sqrt_);
 
