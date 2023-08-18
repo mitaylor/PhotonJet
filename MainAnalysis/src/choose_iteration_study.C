@@ -253,7 +253,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* determine the number of iterations to use */
     std::vector<int64_t> choice(sum->size(), 1);
-    int64_t choice_merge = 1;
 
     for (int i = 0; i < sum->size(); ++i) {
         double min = 99999999999;
@@ -280,28 +279,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     if (choice_set.size() != 0) {
         for (size_t i = 0; i < choice_set.size(); ++i) {
             choice[i] = choice_set[i];
-        }
-    }
-    
-    if (choice_set.size() == 1) {
-        choice_merge = choice_set[0];
-    }
-
-    double min = 99999999999;
-
-    for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
-        auto top = (*sum_merge)[0]->GetBinContent(j);
-
-        if (top == 0) { continue; }
-
-        // std::cout << top << " ";
-
-        if (top < min) {
-            min = top;
-            choice_merge = j;
-        }
-        else {
-            break;
         }
     }
 
