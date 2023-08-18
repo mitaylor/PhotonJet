@@ -307,7 +307,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 else {
                     cs[i]->stack(2, (*batch)[i], label); style((*batch)[i]);
                 }
-            }, set, legend_keys, plots);
+            }, sets, legend_keys, plots);
         }
 
         zip([&](auto& batch) {
