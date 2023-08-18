@@ -149,7 +149,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
+            l->SetTextSize(11);
 
 
             l->DrawLatexNDC(0.14, 0.73, text.data());
@@ -163,7 +163,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
+            l->SetTextSize(11);
 
 
             l->DrawLatexNDC(0.14, 0.73, text.data());
@@ -237,7 +237,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
             /* apply smoothing */
             for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 3; j <= 9; ++j) {
+                for (int64_t j = 1; j <= 6; ++j) {
                 // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
                     if (j == 1) {
                         double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
@@ -253,6 +253,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                     }
                 }
             }
+        }
 
             // batch->apply(square_);
         }
