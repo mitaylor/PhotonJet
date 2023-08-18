@@ -35,10 +35,10 @@ static int const colors[8] = {
     TColor::GetColor("#58508d"), 
     TColor::GetColor("#bc5090"), 
     TColor::GetColor("#ff6361"),
-    TColor::GetColor("#9cf168"),
-    TColor::GetColor("#6ba547"),
-    TColor::GetColor("#60ceed"),
-    TColor::GetColor("#619ed6"),
+    TColor::GetColor("#ffc425"),
+    TColor::GetColor("#f37735"),
+    TColor::GetColor("#00aedb"),
+    TColor::GetColor("#00b159"),
     };
 
 static int const markers[8] = { 49, 48, 47, 45, 6, 6, 6, 6 };
@@ -175,8 +175,8 @@ int theory(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.86, 0.65, photon_selections.data());
-            l->DrawLatexNDC(0.86, 0.60, jet_selections.data());
+            l->DrawLatexNDC(0.86, 0.63, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.58, jet_selections.data());
         }
     };
 
