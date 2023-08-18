@@ -199,11 +199,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             // l->DrawLatexNDC(0.135, 0.765, system_tag.data());
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.865, 0.21, system_tag.data());
-            l->DrawLatexNDC(0.865, 0.15, cms.data());
+            l->DrawLatexNDC(0.135, 0.21, system_tag.data());
+            l->DrawLatexNDC(0.135, 0.15, cms.data());
         }
     };
 
