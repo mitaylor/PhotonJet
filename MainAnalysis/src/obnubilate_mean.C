@@ -123,7 +123,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     };
 
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.85, "Cent. %i - %i%%", dcent, true); };
+        info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -134,26 +134,36 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.78, photon_selections.data());
-            l->DrawLatexNDC(0.135, 0.72, jet_selections.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.13, 0.78, photon_selections.data());
+            l->DrawLatexNDC(0.13, 0.72, jet_selections.data());
+        }
+    };
+
+    auto blurb = [&](int64_t index) {
+        if (index > 0) {
+            auto system_tag = (tag == "aa") ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
+            system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto cms = "#bf{#scale[1.4]{CMS}}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
 
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
 
-    std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
-    auto cms = "#bf{#scale[1.4]{CMS}}"s;
-    if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
-
     /* calculate variations */
     zip([&](auto const& figure) {
         auto stub = "_"s + figure;
 
         auto c1 = new paper(set + "_" + tag + "_mean_var"s + stub, hb);
-        apply_style(c1, cms, system_tag, std::bind(shader, _1, 0.004));
+        apply_style(c1, "", "", std::bind(shader, _1, 0.004));
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
