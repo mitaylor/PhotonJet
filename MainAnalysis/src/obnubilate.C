@@ -184,7 +184,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         std::vector<paper*> cs(cols, nullptr);
 
-        for (size_t i = 0; i < cols; ++i) {
+        for (int i = 0; i < cols; ++i) {
             cs[i] = new paper(set + "_" + tag + "_var"s + stub + "_" + to_text(i), hb);
             apply_style(cs[i], "", "", std::bind(shader, _1, range));
             cs[i]->divide(2, -1);
