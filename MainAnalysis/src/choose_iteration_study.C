@@ -177,6 +177,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto regularization = conf->get<std::string>("regularization");
 
+    auto choice_set = conf->get<std::vector<int32_t>>("choice");
+
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto sel = new configurer(selections);
@@ -261,7 +263,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
             if (top == 0) { continue; }
 
-            std::cout << top << " ";
+            // std::cout << top << " ";
 
             if (top < min) {
                 min = top;
@@ -272,7 +274,17 @@ int quantitate(char const* config, char const* selections, char const* output) {
             }
         }
 
-        std::cout << std::endl << choice[i] << std::endl;
+        // std::cout << std::endl << choice[i] << std::endl;
+    }
+
+    if (choice_set.size() != 0) {
+        for (size_t i = 0; i < choice_set.size(); ++i) {
+            choice[i] = choice_set[i];
+        }
+    }
+    
+    if (choice_set.size() == 1) {
+        choice_merge = choice_set[0];
     }
 
     double min = 99999999999;
@@ -282,7 +294,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         if (top == 0) { continue; }
 
-        std::cout << top << " ";
+        // std::cout << top << " ";
 
         if (top < min) {
             min = top;
@@ -291,8 +303,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
         else {
             break;
         }
-
-        std::cout << std::endl << choice_merge << std::endl;
     }
 
     /* extract chosen histograms */
