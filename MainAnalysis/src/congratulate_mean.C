@@ -100,7 +100,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto blurb = [&](int64_t index) {
         if (index > 0) {
-            auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}, "s;
+            auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
             auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
             auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
