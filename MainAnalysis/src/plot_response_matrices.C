@@ -180,8 +180,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             l->SetTextAlign(31);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.865, 0.21, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.15, jet_selections.data());
+            l->DrawLatexNDC(0.86, 0.20, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.14, jet_selections.data());
         }
     };
 
@@ -191,19 +191,12 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             system_tag += (heavyion) ? ", PbPb 1.69 nb^{-1}"s : ", pp 302 pb^{-1}"s;
             auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
 
-            // TLatex* l = new TLatex();
-            // l->SetTextAlign(11);
-            // l->SetTextFont(42);
-            // l->SetTextSize(11);
-            // l->DrawLatexNDC(0.135, 0.865, cms.data());
-            // l->DrawLatexNDC(0.135, 0.765, system_tag.data());
-
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.135, 0.83, cms.data());
-            l->DrawLatexNDC(0.135, 0.78, system_tag.data());
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.78, system_tag.data());
         }
     };
 
