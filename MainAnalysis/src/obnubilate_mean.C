@@ -200,8 +200,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 } else {
                     sets[groups[k]] = std::max(sets[groups[k]], difference);
                 }
+            }
 
-                (*means)[i]->SetBinContent(k + 2, std::sqrt(sets[groups[k]]));
+            for (size_t k = 0; k < legends.size(); ++k) {
+                (*means)[i]->SetBinContent(k + 2, std::sqrt(sets[k]));
             }
 
             float total = 0;
