@@ -307,7 +307,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         hb->sketch();
 
-        for (c : cs) {
+        for (auto c : cs) {
             c->draw("pdf");
         }
     }, figures, columns, ranges);
