@@ -221,7 +221,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     TFile* fiter = new TFile((base + regularization).data(), "read");
     auto sum = new history<TH1F>(fiter, "sum"s);
-    auto sum_merge = new history<TH1F>(fiter, "sum_merge"s);
 
     /* prepare output file */
     TFile* fout = new TFile(output, "recreate");
