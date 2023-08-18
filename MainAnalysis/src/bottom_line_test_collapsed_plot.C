@@ -202,6 +202,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
+    auto plot_name = conf->get<std::string>("plot_name");
 
     auto before_file = conf->get<std::string>("before_file");
     auto before_label = conf->get<std::string>("before_label");
@@ -757,7 +758,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     hb->alias("smear", "#chi^{2}_{smeared}");
     hb->alias("unfolded", "#chi^{2}_{D'Agostini}");
 
-    auto p1 = new paper(set + "_iteration_chi_squared_dj_" + tag, hb);
+    auto p1 = new paper(set + "_iteration_chi_squared_dj_" + plot_name, hb);
 
     p1->divide(sum->size(), -1);
     p1->accessory(pthf_info);
@@ -778,7 +779,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         }
     }
 
-    auto p2 = new paper(set + "_iteration_chi_squared_pt_" + tag, hb);
+    auto p2 = new paper(set + "_iteration_chi_squared_pt_" + plot_name, hb);
 
     p2->divide(sum->size(), -1);
     p2->accessory(pthf_info);
@@ -789,7 +790,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p2->stack((*chi2_pt_unf)[i], "unfolded");
     }
 
-    auto p3 = new paper(set + "_iteration_chi_squared_simple_dj_" + tag, hb);
+    auto p3 = new paper(set + "_iteration_chi_squared_simple_dj_" + plot_name, hb);
 
     p3->divide(sum->size(), -1);
     p3->accessory(pthf_info);
@@ -800,7 +801,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p3->stack((*chi2_simple_dj_unf)[i], "unfolded");
     }
 
-    auto p4 = new paper(set + "_iteration_chi_squared_simple_pt_" + tag, hb);
+    auto p4 = new paper(set + "_iteration_chi_squared_simple_pt_" + plot_name, hb);
 
     p4->divide(sum->size(), -1);
     p4->accessory(pthf_info);
