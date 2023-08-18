@@ -297,7 +297,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         /* add plots */
         for (int i = 0; i < cols; ++i) {
-            auto style = [&](TH1* h) { cs[i]->adjust(h, "hist", "f"); };
+            auto style = [&](TH1* h) { cs[i]->adjust(h, "hist", "l"); };
 
             auto rename = "total_rename_" + to_text(i);
             TH1F* total_rename = (TH1F*) (*total)[i]->Clone(rename.c_str());
