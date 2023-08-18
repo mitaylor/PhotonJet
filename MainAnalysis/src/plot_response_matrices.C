@@ -172,9 +172,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
-            auto photon_selections = "#bf{"s + to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
-                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator) + "}"s;
-            auto jet_selections = "#bf{anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs) + "}"s;
+            auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
+                ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+            auto jet_selections = "anti-k_{T} R = 0.3, " + to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV, |#eta^{jet}| < "s + to_text(jet_eta_abs);
 
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
@@ -216,8 +216,6 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
-
-        (*matrices)[i]->GetZaxis()->SetTitle("counts");
 
         /* figures */
         cs[0]->add((*matrices)[i]);
