@@ -203,7 +203,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     /* figures */
     auto hb = new pencil();
 
-    gStyle->SetPalette(kBird);
+    gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
     std::vector<paper*> cs(4, nullptr);
     zip([&](paper*& c, std::string const& title) {
