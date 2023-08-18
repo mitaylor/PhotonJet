@@ -31,14 +31,14 @@ using namespace std::placeholders;
 
 static auto const data = TColor::GetColor("#5c5c5c");
 static int const colors[8] = {
-    TColor::GetColor("#ffc9ed"), 
-    TColor::GetColor("#b77ea3"), 
-    TColor::GetColor("#f7d027"), 
-    TColor::GetColor("#e48f1b"), 
-    TColor::GetColor("#9cf168"),
-    TColor::GetColor("#6ba547"),
-    TColor::GetColor("#60ceed"),
-    TColor::GetColor("#619ed6"),
+    TColor::GetColor("#003f5c"), 
+    TColor::GetColor("#58508d"), 
+    TColor::GetColor("#bc5090"), 
+    TColor::GetColor("#ff6361"),
+    TColor::GetColor("#ffc425"),
+    TColor::GetColor("#f37735"),
+    TColor::GetColor("#00aedb"),
+    TColor::GetColor("#00b159"),
     };
 
 static int const markers[8] = { 6, 6, 6, 6, 6, 6, 6, 6 };
