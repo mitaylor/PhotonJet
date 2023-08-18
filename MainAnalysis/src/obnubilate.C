@@ -281,8 +281,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             auto rename = "total_rename_" + to_text(i);
             TH1F* total_rename = (TH1F*) (*total)[i]->Clone(rename.c_str());
 
-            cs[i]->add((*total)[i]); style((*total)[i]);
-            cs[i]->add(total_rename); style(total_rename);
+            cs[i]->add((*total)[i], "total"); style((*total)[i]);
+            cs[i]->add(total_rename, "total"); style(total_rename);
 
             zip([&](auto& batch, auto const& label, auto const& plot) {
                 if (plot == 1) {
