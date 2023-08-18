@@ -253,7 +253,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                     }
                 }
             }
-        }
 
             // batch->apply(square_);
         }
