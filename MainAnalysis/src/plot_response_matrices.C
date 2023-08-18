@@ -191,12 +191,19 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             system_tag += (heavyion) ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
             auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
 
+            // TLatex* l = new TLatex();
+            // l->SetTextAlign(11);
+            // l->SetTextFont(42);
+            // l->SetTextSize(11);
+            // l->DrawLatexNDC(0.135, 0.865, cms.data());
+            // l->DrawLatexNDC(0.135, 0.765, system_tag.data());
+
             TLatex* l = new TLatex();
-            l->SetTextAlign(11);
-            l->SetTextFont(42);
+            l->SetTextAlign(31);
+            l->SetTextFont(43);
             l->SetTextSize(11);
-            l->DrawLatexNDC(0.135, 0.865, cms.data());
-            l->DrawLatexNDC(0.135, 0.765, system_tag.data());
+            l->DrawLatexNDC(0.865, 0.21, system_tag.data());
+            l->DrawLatexNDC(0.865, 0.15, cms.data());
         }
     };
 
