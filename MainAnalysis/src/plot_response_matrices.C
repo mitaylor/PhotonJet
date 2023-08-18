@@ -168,7 +168,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     /* info text */
     auto hf_info = [&](int64_t index) {
-        info_text(index, 0.85, "Cent. %i - %i%%", dcent, true); };
+        info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {

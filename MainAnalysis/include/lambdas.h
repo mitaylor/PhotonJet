@@ -126,8 +126,8 @@ void info_text(int64_t index, float pos, std::string const& format,
 
     TLatex* l = new TLatex();
     l->SetTextFont(43);
-    l->SetTextSize(13);
-    l->DrawLatexNDC(0.135, pos, buffer);
+    l->SetTextSize(11);
+    l->DrawLatexNDC(0.14, pos, buffer);
 }
 
 template <typename T>
@@ -139,8 +139,8 @@ void info_text(int64_t index, float pos, std::string const& format,
 
     TLatex* l = new TLatex();
     l->SetTextFont(43);
-    l->SetTextSize(13);
-    l->DrawLatexNDC(0.135, pos, buffer);
+    l->SetTextSize(11);
+    l->DrawLatexNDC(0.14, pos, buffer);
 }
 
 template <typename T, typename... U>
