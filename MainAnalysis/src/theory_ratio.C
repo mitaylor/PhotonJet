@@ -300,8 +300,8 @@ int theory(char const* config, char const* selections, char const* output) {
         h->SetMarkerColor(colors[i + offset]);
         h->SetLineColor(colors[i + offset]);
         h->SetFillColorAlpha(colors[i + offset], 0.5);
-        h->SetMarkerStyle(markers[i + offset]);
-        h->SetMarkerSize(0.60);
+        // h->SetMarkerStyle(markers[i + offset]);
+        // h->SetMarkerSize(0.60);
 
         p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
     };
