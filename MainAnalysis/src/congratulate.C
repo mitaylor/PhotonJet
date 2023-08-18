@@ -121,21 +121,57 @@ int congratulate(char const* config, char const* selections, char const* output)
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.70, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.64, jet_selections.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.86, 0.65, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.60, jet_selections.data());
         }
     };
 
-    auto luminosity = [&](int64_t index) {
+    auto blurb = [&](int64_t index) {
         if (index > 0) {
-            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+            auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+            auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.55, values.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
+            l->DrawLatexNDC(0.14, 0.73, energy.data());
+        }
+    };
+
+    auto blurb_pp = [&](int64_t index) {
+        if (index > 0) {
+            auto system_tag = "pp 302 pb^{-1}"s;
+            auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto cms = "#bf{#scale[1.4]{CMS}}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
+            l->DrawLatexNDC(0.14, 0.73, energy.data());
+        }
+    };
+
+    auto blurb_aa = [&](int64_t index) {
+        if (index > 0) {
+            auto system_tag = "PbPb 1.69 nb^{-1}"s;
+            auto energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto cms = "#bf{#scale[1.4]{CMS}}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
+            l->DrawLatexNDC(0.14, 0.73, energy.data());
         }
     };
 
@@ -147,7 +183,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
-            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), hist);
+            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN^{#gammaj}/d#deltaj"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
 
@@ -193,16 +229,18 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         /* prepare papers */
         auto p = new paper(set + "_" + prefix + "_results_pp_" + figure, hb);
-        apply_style(p, "#bf{#scale[1.4]{CMS}}     #sqrt{s} = 5.02 TeV"s, "pp 302 pb^{-1}"s, ymin, ymax);
+        apply_style(p, ""s, ""s, ymin, ymax);
         p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         p->accessory(kinematics);
+        p->accessory(blurb_pp);
         p->jewellery(box);
         p->divide(-1, 1);
 
         auto a = new paper(set + "_" + prefix+ "_results_aa_" + figure, hb);
-        apply_style(a, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.6 nb^{-1}"s, ymin, ymax);
+        apply_style(a, ""s, ""s, ymin, ymax);
         a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         a->accessory(kinematics);
+        a->accessory(blurb_aa);
         a->jewellery(box);
         if (hists[0]->size() == ihf->size()) { 
             a->accessory(std::bind(aa_hf_info, _1, hists[0])); 
@@ -214,15 +252,16 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
         s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
         s->accessory(kinematics);
+        s->accessory(blurb);
         s->jewellery(box);
+
         if (hists[0]->size() == ihf->size()) { 
-            apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+            apply_style(s, ""s, ""s, ymin, ymax);
             s->accessory(std::bind(aa_hf_info, _1, hists[0])); 
             s->divide(hists[0]->size()/2, -1);
         } else { 
-            apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
+            apply_style(s, ""s, ""s, ymin, ymax);
             s->accessory(std::bind(aa_range_info, _1, hists[0])); 
-            s->accessory(luminosity);
         }
 
         /* draw histograms with uncertainties */
