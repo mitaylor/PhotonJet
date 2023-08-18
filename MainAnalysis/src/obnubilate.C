@@ -220,7 +220,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
             /* apply smoothing */
             for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 1; j <= 6; ++j) {
+                for (int64_t j = 1; j <= 8; ++j) {
                 // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
                     if (j == 1) {
                         double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
