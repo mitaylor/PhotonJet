@@ -50,8 +50,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto is_paper = conf->get<bool>("paper");
-
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -249,6 +247,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         /* add info text */
         c1->accessory(hf_info); 
         c1->accessory(kinematics);
+        c1->accessory(blurb);
         c1->jewellery(box);
 
         /* save histograms */
