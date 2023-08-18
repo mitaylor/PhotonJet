@@ -219,23 +219,23 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             batch->apply(square_);
 
             /* apply smoothing */
-            for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 1; j <= 8; ++j) {
-                // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
-                    if (j == 1) {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    }
-                    else if (j == (*batch)[i]->GetNbinsX()) {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    } 
-                    else {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1) + (*batch)[i]->GetBinContent(j + 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    }
-                }
-            }
+            // for (int64_t i = 0; i < batch->size(); ++i) {
+            //     for (int64_t j = 1; j <= 8; ++j) {
+            //     // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
+            //         if (j == 1) {
+            //             double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
+            //             (*batch)[i]->SetBinContent(j, value);
+            //         }
+            //         else if (j == (*batch)[i]->GetNbinsX()) {
+            //             double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1))) / 2;
+            //             (*batch)[i]->SetBinContent(j, value);
+            //         } 
+            //         else {
+            //             double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1) + (*batch)[i]->GetBinContent(j + 1))) / 2;
+            //             (*batch)[i]->SetBinContent(j, value);
+            //         }
+            //     }
+            // }
         }
 
         zip([&](auto const& batch, auto group) {
