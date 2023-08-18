@@ -201,7 +201,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                     sets[groups[k]] = std::max(sets[groups[k]], difference);
                 }
 
-                (*means)[i]->SetBinContent(k + 2, std::sqrt(difference));
+                (*means)[i]->SetBinContent(k + 2, std::sqrt(sets[groups[k]]));
             }
 
             float total = 0;
@@ -221,12 +221,12 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         std::cout << std::endl;
 
         /* set bin labels */
-        for (int64_t i = 0; i < means->size(); ++i) {
+        for (int64_t i = 0; i < sets->size(); ++i) {
             for (size_t k = 0; k < inputs.size(); ++k) {
-                (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
+                (*sets)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
             }
-            (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
-            (*means)[i]->GetXaxis()->SetTicks("-");
+            (*sets)[i]->GetXaxis()->SetBinLabel(1, "total");
+            (*sets)[i]->GetXaxis()->SetTicks("-");
         }
 
         /* add plots */
