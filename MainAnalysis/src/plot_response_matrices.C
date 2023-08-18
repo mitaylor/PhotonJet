@@ -19,6 +19,7 @@
 #include "TH2.h"
 #include "TSpline.h"
 #include "TVectorT.h"
+#include "TStyle.h"
 
 #include "TUnfoldBinning.h"
 #include "TUnfoldDensity.h"
@@ -190,6 +191,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     /* figures */
     auto hb = new pencil();
+
+    gStyle->SetPalette(kPearl);
 
     std::vector<paper*> cs(4, nullptr);
     zip([&](paper*& c, std::string const& title) {
