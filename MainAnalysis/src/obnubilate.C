@@ -182,14 +182,14 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     zip([&](auto const& figure, auto cols, auto range) {
         auto stub = "_"s + figure;
 
-        std::vector<paper*> cs(cols*cols, nullptr);
+        std::vector<paper*> cs(cols, nullptr);
 
-        for (size_t i = 0; i < cols*cols; ++i) {
+        for (size_t i = 0; i < cols; ++i) {
             cs[i] = new paper(set + "_" + tag + "_var"s + stub + "_" + to_text(i), hb);
             apply_style(cs[i], "", "", std::bind(shader, _1, range));
             cs[i]->divide(2, -1);
 
-            if (heavyion && cols*cols == 4) { cs[i]->accessory(std::bind(hf_info, _1, i)); }
+            if (heavyion && cols == 4) { cs[i]->accessory(std::bind(hf_info, _1, i)); }
             else if (heavyion) { cs[i]->accessory(range_info); }
 
             cs[i]->accessory(kinematics);
@@ -235,23 +235,23 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             batch->apply(square_);
 
             /* apply smoothing */
-            for (int64_t i = 0; i < batch->size(); ++i) {
-                for (int64_t j = 4; j <= 9; ++j) {
-                // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
-                    if (j == 1) {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    }
-                    else if (j == (*batch)[i]->GetNbinsX()) {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    } 
-                    else {
-                        double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1) + (*batch)[i]->GetBinContent(j + 1))) / 2;
-                        (*batch)[i]->SetBinContent(j, value);
-                    }
-                }
-            }
+            // for (int64_t i = 0; i < batch->size(); ++i) {
+            //     for (int64_t j = 4; j <= 9; ++j) {
+            //     // for (int64_t j = 1; j <= (*batch)[i]->GetNbinsX(); ++j) {
+            //         if (j == 1) {
+            //             double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j + 1))) / 2;
+            //             (*batch)[i]->SetBinContent(j, value);
+            //         }
+            //         else if (j == (*batch)[i]->GetNbinsX()) {
+            //             double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1))) / 2;
+            //             (*batch)[i]->SetBinContent(j, value);
+            //         } 
+            //         else {
+            //             double value = (std::abs((*batch)[i]->GetBinContent(j) + (*batch)[i]->GetBinContent(j - 1) + (*batch)[i]->GetBinContent(j + 1))) / 2;
+            //             (*batch)[i]->SetBinContent(j, value);
+            //         }
+            //     }
+            // }
         }
 
         zip([&](auto const& batch, auto group) {
@@ -291,7 +291,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         std::cout << std::endl;
 
         /* add plots */
-        for (size_t i = 0; i < cols*cols; ++i) {
+        for (size_t i = 0; i < cols; ++i) {
             auto style = [&](TH1* h) { cs[i]->adjust(h, "hist", "f"); };
 
             auto rename = "total_rename_" + to_text(i);
