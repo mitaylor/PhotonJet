@@ -174,7 +174,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             apply_style(cs[i], "", "", std::bind(shader, _1, range));
             cs[i]->divide(2, -1);
 
-            if (heavyion && cols*cols == 4) { cs[i]->accessory(std::bind(hf_info, _0, i)); }
+            if (heavyion && cols*cols == 4) { cs[i]->accessory(std::bind(hf_info, _1, i)); }
             else if (heavyion) { cs[i]->accessory(range_info); }
 
             cs[i]->accessory(kinematics);
@@ -279,7 +279,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             auto style = [&](TH1* h) { cs[i]->adjust(h, "hist", "f"); };
 
             auto rename = "total_rename_" + to_text(i);
-            auto total_rename = (*total)[i]->Clone(rename.c_str();
+            auto total_rename = (*total)[i]->Clone(rename.c_str());
 
             cs[i]->add((*total)[i]); style((*total)[i]);
             cs[i]->add(total_rename); style(total_rename);
