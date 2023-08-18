@@ -207,6 +207,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
 
+    cs[1]->set(paper::flags::logz);
+
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* input folds */
         (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
