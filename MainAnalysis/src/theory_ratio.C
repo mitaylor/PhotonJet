@@ -237,7 +237,7 @@ int theory(char const* config, char const* selections, char const* output) {
         info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.84, 0.04, h, hf_info); };
+        stack_text(index, 0.73, 0.04, h, hf_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -248,21 +248,23 @@ int theory(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
+            l->SetTextSize(11);
             l->DrawLatexNDC(0.865, 0.20, photon_selections.data());
             l->DrawLatexNDC(0.865, 0.14, jet_selections.data());
         }
     };
 
-    auto luminosity = [&](int64_t index) {
+    auto blurb = [&](int64_t index) {
         if (index > 0) {
-            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+            auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #sqrt{s_{NN}} = 5.02 TeV"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(10);
-            l->DrawLatexNDC(0.135, 0.77, values.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
 
@@ -271,7 +273,7 @@ int theory(char const* config, char const* selections, char const* output) {
     apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
     p->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
     p->accessory(kinematics);
-    p->accessory(luminosity);
+    p->accessory(blurb);
     p->jewellery(box);
     p->accessory(std::bind(aa_hf_info, _1, hist_ratio)); 
     p->divide(-1, 1);
