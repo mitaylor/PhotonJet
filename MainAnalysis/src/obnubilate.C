@@ -127,6 +127,21 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }
     };
 
+    auto blurb = [&](int64_t index) {
+        if (index > 0) {
+            auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
+            system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
+        }
+    };
+
     auto hf_info = [&](int64_t index, int64_t cent) {
         if (index > 0) {
             std::string text = "Cent. "s + to_text(dcent[cent + 1]) + " - " + to_text(dcent[cent]) + "%";
@@ -178,6 +193,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             else if (heavyion) { cs[i]->accessory(range_info); }
 
             cs[i]->accessory(kinematics);
+            cs[i]->accessory(blurb);
         }
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
@@ -291,7 +307,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 else {
                     cs[i]->stack(2, (*batch)[i], label); style((*batch)[i]);
                 }
-            }, batches, legend_keys, plots);
+            }, set, legend_keys, plots);
         }
 
         zip([&](auto& batch) {
