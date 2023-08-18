@@ -187,8 +187,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto blurb = [&](int64_t index) {
         if (index > 0) {
-            std::string system_tag = "#sqrt{s_{NN}} = 5.02 TeV"s;
-            system_tag += (heavyion) ? ", PbPb 1.69 nb^{-1}"s : ", pp 302 pb^{-1}"s;
+            auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
+            system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
             auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
 
             TLatex* l = new TLatex();
