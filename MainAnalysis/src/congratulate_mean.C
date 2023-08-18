@@ -92,21 +92,24 @@ int congratulate(char const* config, char const* selections, char const* output)
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.72, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.67, jet_selections.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.86, 0.70, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.65, jet_selections.data());
         }
     };
 
-    auto luminosity = [&](int64_t index) {
+    auto blurb = [&](int64_t index) {
         if (index > 0) {
-            auto values = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+            auto system_tag = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}, "s;
+            system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
+            auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
             TLatex* l = new TLatex();
-            l->SetTextAlign(31);
+            l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.58, values.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.14, 0.83, cms.data());
+            l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
 
@@ -195,9 +198,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* prepare papers */
     auto s = new paper(set + "_" + prefix + "_results_ss_mean" + suffix, hb);
-    apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, min, max);
+    apply_style(s, ""s, ""s, min, max);
     s->accessory(kinematics);
-    s->accessory(luminosity);
+    s->accessory(blurb);
     s->jewellery(box);
 
     /* draw histograms with uncertainties */
