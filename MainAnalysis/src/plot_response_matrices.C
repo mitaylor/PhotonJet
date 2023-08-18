@@ -221,6 +221,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[0]->add((*matrices)[i]);
         cs[0]->adjust((*matrices)[i], "colz", "");
 
+        (*matrices)[i]->GetZaxis()->SetTitle("");
+
         cs[1]->add((*victims)[i]);
         cs[2]->add((*side0)[i]);
         cs[3]->add((*side1)[i]);
