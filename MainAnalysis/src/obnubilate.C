@@ -129,7 +129,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto hf_info = [&](int64_t index, int64_t cent) {
         if (index > 0) {
-            std::string text = "Cent. "s + dcent[cent + 1] + " - " + dcent[cent] + "%";
+            std::string text = "Cent. "s + to_text(dcent[cent + 1]) + " - " + to_text(dcent[cent]) + "%";
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
@@ -143,7 +143,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto range_info = [&](int64_t index) {
         if (index > 0) {
-            std::string text = "Cent. "s + drange[1] + " - " + drange[0] + "%";
+            std::string text = "Cent. "s + to_text(drange[1]) + " - " + to_text(drange[0]) + "%";
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
