@@ -106,11 +106,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         h->SetLineWidth(1);
     };
 
-    auto hf_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
+    // auto hf_info = [&](int64_t index) {
+    //     info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
-    auto range_info = [&](int64_t index) {
-        info_text(index, 0.75, "Cent. %i - %i%%", drange, true); };
+    // auto range_info = [&](int64_t index) {
+    //     info_text(index, 0.75, "Cent. %i - %i%%", drange, true); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
@@ -121,9 +121,37 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             TLatex* l = new TLatex();
             l->SetTextAlign(31);
             l->SetTextFont(43);
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.86, 0.41, photon_selections.data());
+            l->DrawLatexNDC(0.86, 0.36, jet_selections.data());
+        }
+    };
+
+    auto hf_info = [&](int64_t index, int64_t cent) {
+        if (index > 0) {
+            auto text = "Cent. "s + dcent[cent + 1] + " - " + dcent[cent] + "%";
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
             l->SetTextSize(13);
-            l->DrawLatexNDC(0.865, 0.41, photon_selections.data());
-            l->DrawLatexNDC(0.865, 0.36, jet_selections.data());
+
+
+            l->DrawLatexNDC(0.14, 0.73, text.data());
+        }
+    };
+
+    auto range_info = [&](int64_t index) {
+        if (index > 0) {
+            auto text = "Cent. "s + drange[1] + " - " + drange[0] + "%";
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+
+
+            l->DrawLatexNDC(0.14, 0.73, text.data());
         }
     };
 
@@ -139,13 +167,18 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     zip([&](auto const& figure, auto cols, auto range) {
         auto stub = "_"s + figure;
 
-        auto c1 = new paper(set + "_" + tag + "_var"s + stub, hb);
-        apply_style(c1, cms, system_tag, std::bind(shader, _1, range));
-        c1->divide(cols, -1);
+        std::vector<paper*> cs(cols*cols, nullptr);
 
-        auto c2 = new paper(set + "_" + tag + "_var_unfolding"s + stub, hb);
-        apply_style(c2, cms, system_tag, std::bind(shader, _1, range));
-        c2->divide(cols, -1);
+        for (size_t i = 0; i < cols*cols; ++i) {
+            cs[i] = new paper(set + "_" + tag + "_var"s + stub + "_" + to_text(i), hb);
+            apply_style(cs[i], "", "", std::bind(shader, _1, range));
+            cs[i]->divide(2, -1);
+
+            if (heavyion && cols*cols == 4) { c2->accessory(std::bind(hf_info, _0, i)); }
+            else if (heavyion) { c2->accessory(range_info); }
+
+            cs[i]->accessory(kinematics);
+        }
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
         title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), base);
@@ -242,37 +275,28 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         std::cout << std::endl;
 
         /* add plots */
-        auto style1 = [&](TH1* h) { c1->adjust(h, "hist", "f"); };
-        auto style2 = [&](TH1* h) { c2->adjust(h, "hist", "f"); };
+        for (size_t i = 0; i < cols*cols; ++i) {
+            auto style = [&](TH1* h) { cs[i]->adjust(h, "hist", "f"); };
 
-        total->apply([&](TH1* h) { 
-            c1->add(h, "total"); style1(h); 
-            c2->add(h, "total"); style2(h); 
-        });
+            auto rename = "total_rename_" + to_text(i);
+            auto total_rename = (*total)[i]->Clone(rename.c_str();
 
-        zip([&](auto& batch, auto const& label, auto const& plot) {
-            if (plot == 1) {
-                batch->apply([&](TH1* h, int64_t index) {
-                    c1->stack(index + 1, h, label); style1(h);
-                });
-            }
-            else {
-                batch->apply([&](TH1* h, int64_t index) {
-                    c2->stack(index + 1, h, label); style2(h);
-                });
-            }
+            cs[i]->add((*total)[i]); style((*total)[i]);
+            cs[i]->add(total_rename); style(total_rename);
 
+            zip([&](auto& batch, auto const& label, auto const& plot) {
+                if (plot == 1) {
+                    cs[i]->stack(1, (*batch)[i], label); style((*batch)[i]);
+                }
+                else {
+                    cs[i]->stack(2, (*batch)[i], label); style((*batch)[i]);
+                }
+            }, batches, legend_keys, plots);
+        }
+
+        zip([&](auto& batch) {
             batch->save(tag);
-        }, batches, legend_keys, plots);
-
-        /* add info text */
-        if (heavyion && total->size() == 4) { c1->accessory(hf_info); }
-        else if (heavyion) { c1->accessory(range_info); }
-        c1->accessory(kinematics);
-
-        if (heavyion && total->size() == 4) { c2->accessory(hf_info); }
-        else if (heavyion) { c2->accessory(range_info); }
-        c2->accessory(kinematics);
+        }, batches);
 
         /* save histograms */
         for (auto const& set : sets)
@@ -283,8 +307,9 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         hb->sketch();
 
-        c1->draw("pdf");
-        c2->draw("pdf");
+        for (c : cs) {
+            c->draw("pdf");
+        }
     }, figures, columns, ranges);
 
     fout->Close();
