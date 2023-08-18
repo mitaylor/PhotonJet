@@ -107,10 +107,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         info_text(x, pos, "Cent. %i - %i%%", drange, true); };
 
     auto aa_hf_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.84, 0.04, h, hf_info); };
+        stack_text(index, 0.3, 0.04, h, hf_info); };
 
     auto aa_range_info = [&](int64_t index, history<TH1F>* h) {
-        stack_text(index, 0.84, 0.04, h, range_info); };
+        stack_text(index, 0.3, 0.04, h, range_info); };
 
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
