@@ -397,6 +397,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
+                    njet++;
+
                     if (njets == 2) total2++;
                     if (njets == 1) total1++;
                     if (njets > 2) total3++;
