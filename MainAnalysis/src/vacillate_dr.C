@@ -204,6 +204,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
+        int total1 = 0;
+        int total2 = 0;
+        int total3 = 0;
+
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
@@ -393,8 +397,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                    njets++;
-                    if (njets > 1) { std::cout << njets << " jets in event" << std::endl; }
+                    if (njets == 2) total2++;
+                    if (njets == 1) total1++;
+                    if (njets > 2) total3++;
 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*g)[k]->Fill(g_x, weights[k] * cor); }
@@ -448,6 +453,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
             }
         }
+
+        std::cout << "Total entries: " << nentries << std::endl;
+        std::cout << "1 jet: " << total1 << std::endl;
+        std::cout << "2 jet: " << total2 << std::endl;
+        std::cout << "3+ jet: " << total3 << std::endl;
     }
 
     r->divide(*n);
