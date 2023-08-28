@@ -197,7 +197,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     int total1 = 0;
     int total2 = 0;
     int total3 = 0;
-    int total = 0;
+    int totalp = 0;
 
     /* load input */
     for (auto const& input : inputs) {
@@ -325,7 +325,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             
             (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
 
-            total++;
+            totalp++;
 
             int njets = 0;
 
@@ -460,7 +460,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    std::cout << "Total entries: " << nentries << std::endl;
+    std::cout << "Total entries: " << totalp << std::endl;
     std::cout << "1 jet: " << total1 << std::endl;
     std::cout << "2 jet: " << total2 << std::endl;
     std::cout << "3+ jet: " << total3 << std::endl;
