@@ -194,6 +194,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     auto rng = new TRandom3(144);
 
+    int total1 = 0;
+    int total2 = 0;
+    int total3 = 0;
+    int total = 0;
+
     /* load input */
     for (auto const& input : inputs) {
         std::cout << input << std::endl;
@@ -203,10 +208,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
         auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
-
-        int total1 = 0;
-        int total2 = 0;
-        int total3 = 0;
 
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
@@ -323,6 +324,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 (*n)[j]->Fill(1., weights[j] * pho_cor); }
             
             (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
+
+            total++;
 
             int njets = 0;
 
@@ -455,12 +458,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
             }
         }
-
-        std::cout << "Total entries: " << nentries << std::endl;
-        std::cout << "1 jet: " << total1 << std::endl;
-        std::cout << "2 jet: " << total2 << std::endl;
-        std::cout << "3+ jet: " << total3 << std::endl;
     }
+
+    std::cout << "Total entries: " << nentries << std::endl;
+    std::cout << "1 jet: " << total1 << std::endl;
+    std::cout << "2 jet: " << total2 << std::endl;
+    std::cout << "3+ jet: " << total3 << std::endl;
 
     r->divide(*n);
     g->divide(*n);
