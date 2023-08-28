@@ -320,6 +320,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
             
             (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
 
+            int njets = 0;
+
             /* map reco jet to gen jet */
             std::unordered_map<float, int64_t> genid;
             for (int64_t j = 0; j < p->ngen; ++j)
@@ -390,6 +392,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto rdr = std::sqrt(dr2(reco_eta, (*p->WTAeta)[j],
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
+
+                    njets++;
+                    if (njets > 1) { std::cout << njets << " jets in event" << std::endl; }
 
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*g)[k]->Fill(g_x, weights[k] * cor); }
