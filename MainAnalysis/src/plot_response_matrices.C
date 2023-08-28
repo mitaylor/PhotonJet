@@ -189,7 +189,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         if (index > 0) {
             auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
             system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
-            auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
