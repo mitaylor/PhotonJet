@@ -194,11 +194,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     auto rng = new TRandom3(144);
 
-    int total1 = 0;
-    int total2 = 0;
-    int total3 = 0;
-    int totalp = 0;
-
     /* load input */
     for (auto const& input : inputs) {
         std::cout << input << std::endl;
@@ -325,10 +320,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
             
             (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
 
-            totalp++;
-
-            int njets = 0;
-
             /* map reco jet to gen jet */
             std::unordered_map<float, int64_t> genid;
             for (int64_t j = 0; j < p->ngen; ++j)
@@ -400,12 +391,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
                                             reco_phi, (*p->WTAphi)[j]));
                     auto r_x = mr->index_for(v{rdr, reco_pt});
 
-                    njets++;
-
-                    if (njets == 2) total2++;
-                    if (njets == 1) total1++;
-                    if (njets > 2) total3++;
-
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*g)[k]->Fill(g_x, weights[k] * cor); }
 
@@ -459,11 +444,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
             }
         }
     }
-
-    std::cout << "Total entries: " << totalp << std::endl;
-    std::cout << "1 jet: " << total1 << std::endl;
-    std::cout << "2 jet: " << total2 << std::endl;
-    std::cout << "3+ jet: " << total3 << std::endl;
 
     r->divide(*n);
     g->divide(*n);
