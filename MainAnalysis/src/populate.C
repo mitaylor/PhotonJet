@@ -122,7 +122,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
     auto mb_sum = conf->get<std::vector<std::string>>("mb_sum");
-    auto cent = conf->get<int64_t>("cent");
 
     auto acc_file = conf->get<std::string>("acc_file");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
