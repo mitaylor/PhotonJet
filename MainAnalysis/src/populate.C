@@ -47,8 +47,7 @@ void fill_axes(pjtree* pjt,
                bool exclude, 
                bool jet_cor, float jet_pt_min, float jet_eta_abs,
                float dphi_min_numerator, float dphi_min_denominator,
-               multival* mdr, interval* idphi, interval* idr, 
-               TRandom3* rng, bool smear, history<TH1F>* smear_fits_aa, history<TH1F>* smear_fits_pp, int64_t cent,
+               multival* mdr, interval* idphi, interval* idr, int64_t cent,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt,
@@ -63,8 +62,6 @@ void fill_axes(pjtree* pjt,
         auto jet_pt = (*pjt->jtpt)[j];
         if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
         
-        if (jet_pt <= jet_pt_min) { continue; }
-
         auto jet_eta = (*pjt->jteta)[j];
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
 
@@ -94,34 +91,25 @@ void fill_axes(pjtree* pjt,
         double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
         double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
-        if (jt_dr > 0.3) { continue; }
-
-        if (smear) {
-            auto dr_x = idr->index_for(jt_dr);
-
-            auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
-            auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
-            auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
-
-            auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
-            auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
-            auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
-
-            auto res_diff = res(aa_c, aa_s, aa_n, jet_pt) - res(pp_c, pp_s, pp_n, jet_pt);
-
-            if (res_diff > 0) {
-                auto change = rng->Exp(res(aa_c, aa_s, aa_n, jet_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, jet_pt));
-                auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
-                auto adj = jt_dr + change * sign / 2;
-
-                if (0 < adj && adj < 0.2 && jt_dr < 0.2) jt_dr = adj;
-            }
-        }
-
         zip([&](auto const& index, auto const& weight) {
-            if (jet_pt < 200 && jet_pt > jet_pt_min) {
+            if (jet_pt < 200 && jet_pt >= jet_pt_min && jt_dr < 0.3) {
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
+                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
+            }
+            else if (jet_pt < jet_pt_min) {
+                (*pjet_u_dr)[index]->Fill(-1, cor * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
+                (*pjet_f_dr)[index]->Fill(-1, cor * weight);
+            }
+            else if (jet_pt >= 200) {
+                (*pjet_u_dr)[index]->Fill(10000, cor * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
+                (*pjet_f_dr)[index]->Fill(10000, cor * weight);
+            }
+            else if (jt_dr >= 0.3) {
+                (*pjet_u_dr)[index]->Fill(10000, cor * weight);
+                (*pjet_f_jpt)[index]->Fill(10000, cor * weight);
                 (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
             }
         }, pthf_x, weights);
@@ -134,11 +122,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
     auto mb_sum = conf->get<std::vector<std::string>>("mb_sum");
-
-    auto smear = conf->get<bool>("smear");
-    auto smear_input_aa = conf->get<std::string>("smear_input_aa");
-    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
-    auto smear_tag = conf->get<std::string>("smear_tag");
     auto cent = conf->get<int64_t>("cent");
 
     auto acc_file = conf->get<std::string>("acc_file");
@@ -195,7 +178,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
-    auto rdr = sel->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram and also the smearing application
+    auto rdr = sel->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram
 
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
@@ -298,22 +281,6 @@ int populate(char const* config, char const* selections, char const* output) {
         fa = new TFile(acc_file.data(), "read");
         acceptance = new history<TH2F>(fa, acc_label_acc);
         total = new history<TH2F>(fa, acc_label_ref);
-    }
-
-    /* load the smearing information */
-    TFile* fsmear_aa;
-    TFile* fsmear_pp;
-    history<TH1F>* smear_fits_aa = nullptr;
-    history<TH1F>* smear_fits_pp = nullptr;
-
-    if (smear) {
-        fsmear_aa = new TFile(smear_input_aa.data(), "read");
-        fsmear_pp = new TFile(smear_input_pp.data(), "read");
-        smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
-        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }
-        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }
-        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }
-        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }
     }
 
     /* add weight for the number of photons, based on the fraction that are excluded by area */
@@ -519,8 +486,7 @@ int populate(char const* config, char const* selections, char const* output) {
                     fill_axes(pjtm, pthf_x, weights, pho_cor,
                             photon_eta, photon_phi, exclude, heavyion && !no_jes,
                             jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
-                            mdr, idphi, idr, rng,
-                            smear, smear_fits_aa, smear_fits_pp, cent, nmix,
+                            mdr, idphi, idr, rng, cent, nmix,
                             mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_u_dr,
                             acceptance, total);
 
@@ -534,8 +500,7 @@ int populate(char const* config, char const* selections, char const* output) {
             fill_axes(pjt, pthf_x, weights, pho_cor,
                 photon_eta, photon_phi, exclude, heavyion && !no_jes,
                 jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
-                mdr, idphi, idr, rng,
-                smear, smear_fits_aa, smear_fits_pp, cent, nevt,
+                mdr, idphi, idr, rng, cent, nevt,
                 pjet_f_dr, pjet_f_jpt, pjet_u_dr,
                 acceptance, total);
             

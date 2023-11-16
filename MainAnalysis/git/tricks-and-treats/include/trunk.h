@@ -12,7 +12,7 @@
 template <typename... T>
 void for_contents(std::function<float(std::array<double, sizeof...(T) + 1>)> f,
                   TH1* h, T... hs) {
-    for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
+    for (int64_t i = 0; i <= h->GetNbinsX() + 1; ++i) {
         double val = h->GetBinContent(i);
         h->SetBinContent(i, f({val, hs->GetBinContent(i)...}));
     }
@@ -22,7 +22,7 @@ template <typename... T>
 void for_indexed_contents(
         std::function<float(int64_t, std::array<double, sizeof...(T) + 1>)> f,
         TH1* h, T... hs) {
-    for (int64_t i = 1; i < h->GetNbinsX(); ++i) {
+    for (int64_t i = 0; i < h->GetNbinsX() + 1; ++i) {
         double val = h->GetBinContent(i);
         h->SetBinContent(i, f(i - 1, {val, hs->GetBinContent(i)...}));
     }
