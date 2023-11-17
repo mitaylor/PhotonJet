@@ -477,11 +477,9 @@ int populate(char const* config, char const* selections, char const* output) {
     /* normalise by number of photons (events) */
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
-    pjet_u_dr->divide(*nevt);
 
     mix_pjet_f_dr->divide(*nevt);
     mix_pjet_f_jpt->divide(*nevt);
-    mix_pjet_u_dr->divide(*nevt);
 
     /* subtract histograms */
     auto sub_pjet_f_dr = new memory<TH1F>(*pjet_f_dr, "sub");
