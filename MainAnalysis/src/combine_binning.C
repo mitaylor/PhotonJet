@@ -135,7 +135,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
     int j_prime = 2;
 
     for (int64_t k = 0; k < ihf->size(); ++k) {
-        for (int i = 1; i <= (*hist_sub)[k]->GetNbinsX; ++i) {
+        for (int i = 1; i <= (*hist_sub)[k]->GetNbinsX(); ++i) {
             for (int j = 1; j <= (*hist_sub)[k]->GetNbinsY(); ++j) {
                 if ((*hist_sub)[k]->GetXaxis()->GetBinUpEdge(i) > rdrr_1[i_prime]) {
                     i_prime++
