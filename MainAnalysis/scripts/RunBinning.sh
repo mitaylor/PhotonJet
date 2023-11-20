@@ -11,13 +11,13 @@ awk -F "[_.]" '{print $(NF-1)}' files_${n} > index_${n}
 files=($(cat files_${n}))
 index=($(cat index_${n}))
 
-# rm files*
-# rm index*
+rm files*
+rm index*
 
-# for i in ${!files[@]}; do
-#     echo "std::vector<std::string> input = \\" > nohup/${tag}_${index[i]}.conf
-#     echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
-#     cat ../configs/populate/parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
+for i in ${!files[@]}; do
+    echo "std::vector<std::string> input = \\" > nohup/${tag}_${index[i]}.conf
+    echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
+    cat ../configs/populate/parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
 
-#     nohup ../bin/binning nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/binning/arc/${set}/${tag}_${index[i]}.root  > nohup/log/${set}_binning_${tag}_${index[i]}.txt 2>&1 &
-# done
+    nohup ../bin/binning nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/binning/arc/${set}/${tag}_${index[i]}.root  > nohup/log/${set}_binning_${tag}_${index[i]}.txt 2>&1 &
+done
