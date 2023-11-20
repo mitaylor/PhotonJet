@@ -1,6 +1,7 @@
 #include "../include/lambdas.h"
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -44,6 +45,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
     auto label = conf->get<std::string>("label");
     auto tag = conf->get<std::string>("tag");
 
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
     auto sel = new configurer(selections);
@@ -61,6 +63,8 @@ int combine_binning(char const* config, char const* selections, char const* outp
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+
+    auto ihf = new interval(dhf);
 
     /* open input files */
     std::vector<TFile*> files(inputs.size(), nullptr);
