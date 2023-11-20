@@ -60,10 +60,13 @@ int combine_binning(char const* config, char const* selections, char const* outp
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
+    /* define intervals */
+    auto mpthf = new multival(dpt, dhf);
     auto ihf = new interval(dhf);
 
     /* open input files */
@@ -121,6 +124,31 @@ int combine_binning(char const* config, char const* selections, char const* outp
     hist_mix->save();
     hist_sub->save();
 
+    /* make extra versions with different binning */
+    vector<float> rdrr_1 = { 0, 0.01, 0.0, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2};
+    vector<float> rdpt_1 = {20, 30, 40, 50, 60, 70, 80, 100, 120, 200};
+    auto mdr_1 = new multival(rdrr, rptr);
+    auto frdr_1 = std::bind(&multival::book<TH2F>, mdr_1, _1, _2, _3);
+    auto rebin_1 = new history<TH2F>("rebin_1"s, "", frdr_1, mpthf);
+
+    i_prime = 2;
+    j_prime = 2;
+
+    for (int64_t k = 0; k < ihf->size(); ++k) {
+        for (int i = 1; i <= (*hist_sub)[k]->GetNbinsX; ++i) {
+            for (int j = 1; j <= (*hist_sub)[k]->GetNbinsY(); ++j) {
+                if ((*hist_sub)[k]->GetXaxis()->GetBinUpEdge(i) > rdrr_1[i_prime]) {
+                    i_prime++
+                }
+                if ((*hist_sub)[k]->GetYaxis()->GetBinUpEdge(i) > rdpt_1[j_prime]) {
+                    j_prime++
+                }
+
+                (*rebin_1)[k]->SetBinContent((*rebin_1)[k]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k]->GetBinContent(i, j));
+            }
+        }
+    };
+
     /* info text */
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
@@ -158,7 +186,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
     /* figures */
     auto hb = new pencil();
 
-    std::vector<paper*> cs(4, nullptr);
+    std::vector<paper*> cs(3, nullptr);
 
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_" + title + "_binning_" + tag, hb);
@@ -167,7 +195,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
         c->accessory(kinematics);
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
-    }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s});
+    }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s, "rebin1"});
     
     for (int64_t i = 0; i < ihf->size(); ++i) {
         cs[0]->add((*hist)[i*2]);
@@ -175,6 +203,9 @@ int combine_binning(char const* config, char const* selections, char const* outp
 
         cs[1]->add((*hist_sub)[i*2]);
         cs[1]->adjust((*hist_sub)[i*2], "colz0", "");
+
+        cs[2]->add((*rebin_1)[i*2]);
+        cs[2]->adjust((*rebin_1)[i*2], "colz0", "");
     };
 
     hb->sketch();
