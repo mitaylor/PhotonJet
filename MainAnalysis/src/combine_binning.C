@@ -71,6 +71,9 @@ int combine_binning(char const* config, char const* selections, char const* outp
         auto name = group + "_"s + label;
         auto hist = new history<TH2F>(files[0], name); 
 
+        auto name_mix = group + "_mix_"s + label;
+        auto hist_mix = new history<TH2F>(files[0], name_mix);
+
         for (size_t i = 1; i < files.size(); ++i) {
             auto hist_add = new history<TH2F>(files[i], name);
             auto hist_mix_add = new history<TH2F>(files[i], name_mix);
