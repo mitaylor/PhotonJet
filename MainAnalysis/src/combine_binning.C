@@ -167,7 +167,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
     
     for (int64_t i = 0; i < ihf->size(); ++i) {
         c->add((*hist)[i]);
-        c->adjust((*hist)[i], "text colz", "");
+        c->adjust((*hist)[i], "colz0", "");
     };
 
     hb->sketch();
