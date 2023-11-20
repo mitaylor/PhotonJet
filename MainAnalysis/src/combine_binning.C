@@ -56,7 +56,6 @@ int combine_binning(char const* config, char const* selections, char const* outp
 
     /* combine nevt information */
     auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
-    auto nevt_0 = new history<TH1F>(*nevt, "nominal");
 
     for (size_t i = 1; i < files.size(); ++i) {
         auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
@@ -81,7 +80,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
 
-            delete hist_add; delete nevt_add;
+            delete hist_add;
         }
 
         hist->apply([](TH1* h) { 
