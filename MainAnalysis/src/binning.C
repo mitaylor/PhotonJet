@@ -46,8 +46,7 @@ void fill_axes(pjtree* pjt,
                float pho_cor, float photon_eta, int64_t photon_phi, 
                bool exclude, 
                bool jet_cor, float jet_pt_min, float jet_eta_abs,
-               float dphi_min_numerator, float dphi_min_denominator,
-               multival* mdr, interval* idphi,
+               float dphi_min_numerator, float dphi_min_denominator, interval* idphi,
                memory<TH1F>* nevt,
                memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt,
@@ -415,8 +414,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             fill_axes(pjt, pthf_x, weights, pho_cor,
                 photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
-                mdr, idphi, nevt,
+                jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator, idphi, nevt,
                 pjet_f_dr, pjet_f_jpt, pjet_u_dr,
                 acceptance, total);
 
@@ -445,8 +443,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, pthf_x, weights, pho_cor,
                             photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                            jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
-                            mdr, idphi, nmix,
+                            jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator, idphi, nmix,
                             mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_u_dr,
                             acceptance, total);
 
