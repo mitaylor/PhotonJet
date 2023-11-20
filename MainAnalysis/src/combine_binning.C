@@ -69,17 +69,11 @@ int combine_binning(char const* config, char const* selections, char const* outp
         std::cout << label << std::endl;
 
         auto name = group + "_"s + label;
-        auto hist = new history<TH1F>(files[0], name); 
+        auto hist = new history<TH2F>(files[0], name); 
 
         for (size_t i = 1; i < files.size(); ++i) {
-            auto hist_add = new history<TH1F>(files[i], name);
-            auto hist_mix_add = new history<TH1F>(files[i], name_mix);
-            auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
-
-            hist_add->multiply(*nevt_add);
-            hist_mix_add->multiply(*nevt_add);
-
-            // std::cout << (*nevt_0)[0]->GetBinContent(1) << " " << (*nevt_add)[0]->GetBinContent(1) << std::endl;
+            auto hist_add = new history<TH2F>(files[i], name);
+            auto hist_mix_add = new history<TH2F>(files[i], name_mix);
 
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
@@ -95,10 +89,8 @@ int combine_binning(char const* config, char const* selections, char const* outp
             }
         });
 
-        hist->divide(*nevt);
-        hist_mix->divide(*nevt);
 
-        auto hist_sub = new history<TH1F>(*hist, "sub");
+        auto hist_sub = new history<TH2F>(*hist, "sub");
         hist_sub->rename(group + "_sub_" + label);
         *hist_sub -= *hist_mix;
 
