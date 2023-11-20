@@ -7,9 +7,9 @@ run_pp() {
 
     echo ${tag}
 
-    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/data_iteration_${tag}.root
-    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/iteration_${tag}.root
-    ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/quantitate_${tag}.root
+    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/data_iteration_${tag}.root
+    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/iteration_${tag}.root
+    ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/quantitate_${tag}.root
 }
 
 run_aa() {
@@ -17,12 +17,12 @@ run_aa() {
 
     echo ${tag}
 
-    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/data_iteration_${tag}.root
-    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/iteration_${tag}.root
-    ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/quantitate_${tag}.root
+    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/data_iteration_${tag}.root
+    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/iteration_${tag}.root
+    ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/quantitate_${tag}.root
 }
 
-samples=(pp) #pp_smear_0_10 pp_smear_10_30 pp_smear_30_50 pp_smear_50_90
+samples=(pp)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}

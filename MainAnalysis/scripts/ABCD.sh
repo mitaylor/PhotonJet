@@ -5,13 +5,13 @@ set=$1
 run_pp() {
     tag=$1
 
-    echo "nohup ./bin/abcd configs/tessellate/preapproval/tessellate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/abcd_${tag}.root > log/${set}_abcd_${tag}.txt 2>&1 &"
+    echo "nohup ./bin/abcd configs/tessellate/tessellate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/abcd_${tag}.root > log/${set}_abcd_${tag}.txt 2>&1 &"
 }
 
 run_aa() {
     tag=$1
 
-    echo "nohup ./bin/abcd configs/tessellate/preapproval/tessellate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/abcd_${tag}.root > log/${set}_abcd_${tag}.txt 2>&1 &"
+    echo "nohup ./bin/abcd configs/tessellate/tessellate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/abcd_${tag}.root > log/${set}_abcd_${tag}.txt 2>&1 &"
 }
 
 samples=(pp)

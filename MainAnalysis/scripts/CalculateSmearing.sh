@@ -3,9 +3,9 @@
 run() {
     tag=$1
 
-    ./bin/fabulate_angle configs/fabulate/new/fabulate_${tag}_angle.conf \
+    ./bin/fabulate_angle configs/fabulate/fabulate_${tag}_angle.conf \
         data/fabulate_${tag}_angle.root
-    ./bin/distillate_angle configs/distillate/new/distillate_${tag}_angle_dj.conf \
+    ./bin/distillate_angle configs/distillate/distillate_${tag}_angle_dj.conf \
         data/distillate_${tag}_angle.root
 }
 

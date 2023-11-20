@@ -5,13 +5,13 @@ set=$1
 run_pp() {
     tag=$1
 
-    ./bin/accumulate configs/accumulate/preapproval/accumulate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/accumulate_${tag}.root
+    ./bin/accumulate configs/accumulate/accumulate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/accumulate_${tag}.root
 }
 
 run_aa() {
     tag=$1
 
-    ./bin/accumulate configs/accumulate/preapproval/accumulate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/accumulate_${tag}.root
+    ./bin/accumulate configs/accumulate/accumulate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/accumulate_${tag}.root
 }
 
 samples=(pp)

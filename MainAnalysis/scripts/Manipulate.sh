@@ -5,13 +5,13 @@ set=$1
 run_pp() {
     tag=$1
 
-    ./bin/manipulate configs/manipulate/preapproval/manipulate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/manipulate_${tag}.root
+    ./bin/manipulate configs/manipulate/manipulate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/manipulate_${tag}.root
 }
 
 run_aa() {
     tag=$1
 
-    ./bin/manipulate configs/manipulate/preapproval/manipulate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/manipulate_${tag}.root
+    ./bin/manipulate configs/manipulate/manipulate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/manipulate_${tag}.root
 }
 
 samples=(pp)

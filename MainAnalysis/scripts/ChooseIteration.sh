@@ -7,7 +7,7 @@ run_pp() {
 
     echo ${tag}
 
-    ./bin/choose_iteration_study configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/preapproval/${set}/choose_iteration_${tag}.root
+    ./bin/choose_iteration_study configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/choose_iteration_${tag}.root
 }
 
 run_aa() {
@@ -15,7 +15,7 @@ run_aa() {
 
     echo ${tag}
 
-    ./bin/choose_iteration_study configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/preapproval/${set}/choose_iteration_${tag}.root
+    ./bin/choose_iteration_study configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/choose_iteration_${tag}.root
 }
 
 samples=(pp)

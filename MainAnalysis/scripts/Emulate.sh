@@ -3,7 +3,7 @@
 run() {
     tag=$1
     echo $tag
-    ./bin/emulate configs/emulate/preapproval/emulate_${tag}.conf data/preapproval/emulate_${tag}.root > log/emulate_${tag}.txt
+    ./bin/emulate configs/emulate/emulate_${tag}.conf data/arc/emulate_${tag}.root > log/emulate_${tag}.txt
 }
 
 samples=(aa pp aa_extra)
