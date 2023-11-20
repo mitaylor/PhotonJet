@@ -144,7 +144,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
                     j_prime++;
                 }
 
-                (*rebin_1)[k]->SetBinContent((*rebin_1)[k]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k]->GetBinContent(i, j));
+                (*rebin_1)[k]->SetBinContent(i_prime, j_prime, (*rebin_1)[k]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k]->GetBinContent(i, j));
             }
         }
     };
