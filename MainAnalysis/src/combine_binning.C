@@ -158,20 +158,29 @@ int combine_binning(char const* config, char const* selections, char const* outp
     /* figures */
     auto hb = new pencil();
 
-    auto c = new paper(set + "_binning_" + tag, hb);
-    apply_style(c, "", "");
-    if (heavyion) c->accessory(hf_info);
-    c->accessory(kinematics);
-    c->accessory(blurb);
-    c->divide(ihf->size()/2, -1);
+    std::vector<paper*> cs(4, nullptr);
+
+    zip([&](paper*& c, std::string const& title) {
+        auto c = new paper(set + "_" + title + "_binning_" + tag, hb);
+        apply_style(c, "", "");
+        if (heavyion) c->accessory(hf_info);
+        c->accessory(kinematics);
+        c->accessory(blurb);
+        c->divide(ihf->size()/2, -1);
+    }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s});
     
     for (int64_t i = 0; i < ihf->size(); ++i) {
-        c->add((*hist_sub)[i*2]);
-        c->adjust((*hist_sub)[i*2], "colz0", "");
+        cs[0]->add((*hist)[i*2]);
+        cs[0]->adjust((*hist)[i*2], "colz0", "");
+
+        cs[1]->add((*hist_sub)[i*2]);
+        cs[1]->adjust((*hist_sub)[i*2], "colz0", "");
     };
 
     hb->sketch();
-    c->draw("pdf");
+    
+    for (auto c : cs)
+        c->draw("pdf");
 
     fout->Close();
 
