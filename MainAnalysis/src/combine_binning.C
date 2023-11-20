@@ -125,8 +125,8 @@ int combine_binning(char const* config, char const* selections, char const* outp
     hist_sub->save();
 
     /* make extra versions with different binning */
-    vector<float> rdrr_1 = { 0, 0.01, 0.0, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2};
-    vector<float> rdpt_1 = {20, 30, 40, 50, 60, 70, 80, 100, 120, 200};
+    std::vector<float> rdrr_1 = { 0, 0.01, 0.0, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2};
+    std::vector<float> rdpt_1 = {20, 30, 40, 50, 60, 70, 80, 100, 120, 200};
     auto mdr_1 = new multival(rdrr, rptr);
     auto frdr_1 = std::bind(&multival::book<TH2F>, mdr_1, _1, _2, _3);
     auto rebin_1 = new history<TH2F>("rebin_1"s, "", frdr_1, mpthf);
