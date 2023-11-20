@@ -126,13 +126,13 @@ int combine_binning(char const* config, char const* selections, char const* outp
 
     /* make extra versions with different binning */
     std::vector<float> rdrr_1 = { 0, 0.01, 0.0, 0.03, 0.045, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2};
-    std::vector<float> rdpt_1 = {20, 30, 40, 50, 60, 70, 80, 100, 120, 200};
-    auto mdr_1 = new multival(rdrr, rptr);
+    std::vector<float> rptr_1 = {20, 30, 40, 50, 60, 70, 80, 100, 120, 200};
+    auto mdr_1 = new multival(rdrr_1, rptr_1);
     auto frdr_1 = std::bind(&multival::book<TH2F>, mdr_1, _1, _2, _3);
     auto rebin_1 = new history<TH2F>("rebin_1"s, "", frdr_1, mpthf);
 
-    i_prime = 2;
-    j_prime = 2;
+    int i_prime = 2;
+    int j_prime = 2;
 
     for (int64_t k = 0; k < ihf->size(); ++k) {
         for (int i = 1; i <= (*hist_sub)[k]->GetNbinsX; ++i) {
