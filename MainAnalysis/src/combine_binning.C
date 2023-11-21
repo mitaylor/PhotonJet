@@ -140,14 +140,14 @@ int combine_binning(char const* config, char const* selections, char const* outp
                 if ((*hist_sub)[k]->GetXaxis()->GetBinUpEdge(i) > rdrr_1[i_prime]) {
                     i_prime++;
                 }
-                if ((*hist_sub)[k]->GetYaxis()->GetBinUpEdge(i) > rptr_1[j_prime]) {
+                if ((*hist_sub)[k]->GetYaxis()->GetBinUpEdge(j) > rptr_1[j_prime]) {
                     j_prime++;
                 }
 
                 if ((*hist_sub)[k]->GetXaxis()->GetBinLowEdge(i) == rdrr_1[0]) {
                     i_prime = 1;
                 }
-                if ((*hist_sub)[k]->GetYaxis()->GetBinLowEdge(i) == rptr_1[0]) {
+                if ((*hist_sub)[k]->GetYaxis()->GetBinLowEdge(j) == rptr_1[0]) {
                     j_prime = 1;
                 }
 
