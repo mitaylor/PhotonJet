@@ -206,12 +206,15 @@ int combine_binning(char const* config, char const* selections, char const* outp
     }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s, "rebin1"});
     
     for (int64_t i = 0; i < ihf->size(); ++i) {
+        (*hist)[i*2]->SetMinimum(1);
         cs[0]->add((*hist)[i*2]);
         cs[0]->adjust((*hist)[i*2], "colz", "");
 
+        (*hist_sub)[i*2]->SetMinimum(1);
         cs[1]->add((*hist_sub)[i*2]);
         cs[1]->adjust((*hist_sub)[i*2], "colz", "");
 
+        (*rebin_1)[i*2]->SetMinimum(1);
         cs[2]->add((*rebin_1)[i*2]);
         cs[2]->adjust((*rebin_1)[i*2], "colz", "");
     };
