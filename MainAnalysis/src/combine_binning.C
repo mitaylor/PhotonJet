@@ -135,23 +135,23 @@ int combine_binning(char const* config, char const* selections, char const* outp
     int j_prime = 1;
 
     for (int64_t k = 0; k < ihf->size(); ++k) {
-        for (int i = 1; i <= (*hist_sub)[k]->GetNbinsX(); ++i) {
-            for (int j = 1; j <= (*hist_sub)[k]->GetNbinsY(); ++j) {
-                if ((*hist_sub)[k]->GetXaxis()->GetBinUpEdge(i) > rdrr_1[i_prime]) {
+        for (int i = 1; i <= (*hist_sub)[k*2]->GetNbinsX(); ++i) {
+            for (int j = 1; j <= (*hist_sub)[k*2]->GetNbinsY(); ++j) {
+                if ((*hist_sub)[k*2]->GetXaxis()->GetBinUpEdge(i) > rdrr_1[i_prime]) {
                     i_prime++;
                 }
-                if ((*hist_sub)[k]->GetYaxis()->GetBinUpEdge(j) > rptr_1[j_prime]) {
+                if ((*hist_sub)[k*2]->GetYaxis()->GetBinUpEdge(j) > rptr_1[j_prime]) {
                     j_prime++;
                 }
 
-                if ((*hist_sub)[k]->GetXaxis()->GetBinLowEdge(i) == rdrr_1[0]) {
+                if ((*hist_sub)[k*2]->GetXaxis()->GetBinLowEdge(i) == rdrr_1[0]) {
                     i_prime = 1;
                 }
-                if ((*hist_sub)[k]->GetYaxis()->GetBinLowEdge(j) == rptr_1[0]) {
+                if ((*hist_sub)[k*2]->GetYaxis()->GetBinLowEdge(j) == rptr_1[0]) {
                     j_prime = 1;
                 }
 
-                (*rebin_1)[k]->SetBinContent(i_prime, j_prime, (*rebin_1)[k]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k]->GetBinContent(i, j));
+                (*rebin_1)[k*2]->SetBinContent(i_prime, j_prime, (*rebin_1)[k*2]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k*2]->GetBinContent(i, j));
             }
         }
     };
