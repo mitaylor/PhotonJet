@@ -162,8 +162,8 @@ int combine_binning(char const* config, char const* selections, char const* outp
     auto frdr_2 = std::bind(&multival::book<TH2F>, mdr_2, _1, _2, _3);
     auto rebin_2 = new memory<TH2F>("rebin_2"s, "", frdr_2, mpthf);
 
-    int i_prime = 1;
-    int j_prime = 1;
+    i_prime = 1;
+    j_prime = 1;
 
     for (int64_t k = 0; k < ihf->size(); ++k) {
         for (int i = 1; i <= (*hist_sub)[k*2]->GetNbinsX(); ++i) {
