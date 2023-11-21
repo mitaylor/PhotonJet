@@ -202,7 +202,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
         c->accessory(kinematics);
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
-        c->set(paper::flags::logz); 
+        // c->set(paper::flags::logz); 
     }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s, "rebin1"});
     
     for (int64_t i = 0; i < ihf->size(); ++i) {
