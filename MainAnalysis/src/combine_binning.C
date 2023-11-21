@@ -131,8 +131,8 @@ int combine_binning(char const* config, char const* selections, char const* outp
     auto frdr_1 = std::bind(&multival::book<TH2F>, mdr_1, _1, _2, _3);
     auto rebin_1 = new memory<TH2F>("rebin_1"s, "", frdr_1, mpthf);
 
-    int i_prime = 2;
-    int j_prime = 2;
+    int i_prime = 1;
+    int j_prime = 1;
 
     for (int64_t k = 0; k < ihf->size(); ++k) {
         for (int i = 1; i <= (*hist_sub)[k]->GetNbinsX(); ++i) {
@@ -142,6 +142,13 @@ int combine_binning(char const* config, char const* selections, char const* outp
                 }
                 if ((*hist_sub)[k]->GetYaxis()->GetBinUpEdge(i) > rptr_1[j_prime]) {
                     j_prime++;
+                }
+
+                if ((*hist_sub)[k]->GetXaxis()->GetBinLowEdge(i) == rdrr_1[0]) {
+                    i_prime = 1;
+                }
+                if ((*hist_sub)[k]->GetYaxis()->GetBinLowEdge(i) == rptr_1[0]) {
+                    j_prime = 1;
                 }
 
                 (*rebin_1)[k]->SetBinContent(i_prime, j_prime, (*rebin_1)[k]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k]->GetBinContent(i, j));
