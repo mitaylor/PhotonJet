@@ -156,6 +156,37 @@ int combine_binning(char const* config, char const* selections, char const* outp
         }
     };
 
+    std::vector<float> rdrr_2 = { 0, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2};
+    std::vector<float> rptr_2 = {20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 120, 200};
+    auto mdr_2 = new multival(rdrr_2, rptr_2);
+    auto frdr_2 = std::bind(&multival::book<TH2F>, mdr_2, _1, _2, _3);
+    auto rebin_2 = new memory<TH2F>("rebin_2"s, "", frdr_2, mpthf);
+
+    int i_prime = 1;
+    int j_prime = 1;
+
+    for (int64_t k = 0; k < ihf->size(); ++k) {
+        for (int i = 1; i <= (*hist_sub)[k*2]->GetNbinsX(); ++i) {
+            for (int j = 1; j <= (*hist_sub)[k*2]->GetNbinsY(); ++j) {
+                if ((*hist_sub)[k*2]->GetXaxis()->GetBinUpEdge(i) > rdrr_2[i_prime]) {
+                    i_prime++;
+                }
+                if ((*hist_sub)[k*2]->GetYaxis()->GetBinUpEdge(j) > rptr_2[j_prime]) {
+                    j_prime++;
+                }
+
+                if ((*hist_sub)[k*2]->GetXaxis()->GetBinLowEdge(i) == rdrr_2[0]) {
+                    i_prime = 1;
+                }
+                if ((*hist_sub)[k*2]->GetYaxis()->GetBinLowEdge(j) == rptr_2[0]) {
+                    j_prime = 1;
+                }
+
+                (*rebin_2)[k*2]->SetBinContent(i_prime, j_prime, (*rebin_2)[k*2]->GetBinContent(i_prime, j_prime) + (*hist_sub)[k*2]->GetBinContent(i, j));
+            }
+        }
+    };
+
     /* info text */
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
@@ -193,7 +224,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
     /* figures */
     auto hb = new pencil();
 
-    std::vector<paper*> cs(3, nullptr);
+    std::vector<paper*> cs(4, nullptr);
 
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_" + title + "_binning_" + tag, hb);
@@ -203,7 +234,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
         c->set(paper::flags::logz); 
-    }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s, "rebin1"});
+    }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "subtracted"s, "rebin1"s, "rebin2"s});
     
     for (int64_t i = 0; i < ihf->size(); ++i) {
         (*hist)[i*2]->SetMinimum(1);
@@ -217,6 +248,10 @@ int combine_binning(char const* config, char const* selections, char const* outp
         (*rebin_1)[i*2]->SetMinimum(1);
         cs[2]->add((*rebin_1)[i*2]);
         cs[2]->adjust((*rebin_1)[i*2], "colz", "");
+
+        (*rebin_2)[i*2]->SetMinimum(1);
+        cs[3]->add((*rebin_2)[i*2]);
+        cs[3]->adjust((*rebin_2)[i*2], "colz", "");
     };
 
     hb->sketch();
