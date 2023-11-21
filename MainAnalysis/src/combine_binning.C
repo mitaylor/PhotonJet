@@ -129,7 +129,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
     std::vector<float> rptr_1 = {20, 30, 40, 50, 60, 70, 80, 100, 120, 200};
     auto mdr_1 = new multival(rdrr_1, rptr_1);
     auto frdr_1 = std::bind(&multival::book<TH2F>, mdr_1, _1, _2, _3);
-    auto rebin_1 = new history<TH2F>("rebin_1"s, "", frdr_1, mpthf);
+    auto rebin_1 = new memory<TH2F>("rebin_1"s, "", frdr_1, mpthf);
 
     int i_prime = 2;
     int j_prime = 2;
