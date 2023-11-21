@@ -156,7 +156,7 @@ int combine_binning(char const* config, char const* selections, char const* outp
         }
     };
 
-    std::vector<float> rdrr_2 = { 0, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2};
+    std::vector<float> rdrr_2 = { 0, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.1, 0.12, 0.15, 0.2};
     std::vector<float> rptr_2 = {20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 120, 200};
     auto mdr_2 = new multival(rdrr_2, rptr_2);
     auto frdr_2 = std::bind(&multival::book<TH2F>, mdr_2, _1, _2, _3);
