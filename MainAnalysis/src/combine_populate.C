@@ -80,8 +80,6 @@ int combine_populate(char const* config, char const* selections, char const* out
         auto name_mix = group + "_mix_"s + label;
         auto hist_mix = new history<TH1F>(files[0], name_mix);
 
-        // auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
-
         hist->multiply(*nevt_0);
         hist_mix->multiply(*nevt_0);
 
@@ -93,8 +91,6 @@ int combine_populate(char const* config, char const* selections, char const* out
             hist_add->multiply(*nevt_add);
             hist_mix_add->multiply(*nevt_add);
 
-            // std::cout << (*nevt_0)[0]->GetBinContent(1) << " " << (*nevt_add)[0]->GetBinContent(1) << std::endl;
-
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
 
@@ -104,7 +100,7 @@ int combine_populate(char const* config, char const* selections, char const* out
         scale_bin_width(hist, hist_mix);
 
         hist->apply([](TH1* h) { 
-            for (int i = 0; i < h->GetNbinsX(); ++i) {
+            for (int i = 0; i <= h->GetNbinsX(); ++i) {
                 if (h->GetBinContent(i + 1) == 0) {
                     h->SetBinError(i + 1, 1);
                 }
