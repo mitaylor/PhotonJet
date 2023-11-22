@@ -13,7 +13,7 @@
 #include "../include/JetCorrector.h"
 #include "../include/JetUncertainty.h"
 
-#include "../../RooUnfold/RooUnfoldResponse.h"
+#include "../../RooUnfold/src/RooUnfoldResponse.h"
 
 #include "TFile.h"
 #include "TRandom3.h"
