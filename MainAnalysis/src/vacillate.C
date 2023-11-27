@@ -53,12 +53,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto jeu = conf->get<std::string>("jeu");
     auto direction = conf->get<bool>("direction");
 
-    auto smear = conf->get<bool>("smear");
-    auto smear_input_aa = conf->get<std::string>("smear_input_aa");
-    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
-    auto smear_tag = conf->get<std::string>("smear_tag");
-    auto cent = conf->get<int64_t>("cent");
-
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
 
