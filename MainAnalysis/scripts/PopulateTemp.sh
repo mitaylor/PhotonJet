@@ -12,7 +12,7 @@ run_pp() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    for syst in closure; do
+    for syst in qcd qcd_gen_iso; do
         run_pp ${sample}_${syst}
     done
 done

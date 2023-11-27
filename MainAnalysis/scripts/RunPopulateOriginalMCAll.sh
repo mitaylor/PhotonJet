@@ -20,3 +20,10 @@ for sample in ${samples[@]}; do
         run_aa populate_${sample}_${syst}_bkg
     done
 done
+
+samples=(aa_closure)
+
+for sample in ${samples[@]}; do
+    run_aa populate_${sample}_raw
+    run_aa populate_${sample}_bkg
+done
