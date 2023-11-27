@@ -14,7 +14,7 @@ samples=(pp)
 for sample in ${samples[@]}; do
     run_pp ${sample}
 
-    for syst in wo_ele_rej qcd qcd_gen_iso er es; do
+    for syst in wo_ele_rej qcd qcd_gen_iso er es closure; do
         run_pp ${sample}_${syst}
     done
 done
