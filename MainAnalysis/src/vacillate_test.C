@@ -101,9 +101,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
     auto isdr = new interval("#deltaj"s, rdr);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
+    auto ipt = new interval("photon p_{T}"s, 20, 0.f, 300.f);
 
     auto mcdr = new multival(rdrr, rdrg);
     auto mcpt = new multival(rptr, rptg);
+    auto mphopt = new multival(ipt, ipt);
 
     auto mr = new multival(rdrr, rptr);
     auto mg = new multival(rdrg, rptg);
@@ -111,6 +113,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto fn = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fcdr = std::bind(&multival::book<TH2F>, mcdr, _1, _2, _3);
     auto fcpt = std::bind(&multival::book<TH2F>, mcpt, _1, _2, _3);
+    auto fphopt = std::bind(&interval::book<TH2F>, mphopt, _1, _2, _3);
 
     auto fr = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";Reconstructed Bin;"s + label).data(),
@@ -128,6 +131,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto r = new history<TH1F>("r"s, "counts", fr, ihf->size());
     auto g = new history<TH1F>("g"s, "counts", fg, ihf->size());
     auto c = new history<TH2F>("c"s, "counts", fc, ihf->size());
+    auto photon_pt = new history<TH2F>("photon_pt"s, "counts", fphopt, ihf->size());
 
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
@@ -170,6 +174,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto JERSF = new SingleJetCorrector(jersf);
     auto JEU = new JetUncertainty(jeu);
 
+    int nonphoton = 0;
+    int photon = 0;
+
     /* load input */
     for (auto const& input : inputs) {
         std::cout << input << std::endl;
@@ -211,7 +218,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
-            if (leading_pt > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
@@ -222,8 +228,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             auto gen_index = (*p->pho_genMatchedIndex)[leading];
             if (gen_index == -1) { continue; }
+
+            auto pid = (*p->mcPID)[gen_index];
+            auto mpid = (*p->mcMomPID)[gen_index];
             
             if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
+
+            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { nonphoton++; }
+            else { photon++; }
 
             if (!gen_iso) {
                 float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -289,6 +301,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* add weight for the number of photons, based on the fraction that are excluded by area */
             auto pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
+
+            for (int64_t k = 0; k < ihf->size(); ++k) {
+                (*photon_pt)[k]->Fill(leading_pt, (*p->mcPt)[gen_index], weights[k] * pho_cor);
+            }
 
             /* fill histogram */
             for (int64_t j = 0; j < ihf->size(); ++j) {
@@ -419,6 +435,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
         cpt_merge->save(tag);
         c_merge->save(tag);
     });
+
+    std::cout << "Non-photon: " << nonphoton << std::endl;
+    std::cout << "Photon: " << photon << std::endl;
 
     return 0;
 }
