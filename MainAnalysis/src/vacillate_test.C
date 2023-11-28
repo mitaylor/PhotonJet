@@ -93,13 +93,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto rptr = sel->get<std::vector<float>>("ptr_range");
     auto rptg = sel->get<std::vector<float>>("ptg_range");
 
-    auto rdr = sel->get<std::vector<float>>("dr_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
 
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
-    auto isdr = new interval("#deltaj"s, rdr);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
     auto ipt = new interval("photon p_{T}"s, 20, 0.f, 300.f);
 
