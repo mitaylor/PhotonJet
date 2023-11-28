@@ -432,6 +432,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
         cdr_merge->save(tag);
         cpt_merge->save(tag);
         c_merge->save(tag);
+
+        photon_pt->save(tag);
     });
 
     std::cout << "Non-photon: " << nonphoton << std::endl;

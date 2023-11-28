@@ -13,8 +13,6 @@
 #include "../include/JetCorrector.h"
 #include "../include/JetUncertainty.h"
 
-#include "../../RooUnfold/src/RooUnfoldResponse.h"
-
 #include "TFile.h"
 #include "TRandom3.h"
 #include "TH1.h"
@@ -54,12 +52,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto jersf = conf->get<std::string>("jersf");
     auto jeu = conf->get<std::string>("jeu");
     auto direction = conf->get<bool>("direction");
-
-    auto smear = conf->get<bool>("smear");
-    auto smear_input_aa = conf->get<std::string>("smear_input_aa");
-    auto smear_input_pp = conf->get<std::string>("smear_input_pp");
-    auto smear_tag = conf->get<std::string>("smear_tag");
-    auto cent = conf->get<int64_t>("cent");
 
     auto mod = conf->get<bool>("mod");
     auto parity = conf->get<bool>("parity");
@@ -101,13 +93,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto rptr = sel->get<std::vector<float>>("ptr_range");
     auto rptg = sel->get<std::vector<float>>("ptg_range");
 
-    auto rdr = sel->get<std::vector<float>>("dr_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
 
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
-    auto isdr = new interval("#deltaj"s, rdr);
     auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
 
     auto mcdr = new multival(rdrr, rdrg);
@@ -119,6 +109,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto fn = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fcdr = std::bind(&multival::book<TH2F>, mcdr, _1, _2, _3);
     auto fcpt = std::bind(&multival::book<TH2F>, mcpt, _1, _2, _3);
+
+    auto fm = [&](int64_t, std::string const& name, std::string const& label) {
+        return new RooUnfoldResponse(name.data(), (";Reconstructed Bin;Generator Bin;"s + label).data(),
+            mr->size(), 0, mr->size(), mg->size(), 0, mg->size()); };
 
     auto fr = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";Reconstructed Bin;"s + label).data(),
@@ -178,24 +172,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto JERSF = new SingleJetCorrector(jersf);
     auto JEU = new JetUncertainty(jeu);
 
-    /* load the smearing information */
-    TFile* fsmear_aa;
-    TFile* fsmear_pp;
-    history<TH1F>* smear_fits_aa = nullptr;
-    history<TH1F>* smear_fits_pp = nullptr;
-
-    if (smear) {
-        fsmear_aa = new TFile(smear_input_aa.data(), "read");
-        fsmear_pp = new TFile(smear_input_pp.data(), "read");
-        smear_fits_aa = new history<TH1F>(fsmear_aa, "aa_" + smear_tag);
-        if (cent == 0) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_50_90_" + smear_tag); }
-        if (cent == 1) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_30_50_" + smear_tag); }
-        if (cent == 2) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_10_30_" + smear_tag); }
-        if (cent == 3) { smear_fits_pp = new history<TH1F>(fsmear_pp, "pp_smear_0_10_" + smear_tag); }
-    }
-
-    auto rng = new TRandom3(144);
-
     /* load input */
     for (auto const& input : inputs) {
         std::cout << input << std::endl;
@@ -237,7 +213,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* require leading photon */
             if (leading < 0) { continue; }
-            if (leading_pt > 200) { continue; }
 
             if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
                     || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
@@ -248,8 +223,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             auto gen_index = (*p->pho_genMatchedIndex)[leading];
             if (gen_index == -1) { continue; }
+
+            auto pid = (*p->mcPID)[gen_index];
+            auto mpid = (*p->mcMomPID)[gen_index];
             
             if ((*p->mcCalIsoDR04)[gen_index] > 5) { continue; }
+
+            if (pid != 22 || (std::abs(mpid) > 22 && mpid != -999)) { nonphoton++; }
+            else { photon++; }
 
             if (!gen_iso) {
                 float isolation = (*p->pho_ecalClusterIsoR3)[leading]
@@ -315,6 +296,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             /* add weight for the number of photons, based on the fraction that are excluded by area */
             auto pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
+
+            for (int64_t k = 0; k < ihf->size(); ++k) {
+                (*photon_pt)[k]->Fill(leading_pt, (*p->mcPt)[gen_index], weights[k] * pho_cor);
+            }
 
             /* fill histogram */
             for (int64_t j = 0; j < ihf->size(); ++j) {
@@ -397,30 +382,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         (*g)[k]->Fill(g_x, weights[k] * cor); }
 
                     (*g_merge)[0]->Fill(g_x, weights_merge * cor);
-
-
-                    if (smear) {
-                        if (rdr > 0.3) { continue; }
-                        auto dr_x = isdr->index_for(rdr);
-
-                        auto aa_c = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(1);
-                        auto aa_s = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(2);
-                        auto aa_n = (*smear_fits_aa)[x{dr_x, cent}]->GetBinContent(3);
-
-                        auto pp_c = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(1);
-                        auto pp_s = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(2);
-                        auto pp_n = (*smear_fits_pp)[x{dr_x, 0}]->GetBinContent(3);
-
-                        auto res_diff = res(aa_c, aa_s, aa_n, reco_pt) - res(pp_c, pp_s, pp_n, reco_pt);
-
-                        if (res_diff > 0) {
-                            auto change = rng->Exp(res(aa_c, aa_s, aa_n, reco_pt)) - rng->Exp(res(pp_c, pp_s, pp_n, reco_pt));
-                            auto sign = (rng->Integer(2) == 0) ? -1 : 1;                
-                            auto adj = rdr + change * sign / 2;
-
-                            if (0 < adj && adj < 0.2 && rdr < 0.2) rdr = adj;
-                        }
-                    }
                     
                     for (int64_t k = 0; k < ihf->size(); ++k) {
                         (*r)[k]->Fill(r_x, weights[k] * cor);
