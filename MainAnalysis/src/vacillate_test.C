@@ -103,7 +103,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     auto mcdr = new multival(rdrr, rdrg);
     auto mcpt = new multival(rptr, rptg);
-    auto mphopt = new multival(ipt, ipt);
+    auto mphopt = new multival(*ipt, *ipt);
 
     auto mr = new multival(rdrr, rptr);
     auto mg = new multival(rdrg, rptg);
