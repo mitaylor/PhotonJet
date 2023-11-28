@@ -111,7 +111,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto fn = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fcdr = std::bind(&multival::book<TH2F>, mcdr, _1, _2, _3);
     auto fcpt = std::bind(&multival::book<TH2F>, mcpt, _1, _2, _3);
-    auto fphopt = std::bind(&interval::book<TH2F>, mphopt, _1, _2, _3);
+    auto fphopt = std::bind(&multival::book<TH2F>, mphopt, _1, _2, _3);
 
     auto fr = [&](int64_t, std::string const& name, std::string const& label) {
         return new TH1F(name.data(), (";Reconstructed Bin;"s + label).data(),
