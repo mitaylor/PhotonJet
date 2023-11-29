@@ -45,7 +45,7 @@ void fill_axes(pjtree* pjt,
                std::vector<int64_t>& pthf_x, std::vector<float>& weights, 
                float pho_cor, float photon_eta, int64_t photon_phi, 
                bool exclude, 
-               bool jet_cor, float jet_pt_min, float jet_eta_abs,
+               bool jet_cor, float jet_pt_min, float jet_eta_abs, float jet_dr_max,
                float dphi_min_numerator, float dphi_min_denominator,
                multival* mdr, interval* idphi,
                memory<TH1F>* nevt,
@@ -92,7 +92,7 @@ void fill_axes(pjtree* pjt,
         double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
 
         zip([&](auto const& index, auto const& weight) {
-            if (jet_pt < 200 && jet_pt >= jet_pt_min && jt_dr < 0.3) {
+            if (jet_pt < 200 && jet_pt >= jet_pt_min && jt_dr < jet_dr_max) {
                 (*pjet_u_dr)[index]->Fill(mdr->index_for(v{jt_dr, jet_pt}), cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
                 (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
@@ -107,7 +107,7 @@ void fill_axes(pjtree* pjt,
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
                 (*pjet_f_dr)[index]->Fill(10000, cor * weight);
             }
-            else if (jt_dr >= 0.3) {
+            else if (jt_dr >= jet_dr_max) {
                 (*pjet_u_dr)[index]->Fill(10000, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(10000, cor * weight);
                 (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
@@ -171,6 +171,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+    auto const jet_dr_max = sel->get<float>("jet_dr_max");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -484,7 +485,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, pthf_x, weights, pho_cor,
                             photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                            jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
+                            jet_pt_min, jet_eta_abs, jet_dr_max,
+                            dphi_min_numerator, dphi_min_denominator,
                             mdr, idphi, nmix,
                             mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_u_dr,
                             acceptance, total);
@@ -498,7 +500,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
             fill_axes(pjt, pthf_x, weights, pho_cor,
                 photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator,
+                jet_pt_min, jet_eta_abs, jet_dr_max,
+                dphi_min_numerator, dphi_min_denominator,
                 mdr, idphi, nevt,
                 pjet_f_dr, pjet_f_jpt, pjet_u_dr,
                 acceptance, total);
