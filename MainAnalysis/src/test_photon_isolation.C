@@ -98,8 +98,6 @@ int populate(char const* config, char const* selections, char const* output) {
             if (hf >= dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
 
-            auto photon_es = (apply_es) ? photon_pt_es[hf_x] : 1;
-
             int64_t type1_leading = -1;
             float type1_leading_pt = 0;
             bool type1 = false;
@@ -113,8 +111,6 @@ int populate(char const* config, char const* selections, char const* output) {
                 auto pho_et = (*pjt->phoEt)[j];
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
-
-                pho_et *= photon_es;
 
                 if (pho_et < photon_pt_min) { continue; }
 
@@ -258,7 +254,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                 /* electron rejection */
                 bool electron = false;
-                for (int64_t j = 0; j < pjt->nEle; ++k) {
+                for (int64_t k = 0; k < pjt->nEle; ++k) {
                     if (std::abs((*pjt->eleSCEta)[k]) > 1.4442) { continue; }
 
                     auto deta = photon_eta - (*pjt->eleEta)[k];
