@@ -36,6 +36,22 @@ float res(float c, float s, float n, float pt) {
     return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
 }
 
+float acceptance_weight(bool heavyion, interval* idphi, 
+    history<TH2F>* total, history<TH2F>* acceptance, 
+    float photon_phi, float jet_phi, float photon_eta, float jet_eta) {
+
+    double correction = 1;
+
+    if (heavyion) {
+        auto index = idphi->index_for(revert_pi(convert_radian(photon_phi) - convert_radian(jet_phi)));
+        auto bin = (*total)[index]->FindBin(reco_eta, photon_eta);
+        correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+        if (correction < 1) { std::cout << "error" << std::endl; }
+    }
+
+    return correction;
+}
+
 int vacillate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -195,16 +211,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
             
             t->GetEntry(i);
 
-            /* declare weights */
-            auto weight = p->w;
-            std::vector<float> weights(ihf->size(), weight);
-            float weights_merge = weight;
-            double pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
-
             /* look for reco photons */
             bool reco_photon = true;
             int64_t reco_photon_index = -1;
             float reco_photon_pt = 0;
+            float reco_photon_phi;
+            float reco_photon_eta;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if ((*p->phoEt)[j] <= 30) { continue; }
@@ -242,58 +254,32 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
 
                 // potential miss if there is a nearby electron
-                auto reco_photon_eta = (*p->phoEta)[reco_photon_index];
-                auto reco_photon_phi = convert_radian((*p->phoPhi)[reco_photon_index]);
+                reco_photon_eta = (*p->phoEta)[reco_photon_index];
+                reco_photon_phi = (*p->phoPhi)[reco_photon_index];
 
                 if (ele_rej) {
                     bool electron = false;
                     for (int64_t j = 0; j < p->nEle; ++j) {
                         if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                        auto deta = reco_photon_eta - (*p->eleEta)[j];
-                        if (deta > 0.1) { continue; }
+                        auto dr = std::sqrt(dr2(reco_photon_eta, (*p->eleEta)[j], reco_photon_phi, (*p->elePhi)[j]))
 
-                        auto ele_phi = convert_radian((*p->elePhi)[j]);
-                        auto dphi = revert_radian(reco_photon_phi - ele_phi);
-                        auto dr2 = deta * deta + dphi * dphi;
-
-                        if (dr2 < 0.01 && passes_electron_id<
+                        if (dr < 0.1 && passes_electron_id<
                                     det::barrel, wp::loose, pjtree
                                 >(p, j, heavyion)) {
                             electron = true; break; }
                     }
 
-                    if (electron) { reco_photon = false;; }
-                }
-
-                // fill event weight
-                if (heavyion) {
-                    auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
-
-                    for (int64_t j = 0; j < ihf->size(); ++j) {
-                        auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
-                        auto cor = (*rho_weighting)[j]->GetBinContent(bin);
-                        weights[j] *= cor;
-                    }
-
-                    auto bin = (*rho_weighting_merge)[0]->FindBin(avg_rho);
-                    auto cor = (*rho_weighting_merge)[0]->GetBinContent(bin);
-                    weights_merge *= cor;
-                }
-
-                // weight photon pT spectrum
-                if (photon_pt_weight.size() > 0) {
-                    for (int64_t j = 0; j < ihf->size(); ++j) {
-                        weights[j] *= reco_photon_pt * photon_pt_weight[1] + photon_pt_weight[0];
-                    }
-
-                    weights_merge *= reco_photon_pt * photon_pt_weight[1] + photon_pt_weight[0];
+                    if (electron) { reco_photon = false; }
                 }
             }
 
             /* look for gen photons */
             bool gen_photon = false;
             int64_t gen_photon_index = -1;
+            float gen_photon_pt = 0;
+            float gen_photon_phi;
+            float gen_photon_eta;
 
             if (reco_photon) { // find if there is a gen photon, or if it is a fake
                 auto gen_photon_index = (*p->pho_genMatchedIndex)[reco_photon_index];
@@ -317,30 +303,77 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 for (int64_t j = 0; j < p->nMC; ++j) {
                     auto pid = (*p->mcPID)[j];
                     auto mother_pid = (*p->mcMomPID)[j];
+                    auto pho_et = (*p->mcPt)[j];
 
                     // require the candidate pass all selections
                     if ((*p->mcCalIsoDR04)[j] > 5) { continue; }
                     if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { continue; }
-                    if ((*p->mcPt)[j] < photon_pt_min || (*p->mcPt)[j] > photon_pt_max) { continue; }
                     if (heavyion && in_pho_failure_region((*p->mcEta)[j], (*p->mcPhi)[j])) { continue; }
-                    
-                    gen_photon = true;
+                    if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
+
+                    if (pho_et > gen_photon_pt) {
+                        gen_photon_index = j;
+                        gen_photon_pt = pho_et;
+                    }
                 }
             }
 
-            /* handle fakes and misses for photons */
-            if (!gen_photon && !reco_photon) { // useless event
+            if (gen_photon_index > -1) {
+                gen_photon_eta = (*p->mcEta)[gen_photon_index];
+                gen_photon_phi = (*p->mcPhi)[gen_photon_index];
+                gen_photon = true;
+            }
+
+            /* skip useless events */
+            if (!gen_photon && !reco_photon) {
                 continue;
             } 
-            else if (gen_photon && !reco_photon) { // miss, fill the truth histogram
+
+            /* declare weights */
+            auto weight = p->w;
+            std::vector<float> weights(ihf->size(), weight);
+            float weights_merge = weight;
+
+            if (heavyion) {
+                auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
+
+                for (int64_t j = 0; j < ihf->size(); ++j) {
+                    auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
+                    auto cor = (*rho_weighting)[j]->GetBinContent(bin);
+                    weights[j] *= cor;
+                }
+
+                auto bin = (*rho_weighting_merge)[0]->FindBin(avg_rho);
+                auto cor = (*rho_weighting_merge)[0]->GetBinContent(bin);
+                weights_merge *= cor;
+            }
+
+            if (reco_photon && photon_pt_weight.size() > 0) {
+                for (int64_t j = 0; j < ihf->size(); ++j) {
+                    weights[j] *= reco_photon_pt * photon_pt_weight[1] + photon_pt_weight[0];
+                }
+
+                weights_merge *= reco_photon_pt * photon_pt_weight[1] + photon_pt_weight[0];
+            }
+
+            double pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
+
+            /* handle fakes and misses for photons */
+            if (gen_photon && !reco_photon) { // miss, fill the truth histogram
                 // find dj and jet pT
                 for (int64_t j = 0; j < p->ngen; ++j) {
                     auto gen_jet_pt = (*p->genpt)[j];
                     auto gen_jet_eta = (*p->geneta)[j];
                     auto gen_jet_phi = (*p->genphi)[j];
 
-                    if (gen_jet_pt < 200 && gen_jet_pt >= jet_pt_min && gen_jet_dr < jet_dr_max) {
+                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
+                    auto g_x = mg->index_for(v{gen_jet_dr, gen_jet_pt});
 
+                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
+
+                    if (gen_jet_pt < 200 && gen_jet_pt >= jet_pt_min && gen_jet_dr < jet_dr_max) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) { (*g)[k]->Fill(g_x, weights[k] * jet_cor); }
+                        (*g_merge)[0]->Fill(g_x, weights_merge * jet_cor);
                     }
                     else if (gen_jet_pt < jet_pt_min) {
 
@@ -351,8 +384,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     else if (gen_jet_dr >= jet_dr_max) {
 
                     }
-                    auto gen_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[id], gen_jet_phi, (*p->WTAgenphi)[id]));
-                    auto g_x = mg->index_for(v{gdr, gen_jet_pt});
                 }
             }
             else if (!gen_photon && reco_photon) { // fake, fill the reco histogram
