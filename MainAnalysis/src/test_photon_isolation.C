@@ -298,6 +298,11 @@ int populate(char const* config, char const* selections) {
             }
         }
 
+        std::cout << type1_type2_match << std::endl;
+        std::cout << type1_type2_mismatch << std::endl;
+        std::cout << type1_type3_match << std::endl;
+        std::cout << type1_type3_mismatch << std::endl;
+
         f->Close();
     }
 
