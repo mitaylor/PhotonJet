@@ -35,7 +35,6 @@ int populate(char const* config, char const* selections) {
 
     /* options */
     auto gen_iso = conf->get<bool>("generator_isolation");
-    auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
 
@@ -55,7 +54,6 @@ int populate(char const* config, char const* selections) {
     auto see_min = sel->get<float>("see_min");
     auto see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
-    auto const gen_iso_max = sel->get<float>("gen_iso_max");
 
     auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
