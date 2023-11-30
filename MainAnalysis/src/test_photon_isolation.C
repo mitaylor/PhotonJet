@@ -26,7 +26,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-int populate(char const* config, char const* selections, char const* output) {
+int populate(char const* config, char const* selections) {
     auto conf = new configurer(config);
 
     auto input = conf->get<std::vector<std::string>>("input");
@@ -65,9 +65,6 @@ int populate(char const* config, char const* selections, char const* output) {
     if (tag == "bkg") see_min = 0.012;
     if (tag == "bkg") see_max = 0.02;
 
-    /* make histograms */
-    auto ihf = new interval(dhf);
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -92,7 +89,6 @@ int populate(char const* config, char const* selections, char const* output) {
             t->GetEntry(i);
 
             double hf = pjt->hiHF;
-            auto hf_x = ihf->index_for(hf);
 
             if (hf <= dhf.front()) { continue; }
             if (hf >= dhf.back()) { continue; }
@@ -173,8 +169,6 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
 
-                pho_et *= photon_es;
-
                 if (pho_et < photon_pt_min) { continue; }
 
                 /* isolation requirement */
@@ -236,8 +230,6 @@ int populate(char const* config, char const* selections, char const* output) {
                 auto pho_et = (*pjt->phoEt)[j];
                 if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
-
-                pho_et *= photon_es;
 
                 if (pho_et < photon_pt_min) { continue; }
 
@@ -315,9 +307,9 @@ int populate(char const* config, char const* selections, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
-        return populate(argv[1], argv[2], argv[3]);
+    if (argc == 3)
+        return populate(argv[1], argv[2]);
 
-    printf("usage: %s [config] [selections] [output]\n", argv[0]);
+    printf("usage: %s [config] [selections]\n", argv[0]);
     return 1;
 }
