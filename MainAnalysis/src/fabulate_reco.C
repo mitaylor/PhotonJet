@@ -130,7 +130,7 @@ int fabulate(char const* config, char const* output) {
                 if (dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { continue; }
 
                 auto gen_eta = (*p->refeta)[j];
-                if (std::abs(gen_eta) >= eta_max) { continue; }
+                if (std::abs(reco_eta) >= eta_max) { continue; }
 
                 auto gen_phi = (*p->refphi)[j];
 
