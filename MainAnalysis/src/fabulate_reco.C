@@ -126,6 +126,7 @@ int fabulate(char const* config, char const* output) {
                 auto reco_phi = (*p->jtphi)[j];
 
                 if (reco_pt < pt_min) { continue; }
+                if (gen_pt < 0) { continue; }
                 if (dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { continue; }
 
                 auto gen_eta = (*p->refeta)[j];
