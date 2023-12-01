@@ -52,6 +52,10 @@ float acceptance_weight(bool heavyion, interval* idphi,
     return correction;
 }
 
+float back_to_back(float photon_phi, float jet_phi, float threshold) {
+    return std::abs(convert_radian(photon_phi) - convert_radian(jet_phi)) > convert_pi(threshold);
+}
+
 int vacillate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -275,7 +279,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             }
 
             /* look for gen photons */
-            bool gen_photon = false;
+            bool gen_photon = true;
             int64_t gen_photon_index = -1;
             float gen_photon_pt = 0;
             float gen_photon_phi;
@@ -283,33 +287,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             if (reco_photon) { // find if there is a gen photon, or if it is a fake
                 auto gen_photon_index = (*p->pho_genMatchedIndex)[reco_photon_index];
-
-                // fake if the gen particle does not exist
-                if (gen_photon_index != -1) { gen_photon = true; }
-
-                auto pid = (*p->mcPID)[gen_photon_index];
-                auto mother_pid = (*p->mcMomPID)[gen_photon_index];
-                
-                // fake if the gen particle is not isolated
-                if ((*p->mcCalIsoDR04)[gen_photon_index] > 5) { gen_photon = false; }
-
-                // fake if the gen particle is not actualy a photon
-                if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { gen_photon = false; }
-
-                // fake if the gen particle is not in the kinematic range
-                if ((*p->mcPt)[gen_photon_index] < photon_pt_min || (*p->mcPt)[gen_photon_index] > photon_pt_max) { gen_photon = false; }
             }
             else { // find if there is a gen photon (outside the HEM failure region), and it is a miss
                 for (int64_t j = 0; j < p->nMC; ++j) {
-                    auto pid = (*p->mcPID)[j];
-                    auto mother_pid = (*p->mcMomPID)[j];
+                    if (std::abs((*p->mcEta)[j]) >= photon_eta_abs) { continue; }
                     auto pho_et = (*p->mcPt)[j];
-
-                    // require the candidate pass all selections
-                    if ((*p->mcCalIsoDR04)[j] > 5) { continue; }
-                    if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { continue; }
-                    if (heavyion && in_pho_failure_region((*p->mcEta)[j], (*p->mcPhi)[j])) { continue; }
-                    if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
 
                     if (pho_et > gen_photon_pt) {
                         gen_photon_index = j;
@@ -318,10 +300,29 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
             }
 
-            if (gen_photon_index > -1) {
+            // potential miss if there is no reco photon in the right pT range
+            if (gen_photon_index < 0) { 
+                gen_photon = false; 
+            }
+            else {
+                auto pid = (*p->mcPID)[gen_photon_index];
+                auto mother_pid = (*p->mcMomPID)[gen_photon_index];
+
                 gen_photon_eta = (*p->mcEta)[gen_photon_index];
                 gen_photon_phi = (*p->mcPhi)[gen_photon_index];
-                gen_photon = true;
+                gen_photon_pt = (*p->mcPt)[gen_photon_index];
+                
+                // fake if the gen particle is not isolated
+                if ((*p->mcCalIsoDR04)[gen_photon_index] > 5) { gen_photon = false; }
+
+                // fake if the gen particle is not actualy a photon
+                if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { gen_photon = false; }
+
+                // fake if the gen particle is not in the kinematic range
+                if (gen_photon_pt < photon_pt_min || gen_photon_pt > photon_pt_max) { gen_photon = false; }
+
+                // fake if the gen particle is in the HEM failure region
+                if (heavyion && in_pho_failure_region(gen_photon_eta, gen_photon_phi)) { gen_photon = false; }
             }
 
             /* skip useless events */
@@ -366,28 +367,80 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto gen_jet_eta = (*p->geneta)[j];
                     auto gen_jet_phi = (*p->genphi)[j];
 
-                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
-                    auto g_x = mg->index_for(v{gen_jet_dr, gen_jet_pt});
+                    if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
+                    if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
+                    if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
+                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
                     jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
 
                     if (gen_jet_pt < 200 && gen_jet_pt >= jet_pt_min && gen_jet_dr < jet_dr_max) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { (*g)[k]->Fill(g_x, weights[k] * jet_cor); }
-                        (*g_merge)[0]->Fill(g_x, weights_merge * jet_cor);
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
+                        }
+                        (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
                     }
                     else if (gen_jet_pt < jet_pt_min) {
-
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*g)[k]->Fill(-1, weights[k] * jet_cor); 
+                        }
+                        (*g_merge)[0]->Fill(-1, weights_merge * jet_cor);
                     }
-                    else if (jet_pt >= 200) {
-
-                    }
-                    else if (gen_jet_dr >= jet_dr_max) {
-
+                    else if (gen_jet_pt >= 200 || gen_jet_dr >= jet_dr_max) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*g)[k]->Fill(10000, weights[k] * jet_cor); 
+                        }
+                        (*g_merge)[0]->Fill(10000, weights_merge * jet_cor);
                     }
                 }
             }
             else if (!gen_photon && reco_photon) { // fake, fill the reco histogram
                 // find dj and jet pT
+                for (int64_t j = 0; j < p->nref; ++j) {
+                    auto reco_jet_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
+                    auto reco_jet_eta = (*p->jteta)[j];
+                    auto reco_jet_phi = (*p->jtphi)[j];
+
+                    if (std::abs(reco_jet_eta) >= jet_eta_abs) { continue; }
+                    if (heavyion && in_jet_failure_region(p, j)) { continue; }
+                    if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+
+                    auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAgeneta)[j], reco_jet_phi, (*p->WTAgenphi)[j]));
+                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
+
+                    /* correct jet pt for data/MC JER difference */
+                    JERSF->SetJetPT(reco_jet_pt);
+                    JERSF->SetJetEta(reco_jet_eta);
+                    JERSF->SetJetPhi(reco_jet_phi);
+
+                    auto jer_scale_factors = JERSF->GetParameters();
+
+                    auto jer_scale = jer_scale_factors[0];
+                    if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
+                    else if  (jer_up && !heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]);
+
+                    if (!mc) { reco_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt; }
+
+
+                    if (gen_jet_pt < 200 && gen_jet_pt >= jet_pt_min && gen_jet_dr < jet_dr_max) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
+                        }
+                        (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+                    }
+                    else if (gen_jet_pt < jet_pt_min) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*g)[k]->Fill(-1, weights[k] * jet_cor); 
+                        }
+                        (*g_merge)[0]->Fill(-1, weights_merge * jet_cor);
+                    }
+                    else if (gen_jet_pt >= 200 || gen_jet_dr >= jet_dr_max) {
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*g)[k]->Fill(10000, weights[k] * jet_cor); 
+                        }
+                        (*g_merge)[0]->Fill(10000, weights_merge * jet_cor);
+                    }
+                }
             }
             else if (gen_photon && reco_photon) { // real, fill all histograms
                 // look at photon correlations

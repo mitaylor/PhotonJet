@@ -122,6 +122,7 @@ int fabulate(char const* config, char const* output) {
             for (int64_t j = 0; j < p->nref; ++j) {
                 auto gen_pt = (*p->refpt)[j];
                 if (gen_pt < pt_min) { continue; }
+                if (dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { continue; }
 
                 auto gen_eta = (*p->refeta)[j];
                 if (std::abs(gen_eta) >= eta_max) { continue; }
@@ -145,8 +146,7 @@ int fabulate(char const* config, char const* output) {
                 auto reco_phi = (*p->jtphi)[j];
 
                 auto deta = reco_eta - gen_eta;
-                auto dphi = revert_radian(convert_radian(reco_phi)
-                    - convert_radian(gen_phi));
+                auto dphi = revert_radian(convert_radian(reco_phi) - convert_radian(gen_phi));
 
                 auto id = genid[gen_pt];
                 auto gdr = std::sqrt(dr2(gen_eta, (*p->WTAgeneta)[id], gen_phi, (*p->WTAgenphi)[id]));
