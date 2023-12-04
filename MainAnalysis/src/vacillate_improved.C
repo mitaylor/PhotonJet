@@ -384,7 +384,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                     auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
-                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
+                    auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
 
                     // fill histograms
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
@@ -406,7 +406,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                     auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAgeneta)[j], reco_jet_phi, (*p->WTAgenphi)[j]));
-                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
+                    auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
 
                     // add in data/MC JER difference correction
 
@@ -457,7 +457,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                     auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAgeneta)[j], reco_jet_phi, (*p->WTAgenphi)[j]));
-                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
+                    auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
 
                     // jet energy scale uncertainty
                     if (!jeu.empty()) {
@@ -546,7 +546,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                     auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
-                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
+                    auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
 
                     // fill histograms
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
