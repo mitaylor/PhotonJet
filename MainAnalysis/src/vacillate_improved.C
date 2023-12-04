@@ -528,7 +528,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     // skip jets that were matched with a reco photon
                     bool hit = false;
 
-                    for (auto const& index : exclusion) {
+                    for (auto const& index : exclude) {
                         if (j == index) {
                             hit = true; break; 
                         }
