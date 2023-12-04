@@ -440,7 +440,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                 /* fill histogram */
                 for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*n)[k]->Fill(1., weights[j] * pho_cor); 
+                    (*n)[k]->Fill(1., weights[k] * pho_cor); 
                 }
                 
                 (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
