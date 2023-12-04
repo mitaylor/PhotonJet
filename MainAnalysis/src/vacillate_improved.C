@@ -491,7 +491,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     }
                    
                     // no matching gen jet => fake, add matching in jet pT
-                    if (gen_jet_pt < 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
+                    if (gen_jet_pt <= 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
                         // add in data/MC JER difference correction
 
                         // fill histograms
