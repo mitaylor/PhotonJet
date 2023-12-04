@@ -74,7 +74,7 @@ std::cout << __LINE__ << std::endl;
                     auto dphi = revert_pi(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
 std::cout << __LINE__ << std::endl;
                     auto dphi_x = idphi->index_for(dphi);
-std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << dphi_x << " " << dphi << std::endl;
                     (*nevt)[dphi_x]->Fill(jetEta, phoEta);
 std::cout << __LINE__ << std::endl;
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
