@@ -457,6 +457,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
                     std::cout << __LINE__ << std::endl;
                     auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAgeneta)[j], reco_jet_phi, (*p->WTAgenphi)[j]));std::cout << __LINE__ << std::endl;
+                    std::cout << reco_photon_phi << " " << reco_jet_phi << " " << reco_photon_eta << " " << reco_jet_eta << std::endl;
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
                     std::cout << __LINE__ << std::endl;
                     // jet energy scale uncertainty
