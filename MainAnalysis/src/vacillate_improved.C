@@ -39,16 +39,17 @@ float res(float c, float s, float n, float pt) {
 float acceptance_weight(bool heavyion, interval* idphi, 
     history<TH2F>* total, history<TH2F>* acceptance, 
     float photon_phi, float jet_phi, float photon_eta, float jet_eta) {
-
+    std::cout << __LINE__ << std::endl;
     double correction = 1;
-
+    std::cout << __LINE__ << std::endl;
     if (heavyion) {
         auto index = idphi->index_for(revert_pi(convert_radian(photon_phi) - convert_radian(jet_phi)));
+        std::cout << index << std::endl;
         auto bin = (*total)[index]->FindBin(jet_eta, photon_eta);
         correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[index]->GetBinContent(bin);
         if (correction < 1) { std::cout << "error" << std::endl; }
     }
-
+    std::cout << __LINE__ << std::endl;
     return correction;
 }
 
