@@ -29,8 +29,8 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
     auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
 
-    std::cout << eta1 << " " << eta2 << " " << deta << std::endl;
-    std::cout << phi1 << " " << phi2 << " " << dphi << std::endl;
+    // std::cout << eta1 << " " << eta2 << " " << deta << std::endl;
+    // std::cout << phi1 << " " << phi2 << " " << dphi << std::endl;
 
     return deta * deta + dphi * dphi;
 }
@@ -519,8 +519,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         // fill histograms
                         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
 
-                        // std::cout << mg->index_for(v{gen_jet_dr, gen_jet_pt}) << " " << gen_jet_dr << " " << gen_jet_pt << std::endl;
-                        // std::cout << mr->index_for(v{reco_jet_dr, reco_jet_pt}) << " " << reco_jet_dr << " " << reco_jet_pt << std::endl;
+                        std::cout << mg->index_for(v{gen_jet_dr, gen_jet_pt}) << " " << gen_jet_dr << " " << gen_jet_pt << std::endl;
+                        std::cout << mr->index_for(v{reco_jet_dr, reco_jet_pt}) << " " << reco_jet_dr << " " << reco_jet_pt << std::endl;
 
                         for (int64_t k = 0; k < ihf->size(); ++k) { 
                             (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
