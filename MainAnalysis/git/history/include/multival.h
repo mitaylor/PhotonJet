@@ -50,8 +50,7 @@ class multival {
             if (indices[i] > _intervals[i].size()) return size_ + 1;
         }
 
-        return std::inner_product(std::begin(indices), std::end(indices),
-                                  std::begin(_shape), 0, std::plus<>(), size);
+        return index;
     }
 
     template <template <typename...> class T, typename U>
