@@ -103,9 +103,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto const see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    // auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
-    auto const jet_dr_max = sel->get<float>("jet_dr_max");
+    // auto const jet_dr_max = sel->get<float>("jet_dr_max");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -230,8 +230,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
             bool reco_photon = true;
             int64_t reco_photon_index = -1;
             float reco_photon_pt = 0;
-            float reco_photon_phi;
-            float reco_photon_eta;
+            float reco_photon_phi = -1000;
+            float reco_photon_eta = -1000;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if ((*p->phoEt)[j] <= 30) { continue; }
@@ -292,8 +292,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
             bool gen_photon = true;
             int64_t gen_photon_index = -1;
             float gen_photon_pt = 0;
-            float gen_photon_phi;
-            float gen_photon_eta;
+            float gen_photon_phi = -1000;
+            float gen_photon_eta = -1000;
 
             // find if there is a gen photon, or if it is a fake
             if (reco_photon) {
