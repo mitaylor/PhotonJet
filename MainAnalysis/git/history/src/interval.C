@@ -32,7 +32,7 @@ int64_t interval::index_for(double value) const {
         if (value < edge)
             --index;
 
-    return index;
+    return (index == _size) ? _size - 1 : index;
 }
 
 /* template specialisations */
