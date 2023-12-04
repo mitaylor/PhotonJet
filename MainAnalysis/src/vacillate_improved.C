@@ -493,7 +493,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         auto jer_scale = jer_scale_factors[0];
                         if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
                         else if  (jer_up && !heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]);
-                        if (!mc) { reco_jet_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt; }
+                        if (!mc) { reco_jet_pt *= 1 + (jer_scale - 1) * (reco_jet_pt - gen_jet_pt) / reco_jet_pt; }
 
                         // fill histograms
                         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
