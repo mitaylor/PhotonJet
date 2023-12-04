@@ -44,7 +44,7 @@ class multival {
 
         for (size_t i = 0; i < _dims; ++i) {
             index += block * indices[i];
-            block *= axis;
+            block *= _shape[i];
 
             if (indices[i] < 0) return -1;
             if (indices[i] > _intervals[i].size()) return _size + 1;
