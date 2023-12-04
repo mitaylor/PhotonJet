@@ -277,12 +277,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     for (int64_t j = 0; j < p->nEle; ++j) {
                         if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                        auto dr = std::sqrt(dr2(reco_photon_eta, (*p->eleEta)[j], reco_photon_phi, (*p->elePhi)[j]))
+                        auto dr = std::sqrt(dr2(reco_photon_eta, (*p->eleEta)[j], reco_photon_phi, (*p->elePhi)[j]));
 
-                        if (dr < 0.1 && passes_electron_id<
-                                    det::barrel, wp::loose, pjtree
-                                >(p, j, heavyion)) {
-                            electron = true; break; }
+                        if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(p, j, heavyion)) {
+                            electron = true; break; 
+                        }
                     }
 
                     if (electron) { reco_photon = false; }
