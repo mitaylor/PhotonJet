@@ -103,9 +103,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto const see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
 
-    // auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
-    // auto const jet_dr_max = sel->get<float>("jet_dr_max");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -198,9 +196,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     // if (!jer_file.empty()) {
     //     fj = new TFile(jer_file.data(), "read");
-    //     jer_histogram = new history<TH1F>(fj, acc_label_acc);
-    //     jer_function = new history<TF1>(fa, acc_label_ref);
-    // }
+    //     jer_histogram = new history<TH1F>(fj, jer_label_hist);
+    //     jer_function = new history<TF1>(fa, jer_label_hist);
+
+    //     for (int64_t i = 0; i < jer_function->size(); ++i) {
+    //         auto name = jer_label_hist + "_" + std::to_string(i);
+    //         (*jer_function)[i]->GetFunction(name);
+    //     }
+    }
 
     /* get data/MC resolution correction */
     auto JERSF = new SingleJetCorrector(jersf);
@@ -434,6 +437,13 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     (*ppt)[k]->Fill(reco_photon_pt, gen_photon_pt, weights[k] * pho_cor);
                 }
+
+                /* fill histogram */
+                for (int64_t k = 0; k < ihf->size(); ++k) {
+                    (*n)[k]->Fill(1., weights[j] * pho_cor); 
+                }
+                
+                (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
                
                 // map reco jet to gen jet
                 std::unordered_map<float, int64_t> gen_jet_id;
@@ -497,6 +507,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                         // fill histograms
                         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
+
+                        std::cout << mg->index_for(v{gen_jet_dr, gen_jet_pt}) << " " << gen_jet_dr << " " << gen_jet_pt << std::endl;
+                        std::cout << mr->index_for(v{reco_jet_dr, reco_jet_pt}) << " " << reco_jet_dr << " " << reco_jet_pt << std::endl;
 
                         for (int64_t k = 0; k < ihf->size(); ++k) { 
                             (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
