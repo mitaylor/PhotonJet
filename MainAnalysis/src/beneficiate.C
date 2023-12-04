@@ -36,17 +36,17 @@ int beneficiate(char const* selections, char const* output) {
     double jet_eta_max = 2;
     double pho_eta_min = -2;
     double pho_eta_max = 2;
-std::cout << __LINE__ << std::endl;
+
     double phi_min = -TMath::Pi();
     double phi_max = TMath::Pi();
-std::cout << __LINE__ << std::endl;
+
     auto ijeta = new interval("jetEta"s, dim_size, jet_eta_min, jet_eta_max);
     auto ipeta = new interval("phoEta"s, dim_size, pho_eta_min, pho_eta_max);
     auto idphi = new interval("dphi"s, dphi_range);
 
     auto mpjeta = new multival(*ijeta, *ipeta);
     auto mdphi = new multival (*idphi);
-std::cout << __LINE__ << std::endl;
+
     auto fincl = std::bind(&multival::book<TH2F>, mpjeta, _1, _2, _3);
 
     auto nevt = new memory<TH2F>("nevt"s, "none", fincl, mdphi);
@@ -55,7 +55,7 @@ std::cout << __LINE__ << std::endl;
     /* create vectors for photon and jet phi */
     auto ijphi = new interval("jetPhi"s, dim_size, phi_min, phi_max);
     auto ipphi = new interval("phoPhi"s, dim_size, phi_min, phi_max);
-std::cout << __LINE__ << std::endl;
+
     /* fill the histograms */
     for (int64_t i = 0; i < dim_size; ++i) {
         for (int64_t j = 0; j < dim_size; ++j) {
@@ -65,26 +65,26 @@ std::cout << __LINE__ << std::endl;
                     auto peta_edges = ipeta->edges(j);
                     auto jphi_edges = ijphi->edges(k);
                     auto pphi_edges = ipphi->edges(l);
-std::cout << __LINE__ << std::endl;
+
                     auto jetEta = (jeta_edges[1] + jeta_edges[0])/2;
                     auto phoEta = (peta_edges[1] + peta_edges[0])/2;
                     auto jetPhi = (jphi_edges[1] + jphi_edges[0])/2;
                     auto phoPhi = (pphi_edges[1] + pphi_edges[0])/2;
-std::cout << __LINE__ << std::endl;
+
                     auto dphi = revert_pi(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
-std::cout << __LINE__ << std::endl;
+
                     auto dphi_x = idphi->index_for(dphi);
-std::cout << __LINE__ << std::endl; std::cout << dphi_x << " " << dphi << std::endl; std::cout << nevt->size() << std::endl;
+
                     (*nevt)[dphi_x]->Fill(jetEta, phoEta);
-std::cout << __LINE__ << std::endl;
+
                     if (in_pho_failure_region(phoEta, phoPhi) || in_jet_failure_region(jetEta, jetPhi)) { continue; }
-std::cout << __LINE__ << std::endl;
-                    (*nacc)[dphi_x]->Fill(jetEta, phoEta);std::cout << __LINE__ << std::endl;
+
+                    (*nacc)[dphi_x]->Fill(jetEta, phoEta);
                 }
             }
         }
     }
-std::cout << __LINE__ << std::endl;
+
     /* normalise by number of entries */
     // nacc->divide(*nevt);
 
