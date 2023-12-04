@@ -491,7 +491,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     }
                    
                     // no matching gen jet => fake, add matching in jet pT
-                    if (gen_jet_pt < 0 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
+                    if (gen_jet_pt < 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
                         // add in data/MC JER difference correction
 
                         // fill histograms
@@ -520,10 +520,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         auto id = gen_jet_id[gen_jet_pt];
                         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[id], gen_jet_phi, (*p->WTAgenphi)[id]));
 
-                        std::cout << mg->index_for(v{gen_jet_dr, gen_jet_pt}) << " " << gen_jet_dr << " " << gen_jet_pt << " " << (*p->genpt)[id] << std::endl;
-                        std::cout << gen_jet_eta << " " << (*p->WTAgeneta)[id] << " " << gen_jet_phi << " " << (*p->WTAgenphi)[id] << std::endl;
-                        std::cout << mr->index_for(v{reco_jet_dr, reco_jet_pt}) << " " << reco_jet_dr << " " << reco_jet_pt << std::endl;
-                        std::cout << reco_jet_eta << " " << (*p->WTAeta)[j] << " " << reco_jet_phi << " " << (*p->WTAphi)[j] << std::endl << std::endl;
+                        if (gen_jet_dr > 0.3 || reco_jet_dr > 0.3) {
+                            std::cout << mg->index_for(v{gen_jet_dr, gen_jet_pt}) << " " << gen_jet_dr << " " << gen_jet_pt << " " << (*p->genpt)[id] << std::endl;
+                            std::cout << gen_jet_eta << " " << (*p->WTAgeneta)[id] << " " << gen_jet_phi << " " << (*p->WTAgenphi)[id] << std::endl;
+                            std::cout << mr->index_for(v{reco_jet_dr, reco_jet_pt}) << " " << reco_jet_dr << " " << reco_jet_pt << std::endl;
+                            std::cout << reco_jet_eta << " " << (*p->WTAeta)[j] << " " << reco_jet_phi << " " << (*p->WTAphi)[j] << std::endl << std::endl;
+                        }
 
                         for (int64_t k = 0; k < ihf->size(); ++k) { 
                             (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
