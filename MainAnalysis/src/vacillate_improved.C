@@ -297,7 +297,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             // find if there is a gen photon, or if it is a fake
             if (reco_photon) {
-                auto gen_photon_index = (*p->pho_genMatchedIndex)[reco_photon_index];
+                gen_photon_index = (*p->pho_genMatchedIndex)[reco_photon_index];
             }
             // find if there is a gen photon (outside the HEM failure region), and it is a miss
             else {
