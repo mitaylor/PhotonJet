@@ -101,22 +101,16 @@ void fill_axes(pjtree* pjt,
                 (*pjet_u_dr)[index]->Fill(-1, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
                 (*pjet_f_dr)[index]->Fill(-1, cor * weight);
-
-                std::cout << jet_pt << " " << jt_dr << " " << mdr->index_for(v{jt_dr, jet_pt}) << std::endl;
             }
             else if (jet_pt >= 200) {
                 (*pjet_u_dr)[index]->Fill(10000, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
                 (*pjet_f_dr)[index]->Fill(10000, cor * weight);
-
-                std::cout << jet_pt << " " << jt_dr << " " << mdr->index_for(v{jt_dr, jet_pt}) << std::endl;
             }
             else if (jt_dr >= jet_dr_max) {
                 (*pjet_u_dr)[index]->Fill(10000, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(10000, cor * weight);
                 (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
-
-                std::cout << jet_pt << " " << jt_dr << " " << mdr->index_for(v{jt_dr, jet_pt}) << std::endl;
             }
         }, pthf_x, weights);
     }
