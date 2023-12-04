@@ -451,14 +451,14 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto gen_jet_pt = (*p->refpt)[j];
                     auto gen_jet_eta = (*p->refeta)[j];
                     auto gen_jet_phi = (*p->refphi)[j];
-
+                    std::cout << __LINE__ << std::endl;
                     if (std::abs(reco_jet_eta) >= jet_eta_abs) { continue; }
                     if (heavyion && in_jet_failure_region(p, j)) { continue; }
                     if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
-
-                    auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAgeneta)[j], reco_jet_phi, (*p->WTAgenphi)[j]));
+                    std::cout << __LINE__ << std::endl;
+                    auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAgeneta)[j], reco_jet_phi, (*p->WTAgenphi)[j]));std::cout << __LINE__ << std::endl;
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
-
+                    std::cout << __LINE__ << std::endl;
                     // jet energy scale uncertainty
                     if (!jeu.empty()) {
                         JEU->SetJetPT(reco_jet_pt);
