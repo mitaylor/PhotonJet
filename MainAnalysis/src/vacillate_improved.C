@@ -510,7 +510,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                         // if both gen and reco jet are within bounds, fill the collapsed response matrices
                         if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) > -1 && mr->index_for(v{reco_jet_dr, reco_jet_pt}) > -1) {
-                            if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) <= mg->size() > && mr->index_for(v{reco_jet_dr, reco_jet_pt}) <= mr->size()) {
+                            if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) <= mg->size() && mr->index_for(v{reco_jet_dr, reco_jet_pt}) <= mr->size()) {
                                 for (int64_t k = 0; k < ihf->size(); ++k) { 
                                     (*cdr)[k]->Fill(reco_jet_dr, gen_jet_dr, weights[k] * jet_cor);
                                     (*cpt)[k]->Fill(reco_jet_pt, gen_jet_pt, weights[k] * jet_cor);
