@@ -375,7 +375,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
             /* handle fakes and misses for photons */
             // miss, fill the truth histogram
             if (gen_photon && !reco_photon) {
-                // find dj and jet pT
                 for (int64_t j = 0; j < p->ngen; ++j) {
                     auto gen_jet_pt = (*p->genpt)[j];
                     auto gen_jet_eta = (*p->geneta)[j];
@@ -389,29 +388,15 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
 
                     // fill histograms
-                    if (gen_jet_pt < 200 && gen_jet_pt >= jet_pt_min && gen_jet_dr < jet_dr_max) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
-                        }
-                        (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+                    for (int64_t k = 0; k < ihf->size(); ++k) { 
+                        (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
                     }
-                    else if (gen_jet_pt < jet_pt_min) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*g)[k]->Fill(-1, weights[k] * jet_cor); 
-                        }
-                        (*g_merge)[0]->Fill(-1, weights_merge * jet_cor);
-                    }
-                    else if (gen_jet_pt >= 200 || gen_jet_dr >= jet_dr_max) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*g)[k]->Fill(10000, weights[k] * jet_cor); 
-                        }
-                        (*g_merge)[0]->Fill(10000, weights_merge * jet_cor);
-                    }
+
+                    (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
                 }
             }
             // fake, fill the reco histogram
             else if (!gen_photon && reco_photon) {
-                // find dj and jet pT
                 for (int64_t j = 0; j < p->nref; ++j) {
                     auto reco_jet_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
                     auto reco_jet_eta = (*p->jteta)[j];
@@ -437,24 +422,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     }
 
                     // fill histograms
-                    if (reco_jet_pt < 200 && reco_jet_pt >= jet_pt_min && reco_jet_dr < jet_dr_max) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
-                        }
-                        (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
+                    for (int64_t k = 0; k < ihf->size(); ++k) { 
+                        (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
                     }
-                    else if (reco_jet_pt < jet_pt_min) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*r)[k]->Fill(-1, weights[k] * jet_cor); 
-                        }
-                        (*r_merge)[0]->Fill(-1, weights_merge * jet_cor);
-                    }
-                    else if (reco_jet_pt >= 200 || reco_jet_dr >= jet_dr_max) {
-                        for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*r)[k]->Fill(10000, weights[k] * jet_cor); 
-                        }
-                        (*r_merge)[0]->Fill(10000, weights_merge * jet_cor);
-                    }
+
+                    (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
                 }
             }
             // real, fill all histograms
@@ -503,153 +475,87 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         // add in data/MC JER difference correction
 
                         // fill histograms
-                        if (reco_jet_pt < 200 && reco_jet_pt >= jet_pt_min && reco_jet_dr < jet_dr_max) {
-                            for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
-                            }
-                            (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
+                        for (int64_t k = 0; k < ihf->size(); ++k) { 
+                            (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
                         }
-                        else if (reco_jet_pt < jet_pt_min) {
-                            for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                (*r)[k]->Fill(-1, weights[k] * jet_cor); 
-                            }
-                            (*r_merge)[0]->Fill(-1, weights_merge * jet_cor);
-                        }
-                        else if (reco_jet_pt >= 200 || reco_jet_dr >= jet_dr_max) {
-                            for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                (*r)[k]->Fill(10000, weights[k] * jet_cor); 
-                            }
-                            (*r_merge)[0]->Fill(10000, weights_merge * jet_cor);
-                        }
+
+                        (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
                     }
                     // matching gen jet, hit
                     else {
+                        exclude.push_back(gen_jet_id[gen_jet_pt]);
+
                         // add in data/MC JER difference correction
                         JERSF->SetJetPT(reco_jet_pt);
                         JERSF->SetJetEta(reco_jet_eta);
                         JERSF->SetJetPhi(reco_jet_phi);
 
                         auto jer_scale_factors = JERSF->GetParameters();
-
                         auto jer_scale = jer_scale_factors[0];
                         if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
                         else if  (jer_up && !heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]);
-
                         if (!mc) { reco_jet_pt *= 1 + (jer_scale - 1) * (reco_pt - gen_pt) / reco_pt; }
 
                         // fill histograms
                         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
 
                         for (int64_t k = 0; k < ihf->size(); ++k) { 
-                            (*cdr)[k]->Fill(reco_jet_dr, gen_jet_dr, weights[k] * jet_cor);
-                            (*cpt)[k]->Fill(reco_jet_pt, gen_jet_pt, weights[k] * jet_cor);
+                            (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
+                            (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor);
+                            (*c)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
                         }
-                        (*cdr_merge)[0]->Fill(reco_jet_dr, gen_jet_dr, weights_merge * jet_cor);
-                        (*cdr_merge)[0]->Fill(reco_jet_pt, gen_jet_pt, weights_merge * jet_cor);
 
-                        // gen jet within bounds
-                        if (gen_jet_pt < 200 && gen_jet_pt >= jet_pt_min && gen_jet_dr < jet_dr_max) {
-                            for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
-                            }
-                            (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+                        (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+                        (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
+                        (*c_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
 
-                            // reco jet within bounds
-                            if (reco_jet_pt < 200 && reco_jet_pt >= jet_pt_min && reco_jet_dr < jet_dr_max) {
+                        // if both gen and reco jet are within bounds, fill the collapsed response matrices
+                        if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) > -1 && mr->index_for(v{reco_jet_dr, reco_jet_pt}) > -1) {
+                            if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) <= mg->size() > && mr->index_for(v{reco_jet_dr, reco_jet_pt}) <= mr->size()) {
                                 for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor);
-                                    (*c)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
+                                    (*cdr)[k]->Fill(reco_jet_dr, gen_jet_dr, weights[k] * jet_cor);
+                                    (*cpt)[k]->Fill(reco_jet_pt, gen_jet_pt, weights[k] * jet_cor);
                                 }
-                                (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
-                                (*c_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
-                            }
-                            // reco jet underflow
-                            else if (reco_jet_pt < jet_pt_min) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(-1, weights[k] * jet_cor); 
-                                    (*c)[k]->Fill(-1, mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
-                                }
-                                (*r_merge)[0]->Fill(-1, weights_merge * jet_cor);
-                                (*c_merge)[0]->Fill(-1, mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
-                            }
-                            // reco jet overflow
-                            else if (reco_jet_pt >= 200 || reco_jet_dr >= jet_dr_max) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(10000, weights[k] * jet_cor); 
-                                    (*c)[k]->Fill(10000, mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
-                                }
-                                (*r_merge)[0]->Fill(10000, weights_merge * jet_cor);
-                                (*c_merge)[0]->Fill(10000, weights_merge * jet_cor);
-                            }
-                        }
-                        // gen jet underflow
-                        else if (gen_jet_pt < jet_pt_min) {
-                            for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                (*g)[k]->Fill(-1, weights[k] * jet_cor); 
-                            }
-                            (*g_merge)[0]->Fill(-1, weights_merge * jet_cor);
 
-                            // reco jet within bounds
-                            if (reco_jet_pt < 200 && reco_jet_pt >= jet_pt_min && reco_jet_dr < jet_dr_max) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
-                                    (*c)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), -1, weights[k] * jet_cor);
-                                }
-                                (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
-                                (*c_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), -1, weights_merge * jet_cor);
-                            }
-                            // reco jet underflow
-                            else if (reco_jet_pt < jet_pt_min) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(-1, weights[k] * jet_cor); 
-                                    (*c)[k]->Fill(-1, -1, weights[k] * jet_cor);
-                                }
-                                (*r_merge)[0]->Fill(-1, weights_merge * jet_cor);
-                                (*c_merge)[0]->Fill(-1, -1, weights_merge * jet_cor);
-                            }
-                            // reco jet overflow
-                            else if (reco_jet_pt >= 200 || reco_jet_dr >= jet_dr_max) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(10000, weights[k] * jet_cor); 
-                                    (*c)[k]->Fill(10000, -1, weights[k] * jet_cor);
-                                }
-                                (*r_merge)[0]->Fill(10000, weights_merge * jet_cor);
-                                (*c_merge)[0]->Fill(10000, -1, weights_merge * jet_cor);
-                            }
-                        }
-                        // gen jet overflow
-                        else if (gen_jet_pt >= 200 || gen_jet_dr >= jet_dr_max) {
-                            for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                (*g)[k]->Fill(10000, weights[k] * jet_cor); 
-                            }
-                            (*g_merge)[0]->Fill(10000, weights_merge * jet_cor);
-
-                            // reco jet within bounds
-                            if (reco_jet_pt < 200 && reco_jet_pt >= jet_pt_min && reco_jet_dr < jet_dr_max) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
-                                }
-                                (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
-                            }
-                            // reco jet underflow
-                            else if (reco_jet_pt < jet_pt_min) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(-1, weights[k] * jet_cor); 
-                                }
-                                (*r_merge)[0]->Fill(-1, weights_merge * jet_cor);
-                            }
-                            // reco jet overflow
-                            else if (reco_jet_pt >= 200 || reco_jet_dr >= jet_dr_max) {
-                                for (int64_t k = 0; k < ihf->size(); ++k) { 
-                                    (*r)[k]->Fill(10000, weights[k] * jet_cor); 
-                                }
-                                (*r_merge)[0]->Fill(10000, weights_merge * jet_cor);
+                                (*cdr_merge)[0]->Fill(reco_jet_dr, gen_jet_dr, weights_merge * jet_cor);
+                                (*cdr_merge)[0]->Fill(reco_jet_pt, gen_jet_pt, weights_merge * jet_cor);
                             }
                         }
                     }
                 }
 
                 // go through gen jets and fill histograms with misses
+                for (int64_t j = 0; j < p->ngen; ++j) {
+                    // skip jets that were matched with a reco photon
+                    bool hit = false;
+
+                    for (auto const& index : exclusion) {
+                        if (j == index) {
+                            hit = true; break; 
+                        }
+                    }
+
+                    if (hit) continue;
+
+                    // look at remaining jets
+                    auto gen_jet_pt = (*p->genpt)[j];
+                    auto gen_jet_eta = (*p->geneta)[j];
+                    auto gen_jet_phi = (*p->genphi)[j];
+
+                    if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
+                    if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
+                    if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+
+                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
+                    jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
+
+                    // fill histograms
+                    for (int64_t k = 0; k < ihf->size(); ++k) { 
+                        (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
+                    }
+
+                    (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+                }
             }
         }
     }
