@@ -42,7 +42,7 @@ class multival {
         int64_t block = 1;
         int64_t index = 0;
 
-        for (size_t i = 0; i < _dims; ++i) {
+        for (int64_t i = 0; i < _dims; ++i) {
             index += block * indices[i];
             block *= _shape[i];
 
