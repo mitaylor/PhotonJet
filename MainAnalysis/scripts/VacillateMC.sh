@@ -25,8 +25,6 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    run_aa ${sample}
-
     for syst in qcd; do
         run_aa ${sample}_${syst}
     done

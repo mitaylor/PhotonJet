@@ -224,7 +224,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 if ((i + parity) % 2 == 0) { continue; }
             }
             
-            t->GetEntry(i);
+            t->GetEntry(i); std::cout << __LINE__ << std::endl;
 
             /* look for reco photons */
             bool reco_photon = true;
@@ -249,7 +249,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     reco_photon_pt = pho_et;
                 }
             }
-
+            std::cout << __LINE__ << std::endl;
             // potential miss if there is no reco photon in the right pT range
             if (reco_photon_index < 0) { 
                 reco_photon = false; 
@@ -267,7 +267,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                     if (isolation > iso_max) { reco_photon = false; }
                 }
-
+                std::cout << __LINE__ << std::endl;
                 // potential miss if there is a nearby electron
                 reco_photon_eta = (*p->phoEta)[reco_photon_index];
                 reco_photon_phi = (*p->phoPhi)[reco_photon_index];
@@ -287,7 +287,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (electron) { reco_photon = false; }
                 }
             }
-
+            std::cout << __LINE__ << std::endl;
             /* look for gen photons */
             bool gen_photon = true;
             int64_t gen_photon_index = -1;
@@ -311,7 +311,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     }
                 }
             }
-
+            std::cout << __LINE__ << std::endl;
             // potential miss if there is no reco photon in the right pT range
             if (gen_photon_index < 0) { 
                 gen_photon = false; 
@@ -332,11 +332,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                 // fake if the gen particle is not in the kinematic range
                 if (gen_photon_pt < photon_pt_min || gen_photon_pt > photon_pt_max) { gen_photon = false; }
-
+                std::cout << __LINE__ << std::endl;
                 // fake if the gen particle is in the HEM failure region
                 if (heavyion && in_pho_failure_region(gen_photon_eta, gen_photon_phi)) { gen_photon = false; }
             }
-
+            std::cout << __LINE__ << std::endl;
             /* skip useless events */
             if (!gen_photon && !reco_photon) {
                 continue;
@@ -346,7 +346,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             auto weight = p->w;
             std::vector<float> weights(ihf->size(), weight);
             float weights_merge = weight;
-
+            std::cout << __LINE__ << std::endl;
             if (heavyion) {
                 auto avg_rho = get_avg_rho(p, -photon_eta_abs, photon_eta_abs);
 
@@ -360,7 +360,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 auto cor = (*rho_weighting_merge)[0]->GetBinContent(bin);
                 weights_merge *= cor;
             }
-
+            std::cout << __LINE__ << std::endl;
             if (reco_photon && photon_pt_weight.size() > 0) {
                 for (int64_t j = 0; j < ihf->size(); ++j) {
                     weights[j] *= reco_photon_pt * photon_pt_weight[1] + photon_pt_weight[0];
@@ -370,7 +370,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             }
 
             double pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
-
+            std::cout << __LINE__ << std::endl;
             /* handle fakes and misses for photons */
             // miss, fill the truth histogram
             if (gen_photon && !reco_photon) {
@@ -378,7 +378,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto gen_jet_pt = (*p->genpt)[j];
                     auto gen_jet_eta = (*p->geneta)[j];
                     auto gen_jet_phi = (*p->genphi)[j];
-
+                    std::cout << __LINE__ << std::endl;
                     if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
                     if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
                     if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
@@ -390,7 +390,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
                         (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
                     }
-
+                    std::cout << __LINE__ << std::endl;
                     (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
                 }
             }
@@ -400,7 +400,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto reco_jet_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
                     auto reco_jet_eta = (*p->jteta)[j];
                     auto reco_jet_phi = (*p->jtphi)[j];
-
+                    std::cout << __LINE__ << std::endl;
                     if (std::abs(reco_jet_eta) >= jet_eta_abs) { continue; }
                     if (heavyion && in_jet_failure_region(p, j)) { continue; }
                     if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
@@ -409,7 +409,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
 
                     // add in data/MC JER difference correction
-
+                    std::cout << __LINE__ << std::endl;
                     // jet energy scale uncertainty
                     if (!jeu.empty()) {
                         JEU->SetJetPT(reco_jet_pt);
@@ -419,7 +419,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         auto jes_uncertainty = JEU->GetUncertainty();
                         reco_jet_pt *= direction ? (1. + jes_uncertainty.second) : (1. - jes_uncertainty.first);
                     }
-
+                    std::cout << __LINE__ << std::endl;
                     // fill histograms
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
                         (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
@@ -434,7 +434,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     (*ppt)[k]->Fill(reco_photon_pt, gen_photon_pt, weights[k] * pho_cor);
                 }
-
+                std::cout << __LINE__ << std::endl;
                 // map reco jet to gen jet
                 std::unordered_map<float, int64_t> gen_jet_id;
                 for (int64_t j = 0; j < p->ngen; ++j)
@@ -447,7 +447,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     auto reco_jet_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
                     auto reco_jet_eta = (*p->jteta)[j];
                     auto reco_jet_phi = (*p->jtphi)[j];
-
+                    std::cout << __LINE__ << std::endl;
                     auto gen_jet_pt = (*p->refpt)[j];
                     auto gen_jet_eta = (*p->refeta)[j];
                     auto gen_jet_phi = (*p->refphi)[j];
@@ -468,7 +468,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         auto jes_uncertainty = JEU->GetUncertainty();
                         reco_jet_pt *= direction ? (1. + jes_uncertainty.second) : (1. - jes_uncertainty.first);
                     }
-
+                    std::cout << __LINE__ << std::endl;
                     // no matching gen jet => fake, add matching in jet pT
                     if (gen_jet_pt < 0 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
                         // add in data/MC JER difference correction
@@ -477,7 +477,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         for (int64_t k = 0; k < ihf->size(); ++k) { 
                             (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor); 
                         }
-
+                        std::cout << __LINE__ << std::endl;
                         (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
                     }
                     // matching gen jet, hit
@@ -488,7 +488,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         JERSF->SetJetPT(reco_jet_pt);
                         JERSF->SetJetEta(reco_jet_eta);
                         JERSF->SetJetPhi(reco_jet_phi);
-
+                        std::cout << __LINE__ << std::endl;
                         auto jer_scale_factors = JERSF->GetParameters();
                         auto jer_scale = jer_scale_factors[0];
                         if (jer_up && heavyion) jer_scale += (jer_scale_factors[2] - jer_scale_factors[0]) * 1.5;
@@ -503,11 +503,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
                             (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor);
                             (*c)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
                         }
-
+                        std::cout << __LINE__ << std::endl;
                         (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
                         (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
                         (*c_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
-
+                        std::cout << __LINE__ << std::endl;
                         // if both gen and reco jet are within bounds, fill the collapsed response matrices
                         if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) > -1 && mr->index_for(v{reco_jet_dr, reco_jet_pt}) > -1) {
                             if (mg->index_for(v{gen_jet_dr, gen_jet_pt}) <= mg->size() && mr->index_for(v{reco_jet_dr, reco_jet_pt}) <= mr->size()) {
@@ -522,12 +522,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         }
                     }
                 }
-
+                std::cout << __LINE__ << std::endl;
                 // go through gen jets and fill histograms with misses
                 for (int64_t j = 0; j < p->ngen; ++j) {
                     // skip jets that were matched with a reco photon
                     bool hit = false;
-
+                    std::cout << __LINE__ << std::endl;
                     for (auto const& index : exclude) {
                         if (j == index) {
                             hit = true; break; 
@@ -547,7 +547,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                     auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
-
+                    std::cout << __LINE__ << std::endl;
                     // fill histograms
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
                         (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
@@ -558,7 +558,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             }
         }
     }
-
+    std::cout << __LINE__ << std::endl;
     /* save output */
     in(output, [&]() {
         n->save(tag);
