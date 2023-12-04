@@ -24,6 +24,9 @@ interval::interval(int64_t number, double min, double max)
         : interval(std::string(), number, min, max) { }
 
 int64_t interval::index_for(double value) const {
+    if (value < _edges.front()) return -1;
+    if (value > _edges.back()) return _edges.size();
+
     int64_t index = _size;
     for (auto edge : _edges)
         if (value < edge)

@@ -40,8 +40,15 @@ class multival {
     typename std::enable_if<std::is_integral<U>::value, int64_t>::type
     index_for(T<U> const& indices) const {
         int64_t block = 1;
-        auto size = [&](int64_t x, int64_t axis) -> int64_t {
-            auto index = block * x; block = block * axis; return index; };
+        int64_t index = 0;
+
+        for (size_t i = 0; i < _dims; ++i) {
+            index += block * indices[i];
+            block *= axis;
+
+            if (indices[i] < 0) return -1;
+            if (indices[i] > _intervals[i].size()) return size_ + 1;
+        }
 
         return std::inner_product(std::begin(indices), std::end(indices),
                                   std::begin(_shape), 0, std::plus<>(), size);
