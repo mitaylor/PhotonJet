@@ -397,8 +397,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
                     if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-                    auto id = gen_jet_id[gen_jet_pt];
-                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[id], gen_jet_phi, (*p->WTAgenphi)[id]));
+                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
 
                     // fill histograms
