@@ -47,7 +47,7 @@ class multival {
             block *= axis;
 
             if (indices[i] < 0) return -1;
-            if (indices[i] > _intervals[i].size()) return size_ + 1;
+            if (indices[i] > _intervals[i].size()) return _size + 1;
         }
 
         return index;
