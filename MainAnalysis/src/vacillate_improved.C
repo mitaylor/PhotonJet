@@ -44,8 +44,8 @@ float acceptance_weight(bool heavyion, interval* idphi,
 
     if (heavyion) {
         auto index = idphi->index_for(revert_pi(convert_radian(photon_phi) - convert_radian(jet_phi)));
-        auto bin = (*total)[index]->FindBin(reco_eta, photon_eta);
-        correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+        auto bin = (*total)[index]->FindBin(jet_eta, photon_eta);
+        correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[index]->GetBinContent(bin);
         if (correction < 1) { std::cout << "error" << std::endl; }
     }
 
