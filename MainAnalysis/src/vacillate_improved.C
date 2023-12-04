@@ -203,7 +203,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     //         auto name = jer_label_hist + "_" + std::to_string(i);
     //         (*jer_function)[i]->GetFunction(name);
     //     }
-    }
+    // }
 
     /* get data/MC resolution correction */
     auto JERSF = new SingleJetCorrector(jersf);
