@@ -39,15 +39,16 @@ class multival {
     template <template <typename...> class T, typename U>
     typename std::enable_if<std::is_integral<U>::value, int64_t>::type
     index_for(T<U> const& indices) const {
+        std::vector<int64_t> vindices(indices);
         int64_t block = 1;
         int64_t index = 0;
 
         for (int64_t i = 0; i < _dims; ++i) {
-            index += block * indices[i];
+            index += block * vindices[i];
             block *= _shape[i];
 
-            if (indices[i] < 0) return -1;
-            if (indices[i] > _intervals[i].size()) return _size + 1;
+            if (vindices[i] < 0) return -1;
+            if (vindices[i] > _intervals[i].size()) return _size + 1;
         }
 
         return index;
