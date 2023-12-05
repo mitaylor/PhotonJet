@@ -58,6 +58,9 @@ float acceptance_weight(bool heavyion, interval* idphi,
         auto bin = (*total)[index]->FindBin(jet_eta, photon_eta);
         correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[index]->GetBinContent(bin);
         if (correction < 1) { std::cout << "error" << std::endl; }
+        if (!(correction < 100)) {
+            std::cout << idphi << " " << bin << " " << correction << std::endl;
+        }
     }
    
     return correction;
@@ -519,15 +522,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
                         // fill histograms
                         auto id = gen_jet_id[gen_jet_pt];
                         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[id], gen_jet_phi, (*p->WTAgenphi)[id]));
-
-                        if (!(jet_cor < 100)) {
-                            std::cout << jet_cor << std::endl;
-                        }
-
-                        if (!(weights_merge < 100) || !(weights[0] < 100)) {
-                            std::cout << weights_merge << " " << weights[0] << std::endl;
-                        }
-
 
                         for (int64_t k = 0; k < ihf->size(); ++k) { 
                             (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
