@@ -161,7 +161,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto matrices = new history<TH2F>(fi, tag + "_c");
     auto gen = new history<TH1F>(fi, tag + "_g");
     auto reco = new history<TH1F>(fi, tag + "_r");
-    auto photon = new history<TH2F(fi, tag + "_ppt");
+    auto photon = new history<TH2F>(fi, tag + "_ppt");
 
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
