@@ -159,6 +159,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     /* load input and victims */
     TFile* fi = new TFile((base + input).data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
+    auto gen = new history<TH1F>(fi, tag + "_g");
+    auto reco = new history<TH1F>(fi, tag + "_r");
+    auto photon = new history<TH2F(fi, tag + "_ppt");
 
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
@@ -205,7 +208,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
-    std::vector<paper*> cs(4, nullptr);
+    std::vector<paper*> cs(7, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, "", "");
@@ -214,10 +217,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "fold0"s, "fold1"s });
+        "matrices"s, "victims"s, "fold0"s, "fold1"s, "gen"s, "reco"s, "photon"s });
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
+    cs[6]->format(std::bind(default_formatter, _1, 40, 220));
 
     cs[0]->set(paper::flags::logz);  
 
@@ -238,12 +242,24 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[1]->add((*victims)[i]);
         cs[2]->add((*side0)[i]);
         cs[3]->add((*side1)[i]);
+        cs[4]->add((*gen)[i]);
+        cs[5]->add((*reco)[i]);
+
+        if (photon != nullptr) {
+            cs[6]->add((*photon)[i]);
+            cs[6]->adjust((*photon)[i], "colz", "");
+        }
     };
 
     hb->sketch();
 
-    for (auto c : cs)
-        c->draw("pdf");
+    for (size_t i = 0; i < cs.size() - 1; ++i) {
+        cs[i]->draw("pdf");
+    }
+    
+    if (photon != nullptr) {
+        cs[6]->draw("pdf");
+    }
 
     return 0;
 }
