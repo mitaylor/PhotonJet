@@ -122,6 +122,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto original = conf->get<bool>("original");
+
      /* selections */
     auto sel = new configurer(selections);
 
@@ -161,8 +163,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto matrices = new history<TH2F>(fi, tag + "_c");
     auto gen = new history<TH1F>(fi, tag + "_g");
     auto reco = new history<TH1F>(fi, tag + "_r");
-    auto photon = new history<TH2F>(fi, tag + "_ppt");
-std::cout << __LINE__ << std::endl;
+    history<TH2F>* photon = nullptr;
+    if (!original) photon = new history<TH2F>(fi, tag + "_ppt");
+
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
 
@@ -172,7 +175,7 @@ std::cout << __LINE__ << std::endl;
     /* info text */
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
-std::cout << __LINE__ << std::endl;
+
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -187,7 +190,7 @@ std::cout << __LINE__ << std::endl;
             l->DrawLatexNDC(0.86, 0.14, jet_selections.data());
         }
     };
-std::cout << __LINE__ << std::endl;
+
     auto blurb = [&](int64_t index) {
         if (index > 0) {
             auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
@@ -202,7 +205,7 @@ std::cout << __LINE__ << std::endl;
             l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
-std::cout << __LINE__ << std::endl;
+
     /* figures */
     auto hb = new pencil();
 
@@ -218,13 +221,13 @@ std::cout << __LINE__ << std::endl;
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "fold0"s, "fold1"s, "gen"s, "reco"s, "photon"s });
-std::cout << __LINE__ << std::endl;
+
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
     cs[6]->format(std::bind(default_formatter, _1, 40, 220));
-std::cout << __LINE__ << std::endl;
+
     cs[0]->set(paper::flags::logz);  
-std::cout << __LINE__ << std::endl;
+
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* input folds */
         (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
@@ -250,17 +253,17 @@ std::cout << __LINE__ << std::endl;
             cs[6]->adjust((*photon)[i], "colz", "");
         }
     };
-std::cout << __LINE__ << std::endl;
+
     hb->sketch();
 
     for (size_t i = 0; i < cs.size() - 1; ++i) {
         cs[i]->draw("pdf");
     }
-    std::cout << __LINE__ << std::endl;
+    
     if (photon != nullptr) {
         cs[6]->draw("pdf");
     }
-std::cout << __LINE__ << std::endl;
+
     return 0;
 }
 
