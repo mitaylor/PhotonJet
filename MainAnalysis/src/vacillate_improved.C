@@ -201,7 +201,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     if (!jer_file.empty()) {
         fj = new TFile(jer_file.data(), "read");
         jer_histogram = new history<TH1F>(fj, jer_label_hist);
-        jer_function = new history<TF1>("jer_function"s, "", jer_histogram.shape());
+        jer_function = new history<TF1>("jer_function"s, "", jer_histogram->shape());
 
         for (int64_t i = 0; i < jer_function->size(); ++i) {
             auto name = jer_label_func + "_" + std::to_string(i);
