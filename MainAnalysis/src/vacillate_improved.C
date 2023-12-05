@@ -205,7 +205,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
         for (int64_t i = 0; i < jer_function->size(); ++i) {
             auto name = jer_label_func + "_" + std::to_string(i);
-            (*jer_function)[i] = (*jer_histogram)[i]->GetFunction(name);
+            (*jer_function)[i] = (*jer_histogram)[i]->GetFunction(name.c_str());
         }
 
         jer_function->rename(jer_label_func);
