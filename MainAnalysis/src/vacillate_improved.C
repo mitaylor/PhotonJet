@@ -29,19 +29,8 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
     auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
 
-    // std::cout << eta1 << " " << eta2 << " " << deta << std::endl;
-    // std::cout << phi1 << " " << phi2 << " " << dphi << std::endl;
-
     return deta * deta + dphi * dphi;
 }
-
-// double dr(float eta1, float eta2, float phi1, float phi2) {
-//     float deta = TMath::Abs(eta1 - eta2);
-//     float dphi = TMath::Abs(phi1 - phi2);
-//     if (dphi > TMath::Pi()) dphi = TMath::Abs(dphi - 2*TMath::Pi());
-
-//     return TMath::Sqrt(dphi*dphi + deta*deta);
-// }
 
 float res(float c, float s, float n, float pt) {
     return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
@@ -58,9 +47,6 @@ float acceptance_weight(bool heavyion, interval* idphi,
         auto bin = (*total)[index]->FindBin(jet_eta, photon_eta);
         correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[index]->GetBinContent(bin);
         if (correction < 1) { std::cout << "error" << std::endl; }
-        if (!(correction < 100)) {
-            std::cout << index << " " << bin << " " << correction << std::endl;
-        }
     }
    
     return correction;
@@ -82,6 +68,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto acc_file = conf->get<std::string>("acc_file");
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
+
+    auto jer_file = conf->get<std::string>("jer_file");
+    auto jer_label_hist = conf->get<std::string>("jer_label_hist");
+    auto jer_label_func = conf->get<std::string>("jer_label_func");
     
     auto jersf = conf->get<std::string>("jersf");
     auto jeu = conf->get<std::string>("jeu");
@@ -203,21 +193,29 @@ int vacillate(char const* config, char const* selections, char const* output) {
         total = new history<TH2F>(fa, acc_label_ref);
     }
 
-    // /* load derived JER based on reco pT */
-    // TFile* fj;
-    // history<TH1F>* jer_histogram = nullptr;
-    // history<TF1>* jer_function = nullptr;
+    /* load derived JER based on reco pT */
+    TFile* fj;
+    history<TH1F>* jer_histogram = nullptr;
+    history<TF1>* jer_function = nullptr;
 
-    // if (!jer_file.empty()) {
-    //     fj = new TFile(jer_file.data(), "read");
-    //     jer_histogram = new history<TH1F>(fj, jer_label_hist);
-    //     jer_function = new history<TF1>("jer_function"s, "", jer_histogram.shape());
+    if (!jer_file.empty()) {
+        fj = new TFile(jer_file.data(), "read");
+        jer_histogram = new history<TH1F>(fj, jer_label_hist);
+        jer_function = new history<TF1>("jer_function"s, "", jer_histogram.shape());
 
-    //     for (int64_t i = 0; i < jer_function->size(); ++i) {
-    //         auto name = jer_label_hist + "_" + std::to_string(i);
-    //         (*jer_function)[i]->GetFunction(name);
-    //     }
-    // }
+        for (int64_t i = 0; i < jer_function->size(); ++i) {
+            auto name = jer_label_func + "_" + std::to_string(i);
+            (*jer_function)[i] = (*jer_histogram)[i]->GetFunction(name);
+        }
+
+        jer_function->rename(jer_label_func);
+
+        for (int64_t i = 0; i < jer_function->size(); ++i) {
+            std::cout << (*jer_function)[i]->Eval(20) << " " << (*jer_function)[i]->Eval(100) << std::endl;
+        }
+    }
+
+    
 
     /* get data/MC resolution correction */
     auto JERSF = new SingleJetCorrector(jersf);
