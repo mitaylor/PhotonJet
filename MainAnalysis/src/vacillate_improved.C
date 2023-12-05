@@ -215,8 +215,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    
-
     /* get data/MC resolution correction */
     auto JERSF = new SingleJetCorrector(jersf);
     auto JEU = new JetUncertainty(jeu);
