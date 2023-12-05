@@ -59,7 +59,7 @@ float acceptance_weight(bool heavyion, interval* idphi,
         correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[index]->GetBinContent(bin);
         if (correction < 1) { std::cout << "error" << std::endl; }
         if (!(correction < 100)) {
-            std::cout << idphi << " " << bin << " " << correction << std::endl;
+            std::cout << index << " " << bin << " " << correction << std::endl;
         }
     }
    
