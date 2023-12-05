@@ -71,7 +71,7 @@ int beneficiate(char const* selections, char const* output) {
                     auto jetPhi = (jphi_edges[1] + jphi_edges[0])/2;
                     auto phoPhi = (pphi_edges[1] + pphi_edges[0])/2;
 
-                    auto dphi = revert_pi(std::abs(convert_radian(phoPhi) - convert_radian(jetPhi)));
+                    auto dphi = revert_pi(convert_radian(phoPhi) - convert_radian(jetPhi));
 
                     auto dphi_x = idphi->index_for(dphi);
 
