@@ -122,24 +122,24 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto label = conf->get<std::string>("label");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
-std::cout << __LINE__ << std::endl;
+
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-std::cout << __LINE__ << std::endl;
+
     auto plot = conf->get<bool>("plot");
-std::cout << __LINE__ << std::endl;
+
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
-std::cout << __LINE__ << std::endl;
+
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
 
     auto osr = sel->get<std::vector<int64_t>>("osr");
-std::cout << __LINE__ << std::endl;
+
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
@@ -150,59 +150,59 @@ std::cout << __LINE__ << std::endl;
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
-std::cout << __LINE__ << std::endl;
+
     auto ihf = new interval(dhf);
 
     auto mr = new multival(rdrr, rptr);
-std::cout << __LINE__ << std::endl;
+
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
-std::cout << __LINE__ << std::endl;
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-std::cout << __LINE__ << std::endl;
+
     /* open input files */
     TFile* f = new TFile((base + input).data(), "read");
-std::cout << __LINE__ << std::endl;
+
     /* load histograms */
     auto nevt = new history<TH1F>(f, label + "_raw_nevt"s);
-std::cout << __LINE__ << std::endl;
+
     auto pjet_f_dr = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_dr"s);
     auto pjet_f_jpt = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_jpt"s);
     auto pjet_u_dr_jpt = new history<TH1F>(
         f, label + "_raw_sub_pjet_u_dr"s);
-std::cout << __LINE__ << std::endl;
+
     /* rescale by number of signal photons (events) */
     pjet_f_dr->multiply(*nevt);
     pjet_f_jpt->multiply(*nevt);
     pjet_u_dr_jpt->multiply(*nevt);
-std::cout << __LINE__ << std::endl;
+
     /* discard overflow photon pt bin */
     auto discard = [](history<TH1F>*& h, int64_t axis) {
         auto shape = h->shape();
         shape[axis] = shape[axis] - 1;
         h = h->shrink("s", shape, std::vector<int64_t>(h->dims(), 0));
     };
-    std::cout << __LINE__ << std::endl;
+    
     discard(nevt, 0);
     discard(pjet_f_dr, 0);
     discard(pjet_f_jpt, 0);
     discard(pjet_u_dr_jpt, 0);
-std::cout << __LINE__ << std::endl;
+
     /* project onto dj and jet pt */
     auto pjet_u_dr = new history<TH1F>("s_" + label + "_raw_sub_pjet_u_dr"s, "", null<TH1F>, nevt->shape());
     auto pjet_u_jpt = new history<TH1F>("s_" + label + "_raw_sub_pjet_u_jpt"s, "", null<TH1F>, nevt->shape());
-std::cout << __LINE__ << std::endl;
+
     for (int64_t i = 0; i < nevt->size(); ++i) {
         (*pjet_u_dr)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 0, osr);
         (*pjet_u_jpt)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 1, osr);
     }
-std::cout << __LINE__ << std::endl;
+
     pjet_u_dr->rename("s_" + label + "_raw_sub_pjet_u_dr"s);
     pjet_u_jpt->rename("s_" + label + "_raw_sub_pjet_u_jpt"s);
-std::cout << __LINE__ << std::endl;
+
     /* integrate histograms */
     auto nevt_d_pt = nevt->sum(1);
     auto nevt_d_hf = nevt->sum(0);
@@ -216,28 +216,28 @@ std::cout << __LINE__ << std::endl;
     auto pjet_u_dr_d_hf = pjet_u_dr->sum(0);
     auto pjet_u_jpt_d_pt = pjet_u_jpt->sum(1);
     auto pjet_u_jpt_d_hf = pjet_u_jpt->sum(0);
-std::cout << __LINE__ << std::endl;
+
     auto nevt_merge = nevt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_f_dr_merge = pjet_f_dr_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_f_jpt_merge = pjet_f_jpt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_dr_jpt_merge = pjet_u_dr_jpt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_dr_merge = pjet_u_dr_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_jpt_merge = pjet_u_jpt_d_hf->extend("merge", 0, 1)->sum(1);
-std::cout << __LINE__ << std::endl;
+
     nevt_merge->rename("s_" + label + "_raw_nevt_merge"s);
     pjet_f_dr_merge->rename("s_" + label + "_raw_sub_pjet_f_dr_merge"s);
     pjet_f_jpt_merge->rename("s_" + label + "_raw_sub_pjet_f_jpt_merge"s);
     pjet_u_dr_jpt_merge->rename("s_" + label + "_raw_sub_pjet_u_dr_jpt_merge"s);
     pjet_u_dr_merge->rename("s_" + label + "_raw_sub_pjet_u_dr_merge"s);
     pjet_u_jpt_merge->rename("s_" + label + "_raw_sub_pjet_u_jpt_merge"s);
-std::cout << __LINE__ << std::endl;
+
     /* normalise by number of signal photons (events) */
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
     pjet_u_dr_jpt->divide(*nevt);
     pjet_u_dr->divide(*nevt);
     pjet_u_jpt->divide(*nevt);
-std::cout << __LINE__ << std::endl;
+
     pjet_f_dr_d_pt->divide(*nevt_d_pt);
     pjet_f_dr_d_hf->divide(*nevt_d_hf);
     pjet_f_jpt_d_pt->divide(*nevt_d_pt);
@@ -248,38 +248,38 @@ std::cout << __LINE__ << std::endl;
     pjet_u_dr_d_hf->divide(*nevt_d_hf);
     pjet_u_jpt_d_pt->divide(*nevt_d_pt);
     pjet_u_jpt_d_hf->divide(*nevt_d_hf);
-std::cout << __LINE__ << std::endl;
+
     pjet_f_dr_merge->divide(*nevt_merge);
     pjet_f_jpt_merge->divide(*nevt_merge);
     pjet_u_dr_jpt_merge->divide(*nevt_merge);
     pjet_u_dr_merge->divide(*nevt_merge);
     pjet_u_jpt_merge->divide(*nevt_merge);
-std::cout << __LINE__ << std::endl;
+
     /* normalise to unity */
     normalise_to_unity(
         pjet_u_dr,
         pjet_u_dr_d_pt,
         pjet_u_dr_d_hf, 
         pjet_u_dr_merge);
-std::cout << __LINE__ << std::endl;
+
     normalise_to_unity(
         pjet_f_dr,
         pjet_f_dr_d_pt,
         pjet_f_dr_d_hf, 
         pjet_f_dr_merge);
-std::cout << __LINE__ << std::endl;
+
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
         pjet_u_dr,
         pjet_u_dr_d_pt,
         pjet_u_dr_d_hf, 
         pjet_u_dr_merge);
-std::cout << __LINE__ << std::endl;
+
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
         pjet_f_dr,
         pjet_f_dr_d_pt,
         pjet_f_dr_d_hf, 
         pjet_f_dr_merge);
-std::cout << __LINE__ << std::endl;
+
     /* save histograms */
     in(output, [&]() {
         nevt->save(tag);
@@ -307,7 +307,7 @@ std::cout << __LINE__ << std::endl;
         pjet_u_dr_merge->save(tag);
         pjet_u_jpt_merge->save(tag);
     });
-std::cout << __LINE__ << std::endl;
+
     /* draw plots */
     if (plot) {
         printf("painting..\n");
@@ -400,7 +400,7 @@ std::cout << __LINE__ << std::endl;
 
         zip([&](paper*& c, int64_t rows, std::string const& suffix,
                 std::function<void(int64_t)> text) {
-            c = new paper(set + "_" + tag + "_dr_" + suffix, hb);
+            c = new paper(set + "_" + tag + "_fold_dr_" + suffix, hb);
             c->divide(-1, rows);
             c->accessory(text);
 
@@ -415,7 +415,7 @@ std::cout << __LINE__ << std::endl;
 
         zip([&](paper*& c, int64_t rows, std::string const& suffix,
                 std::function<void(int64_t)> text) {
-            c = new paper(set + "_" + tag + "_jpt_" + suffix, hb);
+            c = new paper(set + "_" + tag + "_fold_jpt_" + suffix, hb);
             c->divide(-1, rows);
             c->accessory(text);
 
