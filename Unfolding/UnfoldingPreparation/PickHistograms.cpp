@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 
    // Copy over data
    TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
-   for(int i = 1; i <= NReco; i++)
+   for(int i = 0; i <= NReco + 1; i++)
    {
       HDataReco.SetBinContent(i, HInputData->GetBinContent(i));
       HDataReco.SetBinError(i, HInputData->GetBinError(i));
@@ -66,9 +66,9 @@ int main(int argc, char *argv[])
    
    // Copy over response
    TH2D HResponse("HResponse", ";;", NReco, 0, NReco, NGen, 0, NGen);
-   for(int iX = 1; iX <= NReco; iX++)
+   for(int iX = 0; iX <= NReco + 1; iX++)
    {
-      for(int iY = 1; iY <= NGen; iY++)
+      for(int iY = 0; iY <= NGen + 1; iY++)
       {
          HResponse.SetBinContent(iX, iY, HInputResponse->GetBinContent(iX, iY));
          HResponse.SetBinError(iX, iY, HInputResponse->GetBinError(iX, iY));
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 
    // Copy over MC truth
    TH1D HMCGen("HMCGen", ";;", NGen, 0, NGen);
-   for(int i = 1; i <= NGen; i++)
+   for(int i = 0; i <= NGen + 1; i++)
    {
       HMCGen.SetBinContent(i, HInputResponseTruth->GetBinContent(i));
       HMCGen.SetBinError(i, HInputResponseTruth->GetBinError(i));
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
    
    // Copy over MC measured
    TH1D HMCReco("HMCReco", ";;", NReco, 0, NReco);
-   for(int i = 1; i <= NReco; i++)
+   for(int i = 0; i <= NReco + 1; i++)
    {
       HMCReco.SetBinContent(i, HInputResponseReco->GetBinContent(i));
       HMCReco.SetBinError(i, HInputResponseReco->GetBinError(i));
