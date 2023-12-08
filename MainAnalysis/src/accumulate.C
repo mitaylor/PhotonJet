@@ -17,6 +17,7 @@
 
 #include "TFile.h"
 #include "TH1.h"
+#include "TH2.h"
 #include "TLatex.h"
 #include "TLine.h"
 
@@ -152,7 +153,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto ihf = new interval(dhf);
 
-    auto mdr = new multival(rdrr, rptr);
+    auto mr = new multival(rdrr, rptr);
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
 
@@ -194,7 +195,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_u_dr = new history<TH1F>("s_" + label + "_raw_sub_pjet_u_dr"s, "", null<TH1F>, nevt->shape());
     auto pjet_u_jpt = new history<TH1F>("s_" + label + "_raw_sub_pjet_u_jpt"s, "", null<TH1F>, nevt->shape());
 
-    for (int64_t i = 0; i < hin->size(); ++i) {
+    for (int64_t i = 0; i < nevt->size(); ++i) {
         (*pjet_u_dr)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 0, osr);
         (*pjet_u_jpt)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 1, osr);
     }
@@ -389,7 +390,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
             c->accessory(text);
 
             apply_style(c, cms, system_tag, -0.01, 0.07);
-            c->accessory(std::bind(line_at, _1, 0.f, 0, mdr->size()));
+            c->accessory(std::bind(line_at, _1, 0.f, 0, mr->size()));
         }, c3, x{ ihf->size(), 1L, 1L, 1L }, suffixes, texts);
 
         pjet_u_dr_jpt->apply([&](TH1* h) { c3[0]->add(h, system); });
