@@ -122,24 +122,24 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto label = conf->get<std::string>("label");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
-
+std::cout << __LINE__ << std::endl;
     auto rjpt = conf->get<std::vector<float>>("jpt_range");
     auto rdr = conf->get<std::vector<float>>("dr_range");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto dhf = conf->get<std::vector<float>>("hf_diff");
-
+std::cout << __LINE__ << std::endl;
     auto plot = conf->get<bool>("plot");
-
+std::cout << __LINE__ << std::endl;
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
-
+std::cout << __LINE__ << std::endl;
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
 
     auto osr = sel->get<std::vector<int64_t>>("osr");
-
+std::cout << __LINE__ << std::endl;
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
@@ -150,13 +150,13 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
-
+std::cout << __LINE__ << std::endl;
     auto ihf = new interval(dhf);
 
     auto mr = new multival(rdrr, rptr);
-
+std::cout << __LINE__ << std::endl;
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
-
+std::cout << __LINE__ << std::endl;
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -173,12 +173,12 @@ int accumulate(char const* config, char const* selections, char const* output) {
         f, label + "_raw_sub_pjet_f_jpt"s);
     auto pjet_u_dr_jpt = new history<TH1F>(
         f, label + "_raw_sub_pjet_u_dr_jpt"s);
-
+std::cout << __LINE__ << std::endl;
     /* rescale by number of signal photons (events) */
     pjet_f_dr->multiply(*nevt);
     pjet_f_jpt->multiply(*nevt);
     pjet_u_dr_jpt->multiply(*nevt);
-
+std::cout << __LINE__ << std::endl;
     /* discard overflow photon pt bin */
     auto discard = [](history<TH1F>*& h, int64_t axis) {
         auto shape = h->shape();
