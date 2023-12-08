@@ -172,7 +172,7 @@ std::cout << __LINE__ << std::endl;
     auto pjet_f_jpt = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_jpt"s);
     auto pjet_u_dr_jpt = new history<TH1F>(
-        f, label + "_raw_sub_pjet_u_dr_jpt"s);
+        f, label + "_raw_sub_pjet_u_dr"s);
 std::cout << __LINE__ << std::endl;
     /* rescale by number of signal photons (events) */
     pjet_f_dr->multiply(*nevt);
