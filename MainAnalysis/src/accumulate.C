@@ -185,24 +185,24 @@ int accumulate(char const* config, char const* selections, char const* output) {
         shape[axis] = shape[axis] - 1;
         h = h->shrink("s", shape, std::vector<int64_t>(h->dims(), 0));
     };
-
+    std::cout << __LINE__ << std::endl;
     discard(nevt, 0);
     discard(pjet_f_dr, 0);
     discard(pjet_f_jpt, 0);
     discard(pjet_u_dr_jpt, 0);
-
+std::cout << __LINE__ << std::endl;
     /* project onto dj and jet pt */
     auto pjet_u_dr = new history<TH1F>("s_" + label + "_raw_sub_pjet_u_dr"s, "", null<TH1F>, nevt->shape());
     auto pjet_u_jpt = new history<TH1F>("s_" + label + "_raw_sub_pjet_u_jpt"s, "", null<TH1F>, nevt->shape());
-
+std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < nevt->size(); ++i) {
         (*pjet_u_dr)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 0, osr);
         (*pjet_u_jpt)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 1, osr);
     }
-
+std::cout << __LINE__ << std::endl;
     pjet_u_dr->rename("s_" + label + "_raw_sub_pjet_u_dr"s);
     pjet_u_jpt->rename("s_" + label + "_raw_sub_pjet_u_jpt"s);
-
+std::cout << __LINE__ << std::endl;
     /* integrate histograms */
     auto nevt_d_pt = nevt->sum(1);
     auto nevt_d_hf = nevt->sum(0);
@@ -216,28 +216,28 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_u_dr_d_hf = pjet_u_dr->sum(0);
     auto pjet_u_jpt_d_pt = pjet_u_jpt->sum(1);
     auto pjet_u_jpt_d_hf = pjet_u_jpt->sum(0);
-
+std::cout << __LINE__ << std::endl;
     auto nevt_merge = nevt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_f_dr_merge = pjet_f_dr_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_f_jpt_merge = pjet_f_jpt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_dr_jpt_merge = pjet_u_dr_jpt_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_dr_merge = pjet_u_dr_d_hf->extend("merge", 0, 1)->sum(1);
     auto pjet_u_jpt_merge = pjet_u_jpt_d_hf->extend("merge", 0, 1)->sum(1);
-
+std::cout << __LINE__ << std::endl;
     nevt_merge->rename("s_" + label + "_raw_nevt_merge"s);
     pjet_f_dr_merge->rename("s_" + label + "_raw_sub_pjet_f_dr_merge"s);
     pjet_f_jpt_merge->rename("s_" + label + "_raw_sub_pjet_f_jpt_merge"s);
     pjet_u_dr_jpt_merge->rename("s_" + label + "_raw_sub_pjet_u_dr_jpt_merge"s);
     pjet_u_dr_merge->rename("s_" + label + "_raw_sub_pjet_u_dr_merge"s);
     pjet_u_jpt_merge->rename("s_" + label + "_raw_sub_pjet_u_jpt_merge"s);
-
+std::cout << __LINE__ << std::endl;
     /* normalise by number of signal photons (events) */
     pjet_f_dr->divide(*nevt);
     pjet_f_jpt->divide(*nevt);
     pjet_u_dr_jpt->divide(*nevt);
     pjet_u_dr->divide(*nevt);
     pjet_u_jpt->divide(*nevt);
-
+std::cout << __LINE__ << std::endl;
     pjet_f_dr_d_pt->divide(*nevt_d_pt);
     pjet_f_dr_d_hf->divide(*nevt_d_hf);
     pjet_f_jpt_d_pt->divide(*nevt_d_pt);
@@ -248,38 +248,38 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_u_dr_d_hf->divide(*nevt_d_hf);
     pjet_u_jpt_d_pt->divide(*nevt_d_pt);
     pjet_u_jpt_d_hf->divide(*nevt_d_hf);
-
+std::cout << __LINE__ << std::endl;
     pjet_f_dr_merge->divide(*nevt_merge);
     pjet_f_jpt_merge->divide(*nevt_merge);
     pjet_u_dr_jpt_merge->divide(*nevt_merge);
     pjet_u_dr_merge->divide(*nevt_merge);
     pjet_u_jpt_merge->divide(*nevt_merge);
-
+std::cout << __LINE__ << std::endl;
     /* normalise to unity */
     normalise_to_unity(
         pjet_u_dr,
         pjet_u_dr_d_pt,
         pjet_u_dr_d_hf, 
         pjet_u_dr_merge);
-
+std::cout << __LINE__ << std::endl;
     normalise_to_unity(
         pjet_f_dr,
         pjet_f_dr_d_pt,
         pjet_f_dr_d_hf, 
         pjet_f_dr_merge);
-
+std::cout << __LINE__ << std::endl;
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
         pjet_u_dr,
         pjet_u_dr_d_pt,
         pjet_u_dr_d_hf, 
         pjet_u_dr_merge);
-
+std::cout << __LINE__ << std::endl;
     title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
         pjet_f_dr,
         pjet_f_dr_d_pt,
         pjet_f_dr_d_hf, 
         pjet_f_dr_merge);
-
+std::cout << __LINE__ << std::endl;
     /* save histograms */
     in(output, [&]() {
         nevt->save(tag);
@@ -307,7 +307,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         pjet_u_dr_merge->save(tag);
         pjet_u_jpt_merge->save(tag);
     });
-
+std::cout << __LINE__ << std::endl;
     /* draw plots */
     if (plot) {
         printf("painting..\n");
