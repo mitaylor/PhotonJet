@@ -200,6 +200,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         (*pjet_u_jpt)[i] = fold((*pjet_u_dr_jpt)[i], nullptr, mr, 1, osr);
     }
 
+    pjet_u_dr_jpt->rename("s_" + label + "_raw_sub_pjet_u_dr_jpt"s);
     pjet_u_dr->rename("s_" + label + "_raw_sub_pjet_u_dr"s);
     pjet_u_jpt->rename("s_" + label + "_raw_sub_pjet_u_jpt"s);
 
