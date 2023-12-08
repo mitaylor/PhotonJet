@@ -160,13 +160,13 @@ std::cout << __LINE__ << std::endl;
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
+std::cout << __LINE__ << std::endl;
     /* open input files */
     TFile* f = new TFile((base + input).data(), "read");
-
+std::cout << __LINE__ << std::endl;
     /* load histograms */
     auto nevt = new history<TH1F>(f, label + "_raw_nevt"s);
-
+std::cout << __LINE__ << std::endl;
     auto pjet_f_dr = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_dr"s);
     auto pjet_f_jpt = new history<TH1F>(
