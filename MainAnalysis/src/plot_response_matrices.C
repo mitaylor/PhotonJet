@@ -124,7 +124,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto original = conf->get<bool>("original");
 
-     /* selections */
+    /* selections */
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -133,9 +133,13 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto heavyion = sel->get<bool>("heavyion");
 
     auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
+
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -152,7 +156,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto idrr = new interval("#deltaj", rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
+    auto idrg = new interval("#deltaj", rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
+
     auto mr = new multival(*idrr, *iptr);
+    auto mg = new multival(*idrg, *iptg);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -171,6 +179,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, ihf->size());
     auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, ihf->size());
+
+    auto fold0 = new history<TH1F>(label + "_fold0", "", null<TH1F>, ihf->size());
+    auto fold1 = new history<TH1F>(label + "_fold1", "", null<TH1F>, ihf->size());
 
     /* info text */
     auto hf_info = [&](int64_t index) {
@@ -211,7 +222,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
-    std::vector<paper*> cs(7, nullptr);
+    std::vector<paper*> cs(9, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, "", "");
@@ -220,7 +231,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "fold0"s, "fold1"s, "gen"s, "reco"s, "photon"s });
+        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1" });
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
@@ -233,8 +244,13 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
         (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
 
+        /* response matrix folds */
+        (*fold0)[i] = fold((*reco)[i], nullptr, mg, 0, osg);
+        (*fold1)[i] = fold((*reco)[i], nullptr, mg, 1, osg);
+
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
+        (*fold0)[i]->Scale(1. / (*fold0)[i]->Integral("width"));
 
         /* figures */
         cs[0]->add((*matrices)[i]);
@@ -247,6 +263,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[3]->add((*side1)[i]);
         cs[4]->add((*gen)[i]);
         cs[5]->add((*reco)[i]);
+        cs[7]->add((*fold0)[i]);
+        cs[8]->add((*fold1)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
@@ -256,8 +274,10 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     hb->sketch();
 
-    for (size_t i = 0; i < cs.size() - 1; ++i) {
-        cs[i]->draw("pdf");
+    for (size_t i = 0; i < cs.size(); ++i) {
+        if (i != 6) {
+            cs[i]->draw("pdf");
+        }
     }
     
     if (photon != nullptr) {
