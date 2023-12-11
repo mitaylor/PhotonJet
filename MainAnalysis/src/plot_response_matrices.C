@@ -227,6 +227,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
+    cs[7]->format(std::bind(default_formatter, _1, -2, 27));
+    cs[8]->format(std::bind(default_formatter, _1, -0.001, 0.02));
     cs[6]->format(std::bind(default_formatter, _1, 40, 220));
 
     cs[0]->set(paper::flags::logz);  
