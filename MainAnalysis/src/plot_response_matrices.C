@@ -133,13 +133,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto heavyion = sel->get<bool>("heavyion");
 
     auto osr = sel->get<std::vector<int64_t>>("osr");
-    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
-
-    auto rdrg = sel->get<std::vector<float>>("drg_range");
-    auto rptg = sel->get<std::vector<float>>("ptg_range");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -156,11 +152,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto idrr = new interval("#deltaj", rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
-    auto idrg = new interval("#deltaj", rdrg);
-    auto iptg = new interval("p_{T}^{j}"s, rptg);
-
     auto mr = new multival(*idrr, *iptr);
-    auto mg = new multival(*idrg, *iptg);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -245,8 +237,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
 
         /* response matrix folds */
-        (*fold0)[i] = fold((*reco)[i], nullptr, mg, 0, osg);
-        (*fold1)[i] = fold((*reco)[i], nullptr, mg, 1, osg);
+        (*fold0)[i] = fold((*reco)[i], nullptr, mr, 0, osr);
+        (*fold1)[i] = fold((*reco)[i], nullptr, mr, 1, osr);
 
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
