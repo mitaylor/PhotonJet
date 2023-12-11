@@ -133,9 +133,13 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto heavyion = sel->get<bool>("heavyion");
 
     auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
+
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -152,7 +156,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto idrr = new interval("#deltaj", rdrr);
     auto iptr = new interval("p_{T}^{j}"s, rptr);
 
+    auto idrg = new interval("#deltaj", rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
+
     auto mr = new multival(*idrr, *iptr);
+    auto mg = new multival(*idrg, *iptg);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -169,11 +177,14 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
 
-    auto side0 = new history<TH1F>(label + "_side0", "", null<TH1F>, ihf->size());
-    auto side1 = new history<TH1F>(label + "_side1", "", null<TH1F>, ihf->size());
+    auto victims_fold0 = new history<TH1F>(label + "_victims_fold0", "", null<TH1F>, ihf->size());
+    auto victims_fold1 = new history<TH1F>(label + "_victims_fold1", "", null<TH1F>, ihf->size());
 
-    auto fold0 = new history<TH1F>(label + "_fold0", "", null<TH1F>, ihf->size());
-    auto fold1 = new history<TH1F>(label + "_fold1", "", null<TH1F>, ihf->size());
+    auto reco_fold0 = new history<TH1F>(label + "_reco_fold0", "", null<TH1F>, ihf->size());
+    auto reco_fold1 = new history<TH1F>(label + "_reco_fold1", "", null<TH1F>, ihf->size());
+
+    auto gen_fold0 = new history<TH1F>(label + "_gen_fold0", "", null<TH1F>, ihf->size());
+    auto gen_fold1 = new history<TH1F>(label + "_gen_fold1", "", null<TH1F>, ihf->size());
 
     /* info text */
     auto hf_info = [&](int64_t index) {
@@ -214,7 +225,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
-    std::vector<paper*> cs(9, nullptr);
+    std::vector<paper*> cs(11, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, "", "");
@@ -223,7 +234,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1" });
+        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1" });
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
@@ -234,20 +245,25 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     cs[0]->set(paper::flags::logz);  
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
-        /* input folds */
-        (*side0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
-        (*side1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
+        /* folds */
+        (*victims_fold0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
+        (*victims_fold1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
 
-        /* response matrix folds */
-        (*fold0)[i] = fold((*reco)[i], nullptr, mr, 0, osr);
-        (*fold1)[i] = fold((*reco)[i], nullptr, mr, 1, osr);
+        (*reco_fold0)[i] = fold((*reco)[i], nullptr, mr, 0, osr);
+        (*reco_fold1)[i] = fold((*reco)[i], nullptr, mr, 1, osr);
+
+        (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
+        (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
 
         /* normalise to unity */
-        (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
-        (*side1)[i]->Scale(1. / (*side1)[i]->Integral("width"));
+        (*victims_fold0)[i]->Scale(1. / (*victims_fold0)[i]->Integral("width"));
+        (*victims_fold1)[i]->Scale(1. / (*victims_fold1)[i]->Integral("width"));
 
-        (*fold0)[i]->Scale(1. / (*fold0)[i]->Integral("width"));
-        (*fold1)[i]->Scale(1. / (*fold1)[i]->Integral("width"));
+        (*reco_fold0)[i]->Scale(1. / (*reco_fold0)[i]->Integral("width"));
+        (*reco_fold1)[i]->Scale(1. / (*reco_fold1)[i]->Integral("width"));
+
+        (*gen_fold0)[i]->Scale(1. / (*gen_fold0)[i]->Integral("width"));
+        (*gen_fold1)[i]->Scale(1. / (*gen_fold1)[i]->Integral("width"));
 
         /* figures */
         cs[0]->add((*matrices)[i]);
@@ -256,12 +272,14 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*matrices)[i]->GetZaxis()->SetTitle("");
 
         cs[1]->add((*victims)[i]);
-        cs[2]->add((*side0)[i]);
-        cs[3]->add((*side1)[i]);
+        cs[2]->add((*victims_fold0)[i]);
+        cs[3]->add((*victims_fold1)[i]);
         cs[4]->add((*gen)[i]);
         cs[5]->add((*reco)[i]);
-        cs[7]->add((*fold0)[i]);
-        cs[8]->add((*fold1)[i]);
+        cs[7]->add((*reco_fold0)[i]);
+        cs[8]->add((*reco_fold1)[i]);
+        cs[9]->add((*gen_fold0)[i]);
+        cs[10]->add((*gen_fold1)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
