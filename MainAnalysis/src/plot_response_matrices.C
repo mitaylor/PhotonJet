@@ -242,7 +242,10 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
         /* normalise to unity */
         (*side0)[i]->Scale(1. / (*side0)[i]->Integral("width"));
+        (*side1)[i]->Scale(1. / (*side1)[i]->Integral("width"));
+
         (*fold0)[i]->Scale(1. / (*fold0)[i]->Integral("width"));
+        (*fold1)[i]->Scale(1. / (*fold1)[i]->Integral("width"));
 
         /* figures */
         cs[0]->add((*matrices)[i]);
