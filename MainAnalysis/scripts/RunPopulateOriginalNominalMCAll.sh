@@ -9,7 +9,7 @@ run_aa() {
     ./RunPopulateOriginalNominalMC.sh ${set} ${tag} ${n}
 }
 
-samples=(aa_qcd_no_jes aa_qcd aa_no_rho)
+samples=(aa_qcd_no_jes aa_qcd aa_qcd_no_rho)
 
 for sample in ${samples[@]}; do
     run_aa populate_${sample}_raw
