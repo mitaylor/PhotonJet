@@ -403,7 +403,7 @@ int populate(char const* config, char const* selections, char const* output) {
             }
 
             std::vector<float> weights;
-            float avg_rho;
+            float avg_rho = 1;
             if (!rho_file.empty()) {
                 avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
 
