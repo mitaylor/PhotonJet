@@ -17,7 +17,7 @@ run_aa() {
 }
 
 
-samples=(aa_qcd_nominal_raw aa_qcd_nominal_bkg aa_qcd_nominal_no_jes_raw aa_qcd_nominal_no_jes_bkg aa_qcd_nominal_no_rho_raw aa_qcd_nominal_no_rho_bkg aa_qcd_nominal_rho_match_raw aa_qcd_nominal_rho_match_bkg)
+samples=(aa_qcd_nominal_raw aa_qcd_nominal_bkg aa_qcd_nominal_no_jes_raw aa_qcd_nominal_no_jes_bkg aa_qcd_nominal_no_rho_raw aa_qcd_nominal_no_rho_bkg aa_qcd_nominal_rho_match_raw aa_qcd_nominal_rho_match_bkg aa_qcd_nominal_ncoll_match_raw aa_qcd_nominal_ncoll_match_bkg)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
