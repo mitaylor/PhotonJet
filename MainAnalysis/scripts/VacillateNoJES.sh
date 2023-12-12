@@ -14,16 +14,6 @@ run_aa() {
     echo "nohup ./bin/vacillate_improved configs/vacillate/vacillate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/vacillate_${tag}.root > log/${set}_vacillate_${tag}.txt 2>&1 &"
 }
 
-samples=(pp)
-
-for sample in ${samples[@]}; do
-    for syst in qcd_no_jes; do
-        run_pp ${sample}_${syst}
-    done
-done
-
-samples=(pp)
-
 samples=(aa)
 
 for sample in ${samples[@]}; do
