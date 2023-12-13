@@ -67,7 +67,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, interval *ijpt,
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
 
         auto jpt_x =  ijpt->index_for(jet_pt);
-        auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, hf_x, jpt_x});
+        auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, jpt_x, hf_x});
 
         if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
             (*pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
@@ -133,7 +133,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 
     auto mpthf = new multival(dpt, dhf);
-    auto mpthfjpt = new multival(dpt, dhf, rjpt);
+    auto mpthfjpt = new multival(dpt, rjpt, dhf);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
