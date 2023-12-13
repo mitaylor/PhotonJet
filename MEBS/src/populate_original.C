@@ -139,7 +139,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 
     auto mpthf = new multival(dpt, dhf);
-    auto mpthfjpt = new multival(rdrr, rptr);
+    auto mpthfjpt = new multival(dpt, dhf, rjpt);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
