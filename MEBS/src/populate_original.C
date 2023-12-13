@@ -196,15 +196,14 @@ int populate(char const* config, char const* selections, char const* output) {
 
             t->GetEntry(i);
 
-            double hf = pjt->hiHF;
-            auto hf_x = ihf->index_for(hf);
+            double hf = pjt->hiHF; std::cout << __LINE__ << std::endl;
 
             if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
 
             int64_t photon_index = -1;
             float photon_pt = 0;
-
+std::cout << __LINE__ << std::endl;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
@@ -215,22 +214,22 @@ int populate(char const* config, char const* selections, char const* output) {
                     photon_pt = (*pjt->phoEt)[j];
                 }
             }
-
+std::cout << __LINE__ << std::endl;
             /* require leading photon */
             if (photon_index < 0) { continue; }
             if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
-
+std::cout << __LINE__ << std::endl;
             /* hem failure region exclusion */
             if (exclude && in_pho_failure_region(pjt, photon_index)) { continue; }
-
+std::cout << __LINE__ << std::endl;
             /* isolation requirement */
             float isolation = (*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index];
             if (isolation > iso_max) { continue; }
-
+std::cout << __LINE__ << std::endl;
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[photon_index];
             auto photon_phi = convert_radian((*pjt->phoPhi)[photon_index]);
-
+std::cout << __LINE__ << std::endl;
             /* electron rejection */
             bool electron = false;
             for (int64_t j = 0; j < pjt->nEle; ++j) {
@@ -242,12 +241,13 @@ int populate(char const* config, char const* selections, char const* output) {
                     electron = true; break;
                 }
             }
-
+std::cout << __LINE__ << std::endl;
             if (electron) { continue; }
 
             auto pt_x = ipt->index_for(photon_pt);
+            auto hf_x = ihf->index_for(hf);
             auto weight = pjt->w;
-
+std::cout << __LINE__ << std::endl;
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfjpt, ijpt,
                 pt_x, hf_x, weight,
@@ -256,7 +256,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 dphi_min_numerator, dphi_min_denominator,
                 nevt, pjet_f_dr, pjet_f_jpt, 
                 pjet_f_dphi, pjet_f_dr_jpt);
-
+std::cout << __LINE__ << std::endl;
             if (mix > 0) {
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; m++) {
@@ -292,7 +292,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 }
             }
         }
-
+std::cout << __LINE__ << std::endl;
         f->Close();
     }
 
