@@ -66,7 +66,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfdphi, interval *idph
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
 
-        auto phi_x = ieta->index_for(photon_jet_dphi);
+        auto phi_x = idphi->index_for(photon_jet_dphi);
         auto mpthfdphi_x = mpthfdphi->index_for(x{pt_x, phi_x, hf_x});
 
         /* jet pt cut */
