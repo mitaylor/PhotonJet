@@ -68,7 +68,7 @@ void fill_axes(pjtree* pjt,
         if (exclude && in_jet_failure_region(pjt, j)) { continue; }
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-        auto jet_dr = std::sqrt(dr2(jet_eta, (*p->WTAeta)[j], jet_phi, (*p->WTAphi)[j]));
+        auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi));
 
         auto jpt_x =  ijpt->index_for(jet_pt);
