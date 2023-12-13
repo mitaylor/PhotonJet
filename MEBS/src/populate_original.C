@@ -74,8 +74,7 @@ std::cout << __LINE__ << std::endl;
         auto jpt_x =  ijpt->index_for(jet_pt);
         auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, hf_x, jpt_x});
 std::cout << __LINE__ << std::endl;
-        if (jet_pt < 200 && jet_pt >= jet_pt_min && jet_dr < jet_dr_max) {
-            std::cout << __LINE__ << std::endl; std::cout << mpthfjpt->size() << " " << mpthfjpt_x << " " << pt_x << " " << hf_x << " " << jpt_x << " " << ijpt->size() << std::endl;
+        if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
             (*pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);std::cout << __LINE__ << std::endl;
             (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);std::cout << __LINE__ << std::endl;
             (*pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);std::cout << __LINE__ << std::endl;
