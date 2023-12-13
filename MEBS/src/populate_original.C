@@ -42,17 +42,11 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
     return std::abs(convert_radian(photon_phi) - convert_radian(jet_phi)) > convert_pi(threshold);
 }
 
-void fill_axes(pjtree* pjt, 
-               multival* mpthf, multival* mpthfjpt, interval *ijpt,
-               int64_t pt_x, int64_t hf_x, float weight, 
-               int64_t photon_phi, bool exclude, 
-               float jet_pt_min, float jet_eta_abs, float jet_dr_max,
-               float dphi_min_numerator, float dphi_min_denominator,
-               memory<TH1F>* nevt,
-               memory<TH1F>* pjet_f_dr,
-               memory<TH1F>* pjet_f_jpt,
-               memory<TH1F>* pjet_f_dphi,
-               memory<TH1F>* pjet_f_dr_jpt
+void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, interval *ijpt,
+               int64_t pt_x, int64_t hf_x, float weight, int64_t photon_phi, bool exclude, 
+               float jet_eta_abs, float jet_dr_max, float dphi_min_numerator, float dphi_min_denominator,
+               memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr, memory<TH1F>* pjet_f_jpt,
+               memory<TH1F>* pjet_f_dphi, memory<TH1F>* pjet_f_dr_jpt
             ) {
     std::cout << __LINE__ << std::endl;
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
@@ -111,7 +105,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
     auto const jet_dr_max = sel->get<float>("jet_dr_max");
 
@@ -249,13 +242,10 @@ std::cout << __LINE__ << std::endl;
             auto weight = pjt->w;
 std::cout << __LINE__ << std::endl;
             /* fill histograms */
-            fill_axes(pjt, mpthf, mpthfjpt, ijpt,
-                pt_x, hf_x, weight,
-                photon_phi, exclude,
-                jet_pt_min, jet_eta_abs, jet_dr_max, 
+            fill_axes(pjt, mpthf, mpthfjpt, ijpt, pt_x, hf_x, weight,
+                photon_phi, exclude, jet_eta_abs, jet_dr_max, 
                 dphi_min_numerator, dphi_min_denominator,
-                nevt, pjet_f_dr, pjet_f_jpt, 
-                pjet_f_dphi, pjet_f_dr_jpt);
+                nevt, pjet_f_dr, pjet_f_jpt, pjet_f_dphi, pjet_f_dr_jpt);
 std::cout << __LINE__ << std::endl;
             if (mix > 0) {
                 /* mixing events in minimum bias */
@@ -280,13 +270,10 @@ std::cout << __LINE__ << std::endl;
 
                     if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
 
-                    fill_axes(pjtm, mpthf, mpthfjpt, ijpt,
-                        pt_x, hf_x, weight,
-                        photon_phi, exclude,
-                        jet_pt_min, jet_eta_abs, jet_dr_max, 
+                    fill_axes(pjtm, mpthf, mpthfjpt, ijpt, pt_x, hf_x, weight,
+                        photon_phi, exclude, jet_eta_abs, jet_dr_max, 
                         dphi_min_numerator, dphi_min_denominator,
-                        nmix, mix_pjet_f_dr, mix_pjet_f_jpt, 
-                        mix_pjet_f_dphi, mix_pjet_f_dr_jpt);
+                        nmix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_f_dphi, mix_pjet_f_dr_jpt);
 
                     ++k;
                 }
