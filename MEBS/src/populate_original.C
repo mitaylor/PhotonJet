@@ -54,31 +54,31 @@ void fill_axes(pjtree* pjt,
                memory<TH1F>* pjet_f_dphi,
                memory<TH1F>* pjet_f_dr_jpt
             ) {
-
+    std::cout << __LINE__ << std::endl;
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
-    
+    std::cout << __LINE__ << std::endl;
     (*nevt)[pthf_x]->Fill(1., weight);
-
+std::cout << __LINE__ << std::endl;
     for (int64_t j = 0; j < pjt->nref; ++j) {
         auto jet_pt = (*pjt->jtpt)[j];
         auto jet_eta = (*pjt->jteta)[j];
         auto jet_phi = (*pjt->jtphi)[j];
-
+std::cout << __LINE__ << std::endl;
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
         if (exclude && in_jet_failure_region(pjt, j)) { continue; }
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
-
+std::cout << __LINE__ << std::endl;
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi));
-
+std::cout << __LINE__ << std::endl;
         auto jpt_x =  ijpt->index_for(jet_pt);
         auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, hf_x, jpt_x});
-
+std::cout << __LINE__ << std::endl;
         if (jet_pt < 200 && jet_pt >= jet_pt_min && jet_dr < jet_dr_max) {
-            (*pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
-            (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+            (*pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);std::cout << __LINE__ << std::endl;
+            (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);std::cout << __LINE__ << std::endl;
+            (*pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);std::cout << __LINE__ << std::endl;
+            (*pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);std::cout << __LINE__ << std::endl;
         }
     }
 }
