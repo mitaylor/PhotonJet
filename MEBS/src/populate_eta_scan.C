@@ -252,7 +252,7 @@ int populate(char const* config, char const* selections, char const* output) {
             auto weight = pjt->w;
 
             /* fill histograms */
-            fill_axes(pjt, mpthf, mpthfeta, ijpt, pt_x, hf_x, weight,
+            fill_axes(pjt, mpthf, mpthfeta, ieta, pt_x, hf_x, weight,
                 photon_phi, exclude, jet_eta_abs, jet_dr_max, 
                 jet_pt_min, jet_pt_max, dphi_min_numerator, dphi_min_denominator,
                 nevt, pjet_f_dr, pjet_f_jpt, pjet_f_dphi, pjet_f_dr_eta);
@@ -280,7 +280,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
 
-                    fill_axes(pjtm, mpthf, mpthfeta, ijpt, pt_x, hf_x, weight,
+                    fill_axes(pjtm, mpthf, mpthfeta, ieta, pt_x, hf_x, weight,
                         photon_phi, exclude, jet_eta_abs, jet_dr_max, 
                         jet_pt_min, jet_pt_max, dphi_min_numerator, dphi_min_denominator,
                         nmix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_f_dphi, mix_pjet_f_dr_eta);
