@@ -236,7 +236,7 @@ int populate(char const* config, char const* selections, char const* output) {
             for (int64_t j = 0; j < pjt->nEle; ++j) {
                 if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto dr = std::sqrt(dr2(photon_eta, (*p->eleEta)[j], photon_phi, (*p->elePhi)[j]));
+                auto dr = std::sqrt(dr2(photon_eta, (*pjt->eleEta)[j], photon_phi, (*pjt->elePhi)[j]));
 
                 if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, heavyion)) {
                     electron = true; break;
