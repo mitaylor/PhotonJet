@@ -45,7 +45,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 void fill_axes(pjtree* pjt, 
                multival* mpthf, multival* mpthfjpt, interval *ijpt,
                int64_t pt_x, int64_t hf_x, float weight, 
-               float photon_eta, int64_t photon_phi, bool exclude, 
+               int64_t photon_phi, bool exclude, 
                float jet_pt_min, float jet_eta_abs, float jet_dr_max,
                float dphi_min_numerator, float dphi_min_denominator,
                memory<TH1F>* nevt,
@@ -251,7 +251,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, pthf, mpthfjpt, ijpt,
                 pt_x, hf_x, weight.
-                photon_eta, photon_phi, exclude,
+                photon_phi, exclude,
                 jet_pt_min, jet_eta_abs, jet_dr_max, 
                 dphi_min_numerator, dphi_min_denominator,
                 nevt, pjet_f_dr, pjet_f_jpt, 
@@ -282,7 +282,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, pthf, mpthfjpt, ijpt,
                         pt_x, hf_x, weight.
-                        photon_eta, photon_phi, exclude,
+                        photon_phi, exclude,
                         jet_pt_min, jet_eta_abs, jet_dr_max, 
                         dphi_min_numerator, dphi_min_denominator,
                         nmix, mix_pjet_f_dr, mix_pjet_f_jpt, 
