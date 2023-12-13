@@ -271,7 +271,7 @@ int populate(char const* config, char const* selections, char const* output) {
                         index_m = rng->Integer(mb.size());
                         fm = new TFile(mb[index_m].data(), "read");
                         tm = (TTree*)fm->Get("pj");
-                        pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+                        pjtm = new pjtree(false, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
 
                         mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
                     }
