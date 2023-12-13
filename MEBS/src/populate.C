@@ -16,6 +16,7 @@
 #include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TMath.h"
 #include "TRandom3.h"
 
 #include <memory>
@@ -63,7 +64,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, interval *ijpt,
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
-        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi));
+        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
 
         auto jpt_x =  ijpt->index_for(jet_pt);
         auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, hf_x, jpt_x});
@@ -283,21 +284,10 @@ int populate(char const* config, char const* selections, char const* output) {
         f->Close();
     }
 
-    /* normalise histograms */
+    /* scale histograms */
     if (mix > 0) {
         scale(1. / mix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_f_dphi, mix_pjet_f_dr_jpt);
     }
-
-    /* normalise by number of photons (events) */
-    pjet_f_dr->divide(*nevt);
-    pjet_f_jpt->divide(*nevt);
-    pjet_f_dphi->divide(*nevt);
-    pjet_f_dr_jpt->divide(*nevt);
-
-    mix_pjet_f_dr->divide(*nevt);
-    mix_pjet_f_jpt->divide(*nevt);
-    mix_pjet_f_dphi->divide(*nevt);
-    mix_pjet_f_dr_jpt->divide(*nevt);
 
     /* subtract histograms */
     auto sub_pjet_f_dr = new memory<TH1F>(*pjet_f_dr, "sub");

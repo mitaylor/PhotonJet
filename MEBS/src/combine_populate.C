@@ -62,7 +62,6 @@ int combine_populate(char const* config, char const* selections, char const* out
 
     /* combine nevt information */
     auto nevt = new history<TH1F>(files[0], group + "_nevt"s);
-    auto nevt_0 = new history<TH1F>(*nevt, "nominal");
 
     for (size_t i = 1; i < files.size(); ++i) {
         auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
@@ -80,21 +79,14 @@ int combine_populate(char const* config, char const* selections, char const* out
         auto name_mix = group + "_mix_"s + label;
         auto hist_mix = new history<TH1F>(files[0], name_mix);
 
-        hist->multiply(*nevt_0);
-        hist_mix->multiply(*nevt_0);
-
         for (size_t i = 1; i < files.size(); ++i) {
             auto hist_add = new history<TH1F>(files[i], name);
             auto hist_mix_add = new history<TH1F>(files[i], name_mix);
-            auto nevt_add = new history<TH1F>(files[i], group + "_nevt"s);
-
-            hist_add->multiply(*nevt_add);
-            hist_mix_add->multiply(*nevt_add);
 
             *hist += *hist_add;
             *hist_mix += *hist_mix_add;
 
-            delete hist_add; delete hist_mix_add; delete nevt_add;
+            delete hist_add; delete hist_mix_add;
         }
 
         scale_bin_width(hist, hist_mix);
@@ -106,9 +98,6 @@ int combine_populate(char const* config, char const* selections, char const* out
                 }
             }
         });
-
-        hist->divide(*nevt);
-        hist_mix->divide(*nevt);
 
         auto hist_sub = new history<TH1F>(*hist, "sub");
         hist_sub->rename(group + "_sub_" + label);
