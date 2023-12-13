@@ -249,7 +249,7 @@ int populate(char const* config, char const* selections, char const* output) {
             auto weight = pjt->w;
 
             /* fill histograms */
-            fill_axes(pjt, pthf, mpthfjpt, ijpt,
+            fill_axes(pjt, mpthf, mpthfjpt, ijpt,
                 pt_x, hf_x, weight.
                 photon_phi, exclude,
                 jet_pt_min, jet_eta_abs, jet_dr_max, 
@@ -280,7 +280,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
 
-                    fill_axes(pjtm, pthf, mpthfjpt, ijpt,
+                    fill_axes(pjtm, mpthf, mpthfjpt, ijpt,
                         pt_x, hf_x, weight.
                         photon_phi, exclude,
                         jet_pt_min, jet_eta_abs, jet_dr_max, 
