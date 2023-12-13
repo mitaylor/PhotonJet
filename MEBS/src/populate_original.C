@@ -74,10 +74,10 @@ void fill_axes(pjtree* pjt,
         auto jpt_x =  ijpt->index_for(jet_pt);
         auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, hf_x, jpt_x});
 
-        if (jet_pt < 200 && jet_pt >= jet_pt_min && jt_dr < jet_dr_max) {
-            (*pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jt_dr, weight);
+        if (jet_pt < 200 && jet_pt >= jet_pt_min && jet_dr < jet_dr_max) {
+            (*pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
             (*pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*pjet_f_dr)[pthf_x]->Fill(jt_dr, weight);
+            (*pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
             (*pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
         }
     }
