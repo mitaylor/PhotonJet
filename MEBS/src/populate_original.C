@@ -320,7 +320,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     *sub_pjet_f_dr -= *mix_pjet_f_dr;
     *sub_pjet_f_jpt -= *mix_pjet_f_jpt;
-    *sub_pjet_f_dphi -= mix_pjet_f_dphi;
+    *sub_pjet_f_dphi -= *mix_pjet_f_dphi;
     *sub_pjet_f_dr_jpt -= *mix_pjet_f_dr_jpt;
 
     /* save histograms */
