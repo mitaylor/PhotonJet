@@ -52,7 +52,7 @@ void fill_axes(pjtree* pjt,
                memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt,
                memory<TH1F>* pjet_f_dphi,
-               memory<TH1F>* pjet_f_dr_jpt,
+               memory<TH1F>* pjet_f_dr_jpt
             ) {
 
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
