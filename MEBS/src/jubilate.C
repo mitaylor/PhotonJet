@@ -132,9 +132,9 @@ int jubilate(char const* config, char const* selections, char const* output) {
             std::vector<paper*> cs(shape[1], nullptr);
 
             auto range_info = [&](int64_t index) {
-                if (jpt) { info_text(index, 0.71, "%d < p_{T}^{jet} < %d GeV", rjpt, false); }
-                if (eta) { info_text(index, 0.71, "%d < #eta^{jet} < %d", reta, false); }
-                if (dphi) { info_text(index, 0.71, "%d < #Delta#phi_{j#gamma} < %d", rdphi, false); }
+                if (jpt) { info_text(index, 0.71, "%f < p_{T}^{jet} < %f GeV", rjpt, false); }
+                if (eta) { info_text(index, 0.71, "%f < #eta^{jet} < %f", reta, false); }
+                if (dphi) { info_text(index, 0.71, "%f < #Delta#phi_{j#gamma} < %f", rdphi, false); }
             };
 
             auto cuts_info = [&](int64_t index) {
