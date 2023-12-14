@@ -55,6 +55,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
 
     auto ihf = new interval(dhf);
 
