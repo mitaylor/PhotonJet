@@ -69,9 +69,6 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfeta, interval *ieta,
         auto eta_x = ieta->index_for(jet_eta);
         auto mpthfeta_x = mpthfeta->index_for(x{pt_x, eta_x, hf_x});
 
-        std::cout << jet_eta << " " << eta_x << " " << mpthfeta_x << std::endl;
-        std::cout << jet_pt << " " << jet_pt_min << " " << jet_pt_max << std::endl;
-
         /* jet pt cut */
         if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
@@ -120,6 +117,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_pt_max = sel->get<float>("jet_pt_max");
+
+    std::cout << jet_pt_min << " " << jet_pt_max << std::endl;
 
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdr = sel->get<std::vector<float>>("dr_range");
@@ -257,7 +256,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfeta, ieta, pt_x, hf_x, weight,
                 photon_phi, exclude, jet_eta_abs, jet_dr_max, 
-                jet_pt_min, jet_pt_max, dphi_min_numerator, dphi_min_denominator,
+                dphi_min_numerator, dphi_min_denominator, jet_pt_min, jet_pt_max,
                 nevt, pjet_f_dr, pjet_f_jpt, pjet_f_dphi, pjet_f_dr_eta);
 
             if (mix > 0) {
@@ -285,7 +284,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, mpthf, mpthfeta, ieta, pt_x, hf_x, weight,
                         photon_phi, exclude, jet_eta_abs, jet_dr_max, 
-                        jet_pt_min, jet_pt_max, dphi_min_numerator, dphi_min_denominator,
+                        dphi_min_numerator, dphi_min_denominator, jet_pt_min, jet_pt_max,
                         nmix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_f_dphi, mix_pjet_f_dr_eta);
 
                     ++k;
