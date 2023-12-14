@@ -41,9 +41,9 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto minimums = conf->get<std::vector<float>>("minimums");
     auto maximums = conf->get<std::vector<float>>("maximums");
 
-    auto jpt = conf->get<bool>("jpt");
-    auto eta = conf->get<bool>("eta");
-    auto dphi = conf->get<bool>("dphi");
+    // auto jpt = conf->get<bool>("jpt");
+    // auto eta = conf->get<bool>("eta");
+    // auto dphi = conf->get<bool>("dphi");
 
     /* selections */
     auto sel = new configurer(selections);
