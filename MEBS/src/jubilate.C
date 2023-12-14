@@ -57,9 +57,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto reta = sel->get<std::vector<float>>("eta_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
-    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
-
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
 
     auto ihf = new interval(dhf);
