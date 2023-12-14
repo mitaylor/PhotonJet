@@ -20,6 +20,12 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename... T>
+void scale_bin_width(T*... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1., "width"); }), 0)... };
+}
+
 int jubilate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -54,7 +60,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
-    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
 
     auto ihf = new interval(dhf);
