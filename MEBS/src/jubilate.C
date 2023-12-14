@@ -115,6 +115,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
             apply_style(c, cms, system_tag);
             c->accessory(std::bind(line_at, _1, 0.f, min, max));
             c->accessory(hf_info);
+            c->accessory(cuts_info);
             c->divide(ihf->size() , -1);
 
             for (int64_t i = 0; i < hist->size(); ++i) {
