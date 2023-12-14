@@ -132,7 +132,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 if (index > 0) {
                     auto photon_selections = "p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs);
                     if (jpt || eta) photon_selections += ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-                    auto jet_selections = "anti-k_{T} R = 0.3, |#eta^{jet}| < "s + to_text(jet_eta_abs);
+                    auto jet_selections = "anti-k_{T} R = 0.3"
+                    if (dphi || jpt) jet_selections += ", |#eta^{jet}| < "s + to_text(jet_eta_abs);
                     if (dphi || eta) jet_selections += ", " + to_text(jet_pt_min) + " < p_{T}^{jet} < "s + to_text(jet_pt_max) + " GeV";
 
                     TLatex* l = new TLatex();
