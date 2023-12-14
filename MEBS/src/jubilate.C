@@ -51,9 +51,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
-    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
-
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto reta = sel->get<std::vector<float>>("eta_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range");
