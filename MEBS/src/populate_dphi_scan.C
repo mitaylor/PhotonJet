@@ -251,7 +251,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfdphi, idphi, pt_x, hf_x, weight,
                 photon_phi, exclude, jet_eta_abs, jet_dr_max, 
-                jet_pt_min, jet_pt_max, dphi_min_numerator, dphi_min_denominator,
+                dphi_min_numerator, dphi_min_denominator, jet_pt_min, jet_pt_max,
                 nevt, pjet_f_dr, pjet_f_jpt, pjet_f_dphi, pjet_f_dr_dphi);
 
             if (mix > 0) {
@@ -279,7 +279,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, mpthf, mpthfdphi, idphi, pt_x, hf_x, weight,
                         photon_phi, exclude, jet_eta_abs, jet_dr_max, 
-                        jet_pt_min, jet_pt_max, dphi_min_numerator, dphi_min_denominator,
+                        dphi_min_numerator, dphi_min_denominator, jet_pt_min, jet_pt_max,
                         nmix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_f_dphi, mix_pjet_f_dr_dphi);
 
                     ++k;
