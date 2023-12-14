@@ -107,14 +107,14 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
         if (shape.size() == 3) {
             std::vector<paper*> cs(shape[1], nullptr);
-            std::vector<float> drange;
+            // std::vector<float> drange;
 
-            if (jpt) drange = rjpt;
-            else if (eta) drange = reta;
-            else if (dphi) drange = rdphi;
+            // if (jpt) drange = rjpt;
+            // else if (eta) drange = reta;
+            // else if (dphi) drange = rdphi;
 
-            auto hf_info = [&](int64_t index) {
-                info_text(index, 0.75, "Range %i - %i", drange, true); };
+            // auto hf_info = [&](int64_t index) {
+            //     info_text(index, 0.75, "Range %i - %i", drange, true); };
 
             for (int64_t i = 0; i < shape[1]; ++i) {
                 cs[i] = new paper(set + "_" + tag + "_" + label + "_" + to_text(i), hb);
