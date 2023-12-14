@@ -121,6 +121,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdr = sel->get<std::vector<float>>("dr_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range");
+    auto reta = sel->get<std::vector<float>>("eta_range");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
@@ -131,8 +132,6 @@ int populate(char const* config, char const* selections, char const* output) {
     if (tag == "bkg") see_max = 0.02;
 
     /* make histograms */
-    std::vector<float> reta = {-1.6, -1.4, -1.2, -1.0, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6};
-
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
     auto ieta = new interval(reta);
