@@ -45,7 +45,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 
 void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfdphi, interval *idphi,
                int64_t pt_x, int64_t hf_x, float weight, int64_t photon_phi, bool exclude, 
-               float jet_eta_abs, float jet_dr_max, float dphi_min_numerator, float dphi_min_denominator,
+               float jet_eta_abs, float jet_dr_max,
                float jet_pt_min, float jet_pt_max, memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt, memory<TH1F>* pjet_f_dphi, memory<TH1F>* pjet_f_dr_dphi
             ) {
@@ -110,9 +110,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
     auto const jet_dr_max = sel->get<float>("jet_dr_max");
-
-    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
-    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_pt_max = sel->get<float>("jet_pt_max");
@@ -250,7 +247,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfdphi, idphi, pt_x, hf_x, weight,
                 photon_phi, exclude, jet_eta_abs, jet_dr_max, 
-                dphi_min_numerator, dphi_min_denominator, jet_pt_min, jet_pt_max,
+                jet_pt_min, jet_pt_max,
                 nevt, pjet_f_dr, pjet_f_jpt, pjet_f_dphi, pjet_f_dr_dphi);
 
             if (mix > 0) {
@@ -279,7 +276,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, mpthf, mpthfdphi, idphi, pt_x, hf_x, weight,
                         photon_phi, exclude, jet_eta_abs, jet_dr_max, 
-                        dphi_min_numerator, dphi_min_denominator, jet_pt_min, jet_pt_max,
+                        jet_pt_min, jet_pt_max,
                         nmix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_f_dphi, mix_pjet_f_dr_dphi);
 
                     ++k;
