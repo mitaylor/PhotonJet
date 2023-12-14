@@ -98,16 +98,16 @@ int jubilate(char const* config, char const* selections, char const* output) {
         if (shape.size() == 2) {
             auto cuts_info = [&](int64_t index) {
                 if (index > 0) {
-                    std::string photon_selections = "p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs);
-                    if (jpt || eta) photon_selections += ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-                    std::string jet_selections = "anti-k_{T} R = 0.3, |#eta^{jet}| < "s + to_text(jet_eta_abs) + ", " + to_text(jet_pt_min) + " < p_{T}^{jet} < "s + to_text(jet_pt_max) + " GeV";
+                    auto photon_selections = "p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs);
+                    if (jpt || eta) photon_selections += ", #Delta#phi_{j#gamma} > "s + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+                    auto jet_selections = "anti-k_{T} R = 0.3, |#eta^{jet}| < "s + to_text(jet_eta_abs) + ", " + to_text(jet_pt_min) + " < p_{T}^{jet} < "s + to_text(jet_pt_max) + " GeV";
 
                     TLatex* l = new TLatex();
                     l->SetTextAlign(31);
                     l->SetTextFont(43);
                     l->SetTextSize(11);
-                    l->DrawLatexNDC(0.86, 0.65, photon_selections.c_str());
-                    l->DrawLatexNDC(0.86, 0.60, jet_selections.c_str());
+                    l->DrawLatexNDC(0.86, 0.65, photon_selections.data());
+                    l->DrawLatexNDC(0.86, 0.60, jet_selections.data());
                 }
             };
 
@@ -139,10 +139,10 @@ int jubilate(char const* config, char const* selections, char const* output) {
             auto cuts_info = [&](int64_t index) {
                 if (index > 0) {
                     auto photon_selections = "p_{T}^{#gamma} > "s + to_text(photon_pt_min) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs);
-                    if (jpt || eta) photon_selections += ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
-                    auto jet_selections = "anti-k_{T} R = 0.3";
+                    if (jpt || eta) photon_selections += ", #Delta#phi_{j#gamma} > "s + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
+                    auto jet_selections = "anti-k_{T} R = 0.3"s;
                     if (dphi || jpt) jet_selections += ", |#eta^{jet}| < "s + to_text(jet_eta_abs);
-                    if (dphi || eta) jet_selections += ", " + to_text(jet_pt_min) + " < p_{T}^{jet} < "s + to_text(jet_pt_max) + " GeV";
+                    if (dphi || eta) jet_selections += ", "s + to_text(jet_pt_min) + " < p_{T}^{jet} < "s + to_text(jet_pt_max) + " GeV"s;
 
                     TLatex* l = new TLatex();
                     l->SetTextAlign(31);
