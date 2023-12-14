@@ -128,7 +128,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 cs[i]->accessory(hf_info);
                 cs[i]->divide(ihf->size() , -1);
 
-                for (int64_t j = 0; j < size[2]; ++j) {
+                for (int64_t j = 0; j < shape[2]; ++j) {
                     std::vector<int64_t> index = {0, i, j};
                     cs[i]->add((*hist)[index], "raw");
                     cs[i]->stack((*hist_mix)[index], "mix");
