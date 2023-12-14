@@ -69,6 +69,9 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfeta, interval *ieta,
         auto eta_x = ieta->index_for(jet_eta);
         auto mpthfeta_x = mpthfeta->index_for(x{pt_x, eta_x, hf_x});
 
+        std::cout << jet_eta << " " << eta_x << " " << mpthfeta_x << std::endl;
+        std::cout << jet_pt << " " << jet_pt_min << " " << jet_pt_max << std::endl;
+
         /* jet pt cut */
         if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
