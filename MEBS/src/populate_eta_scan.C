@@ -118,8 +118,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_pt_max = sel->get<float>("jet_pt_max");
 
-    std::cout << jet_pt_min << " " << jet_pt_max << std::endl;
-
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdr = sel->get<std::vector<float>>("dr_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range");
