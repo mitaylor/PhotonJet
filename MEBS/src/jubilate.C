@@ -59,6 +59,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_pt_max = sel->get<float>("jet_pt_max");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
     
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
