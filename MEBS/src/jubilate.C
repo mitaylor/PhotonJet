@@ -106,8 +106,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                     l->SetTextAlign(31);
                     l->SetTextFont(43);
                     l->SetTextSize(11);
-                    l->DrawLatexNDC(0.86, 0.65, photon_selections.data());
-                    l->DrawLatexNDC(0.86, 0.60, jet_selections.data());
+                    l->DrawLatexNDC(0.86, 0.65, photon_selections.c_str());
+                    l->DrawLatexNDC(0.86, 0.60, jet_selections.c_str());
                 }
             };
 
