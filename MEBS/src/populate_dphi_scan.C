@@ -61,7 +61,6 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfdphi, interval *idph
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
         if (exclude && in_jet_failure_region(pjt, j)) { continue; }
-        if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
@@ -276,6 +275,7 @@ int populate(char const* config, char const* selections, char const* output) {
                     tm->GetEntry(m);
 
                     if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
+                    if (std::abs(pjtm->vz) > 15) { continue; }
 
                     fill_axes(pjtm, mpthf, mpthfdphi, idphi, pt_x, hf_x, weight,
                         photon_phi, exclude, jet_eta_abs, jet_dr_max, 

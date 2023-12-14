@@ -270,6 +270,7 @@ int populate(char const* config, char const* selections, char const* output) {
                     tm->GetEntry(m);
 
                     if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
+                    if (std::abs(pjtm->vz) > 15) { continue; }
 
                     fill_axes(pjtm, mpthf, mpthfjpt, ijpt, pt_x, hf_x, weight,
                         photon_phi, exclude, jet_eta_abs, jet_dr_max, 
