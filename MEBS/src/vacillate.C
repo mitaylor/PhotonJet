@@ -27,13 +27,17 @@ using namespace std::placeholders;
 
 static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
-    auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
 
     return deta * deta + dphi * dphi;
 }
 
 float back_to_back(float photon_phi, float jet_phi, float threshold) {
-    return std::abs(convert_radian(photon_phi) - convert_radian(jet_phi)) > convert_pi(threshold);
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return dphi > threshold * TMath::Pi();
 }
 
 int vacillate(char const* config, char const* selections, char const* output) {
@@ -89,7 +93,40 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
     auto fdphi = std::bind(&interval::book<TH1F>, idphi, _1, _2, _3);
 
-    // add all of the histograms
+    /* create histograms */
+
+    // jpt scan
+    auto jpt_nevt = new memory<TH1F>("reco_jpt_nevt"s, "", fincl, mpthf);
+    auto jpt_pjet_f_dr = new memory<TH1F>("reco_jpt_pjet_f_dr"s,
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
+    auto jpt_pjet_f_jpt = new memory<TH1F>("reco_jpt_pjet_f_jpt"s,
+        "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
+    auto jpt_pjet_f_dphi = new memory<TH1F>("reco_jpt_pjet_f_dphi"s,
+        "1/N^{#gamma} dN/d#Delta#phi", fdphi, mpthf);
+    auto jpt_pjet_f_dr_jpt = new memory<TH1F>("reco_jpt_pjet_f_dr_jpt"s, 
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthfjpt);
+
+    // eta scan
+    auto eta_nevt = new memory<TH1F>("reco_eta_nevt"s, "", fincl, mpthf);
+    auto eta_pjet_f_dr = new memory<TH1F>("reco_eta_pjet_f_dr"s,
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
+    auto eta_pjet_f_jpt = new memory<TH1F>("reco_eta_pjet_f_jpt"s,
+        "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
+    auto eta_pjet_f_dphi = new memory<TH1F>("reco_eta_pjet_f_dphi"s,
+        "1/N^{#gamma} dN/d#Delta#phi", fdphi, mpthf);
+    auto eta_pjet_f_dr_eta = new memory<TH1F>("reco_eta_pjet_f_dr_eta"s, 
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthfeta);
+
+    // dphi scan
+    auto dphi_nevt = new memory<TH1F>("reco_dphi_nevt"s, "", fincl, mpthf);
+    auto dphi_pjet_f_dr = new memory<TH1F>("reco_dphi_pjet_f_dr"s,
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
+    auto dphi_pjet_f_jpt = new memory<TH1F>("reco_dphi_pjet_f_jpt"s,
+        "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
+    auto dphi_pjet_f_dphi = new memory<TH1F>("reco_dphi_pjet_f_dphi"s,
+        "1/N^{#gamma} dN/d#Delta#phi", fdphi, mpthf);
+    auto dphi_pjet_f_dr_dphi = new memory<TH1F>("reco_dphi_pjet_f_dr_dphi"s, 
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthfdphi);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -126,43 +163,43 @@ int vacillate(char const* config, char const* selections, char const* output) {
             if (std::abs(p->vz) > 15) { continue; }
 
             /* look for reco photons */
-            int64_t reco_photon_index = -1;
-            float reco_photon_pt = 0;
-            float reco_photon_phi = -1000;
-            float reco_photon_eta = -1000;
+            int64_t photon_index = -1;
+            float photon_pt = 0;
+            float photon_phi = -1000;
+            float photon_eta = -1000;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
                 if ((*p->phoEt)[j] < photon_pt_min) { continue; }
 
-                if ((*p->phoEt)[j] > reco_photon_pt) {
-                    reco_photon_index = j;
-                    reco_photon_pt = (*p->phoEt)[j];
+                if ((*p->phoEt)[j] > photon_pt) {
+                    photon_index = j;
+                    photon_pt = (*p->phoEt)[j];
                 }
             }
            
             /* require leading photon */
-            if (reco_photon_index < 0) { continue; }
-            if ((*p->phoSigmaIEtaIEta_2012)[reco_photon_index] > see_max || (*p->phoSigmaIEtaIEta_2012)[reco_photon_index] < see_min) { continue; }
+            if (photon_index < 0) { continue; }
+            if ((*p->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*p->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
             /* hem failure region exclusion */
-            if (heavyion && in_pho_failure_region(p, reco_photon_index)) { continue; }
+            if (heavyion && in_pho_failure_region(p, photon_index)) { continue; }
 
             /* isolation requirement */
-            float isolation = (*p->pho_ecalClusterIsoR3)[reco_photon_index] + (*p->pho_hcalRechitIsoR3)[reco_photon_index] + (*p->pho_trackIsoR3PtCut20)[reco_photon_index];
+            float isolation = (*p->pho_ecalClusterIsoR3)[photon_index] + (*p->pho_hcalRechitIsoR3)[photon_index] + (*p->pho_trackIsoR3PtCut20)[photon_index];
             if (isolation > iso_max) { continue; }
             
             /* leading photon axis */
-            reco_photon_eta = (*p->phoEta)[reco_photon_index];
-            reco_photon_phi = (*p->phoPhi)[reco_photon_index];
+            photon_eta = (*p->phoEta)[photon_index];
+            photon_phi = (*p->phoPhi)[photon_index];
 
             /* electron rejection */
             bool electron = false;
             for (int64_t j = 0; j < p->nEle; ++j) {
                 if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto dr = std::sqrt(dr2(reco_photon_eta, (*p->eleEta)[j], reco_photon_phi, (*p->elePhi)[j]));
+                auto dr = std::sqrt(dr2(photon_eta, (*p->eleEta)[j], photon_phi, (*p->elePhi)[j]));
 
                 if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(p, j, heavyion)) {
                     electron = true; break; 
@@ -177,27 +214,30 @@ int vacillate(char const* config, char const* selections, char const* output) {
             auto weight = p->w;
 
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
-            (*nevt)[pthf_x]->Fill(1., weight);
+            (*jpt_nevt)[pthf_x]->Fill(1., weight);
+            (*eta_nevt)[pthf_x]->Fill(1., weight);
+            (*dphi_nevt)[pthf_x]->Fill(1., weight);
 
             // go through reco jets and fill histograms for hits and fakes
             for (int64_t j = 0; j < p->nref; ++j) {
-                auto reco_jet_pt = (*p->jtpt)[j];
-                auto reco_jet_eta = (*p->jteta)[j];
-                auto reco_jet_phi = (*p->jtphi)[j];
+                auto jet_pt = (*p->jtpt)[j];
+                auto jet_eta = (*p->jteta)[j];
+                auto jet_phi = (*p->jtphi)[j];
                 
                 auto gen_jet_pt = (*p->refpt)[j];
                 auto gen_jet_eta = (*p->refeta)[j];
                 auto gen_jet_phi = (*p->refphi)[j];
                 
-                if (std::abs(reco_jet_eta) >= jet_eta_abs) { continue; }
+                if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
                 if (heavyion && in_jet_failure_region(p, j)) { continue; }
+                if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
                 // no matching gen jet => fake, already accounted for by mixed-event background subtraction
                 if (gen_jet_pt <= 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
                     continue;
                 }
 
-                auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAeta)[j], reco_jet_phi, (*p->WTAphi)[j]));
+                auto jet_dr = std::sqrt(dr2(jet_eta, (*p->WTAeta)[j], jet_phi, (*p->WTAphi)[j]));
 
                 // get the indices
                 auto jpt_x =  ijpt->index_for(jet_pt);
@@ -209,18 +249,52 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 auto mpthfeta_x = mpthfeta->index_for(x{pt_x, eta_x, hf_x});
 
                 // fill the dphi scan comparison histograms
+                if (mpthfdphi_x > -1 && mpthfdphi_x < mpthfdphi->size() && jet_dr < jet_dr_max) {
+                    (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight);
+                    (*dphi_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+                    (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
+                    (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                }
 
-                if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+                if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                 // fill the other histograms
-                
+                if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
+                    (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
+                    (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+                    (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
+                    (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                }
+
+                if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
+                    (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight);
+                    (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+                    (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
+                    (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                }
             }
         }
     }
    
     /* save output */
     in(output, [&]() {
-        // save the histograms
+        jpt_nevt->save(tag);
+        jpt_pjet_f_dr->save(tag);
+        jpt_pjet_f_jpt->save(tag);
+        jpt_pjet_f_dphi->save(tag);
+        jpt_pjet_f_dr_jpt->save(tag);
+
+        eta_nevt->save(tag);
+        eta_pjet_f_dr->save(tag);
+        eta_pjet_f_jpt->save(tag);
+        eta_pjet_f_dphi->save(tag);
+        eta_pjet_f_dr_eta->save(tag);
+
+        dphi_nevt->save(tag);
+        dphi_pjet_f_dr->save(tag);
+        dphi_pjet_f_jpt->save(tag);
+        dphi_pjet_f_dphi->save(tag);
+        dphi_pjet_f_dr_dphi->save(tag);
     });
 
     return 0;

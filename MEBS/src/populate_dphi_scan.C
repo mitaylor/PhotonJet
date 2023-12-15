@@ -34,13 +34,17 @@ void scale(double factor, T*... args) {
 
 static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
-    auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
 
     return deta * deta + dphi * dphi;
 }
 
 float back_to_back(float photon_phi, float jet_phi, float threshold) {
-    return std::abs(convert_radian(photon_phi) - convert_radian(jet_phi)) > convert_pi(threshold);
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return dphi > threshold * TMath::Pi();
 }
 
 void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfdphi, interval *idphi,
