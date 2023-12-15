@@ -41,7 +41,7 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
 }
 
 float back_to_back(float photon_phi, float jet_phi, float threshold) {
-    float dphi = std::abs(phi1 - phi2);
+    float dphi = std::abs(photon_phi - jet_phi);
     if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
 
     return dphi > threshold * TMath::Pi();
