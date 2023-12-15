@@ -224,7 +224,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[photon_index];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[photon_index]);
+            auto photon_phi = (*pjt->phoPhi)[photon_index];
 
             /* electron rejection */
             bool electron = false;
