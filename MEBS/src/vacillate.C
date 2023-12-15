@@ -69,6 +69,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
+    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_pt_max = sel->get<float>("jet_pt_max");
+
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdr = sel->get<std::vector<float>>("dr_range");
     auto rdphi = sel->get<std::vector<float>>("dphi_range");
