@@ -65,12 +65,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto const iso_max = sel->get<float>("iso_max");
 
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
+    auto const jet_dr_max = sel->get<float>("jet_dr_max");
+    auto const jet_pt_min = sel->get<float>("jet_pt_min");
+    auto const jet_pt_max = sel->get<float>("jet_pt_max");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
-
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
-    auto const jet_pt_max = sel->get<float>("jet_pt_max");
 
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
     auto rdr = sel->get<std::vector<float>>("dr_range");
@@ -136,7 +136,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-    
+
     /* load input */
     for (auto const& input : inputs) {
         std::cout << input << std::endl;
