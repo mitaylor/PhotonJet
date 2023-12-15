@@ -74,6 +74,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto rdphi = sel->get<std::vector<float>>("dphi_range");
     auto reta = sel->get<std::vector<float>>("eta_range");
 
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
     /* prepare histograms */
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
@@ -150,10 +152,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
-
-            if (mod) {
-                if ((i + parity) % 2 == 0) { continue; }
-            }
             
             t->GetEntry(i);
 
