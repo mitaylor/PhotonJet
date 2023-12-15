@@ -238,6 +238,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (electron) { continue; }
 
+            /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
             auto hf_x = ihf->index_for(hf);
             auto weight = pjt->w;

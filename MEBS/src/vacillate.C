@@ -153,42 +153,35 @@ int vacillate(char const* config, char const* selections, char const* output) {
             float isolation = (*p->pho_ecalClusterIsoR3)[reco_photon_index] + (*p->pho_hcalRechitIsoR3)[reco_photon_index] + (*p->pho_trackIsoR3PtCut20)[reco_photon_index];
             if (isolation > iso_max) { continue; }
             
-            // potential miss if there is a nearby electron
+            /* leading photon axis */
             reco_photon_eta = (*p->phoEta)[reco_photon_index];
             reco_photon_phi = (*p->phoPhi)[reco_photon_index];
 
-            if (ele_rej) {
-                bool electron = false;
-                for (int64_t j = 0; j < p->nEle; ++j) {
-                    if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+            /* electron rejection */
+            bool electron = false;
+            for (int64_t j = 0; j < p->nEle; ++j) {
+                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
 
-                    auto dr = std::sqrt(dr2(reco_photon_eta, (*p->eleEta)[j], reco_photon_phi, (*p->elePhi)[j]));
+                auto dr = std::sqrt(dr2(reco_photon_eta, (*p->eleEta)[j], reco_photon_phi, (*p->elePhi)[j]));
 
-                    if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(p, j, heavyion)) {
-                        electron = true; break; 
-                    }
+                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(p, j, heavyion)) {
+                    electron = true; break; 
                 }
-
-                if (electron) { reco_photon = false; }
             }
 
-            /* skip useless events */
-            // fakes are handled already by the purity subtraction
-            if (!reco_photon) {
-                continue;
-            } 
+            if (electron) { continue; }
 
             /* declare weights */
+            auto pt_x = ipt->index_for(photon_pt);
+            auto hf_x = ihf->index_for(hf);
             auto weight = p->w;
-            
-            // map reco jet to gen jet
-            std::unordered_map<float, int64_t> gen_jet_id;
-            for (int64_t j = 0; j < p->ngen; ++j)
-                gen_jet_id[(*p->genpt)[j]] = j;
+
+            auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
+            (*nevt)[pthf_x]->Fill(1., weight);
 
             // go through reco jets and fill histograms for hits and fakes
             for (int64_t j = 0; j < p->nref; ++j) {
-                auto reco_jet_pt = (!no_jes && heavyion) ? (*p->jtptCor)[j] : (*p->jtpt)[j];
+                auto reco_jet_pt = (*p->jtpt)[j];
                 auto reco_jet_eta = (*p->jteta)[j];
                 auto reco_jet_phi = (*p->jtphi)[j];
                 
@@ -198,21 +191,29 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 
                 if (std::abs(reco_jet_eta) >= jet_eta_abs) { continue; }
                 if (heavyion && in_jet_failure_region(p, j)) { continue; }
-                if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                 // no matching gen jet => fake, already accounted for by mixed-event background subtraction
                 if (gen_jet_pt <= 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
                     continue;
                 }
-                
+
                 auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAeta)[j], reco_jet_phi, (*p->WTAphi)[j]));
-                auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
 
-                // fill histograms
-                auto id = gen_jet_id[gen_jet_pt];
-                auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[id], gen_jet_phi, (*p->WTAgenphi)[id]));
+                // get the indices
+                auto jpt_x =  ijpt->index_for(jet_pt);
+                auto phi_x = idphi->index_for(photon_jet_dphi);
+                auto eta_x = ieta->index_for(jet_eta);
 
-                // add histogram filling
+                auto mpthfjpt_x = mpthfjpt->index_for(x{pt_x, jpt_x, hf_x});
+                auto mpthfdphi_x = mpthfdphi->index_for(x{pt_x, phi_x, hf_x});
+                auto mpthfeta_x = mpthfeta->index_for(x{pt_x, eta_x, hf_x});
+
+                // fill the dphi scan comparison histograms
+
+                if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+
+                // fill the other histograms
+                
             }
         }
     }
