@@ -136,12 +136,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
-    /* load derived JER based on reco pT */
-    TFile* fj;
-    history<TH1F>* jer_histogram = nullptr;
-    history<TF1>* jer_function = nullptr;
-
+    
     /* load input */
     for (auto const& input : inputs) {
         std::cout << input << std::endl;
