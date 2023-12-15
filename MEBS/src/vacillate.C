@@ -239,6 +239,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
 
                 auto jet_dr = std::sqrt(dr2(jet_eta, (*p->WTAeta)[j], jet_phi, (*p->WTAphi)[j]));
+                auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
 
                 // get the indices
                 auto jpt_x =  ijpt->index_for(jet_pt);
