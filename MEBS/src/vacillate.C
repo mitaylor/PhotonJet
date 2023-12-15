@@ -57,8 +57,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto heavyion = sel->get<bool>("heavyion");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
-    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
     auto const see_max = sel->get<float>("see_max");
@@ -221,8 +221,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 auto jet_phi = (*p->jtphi)[j];
                 
                 auto gen_jet_pt = (*p->refpt)[j];
-                auto gen_jet_eta = (*p->refeta)[j];
-                auto gen_jet_phi = (*p->refphi)[j];
                 
                 if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
                 if (heavyion && in_jet_failure_region(p, j)) { continue; }
