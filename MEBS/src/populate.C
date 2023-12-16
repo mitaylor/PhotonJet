@@ -46,8 +46,9 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 }
 
 void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthfeta, multival* mpthfdphi, 
-               interval *ijpt, interval *ieta, interval *idphi, int64_t pt_x, int64_t hf_x, float weight, 
-               int64_t photon_phi, bool heavyion, float jet_eta_abs, float jet_dr_max, 
+               interval *ijpt, interval *ieta, interval *idphi, int64_t pt_x, int64_t hf_x,
+               float weight, int64_t photon_phi, bool heavyion, 
+               float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* jpt_pjet_f_dr, memory<TH1F>* jpt_pjet_f_jpt,
                memory<TH1F>* jpt_pjet_f_dphi, memory<TH1F>* jpt_pjet_f_dr_jpt,
@@ -68,7 +69,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
         if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
-        if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+        if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
@@ -321,6 +322,7 @@ int populate(char const* config, char const* selections, char const* output) {
             fill_axes(pjt, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                 ijpt, ieta, idphi, pt_x, hf_x, weight,
                 photon_phi, heavyion, jet_eta_abs, jet_dr_max, 
+                jet_pt_min, jet_pt_max,
                 dphi_min_numerator, dphi_min_denominator, nevt, 
                 jpt_pjet_f_dr, jpt_pjet_f_jpt, 
                 jpt_pjet_f_dphi, jpt_pjet_f_dr_jpt,
@@ -341,7 +343,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
-                        photon_phi, heavyion, jet_eta_abs, jet_dr_max, 
+                        photon_phi, heavyion, jet_eta_abs, jet_dr_max,
+                        jet_pt_min, jet_pt_max, 
                         dphi_min_numerator, dphi_min_denominator, nmix, 
                         jpt_mix_pjet_f_dr, jpt_mix_pjet_f_jpt, 
                         jpt_mix_pjet_f_dphi, jpt_mix_pjet_f_dr_jpt,
