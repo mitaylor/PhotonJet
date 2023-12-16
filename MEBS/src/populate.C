@@ -198,7 +198,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto jpt_mix_pjet_f_dphi = new memory<TH1F>("mix_jpt_pjet_f_dphi"s,
         "1/N^{#gamma} dN/d#Delta#phi", fdphi, mpthf);
     auto jpt_mix_pjet_f_dr_jpt = new memory<TH1F>("mix_jpt_pjet_f_dr_jpt"s, 
-        "1/N^{#gamma} dN/d#deltaj", fdr, mpthfjpt)
+        "1/N^{#gamma} dN/d#deltaj", fdr, mpthfjpt);
 
     // eta scan
     auto eta_pjet_f_dr = new memory<TH1F>("eta_pjet_f_dr"s,
