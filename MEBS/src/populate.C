@@ -67,7 +67,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
         auto jet_phi = (*pjt->jtphi)[j];
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-        if (exclude && in_jet_failure_region(pjt, j)) { continue; }
+        if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
@@ -320,7 +320,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfjpt, mpthfeta, mpthfdphi
                 ijpt, ieta, idphi, pt_x, hf_x, weight,
-                photon_phi, exclude, jet_eta_abs, jet_dr_max, 
+                photon_phi, heavyion, jet_eta_abs, jet_dr_max, 
                 dphi_min_numerator, dphi_min_denominator, nevt, 
                 jpt_pjet_f_dr, jpt_pjet_f_jpt, 
                 jpt_pjet_f_dphi, jpt_pjet_f_dr_jpt,
@@ -341,7 +341,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(pjtm, mpthf, mpthfjpt, mpthfeta, mpthfdphi
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
-                        photon_phi, exclude, jet_eta_abs, jet_dr_max, 
+                        photon_phi, heavyion, jet_eta_abs, jet_dr_max, 
                         dphi_min_numerator, dphi_min_denominator, nmix, 
                         jpt_mix_pjet_f_dr, jpt_mix_pjet_f_jpt, 
                         jpt_mix_pjet_f_dphi, jpt_mix_pjet_f_dr_jpt,
