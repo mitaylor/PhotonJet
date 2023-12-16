@@ -1,3 +1,4 @@
+#include "../include/lambdas.h"
 #include "../include/pjtree.h"
 #include "../include/specifics.h"
 
@@ -9,15 +10,13 @@
 
 #include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
-
-#include "../include/JetCorrector.h"
-#include "../include/JetUncertainty.h"
+#include "../git/tricks-and-treats/include/zip.h"
 
 #include "TFile.h"
-#include "TRandom3.h"
+#include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
-#include "TTree.h"
+#include "TMath.h"
 
 #include <string>
 #include <vector>
