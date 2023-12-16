@@ -54,7 +54,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
                memory<TH1F>* eta_pjet_f_dr, memory<TH1F>* eta_pjet_f_jpt,
                memory<TH1F>* eta_pjet_f_dphi, memory<TH1F>* eta_pjet_f_dr_eta,
                memory<TH1F>* dphi_pjet_f_dr, memory<TH1F>* dphi_pjet_f_jpt,
-               memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi,
+               memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi
             ) {
     
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
