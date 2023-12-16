@@ -43,7 +43,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 int vacillate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
-    auto inputs = conf->get<std::vector<std::string>>("inputs");
+    auto input = conf->get<std::vector<std::string>>("input");
     auto tag = conf->get<std::string>("tag");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -58,7 +58,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
-    
     auto const hovere_max = sel->get<float>("hovere_max");
     auto const see_min = sel->get<float>("see_min");
     auto const see_max = sel->get<float>("see_max");
@@ -66,6 +65,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
     auto const jet_dr_max = sel->get<float>("jet_dr_max");
+
     auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_pt_max = sel->get<float>("jet_pt_max");
 
@@ -138,67 +138,64 @@ int vacillate(char const* config, char const* selections, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* load input */
-    for (auto const& input : inputs) {
-        std::cout << input << std::endl;
+    for (auto const& file : input) {
+        std::cout << file << std::endl;
         
-        TFile* f = new TFile(input.data(), "read");
+        TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
-
+        auto pjt = new pjtree(true, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
-            if (i % 100000 == 0) { printf("%li/%li\n", i, nentries); }
-            
+            if (i % 100000 == 0) { printf("entry: %li/%li\n", i, nentries); }
+
             t->GetEntry(i);
 
-            double hf = p->hiHF; 
+            double hf = pjt->hiHF; 
 
             if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
-            if (std::abs(p->vz) > 15) { continue; }
+            if (std::abs(pjt->vz) > 15) { continue; }
 
             /* look for reco photons */
             int64_t photon_index = -1;
             float photon_pt = 0;
-            float photon_phi = -1000;
-            float photon_eta = -1000;
 
-            for (int64_t j = 0; j < p->nPho; ++j) {
-                if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
-                if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-                if ((*p->phoEt)[j] < photon_pt_min) { continue; }
+            for (int64_t j = 0; j < pjt->nPho; ++j) {
+                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+                if ((*pjt->phoEt)[j] < photon_pt_min) { continue; }
 
-                if ((*p->phoEt)[j] > photon_pt) {
+                if ((*pjt->phoEt)[j] > photon_pt) {
                     photon_index = j;
-                    photon_pt = (*p->phoEt)[j];
+                    photon_pt = (*pjt->phoEt)[j];
                 }
             }
-           
+
             /* require leading photon */
             if (photon_index < 0) { continue; }
-            if ((*p->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*p->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
             /* hem failure region exclusion */
-            if (heavyion && in_pho_failure_region(p, photon_index)) { continue; }
+            if (heavyion && in_pho_failure_region(pjt, photon_index)) { continue; }
 
             /* isolation requirement */
-            float isolation = (*p->pho_ecalClusterIsoR3)[photon_index] + (*p->pho_hcalRechitIsoR3)[photon_index] + (*p->pho_trackIsoR3PtCut20)[photon_index];
+            float isolation = (*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index];
             if (isolation > iso_max) { continue; }
-            
+
             /* leading photon axis */
-            photon_eta = (*p->phoEta)[photon_index];
-            photon_phi = (*p->phoPhi)[photon_index];
+            auto photon_eta = (*pjt->phoEta)[photon_index];
+            auto photon_phi = (*pjt->phoPhi)[photon_index];
 
             /* electron rejection */
             bool electron = false;
-            for (int64_t j = 0; j < p->nEle; ++j) {
-                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+            for (int64_t j = 0; j < pjt->nEle; ++j) {
+                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
 
-                auto dr = std::sqrt(dr2(photon_eta, (*p->eleEta)[j], photon_phi, (*p->elePhi)[j]));
+                auto dr = std::sqrt(dr2(photon_eta, (*pjt->eleEta)[j], photon_phi, (*pjt->elePhi)[j]));
 
-                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(p, j, heavyion)) {
-                    electron = true; break; 
+                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, heavyion)) {
+                    electron = true; break;
                 }
             }
 
@@ -207,7 +204,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
             auto hf_x = ihf->index_for(hf);
-            auto weight = p->w;
+            auto weight = pjt->w;
 
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
             (*jpt_nevt)[pthf_x]->Fill(1., weight);
@@ -215,23 +212,23 @@ int vacillate(char const* config, char const* selections, char const* output) {
             (*dphi_nevt)[pthf_x]->Fill(1., weight);
 
             // go through reco jets and fill histograms for hits and fakes
-            for (int64_t j = 0; j < p->nref; ++j) {
-                auto jet_pt = (*p->jtpt)[j];
-                auto jet_eta = (*p->jteta)[j];
-                auto jet_phi = (*p->jtphi)[j];
+            for (int64_t j = 0; j < pjt->nref; ++j) {
+                auto jet_pt = (*pjt->jtpt)[j];
+                auto jet_eta = (*pjt->jteta)[j];
+                auto jet_phi = (*pjt->jtphi)[j];
                 
-                auto gen_jet_pt = (*p->refpt)[j];
+                auto gen_jet_pt = (*pjt->refpt)[j];
                 
                 if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
                 if (heavyion && in_jet_failure_region(p, j)) { continue; }
                 if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
                 // no matching gen jet => fake, already accounted for by mixed-event background subtraction
-                if (gen_jet_pt <= 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
+                if (gen_jet_pt <= 5 || dr2((*pjt->refeta)[j], (*pjt->jteta)[j], (*pjt->refphi)[j], (*pjt->jtphi)[j]) > 0.0225) { 
                     continue;
                 }
 
-                auto jet_dr = std::sqrt(dr2(jet_eta, (*p->WTAeta)[j], jet_phi, (*p->WTAphi)[j]));
+                auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
                 auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
 
                 // get the indices

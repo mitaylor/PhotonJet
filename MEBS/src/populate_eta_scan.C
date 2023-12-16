@@ -135,13 +135,13 @@ int populate(char const* config, char const* selections, char const* output) {
     if (tag == "bkg") see_min = 0.012;
     if (tag == "bkg") see_max = 0.02;
 
-    /* make histograms */
+    /* prepare histograms */
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
-    auto ieta = new interval(reta);
     auto idr = new interval("#deltaj"s, rdr);
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
     auto idphi = new interval("#Delta#phi"s, rdphi);
+    auto ieta = new interval(reta);
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 
     auto mpthf = new multival(dpt, dhf);
@@ -191,7 +191,7 @@ int populate(char const* config, char const* selections, char const* output) {
     /* load input */
     for (auto const& file : input) {
         std::cout << file << std::endl;
-
+        
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
