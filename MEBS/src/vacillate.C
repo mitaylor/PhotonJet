@@ -220,7 +220,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 auto gen_jet_pt = (*pjt->refpt)[j];
                 
                 if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-                if (heavyion && in_jet_failure_region(p, j)) { continue; }
+                if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
                 if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
                 // no matching gen jet => fake, already accounted for by mixed-event background subtraction
