@@ -145,7 +145,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
             hb->sketch();
             c1->draw("pdf");
             c2->draw("pdf");
-            delete c1, c2;
+            delete c1; delete c2;
         }
 
         if (shape.size() == 3) {
@@ -207,7 +207,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 cs1[i]->draw("pdf");
                 cs2[i]->draw("pdf");
 
-                delete cs1[i], cs2[i];
+                delete cs1[i]; delete cs2[i];
             }
         }
     }, labels, maximums, minimums);
