@@ -34,6 +34,9 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
+    auto comparison = conf->get<std::string>("comparison");
+    auto scan = conf->get<std::string>("scan");
+
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -69,6 +72,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
     /* load history objects */
     TFile* f = new TFile((base + input).data(), "read");
+    TFile* t = new TFile((base + comparison).data(), "read");
 
     TH1::SetDefaultSumw2();
 
@@ -77,7 +81,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto hb = new pencil();
-    hb->category("type", "raw", "mix");
+    hb->category("type", "raw", "mix", "sub", "reco");
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -91,7 +95,13 @@ int jubilate(char const* config, char const* selections, char const* output) {
         auto name_mix = "raw_mix_"s + label;
         auto hist_mix = new history<TH1F>(f, name_mix);
 
-        scale_bin_width(hist, hist_mix);
+        auto name_sub = "raw_sub_"s + label;
+        auto hist_sub = new history<TH1F>(f, name_sub);
+
+        auto name_reco = "aa_reco_"s + scan + "_"s + label;
+        auto hist_reco = new history<TH1F>(t, name_reco);
+
+        scale_bin_width(hist, hist_mix, hist_sub);
 
         auto shape = hist->shape(); // photon pt, scan (optional), centrality
         
@@ -121,6 +131,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
             for (int64_t i = 0; i < hist->size(); ++i) {
                 c->add((*hist)[i], "raw");
                 c->stack((*hist_mix)[i], "mix");
+                c->stack((*hist_sub)[i], "sub");
+                c->stack((*hist_reco)[i], "reco");
             }
 
             hb->sketch();
@@ -167,6 +179,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                     std::vector<int64_t> index = {0, i, j};
                     cs[i]->add((*hist)[index], "raw");
                     cs[i]->stack((*hist_mix)[index], "mix");
+                    cs[i]->stack((*hist_sub)[index], "sub");
+                    cs[i]->stack((*hist_reco)[index], "reco");
                 }
             }
 
