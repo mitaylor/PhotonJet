@@ -121,18 +121,25 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 }
             };
 
-            auto c = new paper(set + "_" + tag + "_" + label, hb);
-            apply_style(c, cms, system_tag);
-            c->accessory(std::bind(line_at, _1, 0.f, min, max));
-            c->accessory(hf_info);
-            c->accessory(cuts_info);
-            c->divide(ihf->size() , -1);
+            auto c1 = new paper(set + "_"s + tag + "_mebs_"s + label, hb);
+            apply_style(c1, cms, system_tag);
+            c1->accessory(std::bind(line_at, _1, 0.f, min, max));
+            c1->accessory(hf_info);
+            c1->accessory(cuts_info);
+            c1->divide(ihf->size() , -1);
+
+            auto c2 = new paper(set + "_"s + tag + "_closure_"s + label, hb);
+            apply_style(c2, cms, system_tag);
+            c2->accessory(std::bind(line_at, _1, 0.f, min, max));
+            c2->accessory(hf_info);
+            c2->accessory(cuts_info);
+            c2->divide(ihf->size() , -1);
 
             for (int64_t i = 0; i < hist->size(); ++i) {
-                c->add((*hist)[i], "raw");
-                c->stack((*hist_mix)[i], "mix");
-                c->stack((*hist_sub)[i], "sub");
-                c->stack((*hist_reco)[i], "reco");
+                c1->add((*hist)[i], "raw");
+                c1->stack((*hist_mix)[i], "mix");
+                c2->add((*hist_sub)[i], "sub");
+                c2->stack((*hist_reco)[i], "reco");
             }
 
             hb->sketch();
@@ -141,7 +148,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
         }
 
         if (shape.size() == 3) {
-            std::vector<paper*> cs(shape[1], nullptr);
+            std::vector<paper*> cs1(shape[1], nullptr);
+            std::vector<paper*> cs2(shape[1], nullptr);
 
             auto range_info = [&](int64_t index) {
                 if (jpt) { info_text(index, 0.71, "%g < p_{T}^{jet} < %g GeV", rjpt, false); }
@@ -167,28 +175,38 @@ int jubilate(char const* config, char const* selections, char const* output) {
             };
 
             for (int64_t i = 0; i < shape[1]; ++i) {
-                cs[i] = new paper(set + "_" + tag + "_" + label + "_" + to_text(i), hb);
-                apply_style(cs[i], cms, system_tag);
-                cs[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
-                cs[i]->accessory(range_info);
-                cs[i]->accessory(hf_info);
-                cs[i]->accessory(cuts_info);
-                cs[i]->divide(ihf->size() , -1);
+                cs1[i] = new paper(set + "_"s + tag + "_mebs_"s + label + "_"s + to_text(i), hb);
+                apply_style(cs1[i], cms, system_tag);
+                cs1[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
+                cs1[i]->accessory(range_info);
+                cs1[i]->accessory(hf_info);
+                cs1[i]->accessory(cuts_info);
+                cs1[i]->divide(ihf->size() , -1);
+
+                cs2[i] = new paper(set + "_"s + tag + "_closure_"s + label + "_"s + to_text(i), hb);
+                apply_style(cs2[i], cms, system_tag);
+                cs2[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
+                cs2[i]->accessory(range_info);
+                cs2[i]->accessory(hf_info);
+                cs2[i]->accessory(cuts_info);
+                cs2[i]->divide(ihf->size() , -1);
 
                 for (int64_t j = 0; j < shape[2]; ++j) {
                     std::vector<int64_t> index = {0, i, j};
-                    cs[i]->add((*hist)[index], "raw");
-                    cs[i]->stack((*hist_mix)[index], "mix");
-                    cs[i]->stack((*hist_sub)[index], "sub");
-                    cs[i]->stack((*hist_reco)[index], "reco");
+                    cs1[i]->add((*hist)[index], "raw");
+                    cs1[i]->stack((*hist_mix)[index], "mix");
+                    cs2[i]->add((*hist_sub)[index], "sub");
+                    cs2[i]->stack((*hist_reco)[index], "reco");
                 }
             }
 
             hb->sketch();
 
             for (int64_t i = 0; i < shape[1]; ++i) {
-                cs[i]->draw("pdf");
-                delete cs[i];
+                cs1[i]->draw("pdf");
+                cs2[i]->draw("pdf");
+
+                delete cs1[i], cs2[i];
             }
         }
     }, labels, maximums, minimums);
