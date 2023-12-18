@@ -143,8 +143,9 @@ int jubilate(char const* config, char const* selections, char const* output) {
             }
 
             hb->sketch();
-            c->draw("pdf");
-            delete c;
+            c1->draw("pdf");
+            c2->draw("pdf");
+            delete c1, c2;
         }
 
         if (shape.size() == 3) {
