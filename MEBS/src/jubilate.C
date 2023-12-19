@@ -29,7 +29,7 @@ void scale_bin_width(T*... args) {
 
 template <typename T>
 void set_range(T* arg1, T* arg2) {
-    arg1->apply([](TH1* h1, int64_t index) {
+    arg1->apply([&](TH1* h1, int64_t index) {
         auto min = std::min(h1->GetMinimum(), (*arg2)[index]->GetMinimum());
         min = std::min(min, 0);
 
