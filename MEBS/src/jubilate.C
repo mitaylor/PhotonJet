@@ -30,7 +30,8 @@ void scale_bin_width(T*... args) {
 template <typename... T>
 void set_range(T*... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        default_formatter(obj, 0, obj->GetMaximum()*1.5); }), 0)... };
+        auto min = obj->GetMinimum() < 0 ? obj->GetMinimum() : 0;
+        default_formatter(obj, min, obj->GetMaximum()*1.5); }), 0)... };
 }
 
 int jubilate(char const* config, char const* selections, char const* output) {
@@ -145,8 +146,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
             for (int64_t i = 0; i < hist->size(); ++i) {
                 c1->add((*hist)[i], "raw");
                 c1->stack((*hist_mix)[i], "mix");
-                c2->add((*hist_sub)[i], "sub");
-                c2->stack((*hist_reco)[i], "reco");
+                c2->add((*hist_reco)[i], "reco");
+                c2->stack((*hist_sub)[i], "sub");
             }
 
             hb->sketch();
@@ -163,7 +164,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 if (index > 0) {
                     if (jpt) { info_text(step, 0.71, "%g < p_{T}^{jet} < %g GeV", rjpt, false); }
                     if (eta) { info_text(step, 0.71, "%g < #eta^{jet} < %g", reta, false); }
-                    if (dphi) { info_text(step, 0.71, "%g < #Delta#phi_{j#gamma} < %g", rdphi, false); }
+                    if (dphi) { info_text(step, 0.71, "%g#pi < #Delta#phi_{j#gamma} < %g#pi", rdphi, false); }
                 }
             };
 
@@ -205,8 +206,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                     std::vector<int64_t> index = {0, i, j};
                     cs1[i]->add((*hist)[index], "raw");
                     cs1[i]->stack((*hist_mix)[index], "mix");
-                    cs2[i]->add((*hist_sub)[index], "sub");
-                    cs2[i]->stack((*hist_reco)[index], "reco");
+                    cs2[i]->add((*hist_reco)[index], "reco");
+                    cs2[i]->stack((*hist_sub)[index], "sub");
                 }
             }
 
