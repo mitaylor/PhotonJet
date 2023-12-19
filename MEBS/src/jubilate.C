@@ -27,6 +27,12 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
+template <typename... T>
+void set_range(T*... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        default_formatter(obj, 0, obj->GetMaximum()*1.5 }), 0)... };
+}
+
 int jubilate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -102,6 +108,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         auto hist_reco = new history<TH1F>(t, name_reco);
 
         scale_bin_width(hist, hist_mix, hist_sub, hist_reco);
+        set_range(hist, hist_mix, hist_sub, hist_reco);
 
         auto shape = hist->shape(); // photon pt, scan (optional), centrality
         
@@ -152,10 +159,12 @@ int jubilate(char const* config, char const* selections, char const* output) {
             std::vector<paper*> cs1(shape[1], nullptr);
             std::vector<paper*> cs2(shape[1], nullptr);
 
-            auto range_info = [&](int64_t index) {
-                if (jpt) { info_text(index, 0.71, "%g < p_{T}^{jet} < %g GeV", rjpt, false); }
-                if (eta) { info_text(index, 0.71, "%g < #eta^{jet} < %g", reta, false); }
-                if (dphi) { info_text(index, 0.71, "%g < #Delta#phi_{j#gamma} < %g", rdphi, false); }
+            auto range_info = [&](int64_t index, int64_t step) {
+                if (index > 0) {
+                    if (jpt) { info_text(step, 0.71, "%g < p_{T}^{jet} < %g GeV", rjpt, false); }
+                    if (eta) { info_text(step, 0.71, "%g < #eta^{jet} < %g", reta, false); }
+                    if (dphi) { info_text(step, 0.71, "%g < #Delta#phi_{j#gamma} < %g", rdphi, false); }
+                }
             };
 
             auto cuts_info = [&](int64_t index) {
@@ -179,7 +188,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 cs1[i] = new paper(set + "_"s + tag + "_mebs_"s + label + "_"s + to_text(i), hb);
                 apply_style(cs1[i], cms, system_tag);
                 cs1[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
-                cs1[i]->accessory(range_info);
+                cs1[i]->accessory(std::bind(range_info, _1, i+1));
                 cs1[i]->accessory(hf_info);
                 cs1[i]->accessory(cuts_info);
                 cs1[i]->divide(ihf->size() , -1);
@@ -187,7 +196,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 cs2[i] = new paper(set + "_"s + tag + "_closure_"s + label + "_"s + to_text(i), hb);
                 apply_style(cs2[i], cms, system_tag);
                 cs2[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
-                cs2[i]->accessory(range_info);
+                cs2[i]->accessory(std::bind(range_info, _1, i+1));
                 cs2[i]->accessory(hf_info);
                 cs2[i]->accessory(cuts_info);
                 cs2[i]->divide(ihf->size() , -1);
