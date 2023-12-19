@@ -35,6 +35,7 @@ void set_range(history<TH1F>* arg1, history<TH1F>* arg2) {
         auto max = std::max(h1->GetMaximum(), (*arg2)[index]->GetMaximum());
 
         default_formatter(h1, min, max*1.3); 
+        default_formatter((*arg2)[index], min, max*1.3); 
     });
 }
 
