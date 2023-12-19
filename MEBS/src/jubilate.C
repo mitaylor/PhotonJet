@@ -28,10 +28,15 @@ void scale_bin_width(T*... args) {
 }
 
 template <typename... T>
-void set_range(T*... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        auto min = obj->GetMinimum() < 0 ? obj->GetMinimum() : 0;
-        default_formatter(obj, min, obj->GetMaximum()*1.5); }), 0)... };
+void set_range(T* arg1, T* arg2) {
+    arg1->apply([](TH1* h1, int64_t index) {
+        auto min = std::min(h1->GetMinimum(), (*arg2)[index]->GetMinimum());
+        min = std::min(min, 0);
+
+        auto max = std::max(h1->GetMaximum(), (*arg2)[index]->GetMaximum());
+
+        default_formatter(h1, min, max*1.3); 
+    });
 }
 
 int jubilate(char const* config, char const* selections, char const* output) {
