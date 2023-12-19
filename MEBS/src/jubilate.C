@@ -30,7 +30,7 @@ void scale_bin_width(T*... args) {
 template <typename... T>
 void set_range(T*... args) {
     (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        default_formatter(obj, 0, obj->GetMaximum()*1.5 }), 0)... };
+        default_formatter(obj, 0, obj->GetMaximum()*1.5) }), 0)... };
 }
 
 int jubilate(char const* config, char const* selections, char const* output) {
