@@ -27,17 +27,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-template <typename... T>
-void scale(double factor, T*... args) {
-    (void)(int [sizeof...(T)]) { (args->scale(factor), 0)... };
-}
-
-template <typename... T>
-void scale_bin_width(T*... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1., "width"); }), 0)... };
-}
-
 int combine_populate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
