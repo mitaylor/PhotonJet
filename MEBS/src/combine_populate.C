@@ -89,8 +89,6 @@ int combine_populate(char const* config, char const* selections, char const* out
             delete hist_add; delete hist_mix_add;
         }
 
-        scale_bin_width(hist, hist_mix);
-
         hist->apply([](TH1* h) { 
             for (int i = 0; i <= h->GetNbinsX(); ++i) {
                 if (h->GetBinContent(i + 1) == 0) {
