@@ -27,7 +27,7 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-void set_range(history<TH1>* arg1, history<TH1>* arg2) {
+void set_range(history<TH1F>* arg1, history<TH1F>* arg2) {
     arg1->apply([&](TH1* h1, int64_t index) {
         auto min = std::min(h1->GetMinimum(), (*arg2)[index]->GetMinimum());
         min = std::min(min, 0);
