@@ -27,7 +27,7 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-template <typename... T>
+template <typename T>
 void set_range(T* arg1, T* arg2) {
     arg1->apply([](TH1* h1, int64_t index) {
         auto min = std::min(h1->GetMinimum(), (*arg2)[index]->GetMinimum());
