@@ -114,7 +114,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
         auto hist_reco = new history<TH1F>(t, name_reco);
 
         scale_bin_width(hist, hist_mix, hist_sub, hist_reco);
-        set_range(hist, hist_mix, hist_sub, hist_reco);
+        set_range(hist, hist_mix);
+        set_range(hist_sub, hist_reco);
 
         auto shape = hist->shape(); // photon pt, scan (optional), centrality
         
