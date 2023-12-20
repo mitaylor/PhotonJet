@@ -48,7 +48,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 }
 
 void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfdphi, interval *idphi,
-               int64_t pt_x, int64_t hf_x, float weight, int64_t photon_phi, bool exclude, 
+               int64_t pt_x, int64_t hf_x, float weight, float photon_phi, bool exclude, 
                float jet_eta_abs, float jet_dr_max,
                float jet_pt_min, float jet_pt_max, memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr,
                memory<TH1F>* pjet_f_jpt, memory<TH1F>* pjet_f_dphi, memory<TH1F>* pjet_f_dr_dphi
