@@ -117,8 +117,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
         set_range(hist, hist_mix);
         set_range(hist_sub, hist_reco);
 
-        gPad->SetTicks();
-
         auto shape = hist->shape(); // photon pt, scan (optional), centrality
         
         if (shape.size() == 2) {
@@ -156,6 +154,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 c1->stack((*hist_mix)[i], "mix");
                 c2->add((*hist_reco)[i], "reco");
                 c2->stack((*hist_sub)[i], "sub");
+
+                gPad->SetTicks();
             }
 
             hb->sketch();
@@ -209,6 +209,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 cs2[i]->accessory(hf_info);
                 cs2[i]->accessory(cuts_info);
                 cs2[i]->divide(ihf->size() , -1);
+
+                gPad->SetTicks();
 
                 for (int64_t j = 0; j < shape[2]; ++j) {
                     std::vector<int64_t> index = {0, i, j};
