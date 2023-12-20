@@ -52,8 +52,8 @@ int beneficiate(char const* selections, char const* output) {
     auto nevt = new memory<TH2F>("nevt"s, "none", fincl, mdphi);
     auto nacc = new memory<TH2F>("nacc"s, "none", fincl, mdphi);
 
-    std::vector<float> evt(mdphi.size(), 0);
-    std::vector<float> acc(mdphi.size(), 0);
+    std::vector<float> evt(mdphi->size()(), 0);
+    std::vector<float> acc(mdphi->size()(), 0);
 
     /* create vectors for photon and jet phi */
     auto ijphi = new interval("jetPhi"s, dim_size, phi_min, phi_max);
@@ -90,16 +90,16 @@ int beneficiate(char const* selections, char const* output) {
         }
     }
 
-    for (size_t i = 0; i < mdphi.size(); ++i) {
-        std::cout << acc[dphi_x]/evt[dphi_x] << std::endl;
+    for (size_t i = 0; i < mdphi->size()(); ++i) {
+        std::cout << acc[i]/evt[i] << std::endl;
     }
 
-    for (size_t i = 0; i < mdphi.size(); ++i) {
-        std::cout << acc[dphi_x] << std::endl;
+    for (size_t i = 0; i < mdphi->size()(); ++i) {
+        std::cout << acc[i] << std::endl;
     }
 
-    for (size_t i = 0; i < mdphi.size(); ++i) {
-        std::cout << evt[dphi_x] << std::endl;
+    for (size_t i = 0; i < mdphi->size()(); ++i) {
+        std::cout << evt[i] << std::endl;
     }
 
     /* normalise by number of entries */
