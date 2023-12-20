@@ -210,8 +210,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 cs2[i]->accessory(cuts_info);
                 cs2[i]->divide(ihf->size() , -1);
 
-                gPad->SetTicks();
-
                 for (int64_t j = 0; j < shape[2]; ++j) {
                     std::vector<int64_t> index = {0, i, j};
                     cs1[i]->add((*hist)[index], "raw");
