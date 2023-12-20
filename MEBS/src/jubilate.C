@@ -117,6 +117,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
         set_range(hist, hist_mix);
         set_range(hist_sub, hist_reco);
 
+        gPad->SetTicks();
+
         auto shape = hist->shape(); // photon pt, scan (optional), centrality
         
         if (shape.size() == 2) {
