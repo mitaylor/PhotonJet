@@ -189,6 +189,8 @@ void paper::draw_pad(auto const& associates, int64_t index) const {
             apply(j, obj, index);
     }
 
+    gPad->SetTicks();
+
     if (_flags & flags::logx) { gPad->SetLogx(); }
     if (_flags & flags::logy) { gPad->SetLogy(); }
     if (_flags & flags::logz) { gPad->SetLogz(); }
