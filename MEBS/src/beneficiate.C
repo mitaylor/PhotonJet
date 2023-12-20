@@ -90,15 +90,15 @@ int beneficiate(char const* selections, char const* output) {
         }
     }
 
-    for (size_t i = 0; i < mdphi->size(); ++i) {
+    for (int64_t i = 0; i < mdphi->size(); ++i) {
         std::cout << acc[i]/evt[i] << std::endl;
     }
 
-    for (size_t i = 0; i < mdphi->size(); ++i) {
+    for (int64_t i = 0; i < mdphi->size(); ++i) {
         std::cout << acc[i] << std::endl;
     }
 
-    for (size_t i = 0; i < mdphi->size(); ++i) {
+    for (int64_t i = 0; i < mdphi->size(); ++i) {
         std::cout << evt[i] << std::endl;
     }
 
