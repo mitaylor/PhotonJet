@@ -154,8 +154,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 c1->stack((*hist_mix)[i], "mix");
                 c2->add((*hist_reco)[i], "reco");
                 c2->stack((*hist_sub)[i], "sub");
-
-                gPad->SetTicks();
             }
 
             hb->sketch();
