@@ -23,6 +23,14 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
+    auto deta = eta1 - eta2;
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return deta * deta + dphi * dphi;
+}
+
 int beneficiate(char const* selections, char const* output) {
     auto sel = new configurer(selections);
     auto dphi_range = sel->get<std::vector<float>>("dphi_range");
@@ -74,7 +82,7 @@ int beneficiate(char const* selections, char const* output) {
                     auto jetPhi = (jphi_edges[1] + jphi_edges[0])/2;
                     auto phoPhi = (pphi_edges[1] + pphi_edges[0])/2;
 
-                    auto dphi = revert_pi(convert_radian(phoPhi) - convert_radian(jetPhi));
+                    auto dphi = std::sqrt(dr2(0, 0, jetPhi, phoPhi)) / TMath::Pi();
 
                     auto dphi_x = idphi->index_for(dphi);
 
