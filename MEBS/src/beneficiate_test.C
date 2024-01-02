@@ -23,9 +23,9 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static double dr2(double eta1, double eta2, double phi1, double phi2) {
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
-    double dphi = std::abs(phi1 - phi2);
+    float dphi = std::abs(phi1 - phi2);
     if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
 
     return deta * deta + dphi * dphi;
@@ -59,10 +59,10 @@ int beneficiate(char const* selections, char const* output) {
     auto mpjeta = new multival(*ijeta, *ipeta);
     auto mdphi = new multival (*idphi);
 
-    auto fincl = std::bind(&multival::book<TH2D>, mpjeta, _1, _2, _3);
+    auto fincl = std::bind(&multival::book<TH2F>, mpjeta, _1, _2, _3);
 
-    auto nevt = new memory<TH2D>("nevt"s, "none", fincl, mdphi);
-    auto nacc = new memory<TH2D>("nacc"s, "none", fincl, mdphi);
+    auto nevt = new memory<TH2F>("nevt"s, "none", fincl, mdphi);
+    auto nacc = new memory<TH2F>("nacc"s, "none", fincl, mdphi);
 
     std::vector<double> evt(mdphi->size(), 0);
     std::vector<double> acc(mdphi->size(), 0);
