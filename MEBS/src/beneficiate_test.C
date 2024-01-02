@@ -41,7 +41,7 @@ int beneficiate(char const* selections, char const* output) {
 
     std::string tag = "aa";
 
-    int64_t dim_size = 200;
+    int64_t dim_size = 100;
 
     /* define history based on multival of jet eta, photon eta, and dphi */
     double jet_eta_min = -jet_eta_abs;
