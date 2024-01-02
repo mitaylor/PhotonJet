@@ -33,17 +33,21 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
 
 int beneficiate(char const* selections, char const* output) {
     auto sel = new configurer(selections);
+    
     auto dphi_range = sel->get<std::vector<float>>("dphi_range");
+
+    auto photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     std::string tag = "aa";
 
-    int64_t dim_size = 100;
+    int64_t dim_size = 200;
 
     /* define history based on multival of jet eta, photon eta, and dphi */
-    double jet_eta_min = -2;
-    double jet_eta_max = 2;
-    double pho_eta_min = -2;
-    double pho_eta_max = 2;
+    double jet_eta_min = -jet_eta_abs;
+    double jet_eta_max = jet_eta_abs;
+    double pho_eta_min = -photon_eta_abs;
+    double pho_eta_max = photon_eta_abs;
 
     double phi_min = -TMath::Pi();
     double phi_max = TMath::Pi();
