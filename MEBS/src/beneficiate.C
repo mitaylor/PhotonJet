@@ -73,6 +73,7 @@ int beneficiate(char const* selections, char const* output) {
 
     /* fill the histograms */
     for (int64_t i = 0; i < dim_size; ++i) {
+        std::cout << i << std::endl;
         for (int64_t j = 0; j < dim_size; ++j) {
             for (int64_t k = 0; k < dim_size; ++k) {
                 for (int64_t l = 0; l < dim_size; ++l) {
