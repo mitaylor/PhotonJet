@@ -20,5 +20,5 @@ for i in ${!files[@]}; do
     echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
     cat ../configs/populate/parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
 
-    nohup ../bin/populate_dphi_scan nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/mebs/${set}/${tag}_dphi_scan_${index[i]}.root  > nohup/log/${set}_${tag}_dphi_scan_${index[i]}.txt 2>&1 &
+    nohup ../bin/populate_fast nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/mebs/${set}/${tag}_fast_${index[i]}.root  > nohup/log/${set}_${tag}_fast_${index[i]}.txt 2>&1 &
 done
