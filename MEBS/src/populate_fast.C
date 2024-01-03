@@ -312,7 +312,7 @@ int populate(char const* config, char const* selections, char const* output) {
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthfdphi);
 
     /* random number for mb selection */
-    auto rng = new TRandom3(0);
+    // auto rng = new TRandom3(0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -472,7 +472,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (mix > 0) {
                 auto hfm_x = ihfm->index_for(hf);
-                auto map_x = hf_map_counter[hfm_x]; // randomize
+                size_t map_x = hf_map_counter[hfm_x]; // randomize
 
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
