@@ -475,14 +475,8 @@ int populate(char const* config, char const* selections, char const* output) {
                 auto map_x = hf_map_counter[hfm_x]; // randomize
 
                 /* mixing events in minimum bias */
-                for (int64_t k = 0; k < mix; m++) {
+                for (int64_t k = 0; k < mix; k++) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
-                    if (m == mentries) { m = 0; }
-
-                    tm->GetEntry(m);
-
-                    if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
-                    if (std::abs(pjtm->vz) > 15) { continue; }
 
                     fill_axes(jet_vector, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
