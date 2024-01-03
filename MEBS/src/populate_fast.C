@@ -133,7 +133,7 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
     
     (*nevt)[pthf_x]->Fill(1., weight);
 
-    for (int64_t j = 0; j < pjt.size(); ++j) {
+    for (size_t j = 0; j < pjt.size(); ++j) {
         auto jet_pt = pjt[j]["jet_pt"];
         auto jet_eta = pjt[j]["jet_eta"];
         auto jet_phi = pjt[j]["jet_phi"];
@@ -141,7 +141,6 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
         auto jet_wta_phi = pjt[j]["jet_wta_phi"];
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-        if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
         if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, jet_wta_eta, jet_phi, jet_wta_phi));
@@ -360,7 +359,7 @@ int populate(char const* config, char const* selections, char const* output) {
         std::vector<std::map<std::string, float>> jet_vector;
 
         for (int64_t j = 0; j < pjtm->nref; ++j) {
-            if (heavyion && in_jet_failure_region(pjtm,j)) { continue; }
+            if (heavyion && in_jet_failure_region(pjtm, j)) { continue; }
 
             auto jet_pt = (*pjtm->jtpt)[j];
             auto jet_eta = (*pjtm->jteta)[j];
