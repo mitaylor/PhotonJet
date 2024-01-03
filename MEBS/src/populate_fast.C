@@ -117,8 +117,8 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
 /* version for background events */
 void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf, 
                multival* mpthfjpt, multival* mpthfeta, multival* mpthfdphi, 
-               interval *ijpt, interval *ieta, interval *idphi, int64_t pt_x, int64_t hf_x,
-               float weight, float photon_phi, bool heavyion, 
+               interval *ijpt, interval *ieta, interval *idphi, 
+               int64_t pt_x, int64_t hf_x, float weight, float photon_phi,
                float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* jpt_pjet_f_dr, memory<TH1F>* jpt_pjet_f_jpt,
@@ -385,8 +385,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
     std::cout << "Bin: Events" << std::endl;
 
-    for(unsigned int i = 0; i < hfBins.size()-1; ++i) {
-      std::cout << " " << i << ", " << hfBins[i] << "-" << hfBins[i+1] << ": " << mapHFToJets[i].size() << std::endl;;
+    for(size_t i = 0; i < hf_bins.size() - 1; ++i) {
+        std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
     }
 
     /* load input */
@@ -486,7 +486,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(jet_vector, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
-                        photon_phi, heavyion, jet_eta_abs, jet_dr_max,
+                        photon_phi, jet_eta_abs, jet_dr_max,
                         jet_pt_min, jet_pt_max, 
                         dphi_min_numerator, dphi_min_denominator, nmix, 
                         jpt_mix_pjet_f_dr, jpt_mix_pjet_f_jpt, 
