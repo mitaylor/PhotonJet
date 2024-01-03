@@ -190,7 +190,7 @@ void fill_axes(std::vector<std::map<std::string, float> > pjt,
         double cor = 1;
         if (exclude) {
             auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
-            auto bin = (*totaal)[dphi_x]->FindBin(jet_eta, photon_eta);
+            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
             cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
             if (cor < 1) { std::cout << "error" << std::endl; }
         }
