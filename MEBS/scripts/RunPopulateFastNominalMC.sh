@@ -2,15 +2,17 @@
 
 set=$1
 tag=$2
+n=$3
 
 ls /data/submit/mitay/photons/regulate_aa_qcd_weighted_* > files
-awk -F "[_.]" '{print $(NF-1)}' files > index
+split -n l/5 --numeric-suffixes=0 -a 1 files files_
+awk -F "[/.]" '{print $(NF-1)}' files_${n} > index_${n}
 
 mkdir -p /data/submit/mitay/mebs/${set}/
 mkdir -p nohup/log/
 
-files=($(cat files))
-index=($(cat index))
+files=($(cat files_${n}))
+index=($(cat index_${n}))
 
 rm files*
 rm index*
