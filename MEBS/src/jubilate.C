@@ -101,13 +101,13 @@ int jubilate(char const* config, char const* selections, char const* output) {
     zip([&](auto const& label, auto& min, auto& max) {
         std::cout << label << std::endl;
 
-        auto name = "raw_"s + label;
+        auto name = "raw_"s + scan + "_"s + label;
         auto hist = new history<TH1F>(f, name); 
 
-        auto name_mix = "raw_mix_"s + label;
+        auto name_mix = "raw_mix_"s + scan + "_"s + label;
         auto hist_mix = new history<TH1F>(f, name_mix);
 
-        auto name_sub = "raw_sub_"s + label;
+        auto name_sub = "raw_sub_"s + scan + "_"s + label;
         auto hist_sub = new history<TH1F>(f, name_sub);
 
         auto name_reco = "aa_reco_"s + scan + "_"s + label;
