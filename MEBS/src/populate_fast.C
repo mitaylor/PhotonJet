@@ -312,7 +312,7 @@ int populate(char const* config, char const* selections, char const* output) {
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthfdphi);
 
     /* random number for mb selection */
-    // auto rng = new TRandom3(0);
+    auto rng = new TRandom3(0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
