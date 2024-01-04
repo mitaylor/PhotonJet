@@ -113,7 +113,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
         hist_sig->apply([&](TH1* h, int64_t index) {
             h->Divide((*hist)[index], (*hist_mix)[index]);
-            h->SetMaximum(1E10);
+            h->SetMaximum(1E3);
             h->SetMinimum(1E-3);
         });
 
@@ -159,6 +159,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
             c3->accessory(hf_info);
             c3->accessory(cuts_info);
             c3->divide(ihf->size() , -1);
+            c3->set(paper::flags::logy);
 
             for (int64_t i = 0; i < hist->size(); ++i) {
                 c1->add((*hist)[i], "raw");
