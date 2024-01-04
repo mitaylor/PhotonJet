@@ -113,7 +113,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
         hist_sig->apply([&](TH1* h, int64_t index) {
             h->Divide((*hist)[index], (*hist_mix)[index]);
-            h->SetMaximum(1E3);
+            h->SetMaximum(1E5);
             h->SetMinimum(1E-3);
         });
 
