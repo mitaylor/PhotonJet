@@ -338,12 +338,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
-    std::map<int64_t, int64_t> hf_map_counter;
-
-    for (size_t i = 0; i < hf_bins.size() - 1; ++i){
-        hf_map[i] = {};
-        hf_map_counter[i] = 0;
-    }
+    for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
 
     // fill map
     for (int64_t i = 0; i < mentries; ++i){
@@ -472,7 +467,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (mix > 0) {
                 auto hfm_x = ihfm->index_for(hf);
-                size_t map_x = hf_map_counter[hfm_x]; // randomize
+                size_t map_x = rng->Integer(hf_map[hfm_x].size());
 
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
@@ -493,8 +488,6 @@ int populate(char const* config, char const* selections, char const* output) {
                     map_x++;
                     if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }
                 }
-
-                hf_map_counter[hfm_x] = map_x;
             }
         }
 
