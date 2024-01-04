@@ -220,7 +220,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 
                 if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
                 if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
-                if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
                 // no matching gen jet => fake, already accounted for by mixed-event background subtraction
                 if (gen_jet_pt <= 5 || dr2((*pjt->refeta)[j], (*pjt->jteta)[j], (*pjt->refphi)[j], (*pjt->jtphi)[j]) > 0.0225) { 
@@ -229,6 +228,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                 auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
                 auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
+                auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
+
+                if (photon_jet_dr < 0.4) { continue; }
 
                 // get the indices
                 auto jpt_x =  ijpt->index_for(jet_pt);
@@ -241,27 +243,36 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                 // fill the dphi scan comparison histograms
                 if (mpthfdphi_x > -1 && mpthfdphi_x < mpthfdphi->size() && jet_dr < jet_dr_max) {
-                    (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight);
                     (*dphi_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-                    (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-                    (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+
+                    if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                        (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight);
+                        (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
+                        (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                    }
                 }
 
                 if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                 // fill the other histograms
-                if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
-                    (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
-                    (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-                    (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-                    (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
+                    (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+
+                    if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                        (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight);
+                        (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
+                        (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                    }
                 }
 
-                if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
-                    (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight);
-                    (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-                    (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-                    (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
+                    (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
+                    (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
+
+                    if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                        (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
+                        (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+                    }
                 }
             }
         }
