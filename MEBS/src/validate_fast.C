@@ -37,7 +37,7 @@ void set_range(history<TH1F>* arg1, history<TH1F>* arg2, float xmin, float xmax)
         default_formatter(h1, ymin*1.3, ymax*1.3); 
         default_formatter((*arg2)[index], ymin*1.3, ymax*1.3); 
 
-        h1->GetXaxis()->SetRangeUser(xmin, xmax); std::cout << xmin << " " << xmax << std::endl;
+        h1->GetXaxis()->SetRangeUser(xmin, xmax);
         (*arg2)[index]->GetXaxis()->SetRangeUser(xmin, xmax);
     });
 }
@@ -259,7 +259,7 @@ int validate(char const* config, char const* selections, char const* output) {
                 delete cs1[i]; delete cs2[i]; delete cs3[i];
             }
         }
-    }, labels, maximums, minimums);
+    }, labels, minimums, maximums);
 
     /* save output */
     in(output, []() {});
