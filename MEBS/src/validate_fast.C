@@ -30,7 +30,7 @@ void scale_bin_width(T*... args) {
 void set_range(history<TH1F>* arg1, history<TH1F>* arg2, float xmin, float xmax) {
     arg1->apply([&](TH1* h1, int64_t index) {
         auto ymin = std::min(h1->GetMinimum(), (*arg2)[index]->GetMinimum());
-        ymin = std::min(min, 0.0);
+        ymin = std::min(ymin, 0.0);
 
         auto ymax = std::max(h1->GetMaximum(), (*arg2)[index]->GetMaximum());
 
