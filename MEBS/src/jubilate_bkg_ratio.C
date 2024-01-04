@@ -112,9 +112,9 @@ int jubilate(char const* config, char const* selections, char const* output) {
         auto hist_sig = new history<TH1F>(*hist, "ratio_"s);
 
         hist_sig->apply([&](TH1* h, int64_t index) {
-            (*hist_sig)[index]->Divide((*hist)[index], (*hist_mix)[index]);
-            (*hist_sig)[index]->SetMaximum(1E10);
-            (*hist_sig)[index]->SetMinimum(1E-3);
+            h->Divide((*hist)[index], (*hist_mix)[index]);
+            h->SetMaximum(1E10);
+            h->SetMinimum(1E-3);
         });
 
         scale_bin_width(hist, hist_mix, hist_sub, hist_reco);
