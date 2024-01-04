@@ -117,7 +117,8 @@ int validate(char const* config, char const* selections, char const* output) {
         hist_mix_fast->rename("mix_"s + label);
         hist_sub_fast->rename("sub_"s + label);
 
-        scale_bin_width(hist, hist_mix, hist_sub, hist_reco);
+        scale_bin_width(hist_nominal, hist_mix_nominal, hist_sub_nominal);
+        scale_bin_width(hist_fast, hist_mix_fast, hist_sub_fast);
 
         set_range(hist_nominal, hist_fast);
         set_range(hist_mix_nominal, hist_mix_fast);
@@ -141,21 +142,21 @@ int validate(char const* config, char const* selections, char const* output) {
                 }
             };
 
-            auto c1 = new paper(set + "_"s + tag + "_raw_"s + label, hb);
+            auto c1 = new paper(set + "_validate_"s + tag + "_raw_"s + label, hb);
             apply_style(c1, cms, system_tag);
             c1->accessory(std::bind(line_at, _1, 0.f, min, max));
             c1->accessory(hf_info);
             c1->accessory(cuts_info);
             c1->divide(ihf->size() , -1);
 
-            auto c2 = new paper(set + "_"s + tag + "_mixed_"s + label, hb);
+            auto c2 = new paper(set + "_validate_"s + tag + "_mixed_"s + label, hb);
             apply_style(c2, cms, system_tag);
             c2->accessory(std::bind(line_at, _1, 0.f, min, max));
             c2->accessory(hf_info);
             c2->accessory(cuts_info);
             c2->divide(ihf->size() , -1);
 
-            auto c3 = new paper(set + "_"s + tag + "_sub_"s + label, hb);
+            auto c3 = new paper(set + "_validate_"s + tag + "_sub_"s + label, hb);
             apply_style(c3, cms, system_tag);
             c3->accessory(std::bind(line_at, _1, 0.f, min, max));
             c3->accessory(hf_info);
@@ -209,7 +210,7 @@ int validate(char const* config, char const* selections, char const* output) {
             };
 
             for (int64_t i = 0; i < shape[1]; ++i) {
-                cs1[i] = new paper(set + "_"s + tag + "_raw_"s + label + "_"s + to_text(i), hb);
+                cs1[i] = new paper(set + "_validate_"s + tag + "_raw_"s + label + "_"s + to_text(i), hb);
                 apply_style(cs1[i], cms, system_tag);
                 cs1[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
                 cs1[i]->accessory(std::bind(range_info, _1, i+1));
@@ -217,7 +218,7 @@ int validate(char const* config, char const* selections, char const* output) {
                 cs1[i]->accessory(cuts_info);
                 cs1[i]->divide(ihf->size() , -1);
 
-                cs2[i] = new paper(set + "_"s + tag + "_mixed_"s + label + "_"s + to_text(i), hb);
+                cs2[i] = new paper(set + "_validate_"s + tag + "_mixed_"s + label + "_"s + to_text(i), hb);
                 apply_style(cs2[i], cms, system_tag);
                 cs2[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
                 cs2[i]->accessory(std::bind(range_info, _1, i+1));
@@ -225,7 +226,7 @@ int validate(char const* config, char const* selections, char const* output) {
                 cs2[i]->accessory(cuts_info);
                 cs2[i]->divide(ihf->size() , -1);
 
-                cs3[i] = new paper(set + "_"s + tag + "_sub_"s + label + "_"s + to_text(i), hb);
+                cs3[i] = new paper(set + "_validate_"s + tag + "_sub_"s + label + "_"s + to_text(i), hb);
                 apply_style(cs3[i], cms, system_tag);
                 cs3[i]->accessory(std::bind(line_at, _1, 0.f, min, max));
                 cs3[i]->accessory(std::bind(range_info, _1, i+1));
