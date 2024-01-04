@@ -124,7 +124,7 @@ int validate(char const* config, char const* selections, char const* output) {
         set_range(hist_mix_nominal, hist_mix_fast);
         set_range(hist_sub_nominal, hist_sub_fast);
 
-        auto shape = hist->shape(); // photon pt, scan (optional), centrality
+        auto shape = hist_nominal->shape(); // photon pt, scan (optional), centrality
         
         if (shape.size() == 2) {
             auto cuts_info = [&](int64_t index) {
