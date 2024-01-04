@@ -129,7 +129,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
 void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf, 
                multival* mpthfjpt, multival* mpthfeta, multival* mpthfdphi, 
                interval *ijpt, interval *ieta, interval *idphi, 
-               int64_t pt_x, int64_t hf_x, float weight, float photon_weight, float photon_phi,
+               int64_t pt_x, int64_t hf_x, float weight, float photon_eta, float photon_phi,
                float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* jpt_pjet_f_dr, memory<TH1F>* jpt_pjet_f_jpt,
