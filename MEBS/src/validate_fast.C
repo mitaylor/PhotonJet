@@ -37,7 +37,7 @@ void set_range(history<TH1F>* arg1, history<TH1F>* arg2, float xmin, float xmax)
         default_formatter(h1, ymin*1.3, ymax*1.3); 
         default_formatter((*arg2)[index], ymin*1.3, ymax*1.3); 
 
-        h1->GetXaxis()->SetRangeUser(xmin, xmax);
+        h1->GetXaxis()->SetRangeUser(xmin, xmax); std::cout << xmin << " " << xmax << std::endl;
         (*arg2)[index]->GetXaxis()->SetRangeUser(xmin, xmax);
     });
 }
@@ -147,21 +147,21 @@ int validate(char const* config, char const* selections, char const* output) {
 
             auto c1 = new paper(set + "_validate_"s + tag + "_raw_"s + label, hb);
             apply_style(c1, cms, system_tag);
-            c1->accessory(std::bind(line_at, _1, 20.f, min, max));
+            c1->accessory(std::bind(line_at, _1, 0.f, min, max));
             c1->accessory(hf_info);
             c1->accessory(cuts_info);
             c1->divide(ihf->size() , -1);
 
             auto c2 = new paper(set + "_validate_"s + tag + "_mixed_"s + label, hb);
             apply_style(c2, cms, system_tag);
-            c2->accessory(std::bind(line_at, _1, 20.f, min, max));
+            c2->accessory(std::bind(line_at, _1, 0.f, min, max));
             c2->accessory(hf_info);
             c2->accessory(cuts_info);
             c2->divide(ihf->size() , -1);
 
             auto c3 = new paper(set + "_validate_"s + tag + "_sub_"s + label, hb);
             apply_style(c3, cms, system_tag);
-            c3->accessory(std::bind(line_at, _1, 20.f, min, max));
+            c3->accessory(std::bind(line_at, _1, 0.f, min, max));
             c3->accessory(hf_info);
             c3->accessory(cuts_info);
             c3->divide(ihf->size() , -1);
