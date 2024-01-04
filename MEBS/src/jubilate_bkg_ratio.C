@@ -109,7 +109,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         auto name_reco = "aa_reco_"s + scan + "_"s + label;
         auto hist_reco = new history<TH1F>(t, name_reco);
 
-        auto hist_sig = new history<TH1F>(hist, "ratio_"s);
+        auto hist_sig = new history<TH1F>(*hist, "ratio_"s);
 
         hist_sig->apply([&](TH1* h, int64_t index) {
             (*hist_sig)[index]->Divide((*hist)[index], (*hist_mix)[index]);
