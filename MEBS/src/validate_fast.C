@@ -163,7 +163,7 @@ int validate(char const* config, char const* selections, char const* output) {
             c3->accessory(cuts_info);
             c3->divide(ihf->size() , -1);
 
-            for (int64_t i = 0; i < hist->size(); ++i) {
+            for (int64_t i = 0; i < hist_nominal->size(); ++i) {
                 c1->add((*hist_fast)[i], "fast");
                 c1->stack((*hist_nominal)[i], "nominal");
                 c2->add((*hist_mix_fast)[i], "fast");
