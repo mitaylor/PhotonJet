@@ -164,8 +164,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
             for (int64_t i = 0; i < hist->size(); ++i) {
                 c1->add((*hist)[i], "raw");
                 c1->stack((*hist_mix)[i], "mix");
-                c2->add((*hist_reco)[i], "reco");
-                c2->stack((*hist_sub)[i], "sub");
+                c2->add((*hist_sub)[i], "sub");
+                c2->stack((*hist_reco)[i], "reco");
                 c3->add((*hist_sig)[i], "sig/bkg");
             }
 
