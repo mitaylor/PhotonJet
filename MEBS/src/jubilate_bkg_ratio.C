@@ -171,7 +171,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
             hb->sketch();
             c1->draw("pdf");
             c2->draw("pdf");
-            delete c1; delete c2;
+            c3->draw("pdf");
+            delete c1; delete c2; delete c3;
         }
     }, labels, maximums, minimums);
 
