@@ -27,7 +27,7 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-void set_range(history<TH1F>* arg1, history<TH1F>* arg2) {
+void set_range(history<TH1F>* arg1, history<TH1F>* arg2, float min, float max) {
     arg1->apply([&](TH1* h1, int64_t index) {
         auto min = std::min(h1->GetMinimum(), (*arg2)[index]->GetMinimum());
         min = std::min(min, 0.0);
@@ -36,6 +36,9 @@ void set_range(history<TH1F>* arg1, history<TH1F>* arg2) {
 
         default_formatter(h1, min*1.3, max*1.3); 
         default_formatter((*arg2)[index], min*1.3, max*1.3); 
+
+        h1->GetXaxis()->SetRangeUser(min, max);
+        (*arg2)[index]->GetXaxis()->SetRangeUser(min, max);
     });
 }
 
@@ -120,16 +123,9 @@ int validate(char const* config, char const* selections, char const* output) {
         scale_bin_width(hist_nominal, hist_mix_nominal, hist_sub_nominal);
         scale_bin_width(hist_fast, hist_mix_fast, hist_sub_fast);
 
-        set_range(hist_nominal, hist_fast);
-        set_range(hist_mix_nominal, hist_mix_fast);
-        set_range(hist_sub_nominal, hist_sub_fast);
-
-        hist_nominal->GetXaxis()->SetRangeUser(min, max);
-        hist_mix_nominal->GetXaxis()->SetRangeUser(min, max);
-        hist_sub_nominal->GetXaxis()->SetRangeUser(min, max);
-        hist_fast->GetXaxis()->SetRangeUser(min, max);
-        hist_mix_fast->GetXaxis()->SetRangeUser(min, max);
-        hist_sub_fast->GetXaxis()->SetRangeUser(min, max);
+        set_range(hist_nominal, hist_fast, min, max);
+        set_range(hist_mix_nominal, hist_mix_fast, min, max);
+        set_range(hist_sub_nominal, hist_sub_fast, min, max);
 
         auto shape = hist_nominal->shape(); // photon pt, scan (optional), centrality
         
