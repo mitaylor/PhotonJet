@@ -89,7 +89,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto hb = new pencil();
-    hb->category("type", "raw", "mix", "sub", "reco");
+    hb->category("type", "raw", "mix", "sub", "reco", "sig/bkg");
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -108,6 +108,14 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
         auto name_reco = "aa_reco_"s + scan + "_"s + label;
         auto hist_reco = new history<TH1F>(t, name_reco);
+
+        auto hist_sig = new history<TH1F>(hist, "ratio_");
+
+        hist_sig->apply([&](TH1* h, int64_t index) {
+            (*hist_sig)[index]->Divide((*hist)[index], (*hist_mix)[index]);
+            (*hist_sig)[index]->SetMaximum(1E10);
+            (*hist_sig)[index]->SetMinimum(1E-3);
+        });
 
         scale_bin_width(hist, hist_mix, hist_sub, hist_reco);
         set_range(hist, hist_mix);
@@ -145,11 +153,19 @@ int jubilate(char const* config, char const* selections, char const* output) {
             c2->accessory(cuts_info);
             c2->divide(ihf->size() , -1);
 
+            auto c3 = new paper(set + "_"s + tag + "_sig_to_bkg_"s + label, hb);
+            apply_style(c3, cms, system_tag);
+            c3->accessory(std::bind(line_at, _1, 0.f, min, max));
+            c3->accessory(hf_info);
+            c3->accessory(cuts_info);
+            c3->divide(ihf->size() , -1);
+
             for (int64_t i = 0; i < hist->size(); ++i) {
                 c1->add((*hist)[i], "raw");
                 c1->stack((*hist_mix)[i], "mix");
                 c2->add((*hist_reco)[i], "reco");
                 c2->stack((*hist_sub)[i], "sub");
+                c3->add((*hist_sig)[i], "sig/bkg");
             }
 
             hb->sketch();
