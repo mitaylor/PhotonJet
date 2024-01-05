@@ -98,7 +98,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         std::cout << label << std::endl;
 
         auto name = "raw_"s + scan + "_"s + label;
-        auto hist = new history<TH1F>(f, name); 
+        auto hist_raw = new history<TH1F>(f, name); 
 
         auto name_mix = "raw_mix_"s + scan + "_"s + label;
         auto hist_mix = new history<TH1F>(f, name_mix);
