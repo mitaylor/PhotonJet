@@ -89,7 +89,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto hb = new pencil();
-    hb->category("type", "raw", "mix", "sub", "reco", "sig/bkg");
+    hb->category("type", "raw", "mix", "sub", "reco", "raw/mix", "reco/mix", "sub/mix");
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -109,19 +109,33 @@ int jubilate(char const* config, char const* selections, char const* output) {
         auto name_reco = "aa_reco_"s + scan + "_"s + label;
         auto hist_reco = new history<TH1F>(t, name_reco);
 
-        auto hist_sig = new history<TH1F>(*hist, "ratio_"s);
+        auto hist_raw_ratio = new history<TH1F>(*hist_raw, "raw_ratio_"s);
+        auto hist_reco_ratio = new history<TH1F>(*hist_reco, "reco_ratio_"s);
+        auto hist_sub_ratio = new history<TH1F>(*hist_sub, "sub_ratio_"s);
 
-        hist_sig->apply([&](TH1* h, int64_t index) {
-            h->Divide((*hist)[index], (*hist_mix)[index]);
+        hist_raw_ratio->apply([&](TH1* h, int64_t index) {
+            h->Divide((*hist_raw)[index], (*hist_mix)[index]);
             h->SetMaximum(1E5);
             h->SetMinimum(1E-3);
         });
 
-        scale_bin_width(hist, hist_mix, hist_sub, hist_reco);
-        set_range(hist, hist_mix);
+        hist_reco_ratio->apply([&](TH1* h, int64_t index) {
+            h->Divide((*hist_reco)[index], (*hist_mix)[index]);
+            h->SetMaximum(1E5);
+            h->SetMinimum(1E-3);
+        });
+
+        hist_sub_ratio->apply([&](TH1* h, int64_t index) {
+            h->Divide((*hist_sub)[index], (*hist_mix)[index]);
+            h->SetMaximum(1E5);
+            h->SetMinimum(1E-3);
+        });
+
+        scale_bin_width(hist_raw, hist_mix, hist_sub, hist_reco);
+        set_range(hist_raw, hist_mix);
         set_range(hist_sub, hist_reco);
 
-        auto shape = hist->shape(); // photon pt, scan (optional), centrality
+        auto shape = hist_raw->shape(); // photon pt, scan (optional), centrality
         
         if (shape.size() == 2) {
             auto cuts_info = [&](int64_t index) {
@@ -153,7 +167,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
             c2->accessory(cuts_info);
             c2->divide(ihf->size() , -1);
 
-            auto c3 = new paper(set + "_"s + tag + "_sig_to_bkg_"s + label, hb);
+            auto c3 = new paper(set + "_"s + tag + "_sub_to_bkg_"s + label, hb);
             apply_style(c3, cms, system_tag);
             c3->accessory(std::bind(line_at, _1, 0.f, min, max));
             c3->accessory(hf_info);
@@ -161,19 +175,39 @@ int jubilate(char const* config, char const* selections, char const* output) {
             c3->divide(ihf->size() , -1);
             c3->set(paper::flags::logy);
 
-            for (int64_t i = 0; i < hist->size(); ++i) {
-                c1->add((*hist)[i], "raw");
+            auto c4 = new paper(set + "_"s + tag + "_reco_to_bkg_"s + label, hb);
+            apply_style(c4, cms, system_tag);
+            c4->accessory(std::bind(line_at, _1, 0.f, min, max));
+            c4->accessory(hf_info);
+            c4->accessory(cuts_info);
+            c4->divide(ihf->size() , -1);
+            c4->set(paper::flags::logy);
+
+            auto c5 = new paper(set + "_"s + tag + "_raw_to_bkg_"s + label, hb);
+            apply_style(c5, cms, system_tag);
+            c5->accessory(std::bind(line_at, _1, 0.f, min, max));
+            c5->accessory(hf_info);
+            c5->accessory(cuts_info);
+            c5->divide(ihf->size() , -1);
+            c5->set(paper::flags::logy);
+
+            for (int64_t i = 0; i < hist_raw->size(); ++i) {
+                c1->add((*hist_raw)[i], "raw");
                 c1->stack((*hist_mix)[i], "mix");
                 c2->add((*hist_sub)[i], "sub");
                 c2->stack((*hist_reco)[i], "reco");
-                c3->add((*hist_sig)[i], "sig/bkg");
+                c3->add((*hist_raw_ratio)[i], "raw/bkg");
+                c4->add((*hist_reco_ratio)[i], "reco/bkg");
+                c5->add((*hist_sub_ratio)[i], "sub/bkg");
             }
 
             hb->sketch();
             c1->draw("pdf");
             c2->draw("pdf");
             c3->draw("pdf");
-            delete c1; delete c2; delete c3;
+            c4->draw("pdf");
+            c5->draw("pdf");
+            delete c1; delete c2; delete c3; delete c4; delete c5;
         }
     }, labels, maximums, minimums);
 
