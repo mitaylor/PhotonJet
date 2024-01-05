@@ -167,7 +167,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
             c2->accessory(cuts_info);
             c2->divide(ihf->size() , -1);
 
-            auto c3 = new paper(set + "_"s + tag + "_sub_to_bkg_"s + label, hb);
+            auto c3 = new paper(set + "_"s + tag + "_raw_to_bkg_"s + label, hb);
             apply_style(c3, cms, system_tag);
             c3->accessory(std::bind(line_at, _1, 0.f, min, max));
             c3->accessory(hf_info);
@@ -183,7 +183,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
             c4->divide(ihf->size() , -1);
             c4->set(paper::flags::logy);
 
-            auto c5 = new paper(set + "_"s + tag + "_raw_to_bkg_"s + label, hb);
+            auto c5 = new paper(set + "_"s + tag + "_sub_to_bkg_"s + label, hb);
             apply_style(c5, cms, system_tag);
             c5->accessory(std::bind(line_at, _1, 0.f, min, max));
             c5->accessory(hf_info);
