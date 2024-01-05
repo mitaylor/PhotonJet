@@ -196,9 +196,9 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 c1->stack((*hist_mix)[i], "mix");
                 c2->add((*hist_sub)[i], "sub");
                 c2->stack((*hist_reco)[i], "reco");
-                c3->add((*hist_raw_ratio)[i], "raw/bkg");
-                c4->add((*hist_reco_ratio)[i], "reco/bkg");
-                c5->add((*hist_sub_ratio)[i], "sub/bkg");
+                c3->add((*hist_raw_ratio)[i], "raw/mix");
+                c4->add((*hist_reco_ratio)[i], "reco/mix");
+                c5->add((*hist_sub_ratio)[i], "sub/mix");
             }
 
             hb->sketch();
