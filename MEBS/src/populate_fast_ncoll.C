@@ -347,11 +347,12 @@ int populate(char const* config, char const* selections, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
 
     // bin construction, 10% intervals
-    std::vector<float> hf_bins = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-    float bin_factor = 1.1;
+    std::vector<float> hf_bins = {2};
+    float bin_factor = 1.01;
 
     while (hf_bins.back() < dhf.back()) {
-      hf_bins.push_back(hf_bins.back()*bin_factor);
+        if (hf_bins.back()*bin_factor < hf_bins.back()+1)   hf_bins.push_back(hf_bins.back()+1);
+        else                                                hf_bins.push_back(hf_bins.back()*bin_factor);
     }
 
     hf_bins.push_back(10000);
