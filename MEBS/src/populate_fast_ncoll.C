@@ -350,7 +350,7 @@ int populate(char const* config, char const* selections, char const* output) {
     std::vector<float> hf_bins = {2};
     float bin_factor = 1.02;
 
-    while (hf_bins.back() < 2300) {
+    while (hf_bins.back() < 2100) {
         if (hf_bins.back()*bin_factor < hf_bins.back()+1)   hf_bins.push_back(hf_bins.back()+1);
         else                                                hf_bins.push_back(hf_bins.back()*bin_factor);
     }
@@ -423,7 +423,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             double hf = pjt->hiHF; 
 
-            if (hf < dhf.front() || hf > dhf.back()) { continue; }
+            if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
 
             /* look for reco photons */
