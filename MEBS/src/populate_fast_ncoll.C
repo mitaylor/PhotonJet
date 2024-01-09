@@ -350,7 +350,7 @@ int populate(char const* config, char const* selections, char const* output) {
     std::vector<float> hf_bins = {2};
     float bin_factor = 1.01;
 
-    while (hf_bins.back() < dhf.back()) {
+    while (hf_bins.back() < 2300) {
         if (hf_bins.back()*bin_factor < hf_bins.back()+1)   hf_bins.push_back(hf_bins.back()+1);
         else                                                hf_bins.push_back(hf_bins.back()*bin_factor);
     }
@@ -369,7 +369,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
         double hf = pjtm->Ncoll; 
 
-        if (hf < dhf.front() || hf > dhf.back()) { continue; }
+        if (hf < hf_bins.front() || hf > hf_bins.back()) { continue; }
         if (std::abs(pjtm->vz) > 15) { continue; }
       
         auto hfm_x = ihfm->index_for(hf);
@@ -421,7 +421,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             t->GetEntry(i);
 
-            double hf = pjt->Ncoll; 
+            double hf = pjt->hiHF; 
 
             if (hf < dhf.front() || hf > dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
@@ -489,7 +489,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
 
             if (mix > 0) {
-                auto hfm_x = ihfm->index_for(hf);
+                auto hfm_x = ihfm->index_for(pjt->Ncoll);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
 
                 /* mixing events in minimum bias */
