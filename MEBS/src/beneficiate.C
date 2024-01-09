@@ -41,7 +41,7 @@ int beneficiate(char const* selections, char const* output) {
 
     std::string tag = "aa";
 
-    int64_t dim_size = 150;
+    int64_t dim_size = 200;
 
     /* define history based on multival of jet eta, photon eta, and dphi */
     double jet_eta_min = -jet_eta_abs;
@@ -59,10 +59,10 @@ int beneficiate(char const* selections, char const* output) {
     auto mpjeta = new multival(*ijeta, *ipeta);
     auto mdphi = new multival (*idphi);
 
-    auto fincl = std::bind(&multival::book<TH2F>, mpjeta, _1, _2, _3);
+    auto fincl = std::bind(&multival::book<TH2D>, mpjeta, _1, _2, _3);
 
-    auto nevt = new memory<TH2F>("nevt"s, "none", fincl, mdphi);
-    auto nacc = new memory<TH2F>("nacc"s, "none", fincl, mdphi);
+    auto nevt = new memory<TH2D>("nevt"s, "none", fincl, mdphi);
+    auto nacc = new memory<TH2D>("nacc"s, "none", fincl, mdphi);
 
     std::vector<double> evt(mdphi->size(), 0);
     std::vector<double> acc(mdphi->size(), 0);
