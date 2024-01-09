@@ -348,7 +348,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     // bin construction, 10% intervals
     std::vector<float> hf_bins = {2};
-    float bin_factor = 1.01;
+    float bin_factor = 1.02;
 
     while (hf_bins.back() < 2300) {
         if (hf_bins.back()*bin_factor < hf_bins.back()+1)   hf_bins.push_back(hf_bins.back()+1);
