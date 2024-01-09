@@ -60,7 +60,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
                memory<TH1F>* eta_pjet_f_dphi, memory<TH1F>* eta_pjet_f_dr_eta,
                memory<TH1F>* dphi_pjet_f_dr, memory<TH1F>* dphi_pjet_f_jpt,
                memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi,
-               history<TH2F>* acceptance, history<TH2F>* total
+               history<TH2D>* acceptance, history<TH2D>* total
             ) {
     
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
@@ -143,7 +143,7 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
                memory<TH1F>* eta_pjet_f_dphi, memory<TH1F>* eta_pjet_f_dr_eta,
                memory<TH1F>* dphi_pjet_f_dr, memory<TH1F>* dphi_pjet_f_jpt,
                memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi,
-               history<TH2F>* acceptance, history<TH2F>* total
+               history<TH2D>* acceptance, history<TH2D>* total
             ) {
     
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
@@ -270,13 +270,13 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* load acceptance weighting for HI */
     TFile* fa;
-    history<TH2F>* acceptance = nullptr;
-    history<TH2F>* total = nullptr;
+    history<TH2D>* acceptance = nullptr;
+    history<TH2D>* total = nullptr;
 
     if (!acc_file.empty()) {
         fa = new TFile(acc_file.data(), "read");
-        acceptance = new history<TH2F>(fa, acc_label_acc);
-        total = new history<TH2F>(fa, acc_label_ref);
+        acceptance = new history<TH2D>(fa, acc_label_acc);
+        total = new history<TH2D>(fa, acc_label_ref);
     }
 
     /* prepare histograms */
