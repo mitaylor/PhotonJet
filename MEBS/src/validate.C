@@ -46,7 +46,10 @@ int validate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto input_nominal = conf->get<std::string>("input_nominal");
-    auto input_fast = conf->get<std::string>("input_fast");
+    auto input_compare = conf->get<std::string>("input_compare");
+
+    auto label_nominal = conf->get<std::string>("label_nominal");
+    auto label_compare = conf->get<std::string>("label_compare");
 
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
@@ -87,7 +90,7 @@ int validate(char const* config, char const* selections, char const* output) {
 
     /* load history objects */
     TFile* n = new TFile((base + input_nominal).data(), "read");
-    TFile* f = new TFile((base + input_fast).data(), "read");
+    TFile* f = new TFile((base + input_compare).data(), "read");
 
     TH1::SetDefaultSumw2();
 
@@ -96,7 +99,7 @@ int validate(char const* config, char const* selections, char const* output) {
         info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
 
     auto hb = new pencil();
-    hb->category("type", "nominal", "fast");
+    hb->category("type", label_nominal, label_compare);
 
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
@@ -106,26 +109,26 @@ int validate(char const* config, char const* selections, char const* output) {
 
         auto name = "raw_"s + scan + "_"s + label;
         auto hist_nominal = new history<TH1F>(n, name); 
-        auto hist_fast = new history<TH1F>(f, name); 
+        auto hist_compare = new history<TH1F>(f, name); 
 
         auto name_mix = "raw_mix_"s + scan + "_"s + label;
         auto hist_mix_nominal = new history<TH1F>(n, name_mix);
-        auto hist_mix_fast = new history<TH1F>(f, name_mix);
+        auto hist_mix_compare = new history<TH1F>(f, name_mix);
 
         auto name_sub = "raw_sub_"s + scan + "_"s + label;
         auto hist_sub_nominal = new history<TH1F>(n, name_sub);
-        auto hist_sub_fast = new history<TH1F>(f, name_sub);
+        auto hist_sub_compare = new history<TH1F>(f, name_sub);
 
-        hist_fast->rename(label);
-        hist_mix_fast->rename("mix_"s + label);
-        hist_sub_fast->rename("sub_"s + label);
+        hist_compare->rename(label);
+        hist_mix_compare->rename("mix_"s + label);
+        hist_sub_compare->rename("sub_"s + label);
 
         scale_bin_width(hist_nominal, hist_mix_nominal, hist_sub_nominal);
-        scale_bin_width(hist_fast, hist_mix_fast, hist_sub_fast);
+        scale_bin_width(hist_compare, hist_mix_compare, hist_sub_compare);
 
-        set_range(hist_nominal, hist_fast, min, max);
-        set_range(hist_mix_nominal, hist_mix_fast, min, max);
-        set_range(hist_sub_nominal, hist_sub_fast, min, max);
+        set_range(hist_nominal, hist_compare, min, max);
+        set_range(hist_mix_nominal, hist_mix_compare, min, max);
+        set_range(hist_sub_nominal, hist_sub_compare, min, max);
 
         auto shape = hist_nominal->shape(); // photon pt, scan (optional), centrality
         
@@ -167,12 +170,12 @@ int validate(char const* config, char const* selections, char const* output) {
             c3->divide(ihf->size() , -1);
 
             for (int64_t i = 0; i < hist_nominal->size(); ++i) {
-                c1->add((*hist_fast)[i], "fast");
-                c1->stack((*hist_nominal)[i], "nominal");
-                c2->add((*hist_mix_fast)[i], "fast");
-                c2->stack((*hist_mix_nominal)[i], "nominal");
-                c3->add((*hist_sub_fast)[i], "fast");
-                c3->stack((*hist_sub_nominal)[i], "nominal");
+                c1->add((*hist_compare)[i], label_compare);
+                c1->stack((*hist_nominal)[i], label_nominal);
+                c2->add((*hist_mix_compare)[i], label_compare);
+                c2->stack((*hist_mix_nominal)[i], label_nominal);
+                c3->add((*hist_sub_compare)[i], label_compare);
+                c3->stack((*hist_sub_nominal)[i], label_nominal);
             }
 
             hb->sketch();
@@ -240,12 +243,12 @@ int validate(char const* config, char const* selections, char const* output) {
                 for (int64_t j = 0; j < shape[2]; ++j) {
                     std::vector<int64_t> index = {0, i, j};
 
-                    cs1[i]->add((*hist_fast)[index], "fast");
-                    cs1[i]->stack((*hist_nominal)[index], "nominal");
-                    cs2[i]->add((*hist_mix_fast)[index], "fast");
-                    cs2[i]->stack((*hist_mix_nominal)[index], "nominal");
-                    cs3[i]->add((*hist_sub_fast)[index], "fast");
-                    cs3[i]->stack((*hist_sub_nominal)[index], "nominal");
+                    cs1[i]->add((*hist_compare)[index], label_compare);
+                    cs1[i]->stack((*hist_nominal)[index], label_nominal);
+                    cs2[i]->add((*hist_mix_compare)[index], label_compare);
+                    cs2[i]->stack((*hist_mix_nominal)[index], label_nominal);
+                    cs3[i]->add((*hist_sub_compare)[index], label_compare);
+                    cs3[i]->stack((*hist_sub_nominal)[index], label_nominal);
                 }
             }
 
