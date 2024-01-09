@@ -51,7 +51,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 /* version for signal events */
 void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthfeta, multival* mpthfdphi, 
                interval *ijpt, interval *ieta, interval *idphi, int64_t pt_x, int64_t hf_x,
-               float weight, float photon_phi, bool heavyion, 
+               float weight, float photon_eta, float photon_phi, bool heavyion, 
                float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* jpt_pjet_f_dr, memory<TH1F>* jpt_pjet_f_jpt,
@@ -59,7 +59,8 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
                memory<TH1F>* eta_pjet_f_dr, memory<TH1F>* eta_pjet_f_jpt,
                memory<TH1F>* eta_pjet_f_dphi, memory<TH1F>* eta_pjet_f_dr_eta,
                memory<TH1F>* dphi_pjet_f_dr, memory<TH1F>* dphi_pjet_f_jpt,
-               memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi
+               memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi,
+               history<TH2F>* acceptance, history<TH2F>* total
             ) {
     
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
@@ -73,10 +74,19 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
         if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
-        if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
+        auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
+
+        // do acceptance weighting
+        double cor = 1;
+        if (exclude) {
+            auto dphi_x = idphi->index_for(photon_jet_dphi);
+            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+            if (cor < 1) { std::cout << "error" << std::endl; }
+        }
 
         // get the indices
         auto jpt_x =  ijpt->index_for(jet_pt);
@@ -89,27 +99,36 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
 
         // fill the dphi scan comparison histograms
         if (mpthfdphi_x > -1 && mpthfdphi_x < mpthfdphi->size() && jet_dr < jet_dr_max) {
-            (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight);
-            (*dphi_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+            (*dphi_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight*cor);
+
+            if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight*cor);
+                (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight*cor);
+                (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight*cor);
+            }
         }
 
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         // fill the other histograms
-        if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
-            (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
-            (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
+            (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight*cor);
+
+            if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight*cor);
+                (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight*cor);
+                (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight*cor);
+            }
         }
 
-        if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
-            (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight);
-            (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
+            (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight*cor);
+            (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight*cor);
+
+            if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight*cor);
+                (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight*cor);
+            }
         }
     }
 }
@@ -118,7 +137,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
 void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf, 
                multival* mpthfjpt, multival* mpthfeta, multival* mpthfdphi, 
                interval *ijpt, interval *ieta, interval *idphi, 
-               int64_t pt_x, int64_t hf_x, float weight, float photon_phi,
+               int64_t pt_x, int64_t hf_x, float weight, float photon_eta, float photon_phi,
                float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* jpt_pjet_f_dr, memory<TH1F>* jpt_pjet_f_jpt,
@@ -126,7 +145,8 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
                memory<TH1F>* eta_pjet_f_dr, memory<TH1F>* eta_pjet_f_jpt,
                memory<TH1F>* eta_pjet_f_dphi, memory<TH1F>* eta_pjet_f_dr_eta,
                memory<TH1F>* dphi_pjet_f_dr, memory<TH1F>* dphi_pjet_f_jpt,
-               memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi
+               memory<TH1F>* dphi_pjet_f_dphi, memory<TH1F>* dphi_pjet_f_dr_dphi,
+               history<TH2F>* acceptance, history<TH2F>* total
             ) {
     
     auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
@@ -141,10 +161,18 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
         auto jet_wta_phi = pjt[j]["jet_wta_phi"];
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-        if (jet_pt < jet_pt_min || jet_pt > jet_pt_max) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, jet_wta_eta, jet_phi, jet_wta_phi));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
+        
+        // do acceptance weighting
+        double cor = 1;
+        if (exclude) {
+            auto dphi_x = idphi->index_for(photon_jet_dphi);
+            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+            if (cor < 1) { std::cout << "error" << std::endl; }
+        }
 
         // get the indices
         auto jpt_x =  ijpt->index_for(jet_pt);
@@ -157,27 +185,36 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
 
         // fill the dphi scan comparison histograms
         if (mpthfdphi_x > -1 && mpthfdphi_x < mpthfdphi->size() && jet_dr < jet_dr_max) {
-            (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight);
-            (*dphi_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+            (*dphi_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight*cor);
+
+            if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                (*dphi_pjet_f_dr_dphi)[mpthfdphi_x]->Fill(jet_dr, weight*cor);
+                (*dphi_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight*cor);
+                (*dphi_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight*cor);
+            }
         }
 
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
         // fill the other histograms
-        if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
-            (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight);
-            (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
+            (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight*cor);
+
+            if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight*cor);
+                (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight*cor);
+                (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight*cor);
+            }
         }
 
-        if (mpthfeta_x > -1 && mpthfeta_x < mpthfeta->size() && jet_dr < jet_dr_max) {
-            (*eta_pjet_f_dr_eta)[mpthfeta_x]->Fill(jet_dr, weight);
-            (*eta_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight);
-            (*eta_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight);
-            (*eta_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight);
+        if (mpthfjpt_x > -1 && mpthfjpt_x < mpthfjpt->size() && jet_dr < jet_dr_max) {
+            (*jpt_pjet_f_jpt)[pthf_x]->Fill(jet_pt, weight*cor);
+            (*jpt_pjet_f_dr_jpt)[mpthfjpt_x]->Fill(jet_dr, weight*cor);
+
+            if (jet_pt > jet_pt_min && jet_pt < jet_pt_max) {
+                (*jpt_pjet_f_dr)[pthf_x]->Fill(jet_dr, weight*cor);
+                (*jpt_pjet_f_dphi)[pthf_x]->Fill(photon_jet_dphi, weight*cor);
+            }
         }
     }
 }
@@ -193,6 +230,10 @@ int populate(char const* config, char const* selections, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
+
+    auto acc_file = conf->get<std::string>("acc_file");
+    auto acc_label_ref = conf->get<std::string>("acc_label_ref");
+    auto acc_label_acc = conf->get<std::string>("acc_label_acc");
 
     /* selections */
     auto sel = new configurer(selections);
@@ -230,6 +271,17 @@ int populate(char const* config, char const* selections, char const* output) {
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
     if (tag == "bkg") see_max = 0.02;
+
+    /* load acceptance weighting for HI */
+    TFile* fa;
+    history<TH2F>* acceptance = nullptr;
+    history<TH2F>* total = nullptr;
+
+    if (!acc_file.empty()) {
+        fa = new TFile(acc_file.data(), "read");
+        acceptance = new history<TH2F>(fa, acc_label_acc);
+        total = new history<TH2F>(fa, acc_label_ref);
+    }
 
     /* prepare histograms */
     auto ipt = new interval(dpt);
@@ -455,15 +507,16 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                 ijpt, ieta, idphi, pt_x, hf_x, weight,
-                photon_phi, heavyion, jet_eta_abs, jet_dr_max, 
-                jet_pt_min, jet_pt_max,
+                photon_eta, photon_phi, heavyion, jet_eta_abs, 
+                jet_dr_max, jet_pt_min, jet_pt_max,
                 dphi_min_numerator, dphi_min_denominator, nevt, 
                 jpt_pjet_f_dr, jpt_pjet_f_jpt, 
                 jpt_pjet_f_dphi, jpt_pjet_f_dr_jpt,
                 eta_pjet_f_dr, eta_pjet_f_jpt, 
                 eta_pjet_f_dphi, eta_pjet_f_dr_eta,
                 dphi_pjet_f_dr, dphi_pjet_f_jpt, 
-                dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
+                dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi, 
+                acceptance, total);
 
             if (mix > 0) {
                 auto hfm_x = ihfm->index_for(hf);
@@ -475,15 +528,16 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(jet_vector, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
-                        photon_phi, jet_eta_abs, jet_dr_max,
-                        jet_pt_min, jet_pt_max, 
+                        photon_eta, photon_phi, jet_eta_abs, 
+                        jet_dr_max, jet_pt_min, jet_pt_max, 
                         dphi_min_numerator, dphi_min_denominator, nmix, 
                         jpt_mix_pjet_f_dr, jpt_mix_pjet_f_jpt, 
                         jpt_mix_pjet_f_dphi, jpt_mix_pjet_f_dr_jpt,
                         eta_mix_pjet_f_dr, eta_mix_pjet_f_jpt, 
                         eta_mix_pjet_f_dphi, eta_mix_pjet_f_dr_eta,
                         dphi_mix_pjet_f_dr, dphi_mix_pjet_f_jpt, 
-                        dphi_mix_pjet_f_dphi, dphi_mix_pjet_f_dr_dphi);
+                        dphi_mix_pjet_f_dphi, dphi_mix_pjet_f_dr_dphi, 
+                        acceptance, total);
 
                     map_x++;
                     if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }

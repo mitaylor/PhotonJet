@@ -5,7 +5,7 @@ tag=$2
 n=$3
 
 ls /data/submit/mitay/photons/regulate_aa_qcd_* > files
-split -n l/7 --numeric-suffixes=0 -a 1 files files_
+split -n l/10 --numeric-suffixes=0 -a 1 files files_
 awk -F "[/.]" '{print $(NF-1)}' files_${n} > index_${n}
 
 mkdir -p /data/submit/mitay/mebs/${set}/
@@ -22,5 +22,5 @@ for i in ${!files[@]}; do
     echo "${files[i]}" >> nohup/${tag}_${index[i]}.conf
     cat ../configs/populate/parallel/${tag}_template.conf >> nohup/${tag}_${index[i]}.conf
 
-    nohup ../bin/populate nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/mebs/${set}/${tag}_${index[i]}.root  > nohup/log/${set}_${tag}_${index[i]}.txt 2>&1 &
+    nohup ../bin/populate_fast_acc_noex nohup/${tag}_${index[i]}.conf ../configs/analysis/${set}/analysis_aa.conf /data/submit/mitay/mebs/${set}/${tag}_fast_acc_${index[i]}.root  > nohup/log/${set}_${tag}_fast_acc_${index[i]}.txt 2>&1 &
 done
