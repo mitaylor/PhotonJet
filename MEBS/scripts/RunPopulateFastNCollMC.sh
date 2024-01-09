@@ -6,7 +6,7 @@ n=$3
 
 ls /data/submit/mitay/photons/regulate_aa_qcd_extra* > files
 ls /data/submit/mitay/photons/aod/* >> files
-split -n l/4 --numeric-suffixes=0 -a 1 files files_
+split -n l/8 --numeric-suffixes=0 -a 1 files files_
 awk -F "[/.]" '{print $(NF-1)}' files_${n} > index_${n}
 
 mkdir -p /data/submit/mitay/mebs/${set}/
