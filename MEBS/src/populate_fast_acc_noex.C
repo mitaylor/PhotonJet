@@ -80,13 +80,11 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
         auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
 
         // do acceptance weighting
-        double cor = 1;
-        if (exclude) {
-            auto dphi_x = idphi->index_for(photon_jet_dphi);
-            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
-            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-            if (cor < 1) { std::cout << "error" << std::endl; }
-        }
+        auto dphi_x = idphi->index_for(photon_jet_dphi);
+        auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+        auto cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+
+        if (cor < 1) { std::cout << "error" << std::endl; }
 
         // get the indices
         auto jpt_x =  ijpt->index_for(jet_pt);
@@ -166,13 +164,11 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
         
         // do acceptance weighting
-        double cor = 1;
-        if (exclude) {
-            auto dphi_x = idphi->index_for(photon_jet_dphi);
-            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
-            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-            if (cor < 1) { std::cout << "error" << std::endl; }
-        }
+        auto dphi_x = idphi->index_for(photon_jet_dphi);
+        auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+        auto cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+        
+        if (cor < 1) { std::cout << "error" << std::endl; }
 
         // get the indices
         auto jpt_x =  ijpt->index_for(jet_pt);
