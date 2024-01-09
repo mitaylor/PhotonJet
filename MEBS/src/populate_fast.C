@@ -225,6 +225,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto heavyion = sel->get<bool>("heavyion");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto see_min = sel->get<float>("see_min");
@@ -433,6 +434,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 if ((*pjt->phoEt)[j] < photon_pt_min) { continue; }
+                if ((*pjt->phoEt)[j] > photon_pt_max) { continue; }
 
                 if ((*pjt->phoEt)[j] > photon_pt) {
                     photon_index = j;
