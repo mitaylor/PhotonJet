@@ -505,6 +505,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
 
                 std::cout << __LINE__ << std::endl;
+                std::cout << pjt->Ncoll << " " << hfm_x << std::endl;
 
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
