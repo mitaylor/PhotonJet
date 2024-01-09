@@ -347,8 +347,8 @@ int populate(char const* config, char const* selections, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
 
     // bin construction, 10% intervals
-    std::vector<float> hf_bins = {2};
-    float bin_factor = 1.02;
+    std::vector<float> hf_bins = {0};
+    float bin_factor = 1.01;
 
     while (hf_bins.back() < 2100) {
         if (hf_bins.back()*bin_factor < hf_bins.back()+1)   hf_bins.push_back(hf_bins.back()+1);
@@ -423,8 +423,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
             double hf = pjt->hiHF; 
 
-            std::cout << __LINE__ << std::endl;
-            std::cout << dhf.front() << " " << dhf.back() << std::endl;
             if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
 
@@ -443,8 +441,6 @@ int populate(char const* config, char const* selections, char const* output) {
                 }
             }
 
-            std::cout << __LINE__ << std::endl;
-
             /* require leading photon */
             if (photon_index < 0) { continue; }
             if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
@@ -460,8 +456,6 @@ int populate(char const* config, char const* selections, char const* output) {
             auto photon_eta = (*pjt->phoEta)[photon_index];
             auto photon_phi = (*pjt->phoPhi)[photon_index];
 
-            std::cout << __LINE__ << std::endl;
-
             /* electron rejection */
             bool electron = false;
             for (int64_t j = 0; j < pjt->nEle; ++j) {
@@ -476,14 +470,10 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (electron) { continue; }
 
-            std::cout << __LINE__ << std::endl;
-
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
             auto hf_x = ihf->index_for(hf);
             auto weight = pjt->w;
-
-            std::cout << __LINE__ << std::endl;
 
             /* fill histograms */
             fill_axes(pjt, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
@@ -498,14 +488,9 @@ int populate(char const* config, char const* selections, char const* output) {
                 dphi_pjet_f_dr, dphi_pjet_f_jpt, 
                 dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
 
-            std::cout << __LINE__ << std::endl;
-
             if (mix > 0) {
                 auto hfm_x = ihfm->index_for(pjt->Ncoll);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
-
-                std::cout << __LINE__ << std::endl;
-                std::cout << pjt->Ncoll << " " << hfm_x << std::endl;
 
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
@@ -525,8 +510,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     map_x++;
                     if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }
-
-                    std::cout << __LINE__ << std::endl;
                 }
             }
         }
