@@ -82,6 +82,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, multival* mpthfjpt, multival* mpthf
         auto dphi_x = idphi->index_for(photon_jet_dphi);
         auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
         auto cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+        std::cout << cor << std::endl;
 
         if (cor < 1) { std::cout << "error" << std::endl; }
 
