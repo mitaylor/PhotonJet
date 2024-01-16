@@ -356,6 +356,10 @@ int populate(char const* config, char const* selections, char const* output) {
     TTree* tms = (TTree*) fms->Get("pj");
     tms->SetBranchAddress("pfSum", &mPfSum);
 
+    std::cout << mb_sum[0].data() << std::endl;
+    if (fms) std:cout << "Valid file" << std::endl;
+    if (tms) std::cout << "Valid tree" << std::endl;
+
     // bin construction, 10000 events per bin
     auto nbin = new TH1F("hPfSum", "hPfSum", 1600, 0, 160000);
     std::vector<float> hf_bins = {0};
