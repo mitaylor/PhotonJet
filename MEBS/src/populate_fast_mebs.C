@@ -358,7 +358,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     // bin construction, 10000 events per bin
     auto nbin = new TH1F("hPfSum", "hPfSum", 3200, 0, 160000);
-    std::vector<float> hf_bins = {0};
+    std::vector<float> hf_bins = {-1000};
     std::vector<float> hf_sums = {};
     int bin_size = 10000;
     int bin_sum = 0;
