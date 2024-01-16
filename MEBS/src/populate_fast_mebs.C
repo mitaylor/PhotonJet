@@ -523,7 +523,7 @@ std::cout << __LINE__ << std::endl;
                 std::cout << __LINE__ << std::endl;
                 auto hfm_x = ihfm->index_for(pfSum - offset);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
-                std::cout << __LINE__ << std::endl;
+                std::cout << __LINE__ << " " << hfm_x << " " << map_x << " " << pfSum << std::endl;
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
