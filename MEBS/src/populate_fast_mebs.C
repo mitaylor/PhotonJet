@@ -367,8 +367,6 @@ int populate(char const* config, char const* selections, char const* output) {
         tms->GetEntry(i);
 
         if (std::abs(pjtm->vz) > 15) { continue; }
-
-        std::cout << mPfSum << std::endl;
       
         nbin->Fill(mPfSum);
     }
