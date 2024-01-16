@@ -359,6 +359,7 @@ int populate(char const* config, char const* selections, char const* output) {
     // bin construction, 10000 events per bin
     auto nbin = new TH1F("hPfSum", "hPfSum", 1600, 0, 160000);
     std::vector<float> hf_bins = {0};
+    std::vector<float> hf_sums = {};
     int bin_size = 10000;
     int bin_sum = 0;
 
@@ -370,15 +371,18 @@ int populate(char const* config, char const* selections, char const* output) {
         nbin->Fill(mPfSum);
     }
 
-    nbin->Print();
-
     for (int64_t i = 1; i <= nbin->GetNbinsX(); ++i) {
         bin_sum += nbin->GetBinContent(i);
 
         if (bin_sum > bin_size) {
             hf_bins.push_back(nbin->GetXaxis()->GetBinUpEdge(i));
+            hf_sums.push_back(bin_sum);
             bin_sum = 0;
         }
+    }
+
+    for (int64_t i = 0; i <= hf_sums.size(); ++i) {
+        std::cout << hf_bins[i] << " - " << hf_bins[i+1] << ": \t" << hf_sums[i] << std::endl;
     }
 
     hf_bins.push_back(160000);
