@@ -446,7 +446,7 @@ int populate(char const* config, char const* selections, char const* output) {
             t->GetEntry(i);
 
             if (pfSumType < 0) {
-                if (*pjt->Ncoll < 0) pfSumType = 1;
+                if (pjt->Ncoll < 0) pfSumType = 1;
                 else                 pfSumType = 2;
 
                 std::cout << pfSumType << std::endl;
