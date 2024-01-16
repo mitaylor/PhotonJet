@@ -370,9 +370,6 @@ int populate(char const* config, char const* selections, char const* output) {
       
         nbin->Fill(mPfSum);
     }
-    auto c1 = new TCanvas();
-    nbin->Draw();
-    c1->SaveAs("pdf");
 
     for (int64_t i = 1; i <= nbin->GetNbinsX(); ++i) {
         bin_sum += nbin->GetBinContent(i);
@@ -399,7 +396,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     // fill map
     for (int64_t i = 0; i < mentries; ++i){
-        tm->GetEntry(i);
+        tm->GetEntry(i); tms->GetEntry(i);
 
         if (std::abs(pjtm->vz) > 15) { continue; }
       
