@@ -354,6 +354,7 @@ int populate(char const* config, char const* selections, char const* output) {
     float mPfSum;
     TFile* fms = new TFile(mb_sum[0].data(), "read");
     TTree* tms = (TTree*) fms->Get("pj");
+    tms->Print();
     tms->SetBranchAddress("pfSum", &mPfSum);
 
     std::cout << mb_sum[0].data() << std::endl;
