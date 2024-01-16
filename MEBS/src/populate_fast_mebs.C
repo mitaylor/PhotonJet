@@ -445,11 +445,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
             t->GetEntry(i);
 
-            if (pfSumType < 0) {
-                if (pjt->pfE->size() > 0)       pfSumType = 1;
-                if (pjt->pfEnergy->size() > 0)  pfSumType = 2;
-            }
-
             double hf = pjt->hiHF; 
 
             if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
@@ -519,6 +514,11 @@ int populate(char const* config, char const* selections, char const* output) {
                 dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
 
             if (mix > 0) {
+                if (pfSumType < 0) {
+                    if (pjt->pfE->size() > 0)       pfSumType = 1;
+                    if (pjt->pfEnergy->size() > 0)  pfSumType = 2;
+                }
+                
                 float pfSum = 0;
 
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
