@@ -364,7 +364,7 @@ int populate(char const* config, char const* selections, char const* output) {
     int bin_sum = 0;
 
     for (int64_t i = 0; i < mentries; ++i){
-        tms->GetEntry(i);
+        tm->GetEntry(i); tms->GetEntry(i);
 
         if (std::abs(pjtm->vz) > 15) { continue; }
       
@@ -385,7 +385,8 @@ int populate(char const* config, char const* selections, char const* output) {
     hf_sums.push_back(bin_sum);
 
     for (size_t i = 0; i < hf_sums.size(); ++i) {
-        std::cout << hf_bins[i] << " - " << hf_bins[i+1] << ": \t" << hf_sums[i] << std::endl;
+        float percent = ((hf_bins[i] / hf_bins[i+1]) - 1) * 100;
+        std::cout << hf_bins[i] << " - " << hf_bins[i+1] << ": \t" << hf_sums[i] << "\t" << percent << "%" << std::endl;
     }
 
     auto ihfm = new interval(hf_bins);
@@ -429,12 +430,6 @@ int populate(char const* config, char const* selections, char const* output) {
         hf_map[hfm_x].push_back(jet_vector);
     }
 
-    std::cout << "Bin: Events" << std::endl;
-
-    for(size_t i = 0; i < hf_bins.size() - 1; ++i) {
-        std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
-    }
-
     /* load input */
     for (auto const& file : input) {
         std::cout << file << std::endl;
@@ -473,14 +468,14 @@ int populate(char const* config, char const* selections, char const* output) {
             /* require leading photon */
             if (photon_index < 0) { continue; }
             if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
-
+std::cout << __LINE__ << std::endl;
             /* hem failure region exclusion */
             if (heavyion && in_pho_failure_region(pjt, photon_index)) { continue; }
 
             /* isolation requirement */
             float isolation = (*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index];
             if (isolation > iso_max) { continue; }
-
+std::cout << __LINE__ << std::endl;
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[photon_index];
             auto photon_phi = (*pjt->phoPhi)[photon_index];
@@ -498,13 +493,13 @@ int populate(char const* config, char const* selections, char const* output) {
             }
 
             if (electron) { continue; }
-
+std::cout << __LINE__ << std::endl;
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
             auto hf_x = ihf->index_for(hf);
             auto weight = pjt->w;
 
-            /* fill histograms */
+            std::cout << __LINE__ << std::endl;/* fill histograms */
             fill_axes(pjt, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                 ijpt, ieta, idphi, pt_x, hf_x, weight,
                 photon_eta, photon_phi, heavyion, jet_eta_abs, 
@@ -516,7 +511,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 eta_pjet_f_dphi, eta_pjet_f_dr_eta,
                 dphi_pjet_f_dr, dphi_pjet_f_jpt, 
                 dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
-
+            std::cout << __LINE__ << std::endl;
             if (mix > 0) {
                 float pfSum = 0;
 
@@ -525,14 +520,14 @@ int populate(char const* config, char const* selections, char const* output) {
                         pfSum += (*pjt->pfE)[j];
                     }
                 }
-
+                std::cout << __LINE__ << std::endl;
                 auto hfm_x = ihfm->index_for(pfSum - offset);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
-
+                std::cout << __LINE__ << std::endl;
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
-
+                    std::cout << __LINE__ << std::endl;
                     fill_axes(jet_vector, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
                         photon_eta, photon_phi, jet_eta_abs, 
@@ -544,7 +539,7 @@ int populate(char const* config, char const* selections, char const* output) {
                         eta_mix_pjet_f_dphi, eta_mix_pjet_f_dr_eta,
                         dphi_mix_pjet_f_dr, dphi_mix_pjet_f_jpt, 
                         dphi_mix_pjet_f_dphi, dphi_mix_pjet_f_dr_dphi);
-
+                    std::cout << __LINE__ << std::endl;
                     map_x++;
                     if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }
                 }
