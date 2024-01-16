@@ -354,7 +354,6 @@ int populate(char const* config, char const* selections, char const* output) {
     float mPfSum;
     TFile* fms = new TFile(mb_sum[0].data(), "read");
     TTree* tms = (TTree*) fms->Get("pj");
-    tms->Print();
     tms->SetBranchAddress("pfSum", &mPfSum);
 
     // bin construction, 10000 events per bin
@@ -370,6 +369,8 @@ int populate(char const* config, char const* selections, char const* output) {
       
         nbin->Fill(mPfSum);
     }
+
+    nbin->Print();
 
     for (int64_t i = 1; i <= nbin->GetNbinsX(); ++i) {
         bin_sum += nbin->GetBinContent(i);
