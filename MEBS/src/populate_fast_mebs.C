@@ -514,10 +514,20 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (mix > 0) {
                 float pfSum = 0;
+                int pfSumType = -1;
 
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
-                    if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
-                        pfSum += (*pjt->pfE)[j];
+                    if (pfSumType < -1) {
+                        if ((*pjt->pfPt)[0] > 0) {
+                            if ((*pjt->pfE)[0] > 0) pfSumType = 1; 
+                            if ((*pjt->pfEnergy)[0] > 0) pfSumType = 2; 
+
+                            std::cout << pfSumType << std::endl;
+                        }
+                    }
+                    else if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                        if (pfSumType == 1) pfSum += (*pjt->pfE)[j];
+                        if (pfSumType == 2) pfSum += (*pjt->pfEnergy)[j];
                     }
                 }
 
