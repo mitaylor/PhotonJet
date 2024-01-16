@@ -357,7 +357,7 @@ int populate(char const* config, char const* selections, char const* output) {
     tms->SetBranchAddress("pfSum", &mPfSum);
 
     // bin construction, 10000 events per bin
-    auto nbin = new TH1F("hPfSum", "hPfSum", 1600, 0 160000);
+    auto nbin = new TH1F("hPfSum", "hPfSum", 1600, 0, 160000);
     std::vector<float> hf_bins = {0};
     int bin_size = 10000;
     int bin_sum = 0;
