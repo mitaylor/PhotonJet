@@ -352,7 +352,7 @@ int populate(char const* config, char const* selections, char const* output) {
     int64_t mentries = static_cast<int64_t>(tm->GetEntries());
 
     float mPfSum;
-    TFile* fms = new TFile(mb_sum[index_m].data(), "read");
+    TFile* fms = new TFile(mb_sum[0].data(), "read");
     TTree* tms = (TTree*) fms->Get("pj");
     tms->SetBranchAddress("pfSum", &mPfSum);
 
