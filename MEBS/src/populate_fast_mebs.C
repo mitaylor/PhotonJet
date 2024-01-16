@@ -381,7 +381,7 @@ int populate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    for (int64_t i = 0; i <= hf_sums.size(); ++i) {
+    for (size_t i = 0; i < hf_sums.size(); ++i) {
         std::cout << hf_bins[i] << " - " << hf_bins[i+1] << ": \t" << hf_sums[i] << std::endl;
     }
 
