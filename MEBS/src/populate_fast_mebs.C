@@ -357,7 +357,7 @@ int populate(char const* config, char const* selections, char const* output) {
     tms->SetBranchAddress("pfSum", &mPfSum);
 
     // bin construction, 10000 events per bin
-    auto nbin = new TH1F("hPfSum", "hPfSum", 1600, 0, 160000);
+    auto nbin = new TH1F("hPfSum", "hPfSum", 3200, 0, 160000);
     std::vector<float> hf_bins = {0};
     std::vector<float> hf_sums = {};
     int bin_size = 10000;
@@ -370,6 +370,9 @@ int populate(char const* config, char const* selections, char const* output) {
       
         nbin->Fill(mPfSum);
     }
+    auto c1 = new TCanvas();
+    nbin->Draw();
+    c1->SaveAs("pdf");
 
     for (int64_t i = 1; i <= nbin->GetNbinsX(); ++i) {
         bin_sum += nbin->GetBinContent(i);
@@ -381,11 +384,12 @@ int populate(char const* config, char const* selections, char const* output) {
         }
     }
 
+    hf_bins.push_back(160000);
+    hf_sums.push_back(bin_sum);
+
     for (size_t i = 0; i < hf_sums.size(); ++i) {
         std::cout << hf_bins[i] << " - " << hf_bins[i+1] << ": \t" << hf_sums[i] << std::endl;
     }
-
-    hf_bins.push_back(160000);
 
     auto ihfm = new interval(hf_bins);
 
