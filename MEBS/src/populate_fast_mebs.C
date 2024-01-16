@@ -385,7 +385,7 @@ int populate(char const* config, char const* selections, char const* output) {
     hf_sums.push_back(bin_sum);
 
     for (size_t i = 0; i < hf_sums.size(); ++i) {
-        float percent = ((hf_bins[i] / hf_bins[i+1]) - 1) * 100;
+        float percent = ((hf_bins[i] / hf_bins[i+1]) - 1) * -100;
         std::cout << hf_bins[i] << " - " << hf_bins[i+1] << ": \t" << hf_sums[i] << "\t" << percent << "%" << std::endl;
     }
 
@@ -468,14 +468,14 @@ int populate(char const* config, char const* selections, char const* output) {
             /* require leading photon */
             if (photon_index < 0) { continue; }
             if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
-std::cout << __LINE__ << std::endl;
+
             /* hem failure region exclusion */
             if (heavyion && in_pho_failure_region(pjt, photon_index)) { continue; }
 
             /* isolation requirement */
             float isolation = (*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index];
             if (isolation > iso_max) { continue; }
-std::cout << __LINE__ << std::endl;
+
             /* leading photon axis */
             auto photon_eta = (*pjt->phoEta)[photon_index];
             auto photon_phi = (*pjt->phoPhi)[photon_index];
@@ -493,13 +493,13 @@ std::cout << __LINE__ << std::endl;
             }
 
             if (electron) { continue; }
-std::cout << __LINE__ << std::endl;
+
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
             auto hf_x = ihf->index_for(hf);
             auto weight = pjt->w;
 
-            std::cout << __LINE__ << std::endl;/* fill histograms */
+            /* fill histograms */
             fill_axes(pjt, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                 ijpt, ieta, idphi, pt_x, hf_x, weight,
                 photon_eta, photon_phi, heavyion, jet_eta_abs, 
@@ -511,23 +511,23 @@ std::cout << __LINE__ << std::endl;
                 eta_pjet_f_dphi, eta_pjet_f_dr_eta,
                 dphi_pjet_f_dr, dphi_pjet_f_jpt, 
                 dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
-            std::cout << __LINE__ << std::endl;
+
             if (mix > 0) {
                 float pfSum = 0;
-std::cout << __LINE__ << std::endl;
+
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
                     if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
                         pfSum += (*pjt->pfE)[j];
                     }
                 }
-                std::cout << __LINE__ << std::endl;
+
                 auto hfm_x = ihfm->index_for(pfSum - offset);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
-                std::cout << __LINE__ << " " << hfm_x << " " << map_x << " " << pfSum << std::endl;
+
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
-                    std::cout << __LINE__ << std::endl;
+
                     fill_axes(jet_vector, mpthf, mpthfjpt, mpthfeta, mpthfdphi,
                         ijpt, ieta, idphi, pt_x, hf_x, weight,
                         photon_eta, photon_phi, jet_eta_abs, 
@@ -539,7 +539,7 @@ std::cout << __LINE__ << std::endl;
                         eta_mix_pjet_f_dphi, eta_mix_pjet_f_dr_eta,
                         dphi_mix_pjet_f_dr, dphi_mix_pjet_f_jpt, 
                         dphi_mix_pjet_f_dphi, dphi_mix_pjet_f_dr_dphi);
-                    std::cout << __LINE__ << std::endl;
+
                     map_x++;
                     if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }
                 }
