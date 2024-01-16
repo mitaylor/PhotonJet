@@ -486,7 +486,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* electron rejection */
             bool electron = false;
             for (int64_t j = 0; j < pjt->nEle; ++j) {
-                if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+                if (std::abs((*pjt->eleEta)[j]) > 1.4442) { continue; }
 
                 auto dr = std::sqrt(dr2(photon_eta, (*pjt->eleEta)[j], photon_phi, (*pjt->elePhi)[j]));
 

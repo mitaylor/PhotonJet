@@ -455,7 +455,7 @@ int populate(char const* config, char const* selections, char const* output) {
             float photon_pt = 0;
 
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 if ((*pjt->phoEt)[j] < photon_pt_min) { continue; }
                 if ((*pjt->phoEt)[j] > photon_pt_max) { continue; }
@@ -518,7 +518,7 @@ int populate(char const* config, char const* selections, char const* output) {
                     if (pjt->pfE->size() > 0)       pfSumType = 1;
                     if (pjt->pfEnergy->size() > 0)  pfSumType = 2;
                 }
-                
+
                 float pfSum = 0;
 
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
