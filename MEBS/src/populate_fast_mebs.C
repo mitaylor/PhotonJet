@@ -357,7 +357,7 @@ int populate(char const* config, char const* selections, char const* output) {
     tms->SetBranchAddress("pfSum", &mPfSum);
 
     std::cout << mb_sum[0].data() << std::endl;
-    if (fms) std:cout << "Valid file" << std::endl;
+    if (fms) std::cout << "Valid file" << std::endl;
     if (tms) std::cout << "Valid tree" << std::endl;
 
     // bin construction, 10000 events per bin
@@ -371,7 +371,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
         if (std::abs(pjtm->vz) > 15) { continue; }
 
-        std::cout << mPfSum << std::endl;
+        // std::cout << mPfSum << std::endl;
       
         nbin->Fill(mPfSum);
     }
