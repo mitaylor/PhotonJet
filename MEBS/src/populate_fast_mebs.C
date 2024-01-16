@@ -449,7 +449,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 if (pjt->Ncoll < 0) pfSumType = 1;
                 else                 pfSumType = 2;
 
-                std::cout << pfSumType << std::endl;
+                std::cout << pfSumType << " " << pjt->Ncoll << std::endl;
             }
 
             double hf = pjt->hiHF; 
