@@ -436,7 +436,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
+        auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
@@ -514,7 +514,7 @@ std::cout << __LINE__ << std::endl;
             std::cout << __LINE__ << std::endl;
             if (mix > 0) {
                 float pfSum = 0;
-
+std::cout << __LINE__ << std::endl;
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
                     if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
                         pfSum += (*pjt->pfE)[j];
