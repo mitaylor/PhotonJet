@@ -446,10 +446,8 @@ int populate(char const* config, char const* selections, char const* output) {
             t->GetEntry(i);
 
             if (pfSumType < 0) {
-                if (pjt->Ncoll < 0) pfSumType = 1;
-                else                 pfSumType = 2;
-
-                std::cout << pfSumType << " " << pjt->Ncoll << std::endl;
+                if (pjt->pfE->size() > 0)       pfSumType = 1;
+                if (pjt->pfEnergy->size() > 0)  pfSumType = 2;
             }
 
             double hf = pjt->hiHF; 
