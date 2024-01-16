@@ -517,7 +517,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 int pfSumType = -1;
 
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
-                    if (pfSumType < -1) {
+                    if (pfSumType < 0) {
                         if ((*pjt->pfPt)[0] > 0) {
                             if ((*pjt->pfE)[0] > 0) pfSumType = 1; 
                             if ((*pjt->pfEnergy)[0] > 0) pfSumType = 2; 
