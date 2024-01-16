@@ -438,11 +438,19 @@ int populate(char const* config, char const* selections, char const* output) {
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(false, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, 0 });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        int64_t pfSumType = -1;
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
 
             t->GetEntry(i);
+
+            if (pfSumType < 0) {
+                if (*pjt->Ncoll < 0) pfSumType = 1;
+                else                 pfSumType = 2;
+
+                std::cout << pfSumType << std::endl;
+            }
 
             double hf = pjt->hiHF; 
 
@@ -514,18 +522,9 @@ int populate(char const* config, char const* selections, char const* output) {
 
             if (mix > 0) {
                 float pfSum = 0;
-                int pfSumType = -1;
 
                 for (size_t j = 0; j < pjt->pfEta->size(); ++j) {
-                    if (pfSumType < 0) {
-                        if ((*pjt->pfPt)[0] > 0) {
-                            if ((*pjt->pfE)[0] > 0) pfSumType = 1; 
-                            if ((*pjt->pfEnergy)[0] > 0) pfSumType = 2; 
-
-                            std::cout << pfSumType << std::endl;
-                        }
-                    }
-                    else if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
+                    if (std::abs((*pjt->pfEta)[j]) > 3 && std::abs((*pjt->pfEta)[j]) < 5) {
                         if (pfSumType == 1) pfSum += (*pjt->pfE)[j];
                         if (pfSumType == 2) pfSum += (*pjt->pfEnergy)[j];
                     }
