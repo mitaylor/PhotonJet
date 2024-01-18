@@ -374,7 +374,7 @@ int populate(char const* config, char const* selections, char const* output) {
         if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
         if (std::abs(vz) > 15) { continue; }
       
-        auto hfvz_x = mhfvz->index_for(hf, vz);
+        auto hfvz_x = mhfvz->index_for(v{hf, vz});
       
         std::vector<std::map<std::string, float>> jet_vector;
 
@@ -493,7 +493,7 @@ int populate(char const* config, char const* selections, char const* output) {
                 dphi_pjet_f_dphi, dphi_pjet_f_dr_dphi);
 
             if (mix > 0) {
-                auto hfvz_x = mhfvz->index_for(hf, vz);
+                auto hfvz_x = mhfvz->index_for(v{hf, vz});
                 size_t map_x = rng->Integer(hf_map[hfvz_x].size());
 
                 /* mixing events in minimum bias */
