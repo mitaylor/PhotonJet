@@ -33,7 +33,7 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
 
 int beneficiate(char const* selections, char const* output) {
     auto sel = new configurer(selections);
-    
+
     auto dphi_range = sel->get<std::vector<float>>("dphi_range");
 
     auto photon_eta_abs = sel->get<float>("photon_eta_abs");
@@ -114,9 +114,6 @@ int beneficiate(char const* selections, char const* output) {
     for (int64_t i = 0; i < mdphi->size(); ++i) {
         std::cout << evt[i] << std::endl;
     }
-
-    /* normalise by number of entries */
-    // nacc->divide(*nevt);
 
     /* save histograms */
     in(output, [&]() {
