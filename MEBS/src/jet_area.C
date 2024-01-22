@@ -70,7 +70,6 @@ void fill_axes(pjtree* pjt, multival* mpthf, int64_t pt_x, int64_t hf_x,
         if (heavyion && in_jet_failure_region(pjt, j)) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
-        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
         auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
 
         if (photon_jet_dr < 0.4) { continue; }
@@ -122,7 +121,6 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
 
         auto jet_dr = std::sqrt(dr2(jet_eta, jet_wta_eta, jet_phi, jet_wta_phi));
-        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
         auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
 
         if (photon_jet_dr < 0.4) { continue; }
