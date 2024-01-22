@@ -259,7 +259,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
     auto idr = new interval("#deltaj"s, rdr);
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
-    auto idphi = new interval("#Delta#phi"s, rdphi);
+    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
     auto ieta = new interval(reta);
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 

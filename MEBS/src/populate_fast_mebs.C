@@ -217,6 +217,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
+    auto const offset = conf->get<float>("hf_offset");
+
     /* selections */
     auto sel = new configurer(selections);
 
@@ -224,8 +226,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto base = sel->get<std::string>("base");
 
     auto heavyion = sel->get<bool>("heavyion");
-
-    auto const offset = conf->get<float>("hf_offset");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const photon_pt_max = sel->get<float>("photon_pt_max");
@@ -483,6 +483,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             /* electron rejection */
             bool electron = false;
+
             for (int64_t j = 0; j < pjt->nEle; ++j) {
                 if (std::abs((*pjt->eleEta)[j]) > 1.4442) { continue; }
 
