@@ -382,6 +382,7 @@ int populate(char const* config, char const* selections, char const* output) {
             t->GetEntry(i);
 
             double hf = pjt->hiHF;
+            auto hf_x = ihf->index_for(hf);
 
             if (rho_file.empty() && hf <= dhf.front()) { continue; }
             if (rho_file.empty() && hf >= dhf.back()) { continue; }
@@ -451,7 +452,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
-            auto hf_x = ihf->index_for(hf);
 
             std::vector<int64_t> pthf_x;
             if (!rho_file.empty()) {
