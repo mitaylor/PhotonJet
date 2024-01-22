@@ -291,11 +291,9 @@ int populate(char const* config, char const* selections, char const* output) {
             tm->GetEntry(i);
 
             double hf = pjtm->hiHF; 
-
-            if (hf <= dhf.front() || hf >= dhf.back()) { continue; }
-            if (std::abs(pjtm->vz) > 15) { continue; }
-        
             auto hfm_x = ihfm->index_for(hf);
+
+            if (std::abs(pjtm->vz) > 15) { continue; }
         
             std::vector<std::map<std::string, float>> jet_vector;
 
