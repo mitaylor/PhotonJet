@@ -237,7 +237,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
 
     auto frdr = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", mdrjpt->size(), 0, mdr->size()); };
+        return new TH1F(name.data(), ";index;", mdrjpt->size(), 0, mdrjpt->size()); };
 
     /* create histograms */
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
@@ -275,6 +275,7 @@ int populate(char const* config, char const* selections, char const* output) {
                                   60100, 62700, 65400, 68250, 71150, 74200, 77400, 80700, 
                                   84100, 87650, 91400, 95300, 99350, 103600, 108100, 
                                   112800, 117700, 123050, 129600, 160000};
+    auto ihfm = new interval(hf_bins);
 
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
@@ -293,7 +294,7 @@ int populate(char const* config, char const* selections, char const* output) {
         
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
-        tentries = += mentries;
+        tentries += mentries;
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i); tms->GetEntry(i);
