@@ -255,7 +255,7 @@ int populate(char const* config, char const* selections, char const* output) {
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
     auto mix_pjet_u_dr_jpt = new memory<TH1F>("mix_pjet_u_dr_jpt"s, "", frdr, mpthf);
 
-    /* random number for smearing and mb selection */
+    /* random number for mb selection */
     auto rng = new TRandom3(0);
 
     /* manage memory manually */
@@ -329,6 +329,12 @@ int populate(char const* config, char const* selections, char const* output) {
         
             hf_map[hfm_x].push_back(jet_vector);
         }
+    }
+
+    std::cout << "Bin: Events" << std::endl;
+
+    for(size_t i = 0; i < hf_bins.size() - 1; ++i) {
+        std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
     }
 
     /* load efficiency correction */
