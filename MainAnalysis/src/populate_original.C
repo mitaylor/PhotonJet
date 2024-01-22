@@ -263,6 +263,7 @@ int populate(char const* config, char const* selections, char const* output) {
     // bin construction, 10% intervals
     std::vector<float> hf_bins = {dhf.front()};
     float bin_factor = 1.1;
+    int64_t tentries = 0;
 
     while (hf_bins.back() < dhf.back()) {
         hf_bins.push_back(hf_bins.back()*bin_factor);
