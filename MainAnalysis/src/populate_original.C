@@ -372,7 +372,6 @@ int populate(char const* config, char const* selections, char const* output) {
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
-        int64_t pfSumType = -1;
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
