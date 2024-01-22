@@ -99,7 +99,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
 /* version for background events */
 void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, bool exclude, 
                multival* mdrjpt, interval* idphi, float pho_cor, float photon_eta, float photon_phi, 
-               bool jet_cor, float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
+               float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
                memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr, memory<TH1F>* pjet_f_jpt, 
                memory<TH1F>* pjet_u_dr_jpt, history<TH2F>* acceptance, history<TH2F>* total) {
     
@@ -513,7 +513,7 @@ int populate(char const* config, char const* selections, char const* output) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
 
                     fill_axes(jet_vector, pthf_x, weights, exclude, mdrjpt, idphi,
-                        pho_cor, photon_eta, photon_phi, jet_cor, jet_eta_abs, 
+                        pho_cor, photon_eta, photon_phi, jet_eta_abs, 
                         dphi_min_numerator, dphi_min_denominator, nevt, mix_pjet_f_dr, 
                         mix_pjet_f_jpt, mix_pjet_u_dr_jpt, acceptance, total);
 
