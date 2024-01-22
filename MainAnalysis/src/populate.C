@@ -74,7 +74,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         if (photon_jet_dr < 0.4) { continue; }
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-        auto drjpt_x = mdrjpt->index_for(v{jt_dr, jet_pt});
+        auto drjpt_x = mdrjpt->index_for(v{jet_dr, jet_pt});
 
         /* do acceptance weighting */
         double cor = 1;
@@ -90,7 +90,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
             if (drjpt_x > -1 && drjpt_x < mdrjpt->size()) {
                 (*pjet_u_dr_jpt)[index]->Fill(drjpt_x, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
-                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
+                (*pjet_f_dr)[index]->Fill(jet_dr, cor * weight);
             }
         }, pthf_x, weights);
     }
@@ -123,7 +123,7 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t
         if (photon_jet_dr < 0.4) { continue; }
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-        auto drjpt_x = mdrjpt->index_for(v{jt_dr, jet_pt});
+        auto drjpt_x = mdrjpt->index_for(v{jet_dr, jet_pt});
 
         /* do acceptance weighting */
         double cor = 1;
@@ -139,7 +139,7 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t
             if (drjpt_x > -1 && drjpt_x < mdrjpt->size()) {
                 (*pjet_u_dr_jpt)[index]->Fill(drjpt_x, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
-                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
+                (*pjet_f_dr)[index]->Fill(jet_dr, cor * weight);
             }
         }, pthf_x, weights);
     }
