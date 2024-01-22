@@ -51,7 +51,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 /* version for signal events */
 void fill_axes(pjtree* pjt, multival* mpthf, int64_t pt_x, int64_t hf_x,
                float weight, float photon_eta, float photon_phi, bool heavyion, 
-               float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
+               float jet_eta_abs, float jet_dr_max, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* njet20, memory<TH1F>* njet25, memory<TH1F>* njet30, 
                memory<TH1F>* njet35, memory<TH1F>* njet40, memory<TH1F>* njet50
@@ -81,19 +81,19 @@ void fill_axes(pjtree* pjt, multival* mpthf, int64_t pt_x, int64_t hf_x,
                 (*njet20)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 25 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet25)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 30 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet30)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 35 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet35)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 40 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet40)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 50 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet50)[pthf_x]->Fill(1, weight);
             }
         }
     }
@@ -102,7 +102,7 @@ void fill_axes(pjtree* pjt, multival* mpthf, int64_t pt_x, int64_t hf_x,
 /* version for background events */
 void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,  
                int64_t pt_x, int64_t hf_x, float weight, float photon_eta, float photon_phi,
-               float jet_eta_abs, float jet_dr_max, float jet_pt_min, float jet_pt_max,
+               float jet_eta_abs, float jet_dr_max, float jet_pt_max,
                float dphi_min_numerator, float dphi_min_denominator, memory<TH1F>* nevt, 
                memory<TH1F>* njet20, memory<TH1F>* njet25, memory<TH1F>* njet30, 
                memory<TH1F>* njet35, memory<TH1F>* njet40, memory<TH1F>* njet50
@@ -133,19 +133,19 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, multival* mpthf,
                 (*njet20)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 25 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet25)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 30 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet30)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 35 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet35)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 40 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet40)[pthf_x]->Fill(1, weight);
             }
             if (jet_pt > 50 && jet_pt < jet_pt_max) {
-                (*njet20)[pthf_x]->Fill(1, weight);
+                (*njet50)[pthf_x]->Fill(1, weight);
             }
         }
     }
@@ -182,7 +182,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
     auto const jet_dr_max = sel->get<float>("jet_dr_max");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_pt_max = sel->get<float>("jet_pt_max");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
@@ -373,7 +372,7 @@ int populate(char const* config, char const* selections, char const* output) {
             /* fill histograms */
             fill_axes(pjt, mpthf, pt_x, hf_x, weight,
                 photon_eta, photon_phi, heavyion, jet_eta_abs, 
-                jet_dr_max, jet_pt_min, jet_pt_max,
+                jet_dr_max, jet_pt_max,
                 dphi_min_numerator, dphi_min_denominator, nevt, 
                 njet20, njet25, njet30, njet35, njet40, njet50);
 
@@ -387,7 +386,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(jet_vector, mpthf, pt_x, hf_x, weight,
                         photon_eta, photon_phi, jet_eta_abs, 
-                        jet_dr_max, jet_pt_min, jet_pt_max, 
+                        jet_dr_max, jet_pt_max, 
                         dphi_min_numerator, dphi_min_denominator, nmix, 
                         mix_njet20, mix_njet25, mix_njet30, 
                         mix_njet35, mix_njet40, mix_njet50);
