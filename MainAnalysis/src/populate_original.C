@@ -493,7 +493,7 @@ std::cout << __LINE__ << std::endl;
             if (mix > 0) {
                 auto hfm_x = ihfm->index_for(hf);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
-std::cout << __LINE__ << " " << hf << " " << hfm_x << " " << mapx << std::endl;
+std::cout << __LINE__ << " " << hf << " " << hfm_x << " " << map_x << std::endl;
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
