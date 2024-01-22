@@ -500,7 +500,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                     fill_axes(jet_vector, pthf_x, weights, exclude, mdrjpt, idphi,
                         pho_cor, photon_eta, photon_phi, jet_eta_abs, 
-                        dphi_min_numerator, dphi_min_denominator, nevt, mix_pjet_f_dr, 
+                        dphi_min_numerator, dphi_min_denominator, nmix, mix_pjet_f_dr, 
                         mix_pjet_f_jpt, mix_pjet_u_dr_jpt, acceptance, total);
 
                     map_x++;
