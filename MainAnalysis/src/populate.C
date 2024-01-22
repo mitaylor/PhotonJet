@@ -60,7 +60,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
     }, pthf_x, weights);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
-        auto jet_pt = (jet_cor) (*pjt->jtptCor)[j] ? (*pjt->jtpt)[j];
+        auto jet_pt = (jet_cor) ? (*pjt->jtptCor)[j] : (*pjt->jtpt)[j];
         auto jet_eta = (*pjt->jteta)[j];
         auto jet_phi = (*pjt->jtphi)[j];
 
@@ -307,7 +307,7 @@ int populate(char const* config, char const* selections, char const* output) {
             for (int64_t j = 0; j < pjtm->nref; ++j) {
                 if (exclude && in_jet_failure_region(pjtm, j)) { continue; }
 
-                auto jet_pt = (jet_cor) (*pjtm->jtptCor)[j] ? (*pjtm->jtpt)[j];
+                auto jet_pt = (jet_cor) ? (*pjtm->jtptCor)[j] : (*pjtm->jtpt)[j];
                 auto jet_eta = (*pjtm->jteta)[j];
                 auto jet_phi = (*pjtm->jtphi)[j];
                 auto jet_wta_eta = (*pjtm->WTAeta)[j];
