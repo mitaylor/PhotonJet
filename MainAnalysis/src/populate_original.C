@@ -384,7 +384,7 @@ int populate(char const* config, char const* selections, char const* output) {
             auto hf_x = ihf->index_for(hf);
 
             if (rho_file.empty() && hf <= dhf.front()) { continue; }
-            if (rho_file.empty() && hf >= dhf.back()) { continue; }
+            if (rho_file.empty() && hf > dhf.back()) { continue; }
             if (std::abs(pjt->vz) > 15) { continue; }
 
             auto photon_es = (apply_es) ? photon_pt_es[hf_x] : 1;
@@ -451,7 +451,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
-
+            std::cout << __LINE__ << std::endl;
             std::vector<int64_t> pthf_x;
             if (!rho_file.empty()) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
@@ -460,7 +460,7 @@ int populate(char const* config, char const* selections, char const* output) {
             } else {
                 pthf_x.push_back(mpthf->index_for(x{pt_x, hf_x}));
             }
-
+std::cout << __LINE__ << std::endl;
             auto weight = pjt->w;
 
             if (!eff_file.empty() && photon_pt / photon_es < 70) {
@@ -469,7 +469,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
                 weight *= cor;
             }
-
+std::cout << __LINE__ << std::endl;
             std::vector<float> weights;
             if (!rho_file.empty()) {
                 auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
@@ -483,17 +483,17 @@ int populate(char const* config, char const* selections, char const* output) {
             } else {
                 weights.push_back(weight);
             }
-
+std::cout << __LINE__ << std::endl;
             /* fill histograms */
             fill_axes(pjt, pthf_x, weights, exclude, mdrjpt, idphi,
                 pho_cor, photon_eta, photon_phi, jet_cor, jet_eta_abs, 
                 dphi_min_numerator, dphi_min_denominator, nevt, 
                 pjet_f_dr, pjet_f_jpt, pjet_u_dr_jpt, acceptance, total);
-
+std::cout << __LINE__ << std::endl;
             if (mix > 0) {
                 auto hfm_x = ihfm->index_for(hf);
                 size_t map_x = rng->Integer(hf_map[hfm_x].size());
-
+std::cout << __LINE__ << hf << " " << hfm_x << " " << map_x << std::endl;
                 /* mixing events in minimum bias */
                 for (int64_t k = 0; k < mix; k++) {
                     std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
