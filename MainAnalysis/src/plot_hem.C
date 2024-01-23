@@ -137,7 +137,7 @@ int plot_hem(char const* config, char const* selections, char const* output) {
                 if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
                 
                 if (pho_et <= photon_pt_min || pho_et >= photon_pt_max) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 if (pho_et > leading_pt) {
                     leading = j;
