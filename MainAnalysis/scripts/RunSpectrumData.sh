@@ -5,7 +5,7 @@ tag=$2
 n=$3
 
 ls /data/submit/mitay/photons/condor/regulate_aa_data_* > files
-split -n l/7 --numeric-suffixes=0 -a 1 files files_
+split -n l/8 --numeric-suffixes=0 -a 1 files files_
 awk -F "[_.]" '{print $(NF-1)}' files_${n} > index_${n}
 
 files=($(cat files_${n}))
