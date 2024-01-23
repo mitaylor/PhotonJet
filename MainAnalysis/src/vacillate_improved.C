@@ -404,10 +404,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
                     if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
                     if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
-                    std::cout << __LINE__ << std::endl;
+                    
                     auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
-                    std::cout << __LINE__ << std::endl;
+                    
                     // fill histograms
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
                         (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
@@ -455,10 +455,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (gen_jet_pt <= 5 || dr2((*p->refeta)[j], (*p->jteta)[j], (*p->refphi)[j], (*p->jtphi)[j]) > 0.0225) { 
                         continue;
                     }
-                    std::cout << __LINE__ << std::endl;
+                    
                     auto reco_jet_dr = std::sqrt(dr2(reco_jet_eta, (*p->WTAeta)[j], reco_jet_phi, (*p->WTAphi)[j]));
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
-                    std::cout << __LINE__ << std::endl;
+                    
                     // jet energy scale uncertainty
                     if (!jeu.empty()) {
                         JEU->SetJetPT(reco_jet_pt);
@@ -532,11 +532,11 @@ int vacillate(char const* config, char const* selections, char const* output) {
                     if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
                     if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
                     if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
-                    std::cout << __LINE__ << std::endl;
+                    
                     auto id = gen_jet_id[gen_jet_pt];
                     auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[id], gen_jet_phi, (*p->WTAgenphi)[id]));
                     auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
-                    std::cout << __LINE__ << std::endl;
+                    
                     // fill histograms
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
                         (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
