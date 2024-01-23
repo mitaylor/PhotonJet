@@ -53,19 +53,12 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
 
-    auto acc_file = conf->get<std::string>("acc_file");
-    auto acc_label_ref = conf->get<std::string>("acc_label_ref");
-    auto acc_label_acc = conf->get<std::string>("acc_label_acc");
-
     auto eff_file = conf->get<std::string>("eff_file");
     auto eff_label = conf->get<std::string>("eff_label");
 
     auto rho_file = conf->get<std::string>("rho_file");
     auto rho_label = conf->get<std::string>("rho_label");
 
-    auto jersf = conf->get<std::string>("jersf");
-
-    auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
 
@@ -176,8 +169,6 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 if (apply_er) temp_photon_pt = (heavyion) ? (*pjt->phoEtErNew)[j] : (*pjt->phoEtEr)[j];
 
-                temp_photon_pt *= photon_es;
-
                 if (temp_photon_pt < photon_pt_min) { continue; }
 
                 if (temp_photon_pt > photon_pt) {
@@ -230,8 +221,8 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
 
             auto weight = pjt->w;
 
-            if (!eff_file.empty() && photon_pt / photon_es < 70) {
-                auto bin = (*efficiency)[1]->FindBin(photon_pt / photon_es);
+            if (!eff_file.empty() && photon_pt < 70) {
+                auto bin = (*efficiency)[1]->FindBin(photon_pt);
                 auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
 
                 weight *= cor;
@@ -253,20 +244,20 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
 
             /* without gen level isolation applied */
             zip([&](auto const& index, auto const& weight) {
-                (*spectrum_photon)[index]->Fill(leading_pt, weight * pho_cor);
+                (*spectrum_photon)[index]->Fill(photon_pt, weight * pho_cor);
             }, hf_x, weights);
 
             /* with gen level isolation applied */
             int gen_index;
 
             if (mc) {
-                gen_index = (*pjt->pho_genMatchedIndex)[leading];
+                gen_index = (*pjt->pho_genMatchedIndex)[photon_index];
                 if (gen_index == -1) { continue; }
                 
                 if ((*pjt->mcCalIsoDR04)[gen_index] > 5) { continue; }
 
                 zip([&](auto const& index, auto const& weight) {
-                    (*mc_spectrum_photon)[index]->Fill(leading_pt, weight * pho_cor);
+                    (*mc_spectrum_photon)[index]->Fill(photon_pt, weight * pho_cor);
                 }, hf_x, weights);
             }
         }
