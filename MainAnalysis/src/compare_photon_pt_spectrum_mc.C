@@ -89,25 +89,10 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_pp_construct_populate = new history<TH1F>(f_pp, "raw_spectrum_photon");
     h_pp_construct_populate->rename("h_pp_construct_populate");
 
-    auto h_aa_construct_populate_jet = new history<TH1F>(f_aa, "raw_spectrum_photon_jet");
-    h_aa_construct_populate_jet->rename("h_aa_construct_populate_jet");
-    auto h_pp_construct_populate_jet = new history<TH1F>(f_pp, "raw_spectrum_photon_jet");
-    h_pp_construct_populate_jet->rename("h_pp_construct_populate_jet");
-
-    auto h_aa_construct_populate_jet_sub = new history<TH1F>(f_aa, "raw_sub_spectrum_photon_jet");
-    h_aa_construct_populate_jet_sub->rename("h_aa_construct_populate_jet_sub");
-    auto h_pp_construct_populate_jet_sub = new history<TH1F>(f_pp, "raw_sub_spectrum_photon_jet");
-    h_pp_construct_populate_jet_sub->rename("h_pp_construct_populate_jet_sub");
-
     auto h_aa_construct_vacillate = new history<TH1F>(f_aa, "raw_mc_spectrum_photon");
     h_aa_construct_vacillate->rename("h_aa_construct_vacillate");
     auto h_pp_construct_vacillate = new history<TH1F>(f_pp, "raw_mc_spectrum_photon");
     h_pp_construct_vacillate->rename("h_pp_construct_vacillate");
-
-    auto h_aa_construct_vacillate_jet = new history<TH1F>(f_aa, "raw_mc_spectrum_photon_jet");
-    h_aa_construct_vacillate_jet->rename("h_aa_construct_vacillate_jet");
-    auto h_pp_construct_vacillate_jet = new history<TH1F>(f_pp, "raw_mc_spectrum_photon_jet");
-    h_pp_construct_vacillate_jet->rename("h_pp_construct_vacillate_jet");
 
     auto h_aa_accumulate_nevt = new history<TH1F>(f_accumulate_aa, accumulate_label_aa);
     h_aa_accumulate_nevt->rename("h_aa_accumulate_nevt");
@@ -136,12 +121,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     auto h_aa_construct_accumulate = new history<TH1F>("h_aa_construct_accumulate"s, "", fpt, ihf->size());
     auto h_pp_construct_accumulate = new history<TH1F>("h_pp_construct_accumulate"s, "", fpt, 1);
 
-    auto h_aa_construct_accumulate_jet = new history<TH1F>("h_aa_construct_accumulate_jet"s, "", fpt, ihf->size());
-    auto h_pp_construct_accumulate_jet = new history<TH1F>("h_pp_construct_accumulate_jet"s, "", fpt, 1);
-
-    auto h_aa_construct_accumulate_jet_sub = new history<TH1F>("h_aa_construct_accumulate_jet_sub"s, "", fpt, ihf->size());
-    auto h_pp_construct_accumulate_jet_sub = new history<TH1F>("h_pp_construct_accumulate_jet_sub"s, "", fpt, 1);
-
     auto h_aa_accumulate = new history<TH1F>("h_aa_accumulate"s, "", fpt, ihf->size());
     auto h_pp_accumulate = new history<TH1F>("h_pp_accumulate"s, "", fpt, 1);
 
@@ -158,16 +137,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
                     (*h_aa_construct_populate)[i]->GetBinContent(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
             (*h_aa_construct_accumulate)[i]->SetBinError(j+1, 
                     (*h_aa_construct_populate)[i]->GetBinError(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
-
-            (*h_aa_construct_accumulate_jet)[i]->SetBinContent(j+1, 
-                    (*h_aa_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
-            (*h_aa_construct_accumulate_jet)[i]->SetBinError(j+1, 
-                    (*h_aa_construct_populate_jet)[i]->GetBinError(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
-
-            (*h_aa_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
-                    (*h_aa_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
-            (*h_aa_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
-                    (*h_aa_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_aa_purity)[index_long]->GetBinContent(1));
 
             (*h_aa_accumulate)[i]->SetBinContent(j+1, (*h_aa_accumulate_nevt)[index_trunc]->GetBinContent(1));
             (*h_aa_accumulate)[i]->SetBinError(j+1, (*h_aa_accumulate_nevt)[index_trunc]->GetBinError(1));
@@ -187,16 +156,6 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
             (*h_pp_construct_accumulate)[i]->SetBinError(j+1, 
                     (*h_pp_construct_populate)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
 
-            (*h_pp_construct_accumulate_jet)[i]->SetBinContent(j+1, 
-                    (*h_pp_construct_populate_jet)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
-            (*h_pp_construct_accumulate_jet)[i]->SetBinError(j+1, 
-                    (*h_pp_construct_populate_jet)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
-
-            (*h_pp_construct_accumulate_jet_sub)[i]->SetBinContent(j+1, 
-                    (*h_pp_construct_populate_jet_sub)[i]->GetBinContent(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
-            (*h_pp_construct_accumulate_jet_sub)[i]->SetBinError(j+1, 
-                    (*h_pp_construct_populate_jet_sub)[i]->GetBinError(j+1) * (*h_pp_purity)[index_long]->GetBinContent(1));
-
             (*h_pp_accumulate)[i]->SetBinContent(j+1, (*h_pp_accumulate_nevt)[index_trunc]->GetBinContent(1));
             (*h_pp_accumulate)[i]->SetBinError(j+1, (*h_pp_accumulate_nevt)[index_trunc]->GetBinError(1));
 
@@ -214,26 +173,16 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
 
     /* normalize */
     scale_bin_width(h_aa_construct_populate, h_pp_construct_populate);
-    scale_bin_width(h_aa_construct_populate_jet, h_pp_construct_populate_jet);
-    scale_bin_width(h_aa_construct_populate_jet_sub, h_pp_construct_populate_jet_sub);
     scale_bin_width(h_aa_construct_accumulate, h_pp_construct_accumulate);
-    scale_bin_width(h_aa_construct_accumulate_jet, h_pp_construct_accumulate_jet);
-    scale_bin_width(h_aa_construct_accumulate_jet_sub, h_pp_construct_accumulate_jet_sub);
     scale_bin_width(h_aa_construct_vacillate, h_pp_construct_vacillate);
-    scale_bin_width(h_aa_construct_vacillate_jet, h_pp_construct_vacillate_jet);
     scale_bin_width(h_aa_accumulate, h_pp_accumulate);
     scale_bin_width(h_aa_populate, h_pp_populate);
     scale_bin_width(h_aa_construct_vacillate_merge, h_pp_construct_vacillate_merge);
     scale_bin_width(h_aa_construct_accumulate_merge, h_pp_construct_accumulate_merge);
 
     normalise_to_unity(h_aa_construct_populate, h_pp_construct_populate);
-    normalise_to_unity(h_aa_construct_populate_jet, h_pp_construct_populate_jet);
-    normalise_to_unity(h_aa_construct_populate_jet_sub, h_pp_construct_populate_jet_sub);
     normalise_to_unity(h_aa_construct_accumulate, h_pp_construct_accumulate);
-    normalise_to_unity(h_aa_construct_accumulate_jet, h_pp_construct_accumulate_jet);
-    normalise_to_unity(h_aa_construct_accumulate_jet_sub, h_pp_construct_accumulate_jet_sub);
     normalise_to_unity(h_aa_construct_vacillate, h_pp_construct_vacillate);
-    normalise_to_unity(h_aa_construct_vacillate_jet, h_pp_construct_vacillate_jet);
     normalise_to_unity(h_aa_accumulate, h_pp_accumulate);
     normalise_to_unity(h_aa_populate, h_pp_populate);
     normalise_to_unity(h_aa_construct_vacillate_merge, h_pp_construct_vacillate_merge);
@@ -307,25 +256,15 @@ int compare_photon_pt_spectrum(char const* config, char const* selections, const
     in(output, [&]() {
         h_aa_construct_populate->save();
         h_pp_construct_populate->save();
-        h_aa_construct_populate_jet->save();
-        h_pp_construct_populate_jet->save();
-        h_aa_construct_populate_jet_sub->save();
-        h_pp_construct_populate_jet_sub->save();
 
         h_aa_construct_vacillate->save();
         h_pp_construct_vacillate->save();
-        h_aa_construct_vacillate_jet->save();
-        h_pp_construct_vacillate_jet->save();
 
         h_aa_populate->save();
         h_pp_populate->save();
 
         h_aa_construct_accumulate->save();
         h_pp_construct_accumulate->save();
-        h_aa_construct_accumulate_jet->save();
-        h_pp_construct_accumulate_jet->save();
-        h_aa_construct_accumulate_jet_sub->save();
-        h_pp_construct_accumulate_jet_sub->save();
 
         h_aa_accumulate->save();
         h_pp_accumulate->save();
