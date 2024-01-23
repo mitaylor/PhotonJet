@@ -52,7 +52,7 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
                multival* mdrjpt, interval* idphi, float pho_cor, float photon_eta, float photon_phi, 
                bool jet_cor, float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
                memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr, memory<TH1F>* pjet_f_jpt, 
-               memory<TH1F>* pjet_u_dr_jpt, history<TH2F>* acceptance, history<TH2F>* total) {
+               memory<TH1F>* pjet_u_dr_jpt, history<TH2D>* acceptance, history<TH2D>* total) {
     
     zip([&](auto const& index, auto const& weight) {
         (*nevt)[index]->Fill(1., weight * pho_cor);
@@ -100,7 +100,7 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t
                multival* mdrjpt, interval* idphi, float pho_cor, float photon_eta, float photon_phi, 
                float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
                memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr, memory<TH1F>* pjet_f_jpt, 
-               memory<TH1F>* pjet_u_dr_jpt, history<TH2F>* acceptance, history<TH2F>* total) {
+               memory<TH1F>* pjet_u_dr_jpt, history<TH2D>* acceptance, history<TH2D>* total) {
     
     zip([&](auto const& index, auto const& weight) {
         (*nevt)[index]->Fill(1., weight * pho_cor);
@@ -356,13 +356,13 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* load acceptance weighting for HI */
     TFile* fa;
-    history<TH2F>* acceptance = nullptr;
-    history<TH2F>* total = nullptr;
+    history<TH2D>* acceptance = nullptr;
+    history<TH2D>* total = nullptr;
 
     if (!acc_file.empty()) {
         fa = new TFile(acc_file.data(), "read");
-        acceptance = new history<TH2F>(fa, acc_label_acc);
-        total = new history<TH2F>(fa, acc_label_ref);
+        acceptance = new history<TH2D>(fa, acc_label_acc);
+        total = new history<TH2D>(fa, acc_label_ref);
     }
 
     /* add weight for the number of photons, based on the fraction that are excluded by area */
