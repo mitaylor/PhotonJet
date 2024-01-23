@@ -8,7 +8,6 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
@@ -40,8 +39,19 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-float res(float c, float s, float n, float pt) {
-    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
+    auto deta = eta1 - eta2;
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return deta * deta + dphi * dphi;
+}
+
+float back_to_back(float photon_phi, float jet_phi, float threshold) {
+    float dphi = std::abs(photon_phi - jet_phi);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return dphi > threshold * TMath::Pi();
 }
 
 void fill_axes(pjtree* pjt, 
@@ -58,35 +68,26 @@ void fill_axes(pjtree* pjt,
         if (!mc) {
             auto jet_pt = jet_cor ? (*pjt->jtptCor)[j] : (*pjt->jtpt)[j];
             auto jet_eta = (*pjt->jteta)[j];
-            auto jet_phi = convert_radian((*pjt->jtphi)[j]);
+            auto jet_phi = (*pjt->jtphi)[j];
 
             if (jet_pt <= jet_pt_min && jet_pt >= 200) { continue; }
-
             if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-
-            /* hem failure region exclusion */
             if (exclude && in_jet_failure_region(pjt,j)) { continue; }
 
-            auto jet_wta_eta = (*pjt->WTAeta)[j];
-            auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
+            auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
+            auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
 
-            auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
-
-            /* require back-to-back jets */
-            if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
+            if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
             /* do acceptance weighting */
             double cor = 1;
-            if (exclude) {
-                auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
-                auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
-                cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-                if (cor < 1) { std::cout << "error" << std::endl; }
-            }
 
-            double jt_deta = jet_eta - jet_wta_eta;
-            double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
-            double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
+            if (exclude) {
+                auto dphi_x = idphi->index_for(photon_jet_dphi);
+                auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+
+                cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+            }
 
             if (jt_dr > 0.3) { continue; }
 
@@ -450,13 +451,6 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     /* normalise histograms */
     if (mix > 0)    scale(1. / mix, mix_spectrum_photon_jet);
 
-    // /* scale by bin width */
-    // scale_bin_width(
-    //     pjet_f_dr,
-    //     pjet_f_jpt,
-    //     mix_pjet_f_dr,
-    //     mix_pjet_f_jpt);
-
     /* subtract histograms */
     auto sub_spectrum_photon_jet = new history<TH1F>(*spectrum_photon_jet, "sub");
 
@@ -465,6 +459,7 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     /* save histograms */
     in(output, [&]() {
         spectrum_photon->save(tag);
+
         spectrum_photon_jet->save(tag);
         mix_spectrum_photon_jet->save(tag);
         sub_spectrum_photon_jet->save(tag);

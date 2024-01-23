@@ -11,7 +11,6 @@
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
 #include "TFile.h"
@@ -61,8 +60,6 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
-
-    /* convert to integral angle units (cast to double) */
 
     auto ihf = new interval(dhf);
 
