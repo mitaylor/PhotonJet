@@ -67,7 +67,6 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
-    auto no_jes = conf->get<bool>("no_jes");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
