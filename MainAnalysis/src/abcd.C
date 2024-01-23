@@ -52,7 +52,7 @@ void fill_data(memory<TH2F>* sfrac, multival* mpthf, TTree* t, pjtree* p,
             auto pho_et = (*p->phoEt)[j];
 
             if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
             
             if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];

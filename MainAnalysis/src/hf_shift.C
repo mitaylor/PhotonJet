@@ -99,7 +99,7 @@ int hf_shift(char const* config, char const* selections, char const* output) {
             float leading_pt = 0;
             for (int64_t j = 0; j < hp_pjt->nPho; ++j) { // new
                 if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*hp_pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*hp_pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
                 auto pho_et = (*hp_pjt->phoEtErNew)[j];
@@ -127,7 +127,7 @@ int hf_shift(char const* config, char const* selections, char const* output) {
             /* electron rejection */
             bool electron = false;
             for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
-                if (std::abs((*hp_pjt->eleSCEta)[j]) > 1.4442) { continue; }
+                if (std::abs((*hp_pjt->eleEta)[j]) > 1.4442) { continue; }
 
                 auto deta = photon_eta - (*hp_pjt->eleEta)[j];
                 if (deta > 0.1) { continue; }

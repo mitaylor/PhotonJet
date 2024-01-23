@@ -284,7 +284,7 @@ int truth_gen_reco(char const* config, char const* selections, char const* outpu
             float leading_pt = 0;
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if ((*p->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
                 auto pho_et = (*p->phoEt)[j];
@@ -334,7 +334,7 @@ int truth_gen_reco(char const* config, char const* selections, char const* outpu
             if (ele_rej) {
                 bool electron = false;
                 for (int64_t j = 0; j < p->nEle; ++j) {
-                    if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+                    if (std::abs((*p->eleEta)[j]) > 1.4442) { continue; }
 
                     auto deta = photon_eta - (*p->eleEta)[j];
                     if (deta > 0.1) { continue; }

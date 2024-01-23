@@ -59,7 +59,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
             auto pho_et = (*p->phoEt)[j];
 
             if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
             
             if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
@@ -157,7 +157,7 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
             auto pho_et = (*p->phoEt)[j];
 
             if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
             
             if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];

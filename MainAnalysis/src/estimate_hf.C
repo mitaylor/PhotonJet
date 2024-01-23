@@ -106,7 +106,7 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
                 if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
                 auto pho_et = (*pjt->phoEt)[j];
@@ -139,7 +139,7 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
             if (ele_rej) {
                 bool electron = false;
                 for (int64_t j = 0; j < pjt->nEle; ++j) {
-                    if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+                    if (std::abs((*pjt->eleEta)[j]) > 1.4442) { continue; }
 
                     auto deta = photon_eta - (*pjt->eleEta)[j];
                     if (deta > 0.1) { continue; }

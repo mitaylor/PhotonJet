@@ -96,7 +96,7 @@ int narrate(char const* config, char const* selections, char const* output) {
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
                 if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= eta_max[0]) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
                 auto pho_et = (*pjt->phoEtErNew)[j];
@@ -154,7 +154,7 @@ int narrate(char const* config, char const* selections, char const* output) {
             float leading_pt = 0;
             for (int64_t j = 0; j < pjt->nPho; ++j) {
                 if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= eta_max[0]) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= eta_max[0]) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
 
                 auto pho_et = (*pjt->phoEtErNew)[j];

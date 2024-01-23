@@ -88,7 +88,7 @@ int speculate(char const* config, char const* selections, char const* output) {
         int64_t leading = -1;
         float leading_pt = 0;
         for (int64_t j = 0; j < p->nPho; ++j) {
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
 
             float pho_et = (*p->phoEt)[j];
@@ -125,7 +125,7 @@ int speculate(char const* config, char const* selections, char const* output) {
         if (ele_rej) {
             bool electron = false;
             for (int64_t j = 0; j < p->nEle; ++j) {
-                if (std::abs((*p->eleSCEta)[j]) > 1.4442) { continue; }
+                if (std::abs((*p->eleEta)[j]) > 1.4442) { continue; }
 
                 auto deta = photon_eta - (*p->eleEta)[j];
                 if (deta > 0.1) { continue; }
