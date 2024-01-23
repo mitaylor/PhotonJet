@@ -238,13 +238,13 @@ int populate(char const* config, char const* selections, char const* output) {
     /* create histograms */
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
     auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);
-std::cout << __LINE__ << std::endl;
+
     auto pjet_f_dr = new memory<TH1F>("pjet_f_dr"s,
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto pjet_f_jpt = new memory<TH1F>("pjet_f_jpt"s,
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
     auto pjet_u_dr_jpt = new memory<TH1F>("pjet_u_dr_jpt"s, "", frdr, mpthf);
-std::cout << __LINE__ << std::endl;
+
     auto mix_pjet_f_dr = new memory<TH1F>("mix_pjet_f_dr",
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
@@ -257,7 +257,7 @@ std::cout << __LINE__ << std::endl;
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-std::cout << __LINE__ << std::endl;
+
     /* set up mixed event background subtraction */
     // bin construction, 10% intervals
     std::vector<float> hf_bins = {0, dhf.front()};
@@ -267,11 +267,11 @@ std::cout << __LINE__ << std::endl;
     if (mix > 0) while (hf_bins.back() < dhf.back()) {
         hf_bins.push_back(hf_bins.back()*bin_factor);
     }
-    std::cout << __LINE__ << std::endl;
+    
     hf_bins.push_back(10000);
 
     auto ihfm = new interval(hf_bins);
-std::cout << __LINE__ << std::endl;
+
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
@@ -285,10 +285,10 @@ std::cout << __LINE__ << std::endl;
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
         tentries += mentries;
-std::cout << __LINE__ << std::endl; std::cout << mb[index_m].data() << std::endl;
+
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
-std::cout << __LINE__ << std::endl;
+
             double hf = pjtm->hiHF; 
             auto hfm_x = ihfm->index_for(hf);
 
@@ -323,13 +323,13 @@ std::cout << __LINE__ << std::endl;
             hf_map[hfm_x].push_back(jet_vector);
         }
     }
-std::cout << __LINE__ << std::endl;
+
     std::cout << "Bin: Events" << std::endl;
 
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) {
         std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
     }
-std::cout << __LINE__ << std::endl;
+
     /* load efficiency correction */
     TFile* fe;
     history<TH1F>* efficiency = nullptr;
