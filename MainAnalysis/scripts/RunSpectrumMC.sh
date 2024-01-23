@@ -5,7 +5,7 @@ tag=$2
 n=$3
 
 ls /data/submit/mitay/photons/regulate_aa_qcd_* > files
-split -n l/8 --numeric-suffixes=0 -a 1 files files_
+split -n l/1 --numeric-suffixes=0 -a 1 files files_
 awk -F "[/.]" '{print $(NF-1)}' files_${n} > index_${n}
 
 files=($(cat files_${n}))
