@@ -246,12 +246,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
             float reco_photon_eta = -1000;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
-                auto temp_photon_pt = (*pjt->phoEt)[j];
+                auto temp_photon_pt = (*p->phoEt)[j];
 
                 if (temp_photon_pt <= 30) { continue; }
                 if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-                if (apply_er) temp_photon_pt = (heavyion) ? (*pjt->phoEtErNew)[j] : (*pjt->phoEtEr)[j];
+                if (apply_er) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
 
                 if (temp_photon_pt < photon_pt_min || temp_photon_pt > photon_pt_max) { continue; }
 
