@@ -80,20 +80,12 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     auto heavyion = sel->get<bool>("heavyion");
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
-    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto const hovere_max = sel->get<float>("hovere_max");
     auto see_min = sel->get<float>("see_min");
     auto see_max = sel->get<float>("see_max");
     auto const iso_max = sel->get<float>("iso_max");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
-    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
-
-    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
-    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
-
-    auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
 
     auto alter_base = conf->get<std::string>("alter_base"); // get offset to paths from the original configuration file
@@ -101,7 +93,6 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
     /* make histograms */
     dpt.pop_back();
 
-    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
     auto ipt = new interval("p_{T}^{#gamma}"s, dpt);
     auto ihf = new interval(dhf);
 
@@ -109,9 +100,6 @@ int photon_pt_spectrum(char const* config, char const* selections, char const* o
 
     auto spectrum_photon = new history<TH1F>("spectrum_photon"s, "", fpt, ihf->size());
     auto mc_spectrum_photon = new history<TH1F>("mc_spectrum_photon"s, "", fpt, ihf->size());
-
-    /* random number for mb selection */
-    auto rng = new TRandom3(144);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
