@@ -26,7 +26,8 @@ using namespace std::placeholders;
 
 static float dr2(float eta1, float eta2, float phi1, float phi2) {
     auto deta = eta1 - eta2;
-    auto dphi = revert_radian(convert_radian(phi1) - convert_radian(phi2));
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
 
     return deta * deta + dphi * dphi;
 }
@@ -39,16 +40,17 @@ float acceptance_weight(bool heavyion, interval* idphi,
     history<TH2D>* total, history<TH2D>* acceptance, 
     float photon_phi, float jet_phi, float photon_eta, float jet_eta) {
    
-    double correction = 1;
+    double cor = 1;
    
     if (heavyion) {
-        auto index = idphi->index_for(revert_pi(convert_radian(photon_phi) - convert_radian(jet_phi)));
-        auto bin = (*total)[index]->FindBin(jet_eta, photon_eta);
-        correction = (*total)[index]->GetBinContent(bin) / (*acceptance)[index]->GetBinContent(bin);
-        if (correction < 1) { std::cout << "error" << std::endl; }
+        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
+        auto dphi_x = idphi->index_for(photon_jet_dphi);
+        auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+        
+        cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
     }
    
-    return correction;
+    return cor;
 }
 
 float back_to_back(float photon_phi, float jet_phi, float threshold) {
