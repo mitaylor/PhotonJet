@@ -280,7 +280,7 @@ int populate(char const* config, char const* selections, char const* output) {
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
 
-    while (tentries < 952000) {
+    while (tentries < 952000 && mix > 0) {
         int index_m = rng->Integer(mb.size());
         TFile* fm = new TFile(mb[index_m].data(), "read");
         TTree* tm = (TTree*)fm->Get("pj");
@@ -332,7 +332,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
     std::cout << "Bin: Events" << std::endl;
 
-    for(size_t i = 0; i < hf_bins.size() - 1; ++i) {
+    for (size_t i = 0; i < hf_bins.size() - 1; ++i) {
         std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
     }
 
