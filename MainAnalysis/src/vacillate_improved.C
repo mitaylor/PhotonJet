@@ -193,27 +193,27 @@ int vacillate(char const* config, char const* selections, char const* output) {
         total = new history<TH2F>(fa, acc_label_ref);
     }
 
-    /* load derived JER based on reco pT */
-    TFile* fj;
-    history<TH1F>* jer_histogram = nullptr;
-    history<TF1>* jer_function = nullptr;
+    // /* load derived JER based on reco pT */
+    // TFile* fj;
+    // history<TH1F>* jer_histogram = nullptr;
+    // history<TF1>* jer_function = nullptr;
 
-    if (!jer_file.empty()) {
-        fj = new TFile(jer_file.data(), "read");
-        jer_histogram = new history<TH1F>(fj, jer_label_hist);
-        jer_function = new history<TF1>("jer_function"s, "", jer_histogram->shape());
+    // if (!jer_file.empty()) {
+    //     fj = new TFile(jer_file.data(), "read");
+    //     jer_histogram = new history<TH1F>(fj, jer_label_hist);
+    //     jer_function = new history<TF1>("jer_function"s, "", jer_histogram->shape());
 
-        for (int64_t i = 0; i < jer_function->size(); ++i) {
-            auto name = jer_label_func + "_" + std::to_string(i);
-            (*jer_function)[i] = (*jer_histogram)[i]->GetFunction(name.c_str());
-        }
+    //     for (int64_t i = 0; i < jer_function->size(); ++i) {
+    //         auto name = jer_label_func + "_" + std::to_string(i);
+    //         (*jer_function)[i] = (*jer_histogram)[i]->GetFunction(name.c_str());
+    //     }
 
-        jer_function->rename(jer_label_func);
+    //     jer_function->rename(jer_label_func);
 
-        for (int64_t i = 0; i < jer_function->size(); ++i) {
-            std::cout << (*jer_function)[i]->Eval(20) << " " << (*jer_function)[i]->Eval(100) << std::endl;
-        }
-    }
+    //     for (int64_t i = 0; i < jer_function->size(); ++i) {
+    //         std::cout << (*jer_function)[i]->Eval(20) << " " << (*jer_function)[i]->Eval(100) << std::endl;
+    //     }
+    // }
 
     /* get data/MC resolution correction */
     auto JERSF = new SingleJetCorrector(jersf);
@@ -226,7 +226,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
         TFile* f = new TFile(input.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
-
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         /* fill histograms */
@@ -247,19 +246,18 @@ int vacillate(char const* config, char const* selections, char const* output) {
             float reco_photon_eta = -1000;
 
             for (int64_t j = 0; j < p->nPho; ++j) {
-                if ((*p->phoEt)[j] <= 30) { continue; }
+                auto temp_photon_pt = (*pjt->phoEt)[j];
+
+                if (temp_photon_pt <= 30) { continue; }
                 if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
+                if (apply_er) temp_photon_pt = (heavyion) ? (*pjt->phoEtErNew)[j] : (*pjt->phoEtEr)[j];
 
-                auto pho_et = (*p->phoEt)[j];
-                if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-                if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+                if (temp_photon_pt < photon_pt_min || temp_photon_pt > photon_pt_max) { continue; }
 
-                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
-
-                if (pho_et > reco_photon_pt) {
+                if (temp_photon_pt > reco_photon_pt) {
                     reco_photon_index = j;
-                    reco_photon_pt = pho_et;
+                    reco_photon_pt = temp_photon_pt;
                 }
             }
            
@@ -280,7 +278,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                     if (isolation > iso_max) { reco_photon = false; }
                 }
-               
+                
                 // potential miss if there is a nearby electron
                 reco_photon_eta = (*p->phoEta)[reco_photon_index];
                 reco_photon_phi = (*p->phoPhi)[reco_photon_index];
@@ -315,8 +313,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
             // find if there is a gen photon (outside the HEM failure region), and it is a miss
             else {
                 for (int64_t j = 0; j < p->nMC; ++j) {
-                    if (std::abs((*p->mcEta)[j]) >= photon_eta_abs) { continue; }
                     auto pho_et = (*p->mcPt)[j];
+                    auto pid = (*p->mcPID)[j];
+                    auto mother_pid = (*p->mcMomPID)[j];
+
+                    if (std::abs((*p->mcEta)[j]) >= photon_eta_abs) { continue; }
+                    if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { continue; }
 
                     if (pho_et > gen_photon_pt) {
                         gen_photon_index = j;
@@ -367,6 +369,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 for (int64_t j = 0; j < ihf->size(); ++j) {
                     auto bin = (*rho_weighting)[j]->FindBin(avg_rho);
                     auto cor = (*rho_weighting)[j]->GetBinContent(bin);
+                    
                     weights[j] *= cor;
                 }
 
