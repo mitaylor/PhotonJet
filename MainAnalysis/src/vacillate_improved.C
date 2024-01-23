@@ -54,7 +54,10 @@ float acceptance_weight(bool heavyion, interval* idphi,
 }
 
 float back_to_back(float photon_phi, float jet_phi, float threshold) {
-    return std::abs(convert_radian(photon_phi) - convert_radian(jet_phi)) > convert_pi(threshold);
+    float dphi = std::abs(photon_phi - jet_phi);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return dphi > threshold * TMath::Pi();
 }
 
 int vacillate(char const* config, char const* selections, char const* output) {
