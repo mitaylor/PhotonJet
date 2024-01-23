@@ -264,7 +264,7 @@ std::cout << __LINE__ << std::endl;
     float bin_factor = 1.1;
     int64_t tentries = 0;
 
-    while (hf_bins.back() < dhf.back()) {
+    if (mix > 0) while (hf_bins.back() < dhf.back()) {
         hf_bins.push_back(hf_bins.back()*bin_factor);
     }
     std::cout << __LINE__ << std::endl;
