@@ -267,6 +267,10 @@ int populate(char const* config, char const* selections, char const* output) {
     if (mix > 0) while (hf_bins.back() < dhf.back()) {
         hf_bins.push_back(hf_bins.back()*bin_factor);
     }
+
+    if (rho_file.empty()) {
+        hf_bins.pop_back(); hf_bins.pop_back();
+    }
     
     hf_bins.push_back(10000);
 
@@ -325,16 +329,6 @@ int populate(char const* config, char const* selections, char const* output) {
     }
 
     std::cout << "Bin: Events" << std::endl;
-
-    for (size_t i = 0; i < hf_bins.size() - 1; ++i) {
-        if (hf_map[i].size() == 0) {
-            hf_bins.pop_back();
-        }
-    }
-
-    hf_bins.back() = 10000;
-    delete ihfm;
-    ihfm = new interval(hf_bins);
 
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) {
         std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
