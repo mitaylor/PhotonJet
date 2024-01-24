@@ -99,7 +99,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
     zip([&](auto const& label, auto& min, auto& max) {
-        std::cout << label << std::endl;
+        std::cout << scan << "_" << label << std::endl;
 
         auto name = "raw_"s + scan + "_"s + label;
         auto hist = new history<TH1F>(f, name); 
@@ -155,7 +155,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 c2->add((*hist_reco)[i], "reco");
                 c2->stack((*hist_sub)[i], "sub");
 
-                std::cout << ( (*hist_reco)[i]->Integral() - (*hist_sub)[i]->Integral() ) / (*hist_mix)[i]->Integral();
+                std::cout << ( (*hist_reco)[i]->Integral() - (*hist_sub)[i]->Integral() ) / (*hist_mix)[i]->Integral() << std::endl;
             }
 
             hb->sketch();
