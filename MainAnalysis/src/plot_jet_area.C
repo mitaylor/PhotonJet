@@ -59,8 +59,8 @@ int combine_populate(char const* config, char const* selections, char const* out
     auto mix_jet40 = new history<TH1F>(f, "raw_mix_jet40"s);
     auto mix_jet50 = new history<TH1F>(f, "raw_mix_jet50"s);
 
-    auto signal = new TH2F("signal", "Fractional Jet Area: Raw", "", 4, 0, 4, 6, 0, 6);
-    auto mixed = new TH2F("signal", "Fractional Jet Area: Mixed", "", 4, 0, 4, 6, 0, 6);
+    auto signal = new TH2F("signal", "Fractional Jet Area: Raw", 4, 0, 4, 6, 0, 6);
+    auto mixed = new TH2F("signal", "Fractional Jet Area: Mixed", 4, 0, 4, 6, 0, 6);
 
     for (int i = 0; i < 4; ++i) {
         signal.SetBinContent(i + 1, 1, jet20->GetBinContent(1));
