@@ -30,13 +30,17 @@ int combine_populate(char const* config, char const* selections, char const* out
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
-    auto group = conf->get<std::string>("group");
-    auto labels = conf->get<std::vector<std::string>>("labels");
+
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
 
     auto sel = new configurer(selections);
 
-    auto set = sel->get<std::string>("set");
+    // auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
+
+    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
+    auto mpthf = new multival(dpt, dhf);
 
     /* load input */
     TFile* f = new TFile((base + input).data(), "read");
@@ -63,19 +67,21 @@ int combine_populate(char const* config, char const* selections, char const* out
     auto mixed = new TH2F("signal", "Fractional Jet Area: Mixed", 4, 0, 4, 6, 0, 6);
 
     for (int i = 0; i < 4; ++i) {
-        signal->SetBinContent(i + 1, 1, (*jet20)[i]->GetBinContent(1));
-        signal->SetBinContent(i + 1, 2, (*jet25)[i]->GetBinContent(1));
-        signal->SetBinContent(i + 1, 3, (*jet30)[i]->GetBinContent(1));
-        signal->SetBinContent(i + 1, 4, (*jet35)[i]->GetBinContent(1));
-        signal->SetBinContent(i + 1, 5, (*jet40)[i]->GetBinContent(1));
-        signal->SetBinContent(i + 1, 6, (*jet50)[i]->GetBinContent(1));
+        auto index = mpthf->index_for(x{0, i})
 
-        mixed->SetBinContent(i + 1, 1, (*mix_jet20)[i]->GetBinContent(1));
-        mixed->SetBinContent(i + 1, 2, (*mix_jet25)[i]->GetBinContent(1));
-        mixed->SetBinContent(i + 1, 3, (*mix_jet30)[i]->GetBinContent(1));
-        mixed->SetBinContent(i + 1, 4, (*mix_jet35)[i]->GetBinContent(1));
-        mixed->SetBinContent(i + 1, 5, (*mix_jet40)[i]->GetBinContent(1));
-        mixed->SetBinContent(i + 1, 6, (*mix_jet50)[i]->GetBinContent(1));
+        signal->SetBinContent(i + 1, 1, (*jet20)[index]->GetBinContent(1));
+        signal->SetBinContent(i + 1, 2, (*jet25)[index]->GetBinContent(1));
+        signal->SetBinContent(i + 1, 3, (*jet30)[index]->GetBinContent(1));
+        signal->SetBinContent(i + 1, 4, (*jet35)[index]->GetBinContent(1));
+        signal->SetBinContent(i + 1, 5, (*jet40)[index]->GetBinContent(1));
+        signal->SetBinContent(i + 1, 6, (*jet50)[index]->GetBinContent(1));
+
+        mixed->SetBinContent(i + 1, 1, (*mix_jet20)[index]->GetBinContent(1));
+        mixed->SetBinContent(i + 1, 2, (*mix_jet25)[index]->GetBinContent(1));
+        mixed->SetBinContent(i + 1, 3, (*mix_jet30)[index]->GetBinContent(1));
+        mixed->SetBinContent(i + 1, 4, (*mix_jet35)[index]->GetBinContent(1));
+        mixed->SetBinContent(i + 1, 5, (*mix_jet40)[index]->GetBinContent(1));
+        mixed->SetBinContent(i + 1, 6, (*mix_jet50)[index]->GetBinContent(1));
     }
 
     signal->Write();
