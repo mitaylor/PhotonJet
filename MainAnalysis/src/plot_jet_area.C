@@ -67,7 +67,7 @@ int combine_populate(char const* config, char const* selections, char const* out
     auto mixed = new TH2F("signal", "Fractional Jet Area: Mixed", 4, 0, 4, 6, 0, 6);
 
     for (int i = 0; i < 4; ++i) {
-        auto index = mpthf->index_for(x{0, i})
+        auto index = mpthf->index_for(x{0, i});
 
         signal->SetBinContent(i + 1, 1, (*jet20)[index]->GetBinContent(1));
         signal->SetBinContent(i + 1, 2, (*jet25)[index]->GetBinContent(1));
