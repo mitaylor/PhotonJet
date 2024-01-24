@@ -67,7 +67,6 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
         if (exclude && in_jet_failure_region(pjt, j)) { continue; }
 
-        auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
         auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
 
@@ -122,19 +121,14 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t
         auto jet_pt = pjt[j]["jet_pt"];
         auto jet_eta = pjt[j]["jet_eta"];
         auto jet_phi = pjt[j]["jet_phi"];
-        auto jet_wta_eta = pjt[j]["jet_wta_eta"];
-        auto jet_wta_phi = pjt[j]["jet_wta_phi"];
 
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
 
-        auto jet_dr = std::sqrt(dr2(jet_eta, jet_wta_eta, jet_phi, jet_wta_phi));
         auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
         auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
 
         if (photon_jet_dr < 0.4) { continue; }
         if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
-
-        auto drjpt_x = mdrjpt->index_for(v{jet_dr, jet_pt});
 
         /* do acceptance weighting */
         double cor = 1;
