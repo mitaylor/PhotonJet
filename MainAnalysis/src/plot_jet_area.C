@@ -121,6 +121,9 @@ int combine_populate(char const* config, char const* selections, char const* out
     mixed->GetYaxis()->SetBinLabel(5, "> 40 GeV");
     mixed->GetYaxis()->SetBinLabel(6, "> 50 GeV");
 
+    signal->GetZaxis()->SetLabelSize(0.35);
+    mixed->GetZaxis()->SetLabelSize(0.35);
+
     auto hb = new pencil();
 
     gStyle->SetPaintTextFormat(".2f");
