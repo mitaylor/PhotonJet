@@ -580,14 +580,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     delete cdr_merge; delete cpt_merge;
     delete ppt;
 
-    if (!rho_file.empty()) {
-        delete frho; delete rho_weighting; delete rho_weighting_merge;
-    }
-
-    if (!acc_file.empty()) {
-        delete fa; delete acceptance; delete total;
-    }
-
     delete JERSF; delete JEU;
 
     return 0;
