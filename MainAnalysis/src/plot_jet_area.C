@@ -126,7 +126,7 @@ int combine_populate(char const* config, char const* selections, char const* out
 
     auto hb = new pencil();
 
-    gStyle->SetPaintTextFormat(".2f");
+    gStyle->SetPaintTextFormat(".3f");
 
     auto c1 = new paper("jet_area_signal_"s + tag, hb);
     apply_style(c1, "", "");
