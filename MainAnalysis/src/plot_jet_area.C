@@ -38,7 +38,6 @@ int combine_populate(char const* config, char const* selections, char const* out
 
     auto sel = new configurer(selections);
 
-    // auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
@@ -92,12 +91,12 @@ int combine_populate(char const* config, char const* selections, char const* out
 
     auto hb = new pencil();
 
-    auto c1 = new paper(set + "_jet_area_signal"s, hb);
+    auto c1 = new paper("jet_area_signal_"s + tag, hb);
     apply_style(c1, "", "");
     c1->add(signal);
     c1->adjust(signal, "colz", "");
 
-    auto c2 = new paper(set + "_jet_area_mixed"s, hb);
+    auto c2 = new paper("jet_area_mixed"s + tag, hb);
     apply_style(c2, "", "");
     c2->add(mixed);
     c2->adjust(mixed, "colz", "");
