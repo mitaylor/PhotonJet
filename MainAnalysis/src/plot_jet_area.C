@@ -33,6 +33,7 @@ int combine_populate(char const* config, char const* selections, char const* out
     auto conf = new configurer(config);
 
     auto input = conf->get<std::string>("input");
+    auto tag = conf->get<std::string>("tag");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
