@@ -90,6 +90,12 @@ int combine_populate(char const* config, char const* selections, char const* out
     signal->Write();
     mixed->Write();
 
+    signal->GetZaxis()->SetMinimum(0);
+    signal->GetZaxis()->SetMaximum(0.15);
+
+    mixed->GetZaxis()->SetMinimum(0);
+    mixed->GetZaxis()->SetMaximum(0.15);
+
     auto hb = new pencil();
 
     auto c1 = new paper("jet_area_signal_"s + tag, hb);
@@ -97,7 +103,7 @@ int combine_populate(char const* config, char const* selections, char const* out
     c1->add(signal);
     c1->adjust(signal, "colz", "");
 
-    auto c2 = new paper("jet_area_mixed"s + tag, hb);
+    auto c2 = new paper("jet_area_mixed_"s + tag, hb);
     apply_style(c2, "", "");
     c2->add(mixed);
     c2->adjust(mixed, "colz", "");
