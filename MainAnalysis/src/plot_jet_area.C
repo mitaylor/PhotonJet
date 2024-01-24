@@ -101,12 +101,12 @@ int combine_populate(char const* config, char const* selections, char const* out
     auto c1 = new paper("jet_area_signal_"s + tag, hb);
     apply_style(c1, "", "");
     c1->add(signal);
-    c1->adjust(signal, "colz", "");
+    c1->adjust(signal, "text colz", "");
 
     auto c2 = new paper("jet_area_mixed_"s + tag, hb);
     apply_style(c2, "", "");
     c2->add(mixed);
-    c2->adjust(mixed, "colz", "");
+    c2->adjust(mixed, "text colz", "");
 
     hb->sketch();
 
