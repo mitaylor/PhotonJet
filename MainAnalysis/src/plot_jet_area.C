@@ -102,6 +102,25 @@ int combine_populate(char const* config, char const* selections, char const* out
     signal->GetXaxis()->SetBinLabel(3, "10-30%");
     signal->GetXaxis()->SetBinLabel(4, "0-10%");
 
+    mixed->GetXaxis()->SetBinLabel(1, "50-90%");
+    mixed->GetXaxis()->SetBinLabel(2, "30-50%");
+    mixed->GetXaxis()->SetBinLabel(3, "10-30%");
+    mixed->GetXaxis()->SetBinLabel(4, "0-10%");
+
+    signal->GetYaxis()->SetBinLabel(1, "Jet pT > 20 GeV");
+    signal->GetYaxis()->SetBinLabel(2, "Jet pT > 25 GeV");
+    signal->GetYaxis()->SetBinLabel(3, "Jet pT > 30 GeV");
+    signal->GetYaxis()->SetBinLabel(4, "Jet pT > 35 GeV");
+    signal->GetYaxis()->SetBinLabel(5, "Jet pT > 40 GeV");
+    signal->GetYaxis()->SetBinLabel(6, "Jet pT > 50 GeV");
+
+    mixed->GetYaxis()->SetBinLabel(1, "Jet pT > 20 GeV");
+    mixed->GetYaxis()->SetBinLabel(2, "Jet pT > 25 GeV");
+    mixed->GetYaxis()->SetBinLabel(3, "Jet pT > 30 GeV");
+    mixed->GetYaxis()->SetBinLabel(4, "Jet pT > 35 GeV");
+    mixed->GetYaxis()->SetBinLabel(5, "Jet pT > 40 GeV");
+    mixed->GetYaxis()->SetBinLabel(6, "Jet pT > 50 GeV");
+
     auto hb = new pencil();
 
     gStyle->SetPaintTextFormat(".2f");
