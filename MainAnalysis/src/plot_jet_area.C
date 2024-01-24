@@ -90,11 +90,11 @@ int combine_populate(char const* config, char const* selections, char const* out
     signal->Write();
     mixed->Write();
 
-    signal->GetZaxis()->SetMinimum(0);
-    signal->GetZaxis()->SetMaximum(0.15);
+    signal->SetMinimum(0);
+    signal->SetMaximum(0.15);
 
-    mixed->GetZaxis()->SetMinimum(0);
-    mixed->GetZaxis()->SetMaximum(0.15);
+    mixed->SetMinimum(0);
+    mixed->SetMaximum(0.15);
 
     auto hb = new pencil();
 
