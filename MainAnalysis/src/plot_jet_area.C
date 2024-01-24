@@ -81,6 +81,8 @@ int combine_populate(char const* config, char const* selections, char const* out
     signal->Write();
     mixed->Write();
 
+    fout->Close();
+
     return 0;
 }
 
