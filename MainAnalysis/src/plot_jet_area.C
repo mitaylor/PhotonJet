@@ -20,6 +20,7 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TRandom3.h"
+#include "TStyle.h"
 
 #include <memory>
 #include <string>
@@ -96,7 +97,14 @@ int combine_populate(char const* config, char const* selections, char const* out
     mixed->SetMinimum(0);
     mixed->SetMaximum(0.15);
 
+    signal->GetXaxis()->SetBinLabel(1, "50-90%");
+    signal->GetXaxis()->SetBinLabel(2, "30-50%");
+    signal->GetXaxis()->SetBinLabel(3, "10-30%");
+    signal->GetXaxis()->SetBinLabel(4, "0-10%");
+
     auto hb = new pencil();
+
+    gStyle->SetPaintTextFormat(".2f");
 
     auto c1 = new paper("jet_area_signal_"s + tag, hb);
     apply_style(c1, "", "");
