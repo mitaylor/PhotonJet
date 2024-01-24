@@ -73,10 +73,10 @@ int combine_populate(char const* config, char const* selections, char const* out
     for (auto const& label : labels) {
         std::cout << label << std::endl;
 
-        auto name = group + "_"s + label;
+        auto name = group + "_"s + label; std::cout << name << std::endl;
         auto hist = new history<TH1F>(files[0], name); 
 
-        auto name_mix = group + "_mix_"s + label;
+        auto name_mix = group + "_mix_"s + label; std::cout << name_mix << std::endl;
         auto hist_mix = new history<TH1F>(files[0], name_mix);
 
         hist->multiply(*nevt_0);
