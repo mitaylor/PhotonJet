@@ -92,12 +92,12 @@ int combine_populate(char const* config, char const* selections, char const* out
 
     auto hb = new pencil();
 
-    c1 = new paper(set + "_jet_area_signal"s, hb);
+    auto c1 = new paper(set + "_jet_area_signal"s, hb);
     apply_style(c1, "", "");
     c1->add(signal);
     c1->adjust(signal, "colz", "");
 
-    c2 = new paper(set + "_jet_area_mixed"s, hb);
+    auto c2 = new paper(set + "_jet_area_mixed"s, hb);
     apply_style(c2, "", "");
     c2->add(mixed);
     c2->adjust(mixed, "colz", "");
