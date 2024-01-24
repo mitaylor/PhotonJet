@@ -45,19 +45,19 @@ int combine_populate(char const* config, char const* selections, char const* out
     TFile* fout = new TFile(output, "recreate");
 
     /* combine nevt information */
-    auto jet20 = new history<TH1F>(f, "raw_jet20"s);
-    auto jet25 = new history<TH1F>(f, "raw_jet25"s);
-    auto jet30 = new history<TH1F>(f, "raw_jet30"s);
-    auto jet35 = new history<TH1F>(f, "raw_jet35"s);
-    auto jet40 = new history<TH1F>(f, "raw_jet40"s);
-    auto jet50 = new history<TH1F>(f, "raw_jet50"s);
+    auto jet20 = new history<TH1F>(f, "raw_njet20"s);
+    auto jet25 = new history<TH1F>(f, "raw_njet25"s);
+    auto jet30 = new history<TH1F>(f, "raw_njet30"s);
+    auto jet35 = new history<TH1F>(f, "raw_njet35"s);
+    auto jet40 = new history<TH1F>(f, "raw_njet40"s);
+    auto jet50 = new history<TH1F>(f, "raw_njet50"s);
 
-    auto mix_jet20 = new history<TH1F>(f, "raw_mix_jet20"s);
-    auto mix_jet25 = new history<TH1F>(f, "raw_mix_jet25"s);
-    auto mix_jet30 = new history<TH1F>(f, "raw_mix_jet30"s);
-    auto mix_jet35 = new history<TH1F>(f, "raw_mix_jet35"s);
-    auto mix_jet40 = new history<TH1F>(f, "raw_mix_jet40"s);
-    auto mix_jet50 = new history<TH1F>(f, "raw_mix_jet50"s);
+    auto mix_jet20 = new history<TH1F>(f, "raw_mix_njet20"s);
+    auto mix_jet25 = new history<TH1F>(f, "raw_mix_njet25"s);
+    auto mix_jet30 = new history<TH1F>(f, "raw_mix_njet30"s);
+    auto mix_jet35 = new history<TH1F>(f, "raw_mix_njet35"s);
+    auto mix_jet40 = new history<TH1F>(f, "raw_mix_njet40"s);
+    auto mix_jet50 = new history<TH1F>(f, "raw_mix_njet50"s);
 
     auto signal = new TH2F("signal", "Fractional Jet Area: Raw", 4, 0, 4, 6, 0, 6);
     auto mixed = new TH2F("signal", "Fractional Jet Area: Mixed", 4, 0, 4, 6, 0, 6);
