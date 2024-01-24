@@ -112,7 +112,11 @@ class history {
     history& operator=(history const&) = delete;
     history(history&&) = default;
     history& operator=(history&&) = default;
-    ~history() = default;
+
+    ~history() {
+        for (int64_t i = 0; i < _size; ++i)
+            if (objects[i] != nullptr) delete objects[i];;
+    }
 
     template <template <typename...> class T, typename U>
     typename std::enable_if<std::is_integral<U>::value, int64_t>::type
@@ -330,6 +334,7 @@ class history {
 
         auto label = new TNamed((full + _tag).data(), stub(_shape).data());
         label->Write("", TObject::kOverwrite);
+        delete label;
     }
 
     void save() const { save(""); }

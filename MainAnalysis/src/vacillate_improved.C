@@ -546,6 +546,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 }
             }
         }
+
+        f->Close();
+        delete f; delete p;
     }
    
     /* save output */
@@ -566,6 +569,26 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
         ppt->save(tag);
     });
+
+    delete conf; delete sel; 
+    delete incl; delete ihf; delete idphi; delete ippt; delete mcdr; delete mcpt; delete mppt;
+    delete mr; delete mg;
+
+    delete n; delete r; delete g; delete c;
+    delete cdr; delete cpt;
+    delete n_merge; delete r_merge; delete g_merge; delete c_merge;
+    delete cdr_merge; delete cpt_merge;
+    delete ppt;
+
+    if (!rho_file.empty()) {
+        delete frho; delete rho_weighting; delete rho_weighting_merge;
+    }
+
+    if (!acc_file.empty()) {
+        delete fa; delete acceptance; delete total;
+    }
+
+    delete JERSF; delete JEU;
 
     return 0;
 }

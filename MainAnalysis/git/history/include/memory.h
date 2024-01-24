@@ -32,7 +32,8 @@ class memory : public history<H> {
     memory& operator=(memory const&) = delete;
     memory(memory&&) = delete;
     memory& operator=(memory&&) = delete;
-    ~memory() = default;
+    
+    ~memory() {}
 
     using history<H>::index_for;
 
