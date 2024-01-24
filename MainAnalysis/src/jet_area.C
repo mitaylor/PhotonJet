@@ -85,22 +85,22 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
 
         zip([&](auto const& index, auto const& weight) {
             if (jet_pt > 20) {
-                (*njet20)[pthf_x]->Fill(1, weight*cor);
+                (*njet20)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 25) {
-                (*njet25)[pthf_x]->Fill(1, weight*cor);
+                (*njet25)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 30) {
-                (*njet30)[pthf_x]->Fill(1, weight*cor);
+                (*njet30)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 35) {
-                (*njet35)[pthf_x]->Fill(1, weight*cor);
+                (*njet35)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 40) {
-                (*njet40)[pthf_x]->Fill(1, weight*cor);
+                (*njet40)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 50) {
-                (*njet50)[pthf_x]->Fill(1, weight*cor);
+                (*njet50)[index]->Fill(1, weight*cor);
             }
         }, pthf_x, weights);
     }
@@ -142,22 +142,22 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t
 
         zip([&](auto const& index, auto const& weight) {
             if (jet_pt > 20) {
-                (*njet20)[pthf_x]->Fill(1, weight*cor);
+                (*njet20)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 25) {
-                (*njet25)[pthf_x]->Fill(1, weight*cor);
+                (*njet25)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 30) {
-                (*njet30)[pthf_x]->Fill(1, weight*cor);
+                (*njet30)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 35) {
-                (*njet35)[pthf_x]->Fill(1, weight*cor);
+                (*njet35)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 40) {
-                (*njet40)[pthf_x]->Fill(1, weight*cor);
+                (*njet40)[index]->Fill(1, weight*cor);
             }
             if (jet_pt > 50) {
-                (*njet50)[pthf_x]->Fill(1, weight*cor);
+                (*njet50)[index]->Fill(1, weight*cor);
             }
         }, pthf_x, weights);
     }
