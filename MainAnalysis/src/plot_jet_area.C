@@ -78,8 +78,8 @@ int combine_populate(char const* config, char const* selections, char const* out
         mixed->SetBinContent(i + 1, 6, (*mix_jet50)[i]->GetBinContent(1));
     }
 
-    signal.Write();
-    mixed.Write();
+    signal->Write();
+    mixed->Write();
 
     return 0;
 }
