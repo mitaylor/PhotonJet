@@ -154,6 +154,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
                 c1->stack((*hist_mix)[i], "mix");
                 c2->add((*hist_reco)[i], "reco");
                 c2->stack((*hist_sub)[i], "sub");
+
+                std::cout << ( (*hist_reco)[i]->Integral() - (*hist_sub)[i]->Integral() ) / (*hist_mix)[i]->Integra();
             }
 
             hb->sketch();
