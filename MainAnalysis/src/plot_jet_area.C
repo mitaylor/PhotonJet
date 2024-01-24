@@ -9,6 +9,9 @@
 #include "../git/history/include/history.h"
 #include "../git/history/include/memory.h"
 
+#include "../git/paper-and-pencil/include/paper.h"
+#include "../git/paper-and-pencil/include/pencil.h"
+
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
@@ -86,6 +89,23 @@ int combine_populate(char const* config, char const* selections, char const* out
 
     signal->Write();
     mixed->Write();
+
+    auto hb = new pencil();
+
+    c1 = new paper(set + "_jet_area_signal"s, hb);
+    apply_style(c1, "", "");
+    c1->add(signal);
+    c1->adjust(signal, "colz", "");
+
+    c2 = new paper(set + "_jet_area_mixed"s, hb);
+    apply_style(c2, "", "");
+    c2->add(mixed);
+    c2->adjust(mixed, "colz", "");
+
+    hb->sketch();
+
+    c1->draw("pdf");
+    c2->draw("pdf");
 
     fout->Close();
 
