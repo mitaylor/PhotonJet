@@ -12,7 +12,7 @@ rm files.txt
 rm index.txt
 
 for i in ${!files[@]}; do
-    ../bin/mebs_inputs ${files[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_data_mebs_${index[i]}.root
+    bin/mebs_inputs ${files[i]} /data/submit/mitay/photons/condor/regulate_aa_mb_data_mebs_${index[i]}.root
 done
 
 # ls /data/submit/mitay/photons/regulate_aa_mb_hydjet.root > files.txt
