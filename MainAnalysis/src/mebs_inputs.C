@@ -33,7 +33,7 @@ int mebs_inputs(char const* input, char const* output) {
     /* load input */
     TFile* fin = new TFile(input, "read");
     TTree* tin = (TTree*)fin->Get("pj");
-    auto pjt = new pjtree(false, false, true, tin, { 1, 1, 1, 1, 1, 0, 1, 0, 0} );
+    auto pjt = new pjtree(false, false, true, tin, { 1, 0, 1, 0, 1, 0, 0, 1, 0} );
     int64_t nentries = static_cast<int64_t>(tin->GetEntries());
 
     std::cout << input << std::endl;
