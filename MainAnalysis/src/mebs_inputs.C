@@ -36,6 +36,8 @@ int mebs_inputs(char const* input, char const* output) {
     auto pjt = new pjtree(false, false, true, tin, { 1, 1, 1, 1, 1, 0, 1, 0, 0} );
     int64_t nentries = static_cast<int64_t>(tin->GetEntries());
 
+    std::cout << input << std::endl;
+
     /* create output tree */
     TFile* fout = new TFile(output, "recreate");
     TTree* tout = new TTree("pj", "photon-jet");
