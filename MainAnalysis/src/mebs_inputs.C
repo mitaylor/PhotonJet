@@ -44,12 +44,12 @@ int mebs_inputs(char const* input, char const* output) {
     float pfSum;
     float hiHF;
     float nref;
-    vector<float> jtptCor;
-    vector<float> jtpt;
-    vector<float> jteta;
-    vector<float> jtphi;
-    vector<float> WTAeta;
-    vector<float> WTAphi;
+    std::vector<float> jtptCor;
+    std::vector<float> jtpt;
+    std::vector<float> jteta;
+    std::vector<float> jtphi;
+    std::vector<float> WTAeta;
+    std::vector<float> WTAphi;
 
     tout->Branch("vz", &vz);
     tout->Branch("pfSum", &pfSum);
