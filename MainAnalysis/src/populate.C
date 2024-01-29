@@ -299,7 +299,7 @@ int populate(char const* config, char const* selections, char const* output) {
         std::vector<float> *WTAphi;
 
         tm->SetBranchAddress("vz", &vz);
-        tm->SetBranchAddress("hiHF", &hiHF);
+        tm->SetBranchAddress("pfSum", &pfSum);
         tm->SetBranchAddress("nref", &nref);
         tm->SetBranchAddress("jtptCor", &jtptCor);
         tm->SetBranchAddress("jtpt", &jtpt);
