@@ -289,7 +289,6 @@ int populate(char const* config, char const* selections, char const* output) {
         // variables used for mixing
         float vz;
         float hiHF;
-        float nref;
 
         std::vector<float> *jtptCor = 0;
         std::vector<float> *jtpt = 0;
