@@ -314,7 +314,7 @@ int populate(char const* config, char const* selections, char const* output) {
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
-
+            std::cout << vz << " " << hiHF << " " << nref << std::endl;
             auto hfm_x = ihfm->index_for(hiHF);
 
             if (std::abs(vz) > 15) { continue; }
