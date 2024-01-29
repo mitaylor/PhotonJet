@@ -300,7 +300,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
         tm->SetBranchAddress("vz", &vz);
         tm->SetBranchAddress("pfSum", &pfSum);
-        tm->SetBranchAddress("nref", &nref);
         tm->SetBranchAddress("jtptCor", &jtptCor);
         tm->SetBranchAddress("jtpt", &jtpt);
         tm->SetBranchAddress("jteta", &jteta);
@@ -318,6 +317,7 @@ int populate(char const* config, char const* selections, char const* output) {
             if (std::abs(vz) > 15) { continue; }
         
             auto hfm_x = ihfm->index_for(pfSum);
+            int64_t nref = jtpt->size();
         
             std::vector<std::map<std::string, float>> jet_vector;
 

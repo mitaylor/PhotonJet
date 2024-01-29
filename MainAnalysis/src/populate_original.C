@@ -300,7 +300,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
         tm->SetBranchAddress("vz", &vz);
         tm->SetBranchAddress("hiHF", &hiHF);
-        tm->SetBranchAddress("nref", &nref);
         tm->SetBranchAddress("jtptCor", &jtptCor);
         tm->SetBranchAddress("jtpt", &jtpt);
         tm->SetBranchAddress("jteta", &jteta);
@@ -314,8 +313,9 @@ int populate(char const* config, char const* selections, char const* output) {
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
-            std::cout << vz << " " << hiHF << " " << nref << " " << jtptCor->size() << std::endl;
+
             auto hfm_x = ihfm->index_for(hiHF);
+            int64_t nref = jtpt->size();
 
             if (std::abs(vz) > 15) { continue; }
             if (rho_file.empty() && hiHF <= dhf.front()) { continue; }
