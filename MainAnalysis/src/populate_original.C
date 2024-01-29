@@ -281,11 +281,33 @@ int populate(char const* config, char const* selections, char const* output) {
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
 
     while (tentries < 952000 && mix > 0) {
+        // read in variables
         int index_m = rng->Integer(mb.size());
         TFile* fm = new TFile(mb[index_m].data(), "read");
-        TTree* tm = (TTree*)fm->Get("pj");
-        auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
-        
+        TTree* tm = (TTree*) fm->Get("pj");
+
+        // variables used for mixing
+        float vz;
+        float hiHF;
+        float nref;
+
+        std::vector<float> jtptCor;
+        std::vector<float> jtpt;
+        std::vector<float> jteta;
+        std::vector<float> jtphi;
+        std::vector<float> WTAeta;
+        std::vector<float> WTAphi;
+
+        tm->SetBranchAddress("vz", &vz);
+        tm->SetBranchAddress("hiHF", &hiHF);
+        tm->SetBranchAddress("nref", &nref);
+        tm->SetBranchAddress("jtptCor", &jtptCor);
+        tm->SetBranchAddress("jtpt", &jtpt);
+        tm->SetBranchAddress("jteta", &jteta);
+        tm->SetBranchAddress("jtphi", &jtphi);
+        tm->SetBranchAddress("WTAeta", &WTAeta);
+        tm->SetBranchAddress("WTAphi", &WTAphi);
+
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
         tentries += mentries;
@@ -293,24 +315,22 @@ int populate(char const* config, char const* selections, char const* output) {
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
 
-            double hf = pjtm->hiHF; 
-            auto hfm_x = ihfm->index_for(hf);
+            auto hfm_x = ihfm->index_for(hiHF);
 
-            if (std::abs(pjtm->vz) > 15) { continue; }
+            if (std::abs(vz) > 15) { continue; }
             if (rho_file.empty() && hf <= dhf.front()) { continue; }
             if (rho_file.empty() && hf >= dhf.back()) { continue; }
         
             std::vector<std::map<std::string, float>> jet_vector;
 
-            for (int64_t j = 0; j < pjtm->nref; ++j) {
-                if (exclude && in_jet_failure_region(pjtm, j)) { continue; }
+            for (int64_t j = 0; j < nref; ++j) {
+                auto jet_pt = (jet_cor) ? jtptCor[j] : jtpt[j];
+                auto jet_eta = jteta[j];
+                auto jet_phi = jtphi[j];
+                auto jet_wta_eta = WTAeta[j];
+                auto jet_wta_phi = WTAphi[j];
 
-                auto jet_pt = (jet_cor) ? (*pjtm->jtptCor)[j] : (*pjtm->jtpt)[j];
-                auto jet_eta = (*pjtm->jteta)[j];
-                auto jet_phi = (*pjtm->jtphi)[j];
-                auto jet_wta_eta = (*pjtm->WTAeta)[j];
-                auto jet_wta_phi = (*pjtm->WTAphi)[j];
-
+                if (exclude && in_jet_failure_region(jet_eta, jet_phi)) { continue; }
                 if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
 
                 std::map<std::string, float> jet_map;
