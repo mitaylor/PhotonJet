@@ -279,9 +279,9 @@ int populate(char const* config, char const* selections, char const* output) {
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
-std::cout << __LINE__ << std::endl;
+
     while (tentries < 952000 && mix > 0) {
-        // read in variables std::cout << __LINE__ << std::endl;
+        // read in variables
         int index_m = rng->Integer(mb.size());
         TFile* fm = new TFile(mb[index_m].data(), "read");
         TTree* tm = (TTree*) fm->Get("pj");
@@ -290,12 +290,12 @@ std::cout << __LINE__ << std::endl;
         float vz;
         float pfSum;
 
-        std::vector<float> *jtptCor;
-        std::vector<float> *jtpt;
-        std::vector<float> *jteta;
-        std::vector<float> *jtphi;
-        std::vector<float> *WTAeta;
-        std::vector<float> *WTAphi;
+        std::vector<float> *jtptCor = 0;
+        std::vector<float> *jtpt = 0;
+        std::vector<float> *jteta = 0;
+        std::vector<float> *jtphi = 0;
+        std::vector<float> *WTAeta = 0;
+        std::vector<float> *WTAphi = 0;
 
         tm->SetBranchAddress("vz", &vz);
         tm->SetBranchAddress("pfSum", &pfSum);
@@ -305,21 +305,21 @@ std::cout << __LINE__ << std::endl;
         tm->SetBranchAddress("jtphi", &jtphi);
         tm->SetBranchAddress("WTAeta", &WTAeta);
         tm->SetBranchAddress("WTAphi", &WTAphi);
-        std::cout << __LINE__ << std::endl;
+
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
         tentries += mentries;
-std::cout << __LINE__ << std::endl; std::cout << tentries << std::endl;
+
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
-std::cout << __LINE__ << std::endl;
+
             if (std::abs(vz) > 15) { continue; }
-        std::cout << __LINE__ << std::endl;
+
             auto hfm_x = ihfm->index_for(pfSum);
             int64_t nref = jtpt->size();
-        std::cout << __LINE__ << std::endl;
+
             std::vector<std::map<std::string, float>> jet_vector;
-std::cout << __LINE__ << std::endl;
+
             for (int64_t j = 0; j < nref; ++j) {
                 auto jet_pt = (jet_cor) ? (*jtptCor)[j] : (*jtpt)[j];
                 auto jet_eta = (*jteta)[j];
