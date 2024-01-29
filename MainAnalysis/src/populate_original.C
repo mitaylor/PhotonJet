@@ -291,12 +291,12 @@ int populate(char const* config, char const* selections, char const* output) {
         float hiHF;
         float nref;
 
-        std::vector<float> *jtptCor;
-        std::vector<float> *jtpt;
-        std::vector<float> *jteta;
-        std::vector<float> *jtphi;
-        std::vector<float> *WTAeta;
-        std::vector<float> *WTAphi;
+        std::vector<float> *jtptCor = 0;
+        std::vector<float> *jtpt = 0;
+        std::vector<float> *jteta = 0;
+        std::vector<float> *jtphi = 0;
+        std::vector<float> *WTAeta = 0;
+        std::vector<float> *WTAphi = 0;
 
         tm->SetBranchAddress("vz", &vz);
         tm->SetBranchAddress("hiHF", &hiHF);
@@ -307,6 +307,8 @@ int populate(char const* config, char const* selections, char const* output) {
         tm->SetBranchAddress("jtphi", &jtphi);
         tm->SetBranchAddress("WTAeta", &WTAeta);
         tm->SetBranchAddress("WTAphi", &WTAphi);
+
+        std::cout << __LINE__ << std::endl;
 
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
