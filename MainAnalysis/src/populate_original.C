@@ -308,15 +308,13 @@ int populate(char const* config, char const* selections, char const* output) {
         tm->SetBranchAddress("WTAeta", &WTAeta);
         tm->SetBranchAddress("WTAphi", &WTAphi);
 
-        std::cout << __LINE__ << std::endl;
-
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
         tentries += mentries;
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
-            std::cout << vz << " " << hiHF << " " << nref << std::endl;
+            std::cout << vz << " " << hiHF << " " << nref << " " << jtptCor->size() << std::endl;
             auto hfm_x = ihfm->index_for(hiHF);
 
             if (std::abs(vz) > 15) { continue; }
