@@ -147,7 +147,7 @@ void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t
 int populate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
-    auto input = conf->get<std::vector<std::string>>("input");std::cout << __LINE__ << std::endl;
+    auto input = conf->get<std::vector<std::string>>("input");
     auto mb = conf->get<std::vector<std::string>>("mb");
     auto mb_sum = conf->get<std::vector<std::string>>("mb_sum");
 
@@ -155,7 +155,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto acc_label_ref = conf->get<std::string>("acc_label_ref");
     auto acc_label_acc = conf->get<std::string>("acc_label_acc");
 
-    auto eff_file = conf->get<std::string>("eff_file");std::cout << __LINE__ << std::endl;
+    auto eff_file = conf->get<std::string>("eff_file");
     auto eff_label = conf->get<std::string>("eff_label");
 
     auto rho_file = conf->get<std::string>("rho_file");
@@ -169,7 +169,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     /* options */
-    auto gen_iso = conf->get<bool>("generator_isolation");std::cout << __LINE__ << std::endl;
+    auto gen_iso = conf->get<bool>("generator_isolation");
     auto ele_rej = conf->get<bool>("electron_rejection");
     auto exclude = conf->get<bool>("exclude");
     auto apply_er = conf->get<bool>("apply_er");
@@ -213,12 +213,12 @@ int populate(char const* config, char const* selections, char const* output) {
     auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
     auto alter_base = conf->get<std::string>("alter_base"); // get offset to paths from the original configuration file
-std::cout << __LINE__ << std::endl;
+
     /* fix sigma eta eta range for background distributions */
     if (tag == "bkg") see_min = 0.012;
     if (tag == "bkg") see_max = 0.02;
 
-    auto jet_cor = heavyion && !no_jes; std::cout << __LINE__ << std::endl;
+    auto jet_cor = heavyion && !no_jes; 
 
     /* prepare histograms */
     auto ipt = new interval(dpt);
@@ -234,7 +234,7 @@ std::cout << __LINE__ << std::endl;
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
     auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
-std::cout << __LINE__ << std::endl;
+
     auto frdr = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";index;", mdrjpt->size(), 0, mdrjpt->size()); };
 
@@ -253,7 +253,7 @@ std::cout << __LINE__ << std::endl;
     auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
     auto mix_pjet_u_dr_jpt = new memory<TH1F>("mix_pjet_u_dr_jpt"s, "", frdr, mpthf);
-std::cout << __LINE__ << std::endl;
+
     /* random number for mb selection */
     auto rng = new TRandom3(0);
 
@@ -275,17 +275,17 @@ std::cout << __LINE__ << std::endl;
                                   84100, 87650, 91400, 95300, 99350, 103600, 108100, 
                                   112800, 117700, 123050, 129600, 160000};
     auto ihfm = new interval(hf_bins);
-std::cout << __LINE__ << std::endl;
+
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
 std::cout << __LINE__ << std::endl;
     while (tentries < 952000 && mix > 0) {
-        // read in variables
+        // read in variables std::cout << __LINE__ << std::endl;
         int index_m = rng->Integer(mb.size());
         TFile* fm = new TFile(mb[index_m].data(), "read");
         TTree* tm = (TTree*) fm->Get("pj");
-        std::cout << __LINE__ << std::endl;
+        
         // variables used for mixing
         float vz;
         float pfSum;
@@ -305,21 +305,21 @@ std::cout << __LINE__ << std::endl;
         tm->SetBranchAddress("jtphi", &jtphi);
         tm->SetBranchAddress("WTAeta", &WTAeta);
         tm->SetBranchAddress("WTAphi", &WTAphi);
-        
+        std::cout << __LINE__ << std::endl;
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
         
         tentries += mentries;
-
+std::cout << __LINE__ << std::endl; std::cout << tentries << std::endl;
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
-
+std::cout << __LINE__ << std::endl;
             if (std::abs(vz) > 15) { continue; }
-        
+        std::cout << __LINE__ << std::endl;
             auto hfm_x = ihfm->index_for(pfSum);
             int64_t nref = jtpt->size();
-        
+        std::cout << __LINE__ << std::endl;
             std::vector<std::map<std::string, float>> jet_vector;
-
+std::cout << __LINE__ << std::endl;
             for (int64_t j = 0; j < nref; ++j) {
                 auto jet_pt = (jet_cor) ? (*jtptCor)[j] : (*jtpt)[j];
                 auto jet_eta = (*jteta)[j];
