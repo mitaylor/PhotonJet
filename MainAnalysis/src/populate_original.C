@@ -318,8 +318,8 @@ int populate(char const* config, char const* selections, char const* output) {
             auto hfm_x = ihfm->index_for(hiHF);
 
             if (std::abs(vz) > 15) { continue; }
-            if (rho_file.empty() && hf <= dhf.front()) { continue; }
-            if (rho_file.empty() && hf >= dhf.back()) { continue; }
+            if (rho_file.empty() && hiHF <= dhf.front()) { continue; }
+            if (rho_file.empty() && hiHF >= dhf.back()) { continue; }
         
             std::vector<std::map<std::string, float>> jet_vector;
 
