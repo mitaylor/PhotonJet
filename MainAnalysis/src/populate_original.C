@@ -291,12 +291,12 @@ int populate(char const* config, char const* selections, char const* output) {
         float hiHF;
         float nref;
 
-        std::vector<float> jtptCor;
-        std::vector<float> jtpt;
-        std::vector<float> jteta;
-        std::vector<float> jtphi;
-        std::vector<float> WTAeta;
-        std::vector<float> WTAphi;
+        std::vector<float> *jtptCor;
+        std::vector<float> *jtpt;
+        std::vector<float> *jteta;
+        std::vector<float> *jtphi;
+        std::vector<float> *WTAeta;
+        std::vector<float> *WTAphi;
 
         tm->SetBranchAddress("vz", &vz);
         tm->SetBranchAddress("hiHF", &hiHF);
@@ -324,11 +324,11 @@ int populate(char const* config, char const* selections, char const* output) {
             std::vector<std::map<std::string, float>> jet_vector;
 
             for (int64_t j = 0; j < nref; ++j) {
-                auto jet_pt = (jet_cor) ? jtptCor[j] : jtpt[j];
-                auto jet_eta = jteta[j];
-                auto jet_phi = jtphi[j];
-                auto jet_wta_eta = WTAeta[j];
-                auto jet_wta_phi = WTAphi[j];
+                auto jet_pt = (jet_cor) ? (*jtptCor)[j] : (*jtpt)[j];
+                auto jet_eta = (*jteta)[j];
+                auto jet_phi = (*jtphi)[j];
+                auto jet_wta_eta = (*WTAeta)[j];
+                auto jet_wta_phi = (*WTAphi)[j];
 
                 if (exclude && in_jet_failure_region(jet_eta, jet_phi)) { continue; }
                 if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
