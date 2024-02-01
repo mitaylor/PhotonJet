@@ -14,8 +14,8 @@ rm -f *
 cp ../../../configs/populate/parallel/${config} .
 cp ../../../configs/analysis/${analysis}/analysis_aa.conf .
 
-ls ${input}* > inputs
-ls ${mb}* > mbs
+ls ${input}*.root > inputs
+ls ${mb}*.root > mbs
 
 awk -F "[_.]" '{print $(NF-1)}' inputs > indices
 
