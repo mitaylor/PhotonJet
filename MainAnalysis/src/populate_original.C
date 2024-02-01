@@ -279,13 +279,13 @@ int populate(char const* config, char const* selections, char const* output) {
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
-
-    while (tentries < 952000 && mix > 0) {
+    
+    if (mix > 0) {
         // read in variables
         int index_m = rng->Integer(mb.size());
         TFile* fm = new TFile(mb[index_m].data(), "read");
         TTree* tm = (TTree*) fm->Get("pj");
-        
+
         // variables used for mixing
         float vz;
         float hiHF;
