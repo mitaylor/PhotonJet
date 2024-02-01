@@ -1,5 +1,5 @@
 Universe                = vanilla
-Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/RunPopulate.sh
+Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/populate/data/RunPopulate.sh
 Should_Transfer_Files   = YES
 When_To_Transfer_Output = ON_EXIT
 +MaxRuntime             = 14400
@@ -8,12 +8,12 @@ When_To_Transfer_Output = ON_EXIT
 Max_Retries             = 5
 When_To_Transfer_Output = ON_EXIT
 Transfer_Output_Files   = __MASTER___$(index).root
-Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/photons/condor/__MASTER___$(index).root"
+Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/populate/arc/__ANALYSIS__/__MASTER___original_$(index).root"
 
-Transfer_Input_Files    = __CONFIG__,../regulate,../data,../x509up_u168456
-Arguments               = __CONFIG__ __MASTER___$(index).root $(file)
+Transfer_Input_Files    = __CONFIG__,../populate,../data,../x509up_u168456
+Arguments               = __CONFIG__ analysis_aa.conf __MASTER___$(index).root $(input) $(mb)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err
 Log                     = __MASTER__.$(ClusterId).$(index).log
 
-Queue index,file from __MASTER__.list
+Queue index,input,mb from __MASTER__.list
