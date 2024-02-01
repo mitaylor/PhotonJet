@@ -11,9 +11,9 @@ Transfer_Output_Files   = __MASTER___$(index).root
 Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/populate/arc/__ANALYSIS__/__MASTER___original_$(index).root"
 
 Transfer_Input_Files    = __CONFIG__,../populate_original,../data/__ANALYSIS__,../x509up_u168456
-Arguments               = __CONFIG__ analysis_aa.conf __MASTER___$(index).root $(input) $(mb)
+Arguments               = __CONFIG__ analysis_aa.conf __MASTER___$(index).root $(signal) $(mb)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err
 Log                     = __MASTER__.$(ClusterId).$(index).log
 
-Queue index,input,mb from __MASTER__.list
+Queue index,signal,mb from __MASTER__.list

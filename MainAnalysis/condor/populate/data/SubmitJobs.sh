@@ -33,7 +33,7 @@ rm indices
 touch ${tag}.list
 
 for i in ${!inputs[@]}; do
-    echo "${indices[i]}, \\\"${inputs[i]}\\\", \\\"${mbs[i]}\\\"" >> ${tag}.list
+    echo "${indices[i]}, ${inputs[i]}, ${mbs[i]}" >> ${tag}.list
 done
 
 cat ../SubmitCondor.condor | sed "s/__MASTER__/${tag}/g" > SubmitCondor.condor
