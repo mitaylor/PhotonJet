@@ -174,6 +174,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
     auto apply_es = conf->get<bool>("apply_es");
+    auto condor = conf->get<bool>("condor");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
@@ -358,7 +359,8 @@ int populate(char const* config, char const* selections, char const* output) {
     history<TH1F>* efficiency = nullptr;
 
     if (!eff_file.empty()) {
-        fe = new TFile((alter_base + base + eff_file).data(), "read");
+        if (!condor) fe = new TFile((alter_base + base + eff_file).data(), "read");
+        else         fe = new TFile(eff_file.data(), "read");
         efficiency = new history<TH1F>(fe, eff_label);
     }
 
@@ -367,7 +369,8 @@ int populate(char const* config, char const* selections, char const* output) {
     history<TH1F>* rho_weighting = nullptr;
 
     if (!rho_file.empty()) {
-        fr = new TFile((alter_base + base + rho_file).data(), "read");
+        if (!condor) fr = new TFile((alter_base + base + rho_file).data(), "read");
+        else         fr = new TFile(rho_file.data(), "read");
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
