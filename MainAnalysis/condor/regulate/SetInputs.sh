@@ -15,17 +15,17 @@
 ##############################################################################
 ##############################################################################
 
-# regulate_aa_zee
-./SubmitJobs.sh \
-"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/HINPbPbSpring21MiniAOD-mva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/20230802PbPbZee/230802_171856/" \
-"regulate_aa_zee.conf" \
-"regulate_aa_zee"
+# # regulate_aa_zee
+# ./SubmitJobs.sh \
+# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/HINPbPbSpring21MiniAOD-mva98_112X_upgrade2018_realistic_HI_v9-v1/MINIAODSIM/DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/20230802PbPbZee/230802_171856/" \
+# "regulate_aa_zee.conf" \
+# "regulate_aa_zee"
 
-# regulate_pp_zee
-./SubmitJobs.sh \
-"/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV-v2/AODSIM/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/20230802PPZee/230802_171642/" \
-"regulate_pp_zee.conf" \
-"regulate_pp_zee"
+# # regulate_pp_zee
+# ./SubmitJobs.sh \
+# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/RunIIpp5Spring18DR-94X_mc2017_realistic_forppRef5TeV-v2/AODSIM/DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8/20230802PPZee/230802_171642/" \
+# "regulate_pp_zee.conf" \
+# "regulate_pp_zee"
 
 ##############################################################################
 ##############################################################################
@@ -540,47 +540,47 @@
 ##############################################################################
 ##############################################################################
 
-# # regulate_aa_qcd_extra_15 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v1/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F15/221209_192400/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_15_F"
+# regulate_aa_qcd_extra_15 filtered weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v1/AODSIM/QCDPhoton_pThat-15_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F15/221209_192400/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_15_F"
 
-# # regulate_aa_qcd_extra_30 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v1/AODSIM/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F30/221209_192253/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_30_F"
+# regulate_aa_qcd_extra_30 filtered weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v1/AODSIM/QCDPhoton_pThat-30_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F30/221209_192253/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_30_F"
 
-# # regulate_aa_qcd_extra_50 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F50/221209_192138/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_50_F"
+# regulate_aa_qcd_extra_50 filtered weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-50_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F50/221209_192138/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_50_F"
 
-# # regulate_aa_qcd_extra_80 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F80/221209_192026/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_80_F"
+# regulate_aa_qcd_extra_80 filtered weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-80_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F80/221209_192026/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_80_F"
 
-# # regulate_aa_qcd_extra_120 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F120/221209_191940/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_120_F"
+# regulate_aa_qcd_extra_120 filtered weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F120/221209_191940/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_120_F"
 
-# # regulate_aa_qcd_extra_120 filtered remainder weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMCExtra30F120/230109_194605/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_120_F_R"
+# regulate_aa_qcd_extra_120 filtered remainder weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-120_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20230109PbPbMCExtra30F120/230109_194605/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_120_F_R"
 
-# # regulate_aa_qcd_extra_170 filtered weighted
-# ./SubmitJobs.sh \
-# "/mnt/T2_US_MIT/hadoop/cms/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F170/221209_191824/" \
-# "regulate_aa_qcd_extra.conf" \
-# "regulate_aa_qcd_extra_weighted_170_F"
+# regulate_aa_qcd_extra_170 filtered weighted
+./SubmitJobs.sh \
+"/store/user/mitaylor/PhotonJet/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/HINPbPbAutumn18DR-FixL1CaloGT_103X_upgrade2018_realistic_HI_v13_ext1-v2/AODSIM/QCDPhoton_pThat-170_Filter30GeV_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/20221209PbPbMCExtra30F170/221209_191824/" \
+"regulate_aa_qcd_extra.conf" \
+"regulate_aa_qcd_extra_weighted_170_F"
 
 ##############################################################################
 ##############################################################################
