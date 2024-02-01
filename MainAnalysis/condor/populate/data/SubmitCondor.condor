@@ -10,7 +10,7 @@ When_To_Transfer_Output = ON_EXIT
 Transfer_Output_Files   = __MASTER___$(index).root
 Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/populate/arc/__ANALYSIS__/__MASTER___original_$(index).root"
 
-Transfer_Input_Files    = __CONFIG__,../populate,../data,../x509up_u168456
+Transfer_Input_Files    = __CONFIG__,../populate_original,../data/__ANALYSIS__,../x509up_u168456
 Arguments               = __CONFIG__ analysis_aa.conf __MASTER___$(index).root $(input) $(mb)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err

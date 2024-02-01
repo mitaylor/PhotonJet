@@ -11,7 +11,7 @@ cp /tmp/x509up_u168456 x509up_u168456
 mkdir -p ${analysis}_${tag}
 cd ${analysis}_${tag}
 rm -f *
-cp ../../../../configs/populate/parallel/${config} .
+cp ../../../../configs/populate/condor/${config} .
 cp ../../../../configs/analysis/${analysis}/analysis_aa.conf .
 
 ls ${input}*.root > inputs
@@ -40,4 +40,4 @@ cat ../SubmitCondor.condor | sed "s/__MASTER__/${tag}/g" > SubmitCondor.condor
 sed -i "s/__CONFIG__/${config}/g" SubmitCondor.condor
 sed -i "s/__ANALYSIS__/${analysis}/g" SubmitCondor.condor
 
-# condor_submit SubmitCondor.condor
+condor_submit SubmitCondor.condor
