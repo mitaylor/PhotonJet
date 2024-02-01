@@ -11,8 +11,8 @@ cp /tmp/x509up_u168456 x509up_u168456
 mkdir -p ${analysis}_${tag}
 cd ${analysis}_${tag}
 rm -f *
-cp ../../configs/populate/parallel/${config} .
-cp ../../configs/analysis/${analysis}/analysis_aa.conf .
+cp ../../../configs/populate/parallel/${config} .
+cp ../../../configs/analysis/${analysis}/analysis_aa.conf .
 
 ls ${input}* > inputs
 ls ${mb}* > mbs
