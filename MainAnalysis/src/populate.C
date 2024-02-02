@@ -307,7 +307,7 @@ int populate(char const* config, char const* selections, char const* output) {
         tm->SetBranchAddress("WTAphi", &WTAphi);
 
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
-        if (mentries > 960000) mentries = 960000;
+        if (mentries > 900000) mentries = 900000;
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
