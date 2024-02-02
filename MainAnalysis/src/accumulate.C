@@ -171,7 +171,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_f_jpt = new history<TH1F>(
         f, label + "_raw_sub_pjet_f_jpt"s);
     auto pjet_u_dr_jpt = new history<TH1F>(
-        f, label + "_raw_sub_pjet_u_dr"s);
+        f, label + "_raw_sub_pjet_u_dr_jpt"s);
 
     /* rescale by number of signal photons (events) */
     pjet_f_dr->multiply(*nevt);
