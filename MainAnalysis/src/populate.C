@@ -263,7 +263,6 @@ int populate(char const* config, char const* selections, char const* output) {
     TH1::SetDefaultSumw2();
 
     /* set up mixed event background subtraction */
-    int64_t tentries = 0;
     std::vector<float> hf_bins = {-1000, 100, 150, 200, 250, 300, 400, 500, 600, 700, 
                                   800, 900, 1050, 1200, 1350, 1500, 1700, 1900, 2100, 
                                   2350, 2600, 2850, 3150, 3450, 3800, 4150, 4550, 4950, 
@@ -308,8 +307,7 @@ int populate(char const* config, char const* selections, char const* output) {
         tm->SetBranchAddress("WTAphi", &WTAphi);
 
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
-        
-        tentries += mentries;
+        if (mentries > 960000) mentries = 960000;
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);

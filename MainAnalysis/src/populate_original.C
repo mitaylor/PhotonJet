@@ -263,7 +263,6 @@ int populate(char const* config, char const* selections, char const* output) {
     // bin construction, 10% intervals
     std::vector<float> hf_bins = {0, dhf.front()};
     float bin_factor = 1.1;
-    int64_t tentries = 0;
 
     if (mix > 0) while (hf_bins.back() < dhf.back()) {
         hf_bins.push_back(hf_bins.back()*bin_factor);
@@ -308,8 +307,7 @@ int populate(char const* config, char const* selections, char const* output) {
         tm->SetBranchAddress("WTAphi", &WTAphi);
 
         int64_t mentries = static_cast<int64_t>(tm->GetEntries());
-        
-        tentries += mentries;
+        if (mentries > 960000) mentries = 960000;
 
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
