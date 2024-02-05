@@ -24,13 +24,13 @@ for sample in ${samples[@]}; do
     done
 done
 
-samples=(pp)
+# samples=(pp)
 
-for sample in ${samples[@]}; do
-    for syst in front back; do
-        run_pp ${sample}_${syst}
-    done
-done
+# for sample in ${samples[@]}; do
+#     for syst in front back; do
+#         run_pp ${sample}_${syst}
+#     done
+# done
 
 samples=(aa)
 
