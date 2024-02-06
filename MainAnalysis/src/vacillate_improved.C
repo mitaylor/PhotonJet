@@ -230,7 +230,8 @@ int vacillate(char const* config, char const* selections, char const* output) {
         TFile* f = new TFile(input.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
-        int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        // int64_t nentries = static_cast<int64_t>(t->GetEntries());
+        int64_t nentries = 500;
 
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
@@ -570,7 +571,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
         ppt->save(tag);
     });
 
-    delete conf; delete sel; 
     delete incl; delete ihf; delete idphi; delete ippt; delete mcdr; delete mcpt; delete mppt;
     delete mr; delete mg;
 
