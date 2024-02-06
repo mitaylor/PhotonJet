@@ -230,8 +230,7 @@ int vacillate(char const* config, char const* selections, char const* output) {
         TFile* f = new TFile(input.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
-        // int64_t nentries = static_cast<int64_t>(t->GetEntries());
-        int64_t nentries = 500;
+        int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         /* fill histograms */
         for (int64_t i = 0; i < nentries; ++i) {
