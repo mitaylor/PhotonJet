@@ -1,5 +1,5 @@
 Universe                = vanilla
-Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/RunRegulate.sh
+Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/regulate/RunRegulate.sh
 Should_Transfer_Files   = YES
 When_To_Transfer_Output = ON_EXIT
 +MaxRuntime             = 14400
