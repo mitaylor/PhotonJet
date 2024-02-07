@@ -9,7 +9,7 @@ cp /tmp/x509up_u168456 x509up_u168456
 mkdir -p ${output_tag}
 cd ${output_tag}
 rm -f *
-cp ../../configs/regulate/${config_fragment} .
+cp ../../../configs/regulate/${config_fragment} .
 
 # find ${folder} -type f > ${output_tag}
 
