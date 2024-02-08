@@ -279,7 +279,7 @@ int populate(char const* config, char const* selections, char const* output) {
     // map: tag, events, jets, jet kinematics
     std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
     for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
-    
+
     if (mix > 0) {
         // read in variables
         int index_m = rng->Integer(mb.size());
@@ -318,7 +318,7 @@ int populate(char const* config, char const* selections, char const* output) {
             if (std::abs(vz) > 15) { continue; }
             if (rho_file.empty() && hiHF <= dhf.front()) { continue; }
             if (rho_file.empty() && hiHF >= dhf.back()) { continue; }
-        
+
             std::vector<std::map<std::string, float>> jet_vector;
 
             for (int64_t j = 0; j < nref; ++j) {
@@ -354,12 +354,15 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* load efficiency correction */
     TFile* fe;
-    history<TH1F>* efficiency = nullptr;
+    history<TH1F>* eff_numerator = nullptr;
+    history<TH1F>* eff_denominator = nullptr;
 
     if (!eff_file.empty()) {
         if (!condor) fe = new TFile((alter_base + base + eff_file).data(), "read");
         else         fe = new TFile(eff_file.data(), "read");
-        efficiency = new history<TH1F>(fe, eff_label);
+        
+        eff_numerator = new history<TH1F>(fe, eff_label + "_numerator"s);
+        eff_denominator = new history<TH1F>(fe, eff_label + "_denominator"s);
     }
 
     /* load centrality weighting for MC */
@@ -369,6 +372,7 @@ int populate(char const* config, char const* selections, char const* output) {
     if (!rho_file.empty()) {
         if (!condor) fr = new TFile((alter_base + base + rho_file).data(), "read");
         else         fr = new TFile(rho_file.data(), "read");
+
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
@@ -487,8 +491,8 @@ int populate(char const* config, char const* selections, char const* output) {
             auto weight = pjt->w;
 
             if (!eff_file.empty() && photon_pt / photon_es < 70) {
-                auto bin = (*efficiency)[1]->FindBin(photon_pt / photon_es);
-                auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
+                auto bin = (*eff_numerator)[hf_x]->FindBin(photon_pt / photon_es);
+                auto cor = (*eff_denominator)[hf_x]->GetBinContent(bin) / (*eff_numerator)[hf_x]->GetBinContent(bin);
 
                 weight *= cor;
             }

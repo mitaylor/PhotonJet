@@ -312,10 +312,10 @@ int populate(char const* config, char const* selections, char const* output) {
         for (int64_t i = 0; i < mentries; ++i){
             tm->GetEntry(i);
 
-            if (std::abs(vz) > 15) { continue; }
-
             auto hfm_x = ihfm->index_for(pfSum);
             int64_t nref = jtpt->size();
+
+            if (std::abs(vz) > 15) { continue; }
 
             std::vector<std::map<std::string, float>> jet_vector;
 
@@ -352,12 +352,15 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* load efficiency correction */
     TFile* fe;
-    history<TH1F>* efficiency = nullptr;
+    history<TH1F>* eff_numerator = nullptr;
+    history<TH1F>* eff_denominator = nullptr;
 
     if (!eff_file.empty()) {
         if (!condor) fe = new TFile((alter_base + base + eff_file).data(), "read");
         else         fe = new TFile(eff_file.data(), "read");
-        efficiency = new history<TH1F>(fe, eff_label);
+        
+        eff_numerator = new history<TH1F>(fe, eff_label + "_numerator"s);
+        eff_denominator = new history<TH1F>(fe, eff_label + "_denominator"s);
     }
 
     /* load centrality weighting for MC */
@@ -367,6 +370,7 @@ int populate(char const* config, char const* selections, char const* output) {
     if (!rho_file.empty()) {
         if (!condor) fr = new TFile((alter_base + base + rho_file).data(), "read");
         else         fr = new TFile(rho_file.data(), "read");
+
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
@@ -486,8 +490,8 @@ int populate(char const* config, char const* selections, char const* output) {
             auto weight = pjt->w;
 
             if (!eff_file.empty() && photon_pt / photon_es < 70) {
-                auto bin = (*efficiency)[1]->FindBin(photon_pt / photon_es);
-                auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
+                auto bin = (*eff_numerator)[hf_x]->FindBin(photon_pt / photon_es);
+                auto cor = (*eff_denominator)[hf_x]->GetBinContent(bin) / (*eff_numerator)[hf_x]->GetBinContent(bin);
 
                 weight *= cor;
             }
