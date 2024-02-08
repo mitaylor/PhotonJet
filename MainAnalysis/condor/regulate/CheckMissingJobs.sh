@@ -1,9 +1,25 @@
 #!/usr/bin/env bash
 
+tags=`ls */*.list | sed 's/\/.*$//'`
+
+for tag in ${tags}; do
+    indices=`cat ${tag}/${tag}.list | awk '{print $1}' | sed 's/\,.*$//'`
+
+    for index in ${indices}; do
+        if [ -f /data/submit/mitay/condor/${tag}_${index}.root ]; then
+            
+        else
+            echo ${tag} ${index} >> missing.txt
+        fi
+    done
+done
+
 # confs=$(ls */*.conf | awk -F / '{print $2}' | sed 's/conf/root/g' | sed 's/^/\/data\/submit\/mitay\/photons\/condor\//')
-ls */*.conf | awk -F / '{print $2}' | sed 's/conf/root/g' | sed 's/^/\/data\/submit\/mitay\/photons\/condor\//' > temp.txt
-xargs -I % bash -c '[[ ! -e $1 ]] && echo "$1"' _ % < temp.txt > missing.txt
-rm temp.txt
+# ls */*.conf | awk -F / '{print $2}' | sed 's/conf/root/g' | sed 's/^/\/data\/submit\/mitay\/photons\/condor\//' > temp.txt
+# xargs -I % bash -c '[[ ! -e $1 ]] && echo "$1"' _ % < temp.txt > missing.txt
+# rm temp.txt
+
+# cat */*.list | awk -F / '{print $1}
 
 # numbers=($(cat missing.txt | awk -F / '{print $7}' | awk -F . '{print $1}' | awk -F _ '{print $NF}'))
 # folders=($(cat missing.txt | awk -F / '{print $7}' | awk -F . '{print $1}' | sed -r 's/(.*)\_.*/\1/'))
