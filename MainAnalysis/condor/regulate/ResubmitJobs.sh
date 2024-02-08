@@ -11,7 +11,7 @@ for tag in ${tags}; do
         done
 
         cd ${tag}
-        mv ${tag}/${tag}_temp.list ${tag}/${tag}.list
+        mv ${tag}_temp.list ${tag}.list
         condor_submit SubmitCondor.condor
         cd ..
     fi
