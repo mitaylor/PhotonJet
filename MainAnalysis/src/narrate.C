@@ -95,7 +95,7 @@ int narrate(char const* config, char const* selections, char const* output) {
                 auto temp_photon_pt = (*pjt->phoEt)[j];
 
                 if (temp_photon_pt <= 30) { continue; }
-                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= eta_max[0]) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 
                 temp_photon_pt = (*pjt->phoEtErNew)[j];
@@ -151,7 +151,7 @@ int narrate(char const* config, char const* selections, char const* output) {
                 auto temp_photon_pt = (*pjt->phoEt)[j];
 
                 if (temp_photon_pt <= 30) { continue; }
-                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= eta_max[0]) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
                 
                 temp_photon_pt = (*pjt->phoEtErNew)[j];
