@@ -113,13 +113,13 @@ int speculate(char const* config, char const* selections, char const* output) {
 
         /* require leading photon */
         if (photon_index < 0) { continue; }
-        if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
+        if ((*p->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*p->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
         /* hem failure region exclusion */
         if (heavyion && in_pho_failure_region(p, photon_index)) { continue; }
 
         /* isolation requirement */
-        if ((*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
+        if ((*p->pho_ecalClusterIsoR3)[photon_index] + (*p->pho_hcalRechitIsoR3)[photon_index] + (*p->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
         /* leading photon axis */
         auto photon_eta = (*p->phoEta)[leading];
@@ -134,7 +134,7 @@ int speculate(char const* config, char const* selections, char const* output) {
 
                 auto dr = std::sqrt(dr2(photon_eta, (*p->eleEta)[j], photon_phi, (*p->elePhi)[j]));
 
-                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, heavyion)) {
+                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(p, j, heavyion)) {
                     electron = true; break;
                 }
             }
