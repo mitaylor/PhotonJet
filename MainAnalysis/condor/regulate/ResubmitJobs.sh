@@ -3,6 +3,7 @@
 tags=`ls */*.list | sed 's/\/.*$//'`
 
 for tag in ${tags}; do
+    echo ${tag}
     if [ -f ${tag}/${tag}.txt ]; then
         indices=`cat ${tag}/${tag}.txt`
 
@@ -12,7 +13,7 @@ for tag in ${tags}; do
 
         cd ${tag}
         mv ${tag}_temp.list ${tag}.list
-        condor_submit SubmitCondor.condor
+        # condor_submit SubmitCondor.condor
         cd ..
     fi
 done
