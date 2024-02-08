@@ -32,7 +32,7 @@ using namespace std::placeholders;
 
 void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
                multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p,
-               bool heavyion, bool apply_er, float pt_min, float photon_eta_abs,
+               bool heavyion, bool apply_er, float photon_pt_min, float photon_eta_abs,
                float hovere_max, float hf_min, float hf_max, float iso_max, float noniso_min, float noniso_max, 
                history<TH1F>* rho_weighting, history<TH1F>* eff_numerator, history<TH1F>* eff_denominator, 
                bool mc, bool apply_es, std::vector<float> photon_pt_es) {
@@ -130,7 +130,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
 void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
                  multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
-                 bool heavyion, bool apply_er, float pt_min, float photon_eta_abs, 
+                 bool heavyion, bool apply_er, float photon_pt_min, float photon_eta_abs, 
                  float hovere_max, float hf_min, float hf_max, float iso_max,
                  float noniso_min, float noniso_max, float gen_iso_max, float offset, 
                  history<TH1F>* rho_weighting) {
@@ -291,7 +291,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     auto gen_iso_max = sel->get<float>("gen_iso_max");
     auto see_max = sel->get<float>("see_max");
-    auto pt_min = sel->get<float>("photon_pt_min");
+    auto photon_pt_min = sel->get<float>("photon_pt_min");
     auto photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto hovere_max = sel->get<float>("hovere_max");
     auto iso_max = sel->get<float>("iso_max");
@@ -360,7 +360,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_data(see_data, see_bkg, mpthf, ipt, ihf, td, pd, heavyion, apply_er,
-                pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
+                photon_pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
                 noniso_min, noniso_max, rho_weighting, eff_numerator, eff_denominator, mc && heavyion,
                 apply_es, photon_pt_es);
     }
@@ -373,7 +373,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
-                    heavyion, apply_er, pt_min, photon_eta_abs, 
+                    heavyion, apply_er, photon_pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
                     noniso_min, noniso_max, gen_iso_max, offset, 
                     rho_weighting);
