@@ -156,8 +156,6 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
             if (apply_er) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
 
-            temp_photon_pt *= photon_es;
-
             if (temp_photon_pt < photon_pt_min) { continue; }
 
             if (temp_photon_pt > photon_pt) {
