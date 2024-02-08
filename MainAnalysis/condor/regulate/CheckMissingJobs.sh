@@ -6,9 +6,7 @@ for tag in ${tags}; do
     indices=`cat ${tag}/${tag}.list | awk '{print $1}' | sed 's/\,.*$//'`
 
     for index in ${indices}; do
-        if [ -f /data/submit/mitay/condor/${tag}_${index}.root ]; then
-            
-        else
+        if ! [[ -f /data/submit/mitay/condor/${tag}_${index}.root ]]; then
             echo ${tag} ${index} >> missing.txt
         fi
     done
