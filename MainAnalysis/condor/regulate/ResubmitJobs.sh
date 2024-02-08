@@ -15,7 +15,7 @@ for tag in ${tags}; do
             rm ${tag}.*.${index}.*
         done
 
-        # condor_submit SubmitCondor.condor
+        condor_submit SubmitCondor.condor
         cd ..
     fi
 done
