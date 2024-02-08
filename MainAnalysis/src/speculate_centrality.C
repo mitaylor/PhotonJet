@@ -85,44 +85,41 @@ int speculate(char const* config, char const* selections, char const* output) {
 
         t->GetEntry(i);
 
-        if (std::abs(p->vz) > 15) { continue; }
         double hf = p->hiHF;
         auto hf_x = ihf->index_for(hf);
 
-        if (hf < dhf.front()) { continue; }
-        if (hf > dhf.back()) { continue; }
+        if (hf <= dhf.front()) { continue; }
+        if (hf >= dhf.back()) { continue; }
+        if (std::abs(p->vz) > 15) { continue; }
 
-        int64_t leading = -1;
-        float leading_pt = 0;
+        int64_t photon_index = -1;
+        float photon_pt = 0;
+
         for (int64_t j = 0; j < p->nPho; ++j) {
+            auto temp_photon_pt = (*p->phoEt)[j];
+
+            if (temp_photon_pt <= 30) { continue; }
             if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
+            if (apply_er) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
 
-            float pho_et = (*p->phoEt)[j];
-            if (pho_et > 30 && heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-            if (pho_et > 30 && !heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            if (temp_photon_pt < photon_pt_min) { continue; }
 
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
+            if (temp_photon_pt > photon_pt) {
+                photon_index = j;
+                photon_pt = temp_photon_pt;
             }
         }
 
         /* require leading photon */
-        if (leading < 0) { continue; }
-
-        if ((*p->phoSigmaIEtaIEta_2012)[leading] > see_max
-                || (*p->phoSigmaIEtaIEta_2012)[leading] < see_min)
-            continue;
+        if (photon_index < 0) { continue; }
+        if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, photon_index)) { continue; }
 
         /* isolation requirement */
-        float isolation = (*p->pho_ecalClusterIsoR3)[leading]
-            + (*p->pho_hcalRechitIsoR3)[leading]
-            + (*p->pho_trackIsoR3PtCut20)[leading];
-        if (isolation > iso_max) { continue; }
+        if ((*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
         /* leading photon axis */
         auto photon_eta = (*p->phoEta)[leading];
