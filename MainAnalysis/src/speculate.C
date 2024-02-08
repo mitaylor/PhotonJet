@@ -10,7 +10,6 @@
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/train.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 
@@ -25,6 +24,14 @@
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
+
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
+    auto deta = eta1 - eta2;
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return deta * deta + dphi * dphi;
+}
 
 int speculate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
@@ -108,25 +115,20 @@ int speculate(char const* config, char const* selections, char const* output) {
 
         /* leading photon axis */
         auto photon_eta = (*p->phoEta)[leading];
-        auto photon_phi = convert_radian((*p->phoPhi)[leading]);
+        auto photon_phi = (*p->phoPhi)[leading];
 
         /* electron rejection */
         if (ele_rej) {
             bool electron = false;
+
             for (int64_t j = 0; j < p->nEle; ++j) {
                 if (std::abs((*p->eleEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*p->eleEta)[j];
-                if (deta > 0.1) { continue; }
+                auto dr = std::sqrt(dr2(photon_eta, (*p->eleEta)[j], photon_phi, (*p->elePhi)[j]));
 
-                auto ele_phi = convert_radian((*p->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
-
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(p, j, heavyion)) {
-                    electron = true; break; }
+                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, heavyion)) {
+                    electron = true; break;
+                }
             }
 
             if (electron) { continue; }
