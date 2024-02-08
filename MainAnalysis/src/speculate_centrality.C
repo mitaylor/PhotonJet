@@ -18,6 +18,7 @@
 #include "TGraphAsymmErrors.h"
 #include "TLine.h"
 #include "TTree.h"
+#include "TMath.h"
 
 #include <string>
 #include <vector>
@@ -101,9 +102,7 @@ int speculate(char const* config, char const* selections, char const* output) {
             if (temp_photon_pt <= 30) { continue; }
             if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            if (apply_er) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
-
-            if (temp_photon_pt < photon_pt_min) { continue; }
+            if (apply_er && temp_photon_pt > 30) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
 
             if (temp_photon_pt > photon_pt) {
                 photon_index = j;
@@ -122,8 +121,8 @@ int speculate(char const* config, char const* selections, char const* output) {
         if ((*p->pho_ecalClusterIsoR3)[photon_index] + (*p->pho_hcalRechitIsoR3)[photon_index] + (*p->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
         /* leading photon axis */
-        auto photon_eta = (*p->phoEta)[leading];
-        auto photon_phi = (*p->phoPhi)[leading];
+        auto photon_eta = (*p->phoEta)[photon_index];
+        auto photon_phi = (*p->phoPhi)[photon_index];
 
         /* electron rejection */
         if (ele_rej) {
@@ -143,15 +142,15 @@ int speculate(char const* config, char const* selections, char const* output) {
         }
 
         if (mc_branches) {
-            (*denominator)[hf_x]->Fill(leading_pt, p->weight);
+            (*denominator)[hf_x]->Fill(photon_pt, p->weight);
             if ((*p->accepts)[0] == 1) {
-                (*numerator)[hf_x]->Fill(leading_pt, p->weight);
+                (*numerator)[hf_x]->Fill(photon_pt, p->weight);
             }
         }
         else {
-            (*denominator)[hf_x]->Fill(leading_pt);
+            (*denominator)[hf_x]->Fill(photon_pt);
             if ((*p->accepts)[0] == 1) {
-                (*numerator)[hf_x]->Fill(leading_pt);
+                (*numerator)[hf_x]->Fill(photon_pt);
             }
         }
     }
