@@ -76,51 +76,47 @@ int narrate(char const* config, char const* selections, char const* output) {
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
-
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
-        // int64_t nentries = 10000;
 
         for (int64_t i = 0; i < nentries-1; ++i) {
-            if (i % 100000 == 0)
-                printf("entry: %li/%li\n", i, nentries);
+            if (i % 100000 == 0) printf("entry: %li/%li\n", i, nentries);
 
             t->GetEntry(i);
+
             auto hf_x = ihf->index_for(pjt->hiHF);
 
-            if (hf_x < 0) continue;
-            if (hf_x == ihf->size()) continue;
-
+            if (hf_x < 0 || hf_x >= ihf->size()) continue;
             if (std::abs(pjt->vz) > 15) { continue; }
 
-            int64_t leading = -1;
-            float leading_pt = 0;
+            int64_t photon_index = -1;
+            float photon_pt = 0;
+
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoEta)[j]) >= eta_max[0]) { continue; }
+                auto temp_photon_pt = (*pjt->phoEt)[j];
+
+                if (temp_photon_pt <= 30) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+                
+                temp_photon_pt = (*pjt->phoEtErNew)[j];
 
-                auto pho_et = (*pjt->phoEtErNew)[j];
+                if (temp_photon_pt < photon_pt_min || temp_photon_pt > photon_pt_max) { continue; }
 
-                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
-
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
+                if (temp_photon_pt > photon_pt) {
+                    photon_index = j;
+                    photon_pt = temp_photon_pt;
                 }
             }
 
-            if (leading < 0) { continue; }
+            /* require leading photon */
+            if (photon_index < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
-                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
-                continue;
+            /* hem failure region exclusion */
+            if (in_pho_failure_region(pjt, photon_index)) { continue; }
 
-            if (in_pho_failure_region(pjt, leading)) { continue; }
-
-            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                    + (*pjt->pho_hcalRechitIsoR3)[leading]
-                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
+            /* isolation requirement */
+            if ((*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
             for (size_t j = 0; j < eta_min.size(); ++j) {
                 auto eta_x = static_cast<int64_t>(j);
@@ -140,45 +136,43 @@ int narrate(char const* config, char const* selections, char const* output) {
         auto pjt = new pjtree(false, false, true, t, { 1, 0, 1, 1, 0, 0, 1, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
-        // nentries = 10000;
 
         for (int64_t i = 0; i < nentries-1; ++i) {
-            if (i % 100000 == 0)
-                printf("entry: %li/%li\n", i, nentries);
+            if (i % 100000 == 0) printf("entry: %li/%li\n", i, nentries);
 
             t->GetEntry(i);
 
             if (std::abs(pjt->vz) > 15) { continue; }
 
-            int64_t leading = -1;
-            float leading_pt = 0;
+            int64_t photon_index = -1;
+            float photon_pt = 0;
+
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoEta)[j]) >= eta_max[0]) { continue; }
+                auto temp_photon_pt = (*pjt->phoEt)[j];
+
+                if (temp_photon_pt <= 30) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+                
+                temp_photon_pt = (*pjt->phoEtErNew)[j];
 
-                auto pho_et = (*pjt->phoEtErNew)[j];
+                if (temp_photon_pt < photon_pt_min || temp_photon_pt > photon_pt_max) { continue; }
 
-                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
-
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
+                if (temp_photon_pt > photon_pt) {
+                    photon_index = j;
+                    photon_pt = temp_photon_pt;
                 }
             }
 
-            if (leading < 0) { continue; }
+            /* require leading photon */
+            if (photon_index < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
-                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
-                continue;
+            /* hem failure region exclusion */
+            if (in_pho_failure_region(pjt, photon_index)) { continue; }
 
-            if (in_pho_failure_region(pjt, leading)) { continue; }
-
-            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                    + (*pjt->pho_hcalRechitIsoR3)[leading]
-                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
+            /* isolation requirement */
+            if ((*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
             for (size_t j = 0; j < eta_min.size(); ++j) {
                 for (size_t k = 0; k < dhf.size()-1; ++k) {
