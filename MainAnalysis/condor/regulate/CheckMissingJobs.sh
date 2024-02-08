@@ -12,7 +12,7 @@ for tag in ${tags}; do
         if [ -f /data/submit/mitay/photons/condor/${tag}_${index}.root ]; then
             echo ${tag} ${index} >> existing.txt
         else
-            echo ${tag} ${index} >> missing.txt
+            echo ${index} >> ${tag}/${tag}.txt
         fi
     done
 done
