@@ -30,6 +30,14 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
+    auto deta = eta1 - eta2;
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return deta * deta + dphi * dphi;
+}
+
 int estimate_hf(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
