@@ -14,7 +14,7 @@ run_aa() {
 analyses=(pho_60_rebin1 pho_60_rebin2 pho_60_rebin3 pho_60_rebin4)
 
 for analysis in ${analyses[@]}; do
-    for syst in qcd qcd_gen_iso closure; do
+    for syst in qcd; do
         run_aa populate_aa_${syst}_raw ${analysis}
         run_aa populate_aa_${syst}_bkg ${analysis}
     done
