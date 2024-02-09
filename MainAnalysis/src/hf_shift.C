@@ -129,7 +129,7 @@ int hf_shift(char const* config, char const* selections, char const* output) {
             if (in_pho_failure_region(hp_pjt, photon_index)) { continue; }
 
             /* isolation requirement */
-            if ((*hp_pjt->pho_ecalClusterIsoR3)[photon_index] + (*hp_pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
+            if ((*hp_pjt->pho_ecalClusterIsoR3)[photon_index] + (*hp_pjt->pho_hcalRechitIsoR3)[photon_index] + (*hp_pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
             /* leading photon axis */
             auto photon_eta = (*hp_pjt->phoEta)[photon_index];
@@ -143,7 +143,7 @@ int hf_shift(char const* config, char const* selections, char const* output) {
 
                 auto dr = std::sqrt(dr2(photon_eta, (*hp_pjt->eleEta)[j], photon_phi, (*hp_pjt->elePhi)[j]));
 
-                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(hp_pjt, j, heavyion)) {
+                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(hp_pjt, j, true)) {
                     electron = true; break;
                 }
             }
