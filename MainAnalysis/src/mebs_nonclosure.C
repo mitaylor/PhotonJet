@@ -31,6 +31,12 @@ static float dr2(float eta1, float eta2, float phi1, float phi2) {
     return deta * deta + dphi * dphi;
 }
 
+template <typename... T>
+void scale_bin_width(T*... args) {
+    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
+        obj->Scale(1., "width"); }), 0)... };
+}
+
 float acceptance_weight(bool heavyion, interval* idphi, 
     history<TH2D>* total, history<TH2D>* acceptance, 
     float photon_phi, float jet_phi, float photon_eta, float jet_eta) {
