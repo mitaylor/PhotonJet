@@ -12,8 +12,8 @@
 #include "../git/paper-and-pencil/include/pencil.h"
 
 #include "../git/tricks-and-treats/include/trunk.h"
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 
+#include "TMath.h"
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -27,6 +27,14 @@
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
+
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
+    auto deta = eta1 - eta2;
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return deta * deta + dphi * dphi;
+}
 
 int hf_shift(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
@@ -84,67 +92,63 @@ int hf_shift(char const* config, char const* selections, char const* output) {
         TFile* hp_f = new TFile(file.data(), "read");
         TTree* hp_t = (TTree*) hp_f->Get("pj");
         auto hp_pjt = new pjtree(true, false, true, hp_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
-
         int64_t nentries = static_cast<int64_t>(hp_t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            if (i % 10000 == 0)
-                printf("entry: %li/%li\n", i, nentries);
+            if (i % 10000 == 0) printf("entry: %li/%li\n", i, nentries);
 
             hp_t->GetEntry(i);
 
-            if (std::abs(hp_pjt->vz) > 15) { continue; } // new
+            if (std::abs(hp_pjt->vz) > 15) { continue; }
 
-            int64_t leading = -1;
-            float leading_pt = 0;
-            for (int64_t j = 0; j < hp_pjt->nPho; ++j) { // new
-                if ((*hp_pjt->phoEt)[j] <= 30) { continue; }
+            int64_t photon_index = -1;
+            float photon_pt = 0;
+
+            for (int64_t j = 0; j < hp_pjt->nPho; ++j) {
+                auto temp_photon_pt = (*hp_pjt->phoEt)[j];
+
+                if (temp_photon_pt <= 30) { continue; }
                 if (std::abs((*hp_pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*hp_pjt->phoHoverE)[j] > hovere_max) { continue; }
 
-                auto pho_et = (*hp_pjt->phoEtErNew)[j];
+                temp_photon_pt = (*hp_pjt->phoEtErNew)[j];
 
-                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
+                if (temp_photon_pt < photon_pt_min || temp_photon_pt > photon_pt_max) { continue; }
                 
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
+                if (temp_photon_pt > photon_pt) {
+                    photon_index = j;
+                    photon_pt = temp_photon_pt;
                 }
             }
 
-            if (leading < 0) { continue; }
-            if ((*hp_pjt->phoSigmaIEtaIEta_2012)[leading] > see_max) { continue; }
+            /* require leading photon */
+            if (photon_index < 0) { continue; }
+            if ((*hp_pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max) { continue; }
 
-            float isolation = (*hp_pjt->pho_ecalClusterIsoR3)[leading]
-                + (*hp_pjt->pho_hcalRechitIsoR3)[leading]
-                + (*hp_pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
+            /* hem failure region exclusion */
+            if (in_pho_failure_region(hp_pjt, photon_index)) { continue; }
+
+            /* isolation requirement */
+            if ((*hp_pjt->pho_ecalClusterIsoR3)[photon_index] + (*hp_pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
 
             /* leading photon axis */
-            auto photon_eta = (*hp_pjt->phoEta)[leading];
-            auto photon_phi = convert_radian((*hp_pjt->phoPhi)[leading]);
+            auto photon_eta = (*hp_pjt->phoEta)[photon_index];
+            auto photon_phi = (*hp_pjt->phoPhi)[photon_index];
 
             /* electron rejection */
             bool electron = false;
+
             for (int64_t j = 0; j < hp_pjt->nEle; ++j) {
                 if (std::abs((*hp_pjt->eleEta)[j]) > 1.4442) { continue; }
 
-                auto deta = photon_eta - (*hp_pjt->eleEta)[j];
-                if (deta > 0.1) { continue; }
+                auto dr = std::sqrt(dr2(photon_eta, (*hp_pjt->eleEta)[j], photon_phi, (*hp_pjt->elePhi)[j]));
 
-                auto ele_phi = convert_radian((*hp_pjt->elePhi)[j]);
-                auto dphi = revert_radian(photon_phi - ele_phi);
-                auto dr2 = deta * deta + dphi * dphi;
-
-                if (dr2 < 0.01 && passes_electron_id<
-                            det::barrel, wp::loose, pjtree
-                        >(hp_pjt, j, true)) {
-                    electron = true; break; }
+                if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(hp_pjt, j, heavyion)) {
+                    electron = true; break;
+                }
             }
 
             if (electron) { continue; }
-
-            if (leading_pt > 200) { continue; } // new
 
             auto avg_rho = get_avg_rho(hp_pjt, -photon_eta_abs, photon_eta_abs);
             float pf_sum = 0;
@@ -171,12 +175,10 @@ int hf_shift(char const* config, char const* selections, char const* output) {
         TFile* mb_f = new TFile(file.data(), "read");
         TTree* mb_t = (TTree*) mb_f->Get("pj");
         auto mb_pjt = new pjtree(true, false, true, mb_t, { 1, 1, 1, 1, 1, 0, 1, 1, 0 });
-
         int64_t nentries = static_cast<int64_t>(mb_t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
-            if (i % 10000 == 0)
-                printf("entry: %li/%li\n", i, nentries);
+            if (i % 10000 == 0) printf("entry: %li/%li\n", i, nentries);
 
             mb_t->GetEntry(i);
 
