@@ -11,8 +11,7 @@ run_aa() {
     "${tag}"
 }
 
-# analyses=(pho_60_rebin1 pho_60_rebin2 pho_60_rebin3 pho_60_rebin4)
-analyses=(pho_60_binning)
+analyses=(pho_60_rebin1 pho_60_rebin2 pho_60_rebin3 pho_60_rebin4)
 
 for analysis in ${analyses[@]}; do
     run_aa populate_aa_raw ${analysis}
