@@ -286,7 +286,7 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
         }
 
         f->Close();
-        delete f; delete p;
+        delete f;
     }
    
     /* save output */
