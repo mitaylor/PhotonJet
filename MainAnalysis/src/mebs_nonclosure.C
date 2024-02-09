@@ -263,10 +263,10 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
                 if (std::abs(reco_jet_eta) >= jet_eta_abs) { continue; }
                 if (exclude && in_jet_failure_region(pjt, j)) { continue; }
 
-                if (!back_to_back(reco_photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+                if (!back_to_back(photon_phi, reco_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
                 // no matching gen jet => fake
-                if (gen_jet_pt <= 5 || dr2((*pjt->refeta)[j], (*pjt->jteta)[j], (*pjt->refphi)[j], (*pjt->jtphi)[j]) > 0.0225) { 
+                if (gen_jet_pt <= 5 || dr2(gen_jet_eta, reco_jet_eta, gen_jet_phi, reco_jet_phi) > 0.0225) { 
                     continue;
                 }
                 
