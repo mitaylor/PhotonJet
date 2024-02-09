@@ -271,7 +271,7 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
                 }
                 
                 auto jet_dr = std::sqrt(dr2(reco_jet_eta, (*pjt->WTAeta)[j], reco_jet_phi, (*pjt->WTAphi)[j]));
-                auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
+                auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, photon_phi, reco_jet_phi, photon_eta, reco_jet_eta);
                 
                 auto drjpt_x = mdrjpt->index_for(v{jet_dr, reco_jet_pt});
                 
