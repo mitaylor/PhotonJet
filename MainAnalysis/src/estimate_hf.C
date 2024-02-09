@@ -21,6 +21,7 @@
 #include "TH2.h"
 #include "TRandom3.h"
 #include "TProfile.h"
+#include "TMath.h"
 
 #include <memory>
 #include <string>
