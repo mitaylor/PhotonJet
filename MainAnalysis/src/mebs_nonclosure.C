@@ -273,13 +273,13 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
                 auto jet_dr = std::sqrt(dr2(reco_jet_eta, (*pjt->WTAeta)[j], reco_jet_phi, (*pjt->WTAphi)[j]));
                 auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, reco_photon_phi, reco_jet_phi, reco_photon_eta, reco_jet_eta);
                 
-                auto drjpt_x = mdrjpt->index_for(v{jet_dr, jet_pt});
+                auto drjpt_x = mdrjpt->index_for(v{jet_dr, reco_jet_pt});
                 
                 zip([&](auto const& index, auto const& weight) {
                     if (drjpt_x > -1 && drjpt_x < mdrjpt->size()) {
                         (*reco_pjet_u_dr_jpt)[index]->Fill(drjpt_x, jet_cor * weight);
-                        (*reco_pjet_f_jpt)[index]->Fill(jet_pt, jet_cor * weight);
-                        (*reco_pjet_f_dr)[index]->Fill(jet_dr, jet_cor * weight);
+                        (*reco_pjet_f_jpt)[index]->Fill(reco_jet_pt, jet_cor * weight);
+                        (*reco_pjet_f_dr)[index]->Fill(reco_jet_pt, jet_cor * weight);
                     }
                 }, pthf_x, weights);
             }
