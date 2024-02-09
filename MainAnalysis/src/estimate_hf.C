@@ -8,7 +8,6 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
@@ -85,14 +84,12 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
     TH1::SetDefaultSumw2();
 
     /* load input */
-
     for (auto const& file : input) {
         std::cout << file << std::endl;
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
         auto pjt = new pjtree(type == "MC", false, false, t, { 1, 1, 1, 1, 1, 0, 0, 1, 1 });
-
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
@@ -102,63 +99,54 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
             
             if (std::abs(pjt->vz) > 15) { continue; }
             
-            int64_t leading = -1;
-            float leading_pt = 0;
+            int64_t photon_index = -1;
+            float photon_pt = 0;
+
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
+                auto temp_photon_pt = (*pjt->phoEt)[j];
+
+                if (temp_photon_pt <= 30) { continue; }
                 if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+                if (apply_er) temp_photon_pt = (*pjt->phoEtEr)[j];
 
-                auto pho_et = (*pjt->phoEt)[j];
-                if (apply_er) pho_et = (*pjt->phoEtEr)[j];
+                if (temp_photon_pt < photon_pt_min || temp_photon_pt > photon_pt_max) { continue; }
 
-                if (pho_et < photon_pt_min || pho_et > photon_pt_max) { continue; }
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
+                if (temp_photon_pt > photon_pt) {
+                    photon_index = j;
+                    photon_pt = temp_photon_pt;
                 }
             }
             
             /* require leading photon */
-            if (leading < 0) { continue; }
+            if (photon_index < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max) { continue; }
 
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max)
-                continue;
-            
             /* isolation requirement */
-            float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                + (*pjt->pho_hcalRechitIsoR3)[leading]
-                + (*pjt->pho_trackIsoR3PtCut20)[leading];
-            if (isolation > iso_max) { continue; }
+            if ((*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
             
             /* leading photon axis */
-            auto photon_eta = (*pjt->phoEta)[leading];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+            auto photon_eta = (*pjt->phoEta)[photon_index];
+            auto photon_phi = (*pjt->phoPhi)[photon_index];
 
             /* electron rejection */
             if (ele_rej) {
                 bool electron = false;
+
                 for (int64_t j = 0; j < pjt->nEle; ++j) {
                     if (std::abs((*pjt->eleEta)[j]) > 1.4442) { continue; }
 
-                    auto deta = photon_eta - (*pjt->eleEta)[j];
-                    if (deta > 0.1) { continue; }
+                    auto dr = std::sqrt(dr2(photon_eta, (*pjt->eleEta)[j], photon_phi, (*pjt->elePhi)[j]));
 
-                    auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                    auto dphi = revert_radian(photon_phi - ele_phi);
-                    auto dr2 = deta * deta + dphi * dphi;
-
-                    if (dr2 < 0.01 && passes_electron_id<
-                                det::barrel, wp::loose, pjtree
-                            >(pjt, j, false)) {
-                        electron = true; break; }
+                    if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, false)) {
+                        electron = true; break;
+                    }
                 }
 
                 if (electron) { continue; }
             }
 
-            if (leading_pt > 200) { continue; }
-            auto pt_x = ipt->index_for(leading_pt);
+            auto pt_x = ipt->index_for(photon_pt);
 
             float pf_sum = 0;
 
@@ -179,10 +167,7 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
                     (*hf_p0)[pt_x]->Fill(pf_sum);
                 }
             }
-            
-            // (*nvtx)[0]->Fill(pjt->nVtx, pf_sum, pjt->w);
-            // if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum, pjt->w); }
-            // if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx, pjt->w); }
+
             (*nvtx)[0]->Fill(pjt->nVtx, pf_sum);
             if (type == "MC") { (*npu)[0]->Fill((*pjt->npus)[5], pf_sum); }
             if (type == "MC") { (*npv)[0]->Fill((*pjt->npus)[5], pjt->nVtx); }
@@ -192,8 +177,9 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
     /* save histograms */
     in(output, [&]() {
         hf_v1->save(tag);
-        if (type == "MC") { hf_p0->save(tag); }
         nvtx->save(tag);
+
+        if (type == "MC") { hf_p0->save(tag); }
         if (type == "MC") { npu->save(tag); }
         if (type == "MC") { npv->save(tag); }
     });
@@ -204,9 +190,7 @@ int estimate_hf(char const* config, char const* selections, char const* output) 
 
     auto mean_info = [&](history<TH1F>* h, int64_t index) {
         char buffer[128] = { '\0' };
-        sprintf(buffer, "mean: %.3f +- %.3f",
-            (*h)[index - 1]->GetMean(1),
-            (*h)[index - 1]->GetMeanError(1));
+        sprintf(buffer, "mean: %.3f +- %.3f", (*h)[index - 1]->GetMean(1), (*h)[index - 1]->GetMeanError(1));
 
         TLatex* text = new TLatex();
         text->SetTextFont(43);
