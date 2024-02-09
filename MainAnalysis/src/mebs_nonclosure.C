@@ -58,7 +58,7 @@ float back_to_back(float photon_phi, float jet_phi, float threshold) {
 int mebs_nonclosure(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
-    auto inputs = conf->get<std::vector<std::string>>("inputs");
+    auto input = conf->get<std::vector<std::string>>("input");
     auto tag = conf->get<std::string>("tag");
 
     auto acc_file = conf->get<std::string>("acc_file");
@@ -164,7 +164,7 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
     /* load input */
-    for (auto const& file : inputs) {
+    for (auto const& file : input) {
         std::cout << file << std::endl;
 
         TFile* f = new TFile(file.data(), "read");
