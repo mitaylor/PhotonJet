@@ -288,7 +288,13 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
         f->Close();
         delete f;
     }
-   
+
+    scale_bin_width(reco_pjet_f_dr, reco_pjet_f_jpt, reco_pjet_u_dr_jpt);
+    
+    reco_pjet_f_dr->divide(*nevt);
+    reco_pjet_f_jpt->divide(*nevt);
+    reco_pjet_u_dr_jpt->divide(*nevt);
+
     /* save output */
     in(output, [&]() {
         nevt->save(tag);
