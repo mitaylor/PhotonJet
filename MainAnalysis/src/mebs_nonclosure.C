@@ -285,7 +285,7 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
                     if (drjpt_x > -1 && drjpt_x < mdrjpt->size()) {
                         (*reco_pjet_u_dr_jpt)[index]->Fill(drjpt_x, jet_cor * weight);
                         (*reco_pjet_f_jpt)[index]->Fill(reco_jet_pt, jet_cor * weight);
-                        (*reco_pjet_f_dr)[index]->Fill(reco_jet_pt, jet_cor * weight);
+                        (*reco_pjet_f_dr)[index]->Fill(jet_dr, jet_cor * weight);
                     }
                 }, pthf_x, weights);
             }
