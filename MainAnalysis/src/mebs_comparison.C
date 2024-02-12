@@ -59,7 +59,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
     TH1::SetDefaultSumw2();
 
-    auto nevt = new history<TH1F>(a, "bkg_nevt");
+    auto nevt = new history<TH1F>(a, "raw_nevt");
 
     auto analysis_pjet_f_dr = new history<TH1F>(a, "raw_sub_pjet_f_dr"); std::cout << __LINE__ << std::endl;
     auto analysis_pjet_f_jpt = new history<TH1F>(a, "raw_sub_pjet_f_jpt");std::cout << __LINE__ << std::endl;
