@@ -8,7 +8,7 @@ run_aa() {
     ./bin/hf_shift configs/hf_shift/hf_shift_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/hf_shift_${tag}.root > log/${set}_hf_shift_${tag}.txt 2>&1 &
 }
 
-samples=(qcd_extra qcd_aod qcd_aod_small)
+samples=(qcd_extra)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
