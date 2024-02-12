@@ -61,13 +61,13 @@ int jubilate(char const* config, char const* selections, char const* output) {
 
     auto nevt = new history<TH1F>(a, "bkg_nevt");
 
-    auto analysis_pjet_f_dr = new history<TH1F>(a, "raw_sub_pjet_f_dr");
-    auto analysis_pjet_f_jpt = new history<TH1F>(a, "raw_sub_pjet_f_jpt");
-    auto analysis_pjet_u_dr_jpt = new history<TH1F>(a, "raw_sub_pjet_u_dr_jpt");
+    auto analysis_pjet_f_dr = new history<TH1F>(a, "raw_sub_pjet_f_dr"); std::cout << __LINE__ << std::endl;
+    auto analysis_pjet_f_jpt = new history<TH1F>(a, "raw_sub_pjet_f_jpt");std::cout << __LINE__ << std::endl;
+    auto analysis_pjet_u_dr_jpt = new history<TH1F>(a, "raw_sub_pjet_u_dr_jpt");std::cout << __LINE__ << std::endl;
 
-    auto truth_pjet_f_dr = new history<TH1F>(t, "raw_reco_pjet_f_dr");
-    auto truth_pjet_f_jpt = new history<TH1F>(t, "raw_reco_pjet_f_jpt");
-    auto truth_pjet_u_dr_jpt = new history<TH1F>(t, "raw_reco_pjet_u_dr_jpt");
+    auto truth_pjet_f_dr = new history<TH1F>(t, "raw_reco_pjet_f_dr");std::cout << __LINE__ << std::endl;
+    auto truth_pjet_f_jpt = new history<TH1F>(t, "raw_reco_pjet_f_jpt");std::cout << __LINE__ << std::endl;
+    auto truth_pjet_u_dr_jpt = new history<TH1F>(t, "raw_reco_pjet_u_dr_jpt");std::cout << __LINE__ << std::endl;
 
     /* shrink to remove overflow photon pt bin */
     auto shape = nevt->shape();
