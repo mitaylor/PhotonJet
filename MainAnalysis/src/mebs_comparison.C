@@ -54,8 +54,8 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    TFile* a = new TFile((base + analysis).data(), "read");
-    TFile* t = new TFile((base + truth).data(), "read");
+    TFile* a = new TFile((base + analysis).data(), "read"); std::cout << (base + analysis).data() << std::endl;
+    TFile* t = new TFile((base + truth).data(), "read"); std::cout << (base + truth).data() << std::endl;
 
     TH1::SetDefaultSumw2();
 
