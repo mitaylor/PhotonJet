@@ -26,6 +26,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto analysis = conf->get<std::string>("analysis");
 
     auto tag = conf->get<std::string>("tag");
+    auto system = conf->get<std::string>("system");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
