@@ -53,19 +53,20 @@ int jubilate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
 
     /* load history objects */
-    TFile* f = new TFile((base + input).data(), "read");
+    TFile* a = new TFile((base + analysis).data(), "read");
+    TFile* t = new TFile((base + truth).data(), "read");
 
     TH1::SetDefaultSumw2();
 
-    auto nevt = new history<TH1F>(f, "bkg_nevt");
+    auto nevt = new history<TH1F>(a, "bkg_nevt");
 
-    auto analysis_pjet_f_dr = new history<TH1F>(f, "raw_sub_pjet_f_dr");
-    auto analysis_pjet_f_jpt = new history<TH1F>(f, "raw_sub_pjet_f_jpt");
-    auto analysis_pjet_u_dr_jpt = new history<TH1F>(f, "raw_sub_pjet_u_dr_jpt");
+    auto analysis_pjet_f_dr = new history<TH1F>(a, "raw_sub_pjet_f_dr");
+    auto analysis_pjet_f_jpt = new history<TH1F>(a, "raw_sub_pjet_f_jpt");
+    auto analysis_pjet_u_dr_jpt = new history<TH1F>(a, "raw_sub_pjet_u_dr_jpt");
 
-    auto truth_pjet_f_dr = new history<TH1F>(f, "raw_reco_pjet_f_dr");
-    auto truth_pjet_f_jpt = new history<TH1F>(f, "raw_reco_pjet_f_jpt");
-    auto truth_pjet_u_dr_jpt = new history<TH1F>(f, "raw_reco_pjet_u_dr_jpt");
+    auto truth_pjet_f_dr = new history<TH1F>(t, "raw_reco_pjet_f_dr");
+    auto truth_pjet_f_jpt = new history<TH1F>(t, "raw_reco_pjet_f_jpt");
+    auto truth_pjet_u_dr_jpt = new history<TH1F>(t, "raw_reco_pjet_u_dr_jpt");
 
     /* shrink to remove overflow photon pt bin */
     auto shape = nevt->shape();
