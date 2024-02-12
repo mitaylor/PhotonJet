@@ -111,7 +111,7 @@ int jubilate(char const* config, char const* selections, char const* output) {
     c1->divide(-1 , ihf->size());
 
     auto c2 = new paper(set + "_" + tag + "_mebs_jpt_d_pthf", hb);
-    apply_style(c2, cms, system_tag, -0.007, 0.07);
+    apply_style(c2, cms, system_tag, -0.003, 0.03);
     c2->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     c2->accessory(pthf_info);
     c2->divide(-1 , ihf->size());
