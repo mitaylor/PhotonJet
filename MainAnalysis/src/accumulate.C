@@ -161,8 +161,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::cout << label + "_"s + type + "_pjet_f_dr"s << " " << label + "_raw_nevt"s << std::endl;
-
     /* open input files */
     TFile* f = new TFile((base + input).data(), "read");
 

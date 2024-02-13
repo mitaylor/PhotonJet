@@ -37,7 +37,7 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa $sample
 
-    for syst in qcd qcd_gen_iso qcd_mebs_nonclosure closure wo_ele_rej tight_purity loose_purity cent_up cent_down es; do
+    for syst in qcd qcd_gen_iso qcd_mebs_nonclosure closure wo_ele_rej tight_purity loose_purity cent_up cent_down es no_er; do
         run_aa ${sample}_${syst}
     done
 done
@@ -45,7 +45,7 @@ done
 # samples=(aa)
 
 # for sample in ${samples[@]}; do
-#     for syst in mebs qcd_mebs no_er; do
+#     for syst in mebs qcd_mebs; do
 #         run_aa ${sample}_${syst}
 #     done
 # done
