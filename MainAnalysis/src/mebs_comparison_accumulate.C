@@ -99,7 +99,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     hb->alias("analysis", "Analysis");
     hb->alias("truth", "MEBS Nonclosure Syst");
 
-    auto p1 = new paper(set + "_mebs_nonclosure_"s + label + "dr"s, hb);
+    auto p1 = new paper(set + "_mebs_nonclosure_"s + label + "_dr"s, hb);
     p1->divide(ihf->size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -108,7 +108,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     h_analysis_dr->apply([&](TH1* h) { p1->add(h, "analysis"); });
     h_truth_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth"); });
 
-    auto p2 = new paper(set + "_mebs_nonclosure_"s + label + "jtpt"s, hb);
+    auto p2 = new paper(set + "_mebs_nonclosure_"s + label + "_jtpt"s, hb);
     p2->divide(ihf->size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
