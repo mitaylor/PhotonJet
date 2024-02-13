@@ -9,7 +9,7 @@ run_aa() {
 }
 
 
-samples=(aa_qcd)
+samples=(aa_qcd aa)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
