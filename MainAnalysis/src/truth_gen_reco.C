@@ -266,7 +266,7 @@ int truth_gen_reco(char const* config, char const* selections, char const* outpu
         
         TFile* f = new TFile(input.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
+        auto p = new pjtree(true, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
 
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 

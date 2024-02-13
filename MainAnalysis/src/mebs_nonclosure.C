@@ -175,7 +175,7 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto pjt = new pjtree(true, false, heavyion, t, { 1, 1, 1, 0, 1, 0, heavyion, 0, 0 });
+        auto pjt = new pjtree(true, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
         for (int64_t i = 0; i < nentries; ++i) {
@@ -252,8 +252,6 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
 
                 weights.push_back(weight * cor);
             }
-
-            std::cout << photon_pt << " " << photon_eta << " " << photon_phi << " " << photon_index << " " << weight * pho_cor << std::endl;
 
             zip([&](auto const& index, auto const& weight) {
                 (*nevt)[index]->Fill(1., weight * pho_cor);

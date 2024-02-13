@@ -511,8 +511,6 @@ int populate(char const* config, char const* selections, char const* output) {
                 weights.push_back(weight);
             }
 
-            std::cout << photon_pt << " " << photon_eta << " " << photon_phi << " " << photon_index << " " << weight * pho_cor << std::endl;
-
             /* fill histograms */
             fill_axes(pjt, pthf_x, weights, exclude, mdrjpt, idphi,
                 pho_cor, photon_eta, photon_phi, jet_cor, jet_eta_abs, 
