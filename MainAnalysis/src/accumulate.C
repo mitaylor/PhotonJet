@@ -268,13 +268,13 @@ int accumulate(char const* config, char const* selections, char const* output) {
     //     pjet_f_dr_d_hf, 
     //     pjet_f_dr_merge);
 
-    title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
+    title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"),
         pjet_u_dr,
         pjet_u_dr_d_pt,
         pjet_u_dr_d_hf, 
         pjet_u_dr_merge);
 
-    title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"),
+    title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"),
         pjet_f_dr,
         pjet_f_dr_d_pt,
         pjet_f_dr_d_hf, 
