@@ -243,15 +243,17 @@ int mebs_nonclosure(char const* config, char const* selections, char const* outp
             }
 
             auto weight = pjt->w;
-            std::vector<float> weights(ihf->size(), weight);
+            std::vector<float> weights;
             auto avg_rho = get_avg_rho(pjt, -photon_eta_abs, photon_eta_abs);
 
             for (int64_t k = 0; k < ihf->size(); ++k) {
                 auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
                 auto cor = (*rho_weighting)[k]->GetBinContent(bin);
-                
-                weights[k] *= cor;
+
+                weights.push_back(weight * cor);
             }
+
+            std::cout << photon_pt << " " << photon_eta << " " << photon_phi << " " << photon_index << " " << weight * pho_cor << std::endl;
 
             zip([&](auto const& index, auto const& weight) {
                 (*nevt)[index]->Fill(1., weight * pho_cor);

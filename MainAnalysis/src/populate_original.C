@@ -478,8 +478,8 @@ int populate(char const* config, char const* selections, char const* output) {
 
             /* declare weights */
             auto pt_x = ipt->index_for(photon_pt);
-
             std::vector<int64_t> pthf_x;
+
             if (!rho_file.empty()) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
@@ -510,6 +510,8 @@ int populate(char const* config, char const* selections, char const* output) {
             } else {
                 weights.push_back(weight);
             }
+
+            std::cout << photon_pt << " " << photon_eta << " " << photon_phi << " " << photon_index << " " << weight * pho_cor << std::endl;
 
             /* fill histograms */
             fill_axes(pjt, pthf_x, weights, exclude, mdrjpt, idphi,
