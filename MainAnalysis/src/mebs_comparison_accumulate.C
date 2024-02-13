@@ -61,9 +61,9 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     TFile* f_truth = new TFile((base + input_truth).data(), "read");
 
     auto h_analysis_dr = new history<TH1F>(f_analysis, "aa_qcd_nominal_s_pure_raw_sub_pjet_f_dr_sum0");
-    auto h_truth_dr = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_reco_pjet_f_dr_sum0");
+    auto h_truth_dr = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_f_dr_sum0");
     auto h_analysis_jtpt = new history<TH1F>(f_analysis, "aa_qcd_nominal_s_pure_raw_sub_pjet_f_jpt_sum0");
-    auto h_truth_jtpt = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_reco_pjet_f_jpt_sum0");
+    auto h_truth_jtpt = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_f_jpt_sum0");
 
     // normalise_to_unity(h_analysis_dr, h_truth_dr, h_analysis_jtpt, h_truth_jtpt);
 
