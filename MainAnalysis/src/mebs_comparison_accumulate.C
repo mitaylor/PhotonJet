@@ -37,6 +37,9 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     auto input_analysis = conf->get<std::string>("input_analysis");
     auto input_truth = conf->get<std::string>("input_truth");
 
+    auto analysis_label = conf->get<std::string>("analysis_label");
+    auto truth_label = conf->get<std::string>("truth_label");
+
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -60,10 +63,10 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     TFile* f_analysis = new TFile((base + input_analysis).data(), "read");
     TFile* f_truth = new TFile((base + input_truth).data(), "read");
 
-    auto h_analysis_dr = new history<TH1F>(f_analysis, "aa_qcd_nominal_s_pure_raw_sub_pjet_f_dr_sum0");
-    auto h_truth_dr = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_f_dr_sum0");
-    auto h_analysis_jtpt = new history<TH1F>(f_analysis, "aa_qcd_nominal_s_pure_raw_sub_pjet_f_jpt_sum0");
-    auto h_truth_jtpt = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_f_jpt_sum0");
+    auto h_analysis_dr = new history<TH1F>(f_analysis, analysis_label + "_raw_sub_pjet_f_dr_sum0"s);
+    auto h_truth_dr = new history<TH1F>(f_truth, truth_label + "_raw_sub_pjet_f_dr_sum0"s);
+    auto h_analysis_jtpt = new history<TH1F>(f_analysis, analysis_label + "_raw_sub_pjet_f_jpt_sum0"s);
+    auto h_truth_jtpt = new history<TH1F>(f_truth, truth_label + "_raw_sub_pjet_f_jpt_sum0"s);
 
     // normalise_to_unity(h_analysis_dr, h_truth_dr, h_analysis_jtpt, h_truth_jtpt);
 
