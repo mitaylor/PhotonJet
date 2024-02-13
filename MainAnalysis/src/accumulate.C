@@ -119,6 +119,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto input = conf->get<std::string>("input");
     auto label = conf->get<std::string>("label");
+    auto type = conf->get<std::string>("type");
     auto system = conf->get<std::string>("system");
     auto tag = conf->get<std::string>("tag");
 
@@ -160,7 +161,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::cout << label + "_pjet_f_dr"s << " " << label + "_raw_nevt"s << std::endl;
+    std::cout << label + "_"s + type + "_pjet_f_dr"s << " " << label + "_raw_nevt"s << std::endl;
 
     /* open input files */
     TFile* f = new TFile((base + input).data(), "read");
@@ -169,11 +170,11 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto nevt = new history<TH1F>(f, label + "_raw_nevt"s);
 
     auto pjet_f_dr = new history<TH1F>(
-        f, label + "_pjet_f_dr"s);
+        f, label + "_"s + type + "_pjet_f_dr"s);
     auto pjet_f_jpt = new history<TH1F>(
-        f, label + "_pjet_f_jpt"s);
+        f, label + "_"s + type + "_pjet_f_jpt"s);
     auto pjet_u_dr_jpt = new history<TH1F>(
-        f, label + "_pjet_u_dr_jpt"s);
+        f, label + "_"s + type + "_pjet_u_dr_jpt"s);
 
     /* rescale by number of signal photons (events) */
     pjet_f_dr->multiply(*nevt);
