@@ -138,8 +138,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
 
-    auto osr = sel->get<std::vector<int64_t>>("osr");
-
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
@@ -156,6 +154,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto mr = new multival(rdrr, rptr);
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+    std::vector<int64_t> osr = {0, 0, 0, 0};
 
     /* manage memory manually */
     TH1::AddDirectory(false);
