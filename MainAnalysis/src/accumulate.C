@@ -168,6 +168,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
     auto pjet_f_dr = new history<TH1F>(
         f, label + "_pjet_f_dr"s);
+        std::cout << label + "_pjet_f_dr"s << " " << label + "_raw_nevt"s << std::endl;
     auto pjet_f_jpt = new history<TH1F>(
         f, label + "_pjet_f_jpt"s);
     auto pjet_u_dr_jpt = new history<TH1F>(
