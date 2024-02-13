@@ -65,7 +65,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     auto h_analysis_jtpt = new history<TH1F>(f_analysis, "aa_qcd_nominal_s_pure_raw_sub_pjet_f_jpt_sum0");
     auto h_truth_jtpt = new history<TH1F>(f_truth, "aa_qcd_mebs_nonclosure_s_pure_raw_reco_pjet_f_jpt_sum0");
 
-    normalise_to_unity(h_analysis_dr, h_truth_dr, h_analysis_jtpt, h_truth_jtpt);
+    // normalise_to_unity(h_analysis_dr, h_truth_dr, h_analysis_jtpt, h_truth_jtpt);
 
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
