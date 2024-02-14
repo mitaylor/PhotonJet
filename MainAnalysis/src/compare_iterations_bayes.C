@@ -173,11 +173,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto label = conf->get<std::string>("before_label");
 
     auto afters = conf->get<std::vector<std::string>>("afters");
-    auto merge = conf->get<std::string>("merge");
-
-    auto regularization = conf->get<std::string>("regularization");
-
-    auto choice_set = conf->get<std::vector<int32_t>>("choice");
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -216,7 +211,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     std::vector<TFile*> fafters(afters.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
-        fafter = new TFile(("unfolded/kErrors/" + set + "/" + after).data(), "read");
+        fafter = new TFile(("unfolded/" + set + "/kErrors/" + after).data(), "read");
     }, fafters, afters);
 
     /* prepare output file */
