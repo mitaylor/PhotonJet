@@ -245,8 +245,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
             (*unfolded[i])[j] = HUnfoldedBayes;
-            (*unfolded_fold0[i])[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 0, osg);
-            (*unfolded_fold1[i])[j] = fold_mat((*unfolded)[j], MUnfolded, mg, 1, osg);
+            (*unfolded_fold0[i])[j] = fold_mat((*unfolded[i])[j], MUnfolded, mg, 0, osg);
+            (*unfolded_fold1[i])[j] = fold_mat((*unfolded[i])[j], MUnfolded, mg, 1, osg);
         }
 
         normalise_to_unity(unfolded_fold0[i], unfolded_fold1[i]);
