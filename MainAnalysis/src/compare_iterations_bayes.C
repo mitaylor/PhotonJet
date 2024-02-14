@@ -230,9 +230,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<history<TH1F>*> unfolded_fold1;
     
     for (size_t i = 0; i < iterations.size(); ++i) {
-        unfolded.push_back(new history<TH1F>("unfolded_iteration"s + text(i), "", null<TH1F>, (int64_t) afters.size()));
-        unfolded_fold0.push_back(new history<TH1F>("unfolded_fold0_iteration"s + text(i), ""s, null<TH1F>, (int64_t) afters.size()));
-        unfolded_fold1.push_back(new history<TH1F>("unfolded_fold1_iteration"s + text(i), ""s, null<TH1F>, (int64_t) afters.size()));
+        unfolded.push_back(new history<TH1F>("unfolded_iteration"s + std::to_string(i), "", null<TH1F>, (int64_t) afters.size()));
+        unfolded_fold0.push_back(new history<TH1F>("unfolded_fold0_iteration"s + std::to_string(i), ""s, null<TH1F>, (int64_t) afters.size()));
+        unfolded_fold1.push_back(new history<TH1F>("unfolded_fold1_iteration"s + std::to_string(i), ""s, null<TH1F>, (int64_t) afters.size()));
     }
 
     /* extract histograms */
