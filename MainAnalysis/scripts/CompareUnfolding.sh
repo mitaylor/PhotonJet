@@ -20,13 +20,13 @@ run_aa() {
     ./bin/compare_bayes_kerrors_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_bayes_kerrors_unnormalized_${tag}.root
 }
 
-samples=(pp)
+samples=(pp pp_qcd)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(aa)
+samples=(aa aa_qcd)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
