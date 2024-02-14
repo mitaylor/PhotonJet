@@ -225,16 +225,16 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<history<TH1F>*> unfolded_fold1;
     std::cout << __LINE__ << std::endl;
     for (size_t i = 0; i < iterations.size(); ++i) {
-        unfolded.push_back(new history<TH1F>("unfolded_iteration"s + std::to_string(i), "", null<TH1F>, (int64_t) afters.size()));
-        unfolded_fold0.push_back(new history<TH1F>("unfolded_fold0_iteration"s + std::to_string(i), ""s, null<TH1F>, (int64_t) afters.size()));
-        unfolded_fold1.push_back(new history<TH1F>("unfolded_fold1_iteration"s + std::to_string(i), ""s, null<TH1F>, (int64_t) afters.size()));
+        unfolded.push_back(new history<TH1F>("unfolded_iteration"s + std::to_string(iterations[i]), "", null<TH1F>, (int64_t) afters.size()));
+        unfolded_fold0.push_back(new history<TH1F>("unfolded_fold0_iteration"s + std::to_string(iterations[i]), ""s, null<TH1F>, (int64_t) afters.size()));
+        unfolded_fold1.push_back(new history<TH1F>("unfolded_fold1_iteration"s + std::to_string(iterations[i]), ""s, null<TH1F>, (int64_t) afters.size()));
     }
 std::cout << __LINE__ << std::endl;
     /* extract histograms */
     for (size_t i = 0; i < iterations.size(); ++i) {std::cout << __LINE__ << std::endl;
         for (size_t j = 0; j < afters.size(); ++j) {
-            std::string unfold_name = "HUnfoldedBayes" + std::to_string(i);
-            std::string matrix_name = "MUnfoldedBayes" + std::to_string(i);
+            std::string unfold_name = "HUnfoldedBayes" + std::to_string(iterations[i]);
+            std::string matrix_name = "MUnfoldedBayes" + std::to_string(iterations[i]);
 std::cout << __LINE__ << std::endl;
             auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());std::cout << __LINE__ << std::endl;
             auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());std::cout << __LINE__ << std::endl;
@@ -246,9 +246,9 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
         normalise_to_unity(unfolded_fold0[i], unfolded_fold1[i]);
 
-        unfolded[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_iteration"s + std::to_string(i));
-        unfolded_fold0[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_fold0_iteration"s + std::to_string(i));
-        unfolded_fold1[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_fold1_iteration"s + std::to_string(i));
+        unfolded[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_iteration"s + std::to_string(iterations[i]));
+        unfolded_fold0[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_fold0_iteration"s + std::to_string(iterations[i]));
+        unfolded_fold1[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_fold1_iteration"s + std::to_string(iterations[i]));
 
         unfolded[i]->save();
         unfolded_fold0[i]->save();
