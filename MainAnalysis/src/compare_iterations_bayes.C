@@ -207,43 +207,43 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* manage memory manually */
     TH1::AddDirectory(false);
-    TH1::SetDefaultSumw2();std::cout << __LINE__ << std::endl;
+    TH1::SetDefaultSumw2();
 
     std::vector<TFile*> fafters(afters.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
         fafter = new TFile(("unfolded/" + set + "/kErrors/" + after).data(), "read");
-    }, fafters, afters);std::cout << __LINE__ << std::endl;
+    }, fafters, afters);
 
     /* prepare output file */
-    TFile* fout = new TFile(output, "recreate");std::cout << __LINE__ << std::endl;
+    TFile* fout = new TFile(output, "recreate");
 
     /* prepare the post-unfolded data */
-    std::vector<int> iterations{1, 2, 3, 4, 5, 10, 15, 20, 30};std::cout << __LINE__ << std::endl;
+    std::vector<int> iterations{1, 2, 3, 4, 5, 10, 15, 20, 30};
 
     std::vector<history<TH1F>*> unfolded;
     std::vector<history<TH1F>*> unfolded_fold0;
     std::vector<history<TH1F>*> unfolded_fold1;
-    std::cout << __LINE__ << std::endl;
+    
     for (size_t i = 0; i < iterations.size(); ++i) {
         unfolded.push_back(new history<TH1F>("unfolded_iteration"s + std::to_string(iterations[i]), "", null<TH1F>, (int64_t) afters.size()));
         unfolded_fold0.push_back(new history<TH1F>("unfolded_fold0_iteration"s + std::to_string(iterations[i]), ""s, null<TH1F>, (int64_t) afters.size()));
         unfolded_fold1.push_back(new history<TH1F>("unfolded_fold1_iteration"s + std::to_string(iterations[i]), ""s, null<TH1F>, (int64_t) afters.size()));
     }
-std::cout << __LINE__ << std::endl;
+
     /* extract histograms */
-    for (size_t i = 0; i < iterations.size(); ++i) {std::cout << __LINE__ << std::endl;
+    for (size_t i = 0; i < iterations.size(); ++i) {
         for (size_t j = 0; j < afters.size(); ++j) {
             std::string unfold_name = "HUnfoldedBayes" + std::to_string(iterations[i]);
             std::string matrix_name = "MUnfoldedBayes" + std::to_string(iterations[i]);
-std::cout << __LINE__ << std::endl;
-            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());std::cout << __LINE__ << std::endl;
-            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());std::cout << __LINE__ << std::endl;
+
+            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
+            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
             (*unfolded[i])[j] = HUnfoldedBayes;
             (*unfolded_fold0[i])[j] = fold_mat((*unfolded[i])[j], MUnfolded, mg, 0, osg);
             (*unfolded_fold1[i])[j] = fold_mat((*unfolded[i])[j], MUnfolded, mg, 1, osg);
         }
-std::cout << __LINE__ << std::endl;
+
         normalise_to_unity(unfolded_fold0[i], unfolded_fold1[i]);
 
         unfolded[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_unfolded_iteration"s + std::to_string(iterations[i]));
@@ -254,7 +254,7 @@ std::cout << __LINE__ << std::endl;
         unfolded_fold0[i]->save();
         unfolded_fold1[i]->save();
     }
-std::cout << __LINE__ << std::endl;
+
     fout->Close();
 
     /* iteration comparison plot */
@@ -293,7 +293,7 @@ std::cout << __LINE__ << std::endl;
 
     for (size_t i = 1; i < iterations.size(); ++i) {
         for (size_t j = 0; j < afters.size(); ++j) {
-            p1->stack(i + 1, (*unfolded_fold0[i])[j], std::to_string(iterations[i]));
+            p1->stack(j + 1, (*unfolded_fold0[i])[j], std::to_string(iterations[i]));
         }
     }
 
@@ -308,7 +308,7 @@ std::cout << __LINE__ << std::endl;
 
     for (size_t i = 1; i < iterations.size(); ++i) {
         for (size_t j = 0; j < afters.size(); ++j) {
-            p2->stack(i + 1, (*unfolded_fold1[i])[j], std::to_string(iterations[i]));
+            p2->stack(j + 1, (*unfolded_fold1[i])[j], std::to_string(iterations[i]));
         }
     }
 
