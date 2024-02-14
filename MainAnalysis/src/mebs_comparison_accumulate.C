@@ -105,8 +105,8 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag);
     
-    h_analysis_dr->apply([&](TH1* h) { p1->add(h, "analysis"); });
-    h_truth_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "truth"); });
+    h_truth_dr->apply([&](TH1* h) { p1->add(h, "truth"); });
+    h_analysis_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "analysis"); });
 
     auto p2 = new paper(set + "_mebs_nonclosure_"s + label + "_jtpt"s, hb);
     p2->divide(ihf->size(), -1);
@@ -114,8 +114,8 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     p2->accessory(kinematics);
     apply_style(p2, cms, system_tag);
     
-    h_analysis_jtpt->apply([&](TH1* h) { p2->add(h, "analysis"); });
-    h_truth_jtpt->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "truth"); });
+    h_truth_jtpt->apply([&](TH1* h) { p2->add(h, "truth"); });
+    h_analysis_jtpt->apply([&](TH1* h, int64_t index) { p2->stack(index + 1, h, "analysis"); });
 
     hb->sketch();
 
