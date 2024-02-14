@@ -223,7 +223,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare the post-unfolded data */
-    vector<int> iterations{1, 2, 3, 4, 5, 10, 15, 20, 30};
+    std::vector<int> iterations{1, 2, 3, 4, 5, 10, 15, 20, 30};
 
     vector<history<TH1F>*> unfolded(iterations.size(), null);
     vector<history<TH1F>*> unfolded_fold0(iterations.size(), null);
