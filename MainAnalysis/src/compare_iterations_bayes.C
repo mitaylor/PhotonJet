@@ -225,19 +225,19 @@ int quantitate(char const* config, char const* selections, char const* output) {
     /* prepare the post-unfolded data */
     std::vector<int> iterations{1, 2, 3, 4, 5, 10, 15, 20, 30};
 
-    std::vector<history<TH1F>*> unfolded(iterations.size(), null);
-    std::vector<history<TH1F>*> unfolded_fold0(iterations.size(), null);
-    std::vector<history<TH1F>*> unfolded_fold1(iterations.size(), null);
+    std::vector<history<TH1F>*> unfolded;
+    std::vector<history<TH1F>*> unfolded_fold0;
+    std::vector<history<TH1F>*> unfolded_fold1;
     
     for (size_t i = 0; i < iterations.size(); ++i) {
-        unfolded[i] = new history<TH1F>("unfolded_iteration"s + text(i), "", null<TH1F>, (int64_t) afters.size());
-        unfolded_fold0[i] = new history<TH1F>("unfolded_fold0_iteration"s + text(i), ""s, null<TH1F>, (int64_t) afters.size());
-        unfolded_fold1[i] = new history<TH1F>("unfolded_fold1_iteration"s + text(i), ""s, null<TH1F>, (int64_t) afters.size());
+        unfolded[i].push_back(new history<TH1F>("unfolded_iteration"s + text(i), "", null<TH1F>, (int64_t) afters.size()));
+        unfolded_fold0[i].push_back(new history<TH1F>("unfolded_fold0_iteration"s + text(i), ""s, null<TH1F>, (int64_t) afters.size()));
+        unfolded_fold1[i].push_back(new history<TH1F>("unfolded_fold1_iteration"s + text(i), ""s, null<TH1F>, (int64_t) afters.size()));
     }
 
     /* extract histograms */
     for (size_t i = 0; i < iterations.size(); ++i) {
-        for (size_t j = 0; j < fafters.size(); ++j) {
+        for (size_t j = 0; j < afters.size(); ++j) {
             std::string unfold_name = "HUnfoldedBayes" + std::to_string(i);
             std::string matrix_name = "MUnfoldedBayes" + std::to_string(i);
 
@@ -299,7 +299,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded_fold0[0]->apply([&](TH1* h) { p1->add(h, std::to_string(iterations[0])); });
 
     for (size_t i = 1; i < iterations.size(); ++i) {
-        for (int64_t j = 0; j < afters.size(); ++j) {
+        for (size_t j = 0; j < afters.size(); ++j) {
             p1->stack(i + 1, (*unfolded_fold0[i])[j], std::to_string(iterations[i]));
         }
     }
@@ -314,7 +314,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded_fold1[0]->apply([&](TH1* h) { p2->add(h, std::to_string(iterations[0])); });
 
     for (size_t i = 1; i < iterations.size(); ++i) {
-        for (int64_t j = 0; j < afters.size(); ++j) {
+        for (size_t j = 0; j < afters.size(); ++j) {
             p2->stack(i + 1, (*unfolded_fold1[i])[j], std::to_string(iterations[i]));
         }
     }
