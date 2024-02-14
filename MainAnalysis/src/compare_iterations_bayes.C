@@ -235,9 +235,9 @@ std::cout << __LINE__ << std::endl;
         for (size_t j = 0; j < afters.size(); ++j) {
             std::string unfold_name = "HUnfoldedBayes" + std::to_string(i);
             std::string matrix_name = "MUnfoldedBayes" + std::to_string(i);
-
-            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
+std::cout << __LINE__ << std::endl;
+            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());std::cout << __LINE__ << std::endl;
+            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());std::cout << __LINE__ << std::endl;
 
             (*unfolded[i])[j] = HUnfoldedBayes;
             (*unfolded_fold0[i])[j] = fold_mat((*unfolded[i])[j], MUnfolded, mg, 0, osg);
