@@ -283,7 +283,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto hb = new pencil();
     hb->category("type", "1 iteration", "2 iterations", "3 iterations", "4 iterations", "5 iterations", "10 iterations", "15 iterations", "20 iterations", "30 iterations");
 
-    auto p1 = new paper(set + "_" + tag + "_bayes_kerrors_comparison_" + label + "_dj", hb);
+    auto p1 = new paper(set + "_" + tag + "_bayes_kerrors_normalized_comparison_" + label + "_dj", hb);
     p1->divide(afters.size(), -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
@@ -298,7 +298,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         }
     }
 
-    auto p2 = new paper(set + "_" + tag + "_bayes_kerrors_comparison_" + label + "_jpt", hb);
+    auto p2 = new paper(set + "_" + tag + "_bayes_kerrors_normalized_comparison_" + label + "_jpt", hb);
     p2->divide(afters.size(), -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
