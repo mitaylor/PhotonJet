@@ -244,12 +244,12 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::string matrix_name = "MUnfoldedBayes" + regularization;
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-        auto MUnfolded = convert_matrix(fafters[j]->Get(matrix_name.data()));
+        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
         (*unfolded[0])[j] = HUnfoldedBayes;
         (*unfolded_fold0[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 0, osg);
         (*unfolded_fold1[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 1, osg);
-        (*covariance[0])[j] = MUnfolded;
+        (*covariance[0])[j] = convert_matrix(MUnfolded));;
     }
 
     normalise_to_unity(unfolded_fold0[0], unfolded_fold1[0]);
