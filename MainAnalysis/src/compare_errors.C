@@ -17,6 +17,7 @@
 #include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TH2D.h"
 #include "TMatrixT.h"
 
 #include <string>
