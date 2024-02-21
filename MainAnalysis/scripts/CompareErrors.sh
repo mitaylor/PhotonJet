@@ -13,9 +13,9 @@ types=(bayes svd)
 errors=(knoerror kerrors kcovariance kcovtoys kerrorstoys)
 
 for sample in ${samples[@]}; do
-    for types in ${samples[@]}; do
-        for errors in ${samples[@]}; do
-            run_pp ${sample}
+    for type in ${types[@]}; do
+        for error in ${errors[@]}; do
+            run_pp ${sample}_${type}_${error}
         done
     done
 done
