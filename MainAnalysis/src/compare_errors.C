@@ -38,8 +38,7 @@ T* null(int64_t, std::string const&, std::string const&) {
 }
 
 TH2F* variance(TH1* flat, multival const* m) {
-    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
-        m->size(), 0, m->size());
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(), m->size(), 0, m->size());
 
     for (int64_t i = 0; i < m->size(); ++i) {
         auto err = flat->GetBinError(i + 1);
@@ -47,6 +46,11 @@ TH2F* variance(TH1* flat, multival const* m) {
     }
 
     return cov;
+}
+
+TH2F* convert_matrix(TMatrixT<double>* matrix) {
+    auto histogram = new TH2F(matrix); 
+    return histogram;
 }
 
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
@@ -226,12 +230,12 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<history<TH1F>*> unfolded;
     std::vector<history<TH1F>*> unfolded_fold0;
     std::vector<history<TH1F>*> unfolded_fold1;
-    std::vector<history<TMatrixT<double>>*> covariance;
+    std::vector<history<TH2F>*> covariance;
     
     unfolded.push_back(new history<TH1F>("unfolded_regularization"s + regularization, "", null<TH1F>, (int64_t) afters.size()));
     unfolded_fold0.push_back(new history<TH1F>("unfolded_fold0_regularization"s + regularization, ""s, null<TH1F>, (int64_t) afters.size()));
     unfolded_fold1.push_back(new history<TH1F>("unfolded_fold1_regularization"s + regularization, ""s, null<TH1F>, (int64_t) afters.size()));
-    covariance.push_back(new history<TMatrixT<double>>*>("covariance_regularization"s + regularization, ""s, null<TH1F>, (int64_t) afters.size()));
+    covariance.push_back(new history<TH2F>*>("covariance_regularization"s + regularization, ""s, null<TH2F>, (int64_t) afters.size()));
 
     /* extract histograms */
     for (size_t j = 0; j < afters.size(); ++j) {
@@ -239,7 +243,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::string matrix_name = "MUnfoldedBayes" + regularization;
 
         auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
+        auto MUnfolded = (TH2F*) convert_matrix(fafters[j]->Get(matrix_name.data()));
 
         (*unfolded[0])[j] = HUnfoldedBayes;
         (*unfolded_fold0[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 0, osg);
