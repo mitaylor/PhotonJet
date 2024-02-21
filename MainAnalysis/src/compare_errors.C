@@ -49,7 +49,7 @@ TH2F* variance(TH1* flat, multival const* m) {
 }
 
 TH2F* convert_matrix(TMatrixT<double>* matrix) {
-    auto histogram = new TH2F(*matrix); 
+    auto histogram = new TH2D(*matrix); 
     return histogram;
 }
 
