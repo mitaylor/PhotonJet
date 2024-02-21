@@ -5,7 +5,7 @@ set=$1
 run_pp() {
     tag=$1
 
-    ./bin/closure configs/closure/closure_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/quantitate_${tag}.root
+    ./bin/compare_errors configs/compare_errors/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_errors_${tag}.root
 }
 
 samples=(pp)
