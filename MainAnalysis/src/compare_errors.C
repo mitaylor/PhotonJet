@@ -326,7 +326,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     covariance[0]->apply([&](TH1* h) { p4->add(h, "data"s); });
     covariance[0]->apply([&](TH1* h) { 
-        h->GetZaxis()->SetLabelSize(0.35);
+        h->GetZaxis()->SetLabelSize(0.035);
         p4->adjust(h, "colz", ""); 
         });
 
