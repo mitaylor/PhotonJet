@@ -249,7 +249,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*unfolded[0])[j] = HUnfoldedBayes;
         (*unfolded_fold0[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 0, osg);
         (*unfolded_fold1[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 1, osg);
-        (*covariance[0])[j] = convert_matrix(MUnfolded));;
+        (*covariance[0])[j] = convert_matrix(MUnfolded);
     }
 
     normalise_to_unity(unfolded_fold0[0], unfolded_fold1[0]);
