@@ -5,7 +5,7 @@ set=$1
 run_pp() {
     tag=$1
 
-    ./bin/compare_errors configs/compare_errors/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_errors_${tag}.root
+    ./bin/compare_errors_nolabels configs/compare_errors/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_errors_${tag}.root
 }
 
 samples=(pp)
@@ -23,7 +23,7 @@ done
 run_aa() {
     tag=$1
 
-    ./bin/compare_errors configs/compare_errors/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_errors_${tag}.root
+    ./bin/compare_errors_nolabels configs/compare_errors/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_errors_${tag}.root
 }
 
 samples=(aa)
