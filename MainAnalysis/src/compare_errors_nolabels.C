@@ -191,19 +191,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto heavyion = sel->get<bool>("heavyion");
-
     auto rdrg = sel->get<std::vector<float>>("drg_range");
     auto rptg = sel->get<std::vector<float>>("ptg_range");
 
     auto osg = sel->get<std::vector<int64_t>>("osg");
-
-    auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
-    auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
-
-    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
-
-    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
