@@ -241,7 +241,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     /* extract histograms */
     for (size_t j = 0; j < afters.size(); ++j) {
         std::string unfold_name = (type == "SVD"s) ? "HUnfoldedSVD" + regularization : "HUnfoldedBayes" + regularization;
-        std::string matrix_name = (type == "SVD"s) ? "HUnfoldedSVD" + regularization : "MUnfoldedBayes" + regularization;
+        std::string matrix_name = (type == "SVD"s) ? "MUnfoldedSVD" + regularization : "MUnfoldedBayes" + regularization;
 
         std::cout << unfold_name << " " << matrix_name << std::endl;
 
