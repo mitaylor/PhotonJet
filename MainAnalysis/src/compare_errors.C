@@ -240,13 +240,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract histograms */
     for (size_t j = 0; j < afters.size(); ++j) {
-        std::string unfold_name = "HUnfoldedBayes" + regularization;
-        std::string matrix_name = "MUnfoldedBayes" + regularization;
+        std::string unfold_name = (type == "SVD") "HUnfoldedSVD" + regularization ? : "HUnfoldedBayes" + regularization;
+        std::string matrix_name = (type == "SVD") "HUnfoldedSVD" + regularization ? : "MUnfoldedBayes" + regularization;
 
-        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
+        auto HUnfolded = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
-        (*unfolded[0])[j] = HUnfoldedBayes;
+        (*unfolded[0])[j] = HUnfolded;
         (*unfolded_fold0[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 0, osg);
         (*unfolded_fold1[0])[j] = fold_mat((*unfolded[0])[j], MUnfolded, mg, 1, osg);
         (*covariance[0])[j] = convert_matrix(MUnfolded);
