@@ -7,12 +7,7 @@ run_pp() {
 
     echo ${tag}
 
-    ./bin/compare_bayes_kerrors_normalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_bayes_kerrors_normalized_${tag}.root
-    ./bin/compare_bayes_kerrors_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_bayes_kerrors_unnormalized_${tag}.root
-    # ./bin/compare_bayes_kcovariance_normalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_bayes_kcovariance_normalized_${tag}.root
-    # ./bin/compare_bayes_kcovariance_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_bayes_kcovariance_unnormalized_${tag}.root
-    # ./bin/compare_svd_kerrors_normalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_svd_kerrors_normalized_${tag}.root
-    # ./bin/compare_svd_kerrors_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_svd_kerrors_unnormalized_${tag}.root
+    ./bin/compare_flat configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_flat_${tag}.root
 }
 
 run_aa() {
@@ -20,12 +15,7 @@ run_aa() {
 
     echo ${tag}
 
-    ./bin/compare_bayes_kerrors_normalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_bayes_kerrors_normalized_${tag}.root
-    ./bin/compare_bayes_kerrors_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_bayes_kerrors_unnormalized_${tag}.root
-    # ./bin/compare_bayes_kcovariance_normalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_bayes_kcovariance_normalized_${tag}.root
-    # ./bin/compare_bayes_kcovariance_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_bayes_kcovariance_unnormalized_${tag}.root
-    # ./bin/compare_svd_kerrors_normalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_svd_kerrors_normalized_${tag}.root
-    # ./bin/compare_svd_kerrors_unnormalized configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_svd_kerrors_unnormalized_${tag}.root
+    ./bin/compare_flat configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_flat_${tag}.root
 }
 
 samples=(pp pp_qcd)
@@ -34,7 +24,7 @@ for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(aa aa_qcd aa_mebs_nonclosure aa_qcd_mebs_nonclosure)
+samples=(aa aa_qcd)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
