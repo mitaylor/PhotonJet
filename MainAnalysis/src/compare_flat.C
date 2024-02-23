@@ -262,7 +262,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
             (*flat_fold1[i])[j] = fold_mat((*flat[i])[j], MUnfolded, mg, 1, osg);
         }
 
-        normalise_to_unity(nominal_fold0[i], nominal_fold1[i], flat_fold0[i], flat_fold1[i]);
+        // normalise_to_unity(nominal_fold0[i], nominal_fold1[i], flat_fold0[i], flat_fold1[i]);
 
         nominal[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_nominal_iteration"s + std::to_string(iterations[i]));
         nominal_fold0[i]->rename(tag + "_"s + label + "_raw_sub_pjet_u_dr_jpt_nominal_fold0_iteration"s + std::to_string(iterations[i]));
