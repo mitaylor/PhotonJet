@@ -212,7 +212,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<TFile*> fnominal(afters.size(), nullptr);
     std::vector<TFile*> fflat(afters.size(), nullptr);
 
-    zip([&](auto& fnominal, fflat, auto const& after) {
+    zip([&](auto& fnominal, auto& fflat, auto const& after) {
         fnominal = new TFile(("unfolded/" + set + "/Bayes/MC/" + after).data(), "read");
         fflat = new TFile(("unfolded/" + set + "/Bayes/Flat/" + after).data(), "read");
     }, fnominal, fflat, afters);
