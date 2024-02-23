@@ -329,7 +329,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p2, cms, system_tag, 0, 0.04);
     p2->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
 
-    nominal_fold1[0]->apply([&](TH1* h) { p2->add(h, std::to_string(iterations[0]) + " iteration, MC prior"s); });
+    nominal_fold1[0]->apply([&](TH1* h) { p2->add(h, std::to_string(iterations[0]) + " iterations, MC prior"s); });
 
     for (size_t j = 0; j < afters.size(); ++j) {
         p2->stack(j + 1, (*flat_fold1[0])[j], std::to_string(iterations[0]) + " iterations, flat prior"s);
