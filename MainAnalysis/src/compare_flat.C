@@ -319,7 +319,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     nominal_fold0[0]->apply([&](TH1* h) { p1->add(h, std::to_string(iterations[0]) + " iteration, MC prior"s); });
 
     for (size_t j = 0; j < afters.size(); ++j) {
-        p1->stack(j + 1, (*flat_fold0[i])[j], std::to_string(iterations[i]) + " iterations, flat prior"s);
+        p1->stack(j + 1, (*flat_fold0[0])[j], std::to_string(iterations[0]) + " iterations, flat prior"s);
     }
 
     auto p2 = new paper(set + "_" + tag + "_bayes_kerrors_normalized_comparison_" + label + "_jpt", hb);
@@ -332,7 +332,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     nominal_fold1[0]->apply([&](TH1* h) { p2->add(h, std::to_string(iterations[0]) + " iteration, MC prior"s); });
 
     for (size_t j = 0; j < afters.size(); ++j) {
-        p2->stack(j + 1, (*flat_fold1[i])[j], std::to_string(iterations[i]) + " iterations, flat prior"s);
+        p2->stack(j + 1, (*flat_fold1[0])[j], std::to_string(iterations[0]) + " iterations, flat prior"s);
     }
 
     hb->sketch();
