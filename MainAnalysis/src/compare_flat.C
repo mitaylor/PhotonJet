@@ -307,7 +307,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     };
 
     auto hb = new pencil();
-    hb->category("type", "30 iterations, flat prior", "30 iterations, MC prior");
+    hb->category("type", std::to_string(iterations[0]) + " iterations, MC prior"s, std::to_string(iterations[0]) + " iterations, MC prior"s);
 
     auto p1 = new paper(set + "_" + tag + "_bayes_kerrors_normalized_comparison_" + label + "_dj", hb);
     p1->divide(afters.size(), -1);
@@ -316,10 +316,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p1, cms, system_tag, -2., 27.);
     p1->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
 
-    nominal_fold0[0]->apply([&](TH1* h) { p1->add(h, std::to_string(iterations[0]) + " iteration, MC prior"s); });
+    nominal_fold0[0]->apply([&](TH1* h) { p1->add(h, std::to_string(iterations[0]) + " iterations, MC prior"s); });
 
     for (size_t j = 0; j < afters.size(); ++j) {
-        p1->stack(j + 1, (*flat_fold0[0])[j], std::to_string(iterations[0]) + " iterations, flat prior"s);
+        p1->stack(j + 1, (*flat_fold0[0])[j], std::to_string(iterations[0]) + " iterations, MC prior"s);
     }
 
     auto p2 = new paper(set + "_" + tag + "_bayes_kerrors_normalized_comparison_" + label + "_jpt", hb);
