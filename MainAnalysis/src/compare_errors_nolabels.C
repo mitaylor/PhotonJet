@@ -234,8 +234,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::string unfold_name = (type == "SVD"s) ? "HUnfoldedSVD" + regularization : "HUnfoldedBayes" + regularization;
         std::string matrix_name = (type == "SVD"s) ? "MUnfoldedSVD" + regularization : "MUnfoldedBayes" + regularization;
 
-        std::cout << unfold_name << " " << matrix_name << std::endl;
-
         auto HUnfolded = (TH1F*) fafters[j]->Get(unfold_name.data());
         auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
 
