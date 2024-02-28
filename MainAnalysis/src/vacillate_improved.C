@@ -123,6 +123,10 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
     auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
 
+    /* manage memory manually */
+    TH1::AddDirectory(false);
+    TH1::SetDefaultSumw2();
+
     /* prepare histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
     auto ihf = new interval(dhf);
@@ -170,10 +174,6 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto cpt_merge = new history<TH2F>("cpt_merge"s, "counts", fcpt, 1);
 
     auto ppt = new history<TH2F>("ppt"s, "counts", fppt, ihf->size());
-
-    /* manage memory manually */
-    TH1::AddDirectory(false);
-    TH1::SetDefaultSumw2();
 
     /* load centrality weighting for MC */
     TFile* frho;
