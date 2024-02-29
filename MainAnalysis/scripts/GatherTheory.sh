@@ -29,5 +29,5 @@ for sample in ${samples[@]}; do
     run_aa ${sample}
 done
 
-./bin/gather_hybrid configs/gather_theory/gather_hybrid.conf \
-    data/arc/pho_40/gather_hybrid.root
+# ./bin/gather_hybrid configs/gather_theory/gather_hybrid.conf \
+#     data/arc/pho_40/gather_hybrid.root
