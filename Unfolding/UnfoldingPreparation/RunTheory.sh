@@ -48,7 +48,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAPythia0.root
+    --Output Theory/${set}/AAPythia0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
     --DataHistogram aa_g_1 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
@@ -59,7 +59,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAPythia1.root
+    --Output Theory/${set}/AAPythia1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
     --DataHistogram aa_g_2 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
@@ -70,7 +70,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAPythia2.root
+    --Output Theory/${set}/AAPythia2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
     --DataHistogram aa_g_3 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
@@ -81,7 +81,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAPythia3.root
+    --Output Theory/${set}/AAPythia3.root
 
 # AAJewel: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -94,7 +94,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAJewel3.root
+    --Output Theory/${set}/AAJewel3.root
 
 # AAJewelNoRecoil: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -107,7 +107,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAJewelNoRecoil3.root
+    --Output Theory/${set}/AAJewelNoRecoil3.root
     
 # AAPyquen: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -120,7 +120,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAPyquen3.root
+    --Output Theory/${set}/AAPyquen3.root
 
 # AAPyquenNoWide: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -133,7 +133,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/AAPyquenNoWide3.root
+    --Output Theory/${set}/AAPyquenNoWide3.root
 
 # PPPythia: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure.root \
@@ -146,7 +146,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/PPPythia0.root
+    --Output Theory/${set}/PPPythia0.root
 
 # PPJewel: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
@@ -159,7 +159,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/PPJewel0.root
+    --Output Theory/${set}/PPJewel0.root
 
 # PPPyquen: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
@@ -172,4 +172,4 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Output/${set}/PPPyquen0.root
+    --Output Theory/${set}/PPPyquen0.root
