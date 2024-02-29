@@ -197,6 +197,9 @@ int gather_theory(char const* config, char const* selections, char const* output
 
         (*hist_dr[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 0, osg);
         (*hist_jpt[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 1, osg);
+
+        hist_dr[i]->rename(trees[i] + "_dr"s);
+        hist_jpt[i]->rename(trees[i] + "_jpt"s);
     }
 
     f->Close();
