@@ -193,7 +193,7 @@ int gather_theory(char const* config, char const* selections, char const* output
             (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) dj, (float) jetPt}), (float) weight);
         }
 
-        hist_dr_jpt[i]->divide(*nevt);
+        hist_dr_jpt[i]->divide(*hist_nevt[i]);
 
         (*hist_dr[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 0, osg);
         (*hist_jpt[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 1, osg);
