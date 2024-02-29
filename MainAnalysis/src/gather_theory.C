@@ -34,6 +34,84 @@ void normalise_to_unity(T*&... args) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
 }
 
+
+template <typename T>
+T* null(int64_t, std::string const&, std::string const&) {
+    return nullptr;
+}
+
+TH2F* variance(TH1* flat, multival const* m) {
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
+        m->size(), 0, m->size());
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto err = flat->GetBinError(i + 1);
+        cov->SetBinContent(i + 1, i + 1, err * err);
+    }
+
+    return cov;
+}
+
+TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
+           std::vector<int64_t>& offsets) {
+    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
+    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
+        { offsets[axis << 1], offsets[(axis << 1) + 1] });
+
+    auto shape = m->shape();
+
+    auto front = std::vector<int64_t>(m->dims(), 0);
+    auto back = std::vector<int64_t>(m->dims(), 0);
+    for (int64_t i = 0; i < m->dims(); ++i) {
+        front[i] = offsets[i << 1];
+        back[i] = shape[i] - offsets[(i << 1) + 1];
+    }
+
+    auto size = back[axis] - front[axis];
+    auto list = new std::vector<int64_t>[size];
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto indices = m->indices_for(i);
+
+        bool flag = false;
+        zip([&](int64_t index, int64_t f, int64_t b) {
+            flag = flag || index < f || index >= b;
+        }, indices, front, back);
+        if (flag) { continue; }
+
+        auto index = indices[axis] - front[axis];
+        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
+            + flat->GetBinContent(i + 1));
+
+        list[index].push_back(i);
+    }
+
+    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
+
+    for (int64_t i = 0; i < size; ++i) {
+        auto indices = list[i];
+        int64_t count = indices.size();
+
+        auto error = 0.;
+        for (int64_t j = 0; j < count; ++j) {
+            auto j_x = indices[j] + 1;
+            for (int64_t k = 0; k < count; ++k) {
+                auto k_x = indices[k] + 1;
+                error = error + cov->GetBinContent(j_x, k_x);
+            }
+        }
+
+        hfold->SetBinError(i + 1, std::sqrt(error));
+    }
+
+    delete [] list;
+    delete cov;
+
+    hfold->Scale(1., "width");
+
+    return hfold;
+}
+
 int gather_theory(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -43,19 +121,30 @@ int gather_theory(char const* config, char const* selections, char const* output
     /* selections */
     auto sel = new configurer(selections);
 
-    auto photon_pt_bounds = sel->get<std::vector<float>>("photon_pt_bounds");
-    auto jet_pt_bounds = sel->get<std::vector<float>>("jet_pt_bounds");
+    auto const photon_pt_min = sel->get<float>("photon_pt_min");
+    auto const photon_pt_max = sel->get<float>("photon_pt_max");
     
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
-    auto gdr = sel->get<std::vector<float>>("drg_range");
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
+
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     /* make histograms */
-    auto idr = new interval("#deltaj"s, gdr);
-    auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
+    auto incl = new interval(""s, 1, 0.f, 9999.f);
 
-    std::vector<history<TH1F>*> hists(trees.size(), nullptr);
+    auto mg = new multival(rdrg, rptg);
+
+    auto fn = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
+    auto fg = [&](int64_t, std::string const& name, std::string const& label) {
+        return new TH1F(name.data(), (";Generator Bin;"s + label).data(), mg->size(), 0, mg->size()); };
+
+    std::vector<history<TH1F>*> hist_nevt(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_dr_jpt(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_dr(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_jpt(trees.size(), nullptr);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -70,7 +159,10 @@ int gather_theory(char const* config, char const* selections, char const* output
         TTree* t = (TTree*)f->Get(trees[i].c_str());
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        hists[i] = new history<TH1F>("dr_"s + trees[i], "", fdr, 1);
+        hist_nevt[i] = new history<TH1F>(trees[i] + "_nevt", "", fn, 1);
+        hist_dr_jpt[i] = new history<TH1F>(trees[i] + "_dr_jpt", "", fg, 1);
+        hist_dr[i] = new history<TH1F>(trees[i] + "_dr", "", null<TH1F>, 1);
+        hist_jpt[i] = new history<TH1F>(trees[i] + "_jpt", "", null<TH1F>, 1);
 
         double photonPt;
         double jetPt;
@@ -84,22 +176,27 @@ int gather_theory(char const* config, char const* selections, char const* output
         t->SetBranchAddress("dj", &dj);
         t->SetBranchAddress("weight", &weight);
 
+        float photonPtPrev = 0;
+
         for (int64_t j = 0; j < nentries; ++j) {
             t->GetEntry(j);
 
-            if ((float) photonPt < photon_pt_bounds[0]) { continue; }
-            if ((float) photonPt > photon_pt_bounds[1]) { continue; }
-
-            if ((float) jetPt < jet_pt_bounds[0]) { continue; }
-            if ((float) jetPt > jet_pt_bounds[1]) { continue; }
+            if ((float) photonPt < photon_pt_min) { continue; }
+            if ((float) photonPt > photon_pt_max) { continue; }
 
             if ((float) dphi < dphi_min_numerator/dphi_min_denominator * TMath::Pi()) { continue; }
 
-            (*hists[i])[0]->Fill((float) dj, (float) weight);
+            if ((float) photonPt != photonPtPrev) {
+                (*hist_nevt[i])[0]->Fill(1., (float) weight);
+            }
+
+            (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) dj, (float) jetPt}), (float) weight);
         }
 
-        scale_bin_width(hists[i]);
-        normalise_to_unity(hists[i]);
+        hist_dr_jpt[i]->divide(*nevt);
+
+        (*hist_dr[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 0, osg);
+        (*hist_jpt[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 1, osg);
     }
 
     f->Close();
@@ -107,7 +204,10 @@ int gather_theory(char const* config, char const* selections, char const* output
     /* save histograms */
     in(output, [&]() {
         for (size_t i = 0; i < trees.size(); ++i) {
-            hists[i]->save();
+            hist_nevt[i]->save();
+            hist_dr_jpt[i]->save();
+            hist_dr[i]->save();
+            hist_jpt[i]->save();
         }
     });
 
