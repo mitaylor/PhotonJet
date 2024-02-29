@@ -37,6 +37,52 @@ if [[ $set == "pho_60_rebin4" ]]; then
     binning_gen_bins="30,40,50,60,70,80,100,200"
 fi 
 
+# AAPythia: Execute
+./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --DataHistogram aa_g_0 \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --ResponseHistogram aa_c_0 \
+    --ResponseTruth aa_g_0 \
+    --ResponseReco aa_r_0 \
+    --PrimaryRecoBins ${primary_reco_bins} \
+    --BinningRecoBins ${binning_reco_bins} \
+    --PrimaryGenBins ${primary_gen_bins} \
+    --BinningGenBins ${binning_gen_bins} \
+    --Output Output/${set}/AAPythia0.root
+./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --DataHistogram aa_g_1 \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --ResponseHistogram aa_c_1 \
+    --ResponseTruth aa_g_1 \
+    --ResponseReco aa_r_1 \
+    --PrimaryRecoBins ${primary_reco_bins} \
+    --BinningRecoBins ${binning_reco_bins} \
+    --PrimaryGenBins ${primary_gen_bins} \
+    --BinningGenBins ${binning_gen_bins} \
+    --Output Output/${set}/AAPythia1.root
+./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --DataHistogram aa_g_2 \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --ResponseHistogram aa_c_2 \
+    --ResponseTruth aa_g_2 \
+    --ResponseReco aa_r_2 \
+    --PrimaryRecoBins ${primary_reco_bins} \
+    --BinningRecoBins ${binning_reco_bins} \
+    --PrimaryGenBins ${primary_gen_bins} \
+    --BinningGenBins ${binning_gen_bins} \
+    --Output Output/${set}/AAPythia2.root
+./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --DataHistogram aa_g_3 \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure.root \
+    --ResponseHistogram aa_c_3 \
+    --ResponseTruth aa_g_3 \
+    --ResponseReco aa_r_3 \
+    --PrimaryRecoBins ${primary_reco_bins} \
+    --BinningRecoBins ${binning_reco_bins} \
+    --PrimaryGenBins ${primary_gen_bins} \
+    --BinningGenBins ${binning_gen_bins} \
+    --Output Output/${set}/AAPythia3.root
+
 # AAJewel: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
@@ -88,6 +134,19 @@ fi
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
     --Output Output/${set}/AAPyquenNoWide3.root
+
+# PPPythia: Execute
+./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure.root \
+    --DataHistogram pp_g_0 \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure.root \
+    --ResponseHistogram pp_c_0 \
+    --ResponseTruth pp_g_0 \
+    --ResponseReco pp_r_0 \
+    --PrimaryRecoBins ${primary_reco_bins} \
+    --BinningRecoBins ${binning_reco_bins} \
+    --PrimaryGenBins ${primary_gen_bins} \
+    --BinningGenBins ${binning_gen_bins} \
+    --Output Output/${set}/PPPythia0.root
 
 # PPJewel: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
