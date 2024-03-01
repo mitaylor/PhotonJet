@@ -163,7 +163,7 @@ fi
 
 # PPPyquen: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
-    --DataHistogram tPyquenPP_dr_0 \
+    --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
