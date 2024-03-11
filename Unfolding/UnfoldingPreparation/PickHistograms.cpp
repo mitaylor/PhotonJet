@@ -59,15 +59,6 @@ int main(int argc, char *argv[])
    cout << NReco1 << " " << NReco2 << " " << NReco1 * NReco2 << " " << NReco << endl;
    cout << NGen1 << " " << NGen2 << " " << NGen1 * NGen2 << " " << NGen << endl;
 
-   // Copy over data
-   TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
-   for(int i = 0; i <= NReco + 1; i++)
-   {
-      HDataReco.SetBinContent(i, HInputData->GetBinContent(i));
-      HDataReco.SetBinError(i, HInputData->GetBinError(i));
-   }
-   HDataReco.Write();
-
    // Copy over error
    if (HErrorData != nullptr) {
       TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
