@@ -19,7 +19,7 @@ samples=(pp)
 for sample in ${samples[@]}; do
     run_pp ${sample}
 
-    for syst in qcd qcd_gen_iso jer_up jeu_up jeu_down wo_ele_rej loose_purity tight_purity closure; do
+    for syst in qcd qcd_gen_iso jer_up jeu_up jeu_down wo_ele_rej loose_purity tight_purity closure_a closure_b; do
         run_pp ${sample}_${syst}
     done
 done
@@ -37,7 +37,7 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa ${sample}
 
-    for syst in qcd qcd_gen_iso jer_up jeu_up jeu_down wo_ele_rej cent_down cent_up loose_purity tight_purity small closure; do
+    for syst in qcd qcd_gen_iso jer_up jeu_up jeu_down wo_ele_rej cent_down cent_up loose_purity tight_purity small closure_a closure_b; do
         run_aa ${sample}_${syst}
     done
 done

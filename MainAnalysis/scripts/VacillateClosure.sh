@@ -17,7 +17,7 @@ run_aa() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    for syst in qcd; do
+    for syst in closure_a closure_b; do
         run_pp ${sample}_${syst}
     done
 done
@@ -25,7 +25,7 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    for syst in qcd; do
+    for syst in closure_a closure_b; do
         run_aa ${sample}_${syst}
     done
 done
