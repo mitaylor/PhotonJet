@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
 
    string DataFileName            = CL.Get("Data");
    string DataHistogram           = CL.Get("DataHistogram");
-   string ErrorFileName            = CL.Get("Error");
-   string ErrorHistogram           = CL.Get("ErrorHistogram");
+   string ErrorFileName            = CL.Get("Error", "");
+   string ErrorHistogram           = CL.Get("ErrorHistogram", "");
    string ResponseFileName        = CL.Get("Response");
    string ResponseHistogram       = CL.Get("ResponseHistogram");
    string ResponseTruth           = CL.Get("ResponseTruth");
