@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
    TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
    TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
-   TH1F *HErrorData          = (TH1F *)DataFile.Get(ErrorHistogram.c_str());
+   TH1F *HErrorData          = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
    TH2F *HInputResponse      = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
    TH1F *HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
    TH1F *HInputResponseReco  = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
