@@ -39,6 +39,9 @@ int regularization(char const* config, char const* selections, char const* outpu
     auto object = conf->get<std::string>("object");
 
     auto filenames = conf->get<std::vector<std::string>>("filenames");
+
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     
     auto sel = new configurer(selections);
 
@@ -47,6 +50,8 @@ int regularization(char const* config, char const* selections, char const* outpu
 
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
+
+    auto mpthf = new multival(rpt, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
