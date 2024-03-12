@@ -99,13 +99,13 @@ int regularization(char const* config, char const* selections, char const* outpu
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto minimum = [&](int64_t index) {
-        auto photon_selections = "minimum: "s + to_text(choice[index-1]);
+        auto min = "minimum: "s + to_text(choice[index-1]);
 
         TLatex* l = new TLatex();
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
-        l->DrawLatexNDC(0.135, 0.75, minimum.data());
+        l->DrawLatexNDC(0.135, 0.75, min.data());
     };
 
     /* plot histograms */
