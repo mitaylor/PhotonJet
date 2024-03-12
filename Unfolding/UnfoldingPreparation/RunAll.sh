@@ -7,7 +7,7 @@ nominal=$3
 unfolding=$4
 mebs=$5
 
-mkdir -p /data/submit/mitay/unfolding/${date}/Input/Data
+mkdir -p /data/submit/mitay/unfolding/${date}/Input/Data/${set}/
 
 if [[ $set == "pho_60" ]]; then
     primary_reco_bins="0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3"

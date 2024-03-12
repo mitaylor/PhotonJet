@@ -31,11 +31,11 @@ int main(int argc, char *argv[])
    vector<double> PrimaryGenBins  = CL.GetDoubleVector("PrimaryGenBins");
    vector<double> BinningGenBins  = CL.GetDoubleVector("BinningGenBins");
 
-   TFile OutputFile(OutputFileName.c_str(), "RECREATE");
-
    TFile DataFile(DataFileName.c_str());
    TFile ErrorFile(ErrorFileName.c_str());
    TFile ResponseFile(ResponseFileName.c_str());
+
+   TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
    TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
    TH1F *HErrorData          = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
