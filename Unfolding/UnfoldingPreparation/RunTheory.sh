@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 set=$1
+date=$2
+
+mkdir -p /data/submit/mitay/unfolding/${date}/Input/Theory
 
 if [[ $set == "pho_60" ]]; then
     primary_reco_bins="0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.105,0.12,0.135,0.15,0.18,0.21,0.3"
@@ -50,7 +53,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPythia0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPythia0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
     --DataHistogram aa_g_1 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
@@ -63,7 +66,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPythia1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPythia1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
     --DataHistogram aa_g_2 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
@@ -76,7 +79,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPythia2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPythia2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
     --DataHistogram aa_g_3 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
@@ -89,7 +92,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPythia3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPythia3.root
 
 # AAMCPythia: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
@@ -104,7 +107,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AAMCPythia0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AAMCPythia0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
     --DataHistogram aa_g_1 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
@@ -117,7 +120,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AAMCPythia1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AAMCPythia1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
     --DataHistogram aa_g_2 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
@@ -130,7 +133,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AAMCPythia2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AAMCPythia2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
     --DataHistogram aa_g_3 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
@@ -143,7 +146,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AAMCPythia3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AAMCPythia3.root
 
 # AADataJewelAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -158,7 +161,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -171,7 +174,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelAA1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -184,7 +187,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelAA2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -197,7 +200,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelAA3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA3.root
 
 # AADataJewelNoRecoilAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -212,7 +215,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelNoRecoilAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -225,7 +228,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelNoRecoilAA1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -238,7 +241,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelNoRecoilAA2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -251,7 +254,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelNoRecoilAA3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA3.root
 
 # AADataJewelPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
@@ -266,7 +269,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -279,7 +282,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -292,7 +295,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -305,7 +308,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP3.root
 
 # AADataPyquenAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -320,7 +323,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -333,7 +336,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenAA1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -346,7 +349,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenAA2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -359,7 +362,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenAA3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA3.root
 
 # AADataPyquenNoWideAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -374,7 +377,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenNoWideAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -387,7 +390,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenNoWideAA1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -400,7 +403,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenNoWideAA2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -413,7 +416,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataPyquenNoWideAA3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA3.root
 
 # AADataPyquenPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
@@ -428,7 +431,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -441,7 +444,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -454,7 +457,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -467,7 +470,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/AADataJewelPP3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP3.root
 
 # PPDataPythia: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_a.root \
@@ -482,7 +485,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataPythia0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataPythia0.root
 
 # PPMCPythia: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_a.root \
@@ -497,7 +500,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPMCPythia0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPMCPythia0.root
 
 # PPDataJewelPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
@@ -512,7 +515,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataJewelPP0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataJewelPP0.root
 
 # PPDataJewelAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -527,7 +530,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataJewelAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataJewelAA0.root
 
 # PPDataJewelNoRecoilAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -542,7 +545,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataJewelNoRecoilAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataJewelNoRecoilAA0.root
 
 # PPDataPyquenPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
@@ -557,7 +560,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataPyquenPP0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataPyquenPP0.root
 
 # PPDataPyquenAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -572,7 +575,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataPyquenAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataPyquenAA0.root
 
 # PPDataPyquenNoWideAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
@@ -587,4 +590,4 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output Theory/${set}/PPDataPyquenNoWideAA0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/PPDataPyquenNoWideAA0.root
