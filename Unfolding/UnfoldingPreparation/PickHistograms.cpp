@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
 
    string DataFileName            = CL.Get("Data");
    string DataHistogram           = CL.Get("DataHistogram");
-   string ErrorFileName            = CL.Get("Error", "");
-   string ErrorHistogram           = CL.Get("ErrorHistogram", "");
+   string ErrorFileName           = CL.Get("Error", "");
+   string ErrorHistogram          = CL.Get("ErrorHistogram", "");
    string ResponseFileName        = CL.Get("Response");
    string ResponseHistogram       = CL.Get("ResponseHistogram");
    string ResponseTruth           = CL.Get("ResponseTruth");
@@ -31,11 +31,11 @@ int main(int argc, char *argv[])
    vector<double> PrimaryGenBins  = CL.GetDoubleVector("PrimaryGenBins");
    vector<double> BinningGenBins  = CL.GetDoubleVector("BinningGenBins");
 
+   TFile OutputFile(OutputFileName.c_str(), "RECREATE");
+
    TFile DataFile(DataFileName.c_str());
    TFile ErrorFile(ErrorFileName.c_str());
    TFile ResponseFile(ResponseFileName.c_str());
-
-   TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
    TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
    TH1F *HErrorData          = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
