@@ -48,7 +48,6 @@ int regularization(char const* config, char const* selections, char const* outpu
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
     auto mpthf = new multival(rpt, dhf);
@@ -115,19 +114,19 @@ int regularization(char const* config, char const* selections, char const* outpu
     hb->category("algorithm", "Bayes", "SVD");
     hb->category("prior", "MC", "Flat");
     hb->category("object", "Data", "MC");
-    hb->category("label", "Pythia", "JewelAA", "JewelPP", "JewelNoRecoilAA", "PyquenAA", "PyquenPP","PyquenNoWideAA")
+    hb->category("label", "Pythia", "JewelAA", "JewelPP", "JewelNoRecoilAA", "PyquenAA", "PyquenPP","PyquenNoWideAA");
 
     hb->set_binary("type");
 
     auto p = new paper(set + "_regularization_" + tag + "_" + object + "_" + algorithm + "_" + label + "_" + prior, hb);
 
-    p->divide(files->size(), -1);
+    p->divide(files.size(), -1);
     p->accessory(pthf_info);
     p->accessory(minimum);
     apply_style(p, cms, system_tag);
     p->set(paper::flags::logy);
 
-    for (int64_t i = 0; i < files->size(); ++i) {
+    for (int64_t i = 0; i < files.size(); ++i) {
         p->add((*mse)[i], "MSE", algorithm, prior, object, label);
     }
 
