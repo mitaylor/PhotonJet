@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -86,6 +87,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     /* plotting setup */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+    auto title = (algorithm == Bayes) ? "iterations"s : "k_{reg}"s;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
@@ -97,26 +99,23 @@ int regularization(char const* config, char const* selections, char const* outpu
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto minimum = [&](int64_t index) {
-        char buffer[128] = { '\0' };
-        sprintf(buffer, "minimum: %d", choice[index-1]);
+        auto photon_selections = "minimum: "s + to_text(choice[index-1]);
 
         TLatex* l = new TLatex();
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
-        l->DrawLatexNDC(0.135, 0.77, buffer);
+        l->DrawLatexNDC(0.135, 0.75, minimum);
     };
 
     /* plot histograms */
     auto hb = new pencil();
 
     hb->category("type", "MSE", "V", "B^{2}");
-    hb->category("algorithm", "Bayes", "SVD");
-    hb->category("prior", "MC", "Flat");
-    hb->category("object", "Data", "MC");
-    hb->category("label", "Pythia", "JewelAA", "JewelPP", "JewelNoRecoilAA", "PyquenAA", "PyquenPP","PyquenNoWideAA");
-
-    hb->set_binary("type");
+    // hb->category("algorithm", "Bayes", "SVD");
+    // hb->category("prior", "MC", "Flat");
+    // hb->category("object", "Data", "MC");
+    // hb->category("label", "Pythia", "JewelAA", "JewelPP", "JewelNoRecoilAA", "PyquenAA", "PyquenPP","PyquenNoWideAA");
 
     auto p = new paper(set + "_regularization_" + tag + "_" + object + "_" + algorithm + "_" + label + "_" + prior, hb);
 
@@ -127,7 +126,9 @@ int regularization(char const* config, char const* selections, char const* outpu
     p->set(paper::flags::logy);
 
     for (size_t i = 0; i < files.size(); ++i) {
-        p->add((*mse)[i], "MSE", algorithm, prior, object, label);
+        (*mse)[i]->GetXaxis()->SetTitle(title);
+        p->add((*mse)[i], "MSE");
+        p->adjust((*mse)[i], "pe", "plf");
     }
 
     hb->sketch();
