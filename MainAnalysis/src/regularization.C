@@ -126,7 +126,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     p->set(paper::flags::logy);
 
     for (size_t i = 0; i < files.size(); ++i) {
-        (*mse)[i]->GetXaxis()->SetTitle(title);
+        (*mse)[i]->GetXaxis()->SetTitle(title.data());
         p->add((*mse)[i], "MSE");
         p->adjust((*mse)[i], "pe", "plf");
     }
