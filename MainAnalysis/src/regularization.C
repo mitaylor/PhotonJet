@@ -56,12 +56,12 @@ int regularization(char const* config, char const* selections, char const* outpu
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare the mse */
-    auto mse = new history<TH1F>("mse", "", null<TH1F>, (int64_t) afters.size());
+    auto mse = new history<TH1F>("mse", "", null<TH1F>, (int64_t) files.size());
 
     /* extract chosen histograms */
     for (size_t j = 0; j < files.size(); ++j) {
         auto HMSE = (TH1F*) files[j]->Get("HMSE");
-        (*mse)[j] = HUnfoldedBayes;
+        (*mse)[j] = HMSE;
     }
 
     /* rename histograms */
