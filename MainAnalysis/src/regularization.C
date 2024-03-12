@@ -87,7 +87,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     /* plotting setup */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
-    auto title = (algorithm == Bayes) ? "iterations"s : "k_{reg}"s;
+    auto title = (algorithm == "Bayes") ? "iterations"s : "k_{reg}"s;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
