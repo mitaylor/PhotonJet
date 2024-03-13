@@ -87,7 +87,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     std::vector<TFile*> files(filenames.size(), nullptr);
 
     zip([&](auto& file, auto const& filename) {
-        file = new TFile(("unfolded/Theory/"s + set + "/"s + algorithm + "/"s + prior + "/kErrors/" + filename).data(), "read");
+        file = new TFile(("unfolded/Theory/"s + set + "/"s + algorithm + "/"s + prior + "/kErrors/"s + filename).data(), "read");
     }, files, filenames);
 
     /* prepare output from pre-unfolded data */
