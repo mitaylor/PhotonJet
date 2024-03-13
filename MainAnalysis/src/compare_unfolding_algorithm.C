@@ -117,82 +117,82 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<TFile*> fdata_svd(filenames.size(), nullptr);
-    std::vector<TFile*> fdata_bayes(filenames.size(), nullptr);
+    std::vector<TFile*> fdata_svd(filenames.size(), nullptr);std::cout << __LINE__ << std::endl;
+    std::vector<TFile*> fdata_bayes(filenames.size(), nullptr);std::cout << __LINE__ << std::endl;
 
     zip([&](auto& fsvd, auto& fbayes, auto const& filename) {
         fsvd = new TFile(("unfolded/Data/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename).data(), "read");
         fbayes = new TFile(("unfolded/Data/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename).data(), "read");
     }, fdata_svd, fdata_bayes, filenames);
-
-    TFile* freg_svd = new TFile((base + file_svd).data(), "read");
-    TFile* freg_bayes = new TFile((base + file_bayes).data(), "read");
-
-    auto regularization_svd = new history<TH1F>(freg_svd, "mse"s);
-    auto regularization_bayes = new history<TH1F>(freg_bayes, "mse"s);
-
+std::cout << __LINE__ << std::endl;
+    TFile* freg_svd = new TFile((base + file_svd).data(), "read");std::cout << __LINE__ << std::endl;
+    TFile* freg_bayes = new TFile((base + file_bayes).data(), "read");std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
+    auto regularization_svd = new history<TH1F>(freg_svd, "mse"s);std::cout << __LINE__ << std::endl;
+    auto regularization_bayes = new history<TH1F>(freg_bayes, "mse"s);std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
-
+std::cout << __LINE__ << std::endl;
     /* prepare data */
     auto unfolded_svd = new history<TH1F>("unfolded_svd", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_svd_fold0 = new history<TH1F>("unfolded_svd_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_svd_fold1 = new history<TH1F>("unfolded_svd_fold1", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     auto unfolded_bayes = new history<TH1F>("unfolded_bayes", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_bayes_fold0 = new history<TH1F>("unfolded_bayes_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_bayes_fold1 = new history<TH1F>("unfolded_bayes_fold1", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     /* determine the regularization to use */
-    std::vector<int64_t> choice_svd(filenames.size(), 1);
-    std::vector<int64_t> choice_bayes(filenames.size(), 1);
-
+    std::vector<int64_t> choice_svd(filenames.size(), 1);std::cout << __LINE__ << std::endl;
+    std::vector<int64_t> choice_bayes(filenames.size(), 1);std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
     for (size_t i = 0; i < filenames.size(); ++i) {
-        choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();
-        choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();
+        choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();std::cout << __LINE__ << std::endl;
+        choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();std::cout << __LINE__ << std::endl;
     }
-
+std::cout << __LINE__ << std::endl;
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
         std::string unfold_name_svd = "HUnfoldedSVD" + std::to_string(choice_svd[j]);
         std::string matrix_name_svd = "MUnfoldedSVD" + std::to_string(choice_svd[j]);
-
+std::cout << __LINE__ << std::endl;
         std::string unfold_name_bayes = "HUnfoldedBayes" + std::to_string(choice_bayes[j]);
         std::string matrix_name_bayes = "MUnfoldedBayes" + std::to_string(choice_bayes[j]);
+std::cout << __LINE__ << std::endl;
+        auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());std::cout << __LINE__ << std::endl;
+        auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(unfold_name_svd.data());std::cout << __LINE__ << std::endl;
 
-        auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
-        auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(unfold_name_svd.data());
+        auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
+        auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
 
-        auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());
-        auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(unfold_name_bayes.data());
+        (*unfolded_svd)[j] = HUnfoldedSVD;std::cout << __LINE__ << std::endl;
+        (*unfolded_svd_fold0)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);std::cout << __LINE__ << std::endl;
+        (*unfolded_svd_fold1)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);std::cout << __LINE__ << std::endl;
 
-        (*unfolded_svd)[j] = HUnfoldedSVD;
-        (*unfolded_svd_fold0)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);
-        (*unfolded_svd_fold1)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);
-
-        (*unfolded_bayes)[j] = HUnfoldedBayes;
-        (*unfolded_bayes_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);
-        (*unfolded_bayes_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);
+        (*unfolded_bayes)[j] = HUnfoldedBayes;std::cout << __LINE__ << std::endl;
+        (*unfolded_bayes_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);std::cout << __LINE__ << std::endl;
+        (*unfolded_bayes_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);std::cout << __LINE__ << std::endl;
     }
-
+std::cout << __LINE__ << std::endl;
     /* rename histograms */
     unfolded_svd->rename("unfolded_svd");
     unfolded_svd_fold0->rename("unfolded_svd_fold0");
     unfolded_svd_fold1->rename("unfolded_svd_fold1");
-
+std::cout << __LINE__ << std::endl;
     unfolded_bayes->rename("unfolded_bayes");
     unfolded_bayes_fold0->rename("unfolded_bayes_fold0");
     unfolded_bayes_fold1->rename("unfolded_bayes_fold1");
-
+std::cout << __LINE__ << std::endl;
     /* save histograms */
     unfolded_svd->save();
     unfolded_svd_fold0->save();
     unfolded_svd_fold1->save();
-
+std::cout << __LINE__ << std::endl;
     unfolded_bayes->save();
     unfolded_bayes_fold0->save();
     unfolded_bayes_fold1->save();
-
+std::cout << __LINE__ << std::endl;
     fout->Close();
 
     return 0;
