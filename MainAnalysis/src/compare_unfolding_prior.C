@@ -230,18 +230,20 @@ int quantitate(char const* config, char const* selections, char const* output) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto minimum = [&](int64_t index) {
-        auto reg = (algorithm == "SVD") ? "k_{reg}"s : "iteration"s;
-        auto min = "Regularization: "s + reg + "_{, mc} = "s to_text(choice_mc[index-1]) + " and " + reg + "_{, flat} = "s + to_text(choice_flat[index-1]);
-        auto alg = "Algorithm: "s + algorithm;
-        auto src = "Source: "s + label;
+        if (index > -1) {
+            auto reg = (algorithm == "SVD") ? "k_{reg}"s : "iteration"s;
+            auto min = "Regularization: "s + reg + "_{, mc} = "s to_text(choice_mc[index-1]) + " and " + reg + "_{, flat} = "s + to_text(choice_flat[index-1]);
+            auto alg = "Algorithm: "s + algorithm;
+            auto src = "Source: "s + label;
 
-        TLatex* l = new TLatex();
-        l->SetTextFont(43);
-        l->SetTextAlign(11);
-        l->SetTextSize(13);
-        l->DrawLatexNDC(0.3, 0.65, min.data());
-        l->DrawLatexNDC(0.3, 0.60, alg.data());
-        l->DrawLatexNDC(0.3, 0.55, src.data());
+            TLatex* l = new TLatex();
+            l->SetTextFont(43);
+            l->SetTextAlign(11);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.3, 0.65, min.data());
+            l->DrawLatexNDC(0.3, 0.60, alg.data());
+            l->DrawLatexNDC(0.3, 0.55, src.data());
+        }
     };
 
     /* plot histograms */
