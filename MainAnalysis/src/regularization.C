@@ -145,12 +145,16 @@ int regularization(char const* config, char const* selections, char const* outpu
 
     auto minimum = [&](int64_t index) {
         auto min = "minimum: "s + to_text(choice[index-1]);
+        auto info = "algorithm: "s + algorithm + ", prior: "s + prior + ", type: "s + object;
+        auto lab = label;
 
         TLatex* l = new TLatex();
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
         l->DrawLatexNDC(0.135, 0.75, min.data());
+        l->DrawLatexNDC(0.135, 0.70, info.data());
+        l->DrawLatexNDC(0.135, 0.65, lab.data());
     };
 
     /* plot histograms */
@@ -175,8 +179,10 @@ int regularization(char const* config, char const* selections, char const* outpu
         auto min_bias = (*bias)[i]->GetMinimum();
 
         auto min = (min_variance < min_bias) ? min_variance : min_bias;
+        auto max = (*mse)[i]->GetMaximum();
 
-        (*mse)[i]->SetMinimum(min);
+        (*mse)[i]->SetMinimum(min/2);
+        (*mse)[i]->SetMinimum(max*10);
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
 
         p->add((*mse)[i], "MSE");
