@@ -125,8 +125,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     zip([&](auto& fsvd, auto& fbayes, auto const& filename) {
         fsvd = new TFile(("unfolded/Data/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename).data(), "read");
         fbayes = new TFile(("unfolded/Data/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename).data(), "read");
-        std::cout << "unfolded/Data/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename << std::endl;
-        std::cout << "unfolded/Data/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename << std::endl;
     }, fdata_svd, fdata_bayes, filenames);
 
     TFile* freg_svd = new TFile((base + file_svd).data(), "read");
@@ -163,14 +161,18 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         std::string unfold_name_bayes = "HUnfoldedBayes" + std::to_string(choice_bayes[j]);
         std::string matrix_name_bayes = "MUnfoldedBayes" + std::to_string(choice_bayes[j]);
-std::cout << unfold_name_svd << " " << matrix_name_svd << " " << unfold_name_bayes << " " << matrix_name_bayes << std::endl;
+
+        std::cout << unfold_name_svd << " " << matrix_name_svd << " " << unfold_name_bayes << " " << matrix_name_bayes << std::endl;
+        
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
         auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(unfold_name_svd.data());
 
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
         auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
-        std::cout << MUnfoldedBayes->GetNcols() << " " << MUnfoldedBayes->GetNrows() << std::endl;
+
+        std::cout << (*MUnfoldedBayes)->GetNcols() << " " << MUnfoldedBayes->GetNrows() << std::endl;
         std::cout << MUnfoldedSVD->GetNcols() << " " << MUnfoldedSVD->GetNrows() << std::endl;
+
         (*unfolded_bayes)[j] = HUnfoldedBayes;std::cout << __LINE__ << std::endl;
         (*unfolded_bayes_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);std::cout << __LINE__ << std::endl;
         (*unfolded_bayes_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);std::cout << __LINE__ << std::endl;
@@ -179,7 +181,7 @@ std::cout << unfold_name_svd << " " << matrix_name_svd << " " << unfold_name_bay
         (*unfolded_svd_fold0)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);std::cout << __LINE__ << std::endl;
         (*unfolded_svd_fold1)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);std::cout << __LINE__ << std::endl;
     }
-std::cout << __LINE__ << std::endl;
+
     /* rename histograms */
     unfolded_svd->rename("unfolded_svd");
     unfolded_svd_fold0->rename("unfolded_svd_fold0");
