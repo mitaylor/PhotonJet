@@ -95,21 +95,38 @@ int regularization(char const* config, char const* selections, char const* outpu
 
     /* prepare the mse */
     auto mse = new history<TH1F>("mse", "", null<TH1F>, (int64_t) files.size());
+    auto bias = new history<TH1F>("bias", "", null<TH1F>, (int64_t) files.size());
+    auto variance = new history<TH1F>("variance", "", null<TH1F>, (int64_t) files.size());
+
     std::vector<int> choice;
 
     /* extract chosen histograms */
     for (size_t j = 0; j < files.size(); ++j) {
         auto HMSE = (TH1F*) files[j]->Get("HMSE");
+        auto HBias = (TH1F*) files[j]->Get("HBias");
+        auto HVariance = (TH1F*) files[j]->Get("HVariance");
+
         interpolate(HMSE);
+        interpolate(HBias);
+        interpolate(HVariance);
+
         (*mse)[j] = HMSE;
+        (*bias)[j] = HBias;
+        (*variance)[j] = HVariance;
+
         choice.push_back(HMSE->GetMinimumBin());
     }
 
     /* rename histograms */
     mse->rename(tag + "_mse"s);
+    bias->rename(tag + "_bias"s);
+    variance->rename(tag + "_variance"s);
     
     /* save histograms */
     mse->save();
+    bias->save();
+    variance->save();
+
     fout->Close();
 
     /* plotting setup */
@@ -139,7 +156,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     /* plot histograms */
     auto hb = new pencil();
 
-    hb->category("type", "MSE", "V", "B^{2}");
+    hb->category("type", "MSE", "Variance", "Bias^{2}");
     // hb->category("algorithm", "Bayes", "SVD");
     // hb->category("prior", "MC", "Flat");
     // hb->category("object", "Data", "MC");
@@ -155,8 +172,14 @@ int regularization(char const* config, char const* selections, char const* outpu
 
     for (size_t i = 0; i < files.size(); ++i) {
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
+
         p->add((*mse)[i], "MSE");
+        p->add((*bias)[i], "Variance");
+        p->add((*variance)[i], "Bias^{2}");
+
         p->adjust((*mse)[i], "l", "l");
+        p->adjust((*bias)[i], "l", "l");
+        p->adjust((*variance)[i], "l", "l");
     }
 
     hb->sketch();
