@@ -171,6 +171,12 @@ int regularization(char const* config, char const* selections, char const* outpu
     p->set(paper::flags::logy);
 
     for (size_t i = 0; i < files.size(); ++i) {
+        auto min_variance = (*variance)[i]->GetMinimum();
+        auto min_bias = (*bias)[i]->GetMinimum();
+
+        auto min = (min_variance < min_bias) ? min_variance : min_bias;
+
+        (*mse)[i]->SetMinimum(min);
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
 
         p->add((*mse)[i], "MSE");
