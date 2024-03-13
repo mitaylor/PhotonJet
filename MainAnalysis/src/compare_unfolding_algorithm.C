@@ -135,13 +135,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare data */
-    auto unfolded_svd = new history<TH1F>("unfolded_svd", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_svd_fold0 = new history<TH1F>("unfolded_svd_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_svd_fold1 = new history<TH1F>("unfolded_svd_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_svd = new history<TH1F>("unfolded_svd", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_svd_fold0 = new history<TH1F>("unfolded_svd_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_svd_fold1 = new history<TH1F>("unfolded_svd_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
-    auto unfolded_bayes = new history<TH1F>("unfolded_bayes", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_bayes_fold0 = new history<TH1F>("unfolded_bayes_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto unfolded_bayes_fold1 = new history<TH1F>("unfolded_bayes_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_bayes = new history<TH1F>("unfolded_bayes", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_bayes_fold0 = new history<TH1F>("unfolded_bayes_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_bayes_fold1 = new history<TH1F>("unfolded_bayes_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
     /* determine the regularization to use */
     std::vector<int64_t> choice_svd(sum->size(), 1);
