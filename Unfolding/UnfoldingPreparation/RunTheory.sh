@@ -431,7 +431,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP0.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -444,7 +444,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP1.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -457,7 +457,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP2.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
@@ -470,7 +470,7 @@ fi
     --BinningRecoBins ${binning_reco_bins} \
     --PrimaryGenBins ${primary_gen_bins} \
     --BinningGenBins ${binning_gen_bins} \
-    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP3.root
+    --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP3.root
 
 # PPDataPythia: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_a.root \
