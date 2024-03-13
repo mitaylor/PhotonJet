@@ -30,6 +30,33 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
+void interpolate(TH1* h) {
+    for (int64_t i = 1; i <= h->GetNBinsX(); ++i) {
+        h->SetBinError(i, 0);
+
+        if (h->GetBinContent(i) == 0) {
+            float y1 = h->GetBinContent(i - 1);
+            float x1 = i - 1;
+
+            float y2 = y1;
+            float x2 = x1;
+
+            for (int64_t j = i + 1; j <= h->GetNBinsX(); ++j) {
+                if (h->GetBinContent(j) == 0) { continue; }
+                else {
+                    y2 = h->GetBinContent(j);
+                    x2 = j;
+                }
+            }
+
+            for (int64_t j = 1; j < x2 - x1; ++j) {
+                float value = y1 + j * (y2 - y1) / (x2 - x1);
+                h->SetBinContent(x1 + j, value);
+            }
+        }
+    }
+}
+
 int regularization(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -126,6 +153,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     p->set(paper::flags::logy);
 
     for (size_t i = 0; i < files.size(); ++i) {
+        interpolate((*mse)[i]);
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
         p->add((*mse)[i], "MSE");
         p->adjust((*mse)[i], "l", "l");
