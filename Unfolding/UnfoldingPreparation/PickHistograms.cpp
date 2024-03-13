@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
    }
    HDataGen.Write();
 
-   TH1D* HDataReco = ForwardFold(HDataGen, HResponse);
+   TH1D* HDataReco = ForwardFold(&HDataGen, &HResponse);
    HDataReco->Write();
 
    // Copy over error input
