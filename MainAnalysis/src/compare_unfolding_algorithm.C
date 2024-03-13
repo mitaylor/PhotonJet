@@ -147,7 +147,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<int64_t> choice_svd(filenames.size(), 1);
     std::vector<int64_t> choice_bayes(filenames.size(), 1);
 
-    for (int i = 0; i < filenames.size(); ++i) {
+    for (size_t i = 0; i < filenames.size(); ++i) {
         choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();
         choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();
     }
