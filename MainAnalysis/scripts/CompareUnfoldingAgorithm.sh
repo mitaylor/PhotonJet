@@ -17,7 +17,7 @@ run_aa() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    for input in pythia pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
+    for input in pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
         for prior in mc flat; do
             run_pp ${sample}_${input}_${prior}
         done
@@ -27,7 +27,7 @@ done
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    for input in pythia pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
+    for input in pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
         for prior in mc flat; do
             run_aa ${sample}_${input}_${prior}
         done
