@@ -94,8 +94,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     // auto label = conf->get<std::string>("label");
     auto prior = conf->get<std::string>("prior");
 
-    auto file_svd = conf->get<std::vector<std::string>>("file_svd");
-    auto file_bayes = conf->get<std::vector<std::string>>("file_bayes");
+    auto file_svd = conf->get<std::string>("file_svd");
+    auto file_bayes = conf->get<std::string>("file_bayes");
 
     auto sel = new configurer(selections);
 
