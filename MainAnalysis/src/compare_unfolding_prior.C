@@ -232,7 +232,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto minimum = [&](int64_t index) {
         if (index > -1) {
             auto reg = (algorithm == "SVD") ? "k_{reg}"s : "iteration"s;
-            auto min = "Regularization: "s + reg + "_{, mc} = "s + to_text(choice_mc[index-1]) + " and " + reg + "_{, flat} = "s + to_text(choice_flat[index-1]);
+            auto min = "Regularization: "s + reg + "^{mc} = "s + to_text(choice_mc[index-1]) + " and " + reg + "^{flat} = "s + to_text(choice_flat[index-1]);
             auto alg = "Algorithm: "s + algorithm;
             auto src = "Source: "s + label;
 
