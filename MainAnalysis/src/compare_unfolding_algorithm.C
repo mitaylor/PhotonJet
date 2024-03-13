@@ -165,7 +165,7 @@ std::cout << __LINE__ << std::endl;
 
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
         auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
-        cout << (HUnfoldedSVD == nullptr) << " " << (MUnfoldedSVD == nullptr) << " " << (HUnfoldedBayes == nullptr) << " " << (MUnfoldedBayes == nullptr) << std::endl;
+        std::cout << (HUnfoldedSVD == nullptr) << " " << (MUnfoldedSVD == nullptr) << " " << (HUnfoldedBayes == nullptr) << " " << (MUnfoldedBayes == nullptr) << std::endl;
         (*unfolded_svd)[j] = HUnfoldedSVD;std::cout << __LINE__ << std::endl;
         (*unfolded_svd_fold0)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);std::cout << __LINE__ << std::endl;
         (*unfolded_svd_fold1)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);std::cout << __LINE__ << std::endl;
