@@ -240,7 +240,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         l->SetTextSize(11);
         l->DrawLatexNDC(0.5, 0.65, min.data());
         l->DrawLatexNDC(0.5, 0.60, pri.data());
-        l->DrawLatexNDC(0.5, 0.55, typ.data());
+        l->DrawLatexNDC(0.5, 0.55, src.data());
     };
 
     /* plot histograms */
