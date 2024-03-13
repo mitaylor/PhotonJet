@@ -12,6 +12,7 @@ using namespace std;
 #include "CustomAssert.h"
 
 int main(int argc, char *argv[]);
+TH1D *ForwardFold(TH1 *HGen, TH2D *HResponse);
 
 int main(int argc, char *argv[])
 {
@@ -62,9 +63,11 @@ int main(int argc, char *argv[])
    // Copy over error
    if (HErrorData != nullptr) {
       TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
+      TH1D *HInputRecoData = ForwardFold(HInputData, HResponse);
+
       for(int i = 0; i <= NReco + 1; i++)
       {
-         HDataReco.SetBinContent(i, HInputData->GetBinContent(i));
+         HDataReco.SetBinContent(i, HInputRecoData->GetBinContent(i));
          HDataReco.SetBinError(i, HErrorData->GetBinError(i));
       }
       HDataReco.Write();
@@ -168,5 +171,53 @@ int main(int argc, char *argv[])
    return 0;
 }
 
+TH1D *ForwardFold(TH1 *HGen, TH2D *HResponse)
+{
+   if(HGen == nullptr || HResponse == nullptr)
+      return nullptr;
 
+   static int Count = 0;
+   Count = Count + 1;
 
+   int NGen = HResponse->GetNbinsY();
+   int NReco = HResponse->GetNbinsX();
+
+   TH1D *HResult = new TH1D(Form("HFold%d", Count), "", NReco, 0, NReco);
+
+   HResult->Sumw2();
+
+   for(int iG = 1; iG <= NGen; iG++)
+   {
+      double N = 0;
+      for(int iR = 1; iR <= NReco; iR++)
+         N = N + HResponse->GetBinContent(iR, iG);
+
+      if(N == 0)
+         continue;
+
+      for(int iR = 1; iR <= NReco; iR++)
+      {
+         double T = HResponse->GetBinContent(iR, iG) / N;
+         double G = HGen->GetBinContent(iG);
+         double ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
+         double EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
+
+         if(HResponse->GetBinContent(iR, iG) == 0)
+            ET = 0;
+         if(HGen->GetBinContent(iG) == 0)
+            EG = 0;
+
+         double V = T * G;
+         double E = sqrt(ET * ET + EG * EG) * V;
+
+         double Current = HResult->GetBinContent(iR);
+         HResult->SetBinContent(iR, Current + V);
+
+         double Error = HResult->GetBinError(iR);
+         Error = sqrt(Error * Error + E * E);
+         HResult->SetBinError(iR, Error);
+      }
+   }
+
+   return HResult;
+}
