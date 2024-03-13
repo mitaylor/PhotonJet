@@ -31,11 +31,6 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
-template <typename T>
-T* null(int64_t, std::string const&, std::string const&) {
-    return nullptr;
-}
-
 TH2F* variance(TH1* flat, multival const* m) {
     auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
         m->size(), 0, m->size());
@@ -147,10 +142,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<TFile*> fdata(filenames.size(), nullptr);
     std::vector<TFile*> fmc(filenames.size(), nullptr);
 
-    zip([&](auto& fdata, auto& fmc, auto const& filename) {
+    zip([&](auto& fdata, auto& fmc, auto const& filename, auto const& mc_filename) {
         fdata = new TFile(("/data/submit/mitay/unfolding/240313/Input/Theory/"s + set + "/"s + filename).data(), "read");
         fmc = new TFile(("/data/submit/mitay/unfolding/240313/Input/Theory/"s + set + "/"s + mc_filename).data(), "read");
-    }, fdata, fmc, filenames);
+    }, fdata, fmc, filenames, mc_filenames);
 
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
