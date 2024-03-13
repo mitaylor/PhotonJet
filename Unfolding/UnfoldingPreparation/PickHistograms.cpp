@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
    TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
    TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
-   TH1F *HErrorData          = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
+   TH1F *HInputErrors        = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
    TH2F *HInputResponse      = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
    TH1F *HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
    TH1F *HInputResponseReco  = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
@@ -72,27 +72,23 @@ int main(int argc, char *argv[])
    }
    HResponse.Write();
 
-   // Copy over error
-   if (HErrorData != nullptr) {
-      TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
-      TH1D *HInputRecoData = ForwardFold(HInputData, &HResponse);
+   // Copy over gen input
+   TH1D HDataGen("HDataGen", ";;", NGen, 0, NGen);
+   for(int i = 0; i <= NGen + 1; i++)
+   {
+      HDataGen.SetBinContent(i, HInputData->GetBinContent(i));
+      HDataGen.SetBinError(i, HInputData->GetBinError(i));
+   }
+   HDataGen.Write();
 
-      for(int i = 0; i <= NReco + 1; i++)
-      {
-         HDataReco.SetBinContent(i, HInputRecoData->GetBinContent(i));
-         HDataReco.SetBinError(i, HErrorData->GetBinError(i));
-      }
-      HDataReco.Write();
+   // Copy over error input
+   TH1D HDataErrors("HDataErrors", ";;", NGen, 0, NGen);
+   for(int i = 0; i <= NGen + 1; i++)
+   {
+      HDataErrors.SetBinContent(i, HInputErrors->GetBinContent(i));
+      HDataErrors.SetBinError(i, HInputErrors->GetBinError(i));
    }
-   else {
-      TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
-      for(int i = 0; i <= NReco + 1; i++)
-      {
-         HDataReco.SetBinContent(i, HInputData->GetBinContent(i));
-         HDataReco.SetBinError(i, HInputData->GetBinError(i));
-      }
-      HDataReco.Write();
-   }
+   HDataErrors.Write();
 
    // Copy over MC truth
    TH1D HMCGen("HMCGen", ";;", NGen, 0, NGen);
