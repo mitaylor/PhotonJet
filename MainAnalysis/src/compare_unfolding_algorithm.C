@@ -170,7 +170,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
         auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
 
-        std::cout << (*MUnfoldedBayes)->GetNcols() << " " << MUnfoldedBayes->GetNrows() << std::endl;
+        std::cout << HUnfoldedBayes->GetNbinsX() << " " << HUnfoldedBayes->GetBinContent(1) << std::endl;
+        std::cout << HUnfoldedSVD->GetNbinsX() << " " << HUnfoldedSVD->GetBinContent(1) << std::endl;
+        std::cout << MUnfoldedBayes->GetNcols() << " " << MUnfoldedBayes->GetNrows() << std::endl;
         std::cout << MUnfoldedSVD->GetNcols() << " " << MUnfoldedSVD->GetNrows() << std::endl;
 
         (*unfolded_bayes)[j] = HUnfoldedBayes;std::cout << __LINE__ << std::endl;
