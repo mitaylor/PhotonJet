@@ -257,7 +257,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     p1->accessory(pthf_info);
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag, -2, 20);
-    p1->set(paper::flags::logy);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
         // (*mse)[i]->GetXaxis()->SetTitle(title.data());
@@ -272,7 +271,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     p2->accessory(pthf_info);
     p2->accessory(minimum);
     apply_style(p2, cms, system_tag, -0.002, 0.02);
-    p2->set(paper::flags::logy);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
         // (*mse)[i]->GetXaxis()->SetTitle(title.data());
