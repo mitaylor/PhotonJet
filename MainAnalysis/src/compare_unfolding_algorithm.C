@@ -127,9 +127,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
 std::cout << __LINE__ << std::endl;
     TFile* freg_svd = new TFile((base + file_svd).data(), "read");std::cout << __LINE__ << std::endl;
     TFile* freg_bayes = new TFile((base + file_bayes).data(), "read");std::cout << __LINE__ << std::endl;
-std::cout << __LINE__ << std::endl; std::cout << base + file_svd << " " << base + file_bayes << std::endl;
-    auto regularization_svd = new history<TH1F>(freg_svd, "mse"s);std::cout << __LINE__ << std::endl;
-    auto regularization_bayes = new history<TH1F>(freg_bayes, "mse"s);std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
+    auto regularization_svd = new history<TH1F>(freg_svd, tag + "_mse"s);std::cout << __LINE__ << std::endl;
+    auto regularization_bayes = new history<TH1F>(freg_bayes, tag + "_mse"s);std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
