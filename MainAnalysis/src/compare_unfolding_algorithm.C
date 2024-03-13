@@ -29,22 +29,22 @@ T* null(int64_t, std::string const&, std::string const&) {
 
 TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
            std::vector<int64_t>& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
+    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);std::cout << __LINE__ << std::endl;
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
         { offsets[axis << 1], offsets[(axis << 1) + 1] });
+std::cout << __LINE__ << std::endl;
+    auto shape = m->shape();std::cout << __LINE__ << std::endl;
 
-    auto shape = m->shape();
-
-    auto front = std::vector<int64_t>(m->dims(), 0);
-    auto back = std::vector<int64_t>(m->dims(), 0);
+    auto front = std::vector<int64_t>(m->dims(), 0);std::cout << __LINE__ << std::endl;
+    auto back = std::vector<int64_t>(m->dims(), 0);std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < m->dims(); ++i) {
         front[i] = offsets[i << 1];
         back[i] = shape[i] - offsets[(i << 1) + 1];
     }
-
-    auto size = back[axis] - front[axis];
-    auto list = new std::vector<int64_t>[size];
-
+std::cout << __LINE__ << std::endl;
+    auto size = back[axis] - front[axis];std::cout << __LINE__ << std::endl;
+    auto list = new std::vector<int64_t>[size];std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < m->size(); ++i) {
         auto indices = m->indices_for(i);
 
@@ -60,7 +60,7 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
 
         list[index].push_back(i);
     }
-
+std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < size; ++i) {
         auto indices = list[i];
         int64_t count = indices.size();
@@ -73,14 +73,14 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
                 error = error + (*covariance)(j_x, k_x);
             }
         }
-
+std::cout << __LINE__ << std::endl;
         hfold->SetBinError(i + 1, std::sqrt(error));
     }
-
+std::cout << __LINE__ << std::endl;
     delete [] list;
-
+std::cout << __LINE__ << std::endl;
     hfold->Scale(1., "width");
-
+std::cout << __LINE__ << std::endl;
     return hfold;
 }
 
