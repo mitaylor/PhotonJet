@@ -270,7 +270,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     p2->divide(filenames.size(), -1);
     p2->accessory(pthf_info);
     p2->accessory(minimum);
-    apply_style(p2, cms, system_tag, -0.002, 0.02);
+    apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
         // (*mse)[i]->GetXaxis()->SetTitle(title.data());
