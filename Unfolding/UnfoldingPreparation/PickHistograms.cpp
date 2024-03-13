@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
    // Copy over error
    if (HErrorData != nullptr) {
       TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
-      TH1D *HInputRecoData = ForwardFold(HInputData, HResponse);
+      TH1D *HInputRecoData = ForwardFold(HInputData, &HResponse);
 
       for(int i = 0; i <= NReco + 1; i++)
       {
