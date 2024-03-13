@@ -59,11 +59,23 @@ int main(int argc, char *argv[])
 
    cout << NReco1 << " " << NReco2 << " " << NReco1 * NReco2 << " " << NReco << endl;
    cout << NGen1 << " " << NGen2 << " " << NGen1 * NGen2 << " " << NGen << endl;
+   
+   // Copy over response
+   TH2D HResponse("HResponse", ";;", NReco, 0, NReco, NGen, 0, NGen);
+   for(int iX = 0; iX <= NReco + 1; iX++)
+   {
+      for(int iY = 0; iY <= NGen + 1; iY++)
+      {
+         HResponse.SetBinContent(iX, iY, HInputResponse->GetBinContent(iX, iY));
+         HResponse.SetBinError(iX, iY, HInputResponse->GetBinError(iX, iY));
+      }
+   }
+   HResponse.Write();
 
    // Copy over error
    if (HErrorData != nullptr) {
       TH1D HDataReco("HDataReco", ";;", NReco, 0, NReco);
-      TH1D *HInputRecoData = ForwardFold(HInputData, HInputResponse);
+      TH1D *HInputRecoData = ForwardFold(HInputData, HResponse);
 
       for(int i = 0; i <= NReco + 1; i++)
       {
@@ -81,18 +93,6 @@ int main(int argc, char *argv[])
       }
       HDataReco.Write();
    }
-   
-   // Copy over response
-   TH2D HResponse("HResponse", ";;", NReco, 0, NReco, NGen, 0, NGen);
-   for(int iX = 0; iX <= NReco + 1; iX++)
-   {
-      for(int iY = 0; iY <= NGen + 1; iY++)
-      {
-         HResponse.SetBinContent(iX, iY, HInputResponse->GetBinContent(iX, iY));
-         HResponse.SetBinError(iX, iY, HInputResponse->GetBinError(iX, iY));
-      }
-   }
-   HResponse.Write();
 
    // Copy over MC truth
    TH1D HMCGen("HMCGen", ";;", NGen, 0, NGen);
