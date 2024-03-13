@@ -157,10 +157,10 @@ int regularization(char const* config, char const* selections, char const* outpu
         l->DrawLatexNDC(0.135, 0.75, min.data());
 
         l->SetTextAlign(11);
-        l->DrawLatexNDC(0.65, 0.70, alg.data());
-        l->DrawLatexNDC(0.65, 0.65, pri.data());
-        l->DrawLatexNDC(0.65, 0.60, typ.data());
-        l->DrawLatexNDC(0.65, 0.55, src.data());
+        l->DrawLatexNDC(0.5, 0.70, alg.data());
+        l->DrawLatexNDC(0.5, 0.65, pri.data());
+        l->DrawLatexNDC(0.5, 0.60, typ.data());
+        l->DrawLatexNDC(0.5, 0.55, src.data());
     };
 
     /* plot histograms */
@@ -188,7 +188,7 @@ int regularization(char const* config, char const* selections, char const* outpu
         auto max = (*mse)[i]->GetMaximum();
 
         (*mse)[i]->SetMinimum(min/2);
-        (*mse)[i]->SetMinimum(max*10);
+        (*mse)[i]->SetMaximum(max*10);
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
 
         p->add((*mse)[i], "MSE");
