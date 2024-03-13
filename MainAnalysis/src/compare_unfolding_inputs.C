@@ -165,7 +165,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        auto HInputMC = (TH1F*) fmc[j]->Get("HDataReco");
+        auto HInputMC = (TH1F*) fmc[j]->Get("HDataErrors");
         auto HInputData = (TH1F*) fdata[j]->Get("HDataErrors");
         auto HInputTheory = (TH1F*) fdata[j]->Get("HDataReco");
 
@@ -237,7 +237,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     /* plot histograms */
     auto hb = new pencil();
 
-    hb->category("type", "Data", "Pythia", "Theory");
+    hb->category("type", "Data", "MC", "Theory");
 
     auto p1 = new paper(set + "_unfolding_inputs_" + tag + "_" + label + "_dj", hb);
 
@@ -247,7 +247,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p1, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p1->add((*input_mc_fold0)[i], "Pythia");
+        p1->add((*input_mc_fold0)[i], "MC");
         p1->stack((*input_data_fold0)[i], "Data");
         p1->stack((*input_theory_fold0)[i], "Theory");
     }
@@ -260,7 +260,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p2->add((*input_mc_fold1)[i], "Pythia");
+        p2->add((*input_mc_fold1)[i], "MC");
         p2->stack((*input_data_fold1)[i], "Data");
         p2->stack((*input_theory_fold1)[i], "Theory");
     }
