@@ -177,7 +177,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
         std::string unfold_name_mc = "HUnfolded" + algorithm + std::to_string(choice_mc[j]);
-        std::string matrix_name_mc = "MUnfolded" algorithm + std::to_string(choice_mc[j]);
+        std::string matrix_name_mc = "MUnfolded" + algorithm + std::to_string(choice_mc[j]);
 
         std::string unfold_name_flat = "HUnfolded" + algorithm + std::to_string(choice_flat[j]);
         std::string matrix_name_flat = "MUnfolded" + algorithm + std::to_string(choice_flat[j]);
