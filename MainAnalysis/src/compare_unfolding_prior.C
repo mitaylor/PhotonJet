@@ -147,8 +147,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
         fflat = new TFile(("unfolded/Data/"s + set + "/" + algorithm+ "/Flat/kErrors/"s + filename).data(), "read");
     }, fdata_mc, fdata_flat, filenames);
 
-    std::cout << base + file_mc << " " << base + file_flat << std::endl;
-
     TFile* freg_mc = new TFile((base + file_mc).data(), "read");
     TFile* freg_flat = new TFile((base + file_flat).data(), "read");
 
@@ -232,8 +230,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto minimum = [&](int64_t index) {
-        auto min = "Regularization: k_{reg} = "s + to_text(choice_mc[index-1]) + " and iteration = "s + to_text(choice_flat[index-1]);
-        auto pri = "Algorithm: "s + algorithm;
+        auto reg = (algorithm == "SVD") ? "k_{reg}"s : "iteration"s;
+        auto min = "Regularization: "s + reg + "_{, mc} = "s to_text(choice_mc[index-1]) + " and " + reg + "_{, flat} = "s + to_text(choice_flat[index-1]);
+        auto alg = "Algorithm: "s + algorithm;
         auto src = "Source: "s + label;
 
         TLatex* l = new TLatex();
@@ -241,7 +240,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         l->SetTextAlign(11);
         l->SetTextSize(13);
         l->DrawLatexNDC(0.3, 0.65, min.data());
-        l->DrawLatexNDC(0.3, 0.60, pri.data());
+        l->DrawLatexNDC(0.3, 0.60, alg.data());
         l->DrawLatexNDC(0.3, 0.55, src.data());
     };
 
