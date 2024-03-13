@@ -147,6 +147,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
         fflat = new TFile(("unfolded/Data/"s + set + "/" + algorithm+ "/Flat/kErrors/"s + filename).data(), "read");
     }, fdata_mc, fdata_flat, filenames);
 
+    std::cout << base + file_mc << " " << base + file_flat << std::endl;
+
     TFile* freg_mc = new TFile((base + file_mc).data(), "read");
     TFile* freg_flat = new TFile((base + file_flat).data(), "read");
 
