@@ -100,6 +100,7 @@ int regularization(char const* config, char const* selections, char const* outpu
     /* extract chosen histograms */
     for (size_t j = 0; j < files.size(); ++j) {
         auto HMSE = (TH1F*) files[j]->Get("HMSE");
+        interpolate(HMSE);
         (*mse)[j] = HMSE;
         choice.push_back(HMSE->GetMinimumBin());
     }
@@ -153,7 +154,6 @@ int regularization(char const* config, char const* selections, char const* outpu
     p->set(paper::flags::logy);
 
     for (size_t i = 0; i < files.size(); ++i) {
-        interpolate((*mse)[i]);
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
         p->add((*mse)[i], "MSE");
         p->adjust((*mse)[i], "l", "l");
