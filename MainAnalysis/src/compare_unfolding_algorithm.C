@@ -159,7 +159,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 std::cout << __LINE__ << std::endl;
         std::string unfold_name_bayes = "HUnfoldedBayes" + std::to_string(choice_bayes[j]);
         std::string matrix_name_bayes = "MUnfoldedBayes" + std::to_string(choice_bayes[j]);
-std::cout << __LINE__ << std::endl;
+std::cout << unfold_name_svd << " " << matrix_name_svd << " " << unfold_name_bayes << " " << matrix_name_bayes << std::endl;
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());std::cout << __LINE__ << std::endl;
         auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(unfold_name_svd.data());std::cout << __LINE__ << std::endl;
 
