@@ -71,7 +71,7 @@ std::cout << __LINE__ << std::endl;
             for (int64_t k = 0; k < count; ++k) {
                 auto k_x = indices[k];std::cout << __LINE__ << std::endl;
                 std::cout << error << std::endl; std::cout << (covariance == nullptr) << std::endl;
-                std::cout << (*covariance)(j_x, k_x) << std::endl;
+                std::cout << (*covariance)(1, 1) << std::endl;
                 error = error + (*covariance)(j_x, k_x);std::cout << __LINE__ << std::endl;
             }
         }
