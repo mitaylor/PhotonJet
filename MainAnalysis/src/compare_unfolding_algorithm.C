@@ -27,6 +27,18 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
+TH2F* variance(TH1* flat, multival const* m) {
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
+        m->size(), 0, m->size());
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto err = flat->GetBinError(i + 1);
+        cov->SetBinContent(i + 1, i + 1, err * err);
+    }
+
+    return cov;
+}
+
 TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
            std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);std::cout << __LINE__ << std::endl;
@@ -165,10 +177,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::cout << unfold_name_svd << " " << matrix_name_svd << " " << unfold_name_bayes << " " << matrix_name_bayes << std::endl;
         
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
-        auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(unfold_name_svd.data());
+        auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data());
 
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
-        auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(unfold_name_bayes.data());std::cout << __LINE__ << std::endl;
+        auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data());std::cout << __LINE__ << std::endl;
 
         std::cout << HUnfoldedBayes->GetNbinsX() << " " << HUnfoldedBayes->GetBinContent(1) << std::endl;
         std::cout << HUnfoldedSVD->GetNbinsX() << " " << HUnfoldedSVD->GetBinContent(1) << std::endl;
