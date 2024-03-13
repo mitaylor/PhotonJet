@@ -64,13 +64,13 @@ std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < size; ++i) {
         auto indices = list[i];
         int64_t count = indices.size();
-
+std::cout << __LINE__ << std::endl;
         auto error = 0.;
         for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j];
+            auto j_x = indices[j];std::cout << __LINE__ << std::endl;
             for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k];
-                error = error + (*covariance)(j_x, k_x);
+                auto k_x = indices[k];std::cout << __LINE__ << std::endl;
+                error = error + (*covariance)(j_x, k_x);std::cout << __LINE__ << std::endl;
             }
         }
 std::cout << __LINE__ << std::endl;
@@ -117,41 +117,41 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<TFile*> fdata_svd(filenames.size(), nullptr);std::cout << __LINE__ << std::endl;
-    std::vector<TFile*> fdata_bayes(filenames.size(), nullptr);std::cout << __LINE__ << std::endl;
+    std::vector<TFile*> fdata_svd(filenames.size(), nullptr);
+    std::vector<TFile*> fdata_bayes(filenames.size(), nullptr);
 
     zip([&](auto& fsvd, auto& fbayes, auto const& filename) {
         fsvd = new TFile(("unfolded/Data/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename).data(), "read");
         fbayes = new TFile(("unfolded/Data/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename).data(), "read");
     }, fdata_svd, fdata_bayes, filenames);
-std::cout << __LINE__ << std::endl;
-    TFile* freg_svd = new TFile((base + file_svd).data(), "read");std::cout << __LINE__ << std::endl;
-    TFile* freg_bayes = new TFile((base + file_bayes).data(), "read");std::cout << __LINE__ << std::endl;
-std::cout << __LINE__ << std::endl;
-    auto regularization_svd = new history<TH1F>(freg_svd, tag + "_mse"s);std::cout << __LINE__ << std::endl;
-    auto regularization_bayes = new history<TH1F>(freg_bayes, tag + "_mse"s);std::cout << __LINE__ << std::endl;
-std::cout << __LINE__ << std::endl;
+
+    TFile* freg_svd = new TFile((base + file_svd).data(), "read");
+    TFile* freg_bayes = new TFile((base + file_bayes).data(), "read");
+
+    auto regularization_svd = new history<TH1F>(freg_svd, tag + "_mse"s);
+    auto regularization_bayes = new history<TH1F>(freg_bayes, tag + "_mse"s);
+
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
-std::cout << __LINE__ << std::endl;
+
     /* prepare data */
     auto unfolded_svd = new history<TH1F>("unfolded_svd", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_svd_fold0 = new history<TH1F>("unfolded_svd_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_svd_fold1 = new history<TH1F>("unfolded_svd_fold1", "", null<TH1F>, (int64_t) filenames.size());
-std::cout << __LINE__ << std::endl;
+
     auto unfolded_bayes = new history<TH1F>("unfolded_bayes", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_bayes_fold0 = new history<TH1F>("unfolded_bayes_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto unfolded_bayes_fold1 = new history<TH1F>("unfolded_bayes_fold1", "", null<TH1F>, (int64_t) filenames.size());
-std::cout << __LINE__ << std::endl;
+
     /* determine the regularization to use */
-    std::vector<int64_t> choice_svd(filenames.size(), 1);std::cout << __LINE__ << std::endl;
-    std::vector<int64_t> choice_bayes(filenames.size(), 1);std::cout << __LINE__ << std::endl;
-std::cout << __LINE__ << std::endl;
+    std::vector<int64_t> choice_svd(filenames.size(), 1);
+    std::vector<int64_t> choice_bayes(filenames.size(), 1);
+
     for (size_t i = 0; i < filenames.size(); ++i) {
-        choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();std::cout << __LINE__ << std::endl;
-        choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();std::cout << __LINE__ << std::endl;
+        choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();
+        choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();
     }
-std::cout << __LINE__ << std::endl;
+
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
         std::string unfold_name_svd = "HUnfoldedSVD" + std::to_string(choice_svd[j]);
