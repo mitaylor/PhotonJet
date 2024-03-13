@@ -175,16 +175,16 @@ int quantitate(char const* config, char const* selections, char const* output) {
         auto HInputTheory = (TH1F*) fdata[j]->Get("HDataReco");
 
         (*input_mc)[j] = HInputMC;
-        (*input_mc_fold0)[j] = fold_mat(HInputMC, nullptr, mr, 0, osr);
-        (*input_mc_fold1)[j] = fold_mat(HInputMC, nullptr, mr, 1, osr);
+        (*input_mc_fold0)[j] = fold(HInputMC, nullptr, mr, 0, osr);
+        (*input_mc_fold1)[j] = fold(HInputMC, nullptr, mr, 1, osr);
 
         (*input_data)[j] = HInputData;
-        (*input_data_fold0)[j] = fold_mat(HInputData, nullptr, mr, 0, osr);
-        (*input_data_fold1)[j] = fold_mat(HInputData, nullptr, mr, 1, osr);
+        (*input_data_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
+        (*input_data_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
 
         (*input_theory)[j] = HInputTheory;
-        (*input_theory_fold0)[j] = fold_mat(HInputTheory, nullptr, mr, 0, osr);
-        (*input_theory_fold1)[j] = fold_mat(HInputTheory, nullptr, mr, 1, osr);
+        (*input_theory_fold0)[j] = fold(HInputTheory, nullptr, mr, 0, osr);
+        (*input_theory_fold1)[j] = fold(HInputTheory, nullptr, mr, 1, osr);
     }
 
     /* rename histograms */
