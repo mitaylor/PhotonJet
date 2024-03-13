@@ -144,17 +144,23 @@ int regularization(char const* config, char const* selections, char const* outpu
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto minimum = [&](int64_t index) {
-        auto min = "minimum: "s + to_text(choice[index-1]);
-        auto info = "algorithm: "s + algorithm + ", prior: "s + prior + ", type: "s + object;
-        auto lab = label;
+        auto min = "Minimum: "s + to_text(choice[index-1]);
+        auto alg = "Algorithm: "s + algorithm;
+        auto pri = "Prior: "s + prior;
+        auto typ = "Type: "s + object;
+        auto src = "Source: "s + label;
 
         TLatex* l = new TLatex();
         l->SetTextAlign(11);
         l->SetTextFont(43);
         l->SetTextSize(13);
         l->DrawLatexNDC(0.135, 0.75, min.data());
-        l->DrawLatexNDC(0.135, 0.70, info.data());
-        l->DrawLatexNDC(0.135, 0.65, lab.data());
+
+        l->SetTextAlign(31);
+        l->DrawLatexNDC(0.135, 0.70, alg.data());
+        l->DrawLatexNDC(0.135, 0.65, pri.data());
+        l->DrawLatexNDC(0.135, 0.65, typ.data());
+        l->DrawLatexNDC(0.135, 0.65, src.data());
     };
 
     /* plot histograms */
