@@ -174,8 +174,8 @@ int regularization(char const* config, char const* selections, char const* outpu
         (*mse)[i]->GetXaxis()->SetTitle(title.data());
 
         p->add((*mse)[i], "MSE");
-        p->stack((*bias)[i], "Variance");
-        p->stack((*variance)[i], "Bias^{2}");
+        p->stack((*variance)[i], "Variance");
+        p->stack((*bias)[i], "Bias^{2}");
 
         p->adjust((*mse)[i], "l", "l");
         p->adjust((*bias)[i], "l", "l");
