@@ -18,7 +18,7 @@ samples=(pp)
 
 for sample in ${samples[@]}; do
     for input in pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
-        run_pp ${sample}_${algorithm}
+        run_pp ${sample}_${input}
     done
 done
 
@@ -26,6 +26,6 @@ samples=(aa)
 
 for sample in ${samples[@]}; do
     for input in pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
-        run_aa ${sample}_${algorithm}
+        run_aa ${sample}_${input}
     done
 done
