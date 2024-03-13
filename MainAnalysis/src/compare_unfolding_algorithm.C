@@ -253,13 +253,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p1 = new paper(set + "_unfolding_algorithm_" + tag + "_data_" + label + "_" + prior + "_dj", hb);
 
-    p1->divide(files.size(), -1);
+    p1->divide(filenames.size(), -1);
     p1->accessory(pthf_info);
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag, -2, 20);
     p1->set(paper::flags::logy);
 
-    for (size_t i = 0; i < files.size(); ++i) {
+    for (size_t i = 0; i < filenames.size(); ++i) {
         // (*mse)[i]->GetXaxis()->SetTitle(title.data());
 
         p1->add((*unfolded_svd_fold0)[i], "data", "SVD");
@@ -268,13 +268,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p2 = new paper(set + "_unfolding_algorithm_" + tag + "_data_" + label + "_" + prior + "_jpt", hb);
 
-    p2->divide(files.size(), -1);
+    p2->divide(filenames.size(), -1);
     p2->accessory(pthf_info);
     p2->accessory(minimum);
     apply_style(p2, cms, system_tag, -0.002, 0.02);
     p2->set(paper::flags::logy);
 
-    for (size_t i = 0; i < files.size(); ++i) {
+    for (size_t i = 0; i < filenames.size(); ++i) {
         // (*mse)[i]->GetXaxis()->SetTitle(title.data());
 
         p2->add((*unfolded_svd_fold1)[i], "data", "SVD");
