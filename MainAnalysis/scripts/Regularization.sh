@@ -18,16 +18,16 @@ samples=(pp)
 
 for sample in ${samples[@]}; do
     for alg in svd bayes; do
-        for input in pythia pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa
-            for prior in mc flat
+        for input in pythia pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
+            for prior in mc flat; do
                 run_pp ${sample}_${alg}_${input}_${prior}
             done
         done
     done
 
     for alg in svd bayes; do
-        for input in pythia
-            for prior in mc flat
+        for input in pythia; do
+            for prior in mc flat; do
                 run_pp ${sample}_qcd_${alg}_${input}_${prior}
             done
         done
@@ -38,16 +38,16 @@ samples=(aa)
 
 for sample in ${samples[@]}; do
     for alg in svd bayes; do
-        for input in pythia pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa
-            for prior in mc flat
+        for input in pythia pyquen_pp pyquen_aa pyquen_nowide_aa jewel_pp jewel_aa jewel_norecoil_aa; do
+            for prior in mc flat; do
                 run_aa ${sample}_${alg}_${input}_${prior}
             done
         done
     done
 
     for alg in svd bayes; do
-        for input in pythia
-            for prior in mc flat
+        for input in pythia; do
+            for prior in mc flat; do
                 run_aa ${sample}_qcd_${alg}_${input}_${prior}
             done
         done
