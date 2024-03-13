@@ -144,10 +144,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto unfolded_bayes_fold1 = new history<TH1F>("unfolded_bayes_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
     /* determine the regularization to use */
-    std::vector<int64_t> choice_svd(sum->size(), 1);
-    std::vector<int64_t> choice_bayes(sum->size(), 1);
+    std::vector<int64_t> choice_svd(filenames.size(), 1);
+    std::vector<int64_t> choice_bayes(filenames.size(), 1);
 
-    for (int i = 0; i < sum->size(); ++i) {
+    for (int i = 0; i < filenames.size(); ++i) {
         choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();
         choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();
     }
