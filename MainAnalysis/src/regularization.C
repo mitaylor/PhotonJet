@@ -157,10 +157,11 @@ int regularization(char const* config, char const* selections, char const* outpu
         l->DrawLatexNDC(0.135, 0.75, min.data());
 
         l->SetTextAlign(11);
-        l->DrawLatexNDC(0.5, 0.70, alg.data());
-        l->DrawLatexNDC(0.5, 0.65, pri.data());
-        l->DrawLatexNDC(0.5, 0.60, typ.data());
-        l->DrawLatexNDC(0.5, 0.55, src.data());
+        l->SetTextSize(11);
+        l->DrawLatexNDC(0.5, 0.65, alg.data());
+        l->DrawLatexNDC(0.5, 0.60, pri.data());
+        l->DrawLatexNDC(0.5, 0.55, typ.data());
+        l->DrawLatexNDC(0.5, 0.50, src.data());
     };
 
     /* plot histograms */
