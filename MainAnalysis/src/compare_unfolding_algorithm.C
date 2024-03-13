@@ -1,4 +1,5 @@
 #include "../include/lambdas.h"
+#include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -218,7 +219,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
-    auto title = (algorithm == "Bayes") ? "Iterations"s : "k_{reg}"s;
 
     std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
         info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
