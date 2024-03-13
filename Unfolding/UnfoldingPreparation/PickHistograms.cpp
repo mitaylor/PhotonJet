@@ -81,6 +81,9 @@ int main(int argc, char *argv[])
    }
    HDataGen.Write();
 
+   TH1D* HDataReco = ForwardFold(HDataGen, HResponse);
+   HDataReco->Write();
+
    // Copy over error input
    TH1D HDataErrors("HDataErrors", ";;", NGen, 0, NGen);
    for(int i = 0; i <= NGen + 1; i++)
@@ -172,13 +175,10 @@ TH1D *ForwardFold(TH1 *HGen, TH2D *HResponse)
    if(HGen == nullptr || HResponse == nullptr)
       return nullptr;
 
-   static int Count = 0;
-   Count = Count + 1;
-
    int NGen = HResponse->GetNbinsY();
    int NReco = HResponse->GetNbinsX();
 
-   TH1D *HResult = new TH1D(Form("HFold%d", Count), "", NReco, 0, NReco);
+   TH1D *HResult = new TH1D("HDataReco", "", NReco, 0, NReco);
 
    HResult->Sumw2();
 
