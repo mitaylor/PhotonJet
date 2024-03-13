@@ -107,7 +107,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto filenames = conf->get<std::vector<std::string>>("filenames");
 
-    // auto label = conf->get<std::string>("label");
+    auto label = conf->get<std::string>("label");
     auto prior = conf->get<std::string>("prior");
 
     auto file_svd = conf->get<std::string>("file_svd");
@@ -230,7 +230,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
     auto minimum = [&](int64_t index) {
-        auto min = "Regularization: k_{reg} = "s + to_text(choice_svd[index-1]) + " and "s to_text(choice_bayes[index-1]);
+        auto min = "Regularization: k_{reg} = "s + to_text(choice_svd[index-1]) + " and "s + to_text(choice_bayes[index-1]);
         auto pri = "Prior: "s + prior;
         auto src = "Source: "s + label;
 
