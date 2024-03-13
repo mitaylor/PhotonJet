@@ -31,7 +31,7 @@ T* null(int64_t, std::string const&, std::string const&) {
 }
 
 void interpolate(TH1* h) {
-    for (int64_t i = 1; i <= h->GetNBinsX(); ++i) {
+    for (int64_t i = 1; i <= h->GetNbinsX(); ++i) {
         h->SetBinError(i, 0);
 
         if (h->GetBinContent(i) == 0) {
@@ -41,7 +41,7 @@ void interpolate(TH1* h) {
             float y2 = y1;
             float x2 = x1;
 
-            for (int64_t j = i + 1; j <= h->GetNBinsX(); ++j) {
+            for (int64_t j = i + 1; j <= h->GetNbinsX(); ++j) {
                 if (h->GetBinContent(j) == 0) { continue; }
                 else {
                     y2 = h->GetBinContent(j);
