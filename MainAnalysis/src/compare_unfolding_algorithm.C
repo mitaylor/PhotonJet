@@ -125,6 +125,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     zip([&](auto& fsvd, auto& fbayes, auto const& filename) {
         fsvd = new TFile(("unfolded/Data/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename).data(), "read");
         fbayes = new TFile(("unfolded/Data/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename).data(), "read");
+        std::cout << "unfolded/Data/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename << std::endl;
+        std::cout << "unfolded/Data/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename << std::endl;
     }, fdata_svd, fdata_bayes, filenames);
 
     TFile* freg_svd = new TFile((base + file_svd).data(), "read");
