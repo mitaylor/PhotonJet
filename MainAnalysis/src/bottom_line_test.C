@@ -580,9 +580,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*chi2_before_simple_dj)[i]->SetBinContent(1, chi2_smear_fold0);
         (*chi2_before_simple_jpt)[i]->SetBinContent(1, chi2_smear_fold1);
 
-        (*p_value_before)[i]->SetBinContent(1, (*data_before)[i]->Chi2Test((*theory_before)[i]));
-        (*p_value_before_dj)[i]->SetBinContent(1, (*data_before_fold0)[i]->Chi2Test((*theory_before_fold0)[i]));
-        (*p_value_before_jpt)[i]->SetBinContent(1, (*data_before_fold1)[i]->Chi2Test((*theory_before_fold1)[i]));
+        (*p_value_before)[i]->SetBinContent(1, (*data_before)[i]->Chi2Test((*theory_before)[i], "WW"));
+        (*p_value_before_dj)[i]->SetBinContent(1, (*data_before_fold0)[i]->Chi2Test((*theory_before_fold0)[i], "WW"));
+        (*p_value_before_jpt)[i]->SetBinContent(1, (*data_before_fold1)[i]->Chi2Test((*theory_before_fold1)[i], "WW"));
     }
     
     for (size_t k = 0; k < iterations.size(); ++k) {
@@ -775,9 +775,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*p_value_before_dj)[i]->SetBinContent(iterations[k], (*p_value_before_dj)[i]->GetBinContent(1));
             (*p_value_before_jpt)[i]->SetBinContent(iterations[k], (*p_value_before_jpt)[i]->GetBinContent(1));
 
-            (*p_value_after)[i]->SetBinContent(iterations[k], (*data_after)[i]->Chi2Test((*theory_after)[i]));
-            (*p_value_after_dj)[i]->SetBinContent(iterations[k], (*data_after_fold0)[i]->Chi2Test((*theory_after_fold0)[i]));
-            (*p_value_after_jpt)[i]->SetBinContent(iterations[k], (*data_after_fold1)[i]->Chi2Test((*theory_after_fold1)[i]));
+            (*p_value_after)[i]->SetBinContent(iterations[k], (*data_after)[i]->Chi2Test((*theory_after)[i], "WW"));
+            (*p_value_after_dj)[i]->SetBinContent(iterations[k], (*data_after_fold0)[i]->Chi2Test((*theory_after_fold0)[i], "WW"));
+            (*p_value_after_jpt)[i]->SetBinContent(iterations[k], (*data_after_fold1)[i]->Chi2Test((*theory_after_fold1)[i], "WW"));
         }
     }
 
@@ -901,7 +901,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p5->stack((*chi2_after_simple_jpt)[i], "unfolded");
     }
 
-    auto p6 = new paper(set + "_iteration_p_value_simple_" + plot_name, hb);
+    auto p6 = new paper(set + "_iteration_p_value_" + plot_name, hb);
 
     p6->divide(size, -1);
     p6->accessory(pthf_info);
