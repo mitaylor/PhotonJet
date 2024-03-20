@@ -39,10 +39,12 @@ void flip(TMatrixT<double>* v) {
 
         for (int i = size - 1; i >= 0; --i) {
             flip.push_back((*v)(0, i));
-        }
+            std::cout << (*v)(0, i) << " ";
+        } std::cout << std::endl;
         for (int i = 0; i < size; ++i) {
+            std::cout << (*v)(0, i) << " ";
             (*v)(0, i) = flip[i];
-        }
+        }std::cout << std::endl;
     }
     if (v->GetNcols() == 1) {
         int size = v->GetNrows();
