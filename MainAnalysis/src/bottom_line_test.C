@@ -270,24 +270,24 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
-
+    std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < size; ++i) {
         (*data_before_fold0)[i] = fold((*data_before)[i], nullptr, mr, 0, osr);
         (*data_before_fold1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
     }
-
+    std::cout << __LINE__ << std::endl;
     data_before->rename("data_before"s);
     data_before_fold0->rename("data_before_fold0"s);
     data_before_fold1->rename("data_before_fold1"s);
-
+    std::cout << __LINE__ << std::endl;
     data_before->save();
     data_before_fold0->save();
     data_before_fold1->save();
-
+    std::cout << __LINE__ << std::endl;
     std::vector<TMatrixT<double>*> data_before_vector(size, nullptr);
     std::vector<TMatrixT<double>*> data_before_vector_fold0(size, nullptr);
     std::vector<TMatrixT<double>*> data_before_vector_fold1(size, nullptr);
-
+    std::cout << __LINE__ << std::endl;
     for (int i = 0; i < size; ++i) {
         std::vector<double> data_before_elements((*data_before_fold1)[i]->GetNbinsX());
         std::vector<double> data_before_fold0_elements((*data_before_fold1)[i]->GetNbinsX());
