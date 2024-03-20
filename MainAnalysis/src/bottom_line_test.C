@@ -445,6 +445,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto func = [&](int64_t, std::string const& name, std::string const&) {
         return new TH1F(name.data(), ";iteration;", iterations.back(), 0.5, iterations.back()+0.5); };
 
+    std::cout << iterations.back() << " " << 0.5 << " " << iterations.back()+0.5 << std::endl;
+
     auto chi2_before = new history<TH1F>("chi2_before"s, "", func, size);
     auto chi2_before_dj = new history<TH1F>("chi2_before_dj"s, "", func, size);
     auto chi2_before_jpt = new history<TH1F>("chi2_before_jpt"s, "", func, size);
@@ -641,6 +643,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
             
             /* fill chi2 histograms */
+            std::cout << iterations[k] << std::endl;
             (*chi2_before)[i]->SetBinContent(iterations[k], (*step2_smear)(0,0));
             (*chi2_before_dj)[i]->SetBinContent(iterations[k], (*step2_smear_fold0)(0,0));
             (*chi2_before_jpt)[i]->SetBinContent(iterations[k], (*step2_smear_fold1)(0,0));
