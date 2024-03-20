@@ -651,6 +651,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             
         }
     }
+
+    chi2_before->save();
+    chi2_before_dj->save();
+    chi2_before_jpt->save();
+
+    chi2_after->save();
+    chi2_after_dj->save();
+    chi2_after_jpt->save();
     
     fout->Close();
 
