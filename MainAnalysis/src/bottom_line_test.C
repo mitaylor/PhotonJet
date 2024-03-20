@@ -268,6 +268,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* data before unfolding */
     TFile* fout = new TFile(output, "recreate");
     std::cout << __LINE__ << std::endl;
+
+    if (tag != "aa") {
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
@@ -714,6 +716,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     p1->draw("pdf");
     p2->draw("pdf");
     std::cout << __LINE__ << std::endl;
+    }
     return 0;
 }
 
