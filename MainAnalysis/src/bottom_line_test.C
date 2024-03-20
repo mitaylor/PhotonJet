@@ -714,8 +714,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 6)
-        return bottom_line_test(argv[1], argv[2], argv[3], std::stoi(argv[4]), std::stoi(argv[5]));
+    if (argc == 4)
+        return bottom_line_test(argv[1], argv[2], argv[3]);
 
     printf("usage: %s [config] [selections] [output] [centrality bin] [iteration]\n", argv[0]);
     return 1;
