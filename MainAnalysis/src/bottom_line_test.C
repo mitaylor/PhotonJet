@@ -31,6 +31,33 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
+void flip(TMatrixT<double>* v) {
+    if (v->GetNrows() == 1) {
+        int size = v->GetNcols()
+        std::vector<double> flip;
+
+        for (int i = size - 1; i >= 0; --i) {
+            flip.push_back((*v)(0, i));
+        }
+        for (int i = 0; i < size; ++i) {
+            (*v)(0, i) = flip[i];
+        }
+    }
+    if (v->GetNcols() == 1) {
+        int size = v->GetNrows()
+        std::vector<double> flip;
+
+        for (int i = size - 1; i >= 0; --i) {
+            flip.push_back((*v)(0, i));
+        }
+        for (int i = 0; i < size; ++i) {
+            (*v)(0, i) = flip[i];
+        }
+    }
+
+    return;
+}
+
 TH2F* variance(TH1* flat, multival const* m) {
     auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
         m->size(), 0, m->size());
@@ -474,6 +501,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto step2_smear = new TMatrixT<double>(1, 1);
 
         smear_diff_vector->Minus(*data_before_vector[i], *theory_before_vector[i]);
+        flip(smear_diff_vector);
         smear_diff_vector_T->Transpose(*smear_diff_vector);
         step1_smear->Mult(*smear_diff_vector, covariance_matrix_before_I);
         step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
@@ -486,6 +514,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto step2_smear_fold0 = new TMatrixT<double>(1, 1);
 
         smear_diff_vector_fold0->Minus(*data_before_vector_fold0[i], *theory_before_vector_fold0[i]);
+        flip(smear_diff_vector_fold0);
         smear_diff_vector_fold0_T->Transpose(*smear_diff_vector_fold0);
         step1_smear_fold0->Mult(*smear_diff_vector_fold0, covariance_matrix_before_fold0_I);
         step2_smear_fold0->Mult(*step1_smear_fold0, *smear_diff_vector_fold0_T);
@@ -498,6 +527,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto step2_smear_fold1 = new TMatrixT<double>(1, 1);
 
         smear_diff_vector_fold1->Minus(*data_before_vector_fold1[i], *theory_before_vector_fold1[i]);
+        flip(smear_diff_vector_fold1);
         smear_diff_vector_fold1_T->Transpose(*smear_diff_vector_fold1);
         step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_matrix_before_fold1_I);
         step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
@@ -652,12 +682,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             auto step2_unfolded = new TMatrixT<double>(1, 1);
 
             unfolded_diff_vector->Minus(*data_after_vector[i], *theory_after_vector[i]);
+            flip(unfolded_diff_vector);
             unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
             step1_unfolded->Mult(*unfolded_diff_vector, covariance_matrix_after_I);
             step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
 
             // fold0
             auto unfolded_diff_vector_fold0 = new TMatrixT<double>(1, (*theory_after_fold0)[i]->GetNbinsX());
+            flip(unfolded_diff_vector_fold0);
             auto unfolded_diff_vector_fold0_T = new TMatrixT<double>((*theory_after_fold0)[i]->GetNbinsX(), 1);
             auto covariance_matrix_after_fold0_I = covariance_matrix_after_fold0[i]->Invert();
             auto step1_unfolded_fold0 = new TMatrixT<double>(1, (*theory_after_fold0)[i]->GetNbinsX());
@@ -668,7 +700,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_matrix_after_fold0_I);
             step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
 
-            // fold0
+            // fold1
             auto unfolded_diff_vector_fold1 = new TMatrixT<double>(1, (*theory_after_fold1)[i]->GetNbinsX());
             auto unfolded_diff_vector_fold1_T = new TMatrixT<double>((*theory_after_fold1)[i]->GetNbinsX(), 1);
             auto covariance_matrix_after_fold1_I = covariance_matrix_after_fold1[i]->Invert();
@@ -676,6 +708,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             auto step2_unfolded_fold1 = new TMatrixT<double>(1, 1);
 
             unfolded_diff_vector_fold1->Minus(*data_after_vector_fold1[i], *theory_after_vector_fold1[i]);
+            flip(unfolded_diff_vector_fold1);
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
             step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
