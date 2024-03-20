@@ -31,33 +31,6 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
-void flip(TMatrixT<double>* v) {
-    if (v->GetNrows() == 1) {
-        int size = v->GetNcols();
-        std::vector<double> flip;
-
-        for (int i = size - 1; i >= 0; --i) {
-            flip.push_back((*v)(0, i));
-        }
-        for (int i = 0; i < size; ++i) {
-            (*v)(0, i) = flip[i];
-        }
-    }
-    if (v->GetNcols() == 1) {
-        int size = v->GetNrows();
-        std::vector<double> flip;
-
-        for (int i = size - 1; i >= 0; --i) {
-            flip.push_back((*v)(i, 0));
-        }
-        for (int i = 0; i < size; ++i) {
-            (*v)(i, 0) = flip[i];
-        }
-    }
-
-    return;
-}
-
 void print(TMatrixT<double>* v) {
     if (v->GetNrows() == 1) {
         int size = v->GetNcols();
@@ -229,12 +202,20 @@ TH1F *forward_fold(TH1 *HGen, TH2F *HResponse)
         for (int iR = 1; iR <= NReco; iR++) {
             float T = HResponse->GetBinContent(iR, iG) / N;
             float G = HGen->GetBinContent(iG);
+            double ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
+            double EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
+
+            if(HResponse->GetBinContent(iR, iG) == 0) { ET = 0; }
 
             float V = T * G;
+            double E = sqrt(ET * ET + EG * EG) * V;
 
-            float Current = HResult->GetBinContent(iR);
+            double Current = HResult->GetBinContent(iR);
             HResult->SetBinContent(iR, Current + V);
-            HResult->SetBinError(iR, 0);
+
+            double Error = HResult->GetBinError(iR);
+            Error = sqrt(Error * Error + E * E);
+            HResult->SetBinError(iR, Error);
         }
     }
 
@@ -501,6 +482,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto chi2_before_simple_dj = new history<TH1F>("chi2_before_simple_dj"s, "", func, size);
     auto chi2_before_simple_jpt = new history<TH1F>("chi2_before_simple_jpt"s, "", func, size);
 
+    auto p_value_before = new history<TH1F>("p_value_before"s, "", func, size);
+    auto p_value_before_dj = new history<TH1F>("p_value_before_dj"s, "", func, size);
+    auto p_value_before_jpt = new history<TH1F>("p_value_before_jpt"s, "", func, size);
+
     auto chi2_after = new history<TH1F>("chi2_after"s, "", func, size);
     auto chi2_after_dj = new history<TH1F>("chi2_after_dj"s, "", func, size);
     auto chi2_after_jpt = new history<TH1F>("chi2_after_jpt"s, "", func, size);
@@ -508,6 +493,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto chi2_after_simple = new history<TH1F>("chi2_after_simple"s, "", func, size);
     auto chi2_after_simple_dj = new history<TH1F>("chi2_after_simple_dj"s, "", func, size);
     auto chi2_after_simple_jpt = new history<TH1F>("chi2_after_simple_jpt"s, "", func, size);
+
+    auto p_value_after = new history<TH1F>("p_value_after"s, "", func, size);
+    auto p_value_after_dj = new history<TH1F>("p_value_after_dj"s, "", func, size);
+    auto p_value_after_jpt = new history<TH1F>("p_value_after_jpt"s, "", func, size);
 
     /* chi square calculations */
     for (int i = 0; i < size; ++i) {
@@ -521,7 +510,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         smear_diff_vector->Minus(*data_before_vector[i], *theory_before_vector[i]);
         smear_diff_vector_T->Transpose(*smear_diff_vector);
-        // flip(smear_diff_vector_T);
         step1_smear->Mult(*smear_diff_vector, covariance_matrix_before_I);
         step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
         
@@ -534,7 +522,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         smear_diff_vector_fold0->Minus(*data_before_vector_fold0[i], *theory_before_vector_fold0[i]);
         smear_diff_vector_fold0_T->Transpose(*smear_diff_vector_fold0);
-        // flip(smear_diff_vector_fold0_T);
         step1_smear_fold0->Mult(*smear_diff_vector_fold0, covariance_matrix_before_fold0_I);
         step2_smear_fold0->Mult(*step1_smear_fold0, *smear_diff_vector_fold0_T);
 
@@ -553,7 +540,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         smear_diff_vector_fold1->Minus(*data_before_vector_fold1[i], *theory_before_vector_fold1[i]);
         smear_diff_vector_fold1_T->Transpose(*smear_diff_vector_fold1);
-        // flip(smear_diff_vector_fold1_T);
         step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_matrix_before_fold1_I);
         step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
 
@@ -593,6 +579,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*chi2_before_simple)[i]->SetBinContent(1, chi2_smear);
         (*chi2_before_simple_dj)[i]->SetBinContent(1, chi2_smear_fold0);
         (*chi2_before_simple_jpt)[i]->SetBinContent(1, chi2_smear_fold1);
+
+        (*p_value_before)[i]->SetBinContent(1, (*data_before)[i]->Chi2Test((*theory_before)[i]));
+        (*p_value_before_dj)[i]->SetBinContent(1, (*data_before_fold0)[i]->Chi2Test((*theory_before_fold0)[i]));
+        (*p_value_before_jpt)[i]->SetBinContent(1, (*data_before_fold1)[i]->Chi2Test((*theory_before_fold1)[i]));
     }
     
     for (size_t k = 0; k < iterations.size(); ++k) {
@@ -710,7 +700,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector->Minus(*data_after_vector[i], *theory_after_vector[i]);
             unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
-            // flip(unfolded_diff_vector_T);
             step1_unfolded->Mult(*unfolded_diff_vector, covariance_matrix_after_I);
             step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
 
@@ -723,7 +712,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold0->Minus(*data_after_vector_fold0[i], *theory_after_vector_fold0[i]);
             unfolded_diff_vector_fold0_T->Transpose(*unfolded_diff_vector_fold0);
-            // flip(unfolded_diff_vector_fold0_T);
             step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_matrix_after_fold0_I);
             step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
 
@@ -736,7 +724,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold1->Minus(*data_after_vector_fold1[i], *theory_after_vector_fold1[i]);
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
-            // flip(unfolded_diff_vector_fold1_T);
             step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
             
@@ -783,6 +770,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*chi2_after_simple)[i]->SetBinContent(iterations[k], chi2_unfolded);
             (*chi2_after_simple_dj)[i]->SetBinContent(iterations[k], chi2_unfolded_fold0);
             (*chi2_after_simple_jpt)[i]->SetBinContent(iterations[k], chi2_unfolded_fold1);
+
+            (*p_value_before)[i]->SetBinContent(iterations[k], (*p_value_before)[i]->GetBinContent(1));
+            (*p_value_before_dj)[i]->SetBinContent(iterations[k], (*p_value_before_dj)[i]->GetBinContent(1));
+            (*p_value_before_jpt)[i]->SetBinContent(iterations[k], (*p_value_before_jpt)[i]->GetBinContent(1));
+
+            (*p_value_after)[i]->SetBinContent(iterations[k], (*data_after)[i]->Chi2Test((*theory_after)[i]));
+            (*p_value_after_dj)[i]->SetBinContent(iterations[k], (*data_after_fold0)[i]->Chi2Test((*theory_after_fold0)[i]));
+            (*p_value_after_jpt)[i]->SetBinContent(iterations[k], (*data_after_fold1)[i]->Chi2Test((*theory_after_fold1)[i]));
         }
     }
 
@@ -801,6 +796,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     chi2_after_simple->save();
     chi2_after_simple_dj->save();
     chi2_after_simple_jpt->save();
+
+    p_value_before->save();
+    p_value_before_dj->save();
+    p_value_before_jpt->save();
+
+    p_value_after->save();
+    p_value_after_dj->save();
+    p_value_after_jpt->save();
     
     fout->Close();
 
@@ -897,6 +900,42 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p5->add((*chi2_before_simple_jpt)[i], "smear");
         p5->stack((*chi2_after_simple_jpt)[i], "unfolded");
     }
+
+    auto p6 = new paper(set + "_iteration_p_value_simple_" + plot_name, hb);
+
+    p6->divide(size, -1);
+    p6->accessory(pthf_info);
+    apply_style(p6, cms, system_tag);
+
+    for (int64_t i = 0; i < size; ++i) {
+        (*p_value_before)[i]->SetMaximum((*p_value_before)[i]->GetMaximum()*5);
+        p6->add((*p_value_before)[i], "smear");
+        p6->stack((*p_value_after)[i], "unfolded");
+    }
+    
+    auto p7 = new paper(set + "_iteration_p_value_dj_" + plot_name, hb);
+
+    p7->divide(size, -1);
+    p7->accessory(pthf_info);
+    apply_style(p7, cms, system_tag);
+
+    for (int i = 0; i < size; ++i) {
+        (*p_value_before_dj)[i]->SetMaximum((*p_value_before_dj)[i]->GetMaximum()*3);
+        p7->add((*p_value_before_dj)[i], "smear");
+        p7->stack((*p_value_after_dj)[i], "unfolded");
+    }
+    
+    auto p8 = new paper(set + "_iteration_p_value_jpt_" + plot_name, hb);
+
+    p8->divide(size, -1);
+    p8->accessory(pthf_info);
+    apply_style(p8, cms, system_tag);
+
+    for (int64_t i = 0; i < size; ++i) {
+        (*p_value_before_jpt)[i]->SetMaximum((*p_value_before_jpt)[i]->GetMaximum()*3);
+        p8->add((*p_value_before_jpt)[i], "smear");
+        p8->stack((*p_value_after_jpt)[i], "unfolded");
+    }
     
     hb->sketch();
     p0->draw("pdf");
@@ -905,7 +944,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     p3->draw("pdf");
     p4->draw("pdf");
     p5->draw("pdf");
-    
+    p6->draw("pdf");
+    p7->draw("pdf");
+    p8->draw("pdf");
     
     return 0;
 }
