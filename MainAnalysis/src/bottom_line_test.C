@@ -402,7 +402,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
     }
 
-    theory_before->rename("theory_before"s)
+    theory_before->rename("theory_before"s);
     theory_before_fold0->rename("theory_before_fold0"s);
     theory_before_fold1->rename("theory_before_fold1"s);
 
@@ -493,7 +493,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                             int index_row = m * idrg->size() + j;
                             int index_col = n * idrg->size() + k;
 
-                            sum += (*covariance_matrix_after)(index_row, index_col);
+                            sum += (*covariance_matrix_after[i])(index_row, index_col);
                         }
                     }
 
@@ -511,7 +511,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                             int index_row = j * idrg->size() + m;
                             int index_col = k * idrg->size() + n;
 
-                            sum += (*covariance_matrix_after)(index_row, index_col);
+                            sum += (*covariance_matrix_after[i])(index_row, index_col);
                         }
                     }
 
