@@ -285,7 +285,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::vector<TMatrixT<double>*> data_before_vector(size, nullptr);
     std::vector<TMatrixT<double>*> data_before_vector_fold0(size, nullptr);
     std::vector<TMatrixT<double>*> data_before_vector_fold1(size, nullptr);
-    std::cout << __LINE__ << std::endl;
+
     for (int i = 0; i < size; ++i) {
         std::vector<double> data_before_elements((*data_before)[i]->GetNbinsX());
         std::vector<double> data_before_fold0_elements((*data_before_fold0)[i]->GetNbinsX());
@@ -307,7 +307,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         data_before_vector_fold0[i] = new TMatrixT<double>(1, (*data_before_fold0)[i]->GetNbinsX(), &data_before_fold0_elements[0]);
         data_before_vector_fold1[i] = new TMatrixT<double>(1, (*data_before_fold1)[i]->GetNbinsX(), &data_before_fold1_elements[0]);
     }
-    std::cout << __LINE__ << std::endl;
+
     /* covariance matrix before unfolding */
     std::vector<TMatrixT<double>*> covariance_matrix_before(size, nullptr);
     std::vector<TMatrixT<double>*> covariance_matrix_before_fold0(size, nullptr);
@@ -341,7 +341,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         covariance_matrix_before_fold0[i]->Write(("covariance_before_fold0_"s + to_text(i)).data());
         covariance_matrix_before_fold1[i]->Write(("covariance_before_fold1_"s + to_text(i)).data());
     }
-    std::cout << __LINE__ << std::endl;
+
     /* response matrix */
     auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
     matrix->rename("response"s);
@@ -351,24 +351,24 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_after = new history<TH1F>(ftheory, theory_label + "_dr_jpt"s);
     auto theory_after_fold0 = new history<TH1F>("theory_after_fold0"s, "", null<TH1F>, theory_after->shape());
     auto theory_after_fold1 = new history<TH1F>("theory_after_fold1"s, "", null<TH1F>, theory_after->shape());
-
+    std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < size; ++i) {
-        (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mr, 0, osr);
-        (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mr, 1, osr);
+        (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
+        (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
     }
-
+    std::cout << __LINE__ << std::endl;
     theory_after->rename("theory_after"s);
     theory_after_fold0->rename("theory_after_fold0"s);
     theory_after_fold1->rename("theory_after_fold1"s);
-
+std::cout << __LINE__ << std::endl;
     theory_after->save();
     theory_after_fold0->save();
     theory_after_fold1->save();
-
+std::cout << __LINE__ << std::endl;
     std::vector<TMatrixT<double>*> theory_after_vector(size, nullptr);
     std::vector<TMatrixT<double>*> theory_after_vector_fold0(size, nullptr);
     std::vector<TMatrixT<double>*> theory_after_vector_fold1(size, nullptr);
-
+std::cout << __LINE__ << std::endl;
     for (int i = 0; i < size; ++i) {
         std::vector<double> theory_after_elements((*theory_after)[i]->GetNbinsX());
         std::vector<double> theory_after_fold0_elements((*theory_after_fold0)[i]->GetNbinsX());
