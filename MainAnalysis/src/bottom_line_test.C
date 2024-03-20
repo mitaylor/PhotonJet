@@ -721,9 +721,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*chi2_before_simple_dj)[i]->SetBinContent(iterations[k], (*chi2_before_simple_dj)[i]->GetBinContent(1));
             (*chi2_before_simple_jpt)[i]->SetBinContent(iterations[k], (*chi2_before_simple_jpt)[i]->GetBinContent(1));
 
-            (*chi2_after_simple)[i]->SetBinContent(1, chi2_unfolded);
-            (*chi2_after_simple_dj)[i]->SetBinContent(1, chi2_unfolded_fold1);
-            (*chi2_after_simple_jpt)[i]->SetBinContent(1, chi2_unfolded_fold1);
+            (*chi2_after_simple)[i]->SetBinContent(iterations[k], chi2_unfolded);
+            (*chi2_after_simple_dj)[i]->SetBinContent(iterations[k], chi2_unfolded_fold1);
+            (*chi2_after_simple_jpt)[i]->SetBinContent(iterations[k], chi2_unfolded_fold1);
         }
     }
 
