@@ -715,7 +715,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
             
             /* fill chi2 histograms */
-            std::cout << iterations[k] << std::endl;
             (*chi2_before)[i]->SetBinContent(iterations[k], (*chi2_before)[i]->GetBinContent(1));
             (*chi2_before_dj)[i]->SetBinContent(iterations[k], (*chi2_before_dj)[i]->GetBinContent(1));
             (*chi2_before_jpt)[i]->SetBinContent(iterations[k], (*chi2_before_jpt)[i]->GetBinContent(1));
