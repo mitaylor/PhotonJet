@@ -262,6 +262,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::cout << "unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after << std::endl;
     }, fafter, after_file);
     std::cout << __LINE__ << std::endl;
+    if (tag != "aa") {
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
     TFile* fmatrix = new TFile((base + matrix_file).data(), "read");
     std::cout << __LINE__ << std::endl;
@@ -269,7 +270,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     TFile* fout = new TFile(output, "recreate");
     std::cout << __LINE__ << std::endl;
 
-    if (tag != "aa") {
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
