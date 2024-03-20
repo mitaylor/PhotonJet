@@ -274,7 +274,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*data_before_fold1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
     }
 
-    data_before->rename("data_before"s)
+    data_before->rename("data_before"s);
     data_before_fold0->rename("data_before_fold0"s);
     data_before_fold1->rename("data_before_fold1"s);
 
@@ -333,13 +333,13 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_before_fold1_elements[j * (*data_before_fold1)[i]->GetNbinsX() + j] = err * err;
         }
 
-        covariance_before_matrix[i] = new TMatrixT<double>((*data_before)[i]->GetNbinsX(), (*data_before)[i]->GetNbinsX(), &covariance_before_elements[0]);
-        covariance_before_matrix_fold0[i] = new TMatrixT<double>((*data_before_fold0)[i]->GetNbinsX(), (*data_before_fold0)[i]->GetNbinsX(), &covariance_before_fold0_elements[0]);
-        covariance_before_matrix_fold1[i] = new TMatrixT<double>((*data_before_fold1)[i]->GetNbinsX(), (*data_before_fold1)[i]->GetNbinsX(), &covariance_before_fold1_elements[0]);
+        covariance_matrix_before[i] = new TMatrixT<double>((*data_before)[i]->GetNbinsX(), (*data_before)[i]->GetNbinsX(), &covariance_before_elements[0]);
+        covariance_matrix_before_fold0[i] = new TMatrixT<double>((*data_before_fold0)[i]->GetNbinsX(), (*data_before_fold0)[i]->GetNbinsX(), &covariance_before_fold0_elements[0]);
+        covariance_matrix_before_fold1[i] = new TMatrixT<double>((*data_before_fold1)[i]->GetNbinsX(), (*data_before_fold1)[i]->GetNbinsX(), &covariance_before_fold1_elements[0]);
         
-        covariance_before_matrix[i]->Write(("covariance_before_"s + to_text(i)).data());
-        covariance_before_matrix_fold0[i]->Write(("covariance_before_fold0_"s + to_text(i)).data());
-        covariance_before_matrix_fold1[i]->Write(("covariance_before_fold1_"s + to_text(i)).data());
+        covariance_matrix_before[i]->Write(("covariance_before_"s + to_text(i)).data());
+        covariance_matrix_before_fold0[i]->Write(("covariance_before_fold0_"s + to_text(i)).data());
+        covariance_matrix_before_fold1[i]->Write(("covariance_before_fold1_"s + to_text(i)).data());
     }
 
     /* response matrix */
@@ -493,7 +493,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                             int index_row = m * idrg->size() + j;
                             int index_col = n * idrg->size() + k;
 
-                            sum += (*covariance_after_matrix)(index_row, index_col);
+                            sum += (*covariance_matrix_after)(index_row, index_col);
                         }
                     }
 
@@ -511,7 +511,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                             int index_row = j * idrg->size() + m;
                             int index_col = k * idrg->size() + n;
 
-                            sum += (*covariance_after_matrix)(index_row, index_col);
+                            sum += (*covariance_matrix_after)(index_row, index_col);
                         }
                     }
 
@@ -519,12 +519,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                 }
             }
 
-            covariance_after_matrix_fold0[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_fold0_elements[0]);
-            covariance_after_matrix_fold1[i] = new TMatrixT<double>((*data_after_fold1)[i]->GetNbinsX(), (*data_after_fold1)[i]->GetNbinsX(), &covariance_after_fold1_elements[0]);
+            covariance_matrix_after_fold0[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_fold0_elements[0]);
+            covariance_matrix_after_fold1[i] = new TMatrixT<double>((*data_after_fold1)[i]->GetNbinsX(), (*data_after_fold1)[i]->GetNbinsX(), &covariance_after_fold1_elements[0]);
 
-            covariance_after_matrix[i]->Write(("covariance_after_"s + to_text(i)).data());
-            covariance_after_matrix_fold0[i]->Write(("covariance_after_fold0_"s + to_text(i)).data());
-            covariance_after_matrix_fold1[i]->Write(("covariance_after_fold1_"s + to_text(i)).data());
+            covariance_matrix_after[i]->Write(("covariance_after_"s + to_text(i)).data());
+            covariance_matrix_after_fold0[i]->Write(("covariance_after_fold0_"s + to_text(i)).data());
+            covariance_matrix_after_fold1[i]->Write(("covariance_after_fold1_"s + to_text(i)).data());
         }
 
         data_after->rename("data_after_iteration_"s + std::to_string(iterations[i]));
@@ -573,7 +573,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             smear_diff_vector->Minus(*data_before_vector[i], *theory_before_vector[i]);
             smear_diff_vector_T->Transpose(*smear_diff_vector);
-            step1_smear->Mult(*smear_diff_vector, covariance_before_matrix_I);
+            step1_smear->Mult(*smear_diff_vector, covariance_matrix_before_I);
             step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
 
             // fold0
@@ -585,7 +585,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             smear_diff_vector_fold0->Minus(*data_before_vector_fold0[i], *theory_before_vector_fold0[i]);
             smear_diff_vector_fold0_T->Transpose(*smear_diff_vector_fold0);
-            step1_smear_fold0->Mult(*smear_diff_vector_fold0, covariance_before_matrix_fold0_I);
+            step1_smear_fold0->Mult(*smear_diff_vector_fold0, covariance_matrix_before_fold0_I);
             step2_smear_fold0->Mult(*step1_smear_fold0, *smear_diff_vector_fold0_T);
 
             // fold1
@@ -597,7 +597,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             smear_diff_vector_fold1->Minus(*data_before_vector_fold1[i], *theory_before_vector_fold1[i]);
             smear_diff_vector_fold1_T->Transpose(*smear_diff_vector_fold1);
-            step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_before_matrix_fold1_I);
+            step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_matrix_before_fold1_I);
             step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
 
             /* chi square in gen space */
@@ -610,7 +610,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector->Minus(*data_after_vector[i], *theory_after_vector[i]);
             unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
-            step1_unfolded->Mult(*unfolded_diff_vector, covariance_after_matrix_I);
+            step1_unfolded->Mult(*unfolded_diff_vector, covariance_matrix_after_I);
             step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
 
             // fold0
@@ -622,7 +622,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold0->Minus(*data_after_vector_fold0[i], *theory_after_vector_fold0[i]);
             unfolded_diff_vector_fold0_T->Transpose(*unfolded_diff_vector_fold0);
-            step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_after_matrix_fold0_I);
+            step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_matrix_after_fold0_I);
             step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
 
             // fold0
@@ -634,7 +634,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold1->Minus(*data_after_vector_fold1[i], *theory_after_vector_fold1[i]);
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
-            step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_after_matrix_fold1_I);
+            step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
 
             /* fill chi2 histograms */
