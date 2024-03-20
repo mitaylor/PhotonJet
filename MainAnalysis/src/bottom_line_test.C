@@ -255,14 +255,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::cout << __LINE__ << std::endl;
     std::vector<TFile*> fafter(size, nullptr);
     std::cout << __LINE__ << std::endl;
-    std::cout << base + theory_file << std::endl;
-    std::cout << base + matrix_file << std::endl;
     
     zip([&](auto& fafter, auto const& after) {
         fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after).data(), "read");
-        std::cout << "unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after << std::endl;
     }, fafter, after_file);
-    if (tag != "aa") { std::cout << __LINE__ << std::endl;
+    
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
     TFile* fmatrix = new TFile((base + matrix_file).data(), "read");
     std::cout << __LINE__ << std::endl;
@@ -716,7 +713,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     p1->draw("pdf");
     p2->draw("pdf");
     std::cout << __LINE__ << std::endl;
-    }
+    
     return 0;
 }
 
