@@ -648,8 +648,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
             step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
-
-            std::cout << (*step2_smear)(0,0) << std::endl;
             
             /* fill chi2 histograms */
             std::cout << iterations[k] << std::endl;
