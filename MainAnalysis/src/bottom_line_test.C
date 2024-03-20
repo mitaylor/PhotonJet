@@ -250,7 +250,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
+    std::cout << __LINE__ << std::endl;
     TFile* fbefore = new TFile((base + before_file).data(), "read");
 
     std::vector<TFile*> fafter(size, nullptr);
@@ -264,7 +264,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     /* data before unfolding */
     TFile* fout = new TFile(output, "recreate");
-
+    std::cout << __LINE__ << std::endl;
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
@@ -307,7 +307,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         data_before_vector_fold0[i] = new TMatrixT<double>(1, (*data_before_fold0)[i]->GetNbinsX(), &data_before_fold0_elements[0]);
         data_before_vector_fold1[i] = new TMatrixT<double>(1, (*data_before_fold1)[i]->GetNbinsX(), &data_before_fold1_elements[0]);
     }
-
+    std::cout << __LINE__ << std::endl;
     /* covariance matrix before unfolding */
     std::vector<TMatrixT<double>*> covariance_matrix_before(size, nullptr);
     std::vector<TMatrixT<double>*> covariance_matrix_before_fold0(size, nullptr);
@@ -341,12 +341,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         covariance_matrix_before_fold0[i]->Write(("covariance_before_fold0_"s + to_text(i)).data());
         covariance_matrix_before_fold1[i]->Write(("covariance_before_fold1_"s + to_text(i)).data());
     }
-
+    std::cout << __LINE__ << std::endl;
     /* response matrix */
     auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
     matrix->rename("response"s);
     matrix->save();
-
+    std::cout << __LINE__ << std::endl;
     /* theory after unfolding */
     auto theory_after = new history<TH1F>(ftheory, theory_label + "_dr_jpt"s);
     auto theory_after_fold0 = new history<TH1F>("theory_after_fold0"s, "", null<TH1F>, theory_after->shape());
@@ -390,7 +390,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         theory_after_vector_fold0[i] = new TMatrixT<double>(1, (*theory_after_fold0)[i]->GetNbinsX(), &theory_after_fold0_elements[0]);
         theory_after_vector_fold1[i] = new TMatrixT<double>(1, (*theory_after_fold1)[i]->GetNbinsX(), &theory_after_fold1_elements[0]);
     }
-
+    std::cout << __LINE__ << std::endl;
     /* theory before unfolding */
     auto theory_before = new history<TH1F>("theory_before"s, "", null<TH1F>, theory_after->shape());
     auto theory_before_fold0 = new history<TH1F>("theory_before_fold0"s, "", null<TH1F>, theory_after->shape());
@@ -435,7 +435,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         theory_before_vector_fold0[i] = new TMatrixT<double>(1, (*theory_before_fold0)[i]->GetNbinsX(), &theory_before_fold0_elements[0]);
         theory_before_vector_fold1[i] = new TMatrixT<double>(1, (*theory_before_fold1)[i]->GetNbinsX(), &theory_before_fold1_elements[0]);
     }
-
+    std::cout << __LINE__ << std::endl;
     /* define unfolding parameters */
     std::vector<int64_t> iterations {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150};
 
@@ -457,17 +457,17 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     // auto chi2_after_simple = new history<TH1F>("chi2_after_simple"s, "", func, size);
     // auto chi2_after_simple_dj = new history<TH1F>("chi2_after_simple_dj"s, "", func, size);
     // auto chi2_after_simple_jpt = new history<TH1F>("chi2_after_simple_jpt"s, "", func, size);
-
+    std::cout << __LINE__ << std::endl;
     for (size_t k = 0; k < iterations.size(); ++k) {
         /* data and covariances after unfolding */
         auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, size);
         auto data_after_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, size);
         auto data_after_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, size);
-
+        std::cout << __LINE__ << std::endl;
         std::vector<TMatrixT<double>*> covariance_matrix_after(size, nullptr);
         std::vector<TMatrixT<double>*> covariance_matrix_after_fold0(size, nullptr);
         std::vector<TMatrixT<double>*> covariance_matrix_after_fold1(size, nullptr);
-
+        std::cout << __LINE__ << std::endl;
         for (int i = 0; i < size; ++i) {
             std::string unfold_name = "HUnfoldedBayes" + std::to_string(iterations[k]);
             std::string matrix_name = "MUnfoldedBayes" + std::to_string(iterations[k]);
@@ -518,7 +518,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
                     covariance_after_fold1_elements[j * (*data_after_fold1)[i]->GetNbinsX() + k] = sum;
                 }
             }
-
+            std::cout << __LINE__ << std::endl;
             covariance_matrix_after_fold0[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_fold0_elements[0]);
             covariance_matrix_after_fold1[i] = new TMatrixT<double>((*data_after_fold1)[i]->GetNbinsX(), (*data_after_fold1)[i]->GetNbinsX(), &covariance_after_fold1_elements[0]);
 
@@ -526,7 +526,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_matrix_after_fold0[i]->Write(("covariance_after_fold0_"s + to_text(i)).data());
             covariance_matrix_after_fold1[i]->Write(("covariance_after_fold1_"s + to_text(i)).data());
         }
-
+        std::cout << __LINE__ << std::endl;
         data_after->rename("data_after_iteration_"s + std::to_string(iterations[k]));
         data_after_fold0->rename("data_after_iteration_"s + std::to_string(iterations[k]) + "_fold0"s);
         data_after_fold1->rename("data_after_iteration_"s + std::to_string(iterations[k]) + "_fold1"s);
@@ -560,7 +560,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             data_after_vector_fold0[i] = new TMatrixT<double>(1, (*data_after_fold0)[i]->GetNbinsX(), &data_after_fold0_elements[0]);
             data_after_vector_fold1[i] = new TMatrixT<double>(1, (*data_after_fold1)[i]->GetNbinsX(), &data_after_fold1_elements[0]);
         }
-
+        std::cout << __LINE__ << std::endl;
         /* chi square calculations */
         for (int i = 0; i < size; ++i) {
             /* chi square in reco space */
@@ -575,7 +575,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             smear_diff_vector_T->Transpose(*smear_diff_vector);
             step1_smear->Mult(*smear_diff_vector, covariance_matrix_before_I);
             step2_smear->Mult(*step1_smear, *smear_diff_vector_T);
-
+            
             // fold0
             auto smear_diff_vector_fold0 = new TMatrixT<double>(1, (*theory_before_fold0)[i]->GetNbinsX());
             auto smear_diff_vector_fold0_T = new TMatrixT<double>((*theory_before_fold0)[i]->GetNbinsX(), 1);
@@ -599,7 +599,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             smear_diff_vector_fold1_T->Transpose(*smear_diff_vector_fold1);
             step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_matrix_before_fold1_I);
             step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
-
+            std::cout << __LINE__ << std::endl;
             /* chi square in gen space */
             // nominal
             auto unfolded_diff_vector = new TMatrixT<double>(1, (*theory_after)[i]->GetNbinsX());
@@ -636,7 +636,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
             step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
-
+            std::cout << __LINE__ << std::endl;
             /* fill chi2 histograms */
             (*chi2_before)[i]->SetBinContent(iterations[k], (*step2_smear)(0,0));
             (*chi2_before_dj)[i]->SetBinContent(iterations[k], (*step2_smear_fold0)(0,0));
@@ -645,9 +645,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*chi2_after)[i]->SetBinContent(iterations[k], (*step2_unfolded)(0,0));
             (*chi2_after_dj)[i]->SetBinContent(iterations[k], (*step2_unfolded_fold0)(0,0));
             (*chi2_after_jpt)[i]->SetBinContent(iterations[k], (*step2_unfolded_fold1)(0,0));
+            std::cout << __LINE__ << std::endl;
         }
     }
-
+    std::cout << __LINE__ << std::endl;
     fout->Close();
 
     /* set up figures */
@@ -671,7 +672,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     hb->alias("smear", "#chi^{2}_{smeared}");
     hb->alias("unfolded", "#chi^{2}_{D'Agostini}");
-
+    std::cout << __LINE__ << std::endl;
     auto p0 = new paper(set + "_iteration_chi_squared_" + plot_name, hb);
 
     p0->divide(size, -1);
@@ -682,7 +683,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p0->add((*chi2_before)[i], "smear");
         p0->stack((*chi2_after)[i], "unfolded");
     }
-
+    std::cout << __LINE__ << std::endl;
     auto p1 = new paper(set + "_iteration_chi_squared_dj_" + plot_name, hb);
 
     p1->divide(size, -1);
@@ -693,7 +694,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p1->add((*chi2_before_dj)[i], "smear");
         p1->stack((*chi2_after_dj)[i], "unfolded");
     }
-
+    std::cout << __LINE__ << std::endl;
     auto p2 = new paper(set + "_iteration_chi_squared_jpt_" + plot_name, hb);
 
     p2->divide(size, -1);
@@ -704,12 +705,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p2->add((*chi2_before_jpt)[i], "smear");
         p2->stack((*chi2_after_jpt)[i], "unfolded");
     }
-
+    std::cout << __LINE__ << std::endl;
     hb->sketch();
     p0->draw("pdf");
     p1->draw("pdf");
     p2->draw("pdf");
-
+    std::cout << __LINE__ << std::endl;
     return 0;
 }
 
