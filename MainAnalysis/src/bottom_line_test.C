@@ -355,7 +355,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     for (int64_t i = 0; i < size; ++i) {
         auto theory_after_base = new history<TH1F>(ftheory, theory_label + "_dr_jpt"s);
 
-        (*theory_after)[i] = (TH1F*) (*theory_after_base)[i]->Clone(to_text(i).data());
+        (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
     }
