@@ -252,16 +252,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     TH1::SetDefaultSumw2();
     std::cout << __LINE__ << std::endl;
     TFile* fbefore = new TFile((base + before_file).data(), "read");
-
+    std::cout << __LINE__ << std::endl;
     std::vector<TFile*> fafter(size, nullptr);
-
+    std::cout << __LINE__ << std::endl;
     zip([&](auto& fafter, auto const& after) {
         fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after).data(), "read");
     }, fafter, after_file);
-
+    std::cout << __LINE__ << std::endl;
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
     TFile* fmatrix = new TFile((base + matrix_file).data(), "read");
-    
+    std::cout << __LINE__ << std::endl;
     /* data before unfolding */
     TFile* fout = new TFile(output, "recreate");
     std::cout << __LINE__ << std::endl;
