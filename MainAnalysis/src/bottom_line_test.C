@@ -48,10 +48,10 @@ void flip(TMatrixT<double>* v) {
         std::vector<double> flip;
 
         for (int i = size - 1; i >= 0; --i) {
-            flip.push_back((*v)(0, i));
+            flip.push_back((*v)(i, 0));
         }
         for (int i = 0; i < size; ++i) {
-            (*v)(0, i) = flip[i];
+            (*v)(i, 0) = flip[i];
         }
     }
 
