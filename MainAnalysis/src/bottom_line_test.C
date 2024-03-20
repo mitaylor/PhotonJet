@@ -525,9 +525,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_matrix_after_fold0[i] = new TMatrixT<double>((*data_after_fold0)[i]->GetNbinsX(), (*data_after_fold0)[i]->GetNbinsX(), &covariance_after_fold0_elements[0]);
             covariance_matrix_after_fold1[i] = new TMatrixT<double>((*data_after_fold1)[i]->GetNbinsX(), (*data_after_fold1)[i]->GetNbinsX(), &covariance_after_fold1_elements[0]);
 
-            covariance_matrix_after[i]->Write(("covariance_after_"s + to_text(i)).data());
-            covariance_matrix_after_fold0[i]->Write(("covariance_after_fold0_"s + to_text(i)).data());
-            covariance_matrix_after_fold1[i]->Write(("covariance_after_fold1_"s + to_text(i)).data());
+            covariance_matrix_after[i]->Write(("covariance_after_iteration_"s + std::to_string(iterations[k]) + "_"s + to_text(i)).data());
+            covariance_matrix_after_fold0[i]->Write(("covariance_after_iteration_"s + std::to_string(iterations[k]) + "_fold0_"s + to_text(i)).data());
+            covariance_matrix_after_fold1[i]->Write(("covariance_after_iteration_"s + std::to_string(iterations[k]) + "_fold1_"s + to_text(i)).data());
         }
         
         data_after->rename("data_after_iteration_"s + std::to_string(iterations[k]));
