@@ -567,7 +567,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
             auto diff = (*data_before)[i]->GetBinContent(j+1) - (*theory_before)[i]->GetBinContent(j+1);
             auto err = (*data_before)[i]->GetBinError(j+1);
-            std::cout << diff << " " << diff*diff << " " << err*err << std::endl;
             chi2_smear += diff * diff / (err * err);
         }
         
@@ -577,6 +576,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         for (int j = 0; j < (*data_before_fold0)[i]->GetNbinsX(); ++j) {
             auto diff = (*data_before_fold0)[i]->GetBinContent(j+1) - (*theory_before_fold0)[i]->GetBinContent(j+1);
             auto err = (*data_before_fold0)[i]->GetBinError(j+1);
+            std::cout << diff << " " << diff*diff << " " << err*err << std::endl;
             chi2_smear_fold0 += diff * diff / (err * err);
         }
 
