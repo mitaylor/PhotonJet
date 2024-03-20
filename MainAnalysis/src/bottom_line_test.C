@@ -250,11 +250,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-    std::cout << __LINE__ << std::endl;
+    
     TFile* fbefore = new TFile((base + before_file).data(), "read");
-    std::cout << __LINE__ << std::endl;
+    
     std::vector<TFile*> fafter(size, nullptr);
-    std::cout << __LINE__ << std::endl;
     
     zip([&](auto& fafter, auto const& after) {
         fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after).data(), "read");
@@ -262,28 +261,27 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
     TFile* fmatrix = new TFile((base + matrix_file).data(), "read");
-    std::cout << __LINE__ << std::endl;
+    
     /* data before unfolding */
     TFile* fout = new TFile(output, "recreate");
-    std::cout << __LINE__ << std::endl;
-
+    
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
-    std::cout << __LINE__ << std::endl;
+    
     for (int64_t i = 0; i < size; ++i) {
         (*data_before_fold0)[i] = fold((*data_before)[i], nullptr, mr, 0, osr);
         (*data_before_fold1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
     }
-    std::cout << __LINE__ << std::endl;
+    
     data_before->rename("data_before"s);
     data_before_fold0->rename("data_before_fold0"s);
     data_before_fold1->rename("data_before_fold1"s);
-    std::cout << __LINE__ << std::endl;
+    
     data_before->save();
     data_before_fold0->save();
     data_before_fold1->save();
-    std::cout << __LINE__ << std::endl;
+    
     std::vector<TMatrixT<double>*> data_before_vector(size, nullptr);
     std::vector<TMatrixT<double>*> data_before_vector_fold0(size, nullptr);
     std::vector<TMatrixT<double>*> data_before_vector_fold1(size, nullptr);
@@ -293,16 +291,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::vector<double> data_before_fold0_elements((*data_before_fold1)[i]->GetNbinsX());
         std::vector<double> data_before_fold1_elements((*data_before_fold1)[i]->GetNbinsX());
 
-        for (int j = 1; j <= (*data_before)[i]->GetNbinsX(); ++j) {
-            data_before_elements[j] = (*data_before)[i]->GetBinContent(j);
+        for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
+            data_before_elements[j] = (*data_before)[i]->GetBinContent(j+1);
         }
 
-        for (int j = 1; j <= (*data_before_fold0)[i]->GetNbinsX(); ++j) {
-            data_before_fold0_elements[j] = (*data_before_fold0)[i]->GetBinContent(j);
+        for (int j = 0; j < (*data_before_fold0)[i]->GetNbinsX(); ++j) {
+            data_before_fold0_elements[j] = (*data_before_fold0)[i]->GetBinContent(j+1);
         }
 
-        for (int j = 1; j <= (*data_before_fold1)[i]->GetNbinsX(); ++j) {
-            data_before_fold1_elements[j] = (*data_before_fold1)[i]->GetBinContent(j);
+        for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
+            data_before_fold1_elements[j] = (*data_before_fold1)[i]->GetBinContent(j+1);
         }
         
         data_before_vector[i] = new TMatrixT<double>(1, (*data_before)[i]->GetNbinsX(), &data_before_elements[0]);
@@ -321,17 +319,17 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::vector<double> covariance_before_fold1_elements((*data_before_fold1)[i]->GetNbinsX() * (*data_before_fold1)[i]->GetNbinsX(), 0);
 
         for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
-            auto err = (*data_before)[i]->GetBinError(j + 1);
+            auto err = (*data_before)[i]->GetBinError(j+1);
             covariance_before_elements[j * (*data_before)[i]->GetNbinsX() + j] = err * err;
         }
 
         for (int j = 0; j < (*data_before_fold0)[i]->GetNbinsX(); ++j) {
-            auto err = (*data_before_fold0)[i]->GetBinError(j + 1);
+            auto err = (*data_before_fold0)[i]->GetBinError(j+1);
             covariance_before_fold0_elements[j * (*data_before_fold0)[i]->GetNbinsX() + j] = err * err;
         }
 
         for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
-            auto err = (*data_before_fold1)[i]->GetBinError(j + 1);
+            auto err = (*data_before_fold1)[i]->GetBinError(j+1);
             covariance_before_fold1_elements[j * (*data_before_fold1)[i]->GetNbinsX() + j] = err * err;
         }
 
@@ -376,16 +374,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::vector<double> theory_after_fold0_elements((*theory_after_fold1)[i]->GetNbinsX());
         std::vector<double> theory_after_fold1_elements((*theory_after_fold1)[i]->GetNbinsX());
 
-        for (int j = 1; j <= (*theory_after)[i]->GetNbinsX(); ++j) {
-            theory_after_elements[j] = (*theory_after)[i]->GetBinContent(j);
+        for (int j = 0; j < (*theory_after)[i]->GetNbinsX(); ++j) {
+            theory_after_elements[j] = (*theory_after)[i]->GetBinContent(j+1);
         }
 
-        for (int j = 1; j <= (*theory_after_fold0)[i]->GetNbinsX(); ++j) {
-            theory_after_fold0_elements[j] = (*theory_after_fold0)[i]->GetBinContent(j);
+        for (int j = 0; j < (*theory_after_fold0)[i]->GetNbinsX(); ++j) {
+            theory_after_fold0_elements[j] = (*theory_after_fold0)[i]->GetBinContent(j+1);
         }
 
-        for (int j = 1; j <= (*theory_after_fold1)[i]->GetNbinsX(); ++j) {
-            theory_after_fold1_elements[j] = (*theory_after_fold1)[i]->GetBinContent(j);
+        for (int j = 0; j < (*theory_after_fold1)[i]->GetNbinsX(); ++j) {
+            theory_after_fold1_elements[j] = (*theory_after_fold1)[i]->GetBinContent(j+1);
         }
         
         theory_after_vector[i] = new TMatrixT<double>(1, (*theory_after)[i]->GetNbinsX(), &theory_after_elements[0]);
@@ -421,16 +419,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::vector<double> theory_before_fold0_elements((*theory_before_fold1)[i]->GetNbinsX());
         std::vector<double> theory_before_fold1_elements((*theory_before_fold1)[i]->GetNbinsX());
 
-        for (int j = 1; j <= (*theory_before)[i]->GetNbinsX(); ++j) {
-            theory_before_elements[j] = (*theory_before)[i]->GetBinContent(j);
+        for (int j = 0; j < (*theory_before)[i]->GetNbinsX(); ++j) {
+            theory_before_elements[j] = (*theory_before)[i]->GetBinContent(j+1);
         }
 
-        for (int j = 1; j <= (*theory_before_fold0)[i]->GetNbinsX(); ++j) {
-            theory_before_fold0_elements[j] = (*theory_before_fold0)[i]->GetBinContent(j);
+        for (int j = 0; j < (*theory_before_fold0)[i]->GetNbinsX(); ++j) {
+            theory_before_fold0_elements[j] = (*theory_before_fold0)[i]->GetBinContent(j+1);
         }
 
-        for (int j = 1; j <= (*theory_before_fold1)[i]->GetNbinsX(); ++j) {
-            theory_before_fold1_elements[j] = (*theory_before_fold1)[i]->GetBinContent(j);
+        for (int j = 0; j < (*theory_before_fold1)[i]->GetNbinsX(); ++j) {
+            theory_before_fold1_elements[j] = (*theory_before_fold1)[i]->GetBinContent(j+1);
         }
         
         theory_before_vector[i] = new TMatrixT<double>(1, (*theory_before)[i]->GetNbinsX(), &theory_before_elements[0]);
@@ -546,16 +544,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             std::vector<double> data_after_fold0_elements((*data_after_fold1)[i]->GetNbinsX());
             std::vector<double> data_after_fold1_elements((*data_after_fold1)[i]->GetNbinsX());
 
-            for (int j = 1; j <= (*data_after)[i]->GetNbinsX(); ++j) {
-                data_after_elements[j] = (*data_after)[i]->GetBinContent(j);
+            for (int j = 0; j < (*data_after)[i]->GetNbinsX(); ++j) {
+                data_after_elements[j] = (*data_after)[i]->GetBinContent(j+1);
             }
 
-            for (int j = 1; j <= (*data_after_fold0)[i]->GetNbinsX(); ++j) {
-                data_after_fold0_elements[j] = (*data_after_fold0)[i]->GetBinContent(j);
+            for (int j = 0; j < (*data_after_fold0)[i]->GetNbinsX(); ++j) {
+                data_after_fold0_elements[j] = (*data_after_fold0)[i]->GetBinContent(j+1);
             }
 
-            for (int j = 1; j <= (*data_after_fold1)[i]->GetNbinsX(); ++j) {
-                data_after_fold1_elements[j] = (*data_after_fold1)[i]->GetBinContent(j);
+            for (int j = 0; j < (*data_after_fold1)[i]->GetNbinsX(); ++j) {
+                data_after_fold1_elements[j] = (*data_after_fold1)[i]->GetBinContent(j+1);
             }
             
             data_after_vector[i] = new TMatrixT<double>(1, (*data_after)[i]->GetNbinsX(), &data_after_elements[0]);
