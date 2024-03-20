@@ -346,7 +346,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
     matrix->rename("response"s);
     matrix->save();
-    std::cout << __LINE__ << std::endl;
+    std::cout << __LINE__ << std::endl; std::cout << theory_label + "_dr_jpt"s << std::endl;
     /* theory after unfolding */
     auto theory_after = new history<TH1F>(ftheory, theory_label + "_dr_jpt"s);
     auto theory_after_fold0 = new history<TH1F>("theory_after_fold0"s, "", null<TH1F>, theory_after->shape());
