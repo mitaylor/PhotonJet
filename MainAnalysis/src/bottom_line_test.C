@@ -32,19 +32,16 @@ T* null(int64_t, std::string const&, std::string const&) {
 }
 
 void flip(TMatrixT<double>* v) {
-    std::cout << v->GetNrows() << " " << v->GetNcols() << std::endl;
     if (v->GetNrows() == 1) {
         int size = v->GetNcols();
         std::vector<double> flip;
 
         for (int i = size - 1; i >= 0; --i) {
             flip.push_back((*v)(0, i));
-            std::cout << (*v)(0, i) << " ";
-        } std::cout << std::endl;
+        }
         for (int i = 0; i < size; ++i) {
-            std::cout << (*v)(0, i) << " ";
             (*v)(0, i) = flip[i];
-        }std::cout << std::endl;
+        }
     }
     if (v->GetNcols() == 1) {
         int size = v->GetNrows();
@@ -56,6 +53,25 @@ void flip(TMatrixT<double>* v) {
         for (int i = 0; i < size; ++i) {
             (*v)(i, 0) = flip[i];
         }
+    }
+
+    return;
+}
+
+void print(TMatrixT<double>* v) {
+    if (v->GetNrows() == 1) {
+        int size = v->GetNcols();
+        for (int i = 0; i < size; ++i) {
+            std::cout << (*v)(0, i) << " ";
+        }
+        std::cout << std::endl;
+    }
+    if (v->GetNcols() == 1) {
+        int size = v->GetNrows();
+        for (int i = 0; i < size; ++i) {
+            std::cout << (*v)(i, 0) << " ";
+        }
+        std::cout << std::endl;
     }
 
     return;
@@ -567,7 +583,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         }
 
         (*chi2_before_simple)[i]->SetBinContent(1, chi2_smear);
-        (*chi2_before_simple_dj)[i]->SetBinContent(1, chi2_smear_fold1);
+        (*chi2_before_simple_dj)[i]->SetBinContent(1, chi2_smear_fold0);
         (*chi2_before_simple_jpt)[i]->SetBinContent(1, chi2_smear_fold1);
     }
     
@@ -712,6 +728,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold1->Minus(*data_after_vector_fold1[i], *theory_after_vector_fold1[i]);
             flip(unfolded_diff_vector_fold1);
+            print(unfolded_diff_vector_fold1);
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
             step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
@@ -757,7 +774,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*chi2_before_simple_jpt)[i]->SetBinContent(iterations[k], (*chi2_before_simple_jpt)[i]->GetBinContent(1));
 
             (*chi2_after_simple)[i]->SetBinContent(iterations[k], chi2_unfolded);
-            (*chi2_after_simple_dj)[i]->SetBinContent(iterations[k], chi2_unfolded_fold1);
+            (*chi2_after_simple_dj)[i]->SetBinContent(iterations[k], chi2_unfolded_fold0);
             (*chi2_after_simple_jpt)[i]->SetBinContent(iterations[k], chi2_unfolded_fold1);
         }
     }
