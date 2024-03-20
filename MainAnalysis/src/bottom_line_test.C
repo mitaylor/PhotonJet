@@ -708,14 +708,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             // fold0
             auto unfolded_diff_vector_fold0 = new TMatrixT<double>(1, (*theory_after_fold0)[i]->GetNbinsX());
-            flip(unfolded_diff_vector_fold0);
-            print(unfolded_diff_vector_fold0);
             auto unfolded_diff_vector_fold0_T = new TMatrixT<double>((*theory_after_fold0)[i]->GetNbinsX(), 1);
             auto covariance_matrix_after_fold0_I = covariance_matrix_after_fold0[i]->Invert();
             auto step1_unfolded_fold0 = new TMatrixT<double>(1, (*theory_after_fold0)[i]->GetNbinsX());
             auto step2_unfolded_fold0 = new TMatrixT<double>(1, 1);
 
             unfolded_diff_vector_fold0->Minus(*data_after_vector_fold0[i], *theory_after_vector_fold0[i]);
+            flip(unfolded_diff_vector_fold0);
+            print(unfolded_diff_vector_fold0);
             unfolded_diff_vector_fold0_T->Transpose(*unfolded_diff_vector_fold0);
             step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_matrix_after_fold0_I);
             step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
