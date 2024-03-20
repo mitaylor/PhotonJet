@@ -257,6 +257,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::cout << __LINE__ << std::endl;
     zip([&](auto& fafter, auto const& after) {
         fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after).data(), "read");
+        std::cout << "unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after << std::endl;
     }, fafter, after_file);
     std::cout << __LINE__ << std::endl;
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
