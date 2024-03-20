@@ -538,6 +538,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         step1_smear_fold0->Mult(*smear_diff_vector_fold0, covariance_matrix_before_fold0_I);
         step2_smear_fold0->Mult(*step1_smear_fold0, *smear_diff_vector_fold0_T);
 
+        print(smear_diff_vector_fold0);
+        print(smear_diff_vector_fold0_T);
+        print(step1_smear_fold0);
+        print(step2_smear_fold0);
+        std::cout << std::endl;
+
         // fold1
         auto smear_diff_vector_fold1 = new TMatrixT<double>(1, (*theory_before_fold1)[i]->GetNbinsX());
         auto smear_diff_vector_fold1_T = new TMatrixT<double>((*theory_before_fold1)[i]->GetNbinsX(), 1);
@@ -561,6 +567,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
             auto diff = (*data_before)[i]->GetBinContent(j+1) - (*theory_before)[i]->GetBinContent(j+1);
             auto err = (*data_before)[i]->GetBinError(j+1);
+            std::cout << diff << " " << diff*diff << " " << err*err << std::endl;
             chi2_smear += diff * diff / (err * err);
         }
         
@@ -715,7 +722,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold0->Minus(*data_after_vector_fold0[i], *theory_after_vector_fold0[i]);
             flip(unfolded_diff_vector_fold0);
-            print(unfolded_diff_vector_fold0);
             unfolded_diff_vector_fold0_T->Transpose(*unfolded_diff_vector_fold0);
             step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_matrix_after_fold0_I);
             step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
