@@ -511,7 +511,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
             auto diff = (*data_before)[i]->GetBinContent(j+1) - (*theory_before)[i]->GetBinContent(j+1);
-            auto err = (*data_before)[i]->GetBinError(j+1)
+            auto err = (*data_before)[i]->GetBinError(j+1);
             chi2_smear += diff * diff / (err * err);
         }
         
@@ -520,7 +520,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         for (int j = 0; j < (*data_before_fold0)[i]->GetNbinsX(); ++j) {
             auto diff = (*data_before_fold0)[i]->GetBinContent(j+1) - (*theory_before_fold0)[i]->GetBinContent(j+1);
-            auto err = (*data_before_fold0)[i]->GetBinError(j+1)
+            auto err = (*data_before_fold0)[i]->GetBinError(j+1);
             chi2_smear_fold0 += diff * diff / (err * err);
         }
 
@@ -529,7 +529,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
         for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
             auto diff = (*data_before_fold1)[i]->GetBinContent(j+1) - (*theory_before_fold1)[i]->GetBinContent(j+1);
-            auto err = (*data_before_fold1)[i]->GetBinError(j+1)
+            auto err = (*data_before_fold1)[i]->GetBinError(j+1);
             chi2_smear_fold1 += diff * diff / (err * err);
         }
 
@@ -695,7 +695,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             for (int j = 0; j < (*data_after)[i]->GetNbinsX(); ++j) {
                 auto diff = (*data_after)[i]->GetBinContent(j+1) - (*theory_after)[i]->GetBinContent(j+1);
-                auto err = (*data_after)[i]->GetBinError(j+1)
+                auto err = (*data_after)[i]->GetBinError(j+1);
                 chi2_unfolded += diff * diff / (err * err);
             }
             
@@ -704,7 +704,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             for (int j = 0; j < (*data_after_fold0)[i]->GetNbinsX(); ++j) {
                 auto diff = (*data_after_fold0)[i]->GetBinContent(j+1) - (*theory_after_fold0)[i]->GetBinContent(j+1);
-                auto err = (*data_after_fold0)[i]->GetBinError(j+1)
+                auto err = (*data_after_fold0)[i]->GetBinError(j+1);
                 chi2_unfolded_fold0 += diff * diff / (err * err);
             }
 
@@ -713,7 +713,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             for (int j = 0; j < (*data_after_fold1)[i]->GetNbinsX(); ++j) {
                 auto diff = (*data_after_fold1)[i]->GetBinContent(j+1) - (*theory_after_fold1)[i]->GetBinContent(j+1);
-                auto err = (*data_after_fold1)[i]->GetBinError(j+1)
+                auto err = (*data_after_fold1)[i]->GetBinError(j+1);
                 chi2_unfolded_fold1 += diff * diff / (err * err);
             }
 
