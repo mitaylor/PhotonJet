@@ -710,7 +710,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector->Minus(*data_after_vector[i], *theory_after_vector[i]);
             unfolded_diff_vector_T->Transpose(*unfolded_diff_vector);
-            flip(unfolded_diff_vector_T);
+            // flip(unfolded_diff_vector_T);
             step1_unfolded->Mult(*unfolded_diff_vector, covariance_matrix_after_I);
             step2_unfolded->Mult(*step1_unfolded, *unfolded_diff_vector_T);
 
@@ -723,7 +723,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold0->Minus(*data_after_vector_fold0[i], *theory_after_vector_fold0[i]);
             unfolded_diff_vector_fold0_T->Transpose(*unfolded_diff_vector_fold0);
-            flip(unfolded_diff_vector_fold0_T);
+            // flip(unfolded_diff_vector_fold0_T);
             step1_unfolded_fold0->Mult(*unfolded_diff_vector_fold0, covariance_matrix_after_fold0_I);
             step2_unfolded_fold0->Mult(*step1_unfolded_fold0, *unfolded_diff_vector_fold0_T);
 
@@ -736,7 +736,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             unfolded_diff_vector_fold1->Minus(*data_after_vector_fold1[i], *theory_after_vector_fold1[i]);
             unfolded_diff_vector_fold1_T->Transpose(*unfolded_diff_vector_fold1);
-            flip(unfolded_diff_vector_fold1_T);
+            // flip(unfolded_diff_vector_fold1_T);
             step1_unfolded_fold1->Mult(*unfolded_diff_vector_fold1, covariance_matrix_after_fold1_I);
             step2_unfolded_fold1->Mult(*step1_unfolded_fold1, *unfolded_diff_vector_fold1_T);
             
