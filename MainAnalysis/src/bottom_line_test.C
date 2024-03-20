@@ -683,7 +683,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     apply_style(p0, cms, system_tag);
 
     for (int64_t i = 0; i < size; ++i) {
-        (*chi2_before)[i]->SetMaximum((*chi2_before)[i]->GetMaximum()*5)
+        (*chi2_before)[i]->SetMaximum((*chi2_before)[i]->GetMaximum()*5);
         p0->add((*chi2_before)[i], "smear");
         p0->stack((*chi2_after)[i], "unfolded");
     }
@@ -695,7 +695,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     apply_style(p1, cms, system_tag);
 
     for (int i = 0; i < size; ++i) {
-        (*chi2_before_dj)[i]->SetMaximum((*chi2_before_dj)[i]->GetMaximum()*5)
+        (*chi2_before_dj)[i]->SetMaximum((*chi2_before_dj)[i]->GetMaximum()*5);
         p1->add((*chi2_before_dj)[i], "smear");
         p1->stack((*chi2_after_dj)[i], "unfolded");
     }
@@ -707,7 +707,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     apply_style(p2, cms, system_tag);
 
     for (int64_t i = 0; i < size; ++i) {
-        (*chi2_before_jpt)[i]->SetMaximum((*chi2_before_jpt)[i]->GetMaximum()*5)
+        (*chi2_before_jpt)[i]->SetMaximum((*chi2_before_jpt)[i]->GetMaximum()*5);
         p2->add((*chi2_before_jpt)[i], "smear");
         p2->stack((*chi2_after_jpt)[i], "unfolded");
     }
