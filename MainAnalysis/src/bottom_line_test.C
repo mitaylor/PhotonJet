@@ -32,6 +32,7 @@ T* null(int64_t, std::string const&, std::string const&) {
 }
 
 void flip(TMatrixT<double>* v) {
+    std::cout << v->GetNrows() << " " << v->GetNcols() << std::endl;
     if (v->GetNrows() == 1) {
         int size = v->GetNcols();
         std::vector<double> flip;
