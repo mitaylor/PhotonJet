@@ -446,17 +446,17 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto chi2_before_dj = new history<TH1F>("chi2_before_dj"s, "", func, size);
     auto chi2_before_jpt = new history<TH1F>("chi2_before_jpt"s, "", func, size);
 
-    auto chi2_before_simple = new history<TH1F>("chi2_before_simple"s, "", func, size);
-    auto chi2_before_simple_dj = new history<TH1F>("chi2_before_simple_dj"s, "", func, size);
-    auto chi2_before_simple_jpt = new history<TH1F>("chi2_before_simple_jpt"s, "", func, size);
+    // auto chi2_before_simple = new history<TH1F>("chi2_before_simple"s, "", func, size);
+    // auto chi2_before_simple_dj = new history<TH1F>("chi2_before_simple_dj"s, "", func, size);
+    // auto chi2_before_simple_jpt = new history<TH1F>("chi2_before_simple_jpt"s, "", func, size);
 
     auto chi2_after = new history<TH1F>("chi2_after"s, "", func, size);
     auto chi2_after_dj = new history<TH1F>("chi2_after_dj"s, "", func, size);
     auto chi2_after_jpt = new history<TH1F>("chi2_after_jpt"s, "", func, size);
 
-    auto chi2_after_simple = new history<TH1F>("chi2_after_simple"s, "", func, size);
-    auto chi2_after_simple_dj = new history<TH1F>("chi2_after_simple_dj"s, "", func, size);
-    auto chi2_after_simple_jpt = new history<TH1F>("chi2_after_simple_jpt"s, "", func, size);
+    // auto chi2_after_simple = new history<TH1F>("chi2_after_simple"s, "", func, size);
+    // auto chi2_after_simple_dj = new history<TH1F>("chi2_after_simple_dj"s, "", func, size);
+    // auto chi2_after_simple_jpt = new history<TH1F>("chi2_after_simple_jpt"s, "", func, size);
 
     for (size_t k = 0; k < iterations.size(); ++k) {
         /* data and covariances after unfolding */
@@ -527,9 +527,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             covariance_matrix_after_fold1[i]->Write(("covariance_after_fold1_"s + to_text(i)).data());
         }
 
-        data_after->rename("data_after_iteration_"s + std::to_string(iterations[i]));
-        data_after_fold0->rename("data_after_iteration_"s + std::to_string(iterations[i]) + "_fold0"s);
-        data_after_fold1->rename("data_after_iteration_"s + std::to_string(iterations[i]) + "_fold1"s);
+        data_after->rename("data_after_iteration_"s + std::to_string(iterations[k]));
+        data_after_fold0->rename("data_after_iteration_"s + std::to_string(iterations[k]) + "_fold0"s);
+        data_after_fold1->rename("data_after_iteration_"s + std::to_string(iterations[k]) + "_fold1"s);
 
         data_after->save();
         data_after_fold0->save();
