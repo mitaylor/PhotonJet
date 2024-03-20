@@ -451,17 +451,17 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto chi2_before_dj = new history<TH1F>("chi2_before_dj"s, "", func, size);
     auto chi2_before_jpt = new history<TH1F>("chi2_before_jpt"s, "", func, size);
 
-    // auto chi2_before_simple = new history<TH1F>("chi2_before_simple"s, "", func, size);
-    // auto chi2_before_simple_dj = new history<TH1F>("chi2_before_simple_dj"s, "", func, size);
-    // auto chi2_before_simple_jpt = new history<TH1F>("chi2_before_simple_jpt"s, "", func, size);
+    auto chi2_before_simple = new history<TH1F>("chi2_before_simple"s, "", func, size);
+    auto chi2_before_simple_dj = new history<TH1F>("chi2_before_simple_dj"s, "", func, size);
+    auto chi2_before_simple_jpt = new history<TH1F>("chi2_before_simple_jpt"s, "", func, size);
 
     auto chi2_after = new history<TH1F>("chi2_after"s, "", func, size);
     auto chi2_after_dj = new history<TH1F>("chi2_after_dj"s, "", func, size);
     auto chi2_after_jpt = new history<TH1F>("chi2_after_jpt"s, "", func, size);
 
-    // auto chi2_after_simple = new history<TH1F>("chi2_after_simple"s, "", func, size);
-    // auto chi2_after_simple_dj = new history<TH1F>("chi2_after_simple_dj"s, "", func, size);
-    // auto chi2_after_simple_jpt = new history<TH1F>("chi2_after_simple_jpt"s, "", func, size);
+    auto chi2_after_simple = new history<TH1F>("chi2_after_simple"s, "", func, size);
+    auto chi2_after_simple_dj = new history<TH1F>("chi2_after_simple_dj"s, "", func, size);
+    auto chi2_after_simple_jpt = new history<TH1F>("chi2_after_simple_jpt"s, "", func, size);
 
     /* chi square calculations */
     for (int i = 0; i < size; ++i) {
@@ -505,6 +505,37 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*chi2_before)[i]->SetBinContent(1, (*step2_smear)(0,0));
         (*chi2_before_dj)[i]->SetBinContent(1, (*step2_smear_fold0)(0,0));
         (*chi2_before_jpt)[i]->SetBinContent(1, (*step2_smear_fold1)(0,0));
+
+        // nominal
+        double chi2_smear = 0;
+
+        for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_before)[i]->GetBinContent(j+1) - (*theory_before)[i]->GetBinContent(j+1);
+            auto err = (*data_before)[i]->GetBinError(j+1)
+            chi2_smear += diff * diff / (err * err);
+        }
+        
+        // fold0
+        double chi2_smear_fold0 = 0;
+
+        for (int j = 0; j < (*data_before_fold0)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_before_fold0)[i]->GetBinContent(j+1) - (*theory_before_fold0)[i]->GetBinContent(j+1);
+            auto err = (*data_before_fold0)[i]->GetBinError(j+1)
+            chi2_smear_fold0 += diff * diff / (err * err);
+        }
+
+        // fold1
+        double chi2_smear_fold1 = 0;
+
+        for (int j = 0; j < (*data_before_fold1)[i]->GetNbinsX(); ++j) {
+            auto diff = (*data_before_fold1)[i]->GetBinContent(j+1) - (*theory_before_fold1)[i]->GetBinContent(j+1);
+            auto err = (*data_before_fold1)[i]->GetBinError(j+1)
+            chi2_smear_fold1 += diff * diff / (err * err);
+        }
+
+        (*chi2_before_simple)[i]->SetBinContent(1, chi2_smear);
+        (*chi2_before_simple_dj)[i]->SetBinContent(1, chi2_smear_fold1);
+        (*chi2_before_simple_jpt)[i]->SetBinContent(1, chi2_smear_fold1);
     }
     
     for (size_t k = 0; k < iterations.size(); ++k) {
@@ -658,6 +689,41 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*chi2_after)[i]->SetBinContent(iterations[k], (*step2_unfolded)(0,0));
             (*chi2_after_dj)[i]->SetBinContent(iterations[k], (*step2_unfolded_fold0)(0,0));
             (*chi2_after_jpt)[i]->SetBinContent(iterations[k], (*step2_unfolded_fold1)(0,0));
+
+            // nominal
+            double chi2_unfolded = 0;
+
+            for (int j = 0; j < (*data_after)[i]->GetNbinsX(); ++j) {
+                auto diff = (*data_after)[i]->GetBinContent(j+1) - (*theory_after)[i]->GetBinContent(j+1);
+                auto err = (*data_after)[i]->GetBinError(j+1)
+                chi2_unfolded += diff * diff / (err * err);
+            }
+            
+            // fold0
+            double chi2_unfolded_fold0 = 0;
+
+            for (int j = 0; j < (*data_after_fold0)[i]->GetNbinsX(); ++j) {
+                auto diff = (*data_after_fold0)[i]->GetBinContent(j+1) - (*theory_after_fold0)[i]->GetBinContent(j+1);
+                auto err = (*data_after_fold0)[i]->GetBinError(j+1)
+                chi2_unfolded_fold0 += diff * diff / (err * err);
+            }
+
+            // fold1
+            double chi2_unfolded_fold1 = 0;
+
+            for (int j = 0; j < (*data_after_fold1)[i]->GetNbinsX(); ++j) {
+                auto diff = (*data_after_fold1)[i]->GetBinContent(j+1) - (*theory_after_fold1)[i]->GetBinContent(j+1);
+                auto err = (*data_after_fold1)[i]->GetBinError(j+1)
+                chi2_unfolded_fold1 += diff * diff / (err * err);
+            }
+
+            (*chi2_before_simple)[i]->SetBinContent(iterations[k], (*chi2_before_simple)[i]->GetBinContent(1));
+            (*chi2_before_simple_dj)[i]->SetBinContent(iterations[k], (*chi2_before_simple_dj)[i]->GetBinContent(1));
+            (*chi2_before_simple_jpt)[i]->SetBinContent(iterations[k], (*chi2_before_simple_jpt)[i]->GetBinContent(1));
+
+            (*chi2_after_simple)[i]->SetBinContent(1, chi2_unfolded);
+            (*chi2_after_simple_dj)[i]->SetBinContent(1, chi2_unfolded_fold1);
+            (*chi2_after_simple_jpt)[i]->SetBinContent(1, chi2_unfolded_fold1);
         }
     }
 
@@ -668,6 +734,14 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     chi2_after->save();
     chi2_after_dj->save();
     chi2_after_jpt->save();
+
+    chi2_before_simple->save();
+    chi2_before_simple_dj->save();
+    chi2_before_simple_jpt->save();
+
+    chi2_after_simple->save();
+    chi2_after_simple_dj->save();
+    chi2_after_simple_jpt->save();
     
     fout->Close();
 
@@ -728,11 +802,50 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p2->add((*chi2_before_jpt)[i], "smear");
         p2->stack((*chi2_after_jpt)[i], "unfolded");
     }
+
+    auto p3 = new paper(set + "_iteration_chi_squared_simple_" + plot_name, hb);
+
+    p3->divide(size, -1);
+    p3->accessory(pthf_info);
+    apply_style(p3, cms, system_tag);
+
+    for (int64_t i = 0; i < size; ++i) {
+        (*chi2_before_simple)[i]->SetMaximum((*chi2_before_simple)[i]->GetMaximum()*5);
+        p3->add((*chi2_before_simple)[i], "smear");
+        p3->stack((*chi2_after_simple)[i], "unfolded");
+    }
+    
+    auto p4 = new paper(set + "_iteration_chi_squared_simple_dj_" + plot_name, hb);
+
+    p4->divide(size, -1);
+    p4->accessory(pthf_info);
+    apply_style(p4, cms, system_tag);
+
+    for (int i = 0; i < size; ++i) {
+        (*chi2_before_simple_dj)[i]->SetMaximum((*chi2_before_simple_dj)[i]->GetMaximum()*3);
+        p4->add((*chi2_before_simple_dj)[i], "smear");
+        p4->stack((*chi2_after_simple_dj)[i], "unfolded");
+    }
+    
+    auto p5 = new paper(set + "_iteration_chi_squared_simple_jpt_" + plot_name, hb);
+
+    p5->divide(size, -1);
+    p5->accessory(pthf_info);
+    apply_style(p5, cms, system_tag);
+
+    for (int64_t i = 0; i < size; ++i) {
+        (*chi2_before_simple_jpt)[i]->SetMaximum((*chi2_before_simple_jpt)[i]->GetMaximum()*3);
+        p5->add((*chi2_before_simple_jpt)[i], "smear");
+        p5->stack((*chi2_after_simple_jpt)[i], "unfolded");
+    }
     
     hb->sketch();
     p0->draw("pdf");
     p1->draw("pdf");
     p2->draw("pdf");
+    p3->draw("pdf");
+    p4->draw("pdf");
+    p5->draw("pdf");
     
     
     return 0;
