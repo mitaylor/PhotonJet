@@ -33,7 +33,7 @@ T* null(int64_t, std::string const&, std::string const&) {
 
 void flip(TMatrixT<double>* v) {
     if (v->GetNrows() == 1) {
-        int size = v->GetNcols()
+        int size = v->GetNcols();
         std::vector<double> flip;
 
         for (int i = size - 1; i >= 0; --i) {
@@ -44,7 +44,7 @@ void flip(TMatrixT<double>* v) {
         }
     }
     if (v->GetNcols() == 1) {
-        int size = v->GetNrows()
+        int size = v->GetNrows();
         std::vector<double> flip;
 
         for (int i = size - 1; i >= 0; --i) {
