@@ -287,8 +287,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::vector<TMatrixT<double>*> data_before_vector_fold1(size, nullptr);
     std::cout << __LINE__ << std::endl;
     for (int i = 0; i < size; ++i) {
-        std::vector<double> data_before_elements((*data_before_fold1)[i]->GetNbinsX());
-        std::vector<double> data_before_fold0_elements((*data_before_fold1)[i]->GetNbinsX());
+        std::vector<double> data_before_elements((*data_before)[i]->GetNbinsX());
+        std::vector<double> data_before_fold0_elements((*data_before_fold0)[i]->GetNbinsX());
         std::vector<double> data_before_fold1_elements((*data_before_fold1)[i]->GetNbinsX());
 
         for (int j = 0; j < (*data_before)[i]->GetNbinsX(); ++j) {
@@ -370,8 +370,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::vector<TMatrixT<double>*> theory_after_vector_fold1(size, nullptr);
 
     for (int i = 0; i < size; ++i) {
-        std::vector<double> theory_after_elements((*theory_after_fold1)[i]->GetNbinsX());
-        std::vector<double> theory_after_fold0_elements((*theory_after_fold1)[i]->GetNbinsX());
+        std::vector<double> theory_after_elements((*theory_after)[i]->GetNbinsX());
+        std::vector<double> theory_after_fold0_elements((*theory_after_fold0)[i]->GetNbinsX());
         std::vector<double> theory_after_fold1_elements((*theory_after_fold1)[i]->GetNbinsX());
 
         for (int j = 0; j < (*theory_after)[i]->GetNbinsX(); ++j) {
@@ -415,8 +415,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::vector<TMatrixT<double>*> theory_before_vector_fold1(size, nullptr);
 
     for (int i = 0; i < size; ++i) {
-        std::vector<double> theory_before_elements((*theory_before_fold1)[i]->GetNbinsX());
-        std::vector<double> theory_before_fold0_elements((*theory_before_fold1)[i]->GetNbinsX());
+        std::vector<double> theory_before_elements((*theory_before)[i]->GetNbinsX());
+        std::vector<double> theory_before_fold0_elements((*theory_before_fold0)[i]->GetNbinsX());
         std::vector<double> theory_before_fold1_elements((*theory_before_fold1)[i]->GetNbinsX());
 
         for (int j = 0; j < (*theory_before)[i]->GetNbinsX(); ++j) {
@@ -540,8 +540,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         std::vector<TMatrixT<double>*> data_after_vector_fold1(size, nullptr);
 
         for (int i = 0; i < size; ++i) {
-            std::vector<double> data_after_elements((*data_after_fold1)[i]->GetNbinsX());
-            std::vector<double> data_after_fold0_elements((*data_after_fold1)[i]->GetNbinsX());
+            std::vector<double> data_after_elements((*data_after)[i]->GetNbinsX());
+            std::vector<double> data_after_fold0_elements((*data_after_fold0)[i]->GetNbinsX());
             std::vector<double> data_after_fold1_elements((*data_after_fold1)[i]->GetNbinsX());
 
             for (int j = 0; j < (*data_after)[i]->GetNbinsX(); ++j) {
