@@ -357,7 +357,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mr, 1, osr);
     }
 
-    theory_after->rename("theory_after"s)
+    theory_after->rename("theory_after"s);
     theory_after_fold0->rename("theory_after_fold0"s);
     theory_after_fold1->rename("theory_after_fold1"s);
 
@@ -396,7 +396,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_before_fold0 = new history<TH1F>("theory_before_fold0"s, "", null<TH1F>, theory_after->shape());
     auto theory_before_fold1 = new history<TH1F>("theory_before_fold1"s, "", null<TH1F>, theory_after->shape());
 
-    for (int64_t i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i) {
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
@@ -460,15 +460,15 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (size_t k = 0; k < iterations.size(); ++k) {
         /* data and covariances after unfolding */
-        auto data_after = new history<TH1D>("unfolded", "", null<TH1D>, size);
-        auto data_after_fold0 = new history<TH1D>("unfolded_fold0", "", null<TH1D>, size);
-        auto data_after_fold1 = new history<TH1D>("unfolded_fold1", "", null<TH1D>, size);
+        auto data_after = new history<TH1F>("unfolded", "", null<TH1F>, size);
+        auto data_after_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, size);
+        auto data_after_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, size);
 
         std::vector<TMatrixT<double>*> covariance_matrix_after(size, nullptr);
         std::vector<TMatrixT<double>*> covariance_matrix_after_fold0(size, nullptr);
         std::vector<TMatrixT<double>*> covariance_matrix_after_fold1(size, nullptr);
 
-        for (int i = 0; i < size; ++j) {
+        for (int i = 0; i < size; ++i) {
             std::string unfold_name = "HUnfoldedBayes" + std::to_string(iterations[k]);
             std::string matrix_name = "MUnfoldedBayes" + std::to_string(iterations[k]);
 
