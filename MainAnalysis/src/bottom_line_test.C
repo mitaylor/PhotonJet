@@ -501,6 +501,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         smear_diff_vector_fold1_T->Transpose(*smear_diff_vector_fold1);
         step1_smear_fold1->Mult(*smear_diff_vector_fold1, covariance_matrix_before_fold1_I);
         step2_smear_fold1->Mult(*step1_smear_fold1, *smear_diff_vector_fold1_T);
+
+        (*chi2_before)[i]->SetBinContent(1, (*step2_smear)(0,0));
+        (*chi2_before_dj)[i]->SetBinContent(1, (*step2_smear_fold0)(0,0));
+        (*chi2_before_jpt)[i]->SetBinContent(1, (*step2_smear_fold1)(0,0));
     }
     
     for (size_t k = 0; k < iterations.size(); ++k) {
@@ -649,9 +653,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             
             /* fill chi2 histograms */
             std::cout << iterations[k] << std::endl;
-            (*chi2_before)[i]->SetBinContent(iterations[k], (*step2_smear)(0,0));
-            (*chi2_before_dj)[i]->SetBinContent(iterations[k], (*step2_smear_fold0)(0,0));
-            (*chi2_before_jpt)[i]->SetBinContent(iterations[k], (*step2_smear_fold1)(0,0));
+            (*chi2_before)[i]->SetBinContent(iterations[k], (*chi2_before)[i]->GetBinContent(1));
+            (*chi2_before_dj)[i]->SetBinContent(iterations[k], (*chi2_before_dj)[i]->GetBinContent(1));
+            (*chi2_before_jpt)[i]->SetBinContent(iterations[k], (*chi2_before_jpt)[i]->GetBinContent(1));
 
             (*chi2_after)[i]->SetBinContent(iterations[k], (*step2_unfolded)(0,0));
             (*chi2_after_dj)[i]->SetBinContent(iterations[k], (*step2_unfolded_fold0)(0,0));
