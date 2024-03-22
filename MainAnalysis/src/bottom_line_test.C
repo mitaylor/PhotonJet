@@ -438,10 +438,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
-
-        // (*theory_before)[i]->Scale((*data_before)[i]->Integral()/(*theory_before)[i]->Integral());
-        // (*theory_before_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_before_fold0)[i]->Integral());
-        // (*theory_before_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_before_fold1)[i]->Integral());
     }
 
     theory_before->rename("theory_before"s);
@@ -854,7 +850,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p0->stack((*chi2_after)[i], "unfolded");
     }
     
-    auto p1 = new paper(set + "_iteration_chi_squared_dj_" + plot_name, hb);
+    auto p1 = new paper(set + "_iteration_chi_squared_" + plot_name + "_dj", hb);
 
     p1->divide(size, -1);
     p1->accessory(pthf_info);
@@ -866,7 +862,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p1->stack((*chi2_after_dj)[i], "unfolded");
     }
     
-    auto p2 = new paper(set + "_iteration_chi_squared_jpt_" + plot_name, hb);
+    auto p2 = new paper(set + "_iteration_chi_squared_" + plot_name + "_jpt", hb);
 
     p2->divide(size, -1);
     p2->accessory(pthf_info);
@@ -878,7 +874,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p2->stack((*chi2_after_jpt)[i], "unfolded");
     }
 
-    auto p3 = new paper(set + "_iteration_chi_squared_simple_" + plot_name, hb);
+    auto p3 = new paper(set + "_iteration_chi_squared_simple" + plot_name, hb);
 
     p3->divide(size, -1);
     p3->accessory(pthf_info);
@@ -890,7 +886,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p3->stack((*chi2_after_simple)[i], "unfolded");
     }
     
-    auto p4 = new paper(set + "_iteration_chi_squared_simple_dj_" + plot_name, hb);
+    auto p4 = new paper(set + "_iteration_chi_squared_simple" + plot_name + "_dj", hb);
 
     p4->divide(size, -1);
     p4->accessory(pthf_info);
@@ -902,7 +898,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p4->stack((*chi2_after_simple_dj)[i], "unfolded");
     }
     
-    auto p5 = new paper(set + "_iteration_chi_squared_simple_jpt_" + plot_name, hb);
+    auto p5 = new paper(set + "_iteration_chi_squared_simple" + plot_name + "_jpt", hb);
 
     p5->divide(size, -1);
     p5->accessory(pthf_info);
@@ -914,41 +910,41 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p5->stack((*chi2_after_simple_jpt)[i], "unfolded");
     }
 
-    auto p6 = new paper(set + "_iteration_p_value_" + plot_name, hb);
+    // auto p6 = new paper(set + "_iteration_p_value_" + plot_name, hb);
 
-    p6->divide(size, -1);
-    p6->accessory(pthf_info);
-    apply_style(p6, cms, system_tag);
+    // p6->divide(size, -1);
+    // p6->accessory(pthf_info);
+    // apply_style(p6, cms, system_tag);
 
-    for (int64_t i = 0; i < size; ++i) {
-        (*p_value_before)[i]->SetMaximum((*p_value_before)[i]->GetMaximum()*5);
-        p6->add((*p_value_before)[i], "smear");
-        p6->stack((*p_value_after)[i], "unfolded");
-    }
+    // for (int64_t i = 0; i < size; ++i) {
+    //     (*p_value_before)[i]->SetMaximum((*p_value_before)[i]->GetMaximum()*5);
+    //     p6->add((*p_value_before)[i], "smear");
+    //     p6->stack((*p_value_after)[i], "unfolded");
+    // }
     
-    auto p7 = new paper(set + "_iteration_p_value_dj_" + plot_name, hb);
+    // auto p7 = new paper(set + "_iteration_p_value_dj_" + plot_name, hb);
 
-    p7->divide(size, -1);
-    p7->accessory(pthf_info);
-    apply_style(p7, cms, system_tag);
+    // p7->divide(size, -1);
+    // p7->accessory(pthf_info);
+    // apply_style(p7, cms, system_tag);
 
-    for (int i = 0; i < size; ++i) {
-        (*p_value_before_dj)[i]->SetMaximum((*p_value_before_dj)[i]->GetMaximum()*3);
-        p7->add((*p_value_before_dj)[i], "smear");
-        p7->stack((*p_value_after_dj)[i], "unfolded");
-    }
+    // for (int i = 0; i < size; ++i) {
+    //     (*p_value_before_dj)[i]->SetMaximum((*p_value_before_dj)[i]->GetMaximum()*3);
+    //     p7->add((*p_value_before_dj)[i], "smear");
+    //     p7->stack((*p_value_after_dj)[i], "unfolded");
+    // }
     
-    auto p8 = new paper(set + "_iteration_p_value_jpt_" + plot_name, hb);
+    // auto p8 = new paper(set + "_iteration_p_value_jpt_" + plot_name, hb);
 
-    p8->divide(size, -1);
-    p8->accessory(pthf_info);
-    apply_style(p8, cms, system_tag);
+    // p8->divide(size, -1);
+    // p8->accessory(pthf_info);
+    // apply_style(p8, cms, system_tag);
 
-    for (int64_t i = 0; i < size; ++i) {
-        (*p_value_before_jpt)[i]->SetMaximum((*p_value_before_jpt)[i]->GetMaximum()*3);
-        p8->add((*p_value_before_jpt)[i], "smear");
-        p8->stack((*p_value_after_jpt)[i], "unfolded");
-    }
+    // for (int64_t i = 0; i < size; ++i) {
+    //     (*p_value_before_jpt)[i]->SetMaximum((*p_value_before_jpt)[i]->GetMaximum()*3);
+    //     p8->add((*p_value_before_jpt)[i], "smear");
+    //     p8->stack((*p_value_after_jpt)[i], "unfolded");
+    // }
     
     hb->sketch();
     p0->draw("pdf");
@@ -957,9 +953,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     p3->draw("pdf");
     p4->draw("pdf");
     p5->draw("pdf");
-    p6->draw("pdf");
-    p7->draw("pdf");
-    p8->draw("pdf");
+    // p6->draw("pdf");
+    // p7->draw("pdf");
+    // p8->draw("pdf");
     
     return 0;
 }
