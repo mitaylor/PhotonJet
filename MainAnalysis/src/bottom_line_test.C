@@ -385,6 +385,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
+
+        (*theory_after)[i]->Scale((*data_before)[i]->Integral()/(*theory_after)[i]->Integral());
+        (*theory_after_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_after_fold0)[i]->Integral());
+        (*theory_after_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_after_fold1)[i]->Integral());
     }
     
     theory_after->rename("theory_after"s);
@@ -430,6 +434,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
+
+        (*theory_before)[i]->Scale((*data_before)[i]->Integral()/(*theory_before)[i]->Integral());
+        (*theory_before_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_before_fold0)[i]->Integral());
+        (*theory_before_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_before_fold1)[i]->Integral());
     }
 
     theory_before->rename("theory_before"s);
@@ -580,9 +588,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*chi2_before_simple_dj)[i]->SetBinContent(1, chi2_smear_fold0);
         (*chi2_before_simple_jpt)[i]->SetBinContent(1, chi2_smear_fold1);
 
-        (*p_value_before)[i]->SetBinContent(1, (*data_before)[i]->Chi2Test((*theory_before)[i], "NORM"));
-        (*p_value_before_dj)[i]->SetBinContent(1, (*data_before_fold0)[i]->Chi2Test((*theory_before_fold0)[i], "NORM"));
-        (*p_value_before_jpt)[i]->SetBinContent(1, (*data_before_fold1)[i]->Chi2Test((*theory_before_fold1)[i], "NORM"));
+        (*p_value_before)[i]->SetBinContent(1, (*data_before)[i]->Chi2Test((*theory_before)[i], "NORMUU"));
+        (*p_value_before_dj)[i]->SetBinContent(1, (*data_before_fold0)[i]->Chi2Test((*theory_before_fold0)[i], "NORMUU"));
+        (*p_value_before_jpt)[i]->SetBinContent(1, (*data_before_fold1)[i]->Chi2Test((*theory_before_fold1)[i], "NORMUU"));
     }
     
     for (size_t k = 0; k < iterations.size(); ++k) {
@@ -776,9 +784,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*p_value_before_dj)[i]->SetBinContent(iterations[k], (*p_value_before_dj)[i]->GetBinContent(1));
             (*p_value_before_jpt)[i]->SetBinContent(iterations[k], (*p_value_before_jpt)[i]->GetBinContent(1));
 
-            (*p_value_after)[i]->SetBinContent(iterations[k], (*data_after)[i]->Chi2Test((*theory_after)[i], "NORM"));
-            (*p_value_after_dj)[i]->SetBinContent(iterations[k], (*data_after_fold0)[i]->Chi2Test((*theory_after_fold0)[i], "NORM"));
-            (*p_value_after_jpt)[i]->SetBinContent(iterations[k], (*data_after_fold1)[i]->Chi2Test((*theory_after_fold1)[i], "NORM"));
+            (*p_value_after)[i]->SetBinContent(iterations[k], (*data_after)[i]->Chi2Test((*theory_after)[i], "NORMUU"));
+            (*p_value_after_dj)[i]->SetBinContent(iterations[k], (*data_after_fold0)[i]->Chi2Test((*theory_after_fold0)[i], "NORMUU"));
+            (*p_value_after_jpt)[i]->SetBinContent(iterations[k], (*data_after_fold1)[i]->Chi2Test((*theory_after_fold1)[i], "NORMUU"));
         }
     }
 
