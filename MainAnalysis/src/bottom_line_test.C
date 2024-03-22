@@ -384,7 +384,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_after_fold1 = new history<TH1F>("theory_after_fold1"s, "", null<TH1F>, data_before->shape());
 
     for (int64_t i = 0; i < size; ++i) {
-        auto theory_after_base = new history<TH1F>(ftheory, theory_label + "_dr_jpt"s);
+        auto theory_after_base = new history<TH1F>(ftheory, theory_label);
 
         (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
