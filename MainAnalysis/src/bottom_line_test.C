@@ -900,7 +900,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     p2->divide(size, -1);
     p2->accessory(pthf_info);
-    p1->accessory(std::bind(pass, _1, choice_jpt));
+    p2->accessory(std::bind(pass, _1, choice_jpt));
     apply_style(p2, cms, system_tag);
 
     for (int64_t i = 0; i < size; ++i) {
@@ -913,7 +913,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     p3->divide(size, -1);
     p3->accessory(pthf_info);
-    p1->accessory(std::bind(pass, _1, choice_simple_dj));
     apply_style(p3, cms, system_tag);
 
     for (int64_t i = 0; i < size; ++i) {
@@ -926,7 +925,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     p4->divide(size, -1);
     p4->accessory(pthf_info);
-    p1->accessory(std::bind(pass, _1, choice_simple_jpt));
+    p4->accessory(std::bind(pass, _1, choice_simple_dj));
     apply_style(p4, cms, system_tag);
 
     for (int i = 0; i < size; ++i) {
@@ -939,6 +938,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     p5->divide(size, -1);
     p5->accessory(pthf_info);
+    p5->accessory(std::bind(pass, _1, choice_simple_jpt));
     apply_style(p5, cms, system_tag);
 
     for (int64_t i = 0; i < size; ++i) {
