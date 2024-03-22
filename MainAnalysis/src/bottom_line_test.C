@@ -386,9 +386,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
 
-        (*theory_after)[i]->Scale((*data_before)[i]->Integral()/(*theory_after)[i]->Integral());
-        (*theory_after_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_after_fold0)[i]->Integral());
-        (*theory_after_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_after_fold1)[i]->Integral());
+        // (*theory_after)[i]->Scale((*data_before)[i]->Integral()/(*theory_after)[i]->Integral());
+        // (*theory_after_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_after_fold0)[i]->Integral());
+        // (*theory_after_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_after_fold1)[i]->Integral());
     }
     
     theory_after->rename("theory_after"s);
@@ -435,9 +435,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
 
-        (*theory_before)[i]->Scale((*data_before)[i]->Integral()/(*theory_before)[i]->Integral());
-        (*theory_before_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_before_fold0)[i]->Integral());
-        (*theory_before_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_before_fold1)[i]->Integral());
+        // (*theory_before)[i]->Scale((*data_before)[i]->Integral()/(*theory_before)[i]->Integral());
+        // (*theory_before_fold0)[i]->Scale((*data_before_fold0)[i]->Integral()/(*theory_before_fold0)[i]->Integral());
+        // (*theory_before_fold1)[i]->Scale((*data_before_fold1)[i]->Integral()/(*theory_before_fold1)[i]->Integral());
     }
 
     theory_before->rename("theory_before"s);
