@@ -50,6 +50,16 @@ void print(TMatrixT<double>* v) {
     return;
 }
 
+int findmin(TH1* before, TH1* after) {
+    for (int i = 1; i <= before->GetNbinsX(); ++i) {
+        if (before->GetBinContent(i) > after->GetBinContent(i)) {
+            return i;
+        }
+    }
+
+    return before->GetNbinsX();
+}
+
 TH2F* variance(TH1* flat, multival const* m) {
     auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
         m->size(), 0, m->size());
@@ -816,6 +826,29 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     fout->Close();
 
+    /* find first cross-over iteration, if it exists */
+    std::vector<int> choice_dj(size, 150);
+    std::vector<int> choice_jpt(size, 150);
+    std::vector<int> choice_simple_dj(size, 150);
+    std::vector<int> choice_simple_jpt(size, 150);
+
+    for (int i = 0; i < size; ++i) {
+        choice_dj.push_back(findmin((*chi2_before_dj)[i], (*chi2_after_dj)[i]));
+        choice_jpt.push_back(findmin((*chi2_before_jpt)[i], (*chi2_after_jpt)[i]));
+        choice_simple_dj.push_back(findmin((*chi2_before_simple_dj)[i], (*chi2_after_simple_dj)[i]));
+        choice_simple_jpt.push_back(findmin((*chi2_before_simple_jpt)[i], (*chi2_after_simple_jpt)[i]));
+    }
+
+    auto pass = [&](int64_t index, std::vector<int> choice) {
+            auto text = "iteration = "s + to_text(choice[index - 1]);
+
+            TLatex* l = new TLatex();
+            l->SetTextAlign(11);
+            l->SetTextFont(43);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.135, 0.79, text.data());
+    };
+
     /* set up figures */
     std::string system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
@@ -854,6 +887,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     p1->divide(size, -1);
     p1->accessory(pthf_info);
+    p1->accessory(std::bind(pass, _1, choice_dj));
     apply_style(p1, cms, system_tag);
 
     for (int i = 0; i < size; ++i) {
