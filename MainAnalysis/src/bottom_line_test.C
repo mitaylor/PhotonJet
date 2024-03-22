@@ -827,10 +827,10 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     fout->Close();
 
     /* find first cross-over iteration, if it exists */
-    std::vector<int> choice_dj(size, 150);
-    std::vector<int> choice_jpt(size, 150);
-    std::vector<int> choice_simple_dj(size, 150);
-    std::vector<int> choice_simple_jpt(size, 150);
+    std::vector<int> choice_dj;
+    std::vector<int> choice_jpt;
+    std::vector<int> choice_simple_dj;
+    std::vector<int> choice_simple_jpt;
 
     for (int i = 0; i < size; ++i) {
         choice_dj.push_back(findmin((*chi2_before_dj)[i], (*chi2_after_dj)[i]));
@@ -845,8 +845,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
             l->SetTextFont(43);
-            l->SetTextSize(13);
-            l->DrawLatexNDC(0.135, 0.79, text.data());
+            l->SetTextSize(11);
+            l->DrawLatexNDC(0.135, 0.77, text.data());
     };
 
     /* set up figures */
