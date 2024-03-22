@@ -615,7 +615,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*data_after_fold1)[i] = fold_mat(HUnfolded, MUnfolded, mg, 1, osg);
 
             covariance_matrix_after[i] = MUnfolded;
-            *covariance_matrix_after[i] *= 1.2;
+            // *covariance_matrix_after[i] *= 1.2;
 
             std::vector<double> covariance_after_fold0_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
             std::vector<double> covariance_after_fold1_elements((*data_after_fold1)[i]->GetNbinsX() * (*data_after_fold1)[i]->GetNbinsX(), 0);
@@ -874,7 +874,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p2->stack((*chi2_after_jpt)[i], "unfolded");
     }
 
-    auto p3 = new paper(set + "_iteration_chi_squared_simple" + plot_name, hb);
+    auto p3 = new paper(set + "_iteration_chi_squared_simple_" + plot_name, hb);
 
     p3->divide(size, -1);
     p3->accessory(pthf_info);
@@ -886,7 +886,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p3->stack((*chi2_after_simple)[i], "unfolded");
     }
     
-    auto p4 = new paper(set + "_iteration_chi_squared_simple" + plot_name + "_dj", hb);
+    auto p4 = new paper(set + "_iteration_chi_squared_simple_" + plot_name + "_dj", hb);
 
     p4->divide(size, -1);
     p4->accessory(pthf_info);
@@ -898,7 +898,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         p4->stack((*chi2_after_simple_dj)[i], "unfolded");
     }
     
-    auto p5 = new paper(set + "_iteration_chi_squared_simple" + plot_name + "_jpt", hb);
+    auto p5 = new paper(set + "_iteration_chi_squared_simple_" + plot_name + "_jpt", hb);
 
     p5->divide(size, -1);
     p5->accessory(pthf_info);
