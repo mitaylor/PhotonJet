@@ -50,9 +50,9 @@ void print(TMatrixT<double>* v) {
     return;
 }
 
-void fix(TMatrixT<double>* M) {
-    for (int i = 0; i < M->GetNrows(); ++i) {
-        for (int j = 0; j < M->GetNcols(); ++j) {
+void fix(TMatrixT<double>* v) {
+    for (int i = 0; i < v->GetNrows(); ++i) {
+        for (int j = 0; j < v->GetNcols(); ++j) {
             if (std::abs((*v)(i, j)) < 1E-7) {
                 if ((*v)(i, j) > 0) (*v)(i, j) = 1E-7;
                 if ((*v)(i, j) < 0) (*v)(i, j) = -1E-7;
