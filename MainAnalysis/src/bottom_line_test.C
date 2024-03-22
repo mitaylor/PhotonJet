@@ -50,6 +50,19 @@ void print(TMatrixT<double>* v) {
     return;
 }
 
+void fix(TMatrixT<double>* M) {
+    for (int i = 0; i < M->GetNrows(); ++i) {
+        for (int j = 0; j < M->GetNcols(); ++j) {
+            if (std::abs((*v)(i, j)) < 1E-7) {
+                if ((*v)(i, j) > 0) (*v)(i, j) = 1E-7;
+                if ((*v)(i, j) < 0) (*v)(i, j) = -1E-7;
+            }
+        }
+    }
+
+    return;
+}
+
 TH2F* variance(TH1* flat, multival const* m) {
     auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
         m->size(), 0, m->size());
@@ -609,6 +622,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             auto HUnfolded = (TH1F*) fafter[i]->Get(unfold_name.data());
             auto MUnfolded = (TMatrixT<double>*) fafter[i]->Get(matrix_name.data());
+            fix(MUnfolded);
 
             (*data_after)[i] = HUnfolded;
             (*data_after_fold0)[i] = fold_mat(HUnfolded, MUnfolded, mg, 0, osg);
