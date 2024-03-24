@@ -68,7 +68,7 @@ int plot_binning(char const* config, char const* selections, char const* output)
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
     /* define intervals */
-    auto mpthf = new multival(dpt, dhf);
+    // auto mpthf = new multival(dpt, dhf);
     auto mhf = new multival(dhf);
 
     /* open input files */
@@ -127,7 +127,7 @@ int plot_binning(char const* config, char const* selections, char const* output)
 
     for (int64_t i = 0; i < mhf->size(); ++i) {
         for (int64_t j = 0; j < mdrjpt->size(); ++j) {
-            auto indices = m->indices_for(i);
+            auto indices = mdrjpt->indices_for(i);
 
             auto value_d_hf = (*hist_d_hf)[i]->GetBinContent(j + 1);
             auto value_mix_d_hf = (*hist_mix_d_hf)[i]->GetBinContent(j + 1);
