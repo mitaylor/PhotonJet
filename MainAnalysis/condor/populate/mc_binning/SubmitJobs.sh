@@ -6,7 +6,7 @@ mb=${3}
 config=${4}
 tag=${5}
 
-cp /tmp/x509up_u168456 x509up_u168456
+cp ~/x509up_u117190 x509up_u168456
 
 mkdir -p ${analysis}_${tag}
 cd ${analysis}_${tag}
