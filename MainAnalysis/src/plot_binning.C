@@ -121,9 +121,9 @@ int plot_binning(char const* config, char const* selections, char const* output)
     auto mdrjpt = new multival(rdrr, rptr);
     auto fdrjpt = std::bind(&multival::book<TH2F>, mdrjpt, _1, _2, _3);
 
-    auto hist2d_d_hf = new memory<TH2F>("hist2d_d_hf"s, "", fdrjpt, hist_d_hf->shape());
-    auto hist2d_mix_d_hf = new memory<TH2F>("hist2d_mix_d_hf"s, "", fdrjpt, hist_d_hf->shape());
-    auto hist2d_sub_d_hf = new memory<TH2F>("hist2d_sub_d_hf"s, "", fdrjpt, hist_d_hf->shape());
+    auto hist2d_d_hf = new memory<TH2F>("hist2d_d_hf"s, "", fdrjpt, ihf);
+    auto hist2d_mix_d_hf = new memory<TH2F>("hist2d_mix_d_hf"s, "", fdrjpt, ihf);
+    auto hist2d_sub_d_hf = new memory<TH2F>("hist2d_sub_d_hf"s, "", fdrjpt, ihf);
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
         for (int64_t j = 0; j < mdrjpt->size(); ++j) {
