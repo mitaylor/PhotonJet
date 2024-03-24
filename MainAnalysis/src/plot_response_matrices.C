@@ -187,6 +187,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto gen_fold0 = new history<TH1F>(label + "_gen_fold0", "", null<TH1F>, ihf->size());
     auto gen_fold1 = new history<TH1F>(label + "_gen_fold1", "", null<TH1F>, ihf->size());
 
+    auto eff_fold0 = new history<TH1F>(label + "_eff_fold0", "", null<TH1F>, ihf->size());
+    auto eff_fold1 = new history<TH1F>(label + "_eff_fold1", "", null<TH1F>, ihf->size());
+
     /* info text */
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
@@ -226,7 +229,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
-    std::vector<paper*> cs(12, nullptr);
+    std::vector<paper*> cs(14, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, "", "");
@@ -235,7 +238,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1", "efficiency"});
+        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1", "eff", "eff_fold0", "eff_fold1"});
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
@@ -256,7 +259,12 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
         (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
 
+        (*eff_fold0)[i] = fold((*eff)[i], nullptr, mg, 0, osg);
+        (*eff_fold1)[i] = fold((*eff)[i], nullptr, mg, 1, osg);
+
         (*eff)[i]->Divide((*gen)[i]);
+        (*eff_fold0)[i]->Divide((*gen_fold0)[i]);
+        (*eff_fold1)[i]->Divide((*gen_fold1)[i]);
 
         /* figures */
         cs[0]->add((*matrices)[i]);
@@ -274,6 +282,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[9]->add((*gen_fold0)[i]);
         cs[10]->add((*gen_fold1)[i]);
         cs[11]->add((*eff)[i]);
+        cs[12]->add((*eff_fold0)[i]);
+        cs[13]->add((*eff_fold1)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
