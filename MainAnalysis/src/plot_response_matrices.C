@@ -14,6 +14,7 @@
 #include "../git/tricks-and-treats/include/zip.h"
 
 #include "TDecompSVD.h"
+#include "TGraphAsymmErrors.h"
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
