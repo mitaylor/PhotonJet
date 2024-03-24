@@ -16,13 +16,13 @@ run_aa() {
     ./bin/inosculate_ele configs/inosculate/inosculate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/inosculate_ele_${tag}.root > log/${set}_inosculate_ele_${tag}.txt 2>&1 &
 }
 
-samples=(pp)
+samples=(pp pp_zee)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
 done
 
-samples=(aa)
+samples=(aa aa_zee)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
