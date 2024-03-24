@@ -170,6 +170,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TFile* fi = new TFile((base + input).data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
     auto gen = new history<TH1F>(fi, tag + "_g");
+    auto eff = new history<TH1F>(fi, tag + "_g_r");
     auto reco = new history<TH1F>(fi, tag + "_r");
     history<TH2F>* photon = nullptr;
     if (!original) photon = new history<TH2F>(fi, tag + "_ppt");
@@ -234,7 +235,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1" });
+        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1", "efficiency"});
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
@@ -255,15 +256,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
         (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
 
-        /* normalise to unity */
-        (*victims_fold0)[i]->Scale(1. / (*victims_fold0)[i]->Integral("width"));
-        (*victims_fold1)[i]->Scale(1. / (*victims_fold1)[i]->Integral("width"));
-
-        (*reco_fold0)[i]->Scale(1. / (*reco_fold0)[i]->Integral("width"));
-        (*reco_fold1)[i]->Scale(1. / (*reco_fold1)[i]->Integral("width"));
-
-        (*gen_fold0)[i]->Scale(1. / (*gen_fold0)[i]->Integral("width"));
-        (*gen_fold1)[i]->Scale(1. / (*gen_fold1)[i]->Integral("width"));
+        (*eff)[i]->Divide((*gen)[i]);
 
         /* figures */
         cs[0]->add((*matrices)[i]);
@@ -280,6 +273,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[8]->add((*reco_fold1)[i]);
         cs[9]->add((*gen_fold0)[i]);
         cs[10]->add((*gen_fold1)[i]);
+        cs[11]->add((*eff)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
