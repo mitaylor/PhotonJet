@@ -226,7 +226,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
-    std::vector<paper*> cs(11, nullptr);
+    std::vector<paper*> cs(12, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, "", "");
