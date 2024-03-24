@@ -69,7 +69,7 @@ int plot_binning(char const* config, char const* selections, char const* output)
 
     /* define intervals */
     auto mpthf = new multival(dpt, dhf);
-    auto ihf = new interval(dhf);
+    auto mhf = new multival(dhf);
 
     /* open input files */
     TFile* fin = new TFile((base + input).data(), "read");
@@ -121,11 +121,11 @@ int plot_binning(char const* config, char const* selections, char const* output)
     auto mdrjpt = new multival(rdrr, rptr);
     auto fdrjpt = std::bind(&multival::book<TH2F>, mdrjpt, _1, _2, _3);
 
-    auto hist2d_d_hf = new memory<TH2F>("hist2d_d_hf"s, "", fdrjpt, ihf);
-    auto hist2d_mix_d_hf = new memory<TH2F>("hist2d_mix_d_hf"s, "", fdrjpt, ihf);
-    auto hist2d_sub_d_hf = new memory<TH2F>("hist2d_sub_d_hf"s, "", fdrjpt, ihf);
+    auto hist2d_d_hf = new memory<TH2F>("hist2d_d_hf"s, "", fdrjpt, mhf);
+    auto hist2d_mix_d_hf = new memory<TH2F>("hist2d_mix_d_hf"s, "", fdrjpt, mhf);
+    auto hist2d_sub_d_hf = new memory<TH2F>("hist2d_sub_d_hf"s, "", fdrjpt, mhf);
 
-    for (int64_t i = 0; i < ihf->size(); ++i) {
+    for (int64_t i = 0; i < mhf->size(); ++i) {
         for (int64_t j = 0; j < mdrjpt->size(); ++j) {
             auto indices = m->indices_for(i);
 
@@ -199,11 +199,11 @@ int plot_binning(char const* config, char const* selections, char const* output)
         if (heavyion) c->accessory(hf_info);
         c->accessory(kinematics);
         c->accessory(blurb);
-        c->divide(ihf->size()/2, -1);
+        c->divide(mhf->size()/2, -1);
         c->set(paper::flags::logz); 
     }, cs, (std::initializer_list<std::string> const) {"unsubtracted"s, "mix"s, "subtracted"s});
     
-    for (int64_t i = 0; i < ihf->size(); ++i) {
+    for (int64_t i = 0; i < mhf->size(); ++i) {
         (*hist2d_d_hf)[i]->SetMinimum(1);
         cs[0]->add((*hist2d_d_hf)[i]);
         cs[0]->adjust((*hist2d_d_hf)[i], "colz", "");
