@@ -53,6 +53,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -64,6 +65,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -75,6 +77,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -86,6 +89,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -97,6 +101,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -110,6 +115,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -121,6 +127,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -132,6 +139,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -143,6 +151,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -154,6 +163,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -167,6 +177,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -178,6 +189,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -189,6 +201,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -200,6 +213,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -211,6 +225,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -224,6 +239,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -235,6 +251,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -246,6 +263,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -257,6 +275,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -268,6 +287,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -281,6 +301,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -292,6 +313,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -303,6 +325,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -314,6 +337,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -325,6 +349,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -338,6 +363,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -349,6 +375,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -360,6 +387,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -371,6 +399,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -382,6 +411,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -395,6 +425,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -406,6 +437,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -417,6 +449,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -428,6 +461,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -439,6 +473,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -452,6 +487,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -463,6 +499,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -474,6 +511,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -485,6 +523,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -496,6 +535,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -509,6 +549,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -520,6 +561,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -531,6 +573,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -542,6 +585,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -553,6 +597,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -566,6 +611,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -577,6 +623,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -588,6 +635,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -599,6 +647,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -610,6 +659,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -623,6 +673,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -634,6 +685,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -645,6 +697,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -656,6 +709,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -667,6 +721,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -680,6 +735,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -691,6 +747,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -702,6 +759,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -713,6 +771,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -724,6 +783,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -737,6 +797,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -748,6 +809,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -759,6 +821,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -770,6 +833,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -781,6 +845,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -794,6 +859,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -805,6 +871,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -816,6 +883,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -827,6 +895,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -838,6 +907,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -851,6 +921,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -862,6 +933,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -873,6 +945,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -884,6 +957,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -895,6 +969,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -908,6 +983,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -921,6 +997,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -934,6 +1011,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_wo_ele_rej.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -947,6 +1025,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_tight_purity.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -960,6 +1039,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_loose_purity.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -973,6 +1053,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -986,6 +1067,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_a.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -999,6 +1081,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd_gen_iso.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1012,6 +1095,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_jeu_up.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1025,6 +1109,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_jeu_down.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1038,6 +1123,7 @@ if [ ${nominal} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_jer_up.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1056,6 +1142,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1067,6 +1154,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1078,6 +1166,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1089,6 +1178,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1100,6 +1190,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1113,6 +1204,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1124,6 +1216,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1135,6 +1228,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1146,6 +1240,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1157,6 +1252,7 @@ if [ ${mebs} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1175,6 +1271,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1186,6 +1283,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1197,6 +1295,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1208,6 +1307,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1219,6 +1319,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1232,6 +1333,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1243,6 +1345,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1254,6 +1357,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1265,6 +1369,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1276,6 +1381,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1289,6 +1395,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
+        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1300,6 +1407,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
+        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1311,6 +1419,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
+        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1322,6 +1431,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
+        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1333,6 +1443,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_merge_0 \
         --ResponseTruth aa_g_merge_0 \
+        --ResponseTruthReco aa_g_r_merge_0 \
         --ResponseReco aa_r_merge_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1346,6 +1457,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_prior_up.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1359,6 +1471,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_prior_down.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
@@ -1372,6 +1485,7 @@ if [ ${unfolding} -eq 1 ]
         --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_stat_response.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
+        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \

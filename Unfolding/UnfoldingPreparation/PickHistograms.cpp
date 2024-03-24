@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
    string ResponseFileName        = CL.Get("Response");
    string ResponseHistogram       = CL.Get("ResponseHistogram");
    string ResponseTruth           = CL.Get("ResponseTruth");
+   string ResponseTruthReco       = CL.Get("ResponseTruthReco");
    string ResponseReco            = CL.Get("ResponseReco");
    string OutputFileName          = CL.Get("Output");
    vector<double> PrimaryRecoBins = CL.GetDoubleVector("PrimaryRecoBins");
@@ -38,16 +39,18 @@ int main(int argc, char *argv[])
 
    TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
-   TH1F *HInputData          = (TH1F *)DataFile.Get(DataHistogram.c_str());
-   TH1F *HInputErrors        = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
-   TH2F *HInputResponse      = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
-   TH1F *HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
-   TH1F *HInputResponseReco  = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
+   TH1F *HInputData              = (TH1F *)DataFile.Get(DataHistogram.c_str());
+   TH1F *HInputErrors            = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
+   TH2F *HInputResponse          = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
+   TH1F *HInputResponseTruth     = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
+   TH1F *HInputResponseTruthReco = (TH1F *)ResponseFile.Get(ResponseTruthReco.c_str());
+   TH1F *HInputResponseReco      = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
 
-   Assert(HInputData != nullptr,          "Input data distribution not found");
-   Assert(HInputResponse != nullptr,      "Input response matrix not found");
-   Assert(HInputResponseTruth != nullptr, "Input response truth not found");
-   Assert(HInputResponseReco != nullptr,  "Input response Reco not found");
+   Assert(HInputData != nullptr,                "Input data distribution not found");
+   Assert(HInputResponse != nullptr,            "Input response matrix not found");
+   Assert(HInputResponseTruth != nullptr,       "Input response truth not found");
+   Assert(HInputResponseTruthReco != nullptr,   "Input response truth reco not found");
+   Assert(HInputResponseReco != nullptr,        "Input response Reco not found");
 
    int NReco = HInputResponse->GetNbinsX();
    int NGen  = HInputResponse->GetNbinsY();
@@ -103,6 +106,15 @@ int main(int argc, char *argv[])
       HMCGen.SetBinError(i, HInputResponseTruth->GetBinError(i));
    }
    HMCGen.Write();
+
+   // Copy over MC truth matching reco cuts
+   TH1D HMCGenReco("HMCGenReco", ";;", NGen, 0, NGen);
+   for(int i = 0; i <= NGen + 1; i++)
+   {
+      HMCGenReco.SetBinContent(i, HInputResponseTruthReco->GetBinContent(i));
+      HMCGenReco.SetBinError(i, HInputResponseTruthReco->GetBinError(i));
+   }
+   HMCGenReco.Write();
    
    // Copy over MC measured
    TH1D HMCReco("HMCReco", ";;", NReco, 0, NReco);
