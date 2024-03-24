@@ -5,23 +5,23 @@ types=(populate_aa populate_aa_cent_down populate_aa_cent_up populate_aa_closure
 for type in ${types[@]}; do
     echo ${type}
 
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin1/{$type}_raw
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin2/{$type}_raw
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin3/{$type}_raw
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin4/{$type}_raw
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin1/${type}_raw
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin2/${type}_raw
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin3/${type}_raw
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin4/${type}_raw
 
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin1/{$type}_bkg
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin2/{$type}_bkg
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin3/{$type}_bkg
-    mkdir /data/submit/mitay/populate/arc/pho_60_rebin4/{$type}_bkg
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin1/${type}_bkg
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin2/${type}_bkg
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin3/${type}_bkg
+    mkdir /data/submit/mitay/populate/arc/pho_60_rebin4/${type}_bkg
 
-    mv /data/submit/mitay/populate/arc/pho_60_rebin1/{$type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin1/{$type}_raw
-    mv /data/submit/mitay/populate/arc/pho_60_rebin2/{$type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin2/{$type}_raw
-    mv /data/submit/mitay/populate/arc/pho_60_rebin3/{$type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin3/{$type}_raw
-    mv /data/submit/mitay/populate/arc/pho_60_rebin4/{$type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin4/{$type}_raw
+    mv /data/submit/mitay/populate/arc/pho_60_rebin1/${type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin1/${type}_raw
+    mv /data/submit/mitay/populate/arc/pho_60_rebin2/${type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin2/${type}_raw
+    mv /data/submit/mitay/populate/arc/pho_60_rebin3/${type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin3/${type}_raw
+    mv /data/submit/mitay/populate/arc/pho_60_rebin4/${type}_raw_* /data/submit/mitay/populate/arc/pho_60_rebin4/${type}_raw
 
-    mv /data/submit/mitay/populate/arc/pho_60_rebin1/{$type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin1/{$type}_bkg
-    mv /data/submit/mitay/populate/arc/pho_60_rebin2/{$type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin2/{$type}_bkg
-    mv /data/submit/mitay/populate/arc/pho_60_rebin3/{$type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin3/{$type}_bkg
-    mv /data/submit/mitay/populate/arc/pho_60_rebin4/{$type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin4/{$type}_bkg
+    mv /data/submit/mitay/populate/arc/pho_60_rebin1/${type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin1/${type}_bkg
+    mv /data/submit/mitay/populate/arc/pho_60_rebin2/${type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin2/${type}_bkg
+    mv /data/submit/mitay/populate/arc/pho_60_rebin3/${type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin3/${type}_bkg
+    mv /data/submit/mitay/populate/arc/pho_60_rebin4/${type}_bkg_* /data/submit/mitay/populate/arc/pho_60_rebin4/${type}_bkg
 done
