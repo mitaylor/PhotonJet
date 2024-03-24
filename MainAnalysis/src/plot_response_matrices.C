@@ -1,4 +1,6 @@
 #include "../include/lambdas.h"
+#include "../include/pjtree.h"
+#include "../include/specifics.h"
 #include "../include/text.h"
 
 #include "../git/config/include/configurer.h"
@@ -10,6 +12,7 @@
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
+#include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
@@ -275,6 +278,23 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         eff_fold0[i]->SetName(("graph_fold0_"s + to_text(i)).data());
         eff_fold1[i]->SetName(("graph_fold1_"s + to_text(i)).data());
 
+        auto hframe = frame((*gen_reco)[i]->GetXaxis(), (*gen_reco)[i]->GetYaxis());
+        auto hframe_fold0 = frame((*gen_reco_fold0)[i]->GetXaxis(), (*gen_reco_fold0)[i]->GetYaxis());
+        auto hframe_fold1 = frame((*gen_reco_fold1)[i]->GetXaxis(), (*gen_reco_fold1)[i]->GetYaxis());
+        
+        hframe->SetName(("frame_"s + to_text(i)).data());
+        hframe_fold0->SetName(("frame_fold0_"s + to_text(i)).data());
+        hframe_fold1->SetName(("frame_fold1_"s + to_text(i)).data());
+
+        hframe->GetYaxis()->SetTitle("Bin Efficiency");
+        hframe->GetXaxis()->SetTitle("Gen Bin Index");
+
+        hframe_fold0->GetYaxis()->SetTitle("Bin Efficiency");
+        hframe_fold0->GetXaxis()->SetTitle("#deltaj");
+
+        hframe_fold1->GetYaxis()->SetTitle("Bin Efficiency");
+        hframe_fold1->GetXaxis()->SetTitle("Jet p_{T}");
+
         /* figures */
         cs[0]->add((*matrices)[i]);
         cs[0]->adjust((*matrices)[i], "colz", "");
@@ -290,9 +310,12 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[8]->add((*reco_fold1)[i]);
         cs[9]->add((*gen_fold0)[i]);
         cs[10]->add((*gen_fold1)[i]);
+        cs[11]->stack(hframe);
         cs[11]->add((eff)[i]);
+        cs[12]->stack(hframe_fold0);
         cs[12]->add((eff_fold0)[i]);
-        cs[13]->add((eff_fold1)[i]);
+        cs[13]->add(hframe_fold1);
+        cs[13]->stack((eff_fold1)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
