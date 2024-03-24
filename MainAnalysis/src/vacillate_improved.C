@@ -326,21 +326,21 @@ int vacillate(char const* config, char const* selections, char const* output) {
                 gen_photon_index = (*p->pho_genMatchedIndex)[reco_photon_index];
             }
             // find if there is a gen photon (outside the HEM failure region), and it is a miss
-            else {
-                for (int64_t j = 0; j < p->nMC; ++j) {
-                    auto pho_et = (*p->mcPt)[j];
-                    auto pid = (*p->mcPID)[j];
-                    auto mother_pid = (*p->mcMomPID)[j];
+            // else {
+            //     for (int64_t j = 0; j < p->nMC; ++j) {
+            //         auto pho_et = (*p->mcPt)[j];
+            //         auto pid = (*p->mcPID)[j];
+            //         auto mother_pid = (*p->mcMomPID)[j];
 
-                    if (std::abs((*p->mcEta)[j]) >= photon_eta_abs) { continue; }
-                    if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { continue; }
+            //         if (std::abs((*p->mcEta)[j]) >= photon_eta_abs) { continue; }
+            //         if (pid != 22 || (std::abs(mother_pid) > 22 && mother_pid != -999)) { continue; }
 
-                    if (pho_et > gen_photon_pt) {
-                        gen_photon_index = j;
-                        gen_photon_pt = pho_et;
-                    }
-                }
-            }
+            //         if (pho_et > gen_photon_pt) {
+            //             gen_photon_index = j;
+            //             gen_photon_pt = pho_et;
+            //         }
+            //     }
+            // }
            
             // potential miss if there is no reco photon in the right pT range
             if (gen_photon_index < 0) { 
