@@ -6,6 +6,7 @@
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
+#include "../git/history/include/history.h"
 
 #include "../git/tricks-and-treats/include/trunk.h"
 
@@ -578,12 +579,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
     r->divide(*r_n);
     g->divide(*g_n);
     g_r->divide(*g_r_n);
-    c->divide(*c_n);
+    // c->divide(*c_n);
 
     r_merge->divide(*r_n_merge);
     g_merge->divide(*g_n_merge);
     g_r_merge->divide(*g_r_n_merge);
-    c_merge->divide(*c_n_merge);
+    // c_merge->divide(*c_n_merge);
    
     /* save output */
     in(output, [&]() {
