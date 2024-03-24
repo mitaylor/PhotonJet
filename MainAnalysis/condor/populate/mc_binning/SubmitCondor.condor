@@ -1,5 +1,6 @@
 Universe                = vanilla
-Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/populate/mc_mebs/RunPopulate.sh
+
+Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/populate/mc_binning/RunBinning.sh
 Should_Transfer_Files   = YES
 When_To_Transfer_Output = ON_EXIT
 +MaxRuntime             = 14400
@@ -8,9 +9,9 @@ When_To_Transfer_Output = ON_EXIT
 Max_Retries             = 5
 When_To_Transfer_Output = ON_EXIT
 Transfer_Output_Files   = __MASTER___$(index).root
-Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/populate/arc/__ANALYSIS__/__MASTER__/__MASTER___mebs_$(index).root"
+Transfer_Output_Remaps  = "__MASTER___$(index).root=/data/submit/mitay/binning/arc/__ANALYSIS__/__MASTER__/__MASTER___original_$(index).root"
 
-Transfer_Input_Files    = __CONFIG__,../populate,../data/__ANALYSIS__/,../x509up_u168456,analysis_aa.conf
+Transfer_Input_Files    = __CONFIG__,../binning,../data/__ANALYSIS__/,../x509up_u168456,analysis_aa.conf
 Arguments               = __CONFIG__ analysis_aa.conf __MASTER___$(index).root $(signal) $(mb)
 Output                  = __MASTER__.$(ClusterId).$(index).out
 Error                   = __MASTER__.$(ClusterId).$(index).err
