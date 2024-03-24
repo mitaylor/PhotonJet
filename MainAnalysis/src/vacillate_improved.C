@@ -404,37 +404,38 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
             double pho_cor = (heavyion) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
            
-            /* handle hits and misses for photons */
-            // miss, fill the truth histogram
-            if (gen_photon && !reco_photon) {
-                for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*g_n)[k]->Fill(1., weights[k] * pho_cor); 
-                }
+            // /* handle hits and misses for photons */
+            // // miss, fill the truth histogram
+            // if (gen_photon && !reco_photon) {
+            //     for (int64_t k = 0; k < ihf->size(); ++k) {
+            //         (*g_n)[k]->Fill(1., weights[k] * pho_cor); 
+            //     }
                 
-                (*g_n_merge)[0]->Fill(1., weights_merge * pho_cor);
+            //     (*g_n_merge)[0]->Fill(1., weights_merge * pho_cor);
 
-                for (int64_t j = 0; j < p->ngen; ++j) {
-                    auto gen_jet_pt = (*p->genpt)[j];
-                    auto gen_jet_eta = (*p->geneta)[j];
-                    auto gen_jet_phi = (*p->genphi)[j];
+            //     for (int64_t j = 0; j < p->ngen; ++j) {
+            //         auto gen_jet_pt = (*p->genpt)[j];
+            //         auto gen_jet_eta = (*p->geneta)[j];
+            //         auto gen_jet_phi = (*p->genphi)[j];
                    
-                    if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
-                    if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
-                    if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+            //         if (std::abs(gen_jet_eta) >= jet_eta_abs) { continue; }
+            //         if (heavyion && in_jet_failure_region(gen_jet_eta, gen_jet_phi)) { continue; }
+            //         if (!back_to_back(gen_photon_phi, gen_jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
                     
-                    auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
-                    auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
+            //         auto gen_jet_dr = std::sqrt(dr2(gen_jet_eta, (*p->WTAgeneta)[j], gen_jet_phi, (*p->WTAgenphi)[j]));
+            //         auto jet_cor = acceptance_weight(heavyion, idphi, total, acceptance, gen_photon_phi, gen_jet_phi, gen_photon_eta, gen_jet_eta);
                     
-                    // fill histograms
-                    for (int64_t k = 0; k < ihf->size(); ++k) { 
-                        (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
-                    }
+            //         // fill histograms
+            //         for (int64_t k = 0; k < ihf->size(); ++k) { 
+            //             (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor); 
+            //         }
                    
-                    (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
-                }
-            }
-            // real, fill all histograms
-            else if (gen_photon && reco_photon) {
+            //         (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+            //     }
+            // }
+            // // real, fill all histograms
+            // else 
+            if (gen_photon && reco_photon) {
                 // look at photon correlations
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     (*ppt)[k]->Fill(reco_photon_pt, gen_photon_pt, weights[k] * pho_cor);
