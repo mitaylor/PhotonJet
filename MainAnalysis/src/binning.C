@@ -8,20 +8,21 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
 #include "TFile.h"
-#include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TMath.h"
 #include "TRandom3.h"
+#include "TTree.h"
 
+#include <ctime>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
-#include <ctime>
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
@@ -31,85 +32,113 @@ void scale(double factor, T*... args) {
     (void)(int [sizeof...(T)]) { (args->scale(factor), 0)... };
 }
 
-template <typename... T>
-void scale_bin_width(T*... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1., "width"); }), 0)... };
+static float dr2(float eta1, float eta2, float phi1, float phi2) {
+    auto deta = eta1 - eta2;
+    float dphi = std::abs(phi1 - phi2);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return deta * deta + dphi * dphi;
 }
 
-float res(float c, float s, float n, float pt) {
-    return std::sqrt(c*c + s*s / pt + n*n / (pt * pt));
+float back_to_back(float photon_phi, float jet_phi, float threshold) {
+    float dphi = std::abs(photon_phi - jet_phi);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return dphi > threshold * TMath::Pi();
 }
 
-void fill_axes(pjtree* pjt, 
-               std::vector<int64_t>& pthf_x, std::vector<float>& weights, 
-               float pho_cor, float photon_eta, int64_t photon_phi, 
-               bool exclude, 
-               bool jet_cor, float jet_pt_min, float jet_eta_abs,
-               float dphi_min_numerator, float dphi_min_denominator, interval* idphi,
-               memory<TH1F>* nevt,
-               memory<TH1F>* pjet_f_dr,
-               memory<TH1F>* pjet_f_jpt,
-               memory<TH2F>* pjet_u_dr,
-               history<TH2F>* acceptance, history<TH2F>* total) {
+/* version for signal events */
+void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, bool exclude, 
+               multival* mdrjpt, interval* idphi, float pho_cor, float photon_eta, float photon_phi, 
+               bool jet_cor, float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
+               memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr, memory<TH1F>* pjet_f_jpt, 
+               memory<TH2F>* pjet_u_dr_jpt, history<TH2D>* acceptance, history<TH2D>* total) {
     
     zip([&](auto const& index, auto const& weight) {
         (*nevt)[index]->Fill(1., weight * pho_cor);
     }, pthf_x, weights);
 
     for (int64_t j = 0; j < pjt->nref; ++j) {
-        auto jet_pt = (*pjt->jtpt)[j];
-        if (jet_cor) jet_pt = (*pjt->jtptCor)[j];
-
+        auto jet_pt = (jet_cor) ? (*pjt->jtptCor)[j] : (*pjt->jtpt)[j];
         auto jet_eta = (*pjt->jteta)[j];
+        auto jet_phi = (*pjt->jtphi)[j];
+
         if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
+        if (exclude && in_jet_failure_region(pjt, j)) { continue; }
 
-        auto jet_phi = convert_radian((*pjt->jtphi)[j]);
+        auto jet_dr = std::sqrt(dr2(jet_eta, (*pjt->WTAeta)[j], jet_phi, (*pjt->WTAphi)[j]));
+        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
+        auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
 
-        /* hem failure region exclusion */
-        if (exclude && in_jet_failure_region(pjt,j)) { continue; }
+        if (photon_jet_dr < 0.4) { continue; }
+        if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-        auto jet_wta_eta = (*pjt->WTAeta)[j];
-        auto jet_wta_phi = convert_radian((*pjt->WTAphi)[j]);
-
-        auto photon_jet_dphi = std::abs(photon_phi - jet_phi);
-
-        /* require back-to-back jets */
-        if (photon_jet_dphi < convert_pi(dphi_min_numerator/dphi_min_denominator)) { continue; }
+        auto drjpt_x = mdrjpt->index_for(v{jet_dr, jet_pt});
 
         /* do acceptance weighting */
         double cor = 1;
+
         if (exclude) {
-            auto dphi_x = idphi->index_for(revert_pi(photon_jet_dphi));
+            auto dphi_x = idphi->index_for(photon_jet_dphi);
             auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+
             cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-            if (cor < 1) { std::cout << "error" << std::endl; }
         }
 
-        double jt_deta = jet_eta - jet_wta_eta;
-        double jt_dphi = revert_radian(jet_phi - jet_wta_phi);
-        double jt_dr = std::sqrt(jt_deta * jt_deta + jt_dphi * jt_dphi);
+        zip([&](auto const& index, auto const& weight) {
+            if (drjpt_x > -1 && drjpt_x < mdrjpt->size()) {
+                (*pjet_u_dr_jpt)[index]->Fill(jet_dr, jet_pt, cor * weight);
+                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
+                (*pjet_f_dr)[index]->Fill(jet_dr, cor * weight);
+            }
+        }, pthf_x, weights);
+    }
+}
+
+/* version for background events */
+void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, bool exclude, 
+               multival* mdrjpt, interval* idphi, float pho_cor, float photon_eta, float photon_phi, 
+               float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
+               memory<TH1F>* nevt, memory<TH1F>* pjet_f_dr, memory<TH1F>* pjet_f_jpt, 
+               memory<TH2F>* pjet_u_dr_jpt, history<TH2D>* acceptance, history<TH2D>* total) {
+    
+    zip([&](auto const& index, auto const& weight) {
+        (*nevt)[index]->Fill(1., weight * pho_cor);
+    }, pthf_x, weights);
+
+    for (size_t j = 0; j < pjt.size(); ++j) {
+        auto jet_pt = pjt[j]["jet_pt"];
+        auto jet_eta = pjt[j]["jet_eta"];
+        auto jet_phi = pjt[j]["jet_phi"];
+        auto jet_wta_eta = pjt[j]["jet_wta_eta"];
+        auto jet_wta_phi = pjt[j]["jet_wta_phi"];
+
+        if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
+
+        auto jet_dr = std::sqrt(dr2(jet_eta, jet_wta_eta, jet_phi, jet_wta_phi));
+        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
+        auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
+
+        if (photon_jet_dr < 0.4) { continue; }
+        if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
+
+        auto drjpt_x = mdrjpt->index_for(v{jet_dr, jet_pt});
+
+        /* do acceptance weighting */
+        double cor = 1;
+
+        if (exclude) {
+            auto dphi_x = idphi->index_for(photon_jet_dphi);
+            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
+            
+            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
+        }
 
         zip([&](auto const& index, auto const& weight) {
-            if (jet_pt < 200 && jet_pt >= jet_pt_min && jt_dr < 0.3) {
-                (*pjet_u_dr)[index]->Fill(jt_dr, jet_pt, cor * weight);
+            if (drjpt_x > -1 && drjpt_x < mdrjpt->size()) {
+                (*pjet_u_dr_jpt)[index]->Fill(jet_dr, jet_pt, cor * weight);
                 (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
-                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
-            }
-            else if (jet_pt < jet_pt_min) {
-                (*pjet_u_dr)[index]->Fill(jt_dr, jet_pt, cor * weight);
-                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
-                (*pjet_f_dr)[index]->Fill(-1, cor * weight);
-            }
-            else if (jet_pt >= 200) {
-                (*pjet_u_dr)[index]->Fill(jt_dr, jet_pt, cor * weight);
-                (*pjet_f_jpt)[index]->Fill(jet_pt, cor * weight);
-                (*pjet_f_dr)[index]->Fill(10000, cor * weight);
-            }
-            else if (jt_dr >= 0.3) {
-                (*pjet_u_dr)[index]->Fill(jt_dr, jet_pt, cor * weight);
-                (*pjet_f_jpt)[index]->Fill(10000, cor * weight);
-                (*pjet_f_dr)[index]->Fill(jt_dr, cor * weight);
+                (*pjet_f_dr)[index]->Fill(jet_dr, cor * weight);
             }
         }, pthf_x, weights);
     }
@@ -145,6 +174,7 @@ int populate(char const* config, char const* selections, char const* output) {
     auto apply_er = conf->get<bool>("apply_er");
     auto no_jes = conf->get<bool>("no_jes");
     auto apply_es = conf->get<bool>("apply_es");
+    auto condor = conf->get<bool>("condor");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
 
@@ -164,15 +194,14 @@ int populate(char const* config, char const* selections, char const* output) {
     auto const iso_max = sel->get<float>("iso_max");
     auto const gen_iso_max = sel->get<float>("gen_iso_max");
 
-    auto const jet_pt_min = sel->get<float>("jet_pt_min");
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
     auto rjpt = sel->get<std::vector<float>>("jpt_range");
-    auto rdphi = sel->get<std::vector<float>>("dphi_range"); // used for the acceptance weighting
-    auto rdr = sel->get<std::vector<float>>("dr_range"); // used for the not-unfolded histogram
+    auto rdr = sel->get<std::vector<float>>("dr_range");
+    auto rdphi = sel->get<std::vector<float>>("dphi_range");
 
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
@@ -187,25 +216,26 @@ int populate(char const* config, char const* selections, char const* output) {
     if (tag == "bkg") see_min = 0.012;
     if (tag == "bkg") see_max = 0.02;
 
-    /* make histograms */
+    auto jet_cor = heavyion && !no_jes;
+
+    /* prepare histograms */
     auto ipt = new interval(dpt);
     auto ihf = new interval(dhf);
-
-    auto mpthf = new multival(dpt, dhf);
-
-    auto incl = new interval(""s, 1, 0.f, 9999.f);
-    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
     auto idr = new interval("#deltaj"s, rdr);
     auto ijpt = new interval("p_{T}^{j}"s, rjpt);
+    auto idphi = new interval("#Delta#phi^{#gammaj}"s, rdphi);
+    auto incl = new interval(""s, 1, 0.f, 9999.f);
 
-    auto mdr = new multival(rdrr, rptr);
+    auto mpthf = new multival(dpt, dhf);
+    auto mdrjpt = new multival(rdrr, rptr);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
     auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
 
-    auto frdr = std::bind(&multival::book<TH2F>, mdr, _1, _2, _3);
+    auto fdrjpt = std::bind(&multival::book<TH2F>, mdrjpt, _1, _2, _3);
 
+    /* create histograms */
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
     auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);
 
@@ -213,36 +243,125 @@ int populate(char const* config, char const* selections, char const* output) {
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto pjet_f_jpt = new memory<TH1F>("pjet_f_jpt"s,
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
-    auto pjet_u_dr = new memory<TH2F>("pjet_u_dr"s, "", frdr, mpthf);
+    auto pjet_u_dr_jpt = new memory<TH2F>("pjet_u_dr_jpt"s, "", fdrjpt, mpthf);
 
     auto mix_pjet_f_dr = new memory<TH1F>("mix_pjet_f_dr",
         "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto mix_pjet_f_jpt = new memory<TH1F>("mix_pjet_f_jpt"s,
         "1/N^{#gamma} dN/dp_{T}^{j}", fjpt, mpthf);
-    auto mix_pjet_u_dr = new memory<TH2F>("mix_pjet_u_dr"s, "", frdr, mpthf);
+    auto mix_pjet_u_dr_jpt = new memory<TH2F>("mix_pjet_u_dr_jpt"s, "", fdrjpt, mpthf);
 
-    /* random number for smearing and mb selection */
-    auto rng = new TRandom3(144);
+    /* random number for mb selection */
+    auto rng = new TRandom3(0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    int index_m = rng->Integer(mb.size());
-    TFile* fm = new TFile(mb[index_m].data(), "read");
-    TTree* tm = (TTree*)fm->Get("pj");
-    auto pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
-    int64_t mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
+    /* set up mixed event background subtraction */
+    // bin construction, 10% intervals
+    std::vector<float> hf_bins = {0, dhf.front()};
+    float bin_factor = 1.1;
 
-    printf("iterate..\n");
+    if (mix > 0) while (hf_bins.back() < dhf.back()) {
+        hf_bins.push_back(hf_bins.back()*bin_factor);
+    }
+
+    if (rho_file.empty()) {
+        hf_bins.pop_back(); hf_bins.pop_back();
+    }
+    
+    hf_bins.push_back(10000);
+
+    auto ihfm = new interval(hf_bins);
+
+    // map: tag, events, jets, jet kinematics
+    std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
+    for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
+
+    if (mix > 0) {
+        // read in variables
+        int index_m = rng->Integer(mb.size());
+        TFile* fm = new TFile(mb[index_m].data(), "read");
+        TTree* tm = (TTree*) fm->Get("pj");
+
+        // variables used for mixing
+        float vz;
+        float hiHF;
+
+        std::vector<float> *jtptCor = 0;
+        std::vector<float> *jtpt = 0;
+        std::vector<float> *jteta = 0;
+        std::vector<float> *jtphi = 0;
+        std::vector<float> *WTAeta = 0;
+        std::vector<float> *WTAphi = 0;
+
+        tm->SetBranchAddress("vz", &vz);
+        tm->SetBranchAddress("hiHF", &hiHF);
+        tm->SetBranchAddress("jtptCor", &jtptCor);
+        tm->SetBranchAddress("jtpt", &jtpt);
+        tm->SetBranchAddress("jteta", &jteta);
+        tm->SetBranchAddress("jtphi", &jtphi);
+        tm->SetBranchAddress("WTAeta", &WTAeta);
+        tm->SetBranchAddress("WTAphi", &WTAphi);
+
+        int64_t mentries = static_cast<int64_t>(tm->GetEntries());
+        if (mentries > 900000) mentries = 900000;
+
+        for (int64_t i = 0; i < mentries; ++i){
+            tm->GetEntry(i);
+
+            auto hfm_x = ihfm->index_for(hiHF);
+            int64_t nref = jtpt->size();
+
+            if (std::abs(vz) > 15) { continue; }
+            if (rho_file.empty() && hiHF <= dhf.front()) { continue; }
+            if (rho_file.empty() && hiHF >= dhf.back()) { continue; }
+
+            std::vector<std::map<std::string, float>> jet_vector;
+
+            for (int64_t j = 0; j < nref; ++j) {
+                auto jet_pt = (jet_cor) ? (*jtptCor)[j] : (*jtpt)[j];
+                auto jet_eta = (*jteta)[j];
+                auto jet_phi = (*jtphi)[j];
+                auto jet_wta_eta = (*WTAeta)[j];
+                auto jet_wta_phi = (*WTAphi)[j];
+
+                if (exclude && in_jet_failure_region(jet_eta, jet_phi)) { continue; }
+                if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
+
+                std::map<std::string, float> jet_map;
+                
+                jet_map["jet_pt"] = jet_pt;
+                jet_map["jet_eta"] = jet_eta;
+                jet_map["jet_phi"] = jet_phi;
+                jet_map["jet_wta_eta"] = jet_wta_eta;
+                jet_map["jet_wta_phi"] = jet_wta_phi;
+
+                jet_vector.push_back(jet_map);
+            }
+        
+            hf_map[hfm_x].push_back(jet_vector);
+        }
+    }
+
+    std::cout << "Bin: Events" << std::endl;
+
+    for (size_t i = 0; i < hf_bins.size() - 1; ++i) {
+        std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
+    }
 
     /* load efficiency correction */
     TFile* fe;
-    history<TH1F>* efficiency = nullptr;
+    history<TH1F>* eff_numerator = nullptr;
+    history<TH1F>* eff_denominator = nullptr;
 
     if (!eff_file.empty()) {
-        fe = new TFile((alter_base + base + eff_file).data(), "read");
-        efficiency = new history<TH1F>(fe, eff_label);
+        if (!condor) fe = new TFile((alter_base + base + eff_file).data(), "read");
+        else         fe = new TFile(eff_file.data(), "read");
+        
+        eff_numerator = new history<TH1F>(fe, eff_label + "_numerator"s);
+        eff_denominator = new history<TH1F>(fe, eff_label + "_denominator"s);
     }
 
     /* load centrality weighting for MC */
@@ -250,29 +369,27 @@ int populate(char const* config, char const* selections, char const* output) {
     history<TH1F>* rho_weighting = nullptr;
 
     if (!rho_file.empty()) {
-        fr = new TFile((alter_base + base + rho_file).data(), "read");
+        if (!condor) fr = new TFile((alter_base + base + rho_file).data(), "read");
+        else         fr = new TFile(rho_file.data(), "read");
+
         rho_weighting = new history<TH1F>(fr, rho_label);
     }
 
     /* load acceptance weighting for HI */
     TFile* fa;
-    history<TH2F>* acceptance = nullptr;
-    history<TH2F>* total = nullptr;
+    history<TH2D>* acceptance = nullptr;
+    history<TH2D>* total = nullptr;
 
     if (!acc_file.empty()) {
         fa = new TFile(acc_file.data(), "read");
-        acceptance = new history<TH2F>(fa, acc_label_acc);
-        total = new history<TH2F>(fa, acc_label_ref);
+        acceptance = new history<TH2D>(fa, acc_label_acc);
+        total = new history<TH2D>(fa, acc_label_ref);
     }
 
     /* add weight for the number of photons, based on the fraction that are excluded by area */
     auto pho_cor = (exclude) ? 1 / (1 - pho_failure_region_fraction(photon_eta_abs)) : 1;
 
     if (modulo != 1) { std::cout << "modulo: " << modulo << std::endl; }
-    
-    int64_t tentries = 0;
-    clock_t time = clock();
-    clock_t duration = 0;
 
     /* load input */
     for (auto const& file : input) {
@@ -283,18 +400,8 @@ int populate(char const* config, char const* selections, char const* output) {
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 0, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        for (int64_t i = 0, m = 0; i < nentries; ++i) {
+        for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
-            if (i % frequency == 0) { 
-                if (tentries != 0) {
-                    duration = clock() - time;
-                    std::cout << "Time per " << frequency/modulo << " entries: " << (double)(duration)/CLOCKS_PER_SEC << " seconds" << std::endl;
-                    std::cout << "Entries: " << tentries << std::endl;
-                    tentries = 0;
-                    time = clock();
-                }
-            }
-
             if ((i + parity) % modulo != 0) { continue; }
 
             t->GetEntry(i);
@@ -308,80 +415,70 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto photon_es = (apply_es) ? photon_pt_es[hf_x] : 1;
 
-            int64_t leading = -1;
-            float leading_pt = 0;
+            /* look for reco photons */
+            int64_t photon_index = -1;
+            float photon_pt = 0;
+
             for (int64_t j = 0; j < pjt->nPho; ++j) {
-                if ((*pjt->phoEt)[j] <= 30) { continue; }
-                if (std::abs((*pjt->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+                auto temp_photon_pt = (*pjt->phoEt)[j];
+
+                if (temp_photon_pt <= 30) { continue; }
+                if (std::abs((*pjt->phoEta)[j]) >= photon_eta_abs) { continue; }
                 if ((*pjt->phoHoverE)[j] > hovere_max) { continue; }
+                if (apply_er) temp_photon_pt = (heavyion) ? (*pjt->phoEtErNew)[j] : (*pjt->phoEtEr)[j];
 
-                auto pho_et = (*pjt->phoEt)[j];
-                if (heavyion && apply_er) pho_et = (*pjt->phoEtErNew)[j];
-                if (!heavyion && apply_er) pho_et = (*pjt->phoEtEr)[j];
+                temp_photon_pt *= photon_es;
 
-                pho_et *= photon_es;
+                if (temp_photon_pt < photon_pt_min) { continue; }
 
-                if (pho_et < photon_pt_min) { continue; }
-
-                if (pho_et > leading_pt) {
-                    leading = j;
-                    leading_pt = pho_et;
+                if (temp_photon_pt > photon_pt) {
+                    photon_index = j;
+                    photon_pt = temp_photon_pt;
                 }
             }
 
             /* require leading photon */
-            if (leading < 0) { continue; }
-
-            if ((*pjt->phoSigmaIEtaIEta_2012)[leading] > see_max
-                    || (*pjt->phoSigmaIEtaIEta_2012)[leading] < see_min)
-                continue;
+            if (photon_index < 0) { continue; }
+            if ((*pjt->phoSigmaIEtaIEta_2012)[photon_index] > see_max || (*pjt->phoSigmaIEtaIEta_2012)[photon_index] < see_min) { continue; }
 
             /* hem failure region exclusion */
-            if (exclude && in_pho_failure_region(pjt, leading)) { continue; }
+            if (exclude && in_pho_failure_region(pjt, photon_index)) { continue; }
 
             /* isolation requirement */
             if (gen_iso) {
-                auto gen_index = (*pjt->pho_genMatchedIndex)[leading];
-                if (gen_index == -1) { continue; }
+                auto gen_index = (*pjt->pho_genMatchedIndex)[photon_index];
 
-                float isolation = (*pjt->mcCalIsoDR04)[gen_index];
-                if (isolation > gen_iso_max) { continue; }
+                if (gen_index == -1) { continue; }
+                if ((*pjt->mcCalIsoDR04)[gen_index] > gen_iso_max) { continue; }
             } else {
-                float isolation = (*pjt->pho_ecalClusterIsoR3)[leading]
-                    + (*pjt->pho_hcalRechitIsoR3)[leading]
-                    + (*pjt->pho_trackIsoR3PtCut20)[leading];
-                if (isolation > iso_max) { continue; }
+                if ((*pjt->pho_ecalClusterIsoR3)[photon_index] + (*pjt->pho_hcalRechitIsoR3)[photon_index] + (*pjt->pho_trackIsoR3PtCut20)[photon_index] > iso_max) { continue; }
             }
 
             /* leading photon axis */
-            auto photon_eta = (*pjt->phoEta)[leading];
-            auto photon_phi = convert_radian((*pjt->phoPhi)[leading]);
+            auto photon_eta = (*pjt->phoEta)[photon_index];
+            auto photon_phi = (*pjt->phoPhi)[photon_index];
 
             /* electron rejection */
             if (ele_rej) {
                 bool electron = false;
+
                 for (int64_t j = 0; j < pjt->nEle; ++j) {
-                    if (std::abs((*pjt->eleSCEta)[j]) > 1.4442) { continue; }
+                    if (std::abs((*pjt->eleEta)[j]) > 1.4442) { continue; }
 
-                    auto deta = photon_eta - (*pjt->eleEta)[j];
-                    if (deta > 0.1) { continue; }
+                    auto dr = std::sqrt(dr2(photon_eta, (*pjt->eleEta)[j], photon_phi, (*pjt->elePhi)[j]));
 
-                    auto ele_phi = convert_radian((*pjt->elePhi)[j]);
-                    auto dphi = revert_radian(photon_phi - ele_phi);
-                    auto dr2 = deta * deta + dphi * dphi;
-
-                    if (dr2 < 0.01 && passes_electron_id<
-                                det::barrel, wp::loose, pjtree
-                            >(pjt, j, heavyion)) {
-                        electron = true; break; }
+                    if (dr < 0.1 && passes_electron_id<det::barrel, wp::loose, pjtree>(pjt, j, heavyion)) {
+                        electron = true; break;
+                    }
                 }
 
                 if (electron) { continue; }
             }
 
-            auto pt_x = ipt->index_for(leading_pt);
-
+            /* declare weights */
+            auto pt_x = ipt->index_for(photon_pt);
             std::vector<int64_t> pthf_x;
+
             if (!rho_file.empty()) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     pthf_x.push_back(mpthf->index_for(x{pt_x, k}));
@@ -392,10 +489,10 @@ int populate(char const* config, char const* selections, char const* output) {
 
             auto weight = pjt->w;
 
-            if (!eff_file.empty() && leading_pt / photon_es < 70) {
-                auto bin = (*efficiency)[1]->FindBin(leading_pt / photon_es);
-                auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
-                if (cor < 1) { std::cout << "error" << std::endl; return -1; }
+            if (!eff_file.empty() && photon_pt / photon_es < 70) {
+                auto bin = (*eff_numerator)[hf_x]->FindBin(photon_pt / photon_es);
+                auto cor = (*eff_denominator)[hf_x]->GetBinContent(bin) / (*eff_numerator)[hf_x]->GetBinContent(bin);
+
                 weight *= cor;
             }
 
@@ -406,51 +503,35 @@ int populate(char const* config, char const* selections, char const* output) {
                 for (int64_t k = 0; k < ihf->size(); ++k) {
                     auto bin = (*rho_weighting)[k]->FindBin(avg_rho);
                     auto cor = (*rho_weighting)[k]->GetBinContent(bin);
+
                     weights.push_back(weight * cor);
                 }
             } else {
                 weights.push_back(weight);
             }
 
-            fill_axes(pjt, pthf_x, weights, pho_cor,
-                photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator, idphi, nevt,
-                pjet_f_dr, pjet_f_jpt, pjet_u_dr,
-                acceptance, total);
+            /* fill histograms */
+            fill_axes(pjt, pthf_x, weights, exclude, mdrjpt, idphi,
+                pho_cor, photon_eta, photon_phi, jet_cor, jet_eta_abs, 
+                dphi_min_numerator, dphi_min_denominator, nevt, 
+                pjet_f_dr, pjet_f_jpt, pjet_u_dr_jpt, acceptance, total);
 
             if (mix > 0) {
+                auto hfm_x = ihfm->index_for(hf);
+                size_t map_x = rng->Integer(hf_map[hfm_x].size());
+
                 /* mixing events in minimum bias */
-                for (int64_t k = 0; k < mix; m++) {
-                    if ((m + 1) % mentries == 0) {
-                        std::cout << "Switch MB file" << std::endl;
-                        m = -1;
+                for (int64_t k = 0; k < mix; k++) {
+                    std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
 
-                        fm->Close();
+                    fill_axes(jet_vector, pthf_x, weights, exclude, mdrjpt, idphi,
+                        pho_cor, photon_eta, photon_phi, jet_eta_abs, 
+                        dphi_min_numerator, dphi_min_denominator, nmix, mix_pjet_f_dr, 
+                        mix_pjet_f_jpt, mix_pjet_u_dr_jpt, acceptance, total);
 
-                        delete fm; delete pjtm;
-                        
-                        index_m = rng->Integer(mb.size());
-                        fm = new TFile(mb[index_m].data(), "read");
-                        tm = (TTree*)fm->Get("pj");
-                        pjtm = new pjtree(gen_iso, false, heavyion, tm, { 1, 1, 1, 1, 1, 0, heavyion, 0, 0 });
-
-                        mentries = static_cast<int64_t>(tm->GetEntries()); std::cout << mentries << std::endl;
-                    }
-
-                    tm->GetEntry(m);
-
-                    if (std::abs(pjtm->hiHF / hf - 1.) > 0.1) { continue; }
-
-                    fill_axes(pjtm, pthf_x, weights, pho_cor,
-                            photon_eta, photon_phi, exclude, heavyion && !no_jes,
-                            jet_pt_min, jet_eta_abs, dphi_min_numerator, dphi_min_denominator, idphi, nmix,
-                            mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_u_dr,
-                            acceptance, total);
-
-                    ++k;
+                    map_x++;
+                    if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }
                 }
-
-                tentries++;
             }
         }
 
@@ -458,18 +539,7 @@ int populate(char const* config, char const* selections, char const* output) {
     }
 
     /* normalise histograms */
-    if (mix > 0)
-        scale(1. / mix,
-            mix_pjet_f_dr,
-            mix_pjet_f_jpt,
-            mix_pjet_u_dr);
-
-    // /* scale by bin width */
-    // scale_bin_width(
-    //     pjet_f_dr,
-    //     pjet_f_jpt,
-    //     mix_pjet_f_dr,
-    //     mix_pjet_f_jpt);
+    if (mix > 0) { scale(1. / mix, mix_pjet_f_dr, mix_pjet_f_jpt, mix_pjet_u_dr_jpt); }
 
     /* normalise by number of photons (events) */
     pjet_f_dr->divide(*nevt);
@@ -481,11 +551,11 @@ int populate(char const* config, char const* selections, char const* output) {
     /* subtract histograms */
     auto sub_pjet_f_dr = new memory<TH1F>(*pjet_f_dr, "sub");
     auto sub_pjet_f_jpt = new memory<TH1F>(*pjet_f_jpt, "sub");
-    auto sub_pjet_u_dr = new memory<TH2F>(*pjet_u_dr, "sub");
+    auto sub_pjet_u_dr_jpt = new memory<TH1F>(*pjet_u_dr_jpt, "sub");
 
     *sub_pjet_f_dr -= *mix_pjet_f_dr;
     *sub_pjet_f_jpt -= *mix_pjet_f_jpt;
-    *sub_pjet_u_dr -= *mix_pjet_u_dr;
+    *sub_pjet_u_dr_jpt -= *mix_pjet_u_dr_jpt;
 
     /* save histograms */
     in(output, [&]() {
@@ -494,15 +564,15 @@ int populate(char const* config, char const* selections, char const* output) {
 
         pjet_f_dr->save(tag);
         pjet_f_jpt->save(tag);
-        pjet_u_dr->save(tag);
+        pjet_u_dr_jpt->save(tag);
 
         mix_pjet_f_dr->save(tag);
         mix_pjet_f_jpt->save(tag);
-        mix_pjet_u_dr->save(tag);
+        mix_pjet_u_dr_jpt->save(tag);
 
         sub_pjet_f_dr->save(tag);
         sub_pjet_f_jpt->save(tag);
-        sub_pjet_u_dr->save(tag);
+        sub_pjet_u_dr_jpt->save(tag);
     });
 
     printf("destroying objects..\n");
