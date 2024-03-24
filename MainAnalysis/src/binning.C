@@ -551,7 +551,7 @@ int populate(char const* config, char const* selections, char const* output) {
     /* subtract histograms */
     auto sub_pjet_f_dr = new memory<TH1F>(*pjet_f_dr, "sub");
     auto sub_pjet_f_jpt = new memory<TH1F>(*pjet_f_jpt, "sub");
-    auto sub_pjet_u_dr_jpt = new memory<TH1F>(*pjet_u_dr_jpt, "sub");
+    auto sub_pjet_u_dr_jpt = new memory<TH2F>(*pjet_u_dr_jpt, "sub");
 
     *sub_pjet_f_dr -= *mix_pjet_f_dr;
     *sub_pjet_f_jpt -= *mix_pjet_f_jpt;
