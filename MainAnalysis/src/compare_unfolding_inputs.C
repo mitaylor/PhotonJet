@@ -26,6 +26,54 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+TH1F *ForwardFold(TH1 *HGen, TH2F *HResponse)
+{
+   if(HGen == nullptr || HResponse == nullptr)
+      return nullptr;
+
+   int NGen = HResponse->GetNbinsY();
+   int NReco = HResponse->GetNbinsX();
+
+   TH1F *HResult = new TH1F("HDataReco", "", NReco, 0, NReco);
+
+   HResult->Sumw2();
+
+   for(int iG = 1; iG <= NGen; iG++)
+   {
+      double N = 0;
+      for(int iR = 1; iR <= NReco; iR++)
+         N = N + HResponse->GetBinContent(iR, iG);
+
+      if(N == 0)
+         continue;
+
+      for(int iR = 1; iR <= NReco; iR++)
+      {
+         double T = HResponse->GetBinContent(iR, iG) / N;
+         double G = HGen->GetBinContent(iG);
+         double ET = HResponse->GetBinError(iR, iG) / HResponse->GetBinContent(iR, iG);
+         double EG = HGen->GetBinError(iG) / HGen->GetBinContent(iG);
+
+         if(HResponse->GetBinContent(iR, iG) == 0)
+            ET = 0;
+         if(HGen->GetBinContent(iG) == 0)
+            EG = 0;
+
+         double V = T * G;
+         double E = sqrt(ET * ET + EG * EG) * V;
+
+         double Current = HResult->GetBinContent(iR);
+         HResult->SetBinContent(iR, Current + V);
+
+         double Error = HResult->GetBinError(iR);
+         Error = sqrt(Error * Error + E * E);
+         HResult->SetBinError(iR, Error);
+      }
+   }
+
+   return HResult;
+}
+
 template <typename T>
 T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
@@ -109,8 +157,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto tag = conf->get<std::string>("tag");
 
     auto filenames = conf->get<std::vector<std::string>>("filenames");
-    auto mc_filenames = conf->get<std::vector<std::string>>("mc_filenames");
-
     auto label = conf->get<std::string>("label");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
@@ -140,73 +186,94 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TH1::SetDefaultSumw2();
 
     std::vector<TFile*> fdata(filenames.size(), nullptr);
-    std::vector<TFile*> fmc(filenames.size(), nullptr);
 
-    zip([&](auto& fdata, auto& fmc, auto const& filename, auto const& mc_filename) {
-        fdata = new TFile(("/data/submit/mitay/unfolding/240313/Input/Theory/"s + set + "/"s + filename).data(), "read");
-        fmc = new TFile(("/data/submit/mitay/unfolding/240313/Input/Theory/"s + set + "/"s + mc_filename).data(), "read");
-    }, fdata, fmc, filenames, mc_filenames);
+    zip([&](auto& fdata, auto const& filename) {
+        fdata = new TFile(("/data/submit/mitay/unfolding/240324/Input/Theory/"s + set + "/"s + filename).data(), "read");
+    }, fdata, filenames);
 
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare data */
-    auto input_mc = new history<TH1F>("input_mc", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_fold0 = new history<TH1F>("input_mc_fold0", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_fold1 = new history<TH1F>("input_mc_fold1", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_gen = new history<TH1F>("input_mc_gen", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
+    auto efficiency = new history<TH1F>("efficiency", "", null<TH1F>, (int64_t) filenames.size());
 
-    auto input_data = new history<TH1F>("input_data", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_data_fold0 = new history<TH1F>("input_data_fold0", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_data_fold1 = new history<TH1F>("input_data_fold1", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_reco = new history<TH1F>("input_mc_reco", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_reco_fold0 = new history<TH1F>("input_mc_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_reco_fold1 = new history<TH1F>("input_mc_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
-    auto input_theory = new history<TH1F>("input_theory", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_theory_fold0 = new history<TH1F>("input_theory_fold0", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_theory_fold1 = new history<TH1F>("input_theory_fold1", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_data_reco = new history<TH1F>("input_data_reco", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_data_reco_fold0 = new history<TH1F>("input_data_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_data_reco_fold1 = new history<TH1F>("input_data_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
+
+    auto input_theory_reco = new history<TH1F>("input_theory_reco", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_theory_reco_fold0 = new history<TH1F>("input_theory_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_theory_reco_fold1 = new history<TH1F>("input_theory_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        auto HInputMC = (TH1F*) fmc[j]->Get("HDataErrors");
+        auto HInputMCGen = (TH1F*) fdata[j]->Get("HMCGen");
+        auto HInputMCGenReco = (TH1F*) fdata[j]->Get("HMCGenReco");
         auto HInputData = (TH1F*) fdata[j]->Get("HDataErrors");
-        auto HInputTheory = (TH1F*) fdata[j]->Get("HDataReco");
+        auto HInputTheory = (TH1F*) fdata[j]->Get("HDataGen");
+        auto HResponse = (TH2F*) fdata[j]->Get("HResponse");
 
-        (*input_mc)[j] = HInputMC;
-        (*input_mc_fold0)[j] = fold(HInputMC, nullptr, mr, 0, osr);
-        (*input_mc_fold1)[j] = fold(HInputMC, nullptr, mr, 1, osr);
+        (*input_mc_gen)[j] = HInputMCGen;
+        (*input_theory_gen)[j] = HInputTheory;
 
-        (*input_data)[j] = HInputData;
-        (*input_data_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
-        (*input_data_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
+        (*efficiency)[j] = HInputMCGenReco;
+        (*efficiency)[j]->Divide((*input_mc_gen)[j]);
+        
+        (*input_mc_gen)[j]->Multiply((*efficiency)[j]);
+        (*input_theory_gen)[j]->Multiply((*efficiency)[j]);
 
-        (*input_theory)[j] = HInputTheory;
-        (*input_theory_fold0)[j] = fold(HInputTheory, nullptr, mr, 0, osr);
-        (*input_theory_fold1)[j] = fold(HInputTheory, nullptr, mr, 1, osr);
+        (*input_data_reco)[j] = HInputData;
+        (*input_data_reco_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
+        (*input_data_reco_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
+
+        (*input_mc_reco)[j] = ForwardFold((*input_mc_gen)[j], HResponse);
+        (*input_mc_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
+        (*input_mc_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
+
+        (*input_theory_reco)[j] = ForwardFold((*input_theory_gen)[j], HResponse);
+        (*input_theory_reco_fold0)[j] = fold((*input_theory_reco)[j], nullptr, mr, 0, osr);
+        (*input_theory_reco_fold1)[j] = fold((*input_theory_reco)[j], nullptr, mr, 1, osr);
     }
 
     /* rename histograms */
-    input_mc->rename("input_mc");
-    input_mc_fold0->rename("input_mc_fold0");
-    input_mc_fold1->rename("input_mc_fold1");
+    input_mc_gen->rename("input_mc_gen");
+    input_theory_gen->rename("input_theory_gen");
+    efficiency->rename("efficiency");
 
-    input_data->rename("input_data");
-    input_data_fold0->rename("input_data_fold0");
-    input_data_fold1->rename("input_data_fold1");
+    input_data_reco->rename("input_data_reco");
+    input_data_reco_fold0->rename("input_data_reco_fold0");
+    input_data_reco_fold1->rename("input_data_reco_fold1");
 
-    input_theory->rename("input_theory");
-    input_theory_fold0->rename("input_theory_fold0");
-    input_theory_fold1->rename("input_theory_fold1");
+    input_mc_reco->rename("input_mc_reco");
+    input_mc_reco_fold0->rename("input_mc_reco_fold0");
+    input_mc_reco_fold1->rename("input_mc_reco_fold1");
+
+    input_theory_reco->rename("input_theory_reco");
+    input_theory_reco_fold0->rename("input_theory_reco_fold0");
+    input_theory_reco_fold1->rename("input_theory_reco_fold1");
 
     /* save histograms */
-    input_mc->save();
-    input_mc_fold0->save();
-    input_mc_fold1->save();
+    input_mc_gen->save();
+    input_theory_gen->save();
+    efficiency->save();
 
-    input_data->save();
-    input_data_fold0->save();
-    input_data_fold1->save();
+    input_data_reco->save();
+    input_data_reco_fold0->save();
+    input_data_reco_fold1->save();
 
-    input_theory->save();
-    input_theory_fold0->save();
-    input_theory_fold1->save();
+    input_mc_reco->save();
+    input_mc_reco_fold0->save();
+    input_mc_reco_fold1->save();
+
+    input_theory_reco->save();
+    input_theory_reco_fold0->save();
+    input_theory_reco_fold1->save();
 
     /* plotting setup */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
@@ -247,9 +314,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p1, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p1->add((*input_mc_fold0)[i], "MC");
-        p1->stack((*input_data_fold0)[i], "Data");
-        p1->stack((*input_theory_fold0)[i], "Theory");
+        p1->add((*input_mc_reco_fold0)[i], "MC");
+        p1->stack((*input_data_reco_fold0)[i], "Data");
+        p1->stack((*input_theory_reco_fold0)[i], "Theory");
     }
 
     auto p2 = new paper(set + "_unfolding_inputs_" + tag + "_" + label + "_jpt", hb);
@@ -260,9 +327,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p2->add((*input_mc_fold1)[i], "MC");
-        p2->stack((*input_data_fold1)[i], "Data");
-        p2->stack((*input_theory_fold1)[i], "Theory");
+        p2->add((*input_mc_reco_fold1)[i], "MC");
+        p2->stack((*input_data_reco_fold1)[i], "Data");
+        p2->stack((*input_theory_reco_fold1)[i], "Theory");
     }
 
     hb->sketch();
