@@ -286,12 +286,15 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         hframe_fold0->SetName(("frame_fold0_"s + to_text(i)).data());
         hframe_fold1->SetName(("frame_fold1_"s + to_text(i)).data());
 
+        hframe->SetMaximum(1.2);
         hframe->GetYaxis()->SetTitle("Bin Efficiency");
         hframe->GetXaxis()->SetTitle("Gen Bin Index");
 
+        hframe_fold0->SetMaximum(1.2);
         hframe_fold0->GetYaxis()->SetTitle("Bin Efficiency");
         hframe_fold0->GetXaxis()->SetTitle("#deltaj");
 
+        hframe_fold1->SetMaximum(1.2);
         hframe_fold1->GetYaxis()->SetTitle("Bin Efficiency");
         hframe_fold1->GetXaxis()->SetTitle("Jet p_{T}");
 
