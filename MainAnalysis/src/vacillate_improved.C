@@ -177,9 +177,9 @@ int vacillate(char const* config, char const* selections, char const* output) {
     auto c_merge = new history<TH2F>("c_merge"s, "counts", fc, 1);
 
     auto r_n_merge = new history<TH1F>("r_n_merge"s, "events", fn, 1);
-    auto g_n_merge = new history<TH2F>("g_n_merge"s, "events", fn, 1);
-    auto g_r_n_merge = new history<TH2F>("g_r_n_merge"s, "events", fn, 1);
-    auto c_n_merge = new history<TH2F>("c_n_merge"s, "events", fn, 1);
+    auto g_n_merge = new history<TH1F>("g_n_merge"s, "events", fn, 1);
+    auto g_r_n_merge = new history<TH1F>("g_r_n_merge"s, "events", fn, 1);
+    auto c_n_merge = new history<TH1F>("c_n_merge"s, "events", fn, 1);
 
     auto cdr_merge = new history<TH2F>("cdr_merge"s, "counts", fcdr, 1);
     auto cpt_merge = new history<TH2F>("cpt_merge"s, "counts", fcpt, 1);
