@@ -290,9 +290,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[8]->add((*reco_fold1)[i]);
         cs[9]->add((*gen_fold0)[i]);
         cs[10]->add((*gen_fold1)[i]);
-        cs[11]->add((*eff)[i]);
-        cs[12]->add((*eff_fold0)[i]);
-        cs[13]->add((*eff_fold1)[i]);
+        cs[11]->add((eff)[i]);
+        cs[12]->add((eff_fold0)[i]);
+        cs[13]->add((eff_fold1)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
