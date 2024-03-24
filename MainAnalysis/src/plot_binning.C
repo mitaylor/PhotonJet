@@ -132,9 +132,9 @@ int plot_binning(char const* config, char const* selections, char const* output)
             auto value_mix_d_hf = (*hist_mix_d_hf)[i]->GetBinContent(j + 1);
             auto value_sub_d_hf = (*hist_sub_d_hf)[i]->GetBinContent(j + 1);
 
-            (*hist2d_d_hf)[i]->SetBinContent(indices[0], indices[1], value_d_hf);
-            (*hist2d_mix_d_hf)[i]->SetBinContent(indices[0], indices[1], value_mix_d_hf);
-            (*hist2d_sub_d_hf)[i]->SetBinContent(indices[0], indices[1], value_sub_d_hf);
+            (*hist2d_d_hf)[i]->SetBinContent(indices[0] + 1, indices[1] + 1, value_d_hf);
+            (*hist2d_mix_d_hf)[i]->SetBinContent(indices[0] + 1, indices[1] + 1, value_mix_d_hf);
+            (*hist2d_sub_d_hf)[i]->SetBinContent(indices[0] + 1, indices[1] + 1, value_sub_d_hf);
         }
     };
 
