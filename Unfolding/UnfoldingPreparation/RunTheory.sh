@@ -46,6 +46,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -59,6 +60,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -72,6 +74,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -85,6 +88,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -100,6 +104,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
     --ErrorHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -113,6 +118,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
     --ErrorHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -126,6 +132,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
     --ErrorHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -139,6 +146,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_b.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
     --ErrorHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -154,6 +162,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -167,6 +176,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -180,6 +190,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -193,6 +204,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -208,6 +220,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -221,6 +234,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -234,6 +248,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -247,6 +262,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -262,6 +278,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -275,6 +292,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -288,6 +306,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -301,6 +320,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -316,6 +336,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -329,6 +350,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -342,6 +364,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -355,6 +378,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -370,6 +394,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -383,6 +408,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -396,6 +422,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -409,6 +436,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -424,6 +452,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
+    --ResponseTruthReco aa_g_r_0 \
     --ResponseReco aa_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -437,6 +466,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
+    --ResponseTruthReco aa_g_r_1 \
     --ResponseReco aa_r_1 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
@@ -450,6 +480,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
+    --ResponseTruthReco aa_g_r_2 \
     --ResponseReco aa_r_2 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
@@ -463,6 +494,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
+    --ResponseTruthReco aa_g_r_3 \
     --ResponseReco aa_r_3 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
     --ErrorHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
@@ -478,6 +510,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_b.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -493,6 +526,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_b.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp_qcd.root \
     --ErrorHistogram pp_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -508,6 +542,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -523,6 +558,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -538,6 +574,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -553,6 +590,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -568,6 +606,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
@@ -583,6 +622,7 @@ fi
     --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
+    --ResponseTruthReco pp_g_r_0 \
     --ResponseReco pp_r_0 \
     --Error ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
     --ErrorHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
