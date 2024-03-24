@@ -310,10 +310,10 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[8]->add((*reco_fold1)[i]);
         cs[9]->add((*gen_fold0)[i]);
         cs[10]->add((*gen_fold1)[i]);
-        cs[11]->stack(hframe);
-        cs[11]->add((eff)[i]);
-        cs[12]->stack(hframe_fold0);
-        cs[12]->add((eff_fold0)[i]);
+        cs[11]->add(hframe);
+        cs[11]->stack((eff)[i]);
+        cs[12]->add(hframe_fold0);
+        cs[12]->stack((eff_fold0)[i]);
         cs[13]->add(hframe_fold1);
         cs[13]->stack((eff_fold1)[i]);
 
