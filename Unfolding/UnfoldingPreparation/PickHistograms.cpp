@@ -85,13 +85,15 @@ int main(int argc, char *argv[])
    HDataReco->Write();
 
    // Copy over error input
-   TH1D HDataErrors("HDataErrors", ";;", NGen, 0, NGen);
-   for(int i = 0; i <= NGen + 1; i++)
-   {
-      HDataErrors.SetBinContent(i, HInputErrors->GetBinContent(i));
-      HDataErrors.SetBinError(i, HInputErrors->GetBinError(i));
+   if (HInputErrors != nullptr) {
+      TH1D HDataErrors("HDataErrors", ";;", NGen, 0, NGen);
+      for(int i = 0; i <= NGen + 1; i++)
+      {
+         HDataErrors.SetBinContent(i, HInputErrors->GetBinContent(i));
+         HDataErrors.SetBinError(i, HInputErrors->GetBinError(i));
+      }
+      HDataErrors.Write();
    }
-   HDataErrors.Write();
 
    // Copy over MC truth
    TH1D HMCGen("HMCGen", ";;", NGen, 0, NGen);
