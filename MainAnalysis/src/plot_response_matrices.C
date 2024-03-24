@@ -170,7 +170,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TFile* fi = new TFile((base + input).data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
     auto gen = new history<TH1F>(fi, tag + "_g");
-    auto eff = new history<TH1F>(fi, tag + "_g_r");
+    auto gen_reco = new history<TH1F>(fi, tag + "_g_r");
     auto reco = new history<TH1F>(fi, tag + "_r");
     history<TH2F>* photon = nullptr;
     if (!original) photon = new history<TH2F>(fi, tag + "_ppt");
@@ -187,8 +187,12 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto gen_fold0 = new history<TH1F>(label + "_gen_fold0", "", null<TH1F>, ihf->size());
     auto gen_fold1 = new history<TH1F>(label + "_gen_fold1", "", null<TH1F>, ihf->size());
 
-    auto eff_fold0 = new history<TH1F>(label + "_eff_fold0", "", null<TH1F>, ihf->size());
-    auto eff_fold1 = new history<TH1F>(label + "_eff_fold1", "", null<TH1F>, ihf->size());
+    auto gen_reco_fold0 = new history<TH1F>(label + "_gen_reco_fold0", "", null<TH1F>, ihf->size());
+    auto gen_reco_fold1 = new history<TH1F>(label + "_gen_reco_fold1", "", null<TH1F>, ihf->size());
+
+    TGraphAsymmErrors* eff[4];
+    TGraphAsymmErrors* eff_fold0[4];
+    TGraphAsymmErrors* eff_fold1[4];
 
     /* info text */
     auto hf_info = [&](int64_t index) {
@@ -259,12 +263,16 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
         (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
 
-        (*eff_fold0)[i] = fold((*eff)[i], nullptr, mg, 0, osg);
-        (*eff_fold1)[i] = fold((*eff)[i], nullptr, mg, 1, osg);
+        (*gen_reco_fold0)[i] = fold((*gen_reco)[i], nullptr, mg, 0, osg);
+        (*gen_reco_fold1)[i] = fold((*gen_reco)[i], nullptr, mg, 1, osg);
 
-        (*eff)[i]->Divide((*gen)[i]);
-        (*eff_fold0)[i]->Divide((*gen_fold0)[i]);
-        (*eff_fold1)[i]->Divide((*gen_fold1)[i]);
+        eff[i] = new TGraphAsymmErrors((*gen_reco)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
+        eff_fold0[i] = new TGraphAsymmErrors((*gen_reco_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
+        eff_fold1[i] = new TGraphAsymmErrors((*gen_reco_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
+
+        eff[i]->SetName(("graph_"s + to_text(i)).data());
+        eff_fold0[i]->SetName(("graph_fold0_"s + to_text(i)).data());
+        eff_fold1[i]->SetName(("graph_fold1_"s + to_text(i)).data());
 
         /* figures */
         cs[0]->add((*matrices)[i]);
