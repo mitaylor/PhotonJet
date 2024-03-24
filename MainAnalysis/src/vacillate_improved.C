@@ -157,18 +157,28 @@ int vacillate(char const* config, char const* selections, char const* output) {
         return new TH2F(name.data(), (";Reconstructed Bin;Generator Bin;"s + label).data(),
             mr->size(), 0, mr->size(), mg->size(), 0, mg->size()); };
 
-    auto n = new history<TH1F>("n"s, "events", fn, ihf->size());
     auto r = new history<TH1F>("r"s, "counts", fr, ihf->size());
     auto g = new history<TH1F>("g"s, "counts", fg, ihf->size());
+    auto g_r = new history<TH1F>("g_r"s, "counts", fg, ihf->size());
     auto c = new history<TH2F>("c"s, "counts", fc, ihf->size());
+
+    auto r_n = new history<TH1F>("r_n"s, "events", fn, ihf->size());
+    auto g_n = new history<TH1F>("g_n"s, "events", fn, ihf->size());
+    auto g_r_n = new history<TH1F>("g_r_n"s, "events", fn, ihf->size());
+    auto c_n = new history<TH1F>("c_n"s, "events", fn, ihf->size());
 
     auto cdr = new history<TH2F>("cdr"s, "counts", fcdr, ihf->size());
     auto cpt = new history<TH2F>("cpt"s, "counts", fcpt, ihf->size());
 
-    auto n_merge = new history<TH1F>("n_merge"s, "events", fn, 1);
     auto r_merge = new history<TH1F>("r_merge"s, "counts", fr, 1);
     auto g_merge = new history<TH1F>("g_merge"s, "counts", fg, 1);
+    auto g_r_merge = new history<TH1F>("g_r_merge"s, "counts", fg, 1);
     auto c_merge = new history<TH2F>("c_merge"s, "counts", fc, 1);
+
+    auto r_n_merge = new history<TH1F>("r_n_merge"s, "events", fn, 1);
+    auto g_n_merge = new history<TH2F>("g_n_merge"s, "events", fn, 1);
+    auto g_r_n_merge = new history<TH2F>("g_r_n_merge"s, "events", fn, 1);
+    auto c_n_merge = new history<TH2F>("c_n_merge"s, "events", fn, 1);
 
     auto cdr_merge = new history<TH2F>("cdr_merge"s, "counts", fcdr, 1);
     auto cpt_merge = new history<TH2F>("cpt_merge"s, "counts", fcpt, 1);
@@ -396,6 +406,12 @@ int vacillate(char const* config, char const* selections, char const* output) {
             /* handle hits and misses for photons */
             // miss, fill the truth histogram
             if (gen_photon && !reco_photon) {
+                for (int64_t k = 0; k < ihf->size(); ++k) {
+                    (*g_n)[k]->Fill(1., weights[k] * pho_cor); 
+                }
+                
+                (*g_n_merge)[0]->Fill(1., weights_merge * pho_cor);
+
                 for (int64_t j = 0; j < p->ngen; ++j) {
                     auto gen_jet_pt = (*p->genpt)[j];
                     auto gen_jet_eta = (*p->geneta)[j];
@@ -425,10 +441,16 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                 /* fill histogram */
                 for (int64_t k = 0; k < ihf->size(); ++k) {
-                    (*n)[k]->Fill(1., weights[k] * pho_cor); 
+                    (*r_n)[k]->Fill(1., weights[k] * pho_cor); 
+                    (*g_n)[k]->Fill(1., weights[k] * pho_cor); 
+                    (*g_r_n)[k]->Fill(1., weights[k] * pho_cor); 
+                    (*c_n)[k]->Fill(1., weights[k] * pho_cor); 
                 }
                 
-                (*n_merge)[0]->Fill(1., weights_merge * pho_cor);
+                (*r_n_merge)[0]->Fill(1., weights_merge * pho_cor);
+                (*g_n_merge)[0]->Fill(1., weights_merge * pho_cor);
+                (*g_r_n_merge)[0]->Fill(1., weights_merge * pho_cor);
+                (*c_n_merge)[0]->Fill(1., weights_merge * pho_cor);
                
                 // map reco jet to gen jet
                 std::unordered_map<float, int64_t> gen_jet_id;
@@ -489,11 +511,13 @@ int vacillate(char const* config, char const* selections, char const* output) {
 
                     for (int64_t k = 0; k < ihf->size(); ++k) { 
                         (*g)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
+                        (*g_r)[k]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
                         (*r)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights[k] * jet_cor);
                         (*c)[k]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights[k] * jet_cor);
                     }
                     
                     (*g_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
+                    (*g_r_merge)[0]->Fill(mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
                     (*r_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), weights_merge * jet_cor);
                     (*c_merge)[0]->Fill(mr->index_for(v{reco_jet_dr, reco_jet_pt}), mg->index_for(v{gen_jet_dr, gen_jet_pt}), weights_merge * jet_cor);
                     
@@ -550,36 +574,47 @@ int vacillate(char const* config, char const* selections, char const* output) {
         f->Close();
         delete f; delete p;
     }
+
+    r->divide(*r_n);
+    g->divide(*g_n);
+    g_r->divide(*g_r_n);
+    c->divide(*c_n);
+
+    r_merge->divide(*r_n_merge);
+    g_merge->divide(*g_n_merge);
+    g_r_merge->divide(*g_r_n_merge);
+    c_merge->divide(*c_n_merge);
    
     /* save output */
     in(output, [&]() {
-        n->save(tag);
         r->save(tag);
         g->save(tag);
-        cdr->save(tag);
-        cpt->save(tag);
+        g_r->save(tag);
         c->save(tag);
 
-        n_merge->save(tag);
+        r_n->save(tag);
+        g_n->save(tag);
+        g_r_n->save(tag);
+        c_n->save(tag);
+
+        cdr->save(tag);
+        cpt->save(tag);
+
         r_merge->save(tag);
         g_merge->save(tag);
+        g_r_merge->save(tag);
+        c_merge->save(tag);
+
+        r_n_merge->save(tag);
+        g_n_merge->save(tag);
+        g_r_n_merge->save(tag);
+        c_n_merge->save(tag);
+
         cdr_merge->save(tag);
         cpt_merge->save(tag);
-        c_merge->save(tag);
 
         ppt->save(tag);
     });
-
-    delete incl; delete ihf; delete idphi; delete ippt; delete mcdr; delete mcpt; delete mppt;
-    delete mr; delete mg;
-
-    delete n; delete r; delete g; delete c;
-    delete cdr; delete cpt;
-    delete n_merge; delete r_merge; delete g_merge; delete c_merge;
-    delete cdr_merge; delete cpt_merge;
-    delete ppt;
-
-    delete JERSF; delete JEU;
 
     return 0;
 }
