@@ -307,11 +307,11 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     TFile* fout = new TFile(output, "recreate");
     
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
-    data_before->Multiply((*reco_eff)[i]);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
     
     for (int64_t i = 0; i < size; ++i) {
+        (*data_before)[i]->Multiply((*reco_eff)[i]);
         (*data_before_fold0)[i] = fold((*data_before)[i], nullptr, mr, 0, osr);
         (*data_before_fold1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
     }
