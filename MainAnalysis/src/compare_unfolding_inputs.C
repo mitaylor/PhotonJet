@@ -201,8 +201,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     /* prepare data */
     auto input_mc_gen = new history<TH1F>(funfolding, tag + "_g");
     auto input_mc_reco = new history<TH1F>(funfolding, tag + "_r");
-    auto input_mc_efficiency = new history<TH1F>(funfolding, tag + "_proj_g");
-    auto input_mc_purity = new history<TH1F>(funfolding, tag + "_proj_r");
+    auto input_mc_efficiency = new history<TH1F>(funfolding, tag + "_g_eff");
+    auto input_mc_purity = new history<TH1F>(funfolding, tag + "_r_eff");
     auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
 
     auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
