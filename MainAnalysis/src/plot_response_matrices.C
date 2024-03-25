@@ -280,15 +280,15 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
         (*reco_proj_fold0)[i] = fold((*reco_proj)[i], nullptr, mr, 0, osr);
         (*reco_proj_fold1)[i] = fold((*reco_proj)[i], nullptr, mr, 1, osr);
-
-        eff[i] = new TGraphAsymmErrors((*gen_proj)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
-        eff_fold0[i] = new TGraphAsymmErrors((*gen_proj_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
-        eff_fold1[i] = new TGraphAsymmErrors((*gen_proj_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
-
-        pur[i] = new TGraphAsymmErrors((*reco_proj)[i], (*reco)[i], "cl=0.683 b(1,1) mode");
-        pur_fold0[i] = new TGraphAsymmErrors((*reco_proj_fold0)[i], (*reco_fold0)[i], "cl=0.683 b(1,1) mode");
-        pur_fold1[i] = new TGraphAsymmErrors((*reco_proj_fold1)[i], (*reco_fold1)[i], "cl=0.683 b(1,1) mode");
-
+std::cout << __LINE__ << std::endl;
+        eff[i] = new TGraphAsymmErrors((*gen_proj)[i], (*gen)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
+        eff_fold0[i] = new TGraphAsymmErrors((*gen_proj_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
+        eff_fold1[i] = new TGraphAsymmErrors((*gen_proj_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
+        pur[i] = new TGraphAsymmErrors((*reco_proj)[i], (*reco)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
+        pur_fold0[i] = new TGraphAsymmErrors((*reco_proj_fold0)[i], (*reco_fold0)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
+        pur_fold1[i] = new TGraphAsymmErrors((*reco_proj_fold1)[i], (*reco_fold1)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl;
         eff[i]->SetName(("eff_"s + to_text(i)).data());
         eff_fold0[i]->SetName(("eff_fold0_"s + to_text(i)).data());
         eff_fold1[i]->SetName(("eff_fold1_"s + to_text(i)).data());
