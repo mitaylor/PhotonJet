@@ -192,11 +192,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto gen_fold0 = new history<TH1F>(label + "_gen_fold0", "", null<TH1F>, ihf->size());
     auto gen_fold1 = new history<TH1F>(label + "_gen_fold1", "", null<TH1F>, ihf->size());
 
-    auto proj_gen_fold0 = new history<TH1F>(label + "_proj_gen_fold0", "", null<TH1F>, ihf->size());
-    auto proj_gen_fold1 = new history<TH1F>(label + "_proj_gen_fold1", "", null<TH1F>, ihf->size());
+    auto gen_proj_fold0 = new history<TH1F>(label + "_gen_proj_fold0", "", null<TH1F>, ihf->size());
+    auto gen_proj_fold1 = new history<TH1F>(label + "_gen_proj_fold1", "", null<TH1F>, ihf->size());
 
-    auto proj_reco_fold0 = new history<TH1F>(label + "_proj_reco_fold0", "", null<TH1F>, ihf->size());
-    auto proj_reco_fold1 = new history<TH1F>(label + "_proj_reco_fold1", "", null<TH1F>, ihf->size());
+    auto reco_proj_fold0 = new history<TH1F>(label + "_reco_proj_fold0", "", null<TH1F>, ihf->size());
+    auto reco_proj_fold1 = new history<TH1F>(label + "_reco_proj_fold1", "", null<TH1F>, ihf->size());
 
     TGraphAsymmErrors* eff[4];
     TGraphAsymmErrors* eff_fold0[4];
@@ -275,16 +275,16 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
         (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
 
-        (*proj_gen_fold0)[i] = fold((*proj_gen)[i], nullptr, mg, 0, osg);
-        (*proj_gen_fold1)[i] = fold((*proj_gen)[i], nullptr, mg, 1, osg);
+        (*gen_proj_fold0)[i] = fold((*gen_proj)[i], nullptr, mg, 0, osg);
+        (*gen_proj_fold1)[i] = fold((*gen_proj)[i], nullptr, mg, 1, osg);
 
-        eff[i] = new TGraphAsymmErrors((*proj_gen)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
-        eff_fold0[i] = new TGraphAsymmErrors((*proj_gen_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
-        eff_fold1[i] = new TGraphAsymmErrors((*proj_gen_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
+        eff[i] = new TGraphAsymmErrors((*gen_proj)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
+        eff_fold0[i] = new TGraphAsymmErrors((*gen_proj_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
+        eff_fold1[i] = new TGraphAsymmErrors((*gen_proj_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
 
-        pur[i] = new TGraphAsymmErrors((*proj_reco)[i], (*reco)[i], "cl=0.683 b(1,1) mode");
-        pur_fold0[i] = new TGraphAsymmErrors((*proj_reco_fold0)[i], (*reco_fold0)[i], "cl=0.683 b(1,1) mode");
-        pur_fold1[i] = new TGraphAsymmErrors((*proj_reco_fold1)[i], (*reco_fold1)[i], "cl=0.683 b(1,1) mode");
+        pur[i] = new TGraphAsymmErrors((*reco_proj)[i], (*reco)[i], "cl=0.683 b(1,1) mode");
+        pur_fold0[i] = new TGraphAsymmErrors((*reco_proj_fold0)[i], (*reco_fold0)[i], "cl=0.683 b(1,1) mode");
+        pur_fold1[i] = new TGraphAsymmErrors((*reco_proj_fold1)[i], (*reco_fold1)[i], "cl=0.683 b(1,1) mode");
 
         eff[i]->SetName(("eff_"s + to_text(i)).data());
         eff_fold0[i]->SetName(("eff_fold0_"s + to_text(i)).data());
@@ -294,13 +294,13 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         pur_fold0[i]->SetName(("pur_fold0_"s + to_text(i)).data());
         pur_fold1[i]->SetName(("pur_fold1_"s + to_text(i)).data());
 
-        auto frame_eff = frame((*proj_gen)[i]->GetXaxis(), (*proj_gen)[i]->GetYaxis());
-        auto frame_eff_fold0 = frame((*proj_gen_fold0)[i]->GetXaxis(), (*proj_gen_fold0)[i]->GetYaxis());
-        auto frame_eff_fold1 = frame((*proj_gen_fold1)[i]->GetXaxis(), (*proj_gen_fold1)[i]->GetYaxis());
+        auto frame_eff = frame((*gen_proj)[i]->GetXaxis(), (*gen_proj)[i]->GetYaxis());
+        auto frame_eff_fold0 = frame((*gen_proj_fold0)[i]->GetXaxis(), (*gen_proj_fold0)[i]->GetYaxis());
+        auto frame_eff_fold1 = frame((*gen_proj_fold1)[i]->GetXaxis(), (*gen_proj_fold1)[i]->GetYaxis());
         
-        auto frame_pur = frame((*proj_reco)[i]->GetXaxis(), (*proj_reco)[i]->GetYaxis());
-        auto frame_pur_fold0 = frame((*proj_reco_fold0)[i]->GetXaxis(), (*proj_reco_fold0)[i]->GetYaxis());
-        auto frame_pur_fold1 = frame((*proj_reco_fold1)[i]->GetXaxis(), (*proj_reco_fold1)[i]->GetYaxis());
+        auto frame_pur = frame((*reco_proj)[i]->GetXaxis(), (*reco_proj)[i]->GetYaxis());
+        auto frame_pur_fold0 = frame((*reco_proj_fold0)[i]->GetXaxis(), (*reco_proj_fold0)[i]->GetYaxis());
+        auto frame_pur_fold1 = frame((*reco_proj_fold1)[i]->GetXaxis(), (*reco_proj_fold1)[i]->GetYaxis());
         
         frame_eff->SetName(("frame_eff_"s + to_text(i)).data());
         frame_eff_fold0->SetName(("frame_eff_fold0_"s + to_text(i)).data());
