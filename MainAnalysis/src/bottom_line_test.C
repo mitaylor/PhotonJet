@@ -297,7 +297,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     std::vector<TFile*> fafter(size, nullptr);
     
     zip([&](auto& fafter, auto const& after) {
-        fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/MC/kErrors/"s + after).data(), "read");
+        fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/Original/kErrors/"s + after).data(), "read");
     }, fafter, after_file);
     
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
@@ -385,8 +385,16 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     /* response matrix */
     auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
+    auto gen_eff = new history<TH1F>(fmatrix, tag + "_g_eff"s);
+    auto reco_eff = new history<TH1F>(fmatrix, tag + "_r_eff"s);
+
     matrix->rename("response"s);
+    gen_eff->rename("gen_eff"s);
+    reco_eff->rename("reco_eff"s);
+
     matrix->save();
+    gen_eff->save();
+    reco_eff->save();
 
     /* theory after unfolding */
     auto theory_after = new history<TH1F>("theory_after"s, "", null<TH1F>, data_before->shape());
@@ -445,7 +453,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_before_fold1 = new history<TH1F>("theory_before_fold1"s, "", null<TH1F>, theory_after->shape());
 
     for (int i = 0; i < size; ++i) {
+        (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
+        (*theory_before)[i]->Divide((*reco_eff)[i])
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
     }
