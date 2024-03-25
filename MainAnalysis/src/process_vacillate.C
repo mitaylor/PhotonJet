@@ -108,7 +108,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* rename histograms */
     input_mc_proj_gen->rename(tag + "_proj_g");
-    input_mc_eff_reco->rename(tag + "_proj_r");
+    input_mc_proj_reco->rename(tag + "_proj_r");
     input_mc_eff_gen->rename(tag + "_g_eff");
     input_mc_eff_reco->rename(tag + "_r_eff");
 
@@ -119,7 +119,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     input_mc_response->save();
     input_mc_n->save();
     input_mc_proj_gen->save();
-    input_mc_eff_reco->save();
+    input_mc_proj_reco->save();
     input_mc_eff_gen->save();
     input_mc_eff_reco->save();
 
