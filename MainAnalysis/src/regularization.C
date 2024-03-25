@@ -46,6 +46,7 @@ void interpolate(TH1* h) {
                 else {
                     y2 = h->GetBinContent(j);
                     x2 = j;
+                    break;
                 }
             }
 
