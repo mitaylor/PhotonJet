@@ -103,6 +103,20 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*input_mc_eff_gen)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));
         (*input_mc_eff_reco)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));
 
+        for (int i = 0; i < (*input_mc_proj_gen)[j]->GetNbinsX(); ++i) {
+            if ((*input_mc_proj_gen)[j]->GetBinContent(i + 1) > (*input_mc_gen)[j]->GetBinContent(i + 1)) {
+                (*input_mc_proj_gen)[j]->SetBinContent(i + 1, (*input_mc_gen)[j]->GetBinContent(i + 1))
+                (*input_mc_eff_gen)[j]->SetBinContent(i + 1, (*input_mc_gen)[j]->GetBinContent(i + 1))
+            }
+        }
+
+        for (int i = 0; i < (*input_mc_proj_reco)[j]->GetNbinsX(); ++i) {
+            if ((*input_mc_proj_reco)[j]->GetBinContent(i + 1) > (*input_mc_reco)[j]->GetBinContent(i + 1)) {
+                (*input_mc_proj_reco)[j]->SetBinContent(i + 1, (*input_mc_reco)[j]->GetBinContent(i + 1))
+                (*input_mc_eff_reco)[j]->SetBinContent(i + 1, (*input_mc_reco)[j]->GetBinContent(i + 1))
+            }
+        }
+
         (*input_mc_eff_gen)[j]->Divide((*input_mc_gen)[j]);
         (*input_mc_eff_reco)[j]->Divide((*input_mc_reco)[j]);
     }
