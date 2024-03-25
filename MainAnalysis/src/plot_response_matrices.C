@@ -262,6 +262,14 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     cs[0]->set(paper::flags::logz);  
 
     for (int64_t i = 0; i < ihf->size(); ++i) {
+        if ((*gen_proj)[i]->GetMaximum() > (*gen)[i]->GetMaximum()) {
+            (*gen_proj)[i]->Scale((*gen)[i]->GetMaximum()/(*gen_proj)[i]->GetMaximum());
+        }
+
+        if ((*reco_proj)[i]->GetMaximum() > (*reco)[i]->GetMaximum()) {
+            (*reco_proj)[i]->Scale((*reco)[i]->GetMaximum()/(*reco_proj)[i]->GetMaximum());
+        }
+        
         /* folds */
         (*victims_fold0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
         (*victims_fold1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
