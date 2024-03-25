@@ -254,6 +254,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
         auto HInputData = (TH1F*) fdata[j]->Get("HDataErrors");
         auto HInputTheory = (TH1F*) fdata[j]->Get("HDataGen");
 
+        (*input_theory_gen)[j] = HInputTheory;
+
         DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[i]);
         (*input_mc_proj_gen)[j]->Divide((*input_mc_n)[j]);
         (*input_mc_proj_reco)[j]->Divide((*input_mc_n)[j]);
@@ -268,12 +270,12 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*input_data_reco_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
         (*input_data_reco_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
 
-        (*input_mc_create_reco)[j] = ForwardFold((*input_mc_gen)[j], HResponse);
+        (*input_mc_create_reco)[j] = ForwardFold((*input_mc_gen)[j], (*input_mc_response)[j]);
         (*input_mc_create_reco)[j]->Divide((*input_mc_proj_reco)[j]);
         (*input_mc_create_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
         (*input_mc_create_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
 
-        (*input_theory_reco)[j] = ForwardFold((*input_theory_gen)[j], HResponse);
+        (*input_theory_reco)[j] = ForwardFold((*input_theory_gen)[j], (*input_mc_response)[j]);
         (*input_theory_reco)[j]->Divide((*input_mc_proj_reco)[j]);
         (*input_theory_reco_fold0)[j] = fold((*input_theory_reco)[j], nullptr, mr, 0, osr);
         (*input_theory_reco_fold1)[j] = fold((*input_theory_reco)[j], nullptr, mr, 1, osr);
