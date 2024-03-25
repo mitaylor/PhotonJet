@@ -165,11 +165,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
-
+std::cout << __LINE__ << std::endl;
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
+std::cout << __LINE__ << std::endl;
     /* load input and victims */
     TFile* fi = new TFile((base + input).data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
@@ -179,13 +179,15 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto reco_proj = new history<TH1F>(fi, tag + "_proj_r");
     history<TH2F>* photon = nullptr;
     if (!original) photon = new history<TH2F>(fi, tag + "_ppt");
+    std::cout << __LINE__ << std::endl;
+    std::cout << (matrices != nullptr) << " " << (reco_proj != nullptr) << " " << (gen != nullptr) << " " << (gen_proj != nullptr) << " " << (reco != nullptr) << " " << std::endl;
 
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
-
+std::cout << __LINE__ << std::endl;
     auto victims_fold0 = new history<TH1F>(label + "_victims_fold0", "", null<TH1F>, ihf->size());
     auto victims_fold1 = new history<TH1F>(label + "_victims_fold1", "", null<TH1F>, ihf->size());
-
+std::cout << __LINE__ << std::endl;
     auto reco_fold0 = new history<TH1F>(label + "_reco_fold0", "", null<TH1F>, ihf->size());
     auto reco_fold1 = new history<TH1F>(label + "_reco_fold1", "", null<TH1F>, ihf->size());
 
@@ -197,7 +199,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     auto reco_proj_fold0 = new history<TH1F>(label + "_reco_proj_fold0", "", null<TH1F>, ihf->size());
     auto reco_proj_fold1 = new history<TH1F>(label + "_reco_proj_fold1", "", null<TH1F>, ihf->size());
-
+std::cout << __LINE__ << std::endl;
     TGraphAsymmErrors* eff[4];
     TGraphAsymmErrors* eff_fold0[4];
     TGraphAsymmErrors* eff_fold1[4];
@@ -205,11 +207,11 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TGraphAsymmErrors* pur[4];
     TGraphAsymmErrors* pur_fold0[4];
     TGraphAsymmErrors* pur_fold1[4];
-
+std::cout << __LINE__ << std::endl;
     /* info text */
     auto hf_info = [&](int64_t index) {
         info_text(index, 0.73, "Cent. %i - %i%%", dcent, true); };
-
+std::cout << __LINE__ << std::endl;
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -224,7 +226,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             l->DrawLatexNDC(0.86, 0.14, jet_selections.data());
         }
     };
-
+std::cout << __LINE__ << std::endl;
     auto blurb = [&](int64_t index) {
         if (index > 0) {
             auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
@@ -239,12 +241,12 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
             l->DrawLatexNDC(0.14, 0.77, system_tag.data());
         }
     };
-
+std::cout << __LINE__ << std::endl;
     /* figures */
     auto hb = new pencil();
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
-
+std::cout << __LINE__ << std::endl;
     std::vector<paper*> cs(17, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
@@ -255,29 +257,32 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
         "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1", "eff", "eff_fold0", "eff_fold1", "pur", "pur_fold0", "pur_fold1"});
-
+std::cout << __LINE__ << std::endl;
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
     cs[7]->format(std::bind(default_formatter, _1, -2, 27));
     cs[8]->format(std::bind(default_formatter, _1, -0.001, 0.02));
     cs[6]->format(std::bind(default_formatter, _1, 40, 220));
-
+std::cout << __LINE__ << std::endl;
     cs[0]->set(paper::flags::logz);  
-
+std::cout << __LINE__ << std::endl;
     for (int64_t i = 0; i < ihf->size(); ++i) {
         /* folds */
         (*victims_fold0)[i] = fold((*victims)[i], nullptr, mr, 0, osr);
         (*victims_fold1)[i] = fold((*victims)[i], nullptr, mr, 1, osr);
-
+std::cout << __LINE__ << std::endl;
         (*reco_fold0)[i] = fold((*reco)[i], nullptr, mr, 0, osr);
         (*reco_fold1)[i] = fold((*reco)[i], nullptr, mr, 1, osr);
-
+std::cout << __LINE__ << std::endl;
         (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
         (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
-
+std::cout << __LINE__ << std::endl;
         (*gen_proj_fold0)[i] = fold((*gen_proj)[i], nullptr, mg, 0, osg);
         (*gen_proj_fold1)[i] = fold((*gen_proj)[i], nullptr, mg, 1, osg);
 
+        (*reco_proj_fold0)[i] = fold((*reco_proj)[i], nullptr, mg, 0, osg);
+        (*reco_proj_fold1)[i] = fold((*reco_proj)[i], nullptr, mg, 1, osg);
+std::cout << __LINE__ << std::endl;
         eff[i] = new TGraphAsymmErrors((*gen_proj)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
         eff_fold0[i] = new TGraphAsymmErrors((*gen_proj_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
         eff_fold1[i] = new TGraphAsymmErrors((*gen_proj_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
