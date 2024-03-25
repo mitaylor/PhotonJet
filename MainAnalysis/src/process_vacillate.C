@@ -26,6 +26,11 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename T>
+T* null(int64_t, std::string const&, std::string const&) {
+    return nullptr;
+}
+
 void DoProjection(TH2F *HResponse, TH1F **HGen, TH1F **HReco)
 {
    if(HResponse == nullptr)
