@@ -159,7 +159,7 @@ fi
 # AADataJewelAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseTruthReco aa_g_r_0 \
@@ -173,7 +173,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseTruthReco aa_g_r_1 \
@@ -187,7 +187,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseTruthReco aa_g_r_2 \
@@ -201,7 +201,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseTruthReco aa_g_r_3 \
@@ -217,7 +217,7 @@ fi
 # AADataJewelNoRecoilAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseTruthReco aa_g_r_0 \
@@ -231,7 +231,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseTruthReco aa_g_r_1 \
@@ -245,7 +245,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseTruthReco aa_g_r_2 \
@@ -259,7 +259,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelNoRecoilAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseTruthReco aa_g_r_3 \
@@ -275,7 +275,7 @@ fi
 # AADataJewelPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseTruthReco aa_g_r_0 \
@@ -289,7 +289,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseTruthReco aa_g_r_1 \
@@ -303,7 +303,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseTruthReco aa_g_r_2 \
@@ -317,7 +317,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataJewelPP2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseTruthReco aa_g_r_3 \
@@ -333,7 +333,7 @@ fi
 # AADataPyquenAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseTruthReco aa_g_r_0 \
@@ -347,7 +347,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseTruthReco aa_g_r_1 \
@@ -361,7 +361,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseTruthReco aa_g_r_2 \
@@ -375,7 +375,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseTruthReco aa_g_r_3 \
@@ -391,7 +391,7 @@ fi
 # AADataPyquenNoWideAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseTruthReco aa_g_r_0 \
@@ -405,7 +405,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseTruthReco aa_g_r_1 \
@@ -419,7 +419,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseTruthReco aa_g_r_2 \
@@ -433,7 +433,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenNoWideAA2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseTruthReco aa_g_r_3 \
@@ -449,7 +449,7 @@ fi
 # AADataPyquenPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_0 \
     --ResponseTruth aa_g_0 \
     --ResponseTruthReco aa_g_r_0 \
@@ -463,7 +463,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP0.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_1 \
     --ResponseTruth aa_g_1 \
     --ResponseTruthReco aa_g_r_1 \
@@ -477,7 +477,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP1.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_2 \
     --ResponseTruth aa_g_2 \
     --ResponseTruthReco aa_g_r_2 \
@@ -491,7 +491,7 @@ fi
     --Output /data/submit/mitay/unfolding/${date}/Input/Theory/${set}/AADataPyquenPP2.root
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
     --ResponseHistogram aa_c_3 \
     --ResponseTruth aa_g_3 \
     --ResponseTruthReco aa_g_r_3 \
@@ -539,7 +539,7 @@ fi
 # PPDataJewelPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tJewelPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseTruthReco pp_g_r_0 \
@@ -555,7 +555,7 @@ fi
 # PPDataJewelAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseTruthReco pp_g_r_0 \
@@ -571,7 +571,7 @@ fi
 # PPDataJewelNoRecoilAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tJewelPbPbNoRecoil_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseTruthReco pp_g_r_0 \
@@ -587,7 +587,7 @@ fi
 # PPDataPyquenPP: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_pp.root \
     --DataHistogram tPyquenPP_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseTruthReco pp_g_r_0 \
@@ -603,7 +603,7 @@ fi
 # PPDataPyquenAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenPbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseTruthReco pp_g_r_0 \
@@ -619,7 +619,7 @@ fi
 # PPDataPyquenNoWideAA: Execute
 ./Execute --Data ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
     --DataHistogram tPyquenNoWidePbPb_dr_jpt_0 \
-    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+    --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
     --ResponseHistogram pp_c_0 \
     --ResponseTruth pp_g_0 \
     --ResponseTruthReco pp_g_r_0 \

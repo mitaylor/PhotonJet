@@ -225,7 +225,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*efficiency)[j] = HInputMCGenReco;
         (*efficiency)[j]->Divide((*input_mc_gen)[j]);
         
-        (*input_mc_gen)[j]->Multiply((*efficiency)[j]);
+        // (*input_mc_gen)[j]->Multiply((*efficiency)[j]);
         (*input_theory_gen)[j]->Multiply((*efficiency)[j]);
 
         (*input_data_reco)[j] = HInputData;
