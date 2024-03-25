@@ -307,6 +307,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     TFile* fout = new TFile(output, "recreate");
     
     auto data_before = new history<TH1F>(fbefore, tag + "_"s + before_label);
+    data_before->Multiply((*reco_eff)[i]);
     auto data_before_fold0 = new history<TH1F>("data_before_fold0"s, "", null<TH1F>, data_before->shape());
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
     
@@ -405,6 +406,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto theory_after_base = new history<TH1F>(ftheory, theory_label);
 
         (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
+        (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
 
@@ -453,9 +455,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_before_fold1 = new history<TH1F>("theory_before_fold1"s, "", null<TH1F>, theory_after->shape());
 
     for (int i = 0; i < size; ++i) {
-        (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
-        (*theory_before)[i]->Divide((*reco_eff)[i]);
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
     }
@@ -634,12 +634,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             *covariance_matrix_after[i] *= 1.1;
 
             (*data_after)[i] = HUnfolded;
-            (*data_after_fold0)[i] = fold_mat(HUnfolded, MUnfolded, mg, 0, osg);
-            (*data_after_fold1)[i] = fold_mat(HUnfolded, MUnfolded, mg, 1, osg);
-            // (*data_after)[i]->Multiply((*gen_eff)[i]);
-            // (*data_after)[i]->Divide((*gen_eff)[i]);
-            // (*data_after_fold0)[i] = fold((*data_after)[i], nullptr, mg, 0, osg);
-            // (*data_after_fold1)[i] = fold((*data_after)[i], nullptr, mg, 1, osg);
+            (*data_after)[i]->Multiply((*gen_eff)[i]);
+            (*data_after_fold0)[i] = fold_mat((*data_after)[i], MUnfolded, mg, 0, osg);
+            (*data_after_fold1)[i] = fold_mat((*data_after)[i], MUnfolded, mg, 1, osg);
 
             std::vector<double> covariance_after_fold0_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
             std::vector<double> covariance_after_fold1_elements((*data_after_fold1)[i]->GetNbinsX() * (*data_after_fold1)[i]->GetNbinsX(), 0);
