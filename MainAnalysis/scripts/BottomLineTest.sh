@@ -1,28 +1,31 @@
 #!/usr/bin/env bash
 
-for cent in 0 1 2 3
-do
-    echo "PbPb Centrality $cent"
-    echo
+set=$1
 
-    for iteration in 1 2 3 4 5 6 7 8 9 10 15 20 30 40
-    do
-        echo "Iteration $iteration"
-        ./bin/bottom_line_test configs/test/bottom_line_test_aa.conf configs/analysis/pho_60/analysis_aa.conf test.root $cent $iteration
+run_pp() {
+    tag=$1
+
+    ./bin/bottom_line_test configs/bottom_line_test/bottom_line_test_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/bottom_line_test_${tag}.root
+}
+
+run_aa() {
+    tag=$1
+
+    ./bin/bottom_line_test configs/bottom_line_test/bottom_line_test_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/bottom_line_test_${tag}.root
+}
+
+samples=(pp)
+
+for sample in ${samples[@]}; do
+    for input in pyquen_pp pyquen_aa jewel_pp jewel_aa pythia_pp; do
+        run_pp ${sample}_${input}
     done
-
-    echo
-    echo
 done
 
-echo "PP"
-echo
+samples=(aa)
 
-for iteration in 1 2 3 4 5 6 7 8 9 10 15 20 30 40
-do
-    echo "Iteration $iteration"
-    ./bin/bottom_line_test configs/test/bottom_line_test_pp.conf configs/analysis/pho_60/analysis_pp.conf test.root 0 $iteration
+for sample in ${samples[@]}; do
+    for input in pyquen_pp pyquen_aa jewel_pp jewel_aa pythia_pp; do
+        run_aa ${sample}_${input}
+    done
 done
-
-echo
-echo
