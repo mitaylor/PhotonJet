@@ -41,7 +41,7 @@ void DoProjection(TH2F *HResponse, TH1F *HGen, TH1F *HReco)
 
     HGen = new TH1F(Form("HGen%d", Count), "", NY, 0, NY);
     HReco = new TH1F(Form("HReco%d", Count), "", NX, 0, NX);
-
+std::cout << __LINE__ << std::endl; std::cout << (HGen != nullptr) << " " << (HReco != nullptr) << std::endl;
     for(int iX = 1; iX <= NX; iX++)
     {
         for(int iY = 1; iY <= NY; iY++)
