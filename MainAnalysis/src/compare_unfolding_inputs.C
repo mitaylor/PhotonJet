@@ -26,31 +26,31 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void DoProjection(TH2F *HResponse, TH1F *HGen, TH1F *HReco)
+void DoProjection(TH2D *HResponse, TH1D **HGen, TH1D **HReco)
 {
-    if(HResponse == nullptr)
-        return;
-    if(HGen != nullptr || HReco != nullptr)
-        return;
-    std::cout << __LINE__ << std::endl;
-    static int Count = 0;
-    Count = Count + 1;
+   if(HResponse == nullptr)
+      return;
+   if((*HGen) != nullptr || (*HReco) != nullptr)
+      return;
 
-    int NX = HResponse->GetNbinsX();
-    int NY = HResponse->GetNbinsY();
+   static int Count = 0;
+   Count = Count + 1;
 
-    HGen = new TH1F(Form("HGen%d", Count), "", NY, 0, NY);
-    HReco = new TH1F(Form("HReco%d", Count), "", NX, 0, NX);
-std::cout << __LINE__ << std::endl; std::cout << (HGen != nullptr) << " " << (HReco != nullptr) << std::endl;
-    for(int iX = 1; iX <= NX; iX++)
-    {
-        for(int iY = 1; iY <= NY; iY++)
-        {
-            double V = HResponse->GetBinContent(iX, iY);
-            HGen->AddBinContent(iY, V);
-            HReco->AddBinContent(iX, V);
-        }
-    }
+   int NX = HResponse->GetNbinsX();
+   int NY = HResponse->GetNbinsY();
+
+   *HGen = new TH1D(Form("HGen%d", Count), "", NY, 0, NY);
+   *HReco = new TH1D(Form("HReco%d", Count), "", NX, 0, NX);
+
+   for(int iX = 1; iX <= NX; iX++)
+   {
+      for(int iY = 1; iY <= NY; iY++)
+      {
+         double V = HResponse->GetBinContent(iX, iY);
+         (*HGen)->AddBinContent(iY, V);
+         (*HReco)->AddBinContent(iX, V);
+      }
+   }
 }
 
 TH1F *ForwardFold(TH1 *HGen, TH2F *HResponse)
@@ -256,7 +256,7 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
         (*input_theory_gen)[j] = HInputTheory;
 std::cout << __LINE__ << std::endl;
-        DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[j]);std::cout << __LINE__ << std::endl;
+        DoProjection((*input_mc_response)[j], &(*input_mc_proj_gen)[j], &(*input_mc_proj_reco)[j]);std::cout << __LINE__ << std::endl;
          std::cout << input_mc_response->size() << " " << ((*input_mc_proj_gen)[j] != nullptr) << " " <<  ((*input_mc_proj_reco)[j] != nullptr) << std::endl;
         (*input_mc_proj_gen)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));std::cout << __LINE__ << std::endl;
         (*input_mc_proj_reco)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));std::cout << __LINE__ << std::endl;
