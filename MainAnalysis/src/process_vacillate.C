@@ -84,6 +84,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto input_mc_reco = new history<TH1F>(funfolding, tag + "_r");
     auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
     auto input_mc_n = new history<TH1F>(funfolding, tag + "_c_n");
+    auto input_mc_ppt = new history<TH1F>(funfolding, tag + "_ppt");
 
     auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, input_mc_gen->size());
     auto input_mc_proj_reco = new history<TH1F>("input_mc_proj_reco", "", null<TH1F>, input_mc_gen->size());
@@ -122,6 +123,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     input_mc_proj_reco->save();
     input_mc_eff_gen->save();
     input_mc_eff_reco->save();
+    input_mc_ppt->save();
 
     fout->Close();
 
