@@ -28,29 +28,29 @@ using namespace std::placeholders;
 
 void DoProjection(TH2F *HResponse, TH1F *HGen, TH1F *HReco)
 {
-   if(HResponse == nullptr)
-      return;
-   if(HGen != nullptr || HReco != nullptr)
-      return;
+    if(HResponse == nullptr)
+        return;
+    if(HGen != nullptr || HReco != nullptr)
+        return;
+    std::cout << __LINE__ << std::endl;
+    static int Count = 0;
+    Count = Count + 1;
 
-   static int Count = 0;
-   Count = Count + 1;
+    int NX = HResponse->GetNbinsX();
+    int NY = HResponse->GetNbinsY();
 
-   int NX = HResponse->GetNbinsX();
-   int NY = HResponse->GetNbinsY();
+    HGen = new TH1F(Form("HGen%d", Count), "", NY, 0, NY);
+    HReco = new TH1F(Form("HReco%d", Count), "", NX, 0, NX);
 
-   HGen = new TH1F(Form("HGen%d", Count), "", NY, 0, NY);
-   HReco = new TH1F(Form("HReco%d", Count), "", NX, 0, NX);
-
-   for(int iX = 1; iX <= NX; iX++)
-   {
-      for(int iY = 1; iY <= NY; iY++)
-      {
-         double V = HResponse->GetBinContent(iX, iY);
-         HGen->AddBinContent(iY, V);
-         HReco->AddBinContent(iX, V);
-      }
-   }
+    for(int iX = 1; iX <= NX; iX++)
+    {
+        for(int iY = 1; iY <= NY; iY++)
+        {
+            double V = HResponse->GetBinContent(iX, iY);
+            HGen->AddBinContent(iY, V);
+            HReco->AddBinContent(iX, V);
+        }
+    }
 }
 
 TH1F *ForwardFold(TH1 *HGen, TH2F *HResponse)
