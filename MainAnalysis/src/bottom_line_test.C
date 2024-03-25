@@ -631,8 +631,12 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             auto MUnfolded = (TMatrixT<double>*) fafter[i]->Get(matrix_name.data());
 
             (*data_after)[i] = HUnfolded;
-            (*data_after_fold0)[i] = fold_mat(HUnfolded, MUnfolded, mg, 0, osg);
-            (*data_after_fold1)[i] = fold_mat(HUnfolded, MUnfolded, mg, 1, osg);
+            // (*data_after_fold0)[i] = fold_mat(HUnfolded, MUnfolded, mg, 0, osg);
+            // (*data_after_fold1)[i] = fold_mat(HUnfolded, MUnfolded, mg, 1, osg);
+            (*data_after)[i]->Multiply((*gen_eff)[i]);
+            (*data_after)[i]->Divide((*gen_eff)[i]);
+            (*data_after_fold0)[i] = fold((*data_after)[i], nullptr, mg, 0, osg);
+            (*data_after_fold1)[i] = fold((*data_after)[i], nullptr, mg, 1, osg);
 
             covariance_matrix_after[i] = MUnfolded;
             *covariance_matrix_after[i] *= 1.2;
