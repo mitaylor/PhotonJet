@@ -256,7 +256,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         (*input_theory_gen)[j] = HInputTheory;
 
-        DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[i]);
+        DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[j]);
         (*input_mc_proj_gen)[j]->Divide((*input_mc_n)[j]);
         (*input_mc_proj_reco)[j]->Divide((*input_mc_n)[j]);
 
