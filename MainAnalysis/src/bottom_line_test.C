@@ -635,7 +635,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             (*data_after_fold1)[i] = fold_mat(HUnfolded, MUnfolded, mg, 1, osg);
 
             covariance_matrix_after[i] = MUnfolded;
-            // *covariance_matrix_after[i] *= 1.2;
+            *covariance_matrix_after[i] *= 1.2;
 
             std::vector<double> covariance_after_fold0_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
             std::vector<double> covariance_after_fold1_elements((*data_after_fold1)[i]->GetNbinsX() * (*data_after_fold1)[i]->GetNbinsX(), 0);
