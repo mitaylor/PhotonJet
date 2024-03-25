@@ -631,7 +631,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             auto MUnfolded = (TMatrixT<double>*) fafter[i]->Get(matrix_name.data());
 
             covariance_matrix_after[i] = MUnfolded;
-            *covariance_matrix_after[i] *= 2;
+            *covariance_matrix_after[i] *= 1;
 
             (*data_after)[i] = HUnfolded;
             (*data_after_fold0)[i] = fold_mat(HUnfolded, MUnfolded, mg, 0, osg);
