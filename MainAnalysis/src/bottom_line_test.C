@@ -303,6 +303,19 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     TFile* ftheory = new TFile((base + theory_file).data(), "read");
     TFile* fmatrix = new TFile((base + matrix_file).data(), "read");
     
+    /* response matrix */
+    auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
+    auto gen_eff = new history<TH1F>(fmatrix, tag + "_g_eff"s);
+    auto reco_eff = new history<TH1F>(fmatrix, tag + "_r_eff"s);
+
+    matrix->rename("response"s);
+    gen_eff->rename("gen_eff"s);
+    reco_eff->rename("reco_eff"s);
+
+    matrix->save();
+    gen_eff->save();
+    reco_eff->save();
+    
     /* data before unfolding */
     TFile* fout = new TFile(output, "recreate");
     
@@ -383,19 +396,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         covariance_matrix_before_fold0[i]->Write(("covariance_before_fold0_"s + to_text(i)).data());
         covariance_matrix_before_fold1[i]->Write(("covariance_before_fold1_"s + to_text(i)).data());
     }
-
-    /* response matrix */
-    auto matrix = new history<TH2F>(fmatrix, tag + "_c"s);
-    auto gen_eff = new history<TH1F>(fmatrix, tag + "_g_eff"s);
-    auto reco_eff = new history<TH1F>(fmatrix, tag + "_r_eff"s);
-
-    matrix->rename("response"s);
-    gen_eff->rename("gen_eff"s);
-    reco_eff->rename("reco_eff"s);
-
-    matrix->save();
-    gen_eff->save();
-    reco_eff->save();
 
     /* theory after unfolding */
     auto theory_after = new history<TH1F>("theory_after"s, "", null<TH1F>, data_before->shape());
