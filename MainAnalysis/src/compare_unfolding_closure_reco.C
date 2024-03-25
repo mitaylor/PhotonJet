@@ -215,7 +215,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        auto HInputData = (TH1F*) fdata[j]->Get("HDataErrors");
+        auto HInputData = (TH1F*) fdata[j]->Get("HData");
 
         (*input_mc_gen)[j]->Multiply((*input_mc_efficiency)[j]);
 
