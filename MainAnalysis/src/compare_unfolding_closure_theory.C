@@ -357,6 +357,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p1, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
+        float max = ((*unfolded_svd_fold0)[i]->GetMaximum() > (*gen_svd_fold0)[i]->GetMaximum()) ? (*unfolded_svd_fold0)[i]->GetMaximum() : (*gen_svd_fold0)[i]->GetMaximum();
+        (*unfolded_svd_fold0)[i]->SetMaximum(max*1.4);
         p1->add((*unfolded_svd_fold0)[i], "Unfolded", "SVD");
         p1->stack((*gen_svd_fold0)[i], "Gen", "SVD");
     }
@@ -369,10 +371,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
+        float max = ((*unfolded_svd_fold1)[i]->GetMaximum() > (*gen_svd_fold1)[i]->GetMaximum()) ? (*unfolded_svd_fold1)[i]->GetMaximum() : (*gen_svd_fold1)[i]->GetMaximum();
+        (*unfolded_svd_fold1)[i]->SetMaximum(max*1.4);
         p2->add((*unfolded_svd_fold1)[i], "Unfolded", "SVD");
         p2->stack((*gen_svd_fold1)[i], "Gen", "SVD");
     }
-
 
     auto p3 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_Bayes_" + prior + "_dj", hb);
 
@@ -382,6 +385,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p3, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
+        float max = ((*unfolded_bayes_fold0)[i]->GetMaximum() > (*gen_bayes_fold0)[i]->GetMaximum()) ? (*unfolded_bayes_fold0)[i]->GetMaximum() : (*gen_bayes_fold0)[i]->GetMaximum();
+        (*unfolded_bayes_fold0)[i]->SetMaximum(max*1.4);
         p3->add((*unfolded_bayes_fold0)[i], "Unfolded", "Bayes");
         p3->stack((*gen_bayes_fold0)[i], "Gen", "Bayes");
     }
@@ -394,6 +399,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p4, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
+        float max = ((*unfolded_bayes_fold1)[i]->GetMaximum() > (*gen_bayes_fold1)[i]->GetMaximum()) ? (*unfolded_bayes_fold1)[i]->GetMaximum() : (*gen_bayes_fold1)[i]->GetMaximum();
+        (*unfolded_bayes_fold1)[i]->SetMaximum(max*1.4);
         p4->add((*unfolded_bayes_fold1)[i], "Unfolded", "Bayes");
         p4->stack((*gen_bayes_fold1)[i], "Gen", "Bayes");
     }
