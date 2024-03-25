@@ -26,6 +26,33 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+void DoProjection(TH2F *HResponse, TH1F *HGen, TH1F *HReco)
+{
+   if(HResponse == nullptr)
+      return;
+   if(HGen != nullptr || HReco != nullptr)
+      return;
+
+   static int Count = 0;
+   Count = Count + 1;
+
+   int NX = HResponse->GetNbinsX();
+   int NY = HResponse->GetNbinsY();
+
+   HGen = new TH1F(Form("HGen%d", Count), "", NY, 0, NY);
+   HReco = new TH1F(Form("HReco%d", Count), "", NX, 0, NX);
+
+   for(int iX = 1; iX <= NX; iX++)
+   {
+      for(int iY = 1; iY <= NY; iY++)
+      {
+         double V = HResponse->GetBinContent(iX, iY);
+         HGen->AddBinContent(iY, V);
+         HReco->AddBinContent(iX, V);
+      }
+   }
+}
+
 TH1F *ForwardFold(TH1 *HGen, TH2F *HResponse)
 {
    if(HGen == nullptr || HResponse == nullptr)
@@ -159,6 +186,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto filenames = conf->get<std::vector<std::string>>("filenames");
     auto label = conf->get<std::string>("label");
 
+    auto unfolding = conf->get<std::string>("unfolding");
+
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
@@ -191,17 +220,26 @@ int quantitate(char const* config, char const* selections, char const* output) {
         fdata = new TFile(("/data/submit/mitay/unfolding/240324/Input/Theory/"s + set + "/"s + filename).data(), "read");
     }, fdata, filenames);
 
+    auto funfolding = new TFile((base + unfolding).data(), "read");
+
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare data */
-    auto input_mc_gen = new history<TH1F>("input_mc_gen", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
-    auto efficiency = new history<TH1F>("efficiency", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_gen = new history<TH1F>(funfolding, tag + "_g");
+    auto input_mc_gen_reco = new history<TH1F>(funfolding, tag + "_g_r");
+    auto input_mc_reco = new history<TH1F>(funfolding, tag + "_r");
+    auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
+    auto input_mc_n = new history<TH1F>(funfolding, tag + "_c_n");
 
-    auto input_mc_reco = new history<TH1F>("input_mc_reco", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_reco_fold0 = new history<TH1F>("input_mc_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_reco_fold1 = new history<TH1F>("input_mc_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
+
+    auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_proj_reco = new history<TH1F>("input_mc_proj_reco", "", null<TH1F>, (int64_t) filenames.size());
+
+    auto input_mc_create_reco = new history<TH1F>("input_mc_create_reco", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_create_reco_fold0 = new history<TH1F>("input_mc_create_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_create_reco_fold1 = new history<TH1F>("input_mc_creat_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
     auto input_data_reco = new history<TH1F>("input_data_reco", "", null<TH1F>, (int64_t) filenames.size());
     auto input_data_reco_fold0 = new history<TH1F>("input_data_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
@@ -213,46 +251,50 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        auto HInputMCGen = (TH1F*) fdata[j]->Get("HMCGen");
-        auto HInputMCGenReco = (TH1F*) fdata[j]->Get("HMCGenReco");
         auto HInputData = (TH1F*) fdata[j]->Get("HDataErrors");
         auto HInputTheory = (TH1F*) fdata[j]->Get("HDataGen");
-        auto HResponse = (TH2F*) fdata[j]->Get("HResponse");
 
-        (*input_mc_gen)[j] = HInputMCGen;
-        (*input_theory_gen)[j] = HInputTheory;
+        DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[i]);
+        (*input_mc_proj_gen)[j]->Divide((*input_mc_n)[j]);
+        (*input_mc_proj_reco)[j]->Divide((*input_mc_n)[j]);
 
-        (*efficiency)[j] = HInputMCGenReco;
-        (*efficiency)[j]->Divide((*input_mc_gen)[j]);
+        (*input_mc_proj_gen)[j]->Divide((*input_mc_gen)[j]);
+        (*input_mc_proj_reco)[j]->Divide((*input_mc_reco)[j]);
         
-        // (*input_mc_gen)[j]->Multiply((*efficiency)[j]);
-        (*input_theory_gen)[j]->Multiply((*efficiency)[j]);
+        (*input_mc_gen)[j]->Multiply((*input_mc_proj_gen)[j]);
+        (*input_theory_gen)[j]->Multiply((*input_mc_proj_gen)[j]);
 
         (*input_data_reco)[j] = HInputData;
         (*input_data_reco_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
         (*input_data_reco_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
 
-        (*input_mc_reco)[j] = ForwardFold((*input_mc_gen)[j], HResponse);
-        (*input_mc_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
-        (*input_mc_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
+        (*input_mc_create_reco)[j] = ForwardFold((*input_mc_gen)[j], HResponse);
+        (*input_mc_create_reco)[j]->Divide((*input_mc_proj_reco)[j]);
+        (*input_mc_create_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
+        (*input_mc_create_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
 
         (*input_theory_reco)[j] = ForwardFold((*input_theory_gen)[j], HResponse);
+        (*input_theory_reco)[j]->Divide((*input_mc_proj_reco)[j]);
         (*input_theory_reco_fold0)[j] = fold((*input_theory_reco)[j], nullptr, mr, 0, osr);
         (*input_theory_reco_fold1)[j] = fold((*input_theory_reco)[j], nullptr, mr, 1, osr);
     }
 
     /* rename histograms */
     input_mc_gen->rename("input_mc_gen");
+    input_mc_gen_reco->rename("input_mc_gen_reco");
+    input_mc_reco->rename("input_mc_reco");
+    input_mc_response->rename("input_mc_response");
+    input_mc_n->rename("input_mc_n");
+
     input_theory_gen->rename("input_theory_gen");
-    efficiency->rename("efficiency");
 
     input_data_reco->rename("input_data_reco");
     input_data_reco_fold0->rename("input_data_reco_fold0");
     input_data_reco_fold1->rename("input_data_reco_fold1");
 
-    input_mc_reco->rename("input_mc_reco");
-    input_mc_reco_fold0->rename("input_mc_reco_fold0");
-    input_mc_reco_fold1->rename("input_mc_reco_fold1");
+    input_mc_create_reco->rename("input_mc_create_reco");
+    input_mc_create_reco_fold0->rename("input_mc_create_reco_fold0");
+    input_mc_create_reco_fold1->rename("input_mc_create_reco_fold1");
 
     input_theory_reco->rename("input_theory_reco");
     input_theory_reco_fold0->rename("input_theory_reco_fold0");
@@ -260,16 +302,20 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* save histograms */
     input_mc_gen->save();
+    input_mc_gen_reco->save();
+    input_mc_reco->save();
+    input_mc_response->save();
+    input_mc_n->save();
+
     input_theory_gen->save();
-    efficiency->save();
 
     input_data_reco->save();
     input_data_reco_fold0->save();
     input_data_reco_fold1->save();
 
-    input_mc_reco->save();
-    input_mc_reco_fold0->save();
-    input_mc_reco_fold1->save();
+    input_mc_create_reco->save();
+    input_mc_create_reco_fold0->save();
+    input_mc_create_reco_fold1->save();
 
     input_theory_reco->save();
     input_theory_reco_fold0->save();
@@ -314,7 +360,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p1, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p1->add((*input_mc_reco_fold0)[i], "MC");
+        p1->add((*input_mc_create_reco_fold0)[i], "MC");
         p1->stack((*input_data_reco_fold0)[i], "Data");
         p1->stack((*input_theory_reco_fold0)[i], "Theory");
     }
@@ -327,7 +373,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p2->add((*input_mc_reco_fold1)[i], "MC");
+        p2->add((*input_mc_create_reco_fold1)[i], "MC");
         p2->stack((*input_data_reco_fold1)[i], "Data");
         p2->stack((*input_theory_reco_fold1)[i], "Theory");
     }
