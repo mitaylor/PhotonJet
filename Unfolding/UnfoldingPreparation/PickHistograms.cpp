@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
    for(int i = 0; i <= NGen + 1; i++)
    {
       HMCGenEfficiency.SetBinContent(i, HInputResponseTruthEfficiency->GetBinContent(i));
-      HMCGenEfficiency.SetBinError(i, 0);
+      HMCGenEfficiency.SetBinError(i, HInputResponseTruthEfficiency->GetBinError(i));
    }
    HMCGenEfficiency.Write();
    
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
    for(int i = 0; i <= NReco + 1; i++)
    {
       HMCRecoEfficiency.SetBinContent(i, HInputResponseRecoEfficiency->GetBinContent(i));
-      HMCRecoEfficiency.SetBinError(i, 0);
+      HMCRecoEfficiency.SetBinError(i, HInputResponseRecoEfficiency->GetBinError(i));
    }
    HMCRecoEfficiency.Write();
 
