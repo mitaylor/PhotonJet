@@ -257,7 +257,7 @@ std::cout << __LINE__ << std::endl;
         (*input_theory_gen)[j] = HInputTheory;
 std::cout << __LINE__ << std::endl;
         DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[j]);std::cout << __LINE__ << std::endl;
-         std::cout << input_mc_response->size() << " " << (*input_mc_proj_gen)[j] != nullptr << " " <<  (*input_mc_proj_reco)[j] != nullptr << std::endl;
+         std::cout << input_mc_response->size() << " " << ((*input_mc_proj_gen)[j] != nullptr) << " " <<  ((*input_mc_proj_reco)[j] != nullptr) << std::endl;
         (*input_mc_proj_gen)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));std::cout << __LINE__ << std::endl;
         (*input_mc_proj_reco)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
