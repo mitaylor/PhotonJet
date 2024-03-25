@@ -630,6 +630,9 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             auto HUnfolded = (TH1F*) fafter[i]->Get(unfold_name.data());
             auto MUnfolded = (TMatrixT<double>*) fafter[i]->Get(matrix_name.data());
 
+            covariance_matrix_after[i] = MUnfolded;
+            *covariance_matrix_after[i] *= 2;
+
             (*data_after)[i] = HUnfolded;
             (*data_after_fold0)[i] = fold_mat(HUnfolded, MUnfolded, mg, 0, osg);
             (*data_after_fold1)[i] = fold_mat(HUnfolded, MUnfolded, mg, 1, osg);
@@ -637,9 +640,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             // (*data_after)[i]->Divide((*gen_eff)[i]);
             // (*data_after_fold0)[i] = fold((*data_after)[i], nullptr, mg, 0, osg);
             // (*data_after_fold1)[i] = fold((*data_after)[i], nullptr, mg, 1, osg);
-
-            covariance_matrix_after[i] = MUnfolded;
-            *covariance_matrix_after[i] *= 2;
 
             std::vector<double> covariance_after_fold0_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
             std::vector<double> covariance_after_fold1_elements((*data_after_fold1)[i]->GetNbinsX() * (*data_after_fold1)[i]->GetNbinsX(), 0);
