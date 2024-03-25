@@ -174,8 +174,9 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     TFile* fi = new TFile((base + input).data(), "read");
     auto matrices = new history<TH2F>(fi, tag + "_c");
     auto gen = new history<TH1F>(fi, tag + "_g");
-    auto gen_reco = new history<TH1F>(fi, tag + "_g_r");
+    auto gen_proj = new history<TH1F>(fi, tag + "proj_g");
     auto reco = new history<TH1F>(fi, tag + "_r");
+    auto reco_proj = new history<TH1F>(fi, tag + "_proj_r");
     history<TH2F>* photon = nullptr;
     if (!original) photon = new history<TH2F>(fi, tag + "_ppt");
 
@@ -191,12 +192,19 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto gen_fold0 = new history<TH1F>(label + "_gen_fold0", "", null<TH1F>, ihf->size());
     auto gen_fold1 = new history<TH1F>(label + "_gen_fold1", "", null<TH1F>, ihf->size());
 
-    auto gen_reco_fold0 = new history<TH1F>(label + "_gen_reco_fold0", "", null<TH1F>, ihf->size());
-    auto gen_reco_fold1 = new history<TH1F>(label + "_gen_reco_fold1", "", null<TH1F>, ihf->size());
+    auto proj_gen_fold0 = new history<TH1F>(label + "_proj_gen_fold0", "", null<TH1F>, ihf->size());
+    auto proj_gen_fold1 = new history<TH1F>(label + "_proj_gen_fold1", "", null<TH1F>, ihf->size());
+
+    auto proj_reco_fold0 = new history<TH1F>(label + "_proj_reco_fold0", "", null<TH1F>, ihf->size());
+    auto proj_reco_fold1 = new history<TH1F>(label + "_proj_reco_fold1", "", null<TH1F>, ihf->size());
 
     TGraphAsymmErrors* eff[4];
     TGraphAsymmErrors* eff_fold0[4];
     TGraphAsymmErrors* eff_fold1[4];
+
+    TGraphAsymmErrors* pur[4];
+    TGraphAsymmErrors* pur_fold0[4];
+    TGraphAsymmErrors* pur_fold1[4];
 
     /* info text */
     auto hf_info = [&](int64_t index) {
@@ -237,7 +245,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
 
     gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
-    std::vector<paper*> cs(14, nullptr);
+    std::vector<paper*> cs(17, nullptr);
     zip([&](paper*& c, std::string const& title) {
         c = new paper(set + "_unfolding_dj_" + tag + "_" + type + "_" + title, hb);
         apply_style(c, "", "");
@@ -246,7 +254,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         c->accessory(blurb);
         c->divide(ihf->size()/2, -1);
     }, cs, (std::initializer_list<std::string> const) {
-        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1", "eff", "eff_fold0", "eff_fold1"});
+        "matrices"s, "victims"s, "victims_fold0"s, "victims_fold1"s, "gen"s, "reco"s, "photon"s, "reco_fold0", "reco_fold1", "gen_fold0", "gen_fold1", "eff", "eff_fold0", "eff_fold1", "pur", "pur_fold0", "pur_fold1"});
 
     cs[2]->format(std::bind(default_formatter, _1, -2, 27));
     cs[3]->format(std::bind(default_formatter, _1, -0.001, 0.02));
@@ -267,36 +275,64 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*gen_fold0)[i] = fold((*gen)[i], nullptr, mg, 0, osg);
         (*gen_fold1)[i] = fold((*gen)[i], nullptr, mg, 1, osg);
 
-        (*gen_reco_fold0)[i] = fold((*gen_reco)[i], nullptr, mg, 0, osg);
-        (*gen_reco_fold1)[i] = fold((*gen_reco)[i], nullptr, mg, 1, osg);
+        (*proj_gen_fold0)[i] = fold((*proj_gen)[i], nullptr, mg, 0, osg);
+        (*proj_gen_fold1)[i] = fold((*proj_gen)[i], nullptr, mg, 1, osg);
 
-        eff[i] = new TGraphAsymmErrors((*gen_reco)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
-        eff_fold0[i] = new TGraphAsymmErrors((*gen_reco_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
-        eff_fold1[i] = new TGraphAsymmErrors((*gen_reco_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
+        eff[i] = new TGraphAsymmErrors((*proj_gen)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
+        eff_fold0[i] = new TGraphAsymmErrors((*proj_gen_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
+        eff_fold1[i] = new TGraphAsymmErrors((*proj_gen_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");
 
-        eff[i]->SetName(("graph_"s + to_text(i)).data());
-        eff_fold0[i]->SetName(("graph_fold0_"s + to_text(i)).data());
-        eff_fold1[i]->SetName(("graph_fold1_"s + to_text(i)).data());
+        pur[i] = new TGraphAsymmErrors((*proj_reco)[i], (*reco)[i], "cl=0.683 b(1,1) mode");
+        pur_fold0[i] = new TGraphAsymmErrors((*proj_reco_fold0)[i], (*reco_fold0)[i], "cl=0.683 b(1,1) mode");
+        pur_fold1[i] = new TGraphAsymmErrors((*proj_reco_fold1)[i], (*reco_fold1)[i], "cl=0.683 b(1,1) mode");
 
-        auto hframe = frame((*gen_reco)[i]->GetXaxis(), (*gen_reco)[i]->GetYaxis());
-        auto hframe_fold0 = frame((*gen_reco_fold0)[i]->GetXaxis(), (*gen_reco_fold0)[i]->GetYaxis());
-        auto hframe_fold1 = frame((*gen_reco_fold1)[i]->GetXaxis(), (*gen_reco_fold1)[i]->GetYaxis());
+        eff[i]->SetName(("eff_"s + to_text(i)).data());
+        eff_fold0[i]->SetName(("eff_fold0_"s + to_text(i)).data());
+        eff_fold1[i]->SetName(("eff_fold1_"s + to_text(i)).data());
+
+        pur[i]->SetName(("pur_"s + to_text(i)).data());
+        pur_fold0[i]->SetName(("pur_fold0_"s + to_text(i)).data());
+        pur_fold1[i]->SetName(("pur_fold1_"s + to_text(i)).data());
+
+        auto frame_eff = frame((*proj_gen)[i]->GetXaxis(), (*proj_gen)[i]->GetYaxis());
+        auto frame_eff_fold0 = frame((*proj_gen_fold0)[i]->GetXaxis(), (*proj_gen_fold0)[i]->GetYaxis());
+        auto frame_eff_fold1 = frame((*proj_gen_fold1)[i]->GetXaxis(), (*proj_gen_fold1)[i]->GetYaxis());
         
-        hframe->SetName(("frame_"s + to_text(i)).data());
-        hframe_fold0->SetName(("frame_fold0_"s + to_text(i)).data());
-        hframe_fold1->SetName(("frame_fold1_"s + to_text(i)).data());
+        auto frame_pur = frame((*proj_reco)[i]->GetXaxis(), (*proj_reco)[i]->GetYaxis());
+        auto frame_pur_fold0 = frame((*proj_reco_fold0)[i]->GetXaxis(), (*proj_reco_fold0)[i]->GetYaxis());
+        auto frame_pur_fold1 = frame((*proj_reco_fold1)[i]->GetXaxis(), (*proj_reco_fold1)[i]->GetYaxis());
+        
+        frame_eff->SetName(("frame_eff_"s + to_text(i)).data());
+        frame_eff_fold0->SetName(("frame_eff_fold0_"s + to_text(i)).data());
+        frame_eff_fold1->SetName(("frame_eff_fold1_"s + to_text(i)).data());
 
-        hframe->SetMaximum(1.4);
-        hframe->GetYaxis()->SetTitle("Bin Efficiency");
-        hframe->GetXaxis()->SetTitle("Gen Bin Index");
+        frame_pur->SetName(("frame_pur_"s + to_text(i)).data());
+        frame_pur_fold0->SetName(("frame_pur_fold0_"s + to_text(i)).data());
+        frame_pur_fold1->SetName(("frame_pur_fold1_"s + to_text(i)).data());
 
-        hframe_fold0->SetMaximum(1.4);
-        hframe_fold0->GetYaxis()->SetTitle("Bin Efficiency");
-        hframe_fold0->GetXaxis()->SetTitle("#deltaj");
+        frame_eff->SetMaximum(1.4);
+        frame_eff->GetYaxis()->SetTitle("Bin Efficiency");
+        frame_eff->GetXaxis()->SetTitle("Gen Bin Index");
 
-        hframe_fold1->SetMaximum(1.4);
-        hframe_fold1->GetYaxis()->SetTitle("Bin Efficiency");
-        hframe_fold1->GetXaxis()->SetTitle("Jet p_{T}");
+        frame_pur->SetMaximum(1.4);
+        frame_pur->GetYaxis()->SetTitle("Bin Purity");
+        frame_pur->GetXaxis()->SetTitle("Reco Bin Index");
+
+        frame_eff_fold0->SetMaximum(1.4);
+        frame_eff_fold0->GetYaxis()->SetTitle("Bin Efficiency");
+        frame_eff_fold0->GetXaxis()->SetTitle("#deltaj");
+
+        frame_pur_fold0->SetMaximum(1.4);
+        frame_pur_fold0->GetYaxis()->SetTitle("Bin Purity");
+        frame_pur_fold0->GetXaxis()->SetTitle("#deltaj");
+
+        frame_eff_fold1->SetMaximum(1.4);
+        frame_eff_fold1->GetYaxis()->SetTitle("Bin Efficiency");
+        frame_eff_fold1->GetXaxis()->SetTitle("Jet p_{T}");
+
+        frame_pur_fold1->SetMaximum(1.4);
+        frame_pur_fold1->GetYaxis()->SetTitle("Bin Purity");
+        frame_pur_fold1->GetXaxis()->SetTitle("Jet p_{T}");
 
         /* figures */
         cs[0]->add((*matrices)[i]);
@@ -313,12 +349,18 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         cs[8]->add((*reco_fold1)[i]);
         cs[9]->add((*gen_fold0)[i]);
         cs[10]->add((*gen_fold1)[i]);
-        cs[11]->add(hframe);
+        cs[11]->add(frame_eff);
         cs[11]->stack((eff)[i]);
-        cs[12]->add(hframe_fold0);
+        cs[12]->add(frame_eff_fold0);
         cs[12]->stack((eff_fold0)[i]);
-        cs[13]->add(hframe_fold1);
+        cs[13]->add(frame_eff_fold1);
         cs[13]->stack((eff_fold1)[i]);
+        cs[14]->add(frame_pur);
+        cs[14]->stack((pur)[i]);
+        cs[15]->add(frame_pur_fold0);
+        cs[15]->stack((pur_fold0)[i]);
+        cs[16]->add(frame_pur_fold1);
+        cs[16]->stack((pur_fold1)[i]);
 
         if (photon != nullptr) {
             cs[6]->add((*photon)[i]);
