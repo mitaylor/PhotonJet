@@ -231,7 +231,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto input_mc_reco = new history<TH1F>(funfolding, tag + "_r");
     auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
     auto input_mc_n = new history<TH1F>(funfolding, tag + "_c_n");
-std::cout << __LINE__ << std::endl; std::cout << input_mc_gen->size() << " " << input_mc_gen_reco->size() << " " <<  input_mc_reco->size() << " " <<  input_mc_response->size() << " " <<  input_mc_n->size() << std::endl;
+std::cout << __LINE__ << std::endl;
     auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
 std::cout << __LINE__ << std::endl;
     auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, (int64_t) filenames.size());
@@ -257,6 +257,7 @@ std::cout << __LINE__ << std::endl;
         (*input_theory_gen)[j] = HInputTheory;
 std::cout << __LINE__ << std::endl;
         DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[j]);std::cout << __LINE__ << std::endl;
+         std::cout << input_mc_response->size() << " " << input_mc_proj_gen->size() << " " <<  input_mc_proj_reco->size() << std::endl;
         (*input_mc_proj_gen)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));std::cout << __LINE__ << std::endl;
         (*input_mc_proj_reco)[j]->Scale(1/(*input_mc_n)[j]->GetBinContent(1));std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
