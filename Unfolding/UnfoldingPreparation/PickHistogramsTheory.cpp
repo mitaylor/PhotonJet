@@ -126,13 +126,16 @@ int main(int argc, char *argv[])
    HMCRecoEfficiency.Write();
 
    // Copy over gen input
-   TH1D HData("HData", ";;", NReco, 0, NReco);
-   for(int i = 0; i <= NReco + 1; i++)
+   TH1D HDataGen("HDataGen", ";;", NGen, 0, NGen);
+   for(int i = 0; i <= NGen + 1; i++)
    {
-      HData.SetBinContent(i, HInputData->GetBinContent(i));
-      HData.SetBinError(i, HInputData->GetBinError(i));
+      HDataGen.SetBinContent(i, HInputData->GetBinContent(i));
+      HDataGen.SetBinError(i, HInputData->GetBinError(i));
    }
-   HData.Write();
+   HDataGen.Write();
+
+   TH1D* HDataReco = ForwardFold(&HDataGen, &HResponse);
+   HDataReco->Write();
    
    // Binning histograms
    TH1D HGenPrimaryBinMin("HGenPrimaryBinMin", ";;", NGen, 0, NGen);

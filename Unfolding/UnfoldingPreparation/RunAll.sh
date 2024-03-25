@@ -50,11 +50,12 @@ if [ ${nominal} -eq 1 ]
     # AANominal: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -62,11 +63,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominal0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -74,11 +76,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominal1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -86,37 +89,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominal2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominal3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominalMerge.root
 
     # AAMEBSNonclosure: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/granulate_before_unfolding_aa_mebs_nonclosure.root \
         --DataHistogram aa_mod_aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -124,11 +117,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAMEBSNonclosure0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/granulate_before_unfolding_aa_mebs_nonclosure.root \
         --DataHistogram aa_mod_aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -136,11 +130,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAMEBSNonclosure1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/granulate_before_unfolding_aa_mebs_nonclosure.root \
         --DataHistogram aa_mod_aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -148,37 +143,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAMEBSNonclosure2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/granulate_before_unfolding_aa_mebs_nonclosure.root \
         --DataHistogram aa_mod_aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAMEBSNonclosure3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/granulate_before_unfolding_aa_mebs_nonclosure.root \
-        --DataHistogram aa_mod_aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAMEBSNonclosureMerge.root
 
     # AAES: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_es.root \
         --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -186,11 +171,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAES0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_es.root \
         --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -198,11 +184,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAES1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_es.root \
         --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -210,37 +197,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAES2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_es.root \
         --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAES3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_es.root \
-        --DataHistogram aa_es_s_pure_es_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAESMerge.root
 
     # AAWithoutEleRej: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_wo_ele_rej.root \
         --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -248,11 +225,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAWithoutEleRej0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_wo_ele_rej.root \
         --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -260,11 +238,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAWithoutEleRej1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_wo_ele_rej.root \
         --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -272,37 +251,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAWithoutEleRej2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_wo_ele_rej.root \
         --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_wo_ele_rej.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAWithoutEleRej3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_wo_ele_rej.root \
-        --DataHistogram aa_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_wo_ele_rej.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAWithoutEleRejMerge.root
 
     # AATightPurity: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_tight_purity.root \
         --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -310,11 +279,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AATightPurity0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_tight_purity.root \
         --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -322,11 +292,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AATightPurity1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_tight_purity.root \
         --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -334,37 +305,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AATightPurity2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_tight_purity.root \
         --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_tight_purity.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AATightPurity3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_tight_purity.root \
-        --DataHistogram aa_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_tight_purity.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AATightPurityMerge.root
 
     # AALoosePurity: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_loose_purity.root \
         --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -372,11 +333,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AALoosePurity0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_loose_purity.root \
         --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -384,11 +346,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AALoosePurity1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_loose_purity.root \
         --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -396,37 +359,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AALoosePurity2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_loose_purity.root \
         --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_loose_purity.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AALoosePurity3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_loose_purity.root \
-        --DataHistogram aa_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_loose_purity.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AALoosePurityMerge.root
 
     # AAQCD: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
         --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -434,11 +387,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCD0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
         --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -446,11 +400,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCD1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
         --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -458,37 +413,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCD2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
         --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCD3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd.root \
-        --DataHistogram aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMerge.root
 
     # AAQCDMEBSNonclosure: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs_nonclosure.root \
         --DataHistogram aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -496,11 +441,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBSNonclosure0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs_nonclosure.root \
         --DataHistogram aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -508,11 +454,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBSNonclosure1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs_nonclosure.root \
         --DataHistogram aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -520,37 +467,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBSNonclosure2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs_nonclosure.root \
         --DataHistogram aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBSNonclosure3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs_nonclosure.root \
-        --DataHistogram aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBSNonclosureMerge.root
 
     # AAClosure: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_closure.root \
         --DataHistogram aa_closure_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -558,11 +495,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAClosure0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_closure.root \
         --DataHistogram aa_closure_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -570,11 +508,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAClosure1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_closure.root \
         --DataHistogram aa_closure_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -582,37 +521,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAClosure2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_closure.root \
         --DataHistogram aa_closure_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_closure_a.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAClosure3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_closure.root \
-        --DataHistogram aa_closure_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_closure_a.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAClosureMerge.root
 
     # AAQCDGenIso: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_gen_iso.root \
         --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -620,11 +549,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDGenIso0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_gen_iso.root \
         --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -632,11 +562,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDGenIso1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_gen_iso.root \
         --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -644,37 +575,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDGenIso2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_gen_iso.root \
         --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd_gen_iso.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDGenIso3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_gen_iso.root \
-        --DataHistogram aa_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd_gen_iso.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDGenIsoMerge.root
 
     # AAJEUUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -682,11 +603,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUUp0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -694,11 +616,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUUp1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -706,37 +629,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUUp2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUUp3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_up.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUUpMerge.root
 
     # AAJEUDown: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -744,11 +657,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUDown0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -756,11 +670,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUDown1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -768,37 +683,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUDown2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jeu_down.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUDown3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jeu_down.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJEUDownMerge.root
 
     # AAJERUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -806,11 +711,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJERUp0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -818,11 +724,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJERUp1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -830,37 +737,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJERUp2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_jer_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJERUp3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_jer_up.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAJERUpMerge.root
 
     # AACentUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_up.root \
         --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -868,11 +765,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentUp0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_up.root \
         --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -880,11 +778,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentUp1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_up.root \
         --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -892,37 +791,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentUp2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_up.root \
         --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentUp3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_up.root \
-        --DataHistogram aa_cent_up_s_pure_cent_up_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_up.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentUpMerge.root
 
     # AACentDown: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_down.root \
         --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -930,11 +819,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentDown0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_down.root \
         --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -942,11 +832,12 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentDown1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_down.root \
         --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -954,37 +845,27 @@ if [ ${nominal} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentDown2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_down.root \
         --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_cent_down.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentDown3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_cent_down.root \
-        --DataHistogram aa_cent_down_s_pure_cent_down_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_cent_down.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AACentDownMerge.root
 
     # PPNominal: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -994,11 +875,12 @@ if [ ${nominal} -eq 1 ]
     # PPES: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_es.root \
         --DataHistogram pp_es_s_pure_es_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1008,11 +890,12 @@ if [ ${nominal} -eq 1 ]
     # PPWithoutEleRej: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_wo_ele_rej.root \
         --DataHistogram pp_wo_ele_rej_s_pure_wo_ele_rej_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_wo_ele_rej.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_wo_ele_rej.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1022,11 +905,12 @@ if [ ${nominal} -eq 1 ]
     # PPTightPurity: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_tight_purity.root \
         --DataHistogram pp_tight_purity_s_pure_tight_purity_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_tight_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_tight_purity.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1036,11 +920,12 @@ if [ ${nominal} -eq 1 ]
     # PPLoosePurity: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_loose_purity.root \
         --DataHistogram pp_loose_purity_s_pure_loose_purity_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_loose_purity.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_loose_purity.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1050,11 +935,12 @@ if [ ${nominal} -eq 1 ]
     # PPQCD: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_qcd.root \
         --DataHistogram pp_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_qcd.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1064,11 +950,12 @@ if [ ${nominal} -eq 1 ]
     # PPClosure: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_closure.root \
         --DataHistogram pp_closure_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_closure_a.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_closure_a.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1078,11 +965,12 @@ if [ ${nominal} -eq 1 ]
     # PPQCDGenIso: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp_qcd_gen_iso.root \
         --DataHistogram pp_qcd_gen_iso_s_pure_gen_iso_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_qcd_gen_iso.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_qcd_gen_iso.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1092,11 +980,12 @@ if [ ${nominal} -eq 1 ]
     # PPJEUUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_jeu_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_jeu_up.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1106,11 +995,12 @@ if [ ${nominal} -eq 1 ]
     # PPJEUDown: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_jeu_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_jeu_down.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1120,11 +1010,12 @@ if [ ${nominal} -eq 1 ]
     # PPJERUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_jer_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_jer_up.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1139,11 +1030,12 @@ if [ ${mebs} -eq 1 ]
     # AANominalMEBS: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_mebs.root \
         --DataHistogram aa_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1151,11 +1043,12 @@ if [ ${mebs} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominalMEBS0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_mebs.root \
         --DataHistogram aa_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1163,11 +1056,12 @@ if [ ${mebs} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominalMEBS1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_mebs.root \
         --DataHistogram aa_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1175,37 +1069,27 @@ if [ ${mebs} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominalMEBS2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_mebs.root \
         --DataHistogram aa_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominalMEBS3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_mebs.root \
-        --DataHistogram aa_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AANominalMEBSMerge.root
 
     # AAQCDMEBS: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs.root \
         --DataHistogram aa_qcd_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1213,11 +1097,12 @@ if [ ${mebs} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBS0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs.root \
         --DataHistogram aa_qcd_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1225,11 +1110,12 @@ if [ ${mebs} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBS1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs.root \
         --DataHistogram aa_qcd_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1237,29 +1123,17 @@ if [ ${mebs} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBS2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs.root \
         --DataHistogram aa_qcd_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_qcd.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBS3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa_qcd_mebs.root \
-        --DataHistogram aa_qcd_nominal_mebs_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_qcd.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAQCDMEBSMerge.root
-
 fi
 
 if [ ${unfolding} -eq 1 ]
@@ -1268,11 +1142,12 @@ if [ ${unfolding} -eq 1 ]
     # AAPriorUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1280,11 +1155,12 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorUp0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1292,11 +1168,12 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorUp1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1304,37 +1181,27 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorUp2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_up.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorUp3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_up.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorUpMerge.root
 
     # AAPriorDown: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1342,11 +1209,12 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorDown0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1354,11 +1222,12 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorDown1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1366,37 +1235,27 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorDown2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_prior_down.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorDown3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_prior_down.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAPriorDownMerge.root
 
     # AAVaryResponse: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_0 \
         --ResponseTruth aa_g_0 \
-        --ResponseTruthReco aa_g_r_0 \
         --ResponseReco aa_r_0 \
+        --ResponseTruthEfficiency aa_g_eff_0 \
+        --ResponseRecoEfficiency aa_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1404,11 +1263,12 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAVaryResponse0.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_1 \
         --ResponseTruth aa_g_1 \
-        --ResponseTruthReco aa_g_r_1 \
         --ResponseReco aa_r_1 \
+        --ResponseTruthEfficiency aa_g_eff_1 \
+        --ResponseRecoEfficiency aa_r_eff_1 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1416,11 +1276,12 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAVaryResponse1.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_2 \
         --ResponseTruth aa_g_2 \
-        --ResponseTruthReco aa_g_r_2 \
         --ResponseReco aa_r_2 \
+        --ResponseTruthEfficiency aa_g_eff_2 \
+        --ResponseRecoEfficiency aa_r_eff_2 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1428,37 +1289,27 @@ if [ ${unfolding} -eq 1 ]
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAVaryResponse2.root
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa_stat_response.root \
         --ResponseHistogram aa_c_3 \
         --ResponseTruth aa_g_3 \
-        --ResponseTruthReco aa_g_r_3 \
         --ResponseReco aa_r_3 \
+        --ResponseTruthEfficiency aa_g_eff_3 \
+        --ResponseRecoEfficiency aa_r_eff_3 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
         --BinningGenBins ${binning_gen_bins} \
         --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAVaryResponse3.root
-    ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_aa.root \
-        --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_merge_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_aa_stat_response.root \
-        --ResponseHistogram aa_c_merge_0 \
-        --ResponseTruth aa_g_merge_0 \
-        --ResponseTruthReco aa_g_r_merge_0 \
-        --ResponseReco aa_r_merge_0 \
-        --PrimaryRecoBins ${primary_reco_bins} \
-        --BinningRecoBins ${binning_reco_bins} \
-        --PrimaryGenBins ${primary_gen_bins} \
-        --BinningGenBins ${binning_gen_bins} \
-        --Output /data/submit/mitay/unfolding/${date}/Input/Data/${set}/AAVaryResponseMerge.root
 
     # PPPriorUp: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_prior_up.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_prior_up.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1468,11 +1319,12 @@ if [ ${unfolding} -eq 1 ]
     # PPPriorDown: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_prior_down.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_prior_down.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
@@ -1482,11 +1334,12 @@ if [ ${unfolding} -eq 1 ]
     # PPVaryResponse: Execute
     ./Execute --Data ../../MainAnalysis/data/arc/${set}/accumulate_pp.root \
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
-        --Response ../../MainAnalysis/data/arc/${set}/vacillate_pp_stat_response.root \
+        --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp_stat_response.root \
         --ResponseHistogram pp_c_0 \
         --ResponseTruth pp_g_0 \
-        --ResponseTruthReco pp_g_r_0 \
         --ResponseReco pp_r_0 \
+        --ResponseTruthEfficiency pp_g_eff_0 \
+        --ResponseRecoEfficiency pp_r_eff_0 \
         --PrimaryRecoBins ${primary_reco_bins} \
         --BinningRecoBins ${binning_reco_bins} \
         --PrimaryGenBins ${primary_gen_bins} \
