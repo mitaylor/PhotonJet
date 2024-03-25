@@ -126,8 +126,6 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto original = conf->get<bool>("original");
-
     /* selections */
     auto sel = new configurer(selections);
 
@@ -177,8 +175,7 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
     auto gen_proj = new history<TH1F>(fi, tag + "_proj_g");
     auto reco = new history<TH1F>(fi, tag + "_r");
     auto reco_proj = new history<TH1F>(fi, tag + "_proj_r");
-    history<TH2F>* photon = nullptr;
-    if (!original) photon = new history<TH2F>(fi, tag + "_ppt");
+    auto photon = new history<TH2F>(fi, tag + "_ppt");
 
     TFile* fv = new TFile((base + victim).data(), "read");
     auto victims = new history<TH1F>(fv, label);
@@ -284,7 +281,7 @@ std::cout << __LINE__ << std::endl;
         eff[i] = new TGraphAsymmErrors((*gen_proj)[i], (*gen)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
         eff_fold0[i] = new TGraphAsymmErrors((*gen_proj_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
         eff_fold1[i] = new TGraphAsymmErrors((*gen_proj_fold1)[i], (*gen_fold1)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
-std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << (*reco_proj)[i]->GetNbinsX() <<  " " << (*reco)[i]->GetNbinsX() << std::endl;
         pur[i] = new TGraphAsymmErrors((*reco_proj)[i], (*reco)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
         pur_fold0[i] = new TGraphAsymmErrors((*reco_proj_fold0)[i], (*reco_fold0)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
         pur_fold1[i] = new TGraphAsymmErrors((*reco_proj_fold1)[i], (*reco_fold1)[i], "cl=0.683 b(1,1) mode");std::cout << __LINE__ << std::endl;
