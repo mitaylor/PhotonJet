@@ -231,94 +231,94 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto input_mc_reco = new history<TH1F>(funfolding, tag + "_r");
     auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
     auto input_mc_n = new history<TH1F>(funfolding, tag + "_c_n");
-
+std::cout << __LINE__ << std::endl;
     auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, (int64_t) filenames.size());
     auto input_mc_proj_reco = new history<TH1F>("input_mc_proj_reco", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     auto input_mc_create_reco = new history<TH1F>("input_mc_create_reco", "", null<TH1F>, (int64_t) filenames.size());
     auto input_mc_create_reco_fold0 = new history<TH1F>("input_mc_create_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto input_mc_create_reco_fold1 = new history<TH1F>("input_mc_creat_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     auto input_data_reco = new history<TH1F>("input_data_reco", "", null<TH1F>, (int64_t) filenames.size());
     auto input_data_reco_fold0 = new history<TH1F>("input_data_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto input_data_reco_fold1 = new history<TH1F>("input_data_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     auto input_theory_reco = new history<TH1F>("input_theory_reco", "", null<TH1F>, (int64_t) filenames.size());
     auto input_theory_reco_fold0 = new history<TH1F>("input_theory_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto input_theory_reco_fold1 = new history<TH1F>("input_theory_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
-
+std::cout << __LINE__ << std::endl;
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
         auto HInputData = (TH1F*) fdata[j]->Get("HDataErrors");
         auto HInputTheory = (TH1F*) fdata[j]->Get("HDataGen");
-
+std::cout << __LINE__ << std::endl;
         (*input_theory_gen)[j] = HInputTheory;
-
+std::cout << __LINE__ << std::endl;
         DoProjection((*input_mc_response)[j], (*input_mc_proj_gen)[j], (*input_mc_proj_reco)[j]);
         (*input_mc_proj_gen)[j]->Divide((*input_mc_n)[j]);
         (*input_mc_proj_reco)[j]->Divide((*input_mc_n)[j]);
-
+std::cout << __LINE__ << std::endl;
         (*input_mc_proj_gen)[j]->Divide((*input_mc_gen)[j]);
         (*input_mc_proj_reco)[j]->Divide((*input_mc_reco)[j]);
-        
+std::cout << __LINE__ << std::endl;
         (*input_mc_gen)[j]->Multiply((*input_mc_proj_gen)[j]);
         (*input_theory_gen)[j]->Multiply((*input_mc_proj_gen)[j]);
-
+std::cout << __LINE__ << std::endl;
         (*input_data_reco)[j] = HInputData;
         (*input_data_reco_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
         (*input_data_reco_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
-
+std::cout << __LINE__ << std::endl;
         (*input_mc_create_reco)[j] = ForwardFold((*input_mc_gen)[j], (*input_mc_response)[j]);
         (*input_mc_create_reco)[j]->Divide((*input_mc_proj_reco)[j]);
         (*input_mc_create_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
         (*input_mc_create_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
-
+std::cout << __LINE__ << std::endl;
         (*input_theory_reco)[j] = ForwardFold((*input_theory_gen)[j], (*input_mc_response)[j]);
         (*input_theory_reco)[j]->Divide((*input_mc_proj_reco)[j]);
         (*input_theory_reco_fold0)[j] = fold((*input_theory_reco)[j], nullptr, mr, 0, osr);
         (*input_theory_reco_fold1)[j] = fold((*input_theory_reco)[j], nullptr, mr, 1, osr);
     }
-
+std::cout << __LINE__ << std::endl;
     /* rename histograms */
     input_mc_gen->rename("input_mc_gen");
     input_mc_gen_reco->rename("input_mc_gen_reco");
     input_mc_reco->rename("input_mc_reco");
     input_mc_response->rename("input_mc_response");
     input_mc_n->rename("input_mc_n");
-
+std::cout << __LINE__ << std::endl;
     input_theory_gen->rename("input_theory_gen");
-
+std::cout << __LINE__ << std::endl;
     input_data_reco->rename("input_data_reco");
     input_data_reco_fold0->rename("input_data_reco_fold0");
     input_data_reco_fold1->rename("input_data_reco_fold1");
-
+std::cout << __LINE__ << std::endl;
     input_mc_create_reco->rename("input_mc_create_reco");
     input_mc_create_reco_fold0->rename("input_mc_create_reco_fold0");
     input_mc_create_reco_fold1->rename("input_mc_create_reco_fold1");
-
+std::cout << __LINE__ << std::endl;
     input_theory_reco->rename("input_theory_reco");
     input_theory_reco_fold0->rename("input_theory_reco_fold0");
     input_theory_reco_fold1->rename("input_theory_reco_fold1");
-
+std::cout << __LINE__ << std::endl;
     /* save histograms */
     input_mc_gen->save();
     input_mc_gen_reco->save();
     input_mc_reco->save();
     input_mc_response->save();
     input_mc_n->save();
-
+std::cout << __LINE__ << std::endl;
     input_theory_gen->save();
-
+std::cout << __LINE__ << std::endl;
     input_data_reco->save();
     input_data_reco_fold0->save();
     input_data_reco_fold1->save();
-
+std::cout << __LINE__ << std::endl;
     input_mc_create_reco->save();
     input_mc_create_reco_fold0->save();
     input_mc_create_reco_fold1->save();
-
+std::cout << __LINE__ << std::endl;
     input_theory_reco->save();
     input_theory_reco_fold0->save();
     input_theory_reco_fold1->save();
