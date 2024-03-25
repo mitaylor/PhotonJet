@@ -20,8 +20,6 @@ int main(int argc, char *argv[])
 
    string DataFileName            = CL.Get("Data");
    string DataHistogram           = CL.Get("DataHistogram");
-   string ErrorFileName           = CL.Get("Error", "");
-   string ErrorHistogram          = CL.Get("ErrorHistogram", "");
    string ResponseFileName        = CL.Get("Response");
    string ResponseHistogram       = CL.Get("ResponseHistogram");
    string ResponseTruth           = CL.Get("ResponseTruth");
@@ -35,13 +33,11 @@ int main(int argc, char *argv[])
    vector<double> BinningGenBins  = CL.GetDoubleVector("BinningGenBins");
 
    TFile DataFile(DataFileName.c_str());
-   TFile ErrorFile(ErrorFileName.c_str());
    TFile ResponseFile(ResponseFileName.c_str());
 
    TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
    TH1F *HInputData                        = (TH1F *)DataFile.Get(DataHistogram.c_str());
-   TH1F *HInputErrors                      = (TH1F *)ErrorFile.Get(ErrorHistogram.c_str());
    TH2F *HInputResponse                    = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
    TH1F *HInputResponseTruth               = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
    TH1F *HInputResponseReco                = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
@@ -77,17 +73,6 @@ int main(int argc, char *argv[])
       }
    }
    HResponse.Write();
-
-   // Copy over error input
-   if (HInputErrors != nullptr) {
-      TH1D HDataErrors("HDataErrors", ";;", NGen, 0, NGen);
-      for(int i = 0; i <= NGen + 1; i++)
-      {
-         HDataErrors.SetBinContent(i, HInputErrors->GetBinContent(i));
-         HDataErrors.SetBinError(i, HInputErrors->GetBinError(i));
-      }
-      HDataErrors.Write();
-   }
 
    // Copy over MC truth
    TH1D HMCGen("HMCGen", ";;", NGen, 0, NGen);
