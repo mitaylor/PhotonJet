@@ -241,6 +241,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     for (size_t i = 0; i < filenames.size(); ++i) {
         choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();
         choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();
+        std::cout << choice_svd[i] << " " << choice_bayes[i] << std::endl;
     }
 
     /* extract chosen histograms */
