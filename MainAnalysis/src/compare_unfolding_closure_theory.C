@@ -246,11 +246,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        std::string unfold_name_svd = "HUnfoldedSVD" + std::to_string(choice_svd[j]);
-        std::string matrix_name_svd = "MUnfoldedSVD" + std::to_string(choice_svd[j]);
+        std::string unfold_name_svd = "Test0HUnfoldedSVD" + std::to_string(choice_svd[j]);
+        std::string matrix_name_svd = "Test0MUnfoldedSVD" + std::to_string(choice_svd[j]);
 
-        std::string unfold_name_bayes = "HUnfoldedBayes" + std::to_string(choice_bayes[j]);
-        std::string matrix_name_bayes = "MUnfoldedBayes" + std::to_string(choice_bayes[j]);
+        std::string unfold_name_bayes = "Test0HUnfoldedBayes" + std::to_string(choice_bayes[j]);
+        std::string matrix_name_bayes = "Test0MUnfoldedBayes" + std::to_string(choice_bayes[j]);
         
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
         auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data());
@@ -325,10 +325,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
-    auto minimum = [&](int64_t index) {
-        auto min = "Regularization: k_{reg} = "s + to_text(choice_svd[index-1]);
+    auto minimum = [&](int64_t index, std::string algorithm) {
+        auto min = (algorithm == "Bayes") ? "Regularization: iteration = "s + to_text(choice_bayes[index-1]) : "Regularization: k_{reg} = "s + to_text(choice_svd[index-1]);
         auto pri = "Prior: "s + prior;
         auto src = "Source: "s + label;
+        auto alg = "Algorithm: "s + algorithm;
 
         TLatex* l = new TLatex();
         l->SetTextFont(43);
@@ -337,6 +338,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         l->DrawLatexNDC(0.3, 0.65, min.data());
         l->DrawLatexNDC(0.3, 0.60, pri.data());
         l->DrawLatexNDC(0.3, 0.55, src.data());
+        l->DrawLatexNDC(0.3, 0.50, alg.data());
     };
 
     /* plot histograms */
@@ -347,11 +349,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     hb->set_binary("type");
 
-    auto p1 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_svd_" + prior + "_dj", hb);
+    auto p1 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_SVD_" + prior + "_dj", hb);
 
     p1->divide(filenames.size(), -1);
     p1->accessory(pthf_info);
-    p1->accessory(minimum);
+    p1->accessory(std::bind(minimum, _1, "SVD"));
     apply_style(p1, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
@@ -359,11 +361,11 @@ int quantitate(char const* config, char const* selections, char const* output) {
         p1->stack((*gen_svd_fold0)[i], "Gen", "SVD");
     }
 
-    auto p2 = new paper(set + "_unfolding_algorithm_" + tag + "_" + label + "_svd" + prior + "_jpt", hb);
+    auto p2 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_SVD_" + prior + "_jpt", hb);
 
     p2->divide(filenames.size(), -1);
     p2->accessory(pthf_info);
-    p2->accessory(minimum);
+    p2->accessory(std::bind(minimum, _1, "SVD"));
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
@@ -371,10 +373,37 @@ int quantitate(char const* config, char const* selections, char const* output) {
         p2->stack((*gen_svd_fold1)[i], "Gen", "SVD");
     }
 
+
+    auto p3 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_Bayes_" + prior + "_dj", hb);
+
+    p3->divide(filenames.size(), -1);
+    p3->accessory(pthf_info);
+    p3->accessory(std::bind(minimum, _1, "Bayes"));
+    apply_style(p3, cms, system_tag, -2, 20);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        p3->add((*unfolded_bayes_fold0)[i], "Unfolded", "Bayes");
+        p3->stack((*gen_bayes_fold0)[i], "Gen", "Bayes");
+    }
+
+    auto p4 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_Bayes_" + prior + "_jpt", hb);
+
+    p4->divide(filenames.size(), -1);
+    p4->accessory(pthf_info);
+    p4->accessory(std::bind(minimum, _1, "Bayes"));
+    apply_style(p4, cms, system_tag, -0.003, 0.03);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        p4->add((*unfolded_bayes_fold1)[i], "Unfolded", "Bayes");
+        p4->stack((*gen_bayes_fold1)[i], "Gen", "Bayes");
+    }
+
     hb->sketch();
 
     p1->draw("pdf");
     p2->draw("pdf");
+    p3->draw("pdf");
+    p4->draw("pdf");
 
     fout->Close();
 
