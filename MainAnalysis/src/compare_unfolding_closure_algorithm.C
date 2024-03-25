@@ -164,11 +164,15 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
-    auto label = conf->get<std::string>("label");
 
     auto filenames = conf->get<std::vector<std::string>>("filenames");
 
-    auto unfolding = conf->get<std::string>("unfolding");
+    auto label = conf->get<std::string>("label");
+    auto prior = conf->get<std::string>("prior");
+    auto object = conf->get<std::string>("object");
+
+    auto file_svd = conf->get<std::string>("file_svd");
+    auto file_bayes = conf->get<std::string>("file_bayes");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -178,91 +182,133 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
 
-    auto rdrr = sel->get<std::vector<float>>("drr_range");
-    auto rptr = sel->get<std::vector<float>>("ptr_range");
+    auto rdrg = sel->get<std::vector<float>>("drg_range");
+    auto rptg = sel->get<std::vector<float>>("ptg_range");
 
-    auto osr = sel->get<std::vector<int64_t>>("osr");
+    auto osg = sel->get<std::vector<int64_t>>("osg");
 
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
     /* create intervals and multivals */
-    auto idrr = new interval("#deltaj"s, rdrr);
-    auto iptr = new interval("p_{T}^{j}"s, rptr);
+    auto idrg = new interval("#deltaj"s, rdrg);
+    auto iptg = new interval("p_{T}^{j}"s, rptg);
 
-    auto mr = new multival(*idrr, *iptr);
+    auto mg = new multival(*idrg, *iptg);
     auto mpthf = new multival(rpt, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<TFile*> fdata(filenames.size(), nullptr);
+    std::vector<TFile*> fdata_svd(filenames.size(), nullptr);
+    std::vector<TFile*> fdata_bayes(filenames.size(), nullptr);
 
-    zip([&](auto& fdata, auto const& filename) {
-        fdata = new TFile(("/data/submit/mitay/unfolding/240325/Input/Data/"s + set + "/"s + filename).data(), "read");
-    }, fdata, filenames);
+    zip([&](auto& fsvd, auto& fbayes, auto const& filename) {
+        fsvd = new TFile(("unfolded/" + object + "/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename).data(), "read");
+        fbayes = new TFile(("unfolded/" + object + "/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename).data(), "read");
+    }, fdata_svd, fdata_bayes, filenames);
 
-    auto funfolding = new TFile((base + unfolding).data(), "read");
+    TFile* freg_svd = new TFile((base + file_svd).data(), "read");
+    TFile* freg_bayes = new TFile((base + file_bayes).data(), "read");
+
+    auto regularization_svd = new history<TH1F>(freg_svd, tag + "_mse"s);
+    auto regularization_bayes = new history<TH1F>(freg_bayes, tag + "_mse"s);
 
     /* prepare output */
     TFile* fout = new TFile(output, "recreate");
 
     /* prepare data */
-    auto input_mc_gen = new history<TH1F>(funfolding, tag + "_g");
-    auto input_mc_reco = new history<TH1F>(funfolding, tag + "_r");
-    auto input_mc_efficiency = new history<TH1F>(funfolding, tag + "_g_eff");
-    auto input_mc_purity = new history<TH1F>(funfolding, tag + "_r_eff");
-    auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
+    auto unfolded_svd = new history<TH1F>("unfolded_svd", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_svd_fold0 = new history<TH1F>("unfolded_svd_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_svd_fold1 = new history<TH1F>("unfolded_svd_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
-    auto input_mc_create_reco = new history<TH1F>("input_mc_create_reco", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_create_reco_fold0 = new history<TH1F>("input_mc_create_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_create_reco_fold1 = new history<TH1F>("input_mc_creat_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
+    auto gen_svd = new history<TH1F>("gen_svd", "", null<TH1F>, (int64_t) filenames.size());
+    auto gen_svd_fold0 = new history<TH1F>("gen_svd_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto gen_svd_fold1 = new history<TH1F>("gen_svd_fold1", "", null<TH1F>, (int64_t) filenames.size());
 
-    auto input_data_reco = new history<TH1F>("input_data_reco", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_data_reco_fold0 = new history<TH1F>("input_data_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_data_reco_fold1 = new history<TH1F>("input_data_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_bayes = new history<TH1F>("unfolded_bayes", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_bayes_fold0 = new history<TH1F>("unfolded_bayes_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto unfolded_bayes_fold1 = new history<TH1F>("unfolded_bayes_fold1", "", null<TH1F>, (int64_t) filenames.size());
+
+    auto gen_bayes = new history<TH1F>("gen_bayes", "", null<TH1F>, (int64_t) filenames.size());
+    auto gen_bayes_fold0 = new history<TH1F>("gen_bayes_fold0", "", null<TH1F>, (int64_t) filenames.size());
+    auto gen_bayes_fold1 = new history<TH1F>("gen_bayes_fold1", "", null<TH1F>, (int64_t) filenames.size());
+
+    /* determine the regularization to use */
+    std::vector<int64_t> choice_svd(filenames.size(), 1);
+    std::vector<int64_t> choice_bayes(filenames.size(), 1);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        choice_svd[i] = (*regularization_svd)[i]->GetMinimumBin();
+        choice_bayes[i] = (*regularization_bayes)[i]->GetMinimumBin();
+    }
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        auto HInputData = (TH1F*) fdata[j]->Get("HData");
+        std::string unfold_name_svd = "HUnfoldedSVD" + std::to_string(choice_svd[j]);
+        std::string matrix_name_svd = "MUnfoldedSVD" + std::to_string(choice_svd[j]);
 
-        (*input_mc_gen)[j]->Multiply((*input_mc_efficiency)[j]);
+        std::string unfold_name_bayes = "HUnfoldedBayes" + std::to_string(choice_bayes[j]);
+        std::string matrix_name_bayes = "MUnfoldedBayes" + std::to_string(choice_bayes[j]);
+        
+        auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
+        auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data());
+        auto HGenSVD = (TH1F*) fdata_svd[j]->Get("HInputGen");
 
-        (*input_data_reco)[j] = HInputData;
-        (*input_data_reco_fold0)[j] = fold(HInputData, nullptr, mr, 0, osr);
-        (*input_data_reco_fold1)[j] = fold(HInputData, nullptr, mr, 1, osr);
+        auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());
+        auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data());
+        auto HGenBayes = (TH1F*) fdata_bayes[j]->Get("HInputGen");
 
-        (*input_mc_create_reco)[j] = ForwardFold((*input_mc_gen)[j], (*input_mc_response)[j]);
-        (*input_mc_create_reco)[j]->Divide((*input_mc_purity)[j]);
-        (*input_mc_create_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
-        (*input_mc_create_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
+        (*unfolded_bayes)[j] = HUnfoldedBayes;
+        (*unfolded_bayes_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);
+        (*unfolded_bayes_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);
+
+        (*gen_bayes)[j] = HGenBayes;
+        (*gen_bayes_fold0)[j] = fold(HGenBayes, nullptr, mg, 0, osg);
+        (*gen_bayes_fold1)[j] = fold(HGenBayes, nullptr, mg, 1, osg);
+
+        (*unfolded_svd)[j] = HUnfoldedSVD;
+        (*unfolded_svd_fold0)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);
+        (*unfolded_svd_fold1)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);
+
+        (*gen_svd)[j] = HGenSVD;
+        (*gen_svd_fold0)[j] = fold(HGenSVD, nullptr, mg, 0, osg);
+        (*gen_svd_fold1)[j] = fold(HGenSVD, nullptr, mg, 1, osg);
     }
 
     /* rename histograms */
-    input_mc_gen->rename("input_mc_gen");
-    input_mc_reco->rename("input_mc_reco");
-    input_mc_response->rename("input_mc_response");
+    unfolded_svd->rename("unfolded_svd");
+    unfolded_svd_fold0->rename("unfolded_svd_fold0");
+    unfolded_svd_fold1->rename("unfolded_svd_fold1");
 
-    input_data_reco->rename("input_data_reco");
-    input_data_reco_fold0->rename("input_data_reco_fold0");
-    input_data_reco_fold1->rename("input_data_reco_fold1");
+    gen_svd->rename("gen_svd");
+    gen_svd_fold0->rename("gen_svd_fold0");
+    gen_svd_fold1->rename("gen_svd_fold1");
 
-    input_mc_create_reco->rename("input_mc_create_reco");
-    input_mc_create_reco_fold0->rename("input_mc_create_reco_fold0");
-    input_mc_create_reco_fold1->rename("input_mc_create_reco_fold1");
+    unfolded_bayes->rename("unfolded_bayes");
+    unfolded_bayes_fold0->rename("unfolded_bayes_fold0");
+    unfolded_bayes_fold1->rename("unfolded_bayes_fold1");
+
+    gen_bayes->rename("gen_bayes");
+    gen_bayes_fold0->rename("gen_bayes_fold0");
+    gen_bayes_fold1->rename("gen_bayes_fold1");
 
     /* save histograms */
-    input_mc_gen->save();
-    input_mc_reco->save();
-    input_mc_response->save();
+    unfolded_svd->save();
+    unfolded_svd_fold0->save();
+    unfolded_svd_fold1->save();
 
-    input_data_reco->save();
-    input_data_reco_fold0->save();
-    input_data_reco_fold1->save();
+    gen_svd->save();
+    gen_svd_fold0->save();
+    gen_svd_fold1->save();
 
-    input_mc_create_reco->save();
-    input_mc_create_reco_fold0->save();
-    input_mc_create_reco_fold1->save();
+    unfolded_bayes->save();
+    unfolded_bayes_fold0->save();
+    unfolded_bayes_fold1->save();
+
+    gen_bayes->save();
+    gen_bayes_fold0->save();
+    gen_bayes_fold1->save();
 
     /* plotting setup */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
@@ -278,31 +324,50 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
+    auto minimum = [&](int64_t index) {
+        auto min = "Regularization: k_{reg} = "s + to_text(choice_svd[index-1]);
+        auto pri = "Prior: "s + prior;
+        auto src = "Source: "s + label;
+
+        TLatex* l = new TLatex();
+        l->SetTextFont(43);
+        l->SetTextAlign(11);
+        l->SetTextSize(13);
+        l->DrawLatexNDC(0.3, 0.65, min.data());
+        l->DrawLatexNDC(0.3, 0.60, pri.data());
+        l->DrawLatexNDC(0.3, 0.55, src.data());
+    };
+
     /* plot histograms */
     auto hb = new pencil();
 
-    hb->category("type", "Analysis MC", "Response MC");
+    hb->category("algorithm", "SVD", "Bayes");
+    hb->category("type", "Gen", "Unfolded");
 
-    auto p1 = new paper(set + "_unfolding_closure_reco_" + tag + "_" + label + "_dj", hb);
+    hb->set_binary("type");
+
+    auto p1 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_svd_" + prior + "_dj", hb);
 
     p1->divide(filenames.size(), -1);
     p1->accessory(pthf_info);
+    p1->accessory(minimum);
     apply_style(p1, cms, system_tag, -2, 20);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p1->add((*input_mc_create_reco_fold0)[i], "Response MC");
-        p1->stack((*input_data_reco_fold0)[i], "Analysis MC");
+        p1->add((*unfolded_svd_fold0)[i], "Unfolded", "SVD");
+        p1->stack((*gen_svd_fold0)[i], "Gen", "SVD");
     }
 
-    auto p2 = new paper(set + "_unfolding_closure_reco_" + tag + "_" + label + "_jpt", hb);
+    auto p2 = new paper(set + "_unfolding_algorithm_" + tag + "_" + label + "_svd" + prior + "_jpt", hb);
 
     p2->divide(filenames.size(), -1);
     p2->accessory(pthf_info);
+    p2->accessory(minimum);
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (size_t i = 0; i < filenames.size(); ++i) {
-        p2->add((*input_mc_create_reco_fold1)[i], "Response MC");
-        p2->stack((*input_data_reco_fold1)[i], "Analysis MC");
+        p2->add((*unfolded_svd_fold1)[i], "Unfolded", "SVD");
+        p2->stack((*gen_svd_fold1)[i], "Gen", "SVD");
     }
 
     hb->sketch();
