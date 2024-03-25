@@ -26,7 +26,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void DoProjection(TH2D *HResponse, TH1D **HGen, TH1D **HReco)
+void DoProjection(TH2F *HResponse, TH1F **HGen, TH1F **HReco)
 {
    if(HResponse == nullptr)
       return;
@@ -39,8 +39,8 @@ void DoProjection(TH2D *HResponse, TH1D **HGen, TH1D **HReco)
    int NX = HResponse->GetNbinsX();
    int NY = HResponse->GetNbinsY();
 
-   *HGen = new TH1D(Form("HGen%d", Count), "", NY, 0, NY);
-   *HReco = new TH1D(Form("HReco%d", Count), "", NX, 0, NX);
+   *HGen = new TH1F(Form("HGen%d", Count), "", NY, 0, NY);
+   *HReco = new TH1F(Form("HReco%d", Count), "", NX, 0, NX);
 
    for(int iX = 1; iX <= NX; iX++)
    {
