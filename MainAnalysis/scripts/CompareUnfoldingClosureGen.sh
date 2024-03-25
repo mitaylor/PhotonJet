@@ -5,25 +5,25 @@ set=$1
 run_pp_theory() {
     tag=$1
 
-    ./bin/./bin/compare_unfolding_closure_theory configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
+    ./bin/compare_unfolding_closure_theory configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
 }
 
 run_aa_theory() {
     tag=$1
 
-    ./bin/./bin/compare_unfolding_closure_theory configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
+    ./bin/compare_unfolding_closure_theory configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
 }
 
 run_pp_pythia() {
     tag=$1
 
-    ./bin/./bin/compare_unfolding_closure_pythia configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
+    ./bin/compare_unfolding_closure_pythia configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
 }
 
 run_aa_pythia() {
     tag=$1
 
-    ./bin/./bin/compare_unfolding_closure_pythia configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
+    ./bin/compare_unfolding_closure_pythia configs/compare_unfolding_closure_gen/compare_unfolding_algorithm_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/compare_unfolding_closure_gen_${tag}.root
 }
 
 samples=(pp)
