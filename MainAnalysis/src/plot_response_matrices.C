@@ -278,8 +278,8 @@ int plot_unfolding_inputs(char const* config, char const* selections) {
         (*gen_proj_fold0)[i] = fold((*gen_proj)[i], nullptr, mg, 0, osg);
         (*gen_proj_fold1)[i] = fold((*gen_proj)[i], nullptr, mg, 1, osg);
 
-        (*reco_proj_fold0)[i] = fold((*reco_proj)[i], nullptr, mg, 0, osg);
-        (*reco_proj_fold1)[i] = fold((*reco_proj)[i], nullptr, mg, 1, osg);
+        (*reco_proj_fold0)[i] = fold((*reco_proj)[i], nullptr, mr, 0, osr);
+        (*reco_proj_fold1)[i] = fold((*reco_proj)[i], nullptr, mr, 1, osr);
 
         eff[i] = new TGraphAsymmErrors((*gen_proj)[i], (*gen)[i], "cl=0.683 b(1,1) mode");
         eff_fold0[i] = new TGraphAsymmErrors((*gen_proj_fold0)[i], (*gen_fold0)[i], "cl=0.683 b(1,1) mode");
