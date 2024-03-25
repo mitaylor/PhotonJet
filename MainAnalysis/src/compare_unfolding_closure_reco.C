@@ -155,6 +155,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
     auto tag = conf->get<std::string>("tag");
+    auto label = conf->get<std::string>("label");
 
     auto filenames = conf->get<std::vector<std::string>>("filenames");
 
@@ -273,7 +274,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     hb->category("type", "Analysis MC", "Response MC");
 
-    auto p1 = new paper(set + "_unfolding_closure_reco_" + tag + "_dj", hb);
+    auto p1 = new paper(set + "_unfolding_closure_reco_" + tag + "_" + label + "_dj", hb);
 
     p1->divide(filenames.size(), -1);
     p1->accessory(pthf_info);
@@ -284,7 +285,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         p1->stack((*input_data_reco_fold0)[i], "Analysis MC");
     }
 
-    auto p2 = new paper(set + "_unfolding_closure_reco_" + tag + "_jpt", hb);
+    auto p2 = new paper(set + "_unfolding_closure_reco_" + tag + "_" + label + "_jpt", hb);
 
     p2->divide(filenames.size(), -1);
     p2->accessory(pthf_info);
