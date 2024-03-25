@@ -85,14 +85,14 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto input_mc_response = new history<TH2F>(funfolding, tag + "_c");
     auto input_mc_n = new history<TH1F>(funfolding, tag + "_c_n");
 
-    auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_proj_reco = new history<TH1F>("input_mc_proj_reco", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, input_mc_gen->size());
+    auto input_mc_proj_reco = new history<TH1F>("input_mc_proj_reco", "", null<TH1F>, input_mc_gen->size());
 
-    auto input_mc_eff_gen = new history<TH1F>("input_mc_eff_gen", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_eff_reco = new history<TH1F>("input_mc_eff_reco", "", null<TH1F>, (int64_t) filenames.size());
+    auto input_mc_eff_gen = new history<TH1F>("input_mc_eff_gen", "", null<TH1F>, input_mc_gen->size());
+    auto input_mc_eff_reco = new history<TH1F>("input_mc_eff_reco", "", null<TH1F>, input_mc_gen->size());
 
     /* extract chosen histograms */
-    for (size_t j = 0; j < filenames.size(); ++j) {
+    for (int64_t j = 0; j < input_mc_gen->size(); ++j) {
         DoProjection((*input_mc_response)[j], &(*input_mc_proj_gen)[j], &(*input_mc_proj_reco)[j]);
         DoProjection((*input_mc_response)[j], &(*input_mc_eff_gen)[j], &(*input_mc_eff_reco)[j]);
 
