@@ -174,7 +174,7 @@ std::cout << __LINE__ << std::endl;
     TFile* fi = new TFile((base + input).data(), "read");std::cout << __LINE__ << std::endl;
     auto matrices = new history<TH2F>(fi, tag + "_c");std::cout << __LINE__ << std::endl;
     auto gen = new history<TH1F>(fi, tag + "_g");std::cout << __LINE__ << std::endl; std::cout << (tag + "proj_g") << std::endl;
-    auto gen_proj = new history<TH1F>(fi, tag + "proj_g");std::cout << __LINE__ << std::endl;
+    auto gen_proj = new history<TH1F>(fi, tag + "_proj_g");std::cout << __LINE__ << std::endl;
     auto reco = new history<TH1F>(fi, tag + "_r");std::cout << __LINE__ << std::endl;
     auto reco_proj = new history<TH1F>(fi, tag + "_proj_r");std::cout << __LINE__ << std::endl;
     history<TH2F>* photon = nullptr;std::cout << __LINE__ << std::endl;
