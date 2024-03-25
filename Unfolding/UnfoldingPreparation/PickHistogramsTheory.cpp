@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
    TH1F *HInputResponseRecoEfficiency      = (TH1F *)ResponseFile.Get(ResponseRecoEfficiency.c_str());
 
    Assert(HInputData != nullptr,                      "Input data distribution not found");
+   Assert(HInputErrors != nullptr,                    "Input error distribution not found");
    Assert(HInputResponse != nullptr,                  "Input response matrix not found");
    Assert(HInputResponseTruth != nullptr,             "Input response truth not found");
    Assert(HInputResponseReco != nullptr,              "Input response reco not found");
@@ -134,7 +135,10 @@ int main(int argc, char *argv[])
    }
    HDataGen.Write();
 
+   HDataGen.Multiply(&HMCGenEfficiency);
+
    TH1D* HDataReco = ForwardFold(&HDataGen, &HResponse);
+   HDataReco->Divide(&HMCRecoEfficiency);
    HDataReco->Write();
    
    // Binning histograms
