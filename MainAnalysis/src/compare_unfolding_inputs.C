@@ -207,9 +207,6 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto input_theory_gen = new history<TH1F>("input_theory_gen", "", null<TH1F>, (int64_t) filenames.size());
 
-    auto input_mc_proj_gen = new history<TH1F>("input_mc_proj_gen", "", null<TH1F>, (int64_t) filenames.size());
-    auto input_mc_proj_reco = new history<TH1F>("input_mc_proj_reco", "", null<TH1F>, (int64_t) filenames.size());
-
     auto input_mc_create_reco = new history<TH1F>("input_mc_create_reco", "", null<TH1F>, (int64_t) filenames.size());
     auto input_mc_create_reco_fold0 = new history<TH1F>("input_mc_create_reco_fold0", "", null<TH1F>, (int64_t) filenames.size());
     auto input_mc_create_reco_fold1 = new history<TH1F>("input_mc_creat_reco_fold1", "", null<TH1F>, (int64_t) filenames.size());
