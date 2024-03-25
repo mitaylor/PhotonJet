@@ -5,13 +5,13 @@ set=$1
 run_pp() {
     tag=$1
 
-    echo "nohup ./bin/process_vacillate configs/process_vacillate/vacillate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/process_vacillate_${tag}.root > log/${set}_process_vacillate_${tag}.txt 2>&1 &"
+    ./bin/process_vacillate configs/process_vacillate/vacillate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/process_vacillate_${tag}.root
 }
 
 run_aa() {
     tag=$1
 
-    echo "nohup ./bin/process_vacillate configs/process_vacillate/vacillate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/process_vacillate_${tag}.root > log/${set}_process_vacillate_${tag}.txt 2>&1 &"
+    ./bin/process_vacillate configs/process_vacillate/vacillate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/process_vacillate_${tag}.root
 }
 
 samples=(pp)
