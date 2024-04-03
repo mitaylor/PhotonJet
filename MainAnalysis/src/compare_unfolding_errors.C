@@ -195,7 +195,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto mg = new multival(*idrg, *iptg);
-    auto mpthf = new multival(rpt, dhf);
+    // auto mpthf = new multival(rpt, dhf);
 
     std::vector<int64_t> osg {0, 0, 0, 0};
 
