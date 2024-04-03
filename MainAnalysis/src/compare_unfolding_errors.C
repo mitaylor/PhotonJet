@@ -207,7 +207,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
     zip([&](auto& fdata, auto const& filename) {
         fdata = new TFile(("unfolded/Errors/"s + set + "/" + algorithm + "/" + prior + "/kErrors/"s + filename).data(), "read");
-    }, fdata, filenames);
+    }, fdata, file_data);
 
     TFile* freg = new TFile((base + file_regularization).data(), "read");
 
@@ -217,11 +217,11 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     TFile* fout = new TFile(output, "recreate");
 
     /* determine the regularization to use */
-    std::vector<std::vector<int64_t>> choices(4, std::vector<int64_t>(filenames.size(), 1));
+    std::vector<std::vector<int64_t>> choices(4, std::vector<int64_t>(file_data.size(), 1));
 
-    for (size_t i = 0; i < filenames.size(); ++i) {
+    for (size_t i = 0; i < file_data.size(); ++i) {
         choices[0][i] = 1;
-        choices[1][i] = (*regularization_mc)[i]->GetMinimumBin();
+        choices[1][i] = (*regularization)[i]->GetMinimumBin();
         choices[2][i] = 50;
         choices[3][i] = 100;
     }
@@ -259,28 +259,28 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
     for (size_t i = 0; i < choices.size(); ++i) {
         /* prepare data */
-        auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) filenames.size());
-        auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) filenames.size());
-        auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) filenames.size());
+        auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) file_data.size());
+        auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) file_data.size());
+        auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) file_data.size());
 
-        auto calc_errors = new history<TH1F>("calc_errors", "", null<TH1F>, (int64_t) filenames.size());
-        auto calc_errors_fold0 = new history<TH1F>("calc_errors_fold0", "", null<TH1F>, (int64_t) filenames.size());
-        auto calc_errors_fold1 = new history<TH1F>("calc_errors_fold1", "", null<TH1F>, (int64_t) filenames.size());
+        auto calc_errors = new history<TH1F>("calc_errors", "", null<TH1F>, (int64_t) file_data.size());
+        auto calc_errors_fold0 = new history<TH1F>("calc_errors_fold0", "", null<TH1F>, (int64_t) file_data.size());
+        auto calc_errors_fold1 = new history<TH1F>("calc_errors_fold1", "", null<TH1F>, (int64_t) file_data.size());
 
-        auto toy_errors = new history<TH1F>("toy_errors", "", null<TH1F>, (int64_t) filenames.size());
-        auto toy_errors_fold0 = new history<TH1F>("toy_errors_fold0", "", null<TH1F>, (int64_t) filenames.size());
-        auto toy_errors_fold1 = new history<TH1F>("toy_errors_fold1", "", null<TH1F>, (int64_t) filenames.size());
+        auto toy_errors = new history<TH1F>("toy_errors", "", null<TH1F>, (int64_t) file_data.size());
+        auto toy_errors_fold0 = new history<TH1F>("toy_errors_fold0", "", null<TH1F>, (int64_t) file_data.size());
+        auto toy_errors_fold1 = new history<TH1F>("toy_errors_fold1", "", null<TH1F>, (int64_t) file_data.size());
 
-        auto calc_covariance = new history<TH2F>("calc_covariance", "", null<TH2F>, (int64_t) filenames.size());
-        auto calc_covariance_fold0 = new history<TH2F>("calc_covariance_fold0", "", null<TH2F>, (int64_t) filenames.size());
-        auto calc_covariance_fold1 = new history<TH2F>("calc_covariance_fold1", "", null<TH2F>, (int64_t) filenames.size());
+        auto calc_covariance = new history<TH2F>("calc_covariance", "", null<TH2F>, (int64_t) file_data.size());
+        auto calc_covariance_fold0 = new history<TH2F>("calc_covariance_fold0", "", null<TH2F>, (int64_t) file_data.size());
+        auto calc_covariance_fold1 = new history<TH2F>("calc_covariance_fold1", "", null<TH2F>, (int64_t) file_data.size());
 
-        auto toy_covariance = new history<TH2F>("toy_covariance", "", null<TH2F>, (int64_t) filenames.size());
-        auto toy_covariance_fold0 = new history<TH2F>("toy_covariance_fold0", "", null<TH2F>, (int64_t) filenames.size());
-        auto toy_covariance_fold1 = new history<TH2F>("toy_covariance_fold1", "", null<TH2F>, (int64_t) filenames.size());
+        auto toy_covariance = new history<TH2F>("toy_covariance", "", null<TH2F>, (int64_t) file_data.size());
+        auto toy_covariance_fold0 = new history<TH2F>("toy_covariance_fold0", "", null<TH2F>, (int64_t) file_data.size());
+        auto toy_covariance_fold1 = new history<TH2F>("toy_covariance_fold1", "", null<TH2F>, (int64_t) file_data.size());
 
         /* extract chosen histograms */
-        for (size_t j = 0; j < filenames.size(); ++j) {
+        for (size_t j = 0; j < file_data.size(); ++j) {
             std::string unfolded_name = "Test0HUnfolded" + algorithm + std::to_string(choices[i][j]);
             std::string calc_covariance_name = "MUnfolded" + algorithm + std::to_string(choices[i][j]);
             std::string toy_covariance_name = "HCovarianceDist" + std::to_string(choices[i][j]);
@@ -374,12 +374,12 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
         // auto p1 = new paper(set + "_unfolding_prior_" + tag + "_data_" + label + "_" + algorithm + "_dj", hb);
 
-        // p1->divide(filenames.size(), -1);
+        // p1->divide(file_data.size(), -1);
         // p1->accessory(pthf_info);
         // p1->accessory(std::bind(minimum, _1, i));
         // apply_style(p1, cms, system_tag, -2, 20);
 
-        // for (size_t i = 0; i < filenames.size(); ++i) {
+        // for (size_t i = 0; i < file_data.size(); ++i) {
         //     p1->add((*unfolded_mc_fold0)[i], "data", "MC");
         //     p1->stack((*unfolded_flat_fold0)[i], "data", "Flat");
         // }
