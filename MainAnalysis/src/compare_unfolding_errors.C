@@ -418,6 +418,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             p4->add((*calc_covariance)[i], "Calculated");
             p4->adjust((*toy_covariance)[i], "colz", "");
             p4->adjust((*calc_covariance)[i], "colz", "");
+            (*toy_covariance)[i]->GetZaxis()->SetLabelSize(0.02);
+            (*calc_covariance)[i]->GetZaxis()->SetLabelSize(0.02);
         }
 
         auto p5 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_fold0_index" + std::to_string(i), hb);
@@ -430,6 +432,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             p5->add((*calc_covariance_fold0)[i], "Calculated");
             p5->adjust((*toy_covariance_fold0)[i], "colz", "");
             p5->adjust((*calc_covariance_fold0)[i], "colz", "");
+            (*toy_covariance_fold0)[i]->GetZaxis()->SetLabelSize(0.02);
+            (*calc_covariance_fold0)[i]->GetZaxis()->SetLabelSize(0.02);
         }
 
         auto p6 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_fold1_index" + std::to_string(i), hb);
@@ -442,6 +446,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             p6->add((*calc_covariance_fold1)[i], "Calculated");
             p6->adjust((*toy_covariance_fold1)[i], "colz", "");
             p6->adjust((*calc_covariance_fold1)[i], "colz", "");
+            (*toy_covariance_fold1)[i]->GetZaxis()->SetLabelSize(0.02);
+            (*calc_covariance_fold1)[i]->GetZaxis()->SetLabelSize(0.02);
         }
 
         hb->sketch();
