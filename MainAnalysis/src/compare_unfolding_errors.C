@@ -88,7 +88,7 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
     return hfold;
 }
 
-TH1F* exract_errors(TH1* h) {
+TH1F* extract_errors(TH1* h) {
     TH1F* err = (TH1F*) h->Clone("errors");
     err->Reset();
 
