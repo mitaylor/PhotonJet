@@ -439,9 +439,9 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
         for (size_t i = 0; i < file_data.size(); ++i) {
             p6->add((*toy_covariance_fold1)[i], "Toy");
-            p6->add((*calc_covarianc_fold1)[i], "Calculated");
+            p6->add((*calc_covariance_fold1)[i], "Calculated");
             p6->adjust((*toy_covariance_fold1)[i], "colz", "");
-            p6->adjust((*calc_covarianc_fold1)[i], "colz", "");
+            p6->adjust((*calc_covariance_fold1)[i], "colz", "");
         }
 
         hb->sketch();
