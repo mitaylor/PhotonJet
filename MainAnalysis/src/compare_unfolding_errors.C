@@ -414,8 +414,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p4, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
-            max = ((*toy_covariance)[i]->GetMaximum() > (*calc_covariance)[i]->GetMaximum()) ? (*toy_covariance)[i]->GetMaximum() : (*calc_covariance)[i]->GetMaximum();
-            min = ((*toy_covariance)[i]->GetMinimum() < (*calc_covariance)[i]->GetMinimum()) ? (*toy_covariance)[i]->GetMinimum() : (*calc_covariance)[i]->GetMinimum();
+            auto max = ((*toy_covariance)[i]->GetMaximum() > (*calc_covariance)[i]->GetMaximum()) ? (*toy_covariance)[i]->GetMaximum() : (*calc_covariance)[i]->GetMaximum();
+            auto min = ((*toy_covariance)[i]->GetMinimum() < (*calc_covariance)[i]->GetMinimum()) ? (*toy_covariance)[i]->GetMinimum() : (*calc_covariance)[i]->GetMinimum();
 
             max *= 1.2;
             min = (min < 0) ? min * 1.2 : 0;
@@ -434,8 +434,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p5, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
-            max = ((*toy_covariance_fold0)[i]->GetMaximum() > (*calc_covariance_fold0)[i]->GetMaximum()) ? (*toy_covariance_fold0)[i]->GetMaximum() : (*calc_covariance_fold0)[i]->GetMaximum();
-            min = ((*toy_covariance_fold0)[i]->GetMinimum() < (*calc_covariance_fold0)[i]->GetMinimum()) ? (*toy_covariance_fold0)[i]->GetMinimum() : (*calc_covariance_fold0)[i]->GetMinimum();
+            auto max = ((*toy_covariance_fold0)[i]->GetMaximum() > (*calc_covariance_fold0)[i]->GetMaximum()) ? (*toy_covariance_fold0)[i]->GetMaximum() : (*calc_covariance_fold0)[i]->GetMaximum();
+            auto min = ((*toy_covariance_fold0)[i]->GetMinimum() < (*calc_covariance_fold0)[i]->GetMinimum()) ? (*toy_covariance_fold0)[i]->GetMinimum() : (*calc_covariance_fold0)[i]->GetMinimum();
 
             max *= 1.2;
             min = (min < 0) ? min * 1.2 : 0;
@@ -454,8 +454,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p6, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
-            max = ((*toy_covariance_fold1)[i]->GetMaximum() > (*calc_covariance_fold1)[i]->GetMaximum()) ? (*toy_covariance_fold1)[i]->GetMaximum() : (*calc_covariance_fold1)[i]->GetMaximum();
-            min = ((*toy_covariance_fold1)[i]->GetMinimum() < (*calc_covariance_fold1)[i]->GetMinimum()) ? (*toy_covariance_fold1)[i]->GetMinimum() : (*calc_covariance_fold1)[i]->GetMinimum();
+            auto max = ((*toy_covariance_fold1)[i]->GetMaximum() > (*calc_covariance_fold1)[i]->GetMaximum()) ? (*toy_covariance_fold1)[i]->GetMaximum() : (*calc_covariance_fold1)[i]->GetMaximum();
+            auto min = ((*toy_covariance_fold1)[i]->GetMinimum() < (*calc_covariance_fold1)[i]->GetMinimum()) ? (*toy_covariance_fold1)[i]->GetMinimum() : (*calc_covariance_fold1)[i]->GetMinimum();
 
             max *= 1.2;
             min = (min < 0) ? min * 1.2 : 0;
