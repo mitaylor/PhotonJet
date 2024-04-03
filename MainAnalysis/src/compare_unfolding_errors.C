@@ -382,10 +382,20 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p1, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
+            auto max = ((*toy_errors)[i]->GetMaximum() > (*calc_errors)[i]->GetMaximum()) ? (*toy_errors)[i]->GetMaximum() : (*calc_errors)[i]->GetMaximum();
+            auto min = ((*toy_errors)[i]->GetMinimum() < (*calc_errors)[i]->GetMinimum()) ? (*toy_errors)[i]->GetMinimum() : (*calc_errors)[i]->GetMinimum();
+
+            max *= 1.2;
+            min = (min < 0) ? min * 1.2 : 0;
+            
             p1->add((*toy_errors)[i], "Toy");
             p1->stack((*calc_errors)[i], "Calculated");
             p1->adjust((*toy_errors)[i], "hist", "");
             p1->adjust((*calc_errors)[i], "hist", "");
+            (*toy_errors)[i]->SetMaximum(max);
+            (*calc_errors)[i]->SetMaximum(max);
+            (*toy_errors)[i]->SetMinimum(min);
+            (*calc_errors)[i]->SetMinimum(min);
         }
 
         auto p2 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold0_index" + std::to_string(i), hb);
@@ -395,8 +405,20 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p2, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
+            auto max = ((*toy_errors_fold0)[i]->GetMaximum() > (*calc_errors_fold0)[i]->GetMaximum()) ? (*toy_errors_fold0)[i]->GetMaximum() : (*calc_errors_fold0)[i]->GetMaximum();
+            auto min = ((*toy_errors_fold0)[i]->GetMinimum() < (*calc_errors_fold0)[i]->GetMinimum()) ? (*toy_errors_fold0)[i]->GetMinimum() : (*calc_errors_fold0)[i]->GetMinimum();
+
+            max *= 1.2;
+            min = (min < 0) ? min * 1.2 : 0;
+
             p2->add((*toy_errors_fold0)[i], "Toy");
             p2->stack((*calc_errors_fold0)[i], "Calculated");
+            p2->adjust((*toy_errors_fold0)[i], "hist", "");
+            p2->adjust((*calc_errors_fold0)[i], "hist", "");
+            (*toy_errors_fold0)[i]->SetMaximum(max);
+            (*calc_errors_fold0)[i]->SetMaximum(max);
+            (*toy_errors_fold0)[i]->SetMinimum(min);
+            (*calc_errors_fold0)[i]->SetMinimum(min);
         }
 
         auto p3 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold1_index" + std::to_string(i), hb);
@@ -406,8 +428,20 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p3, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
+            auto max = ((*toy_errors_fold1)[i]->GetMaximum() > (*calc_errors_fold1)[i]->GetMaximum()) ? (*toy_errors_fold1)[i]->GetMaximum() : (*calc_errors_fold1)[i]->GetMaximum();
+            auto min = ((*toy_errors_fold1)[i]->GetMinimum() < (*calc_errors_fold1)[i]->GetMinimum()) ? (*toy_errors_fold1)[i]->GetMinimum() : (*calc_errors_fold1)[i]->GetMinimum();
+
+            max *= 1.2;
+            min = (min < 0) ? min * 1.2 : 0;
+
             p3->add((*toy_errors_fold1)[i], "Toy");
             p3->stack((*calc_errors_fold1)[i], "Calculated");
+            p3->adjust((*toy_errors_fold1)[i], "hist", "");
+            p3->adjust((*calc_errors_fold1)[i], "hist", "");
+            (*toy_errors_fold1)[i]->SetMaximum(max);
+            (*calc_errors_fold1)[i]->SetMaximum(max);
+            (*toy_errors_fold1)[i]->SetMinimum(min);
+            (*calc_errors_fold1)[i]->SetMinimum(min);
         }
 
         auto p4 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_index" + std::to_string(i), hb);
