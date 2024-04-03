@@ -296,9 +296,9 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             auto toy_errors_temp = (TH1F*) fdata[j]->Get(toy_errors_name.data());
             auto toy_errors_fold0_temp = (TH1F*) fdata[j]->Get(toy_errors_fold0_name.data());
             auto toy_errors_fold1_temp = (TH1F*) fdata[j]->Get(toy_errors_fold1_name.data());
-            auto toy_covariance_temp = (TH1F*) fdata[j]->Get(toy_covariance_name.data());
-            auto toy_covariance_fold0_temp = (TH1F*) fdata[j]->Get(toy_covariance_fold0_name.data());
-            auto toy_covariance_fold1_temp = (TH1F*) fdata[j]->Get(toy_covariance_fold1_name.data());
+            auto toy_covariance_temp = (TH2F*) fdata[j]->Get(toy_covariance_name.data());
+            auto toy_covariance_fold0_temp = (TH2F*) fdata[j]->Get(toy_covariance_fold0_name.data());
+            auto toy_covariance_fold1_temp = (TH2F*) fdata[j]->Get(toy_covariance_fold1_name.data());
 
             /* synthesise ingredients */
             (*unfolded)[j] = unfolded_temp;
@@ -396,7 +396,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
 int main(int argc, char* argv[]) {
     if (argc == 4)
-        return quantitate(argv[1], argv[2], argv[3]);
+        return compare_unfolding_errors(argv[1], argv[2], argv[3]);
 
     printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
