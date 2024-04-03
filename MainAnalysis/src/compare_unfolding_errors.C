@@ -251,7 +251,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             auto reg = (algorithm == "SVD") ? "k_{reg}"s : "it"s;
             auto min = "Regularization: "s + reg + " = "s + to_text(choices[choice][index]);
             auto alg = "Algorithm: "s + algorithm;
-            auto pri = "Prior: "s + label;
+            auto pri = "Prior: "s + prior;
 
             TLatex* l = new TLatex();
             l->SetTextFont(43);
