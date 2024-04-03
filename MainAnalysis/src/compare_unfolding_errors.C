@@ -249,7 +249,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     auto minimum = [&](int64_t index, int64_t choice) {
         if (index > -1) {
             auto reg = (algorithm == "SVD") ? "k_{reg}"s : "it"s;
-            auto min = "Regularization: "s + reg + " = "s + to_text(choices[choice][index]);
+            auto min = "Regularization: "s + reg + " = "s + to_text(choices[choice][index - 1]);
             auto alg = "Algorithm: "s + algorithm;
             auto pri = "Prior: "s + prior;
 
@@ -414,6 +414,12 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p4, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
+            max = ((*toy_covariance)[i]->GetMaximum() > (*calc_covariance)[i]->GetMaximum()) ? (*toy_covariance)[i]->GetMaximum() : (*calc_covariance)[i]->GetMaximum();
+            min = ((*toy_covariance)[i]->GetMinimum() < (*calc_covariance)[i]->GetMinimum()) ? (*toy_covariance)[i]->GetMinimum() : (*calc_covariance)[i]->GetMinimum();
+
+            max *= 1.2;
+            min = (min < 0) ? min * 1.2 : 0;
+
             p4->add((*toy_covariance)[i], "Toy");
             p4->add((*calc_covariance)[i], "Calculated");
             p4->adjust((*toy_covariance)[i], "colz", "");
@@ -428,6 +434,12 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p5, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
+            max = ((*toy_covariance_fold0)[i]->GetMaximum() > (*calc_covariance_fold0)[i]->GetMaximum()) ? (*toy_covariance_fold0)[i]->GetMaximum() : (*calc_covariance_fold0)[i]->GetMaximum();
+            min = ((*toy_covariance_fold0)[i]->GetMinimum() < (*calc_covariance_fold0)[i]->GetMinimum()) ? (*toy_covariance_fold0)[i]->GetMinimum() : (*calc_covariance_fold0)[i]->GetMinimum();
+
+            max *= 1.2;
+            min = (min < 0) ? min * 1.2 : 0;
+
             p5->add((*toy_covariance_fold0)[i], "Toy");
             p5->add((*calc_covariance_fold0)[i], "Calculated");
             p5->adjust((*toy_covariance_fold0)[i], "colz", "");
@@ -442,6 +454,12 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p6, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
+            max = ((*toy_covariance_fold1)[i]->GetMaximum() > (*calc_covariance_fold1)[i]->GetMaximum()) ? (*toy_covariance_fold1)[i]->GetMaximum() : (*calc_covariance_fold1)[i]->GetMaximum();
+            min = ((*toy_covariance_fold1)[i]->GetMinimum() < (*calc_covariance_fold1)[i]->GetMinimum()) ? (*toy_covariance_fold1)[i]->GetMinimum() : (*calc_covariance_fold1)[i]->GetMinimum();
+
+            max *= 1.2;
+            min = (min < 0) ? min * 1.2 : 0;
+
             p6->add((*toy_covariance_fold1)[i], "Toy");
             p6->add((*calc_covariance_fold1)[i], "Calculated");
             p6->adjust((*toy_covariance_fold1)[i], "colz", "");
