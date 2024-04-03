@@ -206,7 +206,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     std::vector<TFile*> fdata(file_data.size(), nullptr);
 
     zip([&](auto& fdata, auto const& filename) {
-        fdata = new TFile(("unfolded/Errors/"s + set + "/" + algorithm + "/" + prior + "/kErrors/"s + filename).data(), "read");
+        fdata = new TFile(("unfolded/Errors/Data/"s + set + "/" + algorithm + "/" + prior + "/kErrors/"s + filename).data(), "read");
     }, fdata, file_data);
 
     TFile* freg = new TFile((base + file_regularization).data(), "read");
