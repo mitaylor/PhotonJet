@@ -107,7 +107,7 @@ TH2F* convert_covariance(TMatrixT<double>* matrix) {
 
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
-            cov->SetBinContent(i + 1, (*matrix)(i, j));
+            cov->SetBinContent(i + 1, j + 1, (*matrix)(i, j));
             cov->SetBinError(i + 1, 0);
         }
     }
