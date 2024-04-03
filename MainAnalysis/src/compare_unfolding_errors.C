@@ -137,6 +137,9 @@ TH2F* collapse_covariance(TH2F* cov, interval const* idrg, interval const* iptg,
                     }
                 }
 
+                sum /= idrg->width(j);
+                sum /= idrg->width(k);
+
                 proj->SetBinContent(j + 1, k + 1, sum);
             }
         }
@@ -157,6 +160,9 @@ TH2F* collapse_covariance(TH2F* cov, interval const* idrg, interval const* iptg,
                         sum += cov->GetBinContent(index_row, index_col);
                     }
                 }
+
+                sum /= iptg->width(j);
+                sum /= iptg->width(k);
 
                 proj->SetBinContent(j + 1, k + 1, sum);
             }
@@ -195,7 +201,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
     auto mg = new multival(*idrg, *iptg);
-    // auto mpthf = new multival(rpt, dhf);
+    auto mpthf = new multival(rpt, dhf);
 
     std::vector<int64_t> osg {0, 0, 0, 0};
 
@@ -227,35 +233,35 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     }
 
     /* plotting setup */
-    // auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
-    // system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
-    // auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+    auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
-    // std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
-    //     info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
 
-    // std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
-    //     info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
 
-    // auto pthf_info = [&](int64_t index) {
-    //     stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
+    auto pthf_info = [&](int64_t index) {
+        stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
-    // auto minimum = [&](int64_t index, int64_t choice) {
-    //     if (index > -1) {
-    //         auto reg = (algorithm == "SVD") ? "k_{reg}"s : "it"s;
-    //         auto min = "Regularization: "s + reg + " = "s + to_text(choices[choice][index]);
-    //         auto alg = "Algorithm: "s + algorithm;
-    //         auto pri = "Prior: "s + label;
+    auto minimum = [&](int64_t index, int64_t choice) {
+        if (index > -1) {
+            auto reg = (algorithm == "SVD") ? "k_{reg}"s : "it"s;
+            auto min = "Regularization: "s + reg + " = "s + to_text(choices[choice][index]);
+            auto alg = "Algorithm: "s + algorithm;
+            auto pri = "Prior: "s + label;
 
-    //         TLatex* l = new TLatex();
-    //         l->SetTextFont(43);
-    //         l->SetTextAlign(11);
-    //         l->SetTextSize(13);
-    //         l->DrawLatexNDC(0.3, 0.65, min.data());
-    //         l->DrawLatexNDC(0.3, 0.60, alg.data());
-    //         l->DrawLatexNDC(0.3, 0.55, pri.data());
-    //     }
-    // };
+            TLatex* l = new TLatex();
+            l->SetTextFont(43);
+            l->SetTextAlign(11);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.3, 0.65, min.data());
+            l->DrawLatexNDC(0.3, 0.60, alg.data());
+            l->DrawLatexNDC(0.3, 0.55, pri.data());
+        }
+    };
 
     for (size_t i = 0; i < choices.size(); ++i) {
         /* prepare data */
@@ -364,29 +370,88 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         toy_covariance_fold0->save();
         toy_covariance_fold1->save();
 
-        // /* plot histograms */
-        // auto hb = new pencil();
+        /* plot histograms */
+        auto hb = new pencil();
 
-        // hb->category("type", "data");
-        // hb->category("prior", "MC", "Flat");
+        hb->category("type", "Calculated", "Toy");
 
-        // hb->set_binary("prior");
+        auto p1 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_index" + std::to_string(i), hb);
+        p1->divide(file_data.size(), -1);
+        p1->accessory(pthf_info);
+        p1->accessory(std::bind(minimum, _1, i));
+        apply_style(p1, cms, system_tag);
 
-        // auto p1 = new paper(set + "_unfolding_prior_" + tag + "_data_" + label + "_" + algorithm + "_dj", hb);
+        for (size_t i = 0; i < file_data.size(); ++i) {
+            p1->add((*toy_errors)[i], "Toy");
+            p1->stack((*calc_errors)[i], "Calculated");
+        }
 
-        // p1->divide(file_data.size(), -1);
-        // p1->accessory(pthf_info);
-        // p1->accessory(std::bind(minimum, _1, i));
-        // apply_style(p1, cms, system_tag, -2, 20);
+        auto p2 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold0_index" + std::to_string(i), hb);
+        p2->divide(file_data.size(), -1);
+        p2->accessory(pthf_info);
+        p2->accessory(std::bind(minimum, _1, i));
+        apply_style(p2, cms, system_tag);
 
-        // for (size_t i = 0; i < file_data.size(); ++i) {
-        //     p1->add((*unfolded_mc_fold0)[i], "data", "MC");
-        //     p1->stack((*unfolded_flat_fold0)[i], "data", "Flat");
-        // }
+        for (size_t i = 0; i < file_data.size(); ++i) {
+            p2->add((*toy_errors_fold0)[i], "Toy");
+            p2->stack((*calc_errors_fold0)[i], "Calculated");
+        }
 
-        // hb->sketch();
+        auto p3 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold1_index" + std::to_string(i), hb);
+        p3->divide(file_data.size(), -1);
+        p3->accessory(pthf_info);
+        p3->accessory(std::bind(minimum, _1, i));
+        apply_style(p3, cms, system_tag);
 
-        // p1->draw("pdf");
+        for (size_t i = 0; i < file_data.size(); ++i) {
+            p3->add((*toy_errors_fold1)[i], "Toy");
+            p3->stack((*calc_errors_fold1)[i], "Calculated");
+        }
+
+        auto p4 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_index" + std::to_string(i), hb);
+        p4->divide(2, file_data.size());
+        p4->accessory(pthf_info);
+        apply_style(p4, cms, system_tag);
+
+        for (size_t i = 0; i < file_data.size(); ++i) {
+            p4->add((*toy_covariance)[i], "Toy");
+            p4->add((*calc_covariance)[i], "Calculated");
+            p4->adjust((*toy_covariance)[i], "colz", "");
+            p4->adjust((*calc_covariance)[i], "colz", "");
+        }
+
+        auto p5 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_fold0_index" + std::to_string(i), hb);
+        p5->divide(2, file_data.size());
+        p5->accessory(pthf_info);
+        apply_style(p5, cms, system_tag);
+
+        for (size_t i = 0; i < file_data.size(); ++i) {
+            p5->add((*toy_covariance_fold0)[i], "Toy");
+            p5->add((*calc_covariance_fold0)[i], "Calculated");
+            p5->adjust((*toy_covariance_fold0)[i], "colz", "");
+            p5->adjust((*calc_covariance_fold0)[i], "colz", "");
+        }
+
+        auto p6 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_fold1_index" + std::to_string(i), hb);
+        p6->divide(2, file_data.size());
+        p6->accessory(pthf_info);
+        apply_style(p6, cms, system_tag);
+
+        for (size_t i = 0; i < file_data.size(); ++i) {
+            p6->add((*toy_covariance_fold1)[i], "Toy");
+            p6->add((*calc_covarianc_fold1)[i], "Calculated");
+            p6->adjust((*toy_covariance_fold1)[i], "colz", "");
+            p6->adjust((*calc_covarianc_fold1)[i], "colz", "");
+        }
+
+        hb->sketch();
+
+        p1->draw("pdf");
+        p2->draw("pdf");
+        p3->draw("pdf");
+        p4->draw("pdf");
+        p5->draw("pdf");
+        p6->draw("pdf");
     }
 
     fout->Close();
