@@ -384,6 +384,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         for (size_t i = 0; i < file_data.size(); ++i) {
             p1->add((*toy_errors)[i], "Toy");
             p1->stack((*calc_errors)[i], "Calculated");
+            p1->adjust((*toy_errors)[i], "hist", "");
+            p1->adjust((*calc_errors)[i], "hist", "");
         }
 
         auto p2 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold0_index" + std::to_string(i), hb);
