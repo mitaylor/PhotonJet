@@ -17,11 +17,15 @@ run_aa() {
 samples=(pp)
 
 for sample in ${samples[@]}; do
-    run_pp ${sample}_${input}
+    for input in bayes_original; do
+        run_pp ${sample}_${input}
+    done
 done
 
 samples=(aa)
 
 for sample in ${samples[@]}; do
-    run_aa ${sample}_${input}
+    for input in bayes_original; do
+        run_aa ${sample}_${input}
+    done
 done
