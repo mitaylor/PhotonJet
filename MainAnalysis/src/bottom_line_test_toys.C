@@ -633,8 +633,8 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
             (*data_after)[i] = HUnfolded;
             (*data_after)[i]->Multiply((*gen_eff)[i]);
-            (*data_after_fold0)[i] = fold_mat((*data_after)[i], MUnfolded, mg, 0, osg);
-            (*data_after_fold1)[i] = fold_mat((*data_after)[i], MUnfolded, mg, 1, osg);
+            (*data_after_fold0)[i] = fold((*data_after)[i], MUnfolded, mg, 0, osg);
+            (*data_after_fold1)[i] = fold((*data_after)[i], MUnfolded, mg, 1, osg);
 
             std::vector<double> covariance_after_elements((*data_after)[i]->GetNbinsX() * (*data_after)[i]->GetNbinsX(), 0);
             std::vector<double> covariance_after_fold0_elements((*data_after_fold0)[i]->GetNbinsX() * (*data_after_fold0)[i]->GetNbinsX(), 0);
