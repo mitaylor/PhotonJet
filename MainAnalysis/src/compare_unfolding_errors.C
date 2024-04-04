@@ -213,6 +213,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
     zip([&](auto& fdata, auto const& filename) {
         fdata = new TFile(("unfolded/Errors/"s + set + "/" + algorithm + "/" + prior + "/kErrors/"s + filename).data(), "read");
+        std::cout << "unfolded/Errors/"s + set + "/" + algorithm + "/" + prior + "/kErrors/"s + filename << std::endl;
     }, fdata, file_data);
 
     TFile* freg = new TFile((base + file_regularization).data(), "read");
@@ -230,6 +231,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         choices[1][i] = (*regularization)[i]->GetMinimumBin();
         choices[2][i] = 50;
         choices[3][i] = 100;
+        std::cout << (*regularization)[i]->GetMinimumBin() << std::endl;
     }
 
     /* plotting setup */
