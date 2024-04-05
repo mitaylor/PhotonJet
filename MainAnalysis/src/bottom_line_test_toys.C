@@ -308,6 +308,13 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto gen_eff = new history<TH1F>(fmatrix, tag + "_g_eff"s);
     auto reco_eff = new history<TH1F>(fmatrix, tag + "_r_eff"s);
 
+    /* set errors to be zero */
+    for (int64_t i = 0; i < size; ++i) {
+        for (int64_t j = 0; j < (*reco_eff)[i]->GetNbinsX(); ++j) {
+            (*reco_eff)[i]->SetBinError(j + 1, 0);
+        }
+    }
+
     matrix->rename("response"s);
     gen_eff->rename("gen_eff"s);
     reco_eff->rename("reco_eff"s);
