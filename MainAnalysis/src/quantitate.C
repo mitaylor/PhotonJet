@@ -232,11 +232,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
     }
 
     /* rename histograms */
+    covariance->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_covariance"s);
     unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold0"s);
     unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold1"s);
 
     /* save histograms */
+    covariance->save();
     unfolded->save();
     unfolded_fold0->save();
     unfolded_fold1->save();
