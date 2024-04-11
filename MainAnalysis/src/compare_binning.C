@@ -234,7 +234,7 @@ int compare_binning(char const* config, char const* output) {
     auto rebin3_before_fold1 = new history<TH1F>("rebin3_before_fold1", "", null<TH1F>, size);
     auto rebin4_before_fold0 = new history<TH1F>("rebin4_before_fold0", "", null<TH1F>, size);
     auto rebin4_before_fold1 = new history<TH1F>("rebin4_before_fold1", "", null<TH1F>, size);
-
+std::cout << __LINE__ << std::endl;
     for (int j = 0; j < size; ++j) {
         (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);
         (*rebin1_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
@@ -245,7 +245,7 @@ int compare_binning(char const* config, char const* output) {
         (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);
         (*rebin4_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);
     }
-
+std::cout << __LINE__ << std::endl;
     rebin1_before_fold0->rename("rebin1_" + tag + "_" + before_label + "_fold0");
     rebin1_before_fold1->rename("rebin1_" + tag + "_" + before_label + "_fold1");
     rebin2_before_fold0->rename("rebin2_" + tag + "_" + before_label + "_fold0");
@@ -254,18 +254,18 @@ int compare_binning(char const* config, char const* output) {
     rebin3_before_fold1->rename("rebin3_" + tag + "_" + before_label + "_fold1");
     rebin4_before_fold0->rename("rebin4_" + tag + "_" + before_label + "_fold0");
     rebin4_before_fold1->rename("rebin4_" + tag + "_" + before_label + "_fold1");
-
+std::cout << __LINE__ << std::endl;
     /* prepare the post-unfolded data */
     auto rebin1_after = new history<TH1F>(finput1, tag + "_"s + after_label);
     auto rebin2_after = new history<TH1F>(finput2, tag + "_"s + after_label);
     auto rebin3_after = new history<TH1F>(finput3, tag + "_"s + after_label);
     auto rebin4_after = new history<TH1F>(finput4, tag + "_"s + after_label);
-
+std::cout << __LINE__ << std::endl;
     auto rebin1_covariance = new history<TH2F>(finput1, tag + "_"s + covariance_label);
     auto rebin2_covariance = new history<TH2F>(finput2, tag + "_"s + covariance_label);
     auto rebin3_covariance = new history<TH2F>(finput3, tag + "_"s + covariance_label);
     auto rebin4_covariance = new history<TH2F>(finput4, tag + "_"s + covariance_label);
-
+std::cout << __LINE__ << std::endl;
     auto rebin1_after_fold0 = new history<TH1F>("rebin1_after_fold0", "", null<TH1F>, size);
     auto rebin1_after_fold1 = new history<TH1F>("rebin1_after_fold1", "", null<TH1F>, size);
     auto rebin2_after_fold0 = new history<TH1F>("rebin2_after_fold0", "", null<TH1F>, size);
@@ -274,7 +274,7 @@ int compare_binning(char const* config, char const* output) {
     auto rebin3_after_fold1 = new history<TH1F>("rebin3_after_fold1", "", null<TH1F>, size);
     auto rebin4_after_fold0 = new history<TH1F>("rebin4_after_fold0", "", null<TH1F>, size);
     auto rebin4_after_fold1 = new history<TH1F>("rebin4_after_fold1", "", null<TH1F>, size);
-
+std::cout << __LINE__ << std::endl;
     for (int j = 0; j < size; ++j) {
         (*rebin1_after_fold0)[j] = fold((*rebin1_after)[j], (*rebin1_covariance)[j], rebin1_mg, 0, rebin1_osg);
         (*rebin1_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin1_covariance)[j], rebin1_mg, 1, rebin1_osg);
@@ -285,7 +285,7 @@ int compare_binning(char const* config, char const* output) {
         (*rebin4_after_fold0)[j] = fold((*rebin4_after)[j], (*rebin4_covariance)[j], rebin4_mg, 0, rebin4_osg);
         (*rebin4_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin4_covariance)[j], rebin4_mg, 1, rebin4_osg);
     }
-
+std::cout << __LINE__ << std::endl;
     rebin1_after_fold0->rename("rebin1_" + tag + "_" + after_label + "_fold0");
     rebin1_after_fold1->rename("rebin1_" + tag + "_" + after_label + "_fold1");
     rebin2_after_fold0->rename("rebin2_" + tag + "_" + after_label + "_fold0");
@@ -294,7 +294,7 @@ int compare_binning(char const* config, char const* output) {
     rebin3_after_fold1->rename("rebin3_" + tag + "_" + after_label + "_fold1");
     rebin4_after_fold0->rename("rebin4_" + tag + "_" + after_label + "_fold0");
     rebin4_after_fold1->rename("rebin4_" + tag + "_" + after_label + "_fold1");
-
+std::cout << __LINE__ << std::endl;
     /* save histograms */
     rebin1_before_fold0->save();
     rebin1_before_fold1->save();
