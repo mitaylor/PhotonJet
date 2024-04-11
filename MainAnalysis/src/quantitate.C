@@ -191,13 +191,13 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto osg = sel->get<std::vector<int64_t>>("osg");
 
     /* create intervals and multivals */
-    auto idrr = new interval("#deltaj"s, rdrr);
-    auto iptr = new interval("p_{T}^{j}"s, rptr);
+    // auto idrr = new interval("#deltaj"s, rdrr);
+    // auto iptr = new interval("p_{T}^{j}"s, rptr);
 
     auto idrg = new interval("#deltaj"s, rdrg);
     auto iptg = new interval("p_{T}^{j}"s, rptg);
 
-    auto mr = new multival(*idrr, *iptr);
+    // auto mr = new multival(*idrr, *iptr);
     auto mg = new multival(*idrg, *iptg);
 
     /* manage memory manually */
