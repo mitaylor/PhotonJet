@@ -252,10 +252,10 @@ int compare_binning(char const* config, char const* output) {
     auto rebin3_after = new history<TH1F>(finput3, tag + "_"s + after_label);
     auto rebin4_after = new history<TH1F>(finput4, tag + "_"s + after_label);
 
-    auto rebin1_covariance = new history<TH1F>(finput1, tag + "_"s + covariance_label);
-    auto rebin2_covariance = new history<TH1F>(finput2, tag + "_"s + covariance_label);
-    auto rebin3_covariance = new history<TH1F>(finput3, tag + "_"s + covariance_label);
-    auto rebin4_covariance = new history<TH1F>(finput4, tag + "_"s + covariance_label);
+    auto rebin1_covariance = new history<TH2F>(finput1, tag + "_"s + covariance_label);
+    auto rebin2_covariance = new history<TH2F>(finput2, tag + "_"s + covariance_label);
+    auto rebin3_covariance = new history<TH2F>(finput3, tag + "_"s + covariance_label);
+    auto rebin4_covariance = new history<TH2F>(finput4, tag + "_"s + covariance_label);
 
     auto rebin1_after_fold0 = new history<TH1F>("rebin1_after_fold0", "", null<TH1F>, size);
     auto rebin1_after_fold1 = new history<TH1F>("rebin1_after_fold1", "", null<TH1F>, size);
