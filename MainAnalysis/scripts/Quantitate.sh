@@ -7,9 +7,7 @@ run_pp() {
 
     echo ${tag}
 
-    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/data_iteration_${tag}.root
-    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/iteration_${tag}.root
-    ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/quantitate_${tag}.root
+    ./bin/quantitate configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/quantitate_${tag}.root
 }
 
 run_aa() {
@@ -17,9 +15,7 @@ run_aa() {
 
     echo ${tag}
 
-    ./bin/get_iteration_files configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/data_iteration_${tag}.root
-    ./bin/iteration configs/iteration/iteration_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/iteration_${tag}.root
-    ./bin/quantitate_merge configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/quantitate_${tag}.root
+    ./bin/quantitate configs/quantitate/quantitate_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/quantitate_${tag}.root
 }
 
 samples=(pp)
@@ -32,20 +28,36 @@ for sample in ${samples[@]}; do
     done
 done
 
+# samples=(pp)
+
+# for sample in ${samples[@]}; do
+#     for syst in stat_matrix prior_up prior_down; do
+#         run_pp ${sample}_${syst}
+#     done
+# done
+
 samples=(aa)
 
 for sample in ${samples[@]}; do
     run_aa ${sample}
 
-    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up cent_up cent_down es; do
+    for syst in wo_ele_rej qcd qcd_gen_iso loose_purity tight_purity jeu_up jeu_down jer_up cent_up cent_down es qcd_mebs_nonclosure; do
         run_aa ${sample}_${syst}
     done
 done
 
-samples=(aa)
+# samples=(aa)
 
-for sample in ${samples[@]}; do
-    for syst in mebs qcd_mebs; do
-        run_aa ${sample}_${syst}
-    done
-done
+# for sample in ${samples[@]}; do
+#     for syst in stat_matrix prior_up prior_down; do
+#         run_aa ${sample}_${syst}
+#     done
+# done
+
+# samples=(aa)
+
+# for sample in ${samples[@]}; do
+#     for syst in mebs qcd_mebs; do
+#         run_aa ${sample}_${syst}
+#     done
+# done
