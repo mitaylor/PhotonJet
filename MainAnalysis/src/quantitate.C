@@ -249,7 +249,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
         std::string calc_name = "MUnfoldedBayes" + std::to_string(choice[j]);
         std::string toys_name = "HCovarianceDist" + std::to_string(choice[j]);
-        std::string efficiency_name = "HMCTruthEfficiency" + std::to_string(choice[j]);
+        std::string efficiency_name = "HMCTruthEfficiency";
         
         if (qcd) {
             auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
