@@ -216,7 +216,7 @@ int compare_binning(char const* config, char const* output) {
     TFile* finput2 = new TFile((rebin2_base + input).data(), "read");
     TFile* finput3 = new TFile((rebin3_base + input).data(), "read");
     TFile* finput4 = new TFile((rebin4_base + input).data(), "read");
-
+std::cout << rebin1_base + input << std::endl;
     /* create ouput file */
     TFile* fout = new TFile(output, "recreate");
 
@@ -225,7 +225,7 @@ int compare_binning(char const* config, char const* output) {
     auto rebin2_before = new history<TH1F>(finput2, tag + "_"s + before_label);
     auto rebin3_before = new history<TH1F>(finput3, tag + "_"s + before_label);
     auto rebin4_before = new history<TH1F>(finput4, tag + "_"s + before_label);
-
+std::cout << tag + "_"s + before_label << std::endl;
     auto rebin1_before_fold0 = new history<TH1F>("rebin1_before_fold0", "", null<TH1F>, size);
     auto rebin1_before_fold1 = new history<TH1F>("rebin1_before_fold1", "", null<TH1F>, size);
     auto rebin2_before_fold0 = new history<TH1F>("rebin2_before_fold0", "", null<TH1F>, size);
@@ -234,7 +234,7 @@ int compare_binning(char const* config, char const* output) {
     auto rebin3_before_fold1 = new history<TH1F>("rebin3_before_fold1", "", null<TH1F>, size);
     auto rebin4_before_fold0 = new history<TH1F>("rebin4_before_fold0", "", null<TH1F>, size);
     auto rebin4_before_fold1 = new history<TH1F>("rebin4_before_fold1", "", null<TH1F>, size);
-std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << (*rebin1_before)[0]->GetBinContent(1) << std::endl;
     for (int j = 0; j < size; ++j) {
         (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);
         (*rebin1_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
