@@ -237,13 +237,13 @@ std::cout << tag + "_"s + before_label << std::endl;
 std::cout << __LINE__ << std::endl; std::cout << (*rebin1_before)[0]->GetBinContent(1) << std::endl;
     for (int j = 0; j < size; ++j) {
         (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);
-        (*rebin1_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
+        (*rebin1_before_fold1)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
         (*rebin2_before_fold0)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 0, rebin2_osr);
         (*rebin2_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 1, rebin2_osr);
         (*rebin3_before_fold0)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 0, rebin3_osr);
-        (*rebin3_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);
+        (*rebin3_before_fold1)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);
         (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);
-        (*rebin4_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);
+        (*rebin4_before_fold1)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);
     }
 std::cout << __LINE__ << std::endl;
     rebin1_before_fold0->rename("rebin1_" + tag + "_" + before_label + "_fold0");
@@ -277,13 +277,13 @@ std::cout << __LINE__ << std::endl;
 std::cout << __LINE__ << std::endl;
     for (int j = 0; j < size; ++j) {
         (*rebin1_after_fold0)[j] = fold((*rebin1_after)[j], (*rebin1_covariance)[j], rebin1_mg, 0, rebin1_osg);
-        (*rebin1_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin1_covariance)[j], rebin1_mg, 1, rebin1_osg);
+        (*rebin1_after_fold1)[j] = fold((*rebin1_after)[j], (*rebin1_covariance)[j], rebin1_mg, 1, rebin1_osg);
         (*rebin2_after_fold0)[j] = fold((*rebin2_after)[j], (*rebin2_covariance)[j], rebin2_mg, 0, rebin2_osg);
         (*rebin2_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin2_covariance)[j], rebin2_mg, 1, rebin2_osg);
         (*rebin3_after_fold0)[j] = fold((*rebin3_after)[j], (*rebin3_covariance)[j], rebin3_mg, 0, rebin3_osg);
-        (*rebin3_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin3_covariance)[j], rebin3_mg, 1, rebin3_osg);
+        (*rebin3_after_fold1)[j] = fold((*rebin3_after)[j], (*rebin3_covariance)[j], rebin3_mg, 1, rebin3_osg);
         (*rebin4_after_fold0)[j] = fold((*rebin4_after)[j], (*rebin4_covariance)[j], rebin4_mg, 0, rebin4_osg);
-        (*rebin4_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin4_covariance)[j], rebin4_mg, 1, rebin4_osg);
+        (*rebin4_after_fold1)[j] = fold((*rebin4_after)[j], (*rebin4_covariance)[j], rebin4_mg, 1, rebin4_osg);
     }
 std::cout << __LINE__ << std::endl;
     rebin1_after_fold0->rename("rebin1_" + tag + "_" + after_label + "_fold0");
