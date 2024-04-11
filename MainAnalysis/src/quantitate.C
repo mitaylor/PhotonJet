@@ -105,61 +105,18 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, TH1* efficiency, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
-    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
-        { offsets[axis << 1], offsets[(axis << 1) + 1] });
+TH2F* get_covariance(TMatrixT<double>* covariance, TH1* efficiency) {
+    int N = covariance->GetNrows();
+    auto hcovariance = new TH2F("covariance", "", N, 0, N, N, 0, N);
 
-    auto shape = m->shape();
-
-    auto front = std::vector<int64_t>(m->dims(), 0);
-    auto back = std::vector<int64_t>(m->dims(), 0);
-    for (int64_t i = 0; i < m->dims(); ++i) {
-        front[i] = offsets[i << 1];
-        back[i] = shape[i] - offsets[(i << 1) + 1];
-    }
-
-    auto size = back[axis] - front[axis];
-    auto list = new std::vector<int64_t>[size];
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto indices = m->indices_for(i);
-
-        bool flag = false;
-        zip([&](int64_t index, int64_t f, int64_t b) {
-            flag = flag || index < f || index >= b;
-        }, indices, front, back);
-        if (flag) { continue; }
-
-        auto index = indices[axis] - front[axis];
-        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
-            + flat->GetBinContent(i + 1));
-
-        list[index].push_back(i);
-    }
-
-    for (int64_t i = 0; i < size; ++i) {
-        auto indices = list[i];
-        int64_t count = indices.size();
-
-        auto error = 0.;
-        for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j];
-            for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k];
-                error = error + (*covariance)(j_x, k_x) / efficiency->GetBinContent(j_x + 1) / efficiency->GetBinContent(k_x + 1);
-            }
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            float value = (*covariance)(i, j) / efficiency->GetBinContent(i + 1) / efficiency->GetBinContent(j + 1);
+            hcovariance->SetBinContent(i + 1, j + 1, value);
         }
-
-        hfold->SetBinError(i + 1, std::sqrt(error));
     }
 
-    delete [] list;
-
-    hfold->Scale(1., "width");
-
-    return hfold;
+    return hcovariance;
 }
 
 int quantitate(char const* config, char const* selections, char const* output) {
@@ -235,6 +192,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto covariance = new history<TH2F>("covariance", "", null<TH2F>, (int64_t) afters.size());
 
     /* determine the regularization to use */
     std::vector<int64_t> choice(afters.size(), 1);
@@ -257,17 +215,19 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(calc_name.data());
             auto Efficiency = (TH1F*) fafters[j]->Get(efficiency_name.data());
 
+            (*covariance)[j] = get_covariance(MUnfolded, Efficiency);
             (*unfolded)[j] = HUnfoldedBayes;
-            (*unfolded_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, Efficiency, mg, 0, osg);
-            (*unfolded_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfolded, Efficiency, mg, 1, osg);
+            (*unfolded_fold0)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg);
+            (*unfolded_fold1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg);
         }
         else {
             auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
             auto MUnfolded = (TH2F*) ferrors[j]->Get(toys_name.data());
 
+            (*covariance)[j] = MUnfolded;
             (*unfolded)[j] = HUnfoldedBayes;
-            (*unfolded_fold0)[j] = fold(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-            (*unfolded_fold1)[j] = fold(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+            (*unfolded_fold0)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg);
+            (*unfolded_fold1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg);
         }
     }
 
