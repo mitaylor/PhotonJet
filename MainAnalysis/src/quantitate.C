@@ -105,7 +105,7 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
+TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, TH1* efficiency, multival const* m, int64_t axis,
            std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
@@ -148,7 +148,7 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
             auto j_x = indices[j];
             for (int64_t k = 0; k < count; ++k) {
                 auto k_x = indices[k];
-                error = error + (*covariance)(j_x, k_x);
+                error = error + (*covariance)(j_x, k_x) / efficiency->GetBinContent(j_x + 1) / efficiency->GetBinContent(k_x + 1);
             }
         }
 
@@ -173,9 +173,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto before_folds = conf->get<std::vector<std::string>>("before_folds");
 
     auto afters = conf->get<std::vector<std::string>>("afters");
-    auto merge = conf->get<std::string>("merge");
-
+    auto errors = conf->get<std::vector<std::string>>("errors");
     auto regularization = conf->get<std::string>("regularization");
+    auto qcd = conf->get<bool>("qcd");
 
     auto sel = new configurer(selections);
 
@@ -204,18 +204,21 @@ int quantitate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
+    /* open input files */
     TFile* fbefore = new TFile((base + before).data(), "read");
 
     std::vector<TFile*> fafters(afters.size(), nullptr);
     zip([&](auto& fafter, auto const& after) {
-        fafter = new TFile(("unfolded/" + set + "/" + after).data(), "read");
+        fafter = new TFile(("unfolded/Data/"s + set + "/Bayes/Original/kErrors/"s + after).data(), "read");
     }, fafters, afters);
 
-    auto fmerge = new TFile(("unfolded/" + set + "/" + merge).data(), "read");
+    std::vector<TFile*> ferrors(errors.size(), nullptr);
+    zip([&](auto& ferror, auto const& error) {
+        ferror = new TFile(("unfolded/Errors/"s + set + "/Bayes/Original/kErrors/"s + error).data(), "read");
+    }, ferrors, errors);
 
-    TFile* fiter = new TFile((base + regularization).data(), "read");
-    auto sum = new history<TH1F>(fiter, "sum"s);
-    auto sum_merge = new history<TH1F>(fiter, "sum_merge"s);
+    TFile* freg = new TFile((base + regularization).data(), "read");
+    auto reg = new history<TH1F>(freg, tag + "_mse"s);
 
     /* prepare output from pre-unfolded data */
     TFile* fout = new TFile(output, "recreate");
@@ -228,200 +231,54 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     }, before_figures);
 
-    /* prepare folds from pre-unfolded data */
-    zip([&](auto const& figure) {
-        auto stub = "_"s + figure;
-
-        auto hin = new history<TH1F>(fbefore, tag + "_"s + before_label + stub);
-        auto shape = hin->shape();
-
-        auto side0 = new history<TH1F>(tag + "_"s + before_label + stub + "_side0"s, "", null<TH1F>, shape);
-        auto side1 = new history<TH1F>(tag + "_"s + before_label + stub + "_side1"s, "", null<TH1F>, shape);
-
-        for (int64_t i = 0; i < hin->size(); ++i) {
-            (*side0)[i] = fold((*hin)[i], nullptr, mr, 0, osr);
-            (*side1)[i] = fold((*hin)[i], nullptr, mr, 1, osr);
-        }
-
-        normalise_to_unity(side0, side1);
-
-        side0->rename(tag + "_"s + before_label + stub + "_side0"s);
-        side1->rename(tag + "_"s + before_label + stub + "_side1"s);
-
-        side0->save();
-        side1->save();
-
-    }, before_folds);
-
     /* prepare the post-unfolded data */
     auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
 
-    auto refolded = new history<TH1F>("refolded", "", null<TH1F>, (int64_t) afters.size());
-    auto refolded_fold0 = new history<TH1F>("refolded_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto refolded_fold1 = new history<TH1F>("refolded_fold1", "", null<TH1F>, (int64_t) afters.size());
+    /* determine the regularization to use */
+    std::vector<int64_t> choice(afters.size(), 1);
 
-    auto measured = new history<TH1F>("measured", "", null<TH1F>, (int64_t) afters.size());
-    auto measured_fold0 = new history<TH1F>("measured_fold0", "", null<TH1F>, (int64_t) afters.size());
-    auto measured_fold1 = new history<TH1F>("measured_fold1", "", null<TH1F>, (int64_t) afters.size());
-
-    auto unfolded_merge = new history<TH1F>("unfolded_merge", "", null<TH1F>, 1);
-    auto unfolded_merge_fold0 = new history<TH1F>("unfolded_merge_fold0", "", null<TH1F>, 1);
-    auto unfolded_merge_fold1 = new history<TH1F>("unfolded_merge_fold1", "", null<TH1F>, 1);
-
-    auto refolded_merge = new history<TH1F>("refolded_merge", "", null<TH1F>, 1);
-    auto refolded_merge_fold0 = new history<TH1F>("refolded_merge_fold0", "", null<TH1F>, 1);
-    auto refolded_merge_fold1 = new history<TH1F>("refolded_merge_fold1", "", null<TH1F>, 1);
-
-    auto measured_merge = new history<TH1F>("measured_merge", "", null<TH1F>, 1);
-    auto measured_merge_fold0 = new history<TH1F>("measured_merge_fold0", "", null<TH1F>, 1);
-    auto measured_merge_fold1 = new history<TH1F>("measured_merge_fold1", "", null<TH1F>, 1);
-
-    /* determine the number of iterations to use */
-    std::vector<int64_t> choice(sum->size(), 1);
-    int64_t choice_merge = 1;
-
-    for (int i = 0; i < sum->size(); ++i) {
-        double min = 99999999999;
-
-        for (int j = 1; j <= (*sum)[i]->GetNbinsX(); ++j) {
-            auto top = (*sum)[i]->GetBinContent(j);
-
-            if (top == 0) { continue; }
-
-            // std::cout << top << " ";
-
-            if (top < min) {
-                min = top;
-                choice[i] = j;
-            }
-            else {
-                break;
-            }
-        }
-
-        // std::cout << std::endl << choice[i] << std::endl;
+    for (size_t i = 0; i < afters.size(); ++i) {
+        choice[i] = (*reg)[i]->GetMinimumBin();
+        std::cout << choice[i] << std::endl;
     }
-
-    double min = 99999999999;
-
-    for (int j = 1; j <= (*sum_merge)[0]->GetNbinsX(); ++j) {
-        auto top = (*sum_merge)[0]->GetBinContent(j);
-
-        if (top == 0) { continue; }
-
-        // std::cout << top << " ";
-
-        if (top < min) {
-            min = top;
-            choice_merge = j;
-        }
-        else {
-            break;
-        }
-    }
-
-    // std::cout << std::endl << choice_merge << std::endl;
 
     /* extract chosen histograms */
     for (size_t j = 0; j < fafters.size(); ++j) {
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
-        std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice[j]);
-        std::string refold_name = "HRefoldedBayes" + std::to_string(choice[j]);
+        std::string calc_name = "MUnfoldedBayes" + std::to_string(choice[j]);
+        std::string toys_name = "HCovarianceDist" + std::to_string(choice[j]);
+        std::string efficiency_name = "HMCTruthEfficiency" + std::to_string(choice[j]);
+        
+        if (qcd) {
+            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
+            auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(calc_name.data());
+            auto Efficiency = (TH1F*) fafters[j]->Get(efficiency_name.data());
 
-        auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
-        auto MUnfolded = (TMatrixT<double>*) fafters[j]->Get(matrix_name.data());
-        auto HRefolded = (TH1F*) fafters[j]->Get(refold_name.data());
-        auto HMeasured = (TH1F*) fafters[j]->Get("HMCMeasured");
+            (*unfolded)[j] = HUnfoldedBayes;
+            (*unfolded_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, Efficiency, mg, 0, osg);
+            (*unfolded_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfolded, Efficiency, mg, 1, osg);
+        }
+        else {
+            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(unfold_name.data());
+            auto MUnfolded = (TH2F*) ferrors[j]->Get(toys_name.data());
 
-        (*unfolded)[j] = HUnfoldedBayes;
-        (*unfolded_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-        (*unfolded_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
-
-        (*refolded)[j] = HRefolded;
-        (*refolded_fold0)[j] = fold(HRefolded, nullptr, mr, 0, osr);
-        (*refolded_fold1)[j] = fold(HRefolded, nullptr, mr, 1, osr);
-
-        (*measured)[j] = HMeasured;
-        (*measured_fold0)[j] = fold(HMeasured, nullptr, mr, 0, osr);
-        (*measured_fold1)[j] = fold(HMeasured, nullptr, mr, 1, osr);
+            (*unfolded)[j] = HUnfoldedBayes;
+            (*unfolded_fold0)[j] = fold(HUnfoldedBayes, MUnfolded, mg, 0, osg);
+            (*unfolded_fold1)[j] = fold(HUnfoldedBayes, MUnfolded, mg, 1, osg);
+        }
     }
 
-    std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice_merge);
-    std::string matrix_name = "MUnfoldedBayes" + std::to_string(choice_merge);
-    std::string refold_name = "HRefoldedBayes" + std::to_string(choice_merge);
-
-    auto HUnfoldedBayes = (TH1F*) fmerge->Get(unfold_name.data());
-    auto MUnfolded = (TMatrixT<double>*) fmerge->Get(matrix_name.data());
-    auto HRefolded = (TH1F*) fmerge->Get(refold_name.data());
-    auto HMeasured = (TH1F*) fmerge->Get("HMCMeasured");
-
-    (*unfolded_merge)[0] = HUnfoldedBayes;
-    (*unfolded_merge_fold0)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 0, osg);
-    (*unfolded_merge_fold1)[0] = fold_mat(HUnfoldedBayes, MUnfolded, mg, 1, osg);
-
-    (*refolded_merge)[0] = HRefolded;
-    (*refolded_merge_fold0)[0] = fold(HRefolded, nullptr, mr, 0, osr);
-    (*refolded_merge_fold1)[0] = fold(HRefolded, nullptr, mr, 1, osr);
-
-    (*measured_merge)[0] = HMeasured;
-    (*measured_merge_fold0)[0] = fold(HMeasured, nullptr, mr, 0, osr);
-    (*measured_merge_fold1)[0] = fold(HMeasured, nullptr, mr, 1, osr);
-
-    /* normalize folded histograms */
-    normalise_to_unity(unfolded_fold0, unfolded_fold1, refolded_fold0, refolded_fold1, measured_fold0, measured_fold1);
-    normalise_to_unity(unfolded_merge_fold0, unfolded_merge_fold1, refolded_merge_fold0, refolded_merge_fold1, measured_merge_fold0, measured_merge_fold1);
-
     /* rename histograms */
-    unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded"s);
-    unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold0"s);
-    unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_unfolded_fold1"s);
-
-    refolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded"s);
-    refolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded_fold0"s);
-    refolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_sum0_refolded_fold1"s);
-
-    measured->rename(tag + "_r");
-    measured_fold0->rename(tag + "_r_fold0");
-    measured_fold1->rename(tag + "_r_fold1");
-
-    unfolded_merge->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded"s);
-    unfolded_merge_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded_fold0"s);
-    unfolded_merge_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_unfolded_fold1"s);
-
-    refolded_merge->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded"s);
-    refolded_merge_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold0"s);
-    refolded_merge_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_merge_refolded_fold1"s);
-
-    measured_merge->rename(tag + "_r_merge");
-    measured_merge_fold0->rename(tag + "_r_merge_fold0");
-    measured_merge_fold1->rename(tag + "_r_merge_fold1");
+    unfolded->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_unfolded"s);
+    unfolded_fold0->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold0"s);
+    unfolded_fold1->rename(tag + "_"s + before_label + "_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold1"s);
 
     /* save histograms */
     unfolded->save();
     unfolded_fold0->save();
     unfolded_fold1->save();
-
-    refolded->save();
-    refolded_fold0->save();
-    refolded_fold1->save();
-
-    measured->save();
-    measured_fold0->save();
-    measured_fold1->save();
-
-    unfolded_merge->save();
-    unfolded_merge_fold0->save();
-    unfolded_merge_fold1->save();
-
-    refolded_merge->save();
-    refolded_merge_fold0->save();
-    refolded_merge_fold1->save();
-
-    measured_merge->save();
-    measured_merge_fold0->save();
-    measured_merge_fold1->save();
 
     fout->Close();
 
