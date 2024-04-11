@@ -209,7 +209,6 @@ int compare_binning(char const* config, char const* output) {
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-    int size = size;
 
     /* open input files */
     TFile* finput1 = new TFile((rebin1_base + input).data(), "read");
@@ -225,6 +224,8 @@ std::cout << rebin1_base + input << std::endl;
     auto rebin2_before = new history<TH1F>(finput2, tag + "_"s + before_label);
     auto rebin3_before = new history<TH1F>(finput3, tag + "_"s + before_label);
     auto rebin4_before = new history<TH1F>(finput4, tag + "_"s + before_label);
+
+    int size = rebin1_before->size();
 std::cout << tag + "_"s + before_label << std::endl;
     auto rebin1_before_fold0 = new history<TH1F>("rebin1_before_fold0", "", null<TH1F>, size);
     auto rebin1_before_fold1 = new history<TH1F>("rebin1_before_fold1", "", null<TH1F>, size);
@@ -236,14 +237,14 @@ std::cout << tag + "_"s + before_label << std::endl;
     auto rebin4_before_fold1 = new history<TH1F>("rebin4_before_fold1", "", null<TH1F>, size);
 std::cout << __LINE__ << std::endl; std::cout << (*rebin1_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin2_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin3_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin4_before)[0]->GetBinContent(1) << std::endl;
     for (int j = 0; j < size; ++j) {
-        (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);
-        (*rebin1_before_fold1)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
-        (*rebin2_before_fold0)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 0, rebin2_osr);
-        (*rebin2_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 1, rebin2_osr);
-        (*rebin3_before_fold0)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 0, rebin3_osr);
-        (*rebin3_before_fold1)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);
-        (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);
-        (*rebin4_before_fold1)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);
+        (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);std::cout << __LINE__ << std::endl;
+        (*rebin1_before_fold1)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);std::cout << __LINE__ << std::endl;
+        (*rebin2_before_fold0)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 0, rebin2_osr);std::cout << __LINE__ << std::endl;
+        (*rebin2_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 1, rebin2_osr);std::cout << __LINE__ << std::endl;
+        (*rebin3_before_fold0)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 0, rebin3_osr);std::cout << __LINE__ << std::endl;
+        (*rebin3_before_fold1)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);std::cout << __LINE__ << std::endl;
+        (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);std::cout << __LINE__ << std::endl;
+        (*rebin4_before_fold1)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);std::cout << __LINE__ << std::endl;
     }
 std::cout << __LINE__ << std::endl;
     rebin1_before_fold0->rename("rebin1_" + tag + "_" + before_label + "_fold0");
