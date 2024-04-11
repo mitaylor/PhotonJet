@@ -241,6 +241,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     for (size_t i = 0; i < afters.size(); ++i) {
         choice[i] = (*reg)[i]->GetMinimumBin();
+        if (!qcd && choice[i] == 1) choice[i] = 2;
         std::cout << choice[i] << std::endl;
     }
 
