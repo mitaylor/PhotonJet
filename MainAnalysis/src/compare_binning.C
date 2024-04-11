@@ -234,7 +234,7 @@ std::cout << tag + "_"s + before_label << std::endl;
     auto rebin3_before_fold1 = new history<TH1F>("rebin3_before_fold1", "", null<TH1F>, size);
     auto rebin4_before_fold0 = new history<TH1F>("rebin4_before_fold0", "", null<TH1F>, size);
     auto rebin4_before_fold1 = new history<TH1F>("rebin4_before_fold1", "", null<TH1F>, size);
-std::cout << __LINE__ << std::endl; std::cout << (*rebin1_before)[0]->GetBinContent(1) << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << (*rebin1_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin2_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin3_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin4_before)[0]->GetBinContent(1) << std::endl;
     for (int j = 0; j < size; ++j) {
         (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);
         (*rebin1_before_fold1)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
