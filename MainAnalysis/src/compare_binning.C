@@ -22,6 +22,83 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
+template <typename T>
+T* null(int64_t, std::string const&, std::string const&) {
+    return nullptr;
+}
+
+TH2F* variance(TH1* flat, multival const* m) {
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
+        m->size(), 0, m->size());
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto err = flat->GetBinError(i + 1);
+        cov->SetBinContent(i + 1, i + 1, err * err);
+    }
+
+    return cov;
+}
+
+TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
+           std::vector<int64_t>& offsets) {
+    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
+    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
+        { offsets[axis << 1], offsets[(axis << 1) + 1] });
+
+    auto shape = m->shape();
+
+    auto front = std::vector<int64_t>(m->dims(), 0);
+    auto back = std::vector<int64_t>(m->dims(), 0);
+    for (int64_t i = 0; i < m->dims(); ++i) {
+        front[i] = offsets[i << 1];
+        back[i] = shape[i] - offsets[(i << 1) + 1];
+    }
+
+    auto size = back[axis] - front[axis];
+    auto list = new std::vector<int64_t>[size];
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto indices = m->indices_for(i);
+
+        bool flag = false;
+        zip([&](int64_t index, int64_t f, int64_t b) {
+            flag = flag || index < f || index >= b;
+        }, indices, front, back);
+        if (flag) { continue; }
+
+        auto index = indices[axis] - front[axis];
+        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
+            + flat->GetBinContent(i + 1));
+
+        list[index].push_back(i);
+    }
+
+    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
+
+    for (int64_t i = 0; i < size; ++i) {
+        auto indices = list[i];
+        int64_t count = indices.size();
+
+        auto error = 0.;
+        for (int64_t j = 0; j < count; ++j) {
+            auto j_x = indices[j] + 1;
+            for (int64_t k = 0; k < count; ++k) {
+                auto k_x = indices[k] + 1;
+                error = error + cov->GetBinContent(j_x, k_x);
+            }
+        }
+
+        hfold->SetBinError(i + 1, std::sqrt(error));
+    }
+
+    delete [] list;
+    delete cov;
+
+    hfold->Scale(1., "width");
+
+    return hfold;
+}
+
 int compare_binning(char const* config, char const* output) {
     auto conf = new configurer(config);
 
