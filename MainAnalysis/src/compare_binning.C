@@ -244,16 +244,16 @@ int compare_binning(char const* config, char const* output) {
         (*rebin3_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);
         (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);
         (*rebin4_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);
-
-        (*rebin1_before_fold0)[j]->rename("rebin1_" + tag + "_" + before_label + "_fold0");
-        (*rebin1_before_fold1)[j]->rename("rebin1_" + tag + "_" + before_label + "_fold1");
-        (*rebin2_before_fold0)[j]->rename("rebin2_" + tag + "_" + before_label + "_fold0");
-        (*rebin2_before_fold1)[j]->rename("rebin2_" + tag + "_" + before_label + "_fold1");
-        (*rebin3_before_fold0)[j]->rename("rebin3_" + tag + "_" + before_label + "_fold0");
-        (*rebin3_before_fold1)[j]->rename("rebin3_" + tag + "_" + before_label + "_fold1");
-        (*rebin4_before_fold0)[j]->rename("rebin4_" + tag + "_" + before_label + "_fold0");
-        (*rebin4_before_fold1)[j]->rename("rebin4_" + tag + "_" + before_label + "_fold1");
     }
+
+    rebin1_before_fold0->rename("rebin1_" + tag + "_" + before_label + "_fold0");
+    rebin1_before_fold1->rename("rebin1_" + tag + "_" + before_label + "_fold1");
+    rebin2_before_fold0->rename("rebin2_" + tag + "_" + before_label + "_fold0");
+    rebin2_before_fold1->rename("rebin2_" + tag + "_" + before_label + "_fold1");
+    rebin3_before_fold0->rename("rebin3_" + tag + "_" + before_label + "_fold0");
+    rebin3_before_fold1->rename("rebin3_" + tag + "_" + before_label + "_fold1");
+    rebin4_before_fold0->rename("rebin4_" + tag + "_" + before_label + "_fold0");
+    rebin4_before_fold1->rename("rebin4_" + tag + "_" + before_label + "_fold1");
 
     /* prepare the post-unfolded data */
     auto rebin1_after = new history<TH1F>(finput1, tag + "_"s + after_label);
@@ -284,16 +284,16 @@ int compare_binning(char const* config, char const* output) {
         (*rebin3_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin3_covariance)[j], rebin3_mg, 1, rebin3_osg);
         (*rebin4_after_fold0)[j] = fold((*rebin4_after)[j], (*rebin4_covariance)[j], rebin4_mg, 0, rebin4_osg);
         (*rebin4_after_fold1)[j] = fold((*rebin2_after)[j], (*rebin4_covariance)[j], rebin4_mg, 1, rebin4_osg);
-
-        (*rebin1_after_fold0)[j]->rename("rebin1_" + tag + "_" + after_label + "_fold0");
-        (*rebin1_after_fold1)[j]->rename("rebin1_" + tag + "_" + after_label + "_fold1");
-        (*rebin2_after_fold0)[j]->rename("rebin2_" + tag + "_" + after_label + "_fold0");
-        (*rebin2_after_fold1)[j]->rename("rebin2_" + tag + "_" + after_label + "_fold1");
-        (*rebin3_after_fold0)[j]->rename("rebin3_" + tag + "_" + after_label + "_fold0");
-        (*rebin3_after_fold1)[j]->rename("rebin3_" + tag + "_" + after_label + "_fold1");
-        (*rebin4_after_fold0)[j]->rename("rebin4_" + tag + "_" + after_label + "_fold0");
-        (*rebin4_after_fold1)[j]->rename("rebin4_" + tag + "_" + after_label + "_fold1");
     }
+
+    rebin1_after_fold0->rename("rebin1_" + tag + "_" + after_label + "_fold0");
+    rebin1_after_fold1->rename("rebin1_" + tag + "_" + after_label + "_fold1");
+    rebin2_after_fold0->rename("rebin2_" + tag + "_" + after_label + "_fold0");
+    rebin2_after_fold1->rename("rebin2_" + tag + "_" + after_label + "_fold1");
+    rebin3_after_fold0->rename("rebin3_" + tag + "_" + after_label + "_fold0");
+    rebin3_after_fold1->rename("rebin3_" + tag + "_" + after_label + "_fold1");
+    rebin4_after_fold0->rename("rebin4_" + tag + "_" + after_label + "_fold0");
+    rebin4_after_fold1->rename("rebin4_" + tag + "_" + after_label + "_fold1");
 
     /* save histograms */
     rebin1_before_fold0->save();
