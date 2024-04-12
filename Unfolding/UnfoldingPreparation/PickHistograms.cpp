@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
    string DataHistogram           = CL.Get("DataHistogram");
    string ResponseFileName        = CL.Get("Response");
    string ResponseHistogram       = CL.Get("ResponseHistogram");
-   string ResponseTruthFileName   = CL.Get("ResponseTruthFile");
+   string ResponseTruthFileName   = CL.Get("ResponseTruthFile", "");
    string ResponseTruth           = CL.Get("ResponseTruth");
    string ResponseReco            = CL.Get("ResponseReco");
    string ResponseTruthEfficiency = CL.Get("ResponseTruthEfficiency");
