@@ -263,8 +263,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
     auto pthf_info_scaled = [&](int64_t index) {
         int64_t scaled_index = (index + 1) / 2;
-        std::string cent_low = to_text(dcent[dcent.size()-scaled_index]);
-        std::string cent_high = to_text(dcent[dcent.size()-scaled_index-1]);
+        std::string cent_low = to_text(dcent[scaled_index]);
+        std::string cent_high = to_text(dcent[scaled_index-1]);
         auto pri = "Cent. " + cent_low + " - " + cent_high + "%";
         auto alg = to_text(rpt[0]) + " < p_{T}^{#gamma} < " + to_text(rpt[1]);
 
