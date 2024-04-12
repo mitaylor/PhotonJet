@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
    TH1F *HInputResponseRecoEfficiency      = (TH1F *)ResponseFile.Get(ResponseRecoEfficiency.c_str());
    TH1F *HInputResponseTruth;
 
-   if (ResponseTruthFile != nullptr) HInputResponseTruth = (TH1F *)ResponseTruthFile.Get(ResponseTruth.c_str());
+   if (ResponseTruthFileName != "")  HInputResponseTruth = (TH1F *)ResponseTruthFile.Get(ResponseTruth.c_str());
    else                              HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
 
    Assert(HInputData != nullptr,                      "Input data distribution not found");
