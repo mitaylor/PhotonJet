@@ -100,14 +100,14 @@ TH1F* extract_errors(TH1* h) {
     return err;
 }
 
-TH2F* convert_covariance(TMatrixT<double>* matrix) {
+TH2F* convert_covariance(TMatrixT<double>* matrix, TH1* efficiency) {
     int N = matrix->GetNrows();
 
     TH2F* cov = new TH2F("covariance", "", N, 0, N, N, 0, N);
 
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
-            cov->SetBinContent(i + 1, j + 1, (*matrix)(i, j));
+            cov->SetBinContent(i + 1, j + 1, (*matrix)(i, j) / efficiency->GetBinContent(i + 1) / efficiency->GetBinContent(j + 1));
             cov->SetBinError(i + 1, 0);
         }
     }
@@ -246,6 +246,21 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
 
+    auto pthf_info_scaled = [&](int64_t index) {
+        int64_t scaled_index = (index + 1) / 2;
+        std::string cent_low = to_text(dcent[dcent.size()-scaled_index]);
+        std::string cent_high = to_text(dcent[dcent.size()-scaled_index-1]);
+        auto pri = "Cent. " + cent_low + " - " + cent_high + "%";
+        auto alg = to_text(rpt[0]) + " < p_{T}^{#gamma} < " + to_text(rpt[1]);
+
+        TLatex* l = new TLatex();
+        l->SetTextFont(43);
+        l->SetTextAlign(11);
+        l->SetTextSize(13);
+        l->DrawLatexNDC(0.125, 0.85, pri.data());
+        l->DrawLatexNDC(0.125, 0.80, alg.data());
+    };
+    
     auto minimum = [&](int64_t index, int64_t choice) {
         if (index > -1) {
             auto reg = (algorithm == "SVD") ? "k_{reg}"s : "it"s;
@@ -295,6 +310,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             std::string toy_errors_name = "HErrorDist" + std::to_string(choices[i][j]);
             std::string toy_errors_fold0_name = "HErrorDist" + std::to_string(choices[i][j]) + "Fold0";
             std::string toy_errors_fold1_name = "HErrorDist" + std::to_string(choices[i][j]) + "Fold1";
+            std::string efficiency_name = "HMCTruthEfficiency";
             
             /* extract ingredients */
             auto unfolded_temp = (TH1F*) fdata[j]->Get(unfolded_name.data());
@@ -305,11 +321,16 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             auto toy_covariance_temp = (TH2F*) fdata[j]->Get(toy_covariance_name.data());
             auto toy_covariance_fold0_temp = (TH2F*) fdata[j]->Get(toy_covariance_fold0_name.data());
             auto toy_covariance_fold1_temp = (TH2F*) fdata[j]->Get(toy_covariance_fold1_name.data());
+            auto efficiency_temp = (TH1F*) fdata[j]->Get(efficiency_name.data());
 
             /* synthesise ingredients */
+            (*calc_covariance)[j] = convert_covariance(calc_covariance_temp, efficiency_temp);
+            (*calc_covariance_fold0)[j] = collapse_covariance((*calc_covariance)[j], idrg, iptg, 0);
+            (*calc_covariance_fold1)[j] = collapse_covariance((*calc_covariance)[j], idrg, iptg, 1);
+
             (*unfolded)[j] = unfolded_temp;
-            (*unfolded_fold0)[j] = fold_mat(unfolded_temp, calc_covariance_temp, mg, 0, osg);
-            (*unfolded_fold1)[j] = fold_mat(unfolded_temp, calc_covariance_temp, mg, 1, osg);
+            (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], (*calc_covariance)[j], mg, 0, osg);
+            (*unfolded_fold1)[j] = fold_mat((*unfolded)[j], (*calc_covariance)[j], mg, 1, osg);
 
             (*calc_errors)[j] = extract_errors((*unfolded)[j]);
             (*calc_errors_fold0)[j] = extract_errors((*unfolded_fold0)[j]);
@@ -318,10 +339,6 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             (*toy_errors)[j] = toy_errors_temp;
             (*toy_errors_fold0)[j] = toy_errors_fold0_temp;
             (*toy_errors_fold1)[j] = toy_errors_fold1_temp;
-
-            (*calc_covariance)[j] = convert_covariance(calc_covariance_temp);
-            (*calc_covariance_fold0)[j] = collapse_covariance((*calc_covariance)[j], idrg, iptg, 0);
-            (*calc_covariance_fold1)[j] = collapse_covariance((*calc_covariance)[j], idrg, iptg, 1);
 
             (*toy_covariance)[j] = toy_covariance_temp;
             (*toy_covariance_fold0)[j] = toy_covariance_fold0_temp;
@@ -446,7 +463,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
         auto p4 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_index" + std::to_string(i), hb);
         p4->divide(2, file_data.size());
-        p4->accessory(pthf_info);
+        p4->accessory(pthf_info_scaled);
         apply_style(p4, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
@@ -470,7 +487,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
         auto p5 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_fold0_index" + std::to_string(i), hb);
         p5->divide(2, file_data.size());
-        p5->accessory(pthf_info);
+        p5->accessory(pthf_info_scaled);
         apply_style(p5, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
@@ -494,7 +511,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
         auto p6 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_covariance_fold1_index" + std::to_string(i), hb);
         p6->divide(2, file_data.size());
-        p6->accessory(pthf_info);
+        p6->accessory(pthf_info_scaled);
         apply_style(p6, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
