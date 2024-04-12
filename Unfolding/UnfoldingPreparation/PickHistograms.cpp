@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
    string DataHistogram           = CL.Get("DataHistogram");
    string ResponseFileName        = CL.Get("Response");
    string ResponseHistogram       = CL.Get("ResponseHistogram");
+   string ResponseTruthFileName   = CL.Get("ResponseTruthFile");
    string ResponseTruth           = CL.Get("ResponseTruth");
    string ResponseReco            = CL.Get("ResponseReco");
    string ResponseTruthEfficiency = CL.Get("ResponseTruthEfficiency");
@@ -34,15 +35,19 @@ int main(int argc, char *argv[])
 
    TFile DataFile(DataFileName.c_str());
    TFile ResponseFile(ResponseFileName.c_str());
+   TFile ResponseTruthFile(ResponseTruthFileName.c_str());
 
    TFile OutputFile(OutputFileName.c_str(), "RECREATE");
 
    TH1F *HInputData                        = (TH1F *)DataFile.Get(DataHistogram.c_str());
    TH2F *HInputResponse                    = (TH2F *)ResponseFile.Get(ResponseHistogram.c_str());
-   TH1F *HInputResponseTruth               = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
    TH1F *HInputResponseReco                = (TH1F *)ResponseFile.Get(ResponseReco.c_str());
    TH1F *HInputResponseTruthEfficiency     = (TH1F *)ResponseFile.Get(ResponseTruthEfficiency.c_str());
    TH1F *HInputResponseRecoEfficiency      = (TH1F *)ResponseFile.Get(ResponseRecoEfficiency.c_str());
+   TH1F *HInputResponseTruth;
+
+   if (ResponseTruthFile != nullptr) HInputResponseTruth = (TH1F *)ResponseTruthFile.Get(ResponseTruth.c_str());
+   else                              HInputResponseTruth = (TH1F *)ResponseFile.Get(ResponseTruth.c_str());
 
    Assert(HInputData != nullptr,                      "Input data distribution not found");
    Assert(HInputResponse != nullptr,                  "Input response matrix not found");
