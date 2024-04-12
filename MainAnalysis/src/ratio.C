@@ -44,8 +44,6 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto prefix = conf->get<std::string>("prefix");
 
-    auto xmins = conf->get<std::vector<float>>("xmin");
-    auto xmaxs = conf->get<std::vector<float>>("xmax");
     auto ymins = conf->get<std::vector<float>>("ymin");
     auto ymaxs = conf->get<std::vector<float>>("ymax");
 
@@ -138,7 +136,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         }
     };
 
-    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax) {
+    zip([&](auto const& figure, auto ymin, auto ymax) {
         /* get histograms */ 
         std::vector<history<TH1F>*> hists(2, nullptr);
         std::vector<history<TH1F>*> systs(2, nullptr);
@@ -148,6 +146,11 @@ int ratio(char const* config, char const* selections, char const* output) {
             hist = new history<TH1F>(file, base_stub + figure);
             title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
+
+            for (int64_t i = 0; i < hist->size(); ++i) {
+                (*hist)[i]->Scale(1/(*hist)[i]->Integral("width"));
+                (*syst)[i]->Scale(1/(*hist)[i]->Integral("width"));
+            }
         }, hists, systs, files, base_stubs, syst_stubs);
 
         /* link histograms, uncertainties */
@@ -195,7 +198,7 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* prepare papers */
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
-        s->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        s->accessory(std::bind(line_at, _1, 1.f, bdr[0], bdr[1]));
         s->accessory(kinematics);
         s->accessory(blurb);
 
@@ -210,7 +213,7 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* draw histograms with uncertainties */
         ratio_syst->apply([&](TH1* h) {
-            h->GetXaxis()->SetRangeUser(xmin, xmax);
+            h->GetXaxis()->SetRangeUser(bdr[0], bdr[1]);
             s->add(h, "r"); 
 
             s->adjust(h, "e2", "plf");
@@ -232,7 +235,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         hb->sketch();
 
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs);
+    }, figures, ymins, ymaxs);
 
     in(output, []() {});
 
