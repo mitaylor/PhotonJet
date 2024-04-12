@@ -29,5 +29,5 @@ for sample in ${samples[@]}; do
     run_aa ${sample}
 done
 
-# ./bin/congratulate configs/congratulate/congratulate.conf configs/analysis/${set}/analysis_pp.conf temp.root
-# ./bin/ratio configs/congratulate/ratio.conf configs/analysis/${set}/analysis_pp.conf temp.root
+./bin/congratulate configs/congratulate/congratulate.conf configs/analysis/${set}/analysis_pp.conf temp.root
+./bin/ratio configs/congratulate/ratio.conf configs/analysis/${set}/analysis_pp.conf temp.root
