@@ -31,6 +31,18 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
+TH2F* variance(TH1* flat, multival const* m) {
+    auto cov = new TH2F("cov", "", m->size(), 0, m->size(),
+        m->size(), 0, m->size());
+
+    for (int64_t i = 0; i < m->size(); ++i) {
+        auto err = flat->GetBinError(i + 1);
+        cov->SetBinContent(i + 1, i + 1, err * err);
+    }
+
+    return cov;
+}
+
 TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
            std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
