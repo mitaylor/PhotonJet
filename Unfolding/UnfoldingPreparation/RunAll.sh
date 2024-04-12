@@ -1144,7 +1144,8 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
-        --ResponseTruth aa_g_0 \
+        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
+        --ResponseTruth tJewelPbPb_dr_jpt_0 \
         --ResponseReco aa_r_0 \
         --ResponseTruthEfficiency aa_g_eff_0 \
         --ResponseRecoEfficiency aa_r_eff_0 \
@@ -1157,7 +1158,8 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
-        --ResponseTruth aa_g_1 \
+        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
+        --ResponseTruth tJewelPbPb_dr_jpt_0 \
         --ResponseReco aa_r_1 \
         --ResponseTruthEfficiency aa_g_eff_1 \
         --ResponseRecoEfficiency aa_r_eff_1 \
@@ -1170,7 +1172,8 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
-        --ResponseTruth aa_g_2 \
+        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
+        --ResponseTruth tJewelPbPb_dr_jpt_0 \
         --ResponseReco aa_r_2 \
         --ResponseTruthEfficiency aa_g_eff_2 \
         --ResponseRecoEfficiency aa_r_eff_2 \
@@ -1183,7 +1186,8 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
-        --ResponseTruth aa_g_3 \
+        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
+        --ResponseTruth tJewelPbPb_dr_jpt_0 \
         --ResponseReco aa_r_3 \
         --ResponseTruthEfficiency aa_g_eff_3 \
         --ResponseRecoEfficiency aa_r_eff_3 \
@@ -1198,8 +1202,7 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_0 \
-        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root
-        --ResponseTruth tJewelPbPb_dr_jpt_0 \
+        --ResponseTruth aa_g_0 \
         --ResponseReco aa_r_0 \
         --ResponseTruthEfficiency aa_g_eff_0 \
         --ResponseRecoEfficiency aa_r_eff_0 \
@@ -1212,8 +1215,7 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_1 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_1 \
-        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root
-        --ResponseTruth tJewelPbPb_dr_jpt_0 \
+        --ResponseTruth aa_g_1 \
         --ResponseReco aa_r_1 \
         --ResponseTruthEfficiency aa_g_eff_1 \
         --ResponseRecoEfficiency aa_r_eff_1 \
@@ -1226,8 +1228,7 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_2 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_2 \
-        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root
-        --ResponseTruth tJewelPbPb_dr_jpt_0 \
+        --ResponseTruth aa_g_2 \
         --ResponseReco aa_r_2 \
         --ResponseTruthEfficiency aa_g_eff_2 \
         --ResponseRecoEfficiency aa_r_eff_2 \
@@ -1240,8 +1241,7 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram aa_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_3 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_aa.root \
         --ResponseHistogram aa_c_3 \
-        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root
-        --ResponseTruth tJewelPbPb_dr_jpt_0 \
+        --ResponseTruth aa_g_3 \
         --ResponseReco aa_r_3 \
         --ResponseTruthEfficiency aa_g_eff_3 \
         --ResponseRecoEfficiency aa_r_eff_3 \
@@ -1256,7 +1256,7 @@ if [ ${unfolding} -eq 1 ]
         --DataHistogram pp_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0_0 \
         --Response ../../MainAnalysis/data/arc/${set}/process_vacillate_pp.root \
         --ResponseHistogram pp_c_0 \
-        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root
+        --ResponseTruthFile ../../MainAnalysis/data/arc/${set}/gather_theory_aa.root \
         --ResponseTruth tJewelPbPb_dr_jpt_0 \
         --ResponseReco pp_r_0 \
         --ResponseTruthEfficiency pp_g_eff_0 \
