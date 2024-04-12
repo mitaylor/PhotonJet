@@ -381,7 +381,7 @@ int compare_binning(char const* config, char const* output) {
     p2->divide(size, -1);
     p2->accessory(pthf_info);
     p2->accessory(minimum);
-    apply_style(p2, cms, system_tag, -2, 20);
+    apply_style(p2, cms, system_tag, -0.003, 0.03);
 
     for (int i = 0; i < size; ++i) {
         p2->add((*rebin1_before_fold1)[i], "rebin1");
@@ -409,7 +409,7 @@ int compare_binning(char const* config, char const* output) {
     p4->divide(size, -1);
     p4->accessory(pthf_info);
     p4->accessory(minimum);
-    apply_style(p4, cms, system_tag, -2, 20);
+    apply_style(p4, cms, system_tag, -0.003, 0.03);
 
     for (int i = 0; i < size; ++i) {
         p4->add((*rebin1_after_fold1)[i], "rebin1");
