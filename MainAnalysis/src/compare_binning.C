@@ -109,10 +109,19 @@ int compare_binning(char const* config, char const* output) {
     auto after_label = conf->get<std::string>("after_label");
     auto covariance_label = conf->get<std::string>("covariance_label");
 
+    auto algorithm = conf->get<std::string>("algorithm");
+    auto prior = conf->get<std::string>("prior");
+
     auto rebin1_config = conf->get<std::string>("rebin1_config");
     auto rebin2_config = conf->get<std::string>("rebin2_config");
     auto rebin3_config = conf->get<std::string>("rebin3_config");
     auto rebin4_config = conf->get<std::string>("rebin4_config");
+
+    auto dhf = conf->get<std::vector<float>>("hf_diff");
+    auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
+    auto rpt = conf->get<std::vector<float>>("photon_pt_bounds");
+
+    auto mpthf = new multival(rpt, dhf);
 
     /* rebin1 */
     auto rebin1 = new configurer(rebin1_config);
@@ -215,7 +224,7 @@ int compare_binning(char const* config, char const* output) {
     TFile* finput2 = new TFile((rebin2_base + input).data(), "read");
     TFile* finput3 = new TFile((rebin3_base + input).data(), "read");
     TFile* finput4 = new TFile((rebin4_base + input).data(), "read");
-std::cout << rebin1_base + input << std::endl;
+
     /* create ouput file */
     TFile* fout = new TFile(output, "recreate");
 
@@ -226,7 +235,7 @@ std::cout << rebin1_base + input << std::endl;
     auto rebin4_before = new history<TH1F>(finput4, tag + "_"s + before_label);
 
     int size = rebin1_before->size();
-std::cout << tag + "_"s + before_label << std::endl;
+
     auto rebin1_before_fold0 = new history<TH1F>("rebin1_before_fold0", "", null<TH1F>, size);
     auto rebin1_before_fold1 = new history<TH1F>("rebin1_before_fold1", "", null<TH1F>, size);
     auto rebin2_before_fold0 = new history<TH1F>("rebin2_before_fold0", "", null<TH1F>, size);
@@ -235,18 +244,18 @@ std::cout << tag + "_"s + before_label << std::endl;
     auto rebin3_before_fold1 = new history<TH1F>("rebin3_before_fold1", "", null<TH1F>, size);
     auto rebin4_before_fold0 = new history<TH1F>("rebin4_before_fold0", "", null<TH1F>, size);
     auto rebin4_before_fold1 = new history<TH1F>("rebin4_before_fold1", "", null<TH1F>, size);
-std::cout << __LINE__ << std::endl; std::cout << (*rebin1_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin2_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin3_before)[0]->GetBinContent(1) << std::endl;std::cout << (*rebin4_before)[0]->GetBinContent(1) << std::endl;
+
     for (int j = 0; j < size; ++j) {
-        (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);std::cout << __LINE__ << std::endl;
-        (*rebin1_before_fold1)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);std::cout << __LINE__ << std::endl;
-        (*rebin2_before_fold0)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 0, rebin2_osr);std::cout << __LINE__ << std::endl;
-        (*rebin2_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 1, rebin2_osr);std::cout << __LINE__ << std::endl;
-        (*rebin3_before_fold0)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 0, rebin3_osr);std::cout << __LINE__ << std::endl;
-        (*rebin3_before_fold1)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);std::cout << __LINE__ << std::endl;
-        (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);std::cout << __LINE__ << std::endl;
-        (*rebin4_before_fold1)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);std::cout << __LINE__ << std::endl;
+        (*rebin1_before_fold0)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 0, rebin1_osr);
+        (*rebin1_before_fold1)[j] = fold((*rebin1_before)[j], nullptr, rebin1_mr, 1, rebin1_osr);
+        (*rebin2_before_fold0)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 0, rebin2_osr);
+        (*rebin2_before_fold1)[j] = fold((*rebin2_before)[j], nullptr, rebin2_mr, 1, rebin2_osr);
+        (*rebin3_before_fold0)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 0, rebin3_osr);
+        (*rebin3_before_fold1)[j] = fold((*rebin3_before)[j], nullptr, rebin3_mr, 1, rebin3_osr);
+        (*rebin4_before_fold0)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 0, rebin4_osr);
+        (*rebin4_before_fold1)[j] = fold((*rebin4_before)[j], nullptr, rebin4_mr, 1, rebin4_osr);
     }
-std::cout << __LINE__ << std::endl;
+
     rebin1_before_fold0->rename("rebin1_" + tag + "_" + before_label + "_fold0");
     rebin1_before_fold1->rename("rebin1_" + tag + "_" + before_label + "_fold1");
     rebin2_before_fold0->rename("rebin2_" + tag + "_" + before_label + "_fold0");
@@ -255,18 +264,18 @@ std::cout << __LINE__ << std::endl;
     rebin3_before_fold1->rename("rebin3_" + tag + "_" + before_label + "_fold1");
     rebin4_before_fold0->rename("rebin4_" + tag + "_" + before_label + "_fold0");
     rebin4_before_fold1->rename("rebin4_" + tag + "_" + before_label + "_fold1");
-std::cout << __LINE__ << std::endl;
+
     /* prepare the post-unfolded data */
     auto rebin1_after = new history<TH1F>(finput1, tag + "_"s + after_label);
     auto rebin2_after = new history<TH1F>(finput2, tag + "_"s + after_label);
     auto rebin3_after = new history<TH1F>(finput3, tag + "_"s + after_label);
     auto rebin4_after = new history<TH1F>(finput4, tag + "_"s + after_label);
-std::cout << __LINE__ << std::endl;
+
     auto rebin1_covariance = new history<TH2F>(finput1, tag + "_"s + covariance_label);
     auto rebin2_covariance = new history<TH2F>(finput2, tag + "_"s + covariance_label);
     auto rebin3_covariance = new history<TH2F>(finput3, tag + "_"s + covariance_label);
     auto rebin4_covariance = new history<TH2F>(finput4, tag + "_"s + covariance_label);
-std::cout << __LINE__ << std::endl;
+
     auto rebin1_after_fold0 = new history<TH1F>("rebin1_after_fold0", "", null<TH1F>, size);
     auto rebin1_after_fold1 = new history<TH1F>("rebin1_after_fold1", "", null<TH1F>, size);
     auto rebin2_after_fold0 = new history<TH1F>("rebin2_after_fold0", "", null<TH1F>, size);
@@ -275,7 +284,7 @@ std::cout << __LINE__ << std::endl;
     auto rebin3_after_fold1 = new history<TH1F>("rebin3_after_fold1", "", null<TH1F>, size);
     auto rebin4_after_fold0 = new history<TH1F>("rebin4_after_fold0", "", null<TH1F>, size);
     auto rebin4_after_fold1 = new history<TH1F>("rebin4_after_fold1", "", null<TH1F>, size);
-std::cout << __LINE__ << std::endl;
+
     for (int j = 0; j < size; ++j) {
         (*rebin1_after_fold0)[j] = fold((*rebin1_after)[j], (*rebin1_covariance)[j], rebin1_mg, 0, rebin1_osg);
         (*rebin1_after_fold1)[j] = fold((*rebin1_after)[j], (*rebin1_covariance)[j], rebin1_mg, 1, rebin1_osg);
@@ -286,7 +295,7 @@ std::cout << __LINE__ << std::endl;
         (*rebin4_after_fold0)[j] = fold((*rebin4_after)[j], (*rebin4_covariance)[j], rebin4_mg, 0, rebin4_osg);
         (*rebin4_after_fold1)[j] = fold((*rebin4_after)[j], (*rebin4_covariance)[j], rebin4_mg, 1, rebin4_osg);
     }
-std::cout << __LINE__ << std::endl;
+
     rebin1_after_fold0->rename("rebin1_" + tag + "_" + after_label + "_fold0");
     rebin1_after_fold1->rename("rebin1_" + tag + "_" + after_label + "_fold1");
     rebin2_after_fold0->rename("rebin2_" + tag + "_" + after_label + "_fold0");
@@ -295,7 +304,7 @@ std::cout << __LINE__ << std::endl;
     rebin3_after_fold1->rename("rebin3_" + tag + "_" + after_label + "_fold1");
     rebin4_after_fold0->rename("rebin4_" + tag + "_" + after_label + "_fold0");
     rebin4_after_fold1->rename("rebin4_" + tag + "_" + after_label + "_fold1");
-std::cout << __LINE__ << std::endl;
+
     /* save histograms */
     rebin1_before_fold0->save();
     rebin1_before_fold1->save();
@@ -316,6 +325,102 @@ std::cout << __LINE__ << std::endl;
     rebin4_after_fold1->save();
 
     fout->Close();
+
+    /* plotting setup */
+    auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    system_tag += (tag == "aa") ? ", 1.69 nb^{-1}"s : ", 302 pb^{-1}"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+
+    std::function<void(int64_t, float)> pt_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "%.0f < p_{T}^{#gamma} < %.0f", rpt, false); };
+
+    std::function<void(int64_t, float)> hf_info = [&](int64_t x, float pos) {
+        info_text(x, pos, "Cent. %i - %i%%", dcent, true); };
+
+    auto pthf_info = [&](int64_t index) {
+        stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
+
+    auto minimum = [&](int64_t index) {
+        if (index > 0) {
+            auto pri = "Prior: "s + prior;
+            auto alg = "Algorithm: "s + algorithm;
+
+            TLatex* l = new TLatex();
+            l->SetTextFont(43);
+            l->SetTextAlign(11);
+            l->SetTextSize(13);
+            l->DrawLatexNDC(0.3, 0.65, pri.data());
+            l->DrawLatexNDC(0.3, 0.60, alg.data());
+        }
+    };
+
+    /* plot histograms */
+    auto hb = new pencil();
+
+    hb->category("rebin", "rebin1", "rebin2", "rebin3", "rebin4");
+
+    auto p1 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_before_dj", hb);
+
+    p1->divide(size, -1);
+    p1->accessory(pthf_info);
+    p1->accessory(minimum);
+    apply_style(p1, cms, system_tag, -2, 20);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        p1->add((*rebin1_before_fold0)[i], "rebin1");
+        p1->stack((*rebin2_before_fold0)[i], "rebin2");
+        p1->stack((*rebin3_before_fold0)[i], "rebin3");
+        p1->stack((*rebin4_before_fold0)[i], "rebin4");
+    }
+
+    auto p2 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_before_jpt", hb);
+
+    p2->divide(size, -1);
+    p2->accessory(pthf_info);
+    p2->accessory(minimum);
+    apply_style(p2, cms, system_tag, -2, 20);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        p2->add((*rebin1_before_fold1)[i], "rebin1");
+        p2->stack((*rebin2_before_fold1)[i], "rebin2");
+        p2->stack((*rebin3_before_fold1)[i], "rebin3");
+        p2->stack((*rebin4_before_fold1)[i], "rebin4");
+    }
+
+    auto p3 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_after_dj", hb);
+
+    p3->divide(size, -1);
+    p3->accessory(pthf_info);
+    p3->accessory(minimum);
+    apply_style(p3, cms, system_tag, -2, 20);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        p3->add((*rebin1_after_fold0)[i], "rebin1");
+        p3->stack((*rebin2_after_fold0)[i], "rebin2");
+        p3->stack((*rebin3_after_fold0)[i], "rebin3");
+        p3->stack((*rebin4_after_fold0)[i], "rebin4");
+    }
+
+    auto p4 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_after_jpt", hb);
+
+    p4->divide(size, -1);
+    p4->accessory(pthf_info);
+    p4->accessory(minimum);
+    apply_style(p4, cms, system_tag, -2, 20);
+
+    for (size_t i = 0; i < filenames.size(); ++i) {
+        p4->add((*rebin1_after_fold1)[i], "rebin1");
+        p4->stack((*rebin2_after_fold1)[i], "rebin2");
+        p4->stack((*rebin3_after_fold1)[i], "rebin3");
+        p4->stack((*rebin4_after_fold1)[i], "rebin4");
+    }
+
+    hb->sketch();
+
+    p1->draw("pdf");
+    p2->draw("pdf");
+    p3->draw("pdf");
+    p4->draw("pdf");
 
     return 0;
 }
