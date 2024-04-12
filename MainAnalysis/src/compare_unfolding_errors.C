@@ -31,7 +31,7 @@ T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
 }
 
-TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
+TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
            std::vector<int64_t>& offsets) {
     auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
     auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
@@ -65,16 +65,18 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
         list[index].push_back(i);
     }
 
+    auto cov = covariance ? (TH2F*)covariance->Clone() : variance(flat, m);
+
     for (int64_t i = 0; i < size; ++i) {
         auto indices = list[i];
         int64_t count = indices.size();
 
         auto error = 0.;
         for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j];
+            auto j_x = indices[j] + 1;
             for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k];
-                error = error + (*covariance)(j_x, k_x);
+                auto k_x = indices[k] + 1;
+                error = error + cov->GetBinContent(j_x, k_x);
             }
         }
 
@@ -82,6 +84,7 @@ TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64
     }
 
     delete [] list;
+    delete cov;
 
     hfold->Scale(1., "width");
 
@@ -329,8 +332,8 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
             (*calc_covariance_fold1)[j] = collapse_covariance((*calc_covariance)[j], idrg, iptg, 1);
 
             (*unfolded)[j] = unfolded_temp;
-            (*unfolded_fold0)[j] = fold_mat((*unfolded)[j], (*calc_covariance)[j], mg, 0, osg);
-            (*unfolded_fold1)[j] = fold_mat((*unfolded)[j], (*calc_covariance)[j], mg, 1, osg);
+            (*unfolded_fold0)[j] = fold((*unfolded)[j], (*calc_covariance)[j], mg, 0, osg);
+            (*unfolded_fold1)[j] = fold((*unfolded)[j], (*calc_covariance)[j], mg, 1, osg);
 
             (*calc_errors)[j] = extract_errors((*unfolded)[j]);
             (*calc_errors_fold0)[j] = extract_errors((*unfolded_fold0)[j]);
