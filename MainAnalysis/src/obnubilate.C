@@ -196,18 +196,18 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         }
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
-        title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), base);
+        title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"), base);
 
         std::vector<history<TH1F>*> sets;
 
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
         zip([&](auto& batch, auto file, auto const& label) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
-            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), batch);
+            title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"), batch);
         }, batches, files, labels);
 
         auto total = new history<TH1F>(*base, "total");
-        title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN/d#deltaj"), total);
+        title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"), total);
         total->apply([](TH1* h) { h->Reset("MICES"); });
 
         for (auto const& batch : batches) {
