@@ -133,6 +133,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto errors = conf->get<std::vector<std::string>>("errors");
     auto regularization = conf->get<std::string>("regularization");
     auto qcd = conf->get<bool>("qcd");
+    auto stat = conf->get<bool>("stat");
 
     auto sel = new configurer(selections);
 
@@ -206,6 +207,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     /* extract chosen histograms */
     for (size_t j = 0; j < fafters.size(); ++j) {
         std::string unfold_name = "HUnfoldedBayes" + std::to_string(choice[j]);
+        std::string stat_name = "Test0HUnfoldedBayes" + std::to_string(choice[j]);
         std::string calc_name = "MUnfoldedBayes" + std::to_string(choice[j]);
         std::string toys_name = "HCovarianceDist" + std::to_string(choice[j]);
         std::string efficiency_name = "HMCTruthEfficiency";
@@ -216,6 +218,15 @@ int quantitate(char const* config, char const* selections, char const* output) {
             auto Efficiency = (TH1F*) fafters[j]->Get(efficiency_name.data());
 
             (*covariance)[j] = get_covariance(MUnfolded, Efficiency);
+            (*unfolded)[j] = HUnfoldedBayes;
+            (*unfolded_fold0)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg);
+            (*unfolded_fold1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg);
+        }
+        else if (stat) {
+            auto HUnfoldedBayes = (TH1F*) fafters[j]->Get(stat_name.data());
+            auto MUnfolded = (TH2F*) ferrors[j]->Get(toys_name.data());
+
+            (*covariance)[j] = MUnfolded;
             (*unfolded)[j] = HUnfoldedBayes;
             (*unfolded_fold0)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg);
             (*unfolded_fold1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg);
