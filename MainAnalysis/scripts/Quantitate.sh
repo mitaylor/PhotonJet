@@ -66,13 +66,11 @@ run_aa_stat() {
 samples=(aa)
 
 for sample in ${samples[@]}; do
-        run_aa ${sample}
-    done
+    run_aa ${sample}
 done
 
 samples=(pp)
 
 for sample in ${samples[@]}; do
-        run_pp ${sample}
-    done
+    run_pp ${sample}
 done
