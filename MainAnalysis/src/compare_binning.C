@@ -366,7 +366,7 @@ int compare_binning(char const* config, char const* output) {
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag, -2, 20);
 
-    for (size_t i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i) {
         p1->add((*rebin1_before_fold0)[i], "rebin1");
         p1->stack((*rebin2_before_fold0)[i], "rebin2");
         p1->stack((*rebin3_before_fold0)[i], "rebin3");
@@ -380,7 +380,7 @@ int compare_binning(char const* config, char const* output) {
     p2->accessory(minimum);
     apply_style(p2, cms, system_tag, -2, 20);
 
-    for (size_t i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i) {
         p2->add((*rebin1_before_fold1)[i], "rebin1");
         p2->stack((*rebin2_before_fold1)[i], "rebin2");
         p2->stack((*rebin3_before_fold1)[i], "rebin3");
@@ -394,7 +394,7 @@ int compare_binning(char const* config, char const* output) {
     p3->accessory(minimum);
     apply_style(p3, cms, system_tag, -2, 20);
 
-    for (size_t i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i) {
         p3->add((*rebin1_after_fold0)[i], "rebin1");
         p3->stack((*rebin2_after_fold0)[i], "rebin2");
         p3->stack((*rebin3_after_fold0)[i], "rebin3");
@@ -408,7 +408,7 @@ int compare_binning(char const* config, char const* output) {
     p4->accessory(minimum);
     apply_style(p4, cms, system_tag, -2, 20);
 
-    for (size_t i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i) {
         p4->add((*rebin1_after_fold1)[i], "rebin1");
         p4->stack((*rebin2_after_fold1)[i], "rebin2");
         p4->stack((*rebin3_after_fold1)[i], "rebin3");
