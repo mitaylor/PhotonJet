@@ -44,8 +44,6 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto smeared = conf->get<bool>("smeared");
 
-    auto xmins = conf->get<std::vector<float>>("xmin");
-    auto xmaxs = conf->get<std::vector<float>>("xmax");
     auto ymins = conf->get<std::vector<float>>("ymin");
     auto ymaxs = conf->get<std::vector<float>>("ymax");
 
@@ -170,7 +168,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
     };
 
-    zip([&](auto const& figure, auto xmin, auto xmax, auto ymin, auto ymax) {
+    zip([&](auto const& figure, auto ymin, auto ymax) {
         /* get histograms */
         std::vector<history<TH1F>*> hists(6, nullptr);
         std::vector<history<TH1F>*> systs(6, nullptr);
@@ -178,7 +176,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         zip([&](auto& hist, auto& syst, auto const file,
                 auto const& base_stub, auto const& syst_stub) {
             hist = new history<TH1F>(file, base_stub + figure);
-            title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN^{#gammaj}/d#deltaj"), hist);
+            title(std::bind(rename_axis, _1, "1/N^{#gamma}dN^{#gammaj}/d#deltaj"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
         }, hists, systs, files, base_stubs, syst_stubs);
 
@@ -225,7 +223,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         /* prepare papers */
         auto p = new paper(set + "_" + prefix + "_results_pp_" + figure, hb);
         apply_style(p, ""s, ""s, ymin, ymax);
-        p->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
+        p->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
         p->accessory(kinematics);
         p->accessory(blurb_pp);
         p->jewellery(box);
@@ -233,7 +231,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         auto a = new paper(set + "_" + prefix+ "_results_aa_" + figure, hb);
         apply_style(a, ""s, ""s, ymin, ymax);
-        a->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
+        a->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
         a->accessory(kinematics);
         a->accessory(blurb_aa);
         a->jewellery(box);
@@ -245,7 +243,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         auto s = new paper(set + "_" + prefix + "_results_ss_" + figure, hb);
-        s->accessory(std::bind(line_at, _1, 0.f, xmin, xmax));
+        s->accessory(std::bind(line_at, _1, 0.f, bdr[0], bdr[1]));
         s->accessory(kinematics);
         s->accessory(blurb);
         s->jewellery(box);
@@ -302,7 +300,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         p->draw("pdf");
         a->draw("pdf");
         s->draw("pdf");
-    }, figures, xmins, xmaxs, ymins, ymaxs);
+    }, figures, ymins, ymaxs);
 
     in(output, []() {});
 
