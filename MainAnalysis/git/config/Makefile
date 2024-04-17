@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS += -O2 -Wall -Werror -Wextra -std=c++14
+CXXFLAGS += -O2 -Wall -Werror -Wextra -std=c++14 -fconcepts-ts
 
 BUILDDIR = ./build
 LIBDIR = ./lib

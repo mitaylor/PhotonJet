@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS  += -O2 -Wall -Werror -Wextra
+CXXFLAGS  += -O2 -Wall -Werror -Wextra -std=c++14 -fconcepts-ts
 RCXXFLAGS := `root-config --cflags --libs`
 LDFLAGS   += -lconf -L./git/config/lib \
 	     -lfoliage -L./git/foliage/lib \
