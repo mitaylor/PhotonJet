@@ -79,7 +79,7 @@ auto default_legend_style = [](TLegend* l, int font, float size) {
     l->SetTextSize(size);
 };
 
-auto line_at = [&](int64_t, float val, float low, float high) {
+auto line_at = [](int64_t, float val, float low, float high) {
     TLine* l1 = new TLine(low, val, high, val);
     l1->SetLineStyle(7);
     l1->Draw();
