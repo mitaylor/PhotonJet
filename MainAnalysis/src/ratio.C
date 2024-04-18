@@ -153,8 +153,9 @@ int ratio(char const* config, char const* selections, char const* output) {
             /* normalize by the number of photon-jet pairs */
             if (normalize) {
                 for (int64_t i = 0; i < hist->size(); ++i) {
-                    (*hist)[i]->Scale(1/(*hist)[i]->Integral("width"));
-                    (*syst)[i]->Scale(1/(*hist)[i]->Integral("width"));
+                    auto integral = (*hist)[i]->Integral("width");
+                    (*hist)[i]->Scale(1/integral);
+                    (*syst)[i]->Scale(1/integral);
                 }
             }
         }, hists, systs, files, base_stubs, syst_stubs);
