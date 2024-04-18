@@ -77,7 +77,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
-    std::vector<float> bjet_pt = {1, 1};
+    std::vector<float> bjet_pt = {1.0, 1.0};
 
     /* manage memory manually */
     TH1::AddDirectory(false);
