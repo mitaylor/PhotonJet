@@ -150,6 +150,9 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto osr = sel->get<std::vector<int64_t>>("osr");
     auto osg = sel->get<std::vector<int64_t>>("osg");
 
+    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
+    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
+
     /* create intervals and multivals */
     // auto idrr = new interval("#deltaj"s, rdrr);
     // auto iptr = new interval("p_{T}^{j}"s, rptr);
@@ -202,6 +205,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto unfolded = new history<TH1F>("unfolded", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold0 = new history<TH1F>("unfolded_fold0", "", null<TH1F>, (int64_t) afters.size());
     auto unfolded_fold1 = new history<TH1F>("unfolded_fold1", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_fold0_part1 = new history<TH1F>("unfolded_fold0_part1", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_fold1_part1 = new history<TH1F>("unfolded_fold1_part1", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_fold0_part2 = new history<TH1F>("unfolded_fold0_part2", "", null<TH1F>, (int64_t) afters.size());
+    auto unfolded_fold1_part2 = new history<TH1F>("unfolded_fold1_part2", "", null<TH1F>, (int64_t) afters.size());
     auto covariance = new history<TH2F>("covariance", "", null<TH2F>, (int64_t) afters.size());
 
     /* determine the nominal regularization to use */
@@ -244,6 +251,10 @@ int quantitate(char const* config, char const* selections, char const* output) {
         (*unfolded)[j] = HUnfoldedBayes;
         (*unfolded_fold0)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg);
         (*unfolded_fold1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg);
+        (*unfolded_fold0_part1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg_part1);
+        (*unfolded_fold1_part1)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg_part1);
+        (*unfolded_fold0_part2)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 0, osg_part2);
+        (*unfolded_fold1_part2)[j] = fold((*unfolded)[j], (*covariance)[j], mg, 1, osg_part2);
     }
 
     /* rename histograms */
@@ -251,12 +262,20 @@ int quantitate(char const* config, char const* selections, char const* output) {
     unfolded->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded"s);
     unfolded_fold0->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold0"s);
     unfolded_fold1->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold1"s);
+    unfolded_fold0_part1->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold0_part1"s);
+    unfolded_fold1_part1->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold1_part1"s);
+    unfolded_fold0_part2->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold0_part2"s);
+    unfolded_fold1_part2->rename(tag + "_"s + before_label + "_iteration_raw_sub_pjet_u_dr_jpt_sum0_unfolded_fold1_part2"s);
 
     /* save histograms */
     covariance->save();
     unfolded->save();
     unfolded_fold0->save();
     unfolded_fold1->save();
+    unfolded_fold0_part1->save();
+    unfolded_fold1_part1->save();
+    unfolded_fold0_part2->save();
+    unfolded_fold1_part2->save();
 
     fout->Close();
 
