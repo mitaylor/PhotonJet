@@ -213,7 +213,7 @@ int ratio(char const* config, char const* selections, char const* output) {
             s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); 
             s->divide(ratio_stat->size()/2, -1);
         } else { 
-            apply_style(s, ""s, ymin, ymax);
+            apply_style(s, ""s, ""s, ymin, ymax);
             s->accessory(std::bind(aa_range_info, _1, ratio_stat)); 
         }
 
