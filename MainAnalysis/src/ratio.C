@@ -50,6 +50,9 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
+    auto osg = conf->get<std::vector<int64_t>>("osg");
+    auto normalize = conf->get<bool>("normalize");
+
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -63,7 +66,7 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
-    auto bdr = sel->get<std::vector<float>>("dr_bounds");
+    auto rdr = sel->get<std::vector<float>>("drg_range");
     auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
 
     auto ihf = new interval(dhf);
@@ -147,9 +150,12 @@ int ratio(char const* config, char const* selections, char const* output) {
             title(std::bind(rename_axis, _1, "PbPb / pp"), hist);
             syst = new history<TH1F>(file, syst_stub + figure);
 
-            for (int64_t i = 0; i < hist->size(); ++i) {
-                (*hist)[i]->Scale(1/(*hist)[i]->Integral("width"));
-                (*syst)[i]->Scale(1/(*hist)[i]->Integral("width"));
+            /* normalize by the number of photon-jet pairs */
+            if (normalize) {
+                for (int64_t i = 0; i < hist->size(); ++i) {
+                    (*hist)[i]->Scale(1/(*hist)[i]->Integral("width"));
+                    (*syst)[i]->Scale(1/(*hist)[i]->Integral("width"));
+                }
             }
         }, hists, systs, files, base_stubs, syst_stubs);
 
@@ -198,22 +204,22 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* prepare papers */
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
-        s->accessory(std::bind(line_at, _1, 1.f, bdr[0], bdr[1]));
+        s->accessory(std::bind(line_at, _1, 1.f, rdr[osg[0]], rdr[rdr.size() - osg[1] - 1]));
         s->accessory(kinematics);
         s->accessory(blurb);
 
         if (ratio_stat->size() == ihf->size()) { 
-            apply_style(s, "#bf{#scale[1.4]{CMS}}     #sqrt{s_{NN}} = 5.02 TeV"s, "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s, ymin, ymax);
+            apply_style(s, ""s, ""s, ymin, ymax);
             s->accessory(std::bind(aa_hf_info, _1, ratio_stat)); 
             s->divide(ratio_stat->size()/2, -1);
         } else { 
-            apply_style(s, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
+            apply_style(s, ""s, ymin, ymax);
             s->accessory(std::bind(aa_range_info, _1, ratio_stat)); 
         }
 
         /* draw histograms with uncertainties */
         ratio_syst->apply([&](TH1* h) {
-            h->GetXaxis()->SetRangeUser(bdr[0], bdr[1]);
+            h->GetXaxis()->SetRangeUser(rdr[osg[0]], rdr[rdr.size() - osg[1] - 1]);
             s->add(h, "r"); 
 
             s->adjust(h, "e2", "plf");
