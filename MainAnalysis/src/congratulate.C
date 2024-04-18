@@ -40,6 +40,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tags = conf->get<std::vector<std::string>>("tags");
     auto figures = conf->get<std::vector<std::string>>("figures");
+    auto types = conf->get<std::vector<std::string>>("types");
     auto prefix = conf->get<std::string>("prefix");
 
     auto smeared = conf->get<bool>("smeared");
@@ -64,7 +65,13 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
-    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+    auto ptg_range = sel->get<std::vector<float>>("ptg_range");
+
+    auto osg = sel->get<std::vector<int64_t>>("osg");
+    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
+    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
+
+    std::vector<float> bjet_pt = {1.0, 1.0};
 
     auto ihf = new interval(dhf);
 
@@ -168,7 +175,22 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
     };
 
-    zip([&](auto const& figure, auto ymin, auto ymax) {
+    zip([&](auto const& figure, auto type, auto ymin, auto ymax) {
+        switch (type) {
+        case 1:
+            bjet_pt[0] = ptg_range[osg_part1[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
+            break;
+        case 2:
+            bjet_pt[0] = ptg_range[osg_part2[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
+            break;
+        default:
+            bjet_pt[0] = ptg_range[osg[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
+        }
+
+
         /* get histograms */
         std::vector<history<TH1F>*> hists(6, nullptr);
         std::vector<history<TH1F>*> systs(6, nullptr);
@@ -300,7 +322,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         p->draw("pdf");
         a->draw("pdf");
         s->draw("pdf");
-    }, figures, ymins, ymaxs);
+    }, figures, types, ymins, ymaxs);
 
     in(output, []() {});
 
