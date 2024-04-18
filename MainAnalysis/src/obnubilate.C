@@ -46,7 +46,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto types = conf->get<std::vector<int64_t>("types");
+    auto types = conf->get<std::vector<int64_t>>("types");
     auto columns = conf->get<std::vector<int32_t>>("columns");
     auto ranges = conf->get<std::vector<float>>("ranges");
 
