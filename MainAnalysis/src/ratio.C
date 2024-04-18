@@ -171,8 +171,8 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* take the ratio */
         for (int64_t i = 0; i < hists[0]->size(); ++i) {
-            std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[1])[0], "UU P") << std::endl;
-            std::cout << "K " << (*hists[0])[i]->KolmogorovTest((*hists[1])[0], "UU P") << std::endl;
+            std::cout << "Chi2 " << (*hists[0])[i]->Chi2Test((*hists[1])[0], "WW P") << std::endl;
+            std::cout << "K " << (*hists[0])[i]->KolmogorovTest((*hists[1])[0], "WW P") << std::endl;
 
             for (int64_t j = 1; j <= (*hists[0])[0]->GetNbinsX(); ++j) {  
                 auto aa_hist = (*hists[0])[i];
