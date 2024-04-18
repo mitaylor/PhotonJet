@@ -153,7 +153,7 @@ int regulate(char const* config, char const* output) {
     auto tpf = harvest<pfcand>(chain_pf);
     auto ttrk = harvest<tracks>(chain_trk);
 
-    std::array<bool, tt::ntt> flags = { tevt, tegg, tpho, tele, tjet, thlt, trho, tpf, ttrk };
+    std::array<bool, tt::ntt> flags = { tevt != nullptr, tegg != nullptr, tpho != nullptr, tele != nullptr, tjet != nullptr, thlt != nullptr, trho != nullptr, tpf != nullptr, ttrk };
     std::transform(flags.begin(), flags.end(), active.begin(), flags.begin(),
                    [](bool a, bool b) -> bool { return a && b; });
 
