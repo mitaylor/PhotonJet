@@ -184,7 +184,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     /* calculate variations */
     zip([&](auto const& figure, auto type, auto cols, auto range) {
-        switch (expression) {
+        switch (type) {
         case 1:
             bjet_pt[0] = ptg_range[osg_part1[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
