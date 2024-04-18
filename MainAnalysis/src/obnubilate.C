@@ -40,13 +40,15 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto labels = conf->get<std::vector<std::string>>("labels");
+    auto groups = conf->get<std::vector<int32_t>>("groups");
     auto plots = conf->get<std::vector<int32_t>>("plots");
     auto legends = conf->get<std::vector<std::string>>("legends");
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
+
     auto figures = conf->get<std::vector<std::string>>("figures");
+    auto types = conf->get<std::vector<int64_t>("types");
     auto columns = conf->get<std::vector<int32_t>>("columns");
     auto ranges = conf->get<std::vector<float>>("ranges");
-    auto groups = conf->get<std::vector<int32_t>>("groups");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -68,9 +70,14 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
-    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+    auto ptg_range = sel->get<std::vector<float>>("ptg_range");
+
+    auto osg = sel->get<std::vector<int64_t>>("osg");
+    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
+    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
+    std::vector<float> bjet_pt = {1, 1};
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -150,7 +157,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             l->SetTextFont(43);
             l->SetTextSize(11);
 
-
             l->DrawLatexNDC(0.14, 0.73, text.data());
         }
     };
@@ -163,7 +169,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             l->SetTextAlign(11);
             l->SetTextFont(43);
             l->SetTextSize(11);
-
 
             l->DrawLatexNDC(0.14, 0.73, text.data());
         }
@@ -178,7 +183,21 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     if (!is_paper) cms += " #it{#scale[1.2]{Preliminary}}"s;
 
     /* calculate variations */
-    zip([&](auto const& figure, auto cols, auto range) {
+    zip([&](auto const& figure, auto type, auto cols, auto range) {
+        switch (expression) {
+        case 1:
+            bjet_pt[0] = ptg_range[osg_part1[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
+            break;
+        case 2:
+            bjet_pt[0] = ptg_range[osg_part2[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
+            break;
+        default:
+            bjet_pt[0] = ptg_range[osg[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
+        }
+
         auto stub = "_"s + figure;
 
         std::vector<paper*> cs(cols, nullptr);
@@ -330,7 +349,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         for (auto c : cs) {
             c->draw("pdf");
         }
-    }, figures, columns, ranges);
+    }, figures, types, columns, ranges);
 
     fout->Close();
 
