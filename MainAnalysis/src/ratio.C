@@ -42,6 +42,7 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tags = conf->get<std::vector<std::string>>("tags");
     auto figures = conf->get<std::vector<std::string>>("figures");
+    auto types = conf->get<std::vector<int64_t>>("types");
     auto prefix = conf->get<std::string>("prefix");
 
     auto ymins = conf->get<std::vector<float>>("ymin");
@@ -50,7 +51,7 @@ int ratio(char const* config, char const* selections, char const* output) {
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
 
-    auto osg = conf->get<std::vector<int64_t>>("osg");
+    auto osg_dr = conf->get<std::vector<int64_t>>("osg");
     auto normalize = conf->get<bool>("normalize");
 
     auto sel = new configurer(selections);
@@ -67,7 +68,13 @@ int ratio(char const* config, char const* selections, char const* output) {
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto rdr = sel->get<std::vector<float>>("drg_range");
-    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+    auto ptg_range = sel->get<std::vector<float>>("ptg_range");
+
+    auto osg = sel->get<std::vector<int64_t>>("osg");
+    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
+    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
+
+    std::vector<float> bjet_pt = {1.0, 1.0};
 
     auto ihf = new interval(dhf);
 
@@ -139,7 +146,21 @@ int ratio(char const* config, char const* selections, char const* output) {
         }
     };
 
-    zip([&](auto const& figure, auto ymin, auto ymax) {
+    zip([&](auto const& figure, auto type, auto ymin, auto ymax) {
+        switch (type) {
+        case 1:
+            bjet_pt[0] = ptg_range[osg_part1[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
+            break;
+        case 2:
+            bjet_pt[0] = ptg_range[osg_part2[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
+            break;
+        default:
+            bjet_pt[0] = ptg_range[osg[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
+        }
+
         /* get histograms */ 
         std::vector<history<TH1F>*> hists(2, nullptr);
         std::vector<history<TH1F>*> systs(2, nullptr);
@@ -205,7 +226,7 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* prepare papers */
         auto s = new paper(set + "_" + prefix + "_ratio_" + figure, hb);
-        s->accessory(std::bind(line_at, _1, 1.f, rdr[osg[0]], rdr[rdr.size() - osg[1] - 1]));
+        s->accessory(std::bind(line_at, _1, 1.f, rdr[osg_dr[0]], rdr[rdr.size() - osg_dr[1] - 1]));
         s->accessory(kinematics);
         s->accessory(blurb);
 
@@ -220,7 +241,7 @@ int ratio(char const* config, char const* selections, char const* output) {
 
         /* draw histograms with uncertainties */
         ratio_syst->apply([&](TH1* h) {
-            h->GetXaxis()->SetRangeUser(rdr[osg[0]], rdr[rdr.size() - osg[1] - 1]);
+            h->GetXaxis()->SetRangeUser(rdr[osg_dr[0]], rdr[rdr.size() - osg_dr[1] - 1]);
             s->add(h, "r"); 
 
             s->adjust(h, "e2", "plf");
@@ -242,7 +263,7 @@ int ratio(char const* config, char const* selections, char const* output) {
         hb->sketch();
 
         s->draw("pdf");
-    }, figures, ymins, ymaxs);
+    }, figures, types, ymins, ymaxs);
 
     in(output, []() {});
 

@@ -190,7 +190,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
 
-
         /* get histograms */
         std::vector<history<TH1F>*> hists(6, nullptr);
         std::vector<history<TH1F>*> systs(6, nullptr);
