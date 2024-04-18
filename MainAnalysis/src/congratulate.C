@@ -40,7 +40,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto tags = conf->get<std::vector<std::string>>("tags");
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto types = conf->get<std::vector<std::string>>("types");
+    auto types = conf->get<std::vector<int64_t>("types");
     auto prefix = conf->get<std::string>("prefix");
 
     auto smeared = conf->get<bool>("smeared");
