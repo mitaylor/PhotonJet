@@ -228,7 +228,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         (*hists[0])[0]->GetXaxis()->SetLabelSize(0.05);
 
         /* prepare papers */
-        auto s = new paper(set + "_" + prefix + "_results_ss_mean" + suffix, hb);
+        auto s = new paper(set + "_" + prefix + "_results_ss_mean" + suffix + "_" + figure, hb);
         apply_style(s, ""s, ""s, min, max);
         s->accessory(kinematics);
         s->accessory(blurb);
