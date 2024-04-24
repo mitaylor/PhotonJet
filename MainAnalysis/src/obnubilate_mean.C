@@ -224,7 +224,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             title(std::bind(rename_axis, _1, "<#deltaj>"), means);
 
             for (int64_t i = 0; i < means->size(); ++i) {
-                float difference = (*(batches[k]))[i]->GetMean() - (*base_mean)[i]->GetBinContent(k + 2);
+                float difference = (*(batches[k]))[i]->GetMean() - (*base_mean_all)[i]->GetBinContent(k + 2);
 
                 (*means_all)[i]->SetBinContent(k + 2, difference * difference);
                 (*means_all)[i]->SetBinError(k + 2, 0);
@@ -239,7 +239,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             std::vector<double> sets;
 
             for (size_t k = 0; k < inputs.size(); ++k) {
-                auto difference = (*means)[i]->GetBinContent(k + 2);
+                auto difference = (*means_all)[i]->GetBinContent(k + 2);
                 if (groups[k] == (int32_t) sets.size()) {
                     sets.push_back(difference);
                 } else {
@@ -289,7 +289,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         c1->jewellery(box);
 
         /* save histograms */
-        base_mean->save(tag);
+        base_mean_all->save(tag);
+        means_all->save(tag);
         means->save(tag);
 
         hb->sketch();
