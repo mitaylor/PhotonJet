@@ -210,12 +210,12 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         auto means = new history<TH1F>("syst_mean"s + stub, "", fmean, base->size());
         auto means_all = new history<TH1F>("syst_mean_all"s + stub, "", fmean_all, base->size());
-        auto base_mean_all = new history<TH1F>("base_mean_all"s + stub, "", fmean_all, base->size());
+        auto base_mean = new history<TH1F>("base_mean"s + stub, "", fmean_all, base->size());
 
         for (int64_t i = 0; i < base->size(); ++i) {
-            for (int64_t j = 0; j < (*base_mean_all)[i]->GetNbinsX(); ++j) {
-                (*base_mean_all)[i]->SetBinContent(j + 1, (*base)[i]->GetMean());
-                (*base_mean_all)[i]->SetBinError(j + 1, (*base)[i]->GetMeanError());
+            for (int64_t j = 0; j < (*base_mean)[i]->GetNbinsX(); ++j) {
+                (*base_mean)[i]->SetBinContent(j + 1, (*base)[i]->GetMean());
+                (*base_mean)[i]->SetBinError(j + 1, (*base)[i]->GetMeanError());
             }
         }
 
@@ -224,7 +224,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             title(std::bind(rename_axis, _1, "<#deltaj>"), means);
 
             for (int64_t i = 0; i < means->size(); ++i) {
-                float difference = (*(batches[k]))[i]->GetMean() - (*base_mean_all)[i]->GetBinContent(k + 2);
+                float difference = (*(batches[k]))[i]->GetMean() - (*base_mean)[i]->GetBinContent(k + 2);
 
                 (*means_all)[i]->SetBinContent(k + 2, difference * difference);
                 (*means_all)[i]->SetBinError(k + 2, 0);
@@ -289,7 +289,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         c1->jewellery(box);
 
         /* save histograms */
-        base_mean_all->save(tag);
+        base_mean->save(tag);
         means_all->save(tag);
         means->save(tag);
 
