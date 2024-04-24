@@ -112,12 +112,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         // h->SetFillColorAlpha(col, 0.32); 
     };
 
-    // auto hf_info = [&](int64_t index) {
-    //     info_text(index, 0.75, "Cent. %i - %i%%", dcent, true); };
-
-    // auto range_info = [&](int64_t index) {
-    //     info_text(index, 0.75, "Cent. %i - %i%%", drange, true); };
-
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -216,10 +210,9 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
         title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"), base);
-
         std::vector<history<TH1F>*> sets;
-
         std::vector<history<TH1F>*> batches(inputs.size(), nullptr);
+
         zip([&](auto& batch, auto file, auto const& label) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
             title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"), batch);

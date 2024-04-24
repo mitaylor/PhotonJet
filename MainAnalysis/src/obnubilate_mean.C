@@ -41,12 +41,15 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto inputs = conf->get<std::vector<std::string>>("inputs");
     auto labels = conf->get<std::vector<std::string>>("labels");
+    auto groups = conf->get<std::vector<int32_t>>("groups");
     auto plots = conf->get<std::vector<int32_t>>("plots");
     auto legends = conf->get<std::vector<std::string>>("legends");
     auto legend_keys = conf->get<std::vector<std::string>>("legend_keys");
+
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto groups = conf->get<std::vector<int32_t>>("groups");
     auto types = conf->get<std::vector<int64_t>>("types");
+    auto columns = conf->get<std::vector<int32_t>>("columns");
+    auto ranges = conf->get<std::vector<float>>("ranges");
 
     auto dhf = conf->get<std::vector<float>>("hf_diff");
     auto dcent = conf->get<std::vector<int32_t>>("cent_diff");
@@ -55,6 +58,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
+
+    auto heavyion = sel->get<bool>("heavyion");
 
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -88,6 +93,13 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto hb = new pencil();
 
     /* lambdas */
+    std::function<void(TH1*)> square_ = [](TH1* h) {
+        for_contents([](std::array<double, 1> v) {
+            return v[0] * v[0]; }, h); };
+    std::function<void(TH1*)> sqrt_ = [](TH1* h) {
+        for_contents([](std::array<double, 1> v) {
+            return std::sqrt(v[0]); }, h); };
+
     auto shader = [&](TH1* h, float max) {
         default_formatter(h, 0., max);
         auto col = h->GetLineColor();
@@ -147,7 +159,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
     auto blurb = [&](int64_t index) {
         if (index > 0) {
-            auto system_tag = (tag == "aa") ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
+            auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
             system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
             auto cms = "#bf{#scale[1.4]{CMS}}"s;
 
@@ -178,7 +190,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             bjet_pt[0] = ptg_range[osg[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
-        
+
         auto stub = "_"s + figure;
 
         auto c1 = new paper(set + "_" + tag + "_mean_var"s + stub, hb);
@@ -190,16 +202,20 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             batch = new history<TH1F>(file, tag + "_" + label + stub, "batch_"s + tag + "_"s + label + stub);
         }, batches, files, labels);
 
-        auto incl = new interval(""s, inputs.size() + 1, 0.f, (float) inputs.size() + 1);
+        auto incl_all = new interval(""s, inputs.size() + 1, 0.f, (float) inputs.size() + 1);
+        auto fmean_all = std::bind(&interval::book<TH1F>, incl_all, _1, _2, _3);
+
+        auto incl = new interval(""s, legends.size() + 1, 0.f, (float) legends.size() + 1);
         auto fmean = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
         auto means = new history<TH1F>("syst_mean"s + stub, "", fmean, base->size());
-        auto base_mean = new history<TH1F>("base_mean"s + stub, "", fmean, base->size());
+        auto means_all = new history<TH1F>("syst_mean_all"s + stub, "", fmean_all, base->size());
+        auto base_mean_all = new history<TH1F>("base_mean_all"s + stub, "", fmean_all, base->size());
 
         for (int64_t i = 0; i < base->size(); ++i) {
-            for (int64_t j = 0; j < (*base_mean)[i]->GetNbinsX(); ++j) {
-                (*base_mean)[i]->SetBinContent(j + 1, (*base)[i]->GetMean());
-                (*base_mean)[i]->SetBinError(j + 1, (*base)[i]->GetMeanError());
+            for (int64_t j = 0; j < (*base_mean_all)[i]->GetNbinsX(); ++j) {
+                (*base_mean_all)[i]->SetBinContent(j + 1, (*base)[i]->GetMean());
+                (*base_mean_all)[i]->SetBinError(j + 1, (*base)[i]->GetMeanError());
             }
         }
 
@@ -210,8 +226,8 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             for (int64_t i = 0; i < means->size(); ++i) {
                 float difference = (*(batches[k]))[i]->GetMean() - (*base_mean)[i]->GetBinContent(k + 2);
 
-                (*means)[i]->SetBinContent(k + 2, difference * difference);
-                (*means)[i]->SetBinError(k + 2, 0);
+                (*means_all)[i]->SetBinContent(k + 2, difference * difference);
+                (*means_all)[i]->SetBinError(k + 2, 0);
 
                 printf("%.5f ", difference);
             }
@@ -227,10 +243,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 if (groups[k] == (int32_t) sets.size()) {
                     sets.push_back(difference);
                 } else {
-                    sets[groups[k]] = std::max(sets[groups[k]], difference);
+                    difference = std::max(sets[groups[k]], difference);
+                    sets[groups[k]] = difference;
                 }
 
-                (*means)[i]->SetBinContent(k + 2, std::sqrt(difference));
+                (*means)[i]->SetBinContent(groups[k] + 2, std::sqrt(difference));
             }
 
             float total = 0;
@@ -251,7 +268,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         /* set bin labels */
         for (int64_t i = 0; i < means->size(); ++i) {
-            for (size_t k = 0; k < inputs.size(); ++k) {
+            for (size_t k = 0; k < labels.size(); ++k) {
                 (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
             }
             (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
