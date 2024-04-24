@@ -268,7 +268,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         /* set bin labels */
         for (int64_t i = 0; i < means->size(); ++i) {
-            for (size_t k = 0; k < labels.size(); ++k) {
+            for (size_t k = 0; k < legends.size(); ++k) {
                 (*means)[i]->GetXaxis()->SetBinLabel(k + 2, legends[k].data());
             }
             (*means)[i]->GetXaxis()->SetBinLabel(1, "total");
