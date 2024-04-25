@@ -111,32 +111,6 @@ int theory(char const* config, char const* selections, char const* output) {
     TFile* file_aa = new TFile((base + input_aa).data(), "read");
     TFile* file_pp = new TFile((base + input_pp).data(), "read");
 
-
-    /* uncertainty box */
-    auto box = [&](TH1* h, int64_t) {
-        if (links.count(h)) {
-            TGraph* gr = new TGraph();
-            gr->SetFillStyle(1001);
-            gr->SetFillColorAlpha(data, 0.48);
-
-            for (int i = 1; i <= h->GetNbinsX(); ++i) {
-                if (h->GetBinError(i) == 0) continue;
-
-                double x = h->GetBinCenter(i);
-                double width = h->GetBinWidth(i);
-                double val = h->GetBinContent(i);
-                double err = links[h]->GetBinContent(i);
-
-                gr->SetPoint(0, x - (width / 2), val - err);
-                gr->SetPoint(1, x + (width / 2), val - err);
-                gr->SetPoint(2, x + (width / 2), val + err);
-                gr->SetPoint(3, x - (width / 2), val + err);
-
-                gr->DrawClone("f");
-            }
-        }
-    };
-
     /* prepare plots */
     auto hb = new pencil();
     hb->category("type", "data", theory_tags);
@@ -314,6 +288,31 @@ int theory(char const* config, char const* selections, char const* output) {
                 theory_ratios[i] = new history<TH1F>(theory_files_ratio[i], theory_figures_ratio[i]);
             }
         }
+
+        /* uncertainty box */
+        auto box = [&](TH1* h, int64_t) {
+            if (links.count(h)) {
+                TGraph* gr = new TGraph();
+                gr->SetFillStyle(1001);
+                gr->SetFillColorAlpha(data, 0.48);
+
+                for (int i = 1; i <= h->GetNbinsX(); ++i) {
+                    if (h->GetBinError(i) == 0) continue;
+
+                    double x = h->GetBinCenter(i);
+                    double width = h->GetBinWidth(i);
+                    double val = h->GetBinContent(i);
+                    double err = links[h]->GetBinContent(i);
+
+                    gr->SetPoint(0, x - (width / 2), val - err);
+                    gr->SetPoint(1, x + (width / 2), val - err);
+                    gr->SetPoint(2, x + (width / 2), val + err);
+                    gr->SetPoint(3, x - (width / 2), val + err);
+
+                    gr->DrawClone("f");
+                }
+            }
+        };
 
         /* prepare papers */
         auto p = new paper(set + "_theory_comparison_ratio", hb);
