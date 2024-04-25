@@ -170,10 +170,15 @@ int theory(char const* config, char const* selections, char const* output) {
             bjet_pt[0] = ptg_range[osg[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
+        std::cout << figure << " " << theory_figure << " " << type << std::endl;
         std::cout << __LINE__ << std::endl; std::cout << "aa_base_aa_nominal_s_pure_raw_sub_"s + figure << std::endl;
+        std::cout << __LINE__ << std::endl; std::cout << "aa_total_base_aa_nominal_s_pure_raw_sub_"s + figure << std::endl;
         auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_"s + figure);
         auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_"s + figure);
 std::cout << __LINE__ << std::endl;
+std::cout << figure << " " << theory_figure << " " << type << std::endl;
+        std::cout << __LINE__ << std::endl; std::cout << "pp_base_pp_nominal_s_pure_raw_sub_"s + figure << std::endl;
+        std::cout << __LINE__ << std::endl; std::cout << "pp_total_base_pp_nominal_s_pure_raw_sub_"s + figure << std::endl;
         auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_"s + figure);
         auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_"s + figure);
 std::cout << __LINE__ << std::endl;
