@@ -155,25 +155,6 @@ int theory(char const* config, char const* selections, char const* output) {
         }
     };
 
-    auto data_style = [&](TH1* h) {
-        h->SetLineColor(1);
-        h->SetFillColorAlpha(data, 0.5);
-        h->SetMarkerStyle(20);
-        h->SetMarkerSize(0.60);
-
-        p->adjust(h, "le", "plf");
-    };
-
-    auto theory_style = [&](TH1* h, int i) {
-        h->SetMarkerColor(colors[i + offset]);
-        h->SetLineColor(colors[i + offset]);
-        h->SetFillColorAlpha(colors[i + offset], 0.5);
-        // h->SetMarkerStyle(markers[i + offset]);
-        // h->SetMarkerSize(0.60);
-
-        p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
-    };
-
     zip([&](auto const& figure, auto type) {
         switch (type) {
         case 1:
@@ -328,6 +309,25 @@ int theory(char const* config, char const* selections, char const* output) {
         (*hist_ratio)[0]->GetXaxis()->SetRangeUser(xmin, xmax);
         p->add((*hist_ratio)[0], "data");
         p->adjust((*hist_ratio)[0], "pe", "plf");
+
+        auto data_style = [&](TH1* h) {
+            h->SetLineColor(1);
+            h->SetFillColorAlpha(data, 0.5);
+            h->SetMarkerStyle(20);
+            h->SetMarkerSize(0.60);
+
+            p->adjust(h, "le", "plf");
+        };
+
+        auto theory_style = [&](TH1* h, int i) {
+            h->SetMarkerColor(colors[i + offset]);
+            h->SetLineColor(colors[i + offset]);
+            h->SetFillColorAlpha(colors[i + offset], 0.5);
+            // h->SetMarkerStyle(markers[i + offset]);
+            // h->SetMarkerSize(0.60);
+
+            p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
+        };
 
         for (size_t i = 0; i < theory_tags.size(); ++i) {
             p->stack((*theory_ratios[i])[0], theory_tags[i]);
