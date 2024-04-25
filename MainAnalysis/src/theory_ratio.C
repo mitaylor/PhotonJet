@@ -170,78 +170,71 @@ int theory(char const* config, char const* selections, char const* output) {
             bjet_pt[0] = ptg_range[osg[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
-        std::cout << figure << " " << theory_figure << " " << type << std::endl;
-        std::cout << __LINE__ << std::endl; std::cout << "aa_base_aa_nominal_s_pure_raw_sub_"s + figure << std::endl;
-        std::cout << __LINE__ << std::endl; std::cout << "aa_total_base_aa_nominal_s_pure_raw_sub_"s + figure << std::endl;
+
         auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_"s + figure);
         auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_"s + figure);
-std::cout << __LINE__ << std::endl;
-std::cout << figure << " " << theory_figure << " " << type << std::endl;
-        std::cout << __LINE__ << std::endl; std::cout << "pp_base_pp_nominal_s_pure_raw_sub_"s + figure << std::endl;
-        std::cout << __LINE__ << std::endl; std::cout << "pp_total_base_pp_nominal_s_pure_raw_sub_"s + figure << std::endl;
+
         auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_"s + figure);
         auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_"s + figure);
-std::cout << __LINE__ << std::endl;
+
         title(std::bind(rename_axis, _1, "PbPb / pp"), hist_pp);
-std::cout << __LINE__ << std::endl;
-std::cout << __LINE__ << std::endl;
+
         /* calculate ratio for data */
         auto hist_ratio = new history<TH1F>(*hist_pp, "ratio"s);
         auto syst_ratio = new history<TH1F>(*syst_pp, "ratio"s);
-std::cout << __LINE__ << std::endl;
+
         /* link histograms, uncertainties */
         std::unordered_map<TH1*, TH1*> links;
         hist_aa->apply([&](TH1* h, int64_t index) { links[h] = (*syst_aa)[index]; });
         hist_pp->apply([&](TH1* h, int64_t index) { links[h] = (*syst_pp)[index]; });
         hist_ratio->apply([&](TH1* h, int64_t index) { links[h] = (*syst_ratio)[index]; });
-std::cout << __LINE__ << std::endl;
+
         /* normalize */
         auto aa_hist = (*hist_aa)[3];
         auto pp_hist = (*hist_pp)[0];
-std::cout << __LINE__ << std::endl;
+
         auto aa_integral = aa_hist->Integral("width");
         auto pp_integral = pp_hist->Integral("width");
-std::cout << __LINE__ << std::endl;
+
         aa_hist->Scale(1/aa_integral);
         pp_hist->Scale(1/pp_integral);
         links[aa_hist]->Scale(1/aa_integral);
         links[pp_hist]->Scale(1/pp_integral);
-std::cout << __LINE__ << std::endl;
+
         for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
             double aa_val = aa_hist->GetBinContent(j);
             double aa_stat_err = aa_hist->GetBinError(j);
             double aa_syst_err = links[aa_hist]->GetBinContent(j);
             auto aa_stat_err_scale = aa_stat_err/aa_val;
             auto aa_syst_err_scale = aa_syst_err/aa_val;
-std::cout << __LINE__ << std::endl;
+
             double pp_val = pp_hist->GetBinContent(j);
             double pp_stat_err = pp_hist->GetBinError(j);
             double pp_syst_err = links[pp_hist]->GetBinContent(j);
             auto pp_stat_err_scale = pp_stat_err/pp_val;
             auto pp_syst_err_scale = pp_syst_err/pp_val;
-std::cout << __LINE__ << std::endl;
+
             auto ratio = aa_val / pp_val;
-std::cout << __LINE__ << std::endl;
+
             aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
             aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
-std::cout << __LINE__ << std::endl;
+
             (*hist_ratio)[0]->SetBinContent(j, ratio);
             (*hist_ratio)[0]->SetBinError(j, aa_stat_err);
             links[(*hist_ratio)[0]]->SetBinContent(j, aa_syst_err);
         }
-std::cout << __LINE__ << std::endl;
+
         /* get theory predictions */ 
         std::vector<TFile*> theory_files_aa(theory_inputs_aa.size());
         std::vector<TFile*> theory_files_pp(theory_inputs_pp.size());
         std::vector<TFile*> theory_files_ratio(theory_inputs_ratio.size());
-std::cout << __LINE__ << std::endl;
+
         std::vector<history<TH1F>*> theory_hists_aa(theory_inputs_aa.size());
         std::vector<history<TH1F>*> theory_hists_pp(theory_inputs_pp.size());
         std::vector<history<TH1F>*> theory_ratios(theory_tags.size());
-std::cout << __LINE__ << std::endl;
+
         for (size_t i = 0; i < theory_tags.size(); ++i) {
             if (theory_inputs_ratio.size() == 0) {
-                std::cout << theory_figures_aa[i] + "_" + theory_figure << " " << theory_figures_pp[i] + "_" + theory_figure << std::endl;
                 theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
                 theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
 
@@ -249,10 +242,17 @@ std::cout << __LINE__ << std::endl;
                 theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i] + "_" + theory_figure);
                 theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
 
-                for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
-                    auto aa_hist = (*theory_hists_aa[i])[0];
-                    auto pp_hist = (*theory_hists_pp[i])[0];
+                /* normalize */
+                auto aa_hist = (*theory_hists_aa[i])[0];
+                auto pp_hist = (*theory_hists_pp[i])[0];
 
+                auto aa_integral = aa_hist->Integral("width");
+                auto pp_integral = pp_hist->Integral("width");
+
+                aa_hist->Scale(1/aa_integral);
+                pp_hist->Scale(1/pp_integral);
+
+                for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
                     double aa_val = aa_hist->GetBinContent(j);
                     double aa_stat_err = aa_hist->GetBinError(j);
                     auto aa_stat_err_scale = aa_stat_err/aa_val;
@@ -273,7 +273,7 @@ std::cout << __LINE__ << std::endl;
                 theory_ratios[i] = new history<TH1F>(theory_files_ratio[i], theory_figures_ratio[i]);
             }
         }
-std::cout << __LINE__ << std::endl;
+
         /* uncertainty box */
         auto box = [&](TH1* h, int64_t) {
             if (links.count(h)) {
