@@ -184,8 +184,6 @@ std::cout << figure << " " << theory_figure << " " << type << std::endl;
 std::cout << __LINE__ << std::endl;
         title(std::bind(rename_axis, _1, "PbPb / pp"), hist_pp);
 std::cout << __LINE__ << std::endl;
-        file_aa->Close();
-        file_pp->Close();
 std::cout << __LINE__ << std::endl;
         /* calculate ratio for data */
         auto hist_ratio = new history<TH1F>(*hist_pp, "ratio"s);
