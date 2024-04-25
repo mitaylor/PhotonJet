@@ -53,8 +53,8 @@ int theory(char const* config, char const* selections, char const* output) {
     auto input_aa = conf->get<std::string>("input_aa");
     auto input_pp = conf->get<std::string>("input_pp");
 
-    auto figure = conf->get<std::string>("figure");
-    auto type = conf->get<std::string>("type");
+    auto figures = conf->get<std::vector<std::string>>("figures");
+    auto types = conf->get<std::vector<int64_t>>("types");
 
     auto theory_inputs_aa = conf->get<std::vector<std::string>>("theory_inputs_aa");
     auto theory_inputs_pp = conf->get<std::vector<std::string>>("theory_inputs_pp");
@@ -94,8 +94,13 @@ int theory(char const* config, char const* selections, char const* output) {
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
-    auto bjet_pt = sel->get<std::vector<float>>("jet_pt_bounds");
+    auto ptg_range = sel->get<std::vector<float>>("ptg_range");
 
+    auto osg = sel->get<std::vector<int64_t>>("osg");
+    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
+    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
+
+    std::vector<float> bjet_pt = {1.0, 1.0};
     std::vector<int32_t> dcent = {10, 0};
 
     /* manage memory manually */
@@ -106,97 +111,6 @@ int theory(char const* config, char const* selections, char const* output) {
     TFile* file_aa = new TFile((base + input_aa).data(), "read");
     TFile* file_pp = new TFile((base + input_pp).data(), "read");
 
-    /* load histograms */
-    auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_"s + figure);
-    auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_"s + figure);
-
-    auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_"s + figure);
-    auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_"s + figure);
-
-    title(std::bind(rename_axis, _1, "PbPb / pp"), hist_pp);
-
-    file_aa->Close();
-    file_pp->Close();
-
-    /* calculate ratio for data */
-    auto hist_ratio = new history<TH1F>(*hist_pp, "ratio"s);
-    auto syst_ratio = new history<TH1F>(*syst_pp, "ratio"s);
-
-    /* link histograms, uncertainties */
-    std::unordered_map<TH1*, TH1*> links;
-    hist_aa->apply([&](TH1* h, int64_t index) { links[h] = (*syst_aa)[index]; });
-    hist_pp->apply([&](TH1* h, int64_t index) { links[h] = (*syst_pp)[index]; });
-    hist_ratio->apply([&](TH1* h, int64_t index) { links[h] = (*syst_ratio)[index]; });
-
-    for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
-        auto aa_hist = (*hist_aa)[3];
-        auto pp_hist = (*hist_pp)[0];
-
-        double aa_val = aa_hist->GetBinContent(j);
-        double aa_stat_err = aa_hist->GetBinError(j);
-        double aa_syst_err = links[aa_hist]->GetBinContent(j);
-        auto aa_stat_err_scale = aa_stat_err/aa_val;
-        auto aa_syst_err_scale = aa_syst_err/aa_val;
-
-        double pp_val = pp_hist->GetBinContent(j);
-        double pp_stat_err = pp_hist->GetBinError(j);
-        double pp_syst_err = links[pp_hist]->GetBinContent(j);
-        auto pp_stat_err_scale = pp_stat_err/pp_val;
-        auto pp_syst_err_scale = pp_syst_err/pp_val;
-
-        auto ratio = aa_val / pp_val;
-
-        aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
-        aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
-
-        (*hist_ratio)[0]->SetBinContent(j, ratio);
-        (*hist_ratio)[0]->SetBinError(j, aa_stat_err);
-        links[(*hist_ratio)[0]]->SetBinContent(j, aa_syst_err);
-    }
-
-    /* get theory predictions */ 
-    std::vector<TFile*> theory_files_aa(theory_inputs_aa.size());
-    std::vector<TFile*> theory_files_pp(theory_inputs_pp.size());
-    std::vector<TFile*> theory_files_ratio(theory_inputs_ratio.size());
-
-    std::vector<history<TH1F>*> theory_hists_aa(theory_inputs_aa.size());
-    std::vector<history<TH1F>*> theory_hists_pp(theory_inputs_pp.size());
-    std::vector<history<TH1F>*> theory_ratios(theory_tags.size());
-
-    for (size_t i = 0; i < theory_tags.size(); ++i) {
-        if (theory_inputs_ratio.size() == 0) {
-            theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
-            theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
-
-            theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i]);
-            theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i]);
-
-            theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
-
-            for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
-                auto aa_hist = (*theory_hists_aa[i])[0];
-                auto pp_hist = (*theory_hists_pp[i])[0];
-
-                double aa_val = aa_hist->GetBinContent(j);
-                double aa_stat_err = aa_hist->GetBinError(j);
-                auto aa_stat_err_scale = aa_stat_err/aa_val;
-
-                double pp_val = pp_hist->GetBinContent(j);
-                double pp_stat_err = pp_hist->GetBinError(j);
-                auto pp_stat_err_scale = pp_stat_err/pp_val;
-
-                auto ratio = aa_val / pp_val;
-
-                aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
-
-                (*theory_ratios[i])[0]->SetBinContent(j, ratio);
-                (*theory_ratios[i])[0]->SetBinError(j, aa_stat_err);
-            }
-        } else {
-            theory_files_ratio[i] = new TFile((base + theory_inputs_ratio[i]).data(), "read");
-            theory_ratios[i] = new history<TH1F>(theory_files_ratio[i], theory_figures_ratio[i]);
-        }
-    }
 
     /* uncertainty box */
     auto box = [&](TH1* h, int64_t) {
@@ -267,25 +181,6 @@ int theory(char const* config, char const* selections, char const* output) {
         }
     };
 
-    /* prepare papers */
-    auto p = new paper(set + "_theory_comparison_ratio_" + type, hb);
-    apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
-    p->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
-    p->accessory(kinematics);
-    p->accessory(blurb);
-    p->jewellery(box);
-    p->accessory(std::bind(aa_hf_info, _1, hist_ratio)); 
-    p->divide(-1, 1);
-
-    /* draw histograms with uncertainties */
-    (*hist_ratio)[0]->GetXaxis()->SetRangeUser(xmin, xmax);
-    p->add((*hist_ratio)[0], "data");
-    p->adjust((*hist_ratio)[0], "pe", "plf");
-
-    for (size_t i = 0; i < theory_tags.size(); ++i) {
-        p->stack((*theory_ratios[i])[0], theory_tags[i]);
-    }
-
     auto data_style = [&](TH1* h) {
         h->SetLineColor(1);
         h->SetFillColorAlpha(data, 0.5);
@@ -305,15 +200,150 @@ int theory(char const* config, char const* selections, char const* output) {
         p->adjust(h, theory_plot_styles[i], theory_legend_styles[i]);
     };
 
-    hb->style("data", data_style);
+    zip([&](auto const& figure, auto type) {
+        switch (type) {
+        case 1:
+            bjet_pt[0] = ptg_range[osg_part1[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
+            break;
+        case 2:
+            bjet_pt[0] = ptg_range[osg_part2[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
+            break;
+        default:
+            bjet_pt[0] = ptg_range[osg[2]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
+        }
 
-    for (size_t i = 0; i < theory_tags.size(); ++i) {
-        hb->style(theory_tags[i], std::bind(theory_style, _1, i));
-    }
+        auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_"s + figure);
+        auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_"s + figure);
 
-    hb->sketch();
+        auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_"s + figure);
+        auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_"s + figure);
 
-    p->draw("pdf");
+        title(std::bind(rename_axis, _1, "PbPb / pp"), hist_pp);
+
+        file_aa->Close();
+        file_pp->Close();
+
+        /* calculate ratio for data */
+        auto hist_ratio = new history<TH1F>(*hist_pp, "ratio"s);
+        auto syst_ratio = new history<TH1F>(*syst_pp, "ratio"s);
+
+        /* link histograms, uncertainties */
+        std::unordered_map<TH1*, TH1*> links;
+        hist_aa->apply([&](TH1* h, int64_t index) { links[h] = (*syst_aa)[index]; });
+        hist_pp->apply([&](TH1* h, int64_t index) { links[h] = (*syst_pp)[index]; });
+        hist_ratio->apply([&](TH1* h, int64_t index) { links[h] = (*syst_ratio)[index]; });
+
+        /* normalize */
+        auto aa_hist = (*hist_aa)[3];
+        auto pp_hist = (*hist_pp)[0];
+
+        auto aa_integral = aa_hist->Integral("width");
+        auto pp_integral = pp_hist->Integral("width");
+
+        aa_hist->Scale(1/aa_integral);
+        pp_hist->Scale(1/pp_integral);
+        links[aa_hist]->Scale(1/aa_integral);
+        links[pp_hist]->Scale(1/pp_integral);
+
+        for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
+            double aa_val = aa_hist->GetBinContent(j);
+            double aa_stat_err = aa_hist->GetBinError(j);
+            double aa_syst_err = links[aa_hist]->GetBinContent(j);
+            auto aa_stat_err_scale = aa_stat_err/aa_val;
+            auto aa_syst_err_scale = aa_syst_err/aa_val;
+
+            double pp_val = pp_hist->GetBinContent(j);
+            double pp_stat_err = pp_hist->GetBinError(j);
+            double pp_syst_err = links[pp_hist]->GetBinContent(j);
+            auto pp_stat_err_scale = pp_stat_err/pp_val;
+            auto pp_syst_err_scale = pp_syst_err/pp_val;
+
+            auto ratio = aa_val / pp_val;
+
+            aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
+            aa_syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
+
+            (*hist_ratio)[0]->SetBinContent(j, ratio);
+            (*hist_ratio)[0]->SetBinError(j, aa_stat_err);
+            links[(*hist_ratio)[0]]->SetBinContent(j, aa_syst_err);
+        }
+
+        /* get theory predictions */ 
+        std::vector<TFile*> theory_files_aa(theory_inputs_aa.size());
+        std::vector<TFile*> theory_files_pp(theory_inputs_pp.size());
+        std::vector<TFile*> theory_files_ratio(theory_inputs_ratio.size());
+
+        std::vector<history<TH1F>*> theory_hists_aa(theory_inputs_aa.size());
+        std::vector<history<TH1F>*> theory_hists_pp(theory_inputs_pp.size());
+        std::vector<history<TH1F>*> theory_ratios(theory_tags.size());
+
+        for (size_t i = 0; i < theory_tags.size(); ++i) {
+            if (theory_inputs_ratio.size() == 0) {
+                theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
+                theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
+
+                theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i]);
+                theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i]);
+
+                theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
+
+                for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
+                    auto aa_hist = (*theory_hists_aa[i])[0];
+                    auto pp_hist = (*theory_hists_pp[i])[0];
+
+                    double aa_val = aa_hist->GetBinContent(j);
+                    double aa_stat_err = aa_hist->GetBinError(j);
+                    auto aa_stat_err_scale = aa_stat_err/aa_val;
+
+                    double pp_val = pp_hist->GetBinContent(j);
+                    double pp_stat_err = pp_hist->GetBinError(j);
+                    auto pp_stat_err_scale = pp_stat_err/pp_val;
+
+                    auto ratio = aa_val / pp_val;
+
+                    aa_stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
+
+                    (*theory_ratios[i])[0]->SetBinContent(j, ratio);
+                    (*theory_ratios[i])[0]->SetBinError(j, aa_stat_err);
+                }
+            } else {
+                theory_files_ratio[i] = new TFile((base + theory_inputs_ratio[i]).data(), "read");
+                theory_ratios[i] = new history<TH1F>(theory_files_ratio[i], theory_figures_ratio[i]);
+            }
+        }
+
+        /* prepare papers */
+        auto p = new paper(set + "_theory_comparison_ratio", hb);
+        apply_style(p, "#bf{#scale[1.4]{CMS}}"s, "#sqrt{s_{NN}} = 5.02 TeV"s, ymin, ymax);
+        p->accessory(std::bind(line_at, _1, 1.f, xmin, xmax));
+        p->accessory(kinematics);
+        p->accessory(blurb);
+        p->jewellery(box);
+        p->accessory(std::bind(aa_hf_info, _1, hist_ratio)); 
+        p->divide(-1, 1);
+
+        /* draw histograms with uncertainties */
+        (*hist_ratio)[0]->GetXaxis()->SetRangeUser(xmin, xmax);
+        p->add((*hist_ratio)[0], "data");
+        p->adjust((*hist_ratio)[0], "pe", "plf");
+
+        for (size_t i = 0; i < theory_tags.size(); ++i) {
+            p->stack((*theory_ratios[i])[0], theory_tags[i]);
+        }
+
+        hb->style("data", data_style);
+
+        for (size_t i = 0; i < theory_tags.size(); ++i) {
+            hb->style(theory_tags[i], std::bind(theory_style, _1, i));
+        }
+
+        hb->sketch();
+
+        p->draw("pdf");
+    }, figures, types);
 
     in(output, []() {});
 
