@@ -243,7 +243,7 @@ int theory(char const* config, char const* selections, char const* output) {
 
                 theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i] + "_" + theory_figure);
                 theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i] + "_" + theory_figure);
-                std::cout << theory_figures_aa[i] + "_" + theory_figure << " " theory_figures_pp[i] + "_" + theory_figure
+                std::cout << theory_figures_aa[i] + "_" + theory_figure << " " << theory_figures_pp[i] + "_" + theory_figure
                 theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
 
                 for (int64_t j = 1; j <= (*hist_ratio)[0]->GetNbinsX(); ++j) {
