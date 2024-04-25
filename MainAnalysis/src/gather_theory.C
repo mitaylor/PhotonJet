@@ -132,6 +132,9 @@ int gather_theory(char const* config, char const* selections, char const* output
 
     auto osg = sel->get<std::vector<int64_t>>("osg");
 
+    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
+    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
+
     /* make histograms */
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 
@@ -145,6 +148,10 @@ int gather_theory(char const* config, char const* selections, char const* output
     std::vector<history<TH1F>*> hist_dr_jpt(trees.size(), nullptr);
     std::vector<history<TH1F>*> hist_dr(trees.size(), nullptr);
     std::vector<history<TH1F>*> hist_jpt(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_dr_part1(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_jpt_part1(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_dr_part2(trees.size(), nullptr);
+    std::vector<history<TH1F>*> hist_jpt_part2(trees.size(), nullptr);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -163,6 +170,10 @@ int gather_theory(char const* config, char const* selections, char const* output
         hist_dr_jpt[i] = new history<TH1F>(trees[i] + "_dr_jpt", "", fg, 1);
         hist_dr[i] = new history<TH1F>(trees[i] + "_dr", "", null<TH1F>, 1);
         hist_jpt[i] = new history<TH1F>(trees[i] + "_jpt", "", null<TH1F>, 1);
+        hist_dr_part1[i] = new history<TH1F>(trees[i] + "_dr_part1", "", null<TH1F>, 1);
+        hist_jpt_part1[i] = new history<TH1F>(trees[i] + "_jpt_part1", "", null<TH1F>, 1);
+        hist_dr_part2[i] = new history<TH1F>(trees[i] + "_dr_part2", "", null<TH1F>, 1);
+        hist_jpt_part2[i] = new history<TH1F>(trees[i] + "_jpt_part2", "", null<TH1F>, 1);
 
         double photonPt;
         double jetPt;
@@ -197,9 +208,17 @@ int gather_theory(char const* config, char const* selections, char const* output
 
         (*hist_dr[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 0, osg);
         (*hist_jpt[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 1, osg);
+        (*hist_dr_part1[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 0, osg_part1);
+        (*hist_jpt_part1[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 1, osg_part1);
+        (*hist_dr_part2[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 0, osg_part2);
+        (*hist_jpt_part2[i])[0] = fold((*hist_dr_jpt[i])[0], nullptr, mg, 1, osg_part2);
 
         hist_dr[i]->rename(trees[i] + "_dr"s);
         hist_jpt[i]->rename(trees[i] + "_jpt"s);
+        hist_dr_part1[i]->rename(trees[i] + "_dr_part1"s);
+        hist_jpt_part1[i]->rename(trees[i] + "_jpt_part1"s);
+        hist_dr_part2[i]->rename(trees[i] + "_dr_part2"s);
+        hist_jpt_part2[i]->rename(trees[i] + "_jpt_part2"s);
     }
 
     f->Close();
@@ -211,6 +230,10 @@ int gather_theory(char const* config, char const* selections, char const* output
             hist_dr_jpt[i]->save();
             hist_dr[i]->save();
             hist_jpt[i]->save();
+            hist_dr_part1[i]->save();
+            hist_jpt_part1[i]->save();
+            hist_dr_part2[i]->save();
+            hist_jpt_part2[i]->save();
         }
     });
 
