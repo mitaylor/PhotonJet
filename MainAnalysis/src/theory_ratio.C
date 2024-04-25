@@ -54,6 +54,7 @@ int theory(char const* config, char const* selections, char const* output) {
     auto input_pp = conf->get<std::string>("input_pp");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
+    auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
     auto types = conf->get<std::vector<int64_t>>("types");
 
     auto theory_inputs_aa = conf->get<std::vector<std::string>>("theory_inputs_aa");
@@ -155,7 +156,7 @@ int theory(char const* config, char const* selections, char const* output) {
         }
     };
 
-    zip([&](auto const& figure, auto type) {
+    zip([&](auto const& figure, auto const& theory_figure, auto type) {
         switch (type) {
         case 1:
             bjet_pt[0] = ptg_range[osg_part1[2]];
@@ -240,8 +241,8 @@ int theory(char const* config, char const* selections, char const* output) {
                 theory_files_aa[i] = new TFile((base + theory_inputs_aa[i]).data(), "read");
                 theory_files_pp[i] = new TFile((base + theory_inputs_pp[i]).data(), "read");
 
-                theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i]);
-                theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i]);
+                theory_hists_aa[i] = new history<TH1F>(theory_files_aa[i], theory_figures_aa[i] + "_" + theory_figure);
+                theory_hists_pp[i] = new history<TH1F>(theory_files_pp[i], theory_figures_pp[i] + "_" + theory_figure);
 
                 theory_ratios[i] = new history<TH1F>(*theory_hists_aa[i], "ratio"s);
 
@@ -342,7 +343,7 @@ int theory(char const* config, char const* selections, char const* output) {
         hb->sketch();
 
         p->draw("pdf");
-    }, figures, types);
+    }, figures, theory_figures, types);
 
     in(output, []() {});
 
