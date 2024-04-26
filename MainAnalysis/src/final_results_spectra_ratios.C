@@ -14,6 +14,7 @@
 #include "TColor.h"
 #include "TFile.h"
 #include "TH1.h"
+#include "TH2.h"
 #include "TLatex.h"
 #include "TLine.h"
 #include "TCanvas.h"
