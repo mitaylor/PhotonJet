@@ -79,6 +79,7 @@ void set_axis(TGaxis &axis)
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
+    axis.SetTickSize(0.0);
     axis.Draw();
 }
 
