@@ -296,9 +296,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         latex.SetTextAlign(31);
         latex.SetTextSize(0.06);
-        latex.DrawLatex(0.95, 0.8, (text_photon_pt + ", " + text_photon_eta).c_str());
-        latex.DrawLatex(0.95, 0.7, (text_dphi + ", " + text_jet_alg).c_str());
-        latex.DrawLatex(0.95, 0.6, (text_jet_pt + ", " + text_jet_eta).c_str());
+        latex.DrawLatex(0.95, 0.78, (text_photon_pt + ", " + text_photon_eta).c_str());
+        latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_alg).c_str());
+        latex.DrawLatex(0.95, 0.58, (text_jet_pt + ", " + text_jet_eta).c_str());
 
         canvas.SaveAs((set + "_final_spectra_" + figure + ".pdf").c_str());
     }, figures, types, ymins, ymaxs);
