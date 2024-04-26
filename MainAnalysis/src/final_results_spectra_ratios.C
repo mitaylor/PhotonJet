@@ -199,11 +199,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         canvas.cd();
 
-        TGaxis axis_x1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
-        TGaxis axis_x2(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
-        TGaxis axis_x3(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
-        TGaxis axis_x4(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
-        TGaxis axis_y1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymin, ymax, 510, "");
+        TGaxis axis_x1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+        TGaxis axis_x2(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+        TGaxis axis_x3(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+        TGaxis axis_x4(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+        TGaxis axis_y1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymin, ymax, 510, "S");
 
         set_axis(axis_x1);
         set_axis(axis_x2);
@@ -246,8 +246,6 @@ int congratulate(char const* config, char const* selections, char const* output)
         // latex.SetTextAlign(21);
         // latex.SetTextAngle(0);
         // latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
-        // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_dphi + ", " + text_jet_alg).c_str());
-        // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_jet_pt + ", " + text_jet_eta).c_str());
 
         TGraph line;
         line.SetPoint(0, xmin, 0);
