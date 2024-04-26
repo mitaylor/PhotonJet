@@ -106,7 +106,7 @@ int theory(char const* config, char const* selections, char const* output) {
     auto hist = new history<TH1F>(file_data, base_stub + figure);
     auto syst = new history<TH1F>(file_data, syst_stub + figure);
 
-    title(std::bind(rename_axis, _1, "1/N^{#gammaj}dN^{#gammaj}/d#deltaj"), hist);
+    title(std::bind(rename_axis, _1, "1/N^{#gamma}dN^{#gammaj}/d#deltaj"), hist);
 
     file_data->Close();
 
