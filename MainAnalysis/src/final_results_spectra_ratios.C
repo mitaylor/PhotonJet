@@ -255,7 +255,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        TLegend legend(0.7, 0.65, 0.95, 0.9);
+        TLegend legend(0.6, 0.65, 0.95, 0.85);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
         legend.SetFillStyle(0);
