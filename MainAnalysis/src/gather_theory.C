@@ -210,11 +210,11 @@ int gather_theory(char const* config, char const* selections, char const* output
 
             (*hist_nevt[i])[0]->Fill(1., (float) weight);
 
-            for (size_t i = 0; i < jetPt->size(); ++i) {
-                if (std::abs((float) (*jetEta)[i]) > jet_eta_abs) { continue; }
-                if (!back_to_back((float) (*photonPhi)[0], (float) (*jetPhi)[i], dphi_min_numerator/dphi_min_denominator)) { continue; }
+            for (size_t k = 0; k < jetPt->size(); ++k) {
+                if (std::abs((float) (*jetEta)[k]) > jet_eta_abs) { continue; }
+                if (!back_to_back((float) (*photonPhi)[0], (float) (*jetPhi)[k], dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-                (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) (*jetDj)[i], (float) (*jetPt)[i]}), (float) weight);
+                (*hist_dr_jpt[k])[0]->Fill(mg->index_for(v{(float) (*jetDj)[k], (float) (*jetPt)[k]}), (float) weight);
             }
         }
 
