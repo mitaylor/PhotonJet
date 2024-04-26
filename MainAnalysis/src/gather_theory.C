@@ -216,7 +216,7 @@ int gather_theory(char const* config, char const* selections, char const* output
                 if (std::abs((float) (*jetEta)[k]) > jet_eta_abs) { continue; }
                 if (!back_to_back((float) (*photonPhi)[0], (float) (*jetPhi)[k], dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-                (*hist_dr_jpt[k])[0]->Fill(mg->index_for(v{(float) (*jetDj)[k], (float) (*jetPt)[k]}), (float) weight);
+                (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) (*jetDj)[k], (float) (*jetPt)[k]}), (float) weight);
             }
         }
 
