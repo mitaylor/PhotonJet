@@ -78,8 +78,8 @@ void set_axis(TGaxis &axis)
     axis.SetLabelSize(0.040);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
-    axis.SetTickLength(0);
-    // axis.Draw();
+    axis.SetTickLength(0.0);
+    axis.Draw();
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
