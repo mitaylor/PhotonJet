@@ -26,8 +26,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-static auto const red = TColor::GetColor("#ff6666");
-static auto const blue = TColor::GetColor("#6666ff");
+static auto const red = TColor::GetColor("#df3020");
+static auto const blue = TColor::GetColor("#12c341");
 
 template <typename... T>
 void title(std::function<void(TH1*)> f, T*&... args) {
@@ -196,7 +196,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto box = [&](TH1* h, int64_t) {
             TGraph* gr = new TGraph();
             gr->SetFillStyle(1001);
-            gr->SetFillColorAlpha(colours[h] ? red : blue, 0.48);
+            gr->SetFillColorAlpha(colours[h] ? red : blue, 0.60);
 
             for (int i = 1; i <= h->GetNbinsX(); ++i) {
                 if (h->GetBinError(i) == 0) continue;
