@@ -225,9 +225,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045);
-        latex.SetTextAlign(21);
+        latex.SetTextAlign(22);
         latex.SetTextAngle(90);
-        latex.DrawLatex(pad_x0 * 0.15, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
+        latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
         latex.SetTextFont(62);
         latex.SetTextSize(0.045);
@@ -255,7 +255,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        TLegend legend(0.05, 0.75, 0.5, 0.95);
+        TLegend legend(0.7, 0.65, 0.95, 0.9);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
         legend.SetFillStyle(0);
