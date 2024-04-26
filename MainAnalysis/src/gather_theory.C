@@ -201,8 +201,6 @@ int gather_theory(char const* config, char const* selections, char const* output
         t->SetBranchAddress("jetDj", &jetDj);
         t->SetBranchAddress("weight", &weight);
 
-        float photonPtPrev = 0;
-
         for (int64_t j = 0; j < nentries; ++j) {
             t->GetEntry(j);
 
