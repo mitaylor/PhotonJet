@@ -127,14 +127,17 @@ std::cout << __LINE__ << std::endl;
         /* define kinematics and luminosity*/
         switch (type) {
         case 1:
+        std::cout << __LINE__ << std::endl;
             bjet_pt[0] = ptg_range[osg_part1[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];std::cout << __LINE__ << std::endl;
             break;
         case 2:
+        std::cout << __LINE__ << std::endl;
             bjet_pt[0] = ptg_range[osg_part2[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];std::cout << __LINE__ << std::endl;
             break;
         default:
+        std::cout << __LINE__ << std::endl;
             bjet_pt[0] = ptg_range[osg[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];std::cout << __LINE__ << std::endl;
         }
