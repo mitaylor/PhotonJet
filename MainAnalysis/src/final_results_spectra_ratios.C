@@ -32,8 +32,8 @@ using namespace std::placeholders;
 void format(history<TH1F>* h, history<TH1F>* s, int system)
 {
     static int style[2] = {21, 25};
-    // ff7366 4dff7c EC8379 71DB8D
-    static int color[2] = {TColor::GetColor("#e6594c"), TColor::GetColor("#47d16c")};
+    // EC8379 71DB8D
+    static int color[2] = {TColor::GetColor("#e03829"), TColor::GetColor("#32c85a")};
 
     for (int i = 0; i < h->size(); ++i) {
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
@@ -48,16 +48,16 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
         (*h)[i]->SetMarkerColor(1);
         (*h)[i]->SetLineColor(1);
         (*h)[i]->SetFillColor(color[system]);
-        (*h)[i]->SetMarkerSize(2.2);
-        (*h)[i]->SetLineWidth(2.0);
+        (*h)[i]->SetMarkerSize(1.5);
+        (*h)[i]->SetLineWidth(1.0);
 
         (*s)[i]->SetMarkerStyle(style[system]);
         (*s)[i]->SetMarkerColor(1);
         (*s)[i]->SetLineColor(1);
         (*s)[i]->SetFillColor(color[system]);
-        (*s)[i]->SetFillColorAlpha(color[system], 0.5);
-        (*s)[i]->SetMarkerSize(2.2);
-        (*s)[i]->SetLineWidth(2.0);
+        (*s)[i]->SetFillColorAlpha(color[system], 0.75);
+        (*s)[i]->SetMarkerSize(1.5);
+        (*s)[i]->SetLineWidth(1.0);
     }
 }
 
@@ -244,7 +244,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.035);
         latex.SetTextAlign(22);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 + pad_dx * 2, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+        latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
         // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_dphi + ", " + text_jet_alg).c_str());
         // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_jet_pt + ", " + text_jet_eta).c_str());
 
