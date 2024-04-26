@@ -218,16 +218,16 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.045);
         latex.SetTextAlign(22);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.4, "#deltaj");
-        latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.4, "#deltaj");
-        latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.4, "#deltaj");
-        latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.4, "#deltaj");
+        latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#deltaj");
+        latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.5, "#deltaj");
+        latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.5, "#deltaj");
+        latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#deltaj");
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045);
-        latex.SetTextAlign(22);
+        latex.SetTextAlign(21);
         latex.SetTextAngle(90);
-        latex.DrawLatex(pad_x0 * 0.5, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
+        latex.DrawLatex(pad_x0 * 0.15, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
         latex.SetTextFont(62);
         latex.SetTextSize(0.045);
@@ -243,7 +243,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045);
-        latex.SetTextAlign(22);
+        latex.SetTextAlign(21);
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
         // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_dphi + ", " + text_jet_alg).c_str());
