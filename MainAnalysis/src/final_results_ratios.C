@@ -180,8 +180,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figure);
         auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figure);
 
-        auto hist_ratio = new history<TH1F>(hist_aa, "hist"s);
-        auto syst_ratio = new history<TH1F>(syst_aa, "syst"s);
+        auto hist_ratio = new history<TH1F>(*hist_aa, "hist");
+        auto syst_ratio = new history<TH1F>(*syst_aa, "syst");
         
         set_values(hist_ratio, syst_ratio, hist_aa, syst_aa, hist_pp, syst_pp);
         format(hist_ratio, syst_ratio, 0);
