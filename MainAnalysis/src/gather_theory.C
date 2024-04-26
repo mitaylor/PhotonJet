@@ -34,6 +34,12 @@ void normalise_to_unity(T*&... args) {
         obj->Scale(1. / obj->Integral("width")); }), 0)... };
 }
 
+bool back_to_back(float photon_phi, float jet_phi, float threshold) {
+    float dphi = std::abs(photon_phi - jet_phi);
+    if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());
+
+    return dphi > threshold * TMath::Pi();
+}
 
 template <typename T>
 T* null(int64_t, std::string const&, std::string const&) {
@@ -123,6 +129,8 @@ int gather_theory(char const* config, char const* selections, char const* output
 
     auto const photon_pt_min = sel->get<float>("photon_pt_min");
     auto const photon_pt_max = sel->get<float>("photon_pt_max");
+    auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
     
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
@@ -175,16 +183,22 @@ int gather_theory(char const* config, char const* selections, char const* output
         hist_dr_part2[i] = new history<TH1F>(trees[i] + "_dr_part2", "", null<TH1F>, 1);
         hist_jpt_part2[i] = new history<TH1F>(trees[i] + "_jpt_part2", "", null<TH1F>, 1);
 
-        double photonPt;
-        double jetPt;
-        double dphi;
-        double dj;
+        std::vector<double> *photonPt;
+        std::vector<double> *photonEta;
+        std::vector<double> *photonPhi;
+        std::vector<double> *jetPt;
+        std::vector<double> *jetEta;
+        std::vector<double> *jetPhi;
+        std::vector<double> *jetDj;
         double weight;
 
         t->SetBranchAddress("photonPt", &photonPt);
+        t->SetBranchAddress("photonEta", &photonEta);
+        t->SetBranchAddress("photonPhi", &photonPhi);
         t->SetBranchAddress("jetPt", &jetPt);
-        t->SetBranchAddress("dphi", &dphi);
-        t->SetBranchAddress("dj", &dj);
+        t->SetBranchAddress("jetEta", &jetEta);
+        t->SetBranchAddress("jetPhi", &jetPhi);
+        t->SetBranchAddress("jetDj", &jetDj);
         t->SetBranchAddress("weight", &weight);
 
         float photonPtPrev = 0;
@@ -192,16 +206,18 @@ int gather_theory(char const* config, char const* selections, char const* output
         for (int64_t j = 0; j < nentries; ++j) {
             t->GetEntry(j);
 
-            if ((float) photonPt < photon_pt_min) { continue; }
-            if ((float) photonPt > photon_pt_max) { continue; }
+            if ((float) (*photonPt)[0] < photon_pt_min) { continue; }
+            if ((float) (*photonPt)[0] > photon_pt_max) { continue; }
+            if (std::abs((float) (*photonEta)[0]) > photon_eta_abs) { continue; }
 
-            if ((float) dphi < dphi_min_numerator/dphi_min_denominator * TMath::Pi()) { continue; }
+            (*hist_nevt[i])[0]->Fill(1., (float) weight);
 
-            if ((float) photonPt != photonPtPrev) {
-                (*hist_nevt[i])[0]->Fill(1., (float) weight);
+            for (size_t i = 0; i < jetPt->size(); ++i) {
+                if (std::abs((float) (*jetEta)[i]) > jet_eta_abs) { continue; }
+                if (!back_to_back((float) (*photonPhi)[0], (float) (*jetPhi)[i], dphi_min_numerator/dphi_min_denominator)) { continue; }
+
+                (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) (*jetDj)[i], (float) (*jetPt)[i]}), (float) weight);
             }
-
-            (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) dj, (float) jetPt}), (float) weight);
         }
 
         hist_dr_jpt[i]->divide(*hist_nevt[i]);
