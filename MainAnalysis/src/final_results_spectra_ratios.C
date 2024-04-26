@@ -253,7 +253,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        TLegend legend(0.57, 0.65, 0.95, 0.85);
+        TLegend legend(0.56, 0.65, 0.95, 0.85);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
         legend.SetFillStyle(0);
@@ -284,6 +284,12 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.07);
         latex.DrawLatex(0.95, 0.9, "Cent. 30-50%");
 
+        latex.SetTextAlign(11);
+        latex.SetTextSize(0.06);
+        latex.DrawLatex(0.45, 0.7, (text_photon_pt + ", " + text_photon_eta).c_str());
+        latex.DrawLatex(0.45, 0.6, (text_dphi + ", " + text_jet_alg).c_str());
+        latex.DrawLatex(0.45, 0.5, (text_jet_pt + ", " + text_jet_eta).c_str());
+
         pads[2]->cd();
         latex.SetTextAlign(31);
         latex.SetTextSize(0.07);
@@ -293,12 +299,6 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAlign(31);
         latex.SetTextSize(0.07);
         latex.DrawLatex(0.95, 0.9, "Cent. 0-10%");
-
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.95, 0.7, (text_photon_pt + ", " + text_photon_eta).c_str());
-        latex.DrawLatex(0.95, 0.6, (text_dphi + ", " + text_jet_alg).c_str());
-        latex.DrawLatex(0.95, 0.5, (text_jet_pt + ", " + text_jet_eta).c_str());
-
 
         canvas.SaveAs((set + "_" + "_final_spectra_" + figure + ".pdf").c_str());
     }, figures, types, ymins, ymaxs);
