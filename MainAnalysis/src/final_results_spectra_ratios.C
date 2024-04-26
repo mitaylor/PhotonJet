@@ -144,14 +144,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
         auto text_dphi = "#Delta#phi_{j#gamma} > "s + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
         auto text_jet_alg = "anti-k_{T} R = 0.3"s;
-        auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"
+        auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
         auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
 
         /* get histograms */
-        hist_aa = new history<TH1F>(file, "aa_base_aa_nominal_s_pure_raw_sub_" + figure);
-        syst_aa = new history<TH1F>(file, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figure);
-        hist_pp = new history<TH1F>(file, "pp_base_pp_nominal_s_pure_raw_sub_" + figure);
-        syst_pp = new history<TH1F>(file, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figure);
+        auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figure);
+        auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figure);
+        auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figure);
+        auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figure);
         
         format(hist_aa, syst_aa, 0);
         format(hist_pp, syst_pp, 1);
