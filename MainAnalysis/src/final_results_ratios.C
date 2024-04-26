@@ -39,9 +39,9 @@ void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history
             auto aa_stat_err_scale = aa_stat_err/aa_val;
             auto aa_syst_err_scale = aa_syst_err/aa_val;
 
-            double pp_val = (*h_pp)[i]->GetBinContent(j);
-            double pp_stat_err = (*h_pp)[i]->GetBinError(j);
-            double pp_syst_err = (*s_pp)[i]->GetBinContent(j);
+            double pp_val = (*h_pp)[0]->GetBinContent(j);
+            double pp_stat_err = (*h_pp)[0]->GetBinError(j);
+            double pp_syst_err = (*s_pp)[0]->GetBinContent(j);
             auto pp_stat_err_scale = pp_stat_err/pp_val;
             auto pp_syst_err_scale = pp_syst_err/pp_val;
 
