@@ -88,7 +88,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_pp = conf->get<std::string>("input_pp");
 std::cout << __LINE__ << std::endl;
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto types = conf->get<std::vector<int64_t>>("types");
+    auto types = conf->get<std::vector<float>>("types");
 
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
