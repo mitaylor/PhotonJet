@@ -55,7 +55,7 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
         (*s)[i]->SetMarkerColor(1);
         (*s)[i]->SetLineColor(1);
         (*s)[i]->SetFillColor(color[system]);
-        (*s)[i]->SetFillColorAlpha(color[system], 0.75);
+        (*s)[i]->SetFillColorAlpha(color[system], 0.50);
         (*s)[i]->SetMarkerSize(1.5);
         (*s)[i]->SetLineWidth(1.0);
     }
@@ -149,8 +149,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
         auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
         auto text_jet_alg = "anti-k_{T} R = 0.3"s;
-        auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
-        auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
+        auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{j} < "s + to_text(bjet_pt[1]) + " GeV"s;
+        auto text_jet_eta = "|#eta^{j}| < "s + to_text(jet_eta_abs);
 
         /* get histograms */
         auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figure);
@@ -300,7 +300,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.07);
         latex.DrawLatex(0.95, 0.9, "Cent. 0-10%");
 
-        canvas.SaveAs((set + "_" + "_final_spectra_" + figure + ".pdf").c_str());
+        canvas.SaveAs((set + "_final_spectra_" + figure + ".pdf").c_str());
     }, figures, types, ymins, ymaxs);
 
     in(output, []() {});
