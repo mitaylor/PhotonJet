@@ -184,13 +184,13 @@ int gather_theory(char const* config, char const* selections, char const* output
         hist_dr_part2[i] = new history<TH1F>(trees[i] + "_dr_part2", "", null<TH1F>, 1);
         hist_jpt_part2[i] = new history<TH1F>(trees[i] + "_jpt_part2", "", null<TH1F>, 1);
 
-        std::vector<double> *photonPt;
-        std::vector<double> *photonEta;
-        std::vector<double> *photonPhi;
-        std::vector<double> *jetPt;
-        std::vector<double> *jetEta;
-        std::vector<double> *jetPhi;
-        std::vector<double> *jetDj;
+        std::vector<double> *photonPt = 0;
+        std::vector<double> *photonEta = 0;
+        std::vector<double> *photonPhi = 0;
+        std::vector<double> *jetPt = 0;
+        std::vector<double> *jetEta = 0;
+        std::vector<double> *jetPhi = 0;
+        std::vector<double> *jetDj = 0;
         double weight;
 
         t->SetBranchAddress("photonPt", &photonPt);
