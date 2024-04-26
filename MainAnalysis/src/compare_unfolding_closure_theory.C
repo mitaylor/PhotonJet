@@ -205,7 +205,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
-        std::string efficiency_name = "HMCTruthEfficiency";
+        // std::string efficiency_name = "HMCTruthEfficiency";
 
         std::string unfold_name_svd = "Test0HUnfoldedSVD" + std::to_string(choice_svd[j]);
         // std::string matrix_name_svd = "Test0MUnfoldedSVD" + std::to_string(choice_svd[j]);
@@ -214,12 +214,12 @@ int quantitate(char const* config, char const* selections, char const* output) {
         // std::string matrix_name_bayes = "Test0MUnfoldedBayes" + std::to_string(choice_bayes[j]);
         
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
-        auto HEfficiencySVD = (TH1F*) fdata_svd[j]->Get(efficiency_name.data());
+        // auto HEfficiencySVD = (TH1F*) fdata_svd[j]->Get(efficiency_name.data());
         // auto MUnfoldedSVD = get_covariance((TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data()), HEfficiencySVD);
         auto HGenSVD = (TH1F*) fdata_svd[j]->Get("HInputGen");
 
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());
-        auto HEfficiencyBayes = (TH1F*) fdata_bayes[j]->Get(efficiency_name.data());
+        // auto HEfficiencyBayes = (TH1F*) fdata_bayes[j]->Get(efficiency_name.data());
         // auto MUnfoldedBayes = get_covariance((TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data()), HEfficiencyBayes);
         auto HGenBayes = (TH1F*) fdata_bayes[j]->Get("HInputGen");
 
