@@ -203,7 +203,7 @@ int gather_theory(char const* config, char const* selections, char const* output
         t->SetBranchAddress("weight", &weight);
 
         for (int64_t j = 0; j < nentries; ++j) {
-            std::cout << t->GetEntry(j) << std::endl;
+            t->GetEntry(j);
             if (j < 100) std::cout << (*photonPt)[0] << std::endl;
             if (j < 100) std::cout << (*photonEta)[0] << std::endl;
             if (j < 100) std::cout << (*photonPhi)[0] << std::endl;
