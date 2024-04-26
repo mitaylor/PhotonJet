@@ -32,8 +32,8 @@ using namespace std::placeholders;
 void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history<TH1F>* s_aa, history<TH1F>* h_pp, history<TH1F>* s_pp)
 {
     for (int i = 0; i < h->size(); ++i) {
-        (*s_pp)[0]->Scale(1/(*s_pp)[0]->Integral("width"));
-        (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
+        (*s_aa)[i]->Scale(1/(*s_aa)[i]->Integral("width"));
+        (*h_aa)[i]->Scale(1/(*h_aa)[i]->Integral("width"));
         (*s_pp)[0]->Scale(1/(*s_pp)[0]->Integral("width"));
         (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
 
