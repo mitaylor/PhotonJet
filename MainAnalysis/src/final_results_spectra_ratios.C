@@ -78,6 +78,7 @@ void set_axis(TGaxis &axis)
     axis.SetLabelSize(0.040);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
+    axis.SetTickLength(0);
     axis.Draw();
 }
 
@@ -198,10 +199,10 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         canvas.cd();
 
-        TGaxis axis_x1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax * 0.9999999, 510, "");
-        TGaxis axis_x2(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax * 0.9999999, 510, "");
-        TGaxis axis_x3(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.9999999, 510, "");
-        TGaxis axis_x4(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.9999999, 510, "");
+        TGaxis axis_x1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
+        TGaxis axis_x2(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
+        TGaxis axis_x3(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
+        TGaxis axis_x4(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "");
         TGaxis axis_y1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymin, ymax, 510, "");
 
         set_axis(axis_x1);
@@ -226,7 +227,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.045);
         latex.SetTextAlign(22);
         latex.SetTextAngle(90);
-        latex.DrawLatex(pad_x0 * 0.15, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
+        latex.DrawLatex(pad_x0 * 0.5, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
         latex.SetTextFont(62);
         latex.SetTextSize(0.045);
@@ -241,7 +242,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * 1, text_system.c_str());
 
         latex.SetTextFont(42);
-        latex.SetTextSize(0.035);
+        latex.SetTextSize(0.045);
         latex.SetTextAlign(22);
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
