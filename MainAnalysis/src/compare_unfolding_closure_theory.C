@@ -161,6 +161,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<TFile*> fdata_bayes(filenames.size(), nullptr);
 
     zip([&](auto& fsvd, auto& fbayes, auto const& filename) {
+        std::cout << "unfolded/" + object + "/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename << std::endl;
+        std::cout << "unfolded/" + object + "/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename << std::endl;
         fsvd = new TFile(("unfolded/" + object + "/"s + set + "/SVD/"s + prior + "/kErrors/"s + filename).data(), "read");
         fbayes = new TFile(("unfolded/" + object + "/"s + set + "/Bayes/"s + prior + "/kErrors/"s + filename).data(), "read");
     }, fdata_svd, fdata_bayes, filenames);
