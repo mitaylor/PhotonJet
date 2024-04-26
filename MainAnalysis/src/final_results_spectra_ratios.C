@@ -253,7 +253,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        TLegend legend(0.56, 0.65, 0.95, 0.85);
+        TLegend legend(0.565, 0.65, 0.95, 0.85);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
         legend.SetFillStyle(0);
@@ -286,9 +286,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         latex.SetTextAlign(11);
         latex.SetTextSize(0.06);
-        latex.DrawLatex(0.45, 0.7, (text_photon_pt + ", " + text_photon_eta).c_str());
-        latex.DrawLatex(0.45, 0.6, (text_dphi + ", " + text_jet_alg).c_str());
-        latex.DrawLatex(0.45, 0.5, (text_jet_pt + ", " + text_jet_eta).c_str());
+        latex.DrawLatex(0.35, 0.7, (text_photon_pt + ", " + text_photon_eta).c_str());
+        latex.DrawLatex(0.35, 0.6, (text_dphi + ", " + text_jet_alg).c_str());
+        latex.DrawLatex(0.35, 0.5, (text_jet_pt + ", " + text_jet_eta).c_str());
 
         pads[2]->cd();
         latex.SetTextAlign(31);
