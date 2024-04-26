@@ -103,61 +103,18 @@ TH1F* fold(TH1* flat, TH2* covariance, multival const* m, int64_t axis,
     return hfold;
 }
 
-TH1F* fold_mat(TH1* flat, TMatrixT<double>* covariance, multival const* m, int64_t axis,
-           std::vector<int64_t>& offsets) {
-    auto name = std::string(flat->GetName()) + "_fold" + std::to_string(axis);
-    auto hfold = m->axis(axis).book<TH1F, 2>(0, name, "",
-        { offsets[axis << 1], offsets[(axis << 1) + 1] });
+TH2F* get_covariance(TMatrixT<double>* covariance, TH1* efficiency) {
+    int N = covariance->GetNrows();
+    auto hcovariance = new TH2F("covariance", "", N, 0, N, N, 0, N);
 
-    auto shape = m->shape();
-
-    auto front = std::vector<int64_t>(m->dims(), 0);
-    auto back = std::vector<int64_t>(m->dims(), 0);
-    for (int64_t i = 0; i < m->dims(); ++i) {
-        front[i] = offsets[i << 1];
-        back[i] = shape[i] - offsets[(i << 1) + 1];
-    }
-
-    auto size = back[axis] - front[axis];
-    auto list = new std::vector<int64_t>[size];
-
-    for (int64_t i = 0; i < m->size(); ++i) {
-        auto indices = m->indices_for(i);
-
-        bool flag = false;
-        zip([&](int64_t index, int64_t f, int64_t b) {
-            flag = flag || index < f || index >= b;
-        }, indices, front, back);
-        if (flag) { continue; }
-
-        auto index = indices[axis] - front[axis];
-        hfold->SetBinContent(index + 1, hfold->GetBinContent(index + 1)
-            + flat->GetBinContent(i + 1));
-
-        list[index].push_back(i);
-    }
-
-    for (int64_t i = 0; i < size; ++i) {
-        auto indices = list[i];
-        int64_t count = indices.size();
-
-        auto error = 0.;
-        for (int64_t j = 0; j < count; ++j) {
-            auto j_x = indices[j];
-            for (int64_t k = 0; k < count; ++k) {
-                auto k_x = indices[k];
-                error = error + (*covariance)(j_x, k_x);
-            }
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            float value = (*covariance)(i, j) / efficiency->GetBinContent(i + 1) / efficiency->GetBinContent(j + 1);
+            hcovariance->SetBinContent(i + 1, j + 1, value);
         }
-
-        hfold->SetBinError(i + 1, std::sqrt(error));
     }
 
-    delete [] list;
-
-    hfold->Scale(1., "width");
-
-    return hfold;
+    return hcovariance;
 }
 
 int quantitate(char const* config, char const* selections, char const* output) {
@@ -246,6 +203,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     /* extract chosen histograms */
     for (size_t j = 0; j < filenames.size(); ++j) {
+        std::string efficiency_name = "HMCTruthEfficiency";
+
         std::string unfold_name_svd = "Test0HUnfoldedSVD" + std::to_string(choice_svd[j]);
         std::string matrix_name_svd = "Test0MUnfoldedSVD" + std::to_string(choice_svd[j]);
 
@@ -253,24 +212,26 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::string matrix_name_bayes = "Test0MUnfoldedBayes" + std::to_string(choice_bayes[j]);
         
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
-        auto MUnfoldedSVD = (TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data());
+        auto HEfficiencySVD = (TH1F*) fdata_svd[j]->Get(efficiency_name.data());
+        auto MUnfoldedSVD = get_covariance((TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data()), HEfficiencySVD);
         auto HGenSVD = (TH1F*) fdata_svd[j]->Get("HInputGen");
 
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());
-        auto MUnfoldedBayes = (TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data());
+        auto HEfficiencyBayes = (TH1F*) fdata_bayes[j]->Get(efficiency_name.data());
+        auto MUnfoldedBayes = get_covariance((TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data()), HEfficiencyBayes);
         auto HGenBayes = (TH1F*) fdata_bayes[j]->Get("HInputGen");
 
         (*unfolded_bayes)[j] = HUnfoldedBayes;
-        (*unfolded_bayes_fold0)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);
-        (*unfolded_bayes_fold1)[j] = fold_mat(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);
+        (*unfolded_bayes_fold0)[j] = fold(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);
+        (*unfolded_bayes_fold1)[j] = fold(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);
 
         (*gen_bayes)[j] = HGenBayes;
         (*gen_bayes_fold0)[j] = fold(HGenBayes, nullptr, mg, 0, osg);
         (*gen_bayes_fold1)[j] = fold(HGenBayes, nullptr, mg, 1, osg);
 
         (*unfolded_svd)[j] = HUnfoldedSVD;
-        (*unfolded_svd_fold0)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);
-        (*unfolded_svd_fold1)[j] = fold_mat(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);
+        (*unfolded_svd_fold0)[j] = fold(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);
+        (*unfolded_svd_fold1)[j] = fold(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);
 
         (*gen_svd)[j] = HGenSVD;
         (*gen_svd_fold0)[j] = fold(HGenSVD, nullptr, mg, 0, osg);
