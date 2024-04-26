@@ -144,7 +144,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         auto text_system = "#sqrt{s_{NN}} = 5.02 TeV, PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
-        auto text_cms = "#bf{#scale[1.4]{CMS}}"s;
+        auto text_cms = "CMS"s;
         auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
         auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
         auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
@@ -296,7 +296,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.07);
         latex.DrawLatex(0.95, 0.9, "Cent. 0-10%");
 
-        latex.SetTextSize(0.04);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.95, 0.7, (text_photon_pt + ", " + text_photon_eta).c_str());
         latex.DrawLatex(0.95, 0.6, (text_dphi + ", " + text_jet_alg).c_str());
         latex.DrawLatex(0.95, 0.5, (text_jet_pt + ", " + text_jet_eta).c_str());
