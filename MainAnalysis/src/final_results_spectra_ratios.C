@@ -128,15 +128,15 @@ std::cout << __LINE__ << std::endl;
         switch (type) {
         case 1:
             bjet_pt[0] = ptg_range[osg_part1[2]];
-            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];std::cout << __LINE__ << std::endl;
             break;
         case 2:
             bjet_pt[0] = ptg_range[osg_part2[2]];
-            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];std::cout << __LINE__ << std::endl;
             break;
         default:
             bjet_pt[0] = ptg_range[osg[2]];
-            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
+            bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];std::cout << __LINE__ << std::endl;
         }
 std::cout << __LINE__ << std::endl;
         auto text_system = "#sqrt{s_{NN}} = 5.02 TeV, PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
