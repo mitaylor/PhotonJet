@@ -278,7 +278,7 @@ int congratulate(char const* config, char const* selections, char const* output)
             s->accessory(std::bind(aa_range_info, _1, hists[0])); 
         }
 
-        /* draw histograms with uncertainties */
+        /* draw histograms with uncertainties in informal result */
         hists[0]->apply([&](TH1* h) {
             a->add(h, "aa");
             s->add(h, "aa"); 
