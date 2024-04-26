@@ -229,10 +229,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAngle(90);
         latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
-        latex.SetTextFont(62);
         latex.SetTextSize(0.045);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
+        latex.SetTextFont(62);
         latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * 1, text_cms.c_str());
 
         latex.SetTextFont(42);
@@ -241,11 +241,11 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * 1, text_system.c_str());
 
-        latex.SetTextFont(42);
-        latex.SetTextSize(0.045);
-        latex.SetTextAlign(21);
-        latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+        // latex.SetTextFont(42);
+        // latex.SetTextSize(0.045);
+        // latex.SetTextAlign(21);
+        // latex.SetTextAngle(0);
+        // latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 1.15 + pad_dy * 1, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi + ", " + text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
         // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_dphi + ", " + text_jet_alg).c_str());
         // latex.DrawLatex(0.95, pad_y0 * 1.15 + pad_dy * 1, (text_jet_pt + ", " + text_jet_eta).c_str());
 
@@ -255,7 +255,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        TLegend legend(0.6, 0.65, 0.95, 0.85);
+        TLegend legend(0.55, 0.65, 0.95, 0.85);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
         legend.SetFillStyle(0);
@@ -295,6 +295,12 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAlign(31);
         latex.SetTextSize(0.07);
         latex.DrawLatex(0.95, 0.9, "Cent. 0-10%");
+
+        latex.SetTextSize(0.04);
+        latex.DrawLatex(0.95, 0.7, (text_photon_pt + ", " + text_photon_eta).c_str());
+        latex.DrawLatex(0.95, 0.6, (text_dphi + ", " + text_jet_alg).c_str());
+        latex.DrawLatex(0.95, 0.5, (text_jet_pt + ", " + text_jet_eta).c_str());
+
 
         canvas.SaveAs((set + "_" + "_final_spectra_" + figure + ".pdf").c_str());
     }, figures, types, ymins, ymaxs);
