@@ -204,7 +204,9 @@ int gather_theory(char const* config, char const* selections, char const* output
 
         for (int64_t j = 0; j < nentries; ++j) {
             t->GetEntry(j);
-            // std::cout << (*photonPt)[0] << std::endl;
+            if (j < 100) std::cout << (*photonPt)[0] << std::endl;
+            if (j < 100) std::cout << (*photonEta)[0] << std::endl;
+            if (j < 100) std::cout << (*photonPhi)[0] << std::endl;
 
             if ((float) (*photonPt)[0] < photon_pt_min) { continue; }
             if ((float) (*photonPt)[0] > photon_pt_max) { continue; }
