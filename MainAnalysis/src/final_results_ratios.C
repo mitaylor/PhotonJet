@@ -38,9 +38,9 @@ void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history
         (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
 
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            double aa_val = (*h_pp)[0]->GetBinContent(j);
-            double aa_stat_err = (*h_pp)[0]->GetBinError(j);
-            double aa_syst_err = (*s_pp)[0]->GetBinContent(j);
+            double aa_val = (*h_aa)[i]->GetBinContent(j);
+            double aa_stat_err = (*h_aa)[i]->GetBinError(j);
+            double aa_syst_err = (*s_aa)[i]->GetBinContent(j);
             auto aa_stat_err_scale = aa_stat_err/aa_val;
             auto aa_syst_err_scale = aa_syst_err/aa_val;
 
