@@ -32,10 +32,15 @@ using namespace std::placeholders;
 void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history<TH1F>* s_aa, history<TH1F>* h_pp, history<TH1F>* s_pp)
 {
     for (int i = 0; i < h->size(); ++i) {
+        (*s_pp)[0]->Scale(1/(*s_pp)[0]->Integral("width"));
+        (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
+        (*s_pp)[0]->Scale(1/(*s_pp)[0]->Integral("width"));
+        (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
+
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            double aa_val = (*h_aa)[i]->GetBinContent(j);
-            double aa_stat_err = (*h_aa)[i]->GetBinError(j);
-            double aa_syst_err = (*s_aa)[i]->GetBinContent(j);
+            double aa_val = (*h_pp)[0]->GetBinContent(j);
+            double aa_stat_err = (*h_pp)[0]->GetBinError(j);
+            double aa_syst_err = (*s_pp)[0]->GetBinContent(j);
             auto aa_stat_err_scale = aa_stat_err/aa_val;
             auto aa_syst_err_scale = aa_syst_err/aa_val;
 
@@ -252,7 +257,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.045);
         latex.SetTextAlign(22);
         latex.SetTextAngle(90);
-        latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
+        latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#nicefrac{#frac{1}{N_{j#gamma}^{PbPb}} #frac{dN_{j#gamma}^{PbPb}}{d#deltaj}}{1}{N_{j#gamma}^{pp}} #frac{dN_{j#gamma}^{pp}}{d#deltaj}}");
 
         latex.SetTextFont(62);
         latex.SetTextSize(0.055);
