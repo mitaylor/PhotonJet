@@ -55,7 +55,7 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
         (*s)[i]->SetMarkerColor(1);
         (*s)[i]->SetLineColor(1);
         (*s)[i]->SetFillColor(color[system]);
-        (*s)[i]->SetFillColorAlpha(color[system], 0.50);
+        (*s)[i]->SetFillColorAlpha(color[system], 0.60);
         (*s)[i]->SetMarkerSize(1.5);
         (*s)[i]->SetLineWidth(1.0);
     }
