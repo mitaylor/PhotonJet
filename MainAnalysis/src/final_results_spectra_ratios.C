@@ -86,43 +86,43 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto input_aa = conf->get<std::string>("input_aa");
     auto input_pp = conf->get<std::string>("input_pp");
-
+std::cout << __LINE__ << std::endl;
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto types = conf->get<std::vector<int64_t>>("types");
 
-    auto ymins = conf->get<std::vector<float>>("ymin");
-    auto ymaxs = conf->get<std::vector<float>>("ymax");
-
+    auto ymins = conf->get<std::vector<float>>("ymins");
+    auto ymaxs = conf->get<std::vector<float>>("ymaxs");
+std::cout << __LINE__ << std::endl;
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
     auto base = sel->get<std::string>("base");
-
+std::cout << __LINE__ << std::endl;
     auto const dphi_min_numerator = sel->get<float>("dphi_min_numerator");
     auto const dphi_min_denominator = sel->get<float>("dphi_min_denominator");
 
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
-
+std::cout << __LINE__ << std::endl;
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto bdr = sel->get<std::vector<float>>("dr_bounds");
     auto ptg_range = sel->get<std::vector<float>>("ptg_range");
-
+std::cout << __LINE__ << std::endl;
     auto osg = sel->get<std::vector<int64_t>>("osg");
     auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
     auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
 
     std::vector<float> bjet_pt = {1.0, 1.0};
-
+std::cout << __LINE__ << std::endl;
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
+std::cout << __LINE__ << std::endl;
     /* open input files */
     auto file_aa = new TFile((base + input_aa).data(), "read");
     auto file_pp = new TFile((base + input_pp).data(), "read");
-
+std::cout << __LINE__ << std::endl;
     zip([&](auto const& figure, auto type, auto ymin, auto ymax) {
         /* define kinematics and luminosity*/
         switch (type) {
@@ -138,7 +138,7 @@ int congratulate(char const* config, char const* selections, char const* output)
             bjet_pt[0] = ptg_range[osg[2]];
             bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
-
+std::cout << __LINE__ << std::endl;
         auto text_system = "#sqrt{s_{NN}} = 5.02 TeV, PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
         auto text_cms = "#bf{#scale[1.4]{CMS}}"s;
         auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
@@ -147,22 +147,22 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_jet_alg = "anti-k_{T} R = 0.3"s;
         auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
         auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
-
+std::cout << __LINE__ << std::endl;
         /* get histograms */
         auto hist_aa = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figure);
         auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figure);
         auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figure);
         auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figure);
-        
+        std::cout << __LINE__ << std::endl;
         format(hist_aa, syst_aa, 0);
         format(hist_pp, syst_pp, 1);
-
+std::cout << __LINE__ << std::endl;
         /* size canvas */
         double panel_size = 500;
         double padding_width_left = 140;
         double padding_width_right = 50;
         double padding_height = 130;
-
+std::cout << __LINE__ << std::endl;
         double canvas_width = panel_size * 4 + padding_width_left + padding_width_right;
         double canvas_height = panel_size * 1 + padding_height * 2;
 
@@ -170,37 +170,37 @@ int congratulate(char const* config, char const* selections, char const* output)
         double pad_y0 = padding_height / canvas_height;
         double pad_dx = panel_size / canvas_width;
         double pad_dy = panel_size / canvas_height;
-
+std::cout << __LINE__ << std::endl;
         double xmin = bdr[0];
         double xmax = bdr[1];
 
         /* declare canvas, pads, axes, and titles */
         TCanvas canvas("canvas", "", canvas_width, canvas_height);
-
+std::cout << __LINE__ << std::endl;
         TH2F world("world", ";;", 100, xmin, xmax, 100, ymin, ymax);
         world.SetStats(0);
 
         const int npads = 4;
         TPad *pads[npads];
-
+std::cout << __LINE__ << std::endl;
         pads[0] = new TPad("P1", "", pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 1, 0);
         pads[1] = new TPad("P2", "", pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 1, 0);
         pads[2] = new TPad("P3", "", pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 1, 0);
         pads[3] = new TPad("P4", "", pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 1, 0);
-
+std::cout << __LINE__ << std::endl;
         set_pad(*pads[0]);
         set_pad(*pads[1]);
         set_pad(*pads[2]);
         set_pad(*pads[3]);
 
         canvas.cd();
-
+std::cout << __LINE__ << std::endl;
         TGaxis axis_x1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax, 510, "");
         TGaxis axis_x2(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax, 510, "");
         TGaxis axis_x3(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax, 510, "");
         TGaxis axis_x4(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax, 510, "");
         TGaxis axis_y1(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymin, ymax, 510, "");
-        
+std::cout << __LINE__ << std::endl;
         set_axis(axis_x1);
         set_axis(axis_x2);
         set_axis(axis_x3);
