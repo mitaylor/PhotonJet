@@ -257,7 +257,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.045);
         latex.SetTextAlign(22);
         latex.SetTextAngle(90);
-        latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#left. #frac{1}{N_{j#gamma}^{PbPb}} #frac{dN_{j#gamma}^{PbPb}}{d#deltaj} #middle/ #frac{1}{N_{j#gamma}^{pp}} #frac{dN_{j#gamma}^{pp}}{d#deltaj} #right.");
+        latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{j#gamma}^{PbPb}} #frac{dN_{j#gamma}^{PbPb}}{d#deltaj} #/ #frac{1}{N_{j#gamma}^{pp}} #frac{dN_{j#gamma}^{pp}}{d#deltaj}");
 
         latex.SetTextFont(62);
         latex.SetTextSize(0.055);
