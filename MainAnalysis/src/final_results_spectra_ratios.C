@@ -79,7 +79,7 @@ void set_axis(TGaxis &axis)
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0);
-    axis.Draw();
+    // axis.Draw();
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
@@ -267,7 +267,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         {
             pads[i]->cd();
 
-            // world.Draw("axis");
+            world.Draw("axis");
             (*syst_aa)[i]->Draw("same e2");
             (*syst_pp)[0]->Draw("same e2");
             (*hist_aa)[i]->Draw("same");
