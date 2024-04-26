@@ -208,32 +208,36 @@ int quantitate(char const* config, char const* selections, char const* output) {
         std::string efficiency_name = "HMCTruthEfficiency";
 
         std::string unfold_name_svd = "Test0HUnfoldedSVD" + std::to_string(choice_svd[j]);
-        std::string matrix_name_svd = "Test0MUnfoldedSVD" + std::to_string(choice_svd[j]);
+        // std::string matrix_name_svd = "Test0MUnfoldedSVD" + std::to_string(choice_svd[j]);
 
         std::string unfold_name_bayes = "Test0HUnfoldedBayes" + std::to_string(choice_bayes[j]);
-        std::string matrix_name_bayes = "Test0MUnfoldedBayes" + std::to_string(choice_bayes[j]);
+        // std::string matrix_name_bayes = "Test0MUnfoldedBayes" + std::to_string(choice_bayes[j]);
         
         auto HUnfoldedSVD = (TH1F*) fdata_svd[j]->Get(unfold_name_svd.data());
         auto HEfficiencySVD = (TH1F*) fdata_svd[j]->Get(efficiency_name.data());
-        auto MUnfoldedSVD = get_covariance((TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data()), HEfficiencySVD);
+        // auto MUnfoldedSVD = get_covariance((TMatrixT<double>*) fdata_svd[j]->Get(matrix_name_svd.data()), HEfficiencySVD);
         auto HGenSVD = (TH1F*) fdata_svd[j]->Get("HInputGen");
 
         auto HUnfoldedBayes = (TH1F*) fdata_bayes[j]->Get(unfold_name_bayes.data());
         auto HEfficiencyBayes = (TH1F*) fdata_bayes[j]->Get(efficiency_name.data());
-        auto MUnfoldedBayes = get_covariance((TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data()), HEfficiencyBayes);
+        // auto MUnfoldedBayes = get_covariance((TMatrixT<double>*) fdata_bayes[j]->Get(matrix_name_bayes.data()), HEfficiencyBayes);
         auto HGenBayes = (TH1F*) fdata_bayes[j]->Get("HInputGen");
 
         (*unfolded_bayes)[j] = HUnfoldedBayes;
-        (*unfolded_bayes_fold0)[j] = fold(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);
-        (*unfolded_bayes_fold1)[j] = fold(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);
+        // (*unfolded_bayes_fold0)[j] = fold(HUnfoldedBayes, MUnfoldedBayes, mg, 0, osg);
+        // (*unfolded_bayes_fold1)[j] = fold(HUnfoldedBayes, MUnfoldedBayes, mg, 1, osg);
+        (*unfolded_bayes_fold0)[j] = fold(HUnfoldedBayes, nullptr, mg, 0, osg);
+        (*unfolded_bayes_fold1)[j] = fold(HUnfoldedBayes, nullptr, mg, 1, osg);
 
         (*gen_bayes)[j] = HGenBayes;
         (*gen_bayes_fold0)[j] = fold(HGenBayes, nullptr, mg, 0, osg);
         (*gen_bayes_fold1)[j] = fold(HGenBayes, nullptr, mg, 1, osg);
 
         (*unfolded_svd)[j] = HUnfoldedSVD;
-        (*unfolded_svd_fold0)[j] = fold(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);
-        (*unfolded_svd_fold1)[j] = fold(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);
+        // (*unfolded_svd_fold0)[j] = fold(HUnfoldedSVD, MUnfoldedSVD, mg, 0, osg);
+        // (*unfolded_svd_fold1)[j] = fold(HUnfoldedSVD, MUnfoldedSVD, mg, 1, osg);
+        (*unfolded_svd_fold0)[j] = fold(HUnfoldedSVD, nullptr, mg, 0, osg);
+        (*unfolded_svd_fold1)[j] = fold(HUnfoldedSVD, nullptr, mg, 1, osg);
 
         (*gen_svd)[j] = HGenSVD;
         (*gen_svd_fold0)[j] = fold(HGenSVD, nullptr, mg, 0, osg);
