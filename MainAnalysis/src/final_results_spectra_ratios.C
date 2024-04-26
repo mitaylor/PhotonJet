@@ -33,7 +33,7 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
 {
     static int style[2] = {21, 25};
     // EC8379 71DB8D
-    static int color[2] = {TColor::GetColor("#e03829"), TColor::GetColor("#32c85a")};
+    static int color[2] = {TColor::GetColor("#df3020"), TColor::GetColor("#12c341")};
 
     for (int i = 0; i < h->size(); ++i) {
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
