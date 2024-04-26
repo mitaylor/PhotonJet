@@ -229,10 +229,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAngle(90);
         latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
-        latex.SetTextSize(0.045);
+        latex.SetTextFont(62);
+        latex.SetTextSize(0.055);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
-        latex.SetTextFont(62);
         latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * 1, text_cms.c_str());
 
         latex.SetTextFont(42);
