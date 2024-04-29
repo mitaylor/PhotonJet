@@ -318,8 +318,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (ratio) ? 0.6 : 0.5;
-    TLegend legend(0.5, legend_y_min, 0.8, 0.85);
+    auto legend_y_min = (ratio) ? 0.65 : 0.55;
+    TLegend legend(0.6, legend_y_min, 0.95, 0.75);
     legend.SetTextFont(42);
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
