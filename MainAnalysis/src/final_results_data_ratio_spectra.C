@@ -318,8 +318,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (ratio) ? 0.65 : 0.55;
-    TLegend legend(0.6, legend_y_min, 0.95, 0.75);
+    auto legend_y_min = (ratio) ? 0.75 : 0.65;
+    TLegend legend(0.6, legend_y_min, 0.95, 0.85);
     legend.SetTextFont(42);
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
@@ -355,7 +355,6 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAlign(21);
         latex.SetTextSize(0.07);
         latex.DrawLatex(0.5, 0.9, "Cent. 50-90%");
-        legend.Draw();
 
         pads[i][1]->cd();
         latex.SetTextAlign(21);
@@ -374,10 +373,19 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[nrows-1][1]->cd();
+    legend.Draw();
+
+    pads[nrows-1][2]->cd();
     latex.SetTextAlign(31);
-    latex.SetTextSize(0.06);
-    latex.DrawLatex(0.95, 0.78, (text_photon_pt + ", " + text_photon_eta).c_str());
-    latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_alg + ", " + text_jet_eta).c_str());
+    latex.SetTextSize(0.07);
+    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    latex.DrawLatex(0.95, 0.68, (text_photon_eta).c_str());
+
+    pads[nrows-1][3]->cd();
+    latex.SetTextAlign(31);
+    latex.SetTextSize(0.07);
+    latex.DrawLatex(0.95, 0.78, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.95, 0.68, (text_jet_alg).c_str());
 
     if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
     if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
