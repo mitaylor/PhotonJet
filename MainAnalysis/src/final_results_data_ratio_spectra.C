@@ -318,8 +318,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_x_min = (ratio) ? 0.75 : 0.65;
-    TLegend legend(0.565, legend_x_min, 0.95, 0.85);
+    auto legend_y_min = (ratio) ? 0.75 : 0.65;
+    TLegend legend(0.4, legend_y_min, 0.95, 0.85);
     legend.SetTextFont(42);
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
@@ -350,34 +350,34 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i][0]->cd();
         latex.SetTextAlign(11);
         latex.SetTextSize(0.07);
-        latex.DrawLatex(0.05, 0.9, (text_jet_pt).c_str());
+        latex.DrawLatex(0.4, legend_y_min - 0.1, (text_jet_pt).c_str());
     }
 
     pads[nrows-1][0]->cd();
-    latex.SetTextAlign(31);
+    latex.SetTextAlign(11);
     latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.9, "Cent. 50-90%");
+    latex.DrawLatex(0.05, 0.9, "Cent. 50-90%");
     legend.Draw();
 
     pads[nrows-1][1]->cd();
-    latex.SetTextAlign(31);
+    latex.SetTextAlign(11);
     latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.9, "Cent. 30-50%");
-
-    pads[nrows-1][2]->cd();
-    latex.SetTextAlign(31);
-    latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.9, "Cent. 10-30%");
+    latex.DrawLatex(0.05, 0.9, "Cent. 30-50%");
 
     latex.SetTextAlign(31);
     latex.SetTextSize(0.06);
     latex.DrawLatex(0.95, 0.78, (text_photon_pt + ", " + text_photon_eta).c_str());
     latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_alg + ", " + text_jet_eta).c_str());
 
-    pads[nrows-1][3]->cd();
-    latex.SetTextAlign(31);
+    pads[nrows-1][2]->cd();
+    latex.SetTextAlign(11);
     latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.9, "Cent. 0-10%");
+    latex.DrawLatex(0.05, 0.9, "Cent. 10-30%");
+
+    pads[nrows-1][3]->cd();
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.07);
+    latex.DrawLatex(0.05, 0.9, "Cent. 0-10%");
 
     if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
     if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
