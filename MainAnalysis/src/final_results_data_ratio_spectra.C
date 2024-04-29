@@ -160,8 +160,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     const int nrows = figures.size();
     const int npads = 4;
 
-    std::vector<std::vector<float>> bjet_pt(nrows, std::vector<float(2, 0));
-
+    std::vector<std::vector<float>> bjet_pt(nrows, std::vector<float>(2, 0));
+    
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
