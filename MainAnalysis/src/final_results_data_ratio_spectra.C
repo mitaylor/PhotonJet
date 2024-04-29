@@ -321,9 +321,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    if (ratio)      legend.AddEntry((*syst_ratio)[0], "PbPb/pp", "plf");
-    if (spectra)    legend.AddEntry((*syst_aa)[0], "PbPb", "plf");
-    if (spectra)    legend.AddEntry((*syst_pp)[0], "pp", "plf");
+    if (ratio)      legend.AddEntry((*systs_ratio[0])[0], "PbPb/pp", "plf");
+    if (spectra)    legend.AddEntry((*systs_aa[0])[0], "PbPb", "plf");
+    if (spectra)    legend.AddEntry((*systs_pp[0])[0], "pp", "plf");
 
     for (int i = 0; i < nrows; i++) {
         for(int j = 0; j < npads; j++)
