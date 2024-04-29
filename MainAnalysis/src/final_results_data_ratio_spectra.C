@@ -303,7 +303,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        auto legend_x_min = (ratio) ? 0.75 : 0.65
+        auto legend_x_min = (ratio) ? 0.75 : 0.65;
         TLegend legend(0.565, legend_x_min, 0.95, 0.85);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
