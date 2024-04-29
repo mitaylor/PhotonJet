@@ -318,8 +318,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (ratio) ? 0.75 : 0.65;
-    TLegend legend(0.6, legend_y_min, 0.95, 0.85);
+    auto legend_y_min = (ratio) ? 0.75 : 0.25;
+    auto legend_y_max = (ratio) ? 0.85 : 0.45;
+    auto legend_x_min = (ratio) ? 0.05 : 0.6;
+    auto legend_x_max = (ratio) ? 0.4 : 0.95;
+
+    TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
@@ -378,14 +382,18 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[nrows-1][2]->cd();
     latex.SetTextAlign(31);
     latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    latex.DrawLatex(0.95, 0.68, (text_photon_eta).c_str());
+    if (ratio)      latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (ratio)      latex.DrawLatex(0.95, 0.68, (text_photon_eta).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.38, (text_photon_pt).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.28, (text_photon_eta).c_str());
 
     pads[nrows-1][3]->cd();
     latex.SetTextAlign(31);
     latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.78, (text_dphi + ", " + text_jet_eta).c_str());
-    latex.DrawLatex(0.95, 0.68, (text_jet_alg).c_str());
+    if (ratio)      latex.DrawLatex(0.95, 0.78, (text_dphi + ", " + text_jet_eta).c_str());
+    if (ratio)      latex.DrawLatex(0.95, 0.68, (text_jet_alg).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.38, (text_dphi + ", " + text_jet_eta).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.28, (text_jet_alg).c_str());
 
     if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
     if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
