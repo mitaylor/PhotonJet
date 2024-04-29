@@ -299,13 +299,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.055/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
@@ -353,31 +353,32 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
     }
 
-    pads[nrows-1][0]->cd();
+    pads[0][0]->cd();
     latex.SetTextAlign(31);
-    latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.2, "Cent. 50-90%");
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.95, 0.15, "Cent. 50-90%");
     legend.Draw();
 
-    pads[nrows-1][1]->cd();
+    pads[0][1]->cd();
     latex.SetTextAlign(31);
-    latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.2, "Cent. 30-50%");
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.95, 0.15, "Cent. 30-50%");
 
+    pads[0][2]->cd();
+    latex.SetTextAlign(31);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.95, 0.15, "Cent. 10-30%");
+
+    pads[0][3]->cd();
+    latex.SetTextAlign(31);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.95, 0.15, "Cent. 0-10%");
+
+    pads[nrows-1][1]->cd();
     latex.SetTextAlign(31);
     latex.SetTextSize(0.06);
     latex.DrawLatex(0.95, 0.78, (text_photon_pt + ", " + text_photon_eta).c_str());
     latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_alg + ", " + text_jet_eta).c_str());
-
-    pads[nrows-1][2]->cd();
-    latex.SetTextAlign(31);
-    latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.2, "Cent. 10-30%");
-
-    pads[nrows-1][3]->cd();
-    latex.SetTextAlign(31);
-    latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.2, "Cent. 0-10%");
 
     if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
     if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
