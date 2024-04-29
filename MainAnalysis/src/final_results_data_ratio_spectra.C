@@ -80,7 +80,7 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
 
 void format(history<TH1F>* h, history<TH1F>* s, int system)
 {
-    static int style[3] = {21, 25, 21};
+    static int style[3] = {20, 24, 20};
     static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
 
     for (int i = 0; i < h->size(); ++i) {
@@ -262,7 +262,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         set_pad(*pads[i][2]);
         set_pad(*pads[i][3]);
 
-        axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i], 510, "S");
+        axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i] * 0.999, 510, "S");
         
         set_axis(*axis_y[i], sf);
     }
@@ -347,10 +347,10 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{j} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
-        pads[i][1]->cd();
-        latex.SetTextAlign(31);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.95, 0.78, (text_jet_pt).c_str());
+        pads[i][0]->cd();
+        latex.SetTextAlign(11);
+        latex.SetTextSize(0.07);
+        latex.DrawLatex(0.95, 0.9, (text_jet_pt).c_str());
     }
 
     pads[nrows-1][0]->cd();
