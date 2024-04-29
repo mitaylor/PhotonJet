@@ -319,7 +319,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* declare legend */
     auto legend_y_min = (ratio) ? 0.6 : 0.5;
-    TLegend legend(0.6, legend_y_min, 0.8, 0.85);
+    TLegend legend(0.5, legend_y_min, 0.8, 0.85);
     legend.SetTextFont(42);
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
