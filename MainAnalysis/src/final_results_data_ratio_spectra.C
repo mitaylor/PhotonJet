@@ -247,7 +247,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     for (int i = 0; i < nrows; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
-        worlds[i].SetStats(0);
+        worlds[i]->SetStats(0);
 
         pads[i][0] = new TPad("P1", "", pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 1, 0);
         pads[i][1] = new TPad("P2", "", pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 1, 0);
@@ -260,6 +260,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         set_pad(*pads[i][3]);
 
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i], 510, "S");
+        
+        set_axis(*axis_y[i]);
     }
 
     canvas.cd();
@@ -269,10 +271,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
     axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
 
-    set_axis(axis_x[0]);
-    set_axis(axis_x[1]);
-    set_axis(axis_x[2]);
-    set_axis(axis_x[3]);
+    set_axis(*axis_x[0]);
+    set_axis(*axis_x[1]);
+    set_axis(*axis_x[2]);
+    set_axis(*axis_x[3]);
 
     TLatex latex;
     latex.SetNDC();
