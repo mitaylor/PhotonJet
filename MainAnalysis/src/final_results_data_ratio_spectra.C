@@ -161,7 +161,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     const int npads = 4;
 
     std::vector<std::vector<float>> bjet_pt(nrows, std::vector<float>(2, 0));
-    
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -188,7 +188,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     for (int i = 0; i < nrows; ++i) {
         /* define jet pT bounds */
-        switch (type[i]) {
+        switch (types[i]) {
         case 1:
             bjet_pt[i][0] = ptg_range[osg_part1[2]];
             bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
@@ -202,8 +202,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
 
-        auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{j} < "s + to_text(bjet_pt[1]) + " GeV"s;
-    
         /* get histograms */
         hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
         systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
@@ -341,6 +339,13 @@ int congratulate(char const* config, char const* selections, char const* output)
 
             line.Draw("l");
         }
+
+        auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{j} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
+    
+        pads[i][1]->cd();
+        latex.SetTextAlign(31);
+        latex.SetTextSize(0.06);
+        latex.DrawLatex(0.95, 0.78, (text_jet_pt).c_str());
     }
 
     pads[0][0]->cd();
@@ -350,13 +355,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[0][1]->cd();
-    latex.SetTextAlign(31);
-    latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.9, "Cent. 30-50%");
-
-    latex.SetTextAlign(31);
-    latex.SetTextSize(0.06);
-    latex.DrawLatex(0.95, 0.78, (text_jet_pt).c_str());
+        latex.SetTextAlign(31);
+        latex.SetTextSize(0.07);
+        latex.DrawLatex(0.95, 0.9, "Cent. 30-50%");
 
     pads[0][2]->cd();
     latex.SetTextAlign(31);
