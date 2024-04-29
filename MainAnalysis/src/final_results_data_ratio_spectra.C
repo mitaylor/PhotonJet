@@ -40,13 +40,13 @@ void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
             double aa_val = (*h_aa)[i]->GetBinContent(j);
             double aa_stat_err = (*h_aa)[i]->GetBinError(j);
-            double aa_syst_err = (*s_aa)[i]->GetBinContent(j);
+            double aa_syst_err = (*s_aa)[i]->GetBinError(j);
             auto aa_stat_err_scale = aa_stat_err/aa_val;
             auto aa_syst_err_scale = aa_syst_err/aa_val;
 
             double pp_val = (*h_pp)[0]->GetBinContent(j);
             double pp_stat_err = (*h_pp)[0]->GetBinError(j);
-            double pp_syst_err = (*s_pp)[0]->GetBinContent(j);
+            double pp_syst_err = (*s_pp)[0]->GetBinError(j);
             auto pp_stat_err_scale = pp_stat_err/pp_val;
             auto pp_syst_err_scale = pp_syst_err/pp_val;
 
@@ -63,10 +63,24 @@ void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history
     }
 }
 
+void set_systematics(history<TH1F>* h, history<TH1F>* s)
+{
+
+    for (int i = 0; i < h->size(); ++i) {
+        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
+            double val = (*h)[i]->GetBinContent(j);
+            double err = (*s)[i]->GetBinContent(j);
+
+            (*s)[i]->SetBinContent(j, val);
+            (*s)[i]->SetBinError(j, err);
+        }
+    }
+}
+
 void format(history<TH1F>* h, history<TH1F>* s, int system)
 {
-    static int style[2] = {21, 25};
-    static int color[2] = {TColor::GetColor("#df3020"), TColor::GetColor("#12c341")};
+    static int style[3] = {21, 25, 21};
+    static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
 
     for (int i = 0; i < h->size(); ++i) {
         (*h)[i]->SetMarkerStyle(style[system]);
@@ -120,6 +134,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
     auto osg_dr = conf->get<std::vector<int64_t>>("osg");
+
+    auto ratio = conf->get<bool>("ratio");
+    auto spectra = conf->get<bool>("spectra");
 
     auto sel = new configurer(selections);
 
@@ -184,12 +201,18 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto syst_aa = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figure);
         auto hist_pp = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figure);
         auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figure);
-
+        
         auto hist_ratio = new history<TH1F>(*hist_aa, "hist");
         auto syst_ratio = new history<TH1F>(*syst_aa, "syst");
         
+        set_systematics(hist_aa, syst_aa);
+        set_systematics(hist_pp, syst_pp);
+        
         set_values(hist_ratio, syst_ratio, hist_aa, syst_aa, hist_pp, syst_pp);
-        format(hist_ratio, syst_ratio, 0);
+
+        format(hist_aa, syst_aa, 0);
+        format(hist_pp, syst_pp, 1);
+        format(hist_ratio, syst_ratio, 2);
 
         /* size canvas */
         double panel_size = 500;
@@ -257,7 +280,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.045);
         latex.SetTextAlign(22);
         latex.SetTextAngle(90);
-        latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{j#gamma}^{PbPb}} #frac{dN_{j#gamma}^{PbPb}}{d#deltaj} #/ #frac{1}{N_{j#gamma}^{pp}} #frac{dN_{j#gamma}^{pp}}{d#deltaj}");
+        if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "PbPb / pp");
+        if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
         latex.SetTextFont(62);
         latex.SetTextSize(0.055);
@@ -272,25 +296,34 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * 1, text_system.c_str());
 
         TGraph line;
-        line.SetPoint(0, xmin, 1);
-        line.SetPoint(1, xmax, 1);
+        if (ratio)      line.SetPoint(0, xmin, 1);
+        if (ratio)      line.SetPoint(1, xmax, 1);
+        if (spectra)    line.SetPoint(0, xmin, 0);
+        if (spectra)    line.SetPoint(1, xmax, 0);
         line.SetLineStyle(kDashed);
 
         /* declare legend */
-        TLegend legend(0.565, 0.75, 0.95, 0.85);
+        auto legend_x_min = (ratio) ? 0.75 : 0.65
+        TLegend legend(0.565, legend_x_min, 0.95, 0.85);
         legend.SetTextFont(42);
         legend.SetTextSize(0.07);
         legend.SetFillStyle(0);
         legend.SetBorderSize(0);
-        legend.AddEntry((*syst_ratio)[0], "PbPb/pp", "plf");
+        if (ratio)      legend.AddEntry((*syst_ratio)[0], "PbPb/pp", "plf");
+        if (spectra)    legend.AddEntry((*syst_aa)[0], "PbPb", "plf");
+        if (spectra)    legend.AddEntry((*syst_pp)[0], "pp", "plf");
 
         for(int i = 0; i < npads; i++)
         {
             pads[i]->cd();
 
             world.Draw("axis");
-            (*syst_ratio)[i]->Draw("same e2");
-            (*hist_ratio)[i]->Draw("same");
+            if (ratio)      (*syst_ratio)[i]->Draw("same e2");
+            if (ratio)      (*hist_ratio)[i]->Draw("same");
+            if (spectra)    (*syst_aa)[i]->Draw("same e2");
+            if (spectra)    (*syst_pp)[0]->Draw("same e2");
+            if (spectra)    (*hist_aa)[i]->Draw("same");
+            if (spectra)    (*hist_pp)[0]->Draw("same");
             line.Draw("l");
         }
 
@@ -321,7 +354,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_alg).c_str());
         latex.DrawLatex(0.95, 0.58, (text_jet_pt + ", " + text_jet_eta).c_str());
 
-        canvas.SaveAs((set + "_final_ratio_" + figure + ".pdf").c_str());
+        if (ratio)      canvas.SaveAs((set + "_final_ratio_" + figure + ".pdf").c_str());
+        if (spectra)    canvas.SaveAs((set + "_final_spectra_" + figure + ".pdf").c_str());
     }, figures, types, ymins, ymaxs);
 
     in(output, []() {});
