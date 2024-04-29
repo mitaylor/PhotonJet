@@ -111,10 +111,10 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis)
+void set_axis(TGaxis &axis, int nrows)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.040);
+    axis.SetLabelSize(0.040/nrows);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
@@ -261,7 +261,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i], 510, "S");
         
-        set_axis(*axis_y[i]);
+        set_axis(*axis_y[i], nrows);
     }
 
     canvas.cd();
@@ -271,16 +271,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
     axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
 
-    set_axis(*axis_x[0]);
-    set_axis(*axis_x[1]);
-    set_axis(*axis_x[2]);
-    set_axis(*axis_x[3]);
+    set_axis(*axis_x[0]/nrows);
+    set_axis(*axis_x[1]/nrows);
+    set_axis(*axis_x[2]/nrows);
+    set_axis(*axis_x[3]/nrows);
 
     TLatex latex;
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045);
+    latex.SetTextSize(0.045/nrows);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#deltaj");
@@ -289,20 +289,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#deltaj");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045);
+    latex.SetTextSize(0.045/nrows);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "PbPb / pp");
     if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.055);
+    latex.SetTextSize(0.055/nrows);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045);
+    latex.SetTextSize(0.045/nrows);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
