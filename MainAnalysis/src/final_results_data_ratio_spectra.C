@@ -208,7 +208,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         set_systematics(hist_aa, syst_aa);
         set_systematics(hist_pp, syst_pp);
         
-        set_values(hist_ratio, syst_ratio, hist_aa, syst_aa, hist_pp, syst_pp);
+        if (ratio)      set_values(hist_ratio, syst_ratio, hist_aa, syst_aa, hist_pp, syst_pp);
 
         format(hist_aa, syst_aa, 0);
         format(hist_pp, syst_pp, 1);
