@@ -128,6 +128,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_pp = conf->get<std::string>("input_pp");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
+    auto name = conf->get<std::string>("name");
     auto types = conf->get<std::vector<int64_t>>("types");
 
     auto ymins = conf->get<std::vector<float>>("ymins");
@@ -204,10 +205,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{j} < "s + to_text(bjet_pt[1]) + " GeV"s;
     
         /* get histograms */
-        hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figure);
-        systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figure);
-        hists_pp[i] = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figure);
-        systs_pp[i] = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figure);
+        hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
+        systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
+        hists_pp[i] = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
+        systs_pp[i] = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
         hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
         systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
 
@@ -372,8 +373,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.07);
     latex.DrawLatex(0.95, 0.9, "Cent. 0-10%");
 
-    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + figure + ".pdf").c_str());
-    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + figure + ".pdf").c_str());
+    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
+    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
 
     in(output, []() {});
 
