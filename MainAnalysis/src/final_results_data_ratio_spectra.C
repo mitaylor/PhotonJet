@@ -210,14 +210,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
         systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
 
-        set_systematics(*hists_aa[i], *systs_aa[i]);
-        set_systematics(*hists_pp[i], *systs_pp[i]);
+        set_systematics(hists_aa[i], systs_aa[i]);
+        set_systematics(hists_pp[i], systs_pp[i]);
         
-        if (ratio)      set_values(*hist_ratio[i], *syst_ratio[i], *hists_aa[i], *systs_aa[i], *hists_pp[i], *systs_pp[i]);
+        if (ratio)      set_values(hist_ratio[i], syst_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
 
-        format(*hists_aa[i], *systs_aa[i], 0);
-        format(*hists_pp[i], *systs_pp[i], 1);
-        format(*hist_ratio[i], *syst_ratio[i], 2);
+        format(hists_aa[i], systs_aa[i], 0);
+        format(hists_pp[i], systs_pp[i], 1);
+        format(hist_ratio[i], syst_ratio[i], 2);
     }
 
     /* size canvas */
