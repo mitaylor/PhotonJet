@@ -356,7 +356,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[nrows-1][0]->cd();
     latex.SetTextAlign(31);
     latex.SetTextSize(0.07);
-    latex.DrawLatex(0.95, 0.9, "Cent. 50-90%");
+    latex.DrawLatex(0.05, 0.9, "Cent. 50-90%");
     legend.Draw();
 
     pads[nrows-1][1]->cd();
