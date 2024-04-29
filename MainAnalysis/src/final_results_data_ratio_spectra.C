@@ -328,7 +328,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         {
             pads[i][j]->cd();
 
-            world[i]->Draw("axis");
+            worlds[i]->Draw("axis");
 
             if (ratio)      (*systs_ratio[i])[j]->Draw("same e2");
             if (ratio)      (*hists_ratio[i])[j]->Draw("same");
@@ -355,9 +355,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[0][1]->cd();
-        latex.SetTextAlign(31);
-        latex.SetTextSize(0.07);
-        latex.DrawLatex(0.95, 0.9, "Cent. 30-50%");
+    latex.SetTextAlign(31);
+    latex.SetTextSize(0.07);
+    latex.DrawLatex(0.95, 0.9, "Cent. 30-50%");
 
     pads[0][2]->cd();
     latex.SetTextAlign(31);
