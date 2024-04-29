@@ -241,7 +241,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
 
     std::vector<TH2F*> worlds(nrows);
-    std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*> npads);
+    std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
 
