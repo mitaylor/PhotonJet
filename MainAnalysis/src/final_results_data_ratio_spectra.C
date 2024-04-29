@@ -271,10 +271,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
     axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
 
-    set_axis(*axis_x[0]/nrows);
-    set_axis(*axis_x[1]/nrows);
-    set_axis(*axis_x[2]/nrows);
-    set_axis(*axis_x[3]/nrows);
+    set_axis(*axis_x[0], nrows);
+    set_axis(*axis_x[1], nrows);
+    set_axis(*axis_x[2], nrows);
+    set_axis(*axis_x[3], nrows);
 
     TLatex latex;
     latex.SetNDC();
