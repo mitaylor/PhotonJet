@@ -112,10 +112,10 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis, int nrows)
+void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.040/std::sqrt(nrows));
+    axis.SetLabelSize(0.040/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
@@ -230,6 +230,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double canvas_width = panel_size * 4 + padding_width_left + padding_width_right;
     double canvas_height = panel_size * nrows + padding_height * 2;
 
+    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2)
+
     double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
     double pad_dx = panel_size / canvas_width;
@@ -262,7 +264,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i], 510, "S");
         
-        set_axis(*axis_y[i], nrows);
+        set_axis(*axis_y[i], sf);
     }
 
     canvas.cd();
@@ -272,16 +274,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
     axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
 
-    set_axis(*axis_x[0], nrows);
-    set_axis(*axis_x[1], nrows);
-    set_axis(*axis_x[2], nrows);
-    set_axis(*axis_x[3], nrows);
+    set_axis(*axis_x[0], sf);
+    set_axis(*axis_x[1], sf);
+    set_axis(*axis_x[2], sf);
+    set_axis(*axis_x[3], sf);
 
     TLatex latex;
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045/std::sqrt(nrows));
+    latex.SetTextSize(0.045/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#deltaj");
@@ -290,20 +292,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#deltaj");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045/std::sqrt(nrows));
+    latex.SetTextSize(0.045/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "PbPb / pp");
     if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.055/std::sqrt(nrows));
+    latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045/std::sqrt(nrows));
+    latex.SetTextSize(0.045/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
