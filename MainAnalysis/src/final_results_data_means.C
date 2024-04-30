@@ -258,7 +258,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         
         set_pad(*pads[i]);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, -900, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, -009, "S");
         
         set_axis(*axis_x[i], true, sf);
     }
