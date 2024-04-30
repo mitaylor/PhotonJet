@@ -107,6 +107,7 @@ void set_axis(TGaxis &axis, bool x, double sf)
     axis.SetTickLength(0.0);
 
     if (x) {
+        axis.SetNdivisions(509, kFALSE);
         axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(2, -1, -1, -1, -1, -1, "50-90%");
         axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
@@ -258,7 +259,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         
         set_pad(*pads[i]);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, -9, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 510, "S");
         
         set_axis(*axis_x[i], true, sf);
     }
