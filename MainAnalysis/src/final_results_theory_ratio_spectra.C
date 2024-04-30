@@ -304,10 +304,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (system < 2) ? 0.75 : 0.25;
-    auto legend_y_max = (system < 2) ? 0.85 : 0.45;
-    auto legend_x_min = (system < 2) ? 0.05 : 0.6;
-    auto legend_x_max = (system < 2) ? 0.4 : 0.95;
+    auto legend_y_min = (system == 2) ? 0.75 : 0.35;
+    auto legend_y_max = (system == 2) ? 0.85 : 0.45;
+    auto legend_x_min = (system == 2) ? 0.05 : 0.6;
+    auto legend_x_max = (system == 2) ? 0.4 : 0.95;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
