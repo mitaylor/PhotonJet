@@ -107,7 +107,7 @@ void set_axis(TGaxis &axis, bool x, double sf)
     axis.SetTickLength(0.0);
 
     if (x) {
-        axis.SetNdivisions(-509);
+        axis.SetNdivisions(509);
         axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(2, -1, -1, -1, -1, -1, "50-90%");
         axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
