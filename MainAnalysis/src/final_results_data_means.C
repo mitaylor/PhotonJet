@@ -98,7 +98,7 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis, bool x, double sf)
+void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.040/sf);
@@ -106,11 +106,21 @@ void set_axis(TGaxis &axis, bool x, double sf)
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
 
-    if (x) {
-        axis.SetLabelSize(0);
-    }
-
     axis.Draw();
+}
+
+void set_world(TH2F* world) {
+    world->GetXaxis()->SetBinLabel(1, " ");
+    world->GetXaxis()->SetBinLabel(2, "50-90%");
+    world->GetXaxis()->SetBinLabel(3, " ");
+    world->GetXaxis()->SetBinLabel(4, "30-50%");
+    world->GetXaxis()->SetBinLabel(5, " ");
+    world->GetXaxis()->SetBinLabel(6, "10-30%");
+    world->GetXaxis()->SetBinLabel(7, " ");
+    world->GetXaxis()->SetBinLabel(8, "0-10%");
+    world->GetXaxis()->SetBinLabel(9, " ");
+    world->GetXaxis()->SetTickLength(0);
+    world->GetXaxis()->SetLabelSize(0.05);
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
@@ -243,23 +253,24 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TGaxis*> axis_y(1);
 
     for (int i = 0; i < ncols; ++i) {
-        worlds[i] = new TH2F("world", ";;", 1, 0.f, 9.f, 100, ymins[i], ymaxs[i]);
+        worlds[i] = new TH2F("world", ";;", 9, 0.f, 9.f, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
+        set_world(worlds[i]);
 
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
         
         set_pad(*pads[i]);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 9, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 510, "S");
         
-        set_axis(*axis_x[i], true, sf);
+        set_axis(*axis_x[i], sf);
     }
 
     canvas.cd();
 
     axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[0], ymaxs[0] * 0.999, 510, "S");
 
-    set_axis(*axis_y[0], false, sf);
+    set_axis(*axis_y[0], sf);
 
     TLatex latex;
     latex.SetNDC();
