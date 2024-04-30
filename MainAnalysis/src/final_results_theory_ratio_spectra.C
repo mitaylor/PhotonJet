@@ -181,14 +181,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto text_jet_alg = "anti-k_{T} R = 0.3"s;
     auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
 
-    std::vector<history<TH1F>*> hists_aa(nrows);
-    std::vector<history<TH1F>*> systs_aa(nrows);
-    std::vector<history<TH1F>*> hists_pp(nrows);
-    std::vector<history<TH1F>*> systs_pp(nrows);
-    std::vector<history<TH1F>*> hists_ratio(nrows);
-    std::vector<history<TH1F>*> systs_ratio(nrows);
+    std::vector<history<TH1F>*> hists_aa(ncols);
+    std::vector<history<TH1F>*> systs_aa(ncols);
+    std::vector<history<TH1F>*> hists_pp(ncols);
+    std::vector<history<TH1F>*> systs_pp(ncols);
+    std::vector<history<TH1F>*> hists_ratio(ncols);
+    std::vector<history<TH1F>*> systs_ratio(ncols);
 
-    for (int i = 0; i < nrows; ++i) {
+    for (int i = 0; i < ncols; ++i) {
         /* define jet pT bounds */
         switch (types[i]) {
         case 1:
@@ -252,7 +252,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(1);
 
-    for (int i = 0; i < nrows; ++i) {
+    for (int i = 0; i < ncols; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
 
@@ -288,13 +288,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
+    latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy, text_cms.c_str());
 
     latex.SetTextFont(42);
     latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
+    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
 
     TGraph line;
     if (system == 2)    line.SetPoint(0, xmin, 1);
@@ -323,11 +323,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         worlds[i]->Draw("axis");
 
-        if (system == 2)    (*systs_ratio[i])[j]->Draw("same e2");
-        if (system == 2)    (*hists_ratio[i])[j]->Draw("same");
-        if (system == 0)    (*systs_aa[i])[j]->Draw("same e2");
-        if (system == 0)    (*hists_aa[i])[0]->Draw("same");
-        if (system == 1)    (*systs_pp[i])[j]->Draw("same e2");
+        if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
+        if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
+        if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
+        if (system == 0)    (*hists_aa[i])[3]->Draw("same");
+        if (system == 1)    (*systs_pp[i])[0]->Draw("same e2");
         if (system == 1)    (*hists_pp[i])[0]->Draw("same");
 
         line.Draw("l");
