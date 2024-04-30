@@ -30,22 +30,36 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void set_values(history<TH1F>* h_mean, history<TH1F>* s_mean, history<TH1F>* h, history<TH1F>* s, int system)
+void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history<TH1F>* s_aa, history<TH1F>* h_pp, history<TH1F>* s_pp)
 {
-    for (int i = 0; i < 4; ++i) {
-        if (system == 0) {
-            (*h_mean)[0]->SetBinContent((i + 1) * 2, (*h)[i]->GetBinContent(1));
-            (*h_mean)[0]->SetBinError((i + 1) * 2, (*h)[i]->GetBinError(1));
+    for (int i = 0; i < h->size(); ++i) {
+        (*s_aa)[i]->Scale(1/(*h_aa)[i]->Integral("width"));
+        (*h_aa)[i]->Scale(1/(*h_aa)[i]->Integral("width"));
+        (*s_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
+        (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
 
-            (*s_mean)[0]->SetBinContent((i + 1) * 2, (*s)[i]->GetBinContent(1));
-            (*s_mean)[0]->SetBinError((i + 1) * 2, (*s)[i]->GetBinError(1));
-        }
-        if (system == 1) {
-            (*h_mean)[0]->SetBinContent((i + 1) * 2, (*h)[0]->GetBinContent(1));
-            (*h_mean)[0]->SetBinError((i + 1) * 2, (*h)[0]->GetBinError(1));
+        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
+            double aa_val = (*h_aa)[i]->GetBinContent(j);
+            double aa_stat_err = (*h_aa)[i]->GetBinError(j);
+            double aa_syst_err = (*s_aa)[i]->GetBinError(j);
+            auto aa_stat_err_scale = aa_stat_err/aa_val;
+            auto aa_syst_err_scale = aa_syst_err/aa_val;
 
-            (*s_mean)[0]->SetBinContent((i + 1) * 2, (*s)[0]->GetBinContent(1));
-            (*s_mean)[0]->SetBinError((i + 1) * 2, (*s)[0]->GetBinError(1));
+            double pp_val = (*h_pp)[0]->GetBinContent(j);
+            double pp_stat_err = (*h_pp)[0]->GetBinError(j);
+            double pp_syst_err = (*s_pp)[0]->GetBinError(j);
+            auto pp_stat_err_scale = pp_stat_err/pp_val;
+            auto pp_syst_err_scale = pp_syst_err/pp_val;
+
+            auto ratio = aa_val / pp_val;
+
+            auto stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
+            auto syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
+
+            (*h)[i]->SetBinContent(j, ratio);
+            (*h)[i]->SetBinError(j, stat_err);
+            (*s)[i]->SetBinContent(j, ratio);
+            (*s)[i]->SetBinError(j, syst_err);
         }
     }
 }
@@ -98,43 +112,14 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis, bool x, double sf)
+void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.040/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
-
-    if (x) {
-        axis.SetNdivisions(18);
-        axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(2, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(4, 30, -1, 23, -1, -1, "50- 90%");
-        axis.ChangeLabel(5, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(6, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(7, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(8, 30, -1, 23, -1, -1, "30- 50%");
-        axis.ChangeLabel(9, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(10, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(11, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(12, 30, -1, 23, -1, -1, "10- 30%");
-        axis.ChangeLabel(13, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(14, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(15, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(16, 30, -1, 23, -1, -1, "0- 10%");
-        axis.ChangeLabel(17, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(18, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(19, -1, -1, -1, -1, -1, " ");
-    }
-
     axis.Draw();
-}
-
-void set_world(TH2F* world) {
-    // world->GetXaxis()->SetTickLength(0);
-    world->GetXaxis()->SetNdivisions(9);
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
@@ -152,6 +137,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto subsets = conf->get<bool>("subsets");
     auto whole = conf->get<bool>("whole");
+    auto system = conf->get<int64_t>("system");
 
     auto sel = new configurer(selections);
 
@@ -195,16 +181,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto text_jet_alg = "anti-k_{T} R = 0.3"s;
     auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
 
-    std::vector<history<TH1F>*> hists_aa(ncols);
-    std::vector<history<TH1F>*> systs_aa(ncols);
-    std::vector<history<TH1F>*> hists_pp(ncols);
-    std::vector<history<TH1F>*> systs_pp(ncols);
-    std::vector<history<TH1F>*> hists_means_aa(ncols);
-    std::vector<history<TH1F>*> systs_means_aa(ncols);
-    std::vector<history<TH1F>*> hists_means_pp(ncols);
-    std::vector<history<TH1F>*> systs_means_pp(ncols);
+    std::vector<history<TH1F>*> hists_aa(nrows);
+    std::vector<history<TH1F>*> systs_aa(nrows);
+    std::vector<history<TH1F>*> hists_pp(nrows);
+    std::vector<history<TH1F>*> systs_pp(nrows);
+    std::vector<history<TH1F>*> hists_ratio(nrows);
+    std::vector<history<TH1F>*> systs_ratio(nrows);
 
-    for (int i = 0; i < ncols; ++i) {
+    for (int i = 0; i < nrows; ++i) {
         /* define jet pT bounds */
         switch (types[i]) {
         case 1:
@@ -221,26 +205,21 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         /* get histograms */
-        auto incl = new interval(""s, 9, 0.f, 9.f);
-        auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
-
-        hists_aa[i] = new history<TH1F>(file_aa, "aa_base_mean_raw_sub_"s + figures[i]);
-        systs_aa[i] = new history<TH1F>(file_aa, "aa_syst_mean_raw_sub_"s + figures[i]);
-        hists_pp[i] = new history<TH1F>(file_pp, "pp_base_mean_raw_sub_"s + figures[i]);
-        systs_pp[i] = new history<TH1F>(file_pp, "pp_syst_mean_raw_sub_"s + figures[i]);
-        hists_means_aa[i] = new history<TH1F>("aa_base_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
-        systs_means_aa[i] = new history<TH1F>("aa_syst_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
-        hists_means_pp[i] = new history<TH1F>("pp_base_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
-        systs_means_pp[i] = new history<TH1F>("pp_syst_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
+        hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
+        systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
+        hists_pp[i] = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
+        systs_pp[i] = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
+        hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
+        systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
 
         set_systematics(hists_aa[i], systs_aa[i]);
         set_systematics(hists_pp[i], systs_pp[i]);
         
-        set_values(hists_means_aa[i], systs_means_aa[i], hists_aa[i], systs_aa[i], 0);
-        set_values(hists_means_pp[i], systs_means_pp[i], hists_pp[i], systs_pp[i], 1);
+        if (system == 2)    set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
 
-        format(hists_means_aa[i], systs_means_aa[i], 0);
-        format(hists_means_pp[i], systs_means_pp[i], 1);
+        format(hists_aa[i], systs_aa[i], 2);
+        format(hists_pp[i], systs_pp[i], 2);
+        format(hists_ratio[i], systs_ratio[i], 2);
     }
 
     /* size canvas */
@@ -259,85 +238,114 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
+    double xmin = bdr[0];
+    double xmax = bdr[1];
+
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
+
+    TLatex latex;
+    latex.SetNDC();
 
     std::vector<TH2F*> worlds(ncols);
     std::vector<TPad*> pads(ncols);
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(1);
 
-    for (int i = 0; i < ncols; ++i) {
-        worlds[i] = new TH2F("world", ";;", 9, 0.f, 9.f, 100, ymins[i], ymaxs[i]);
+    for (int i = 0; i < nrows; ++i) {
+        worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
-        set_world(worlds[i]);
 
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
         
         set_pad(*pads[i]);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 510, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
         
-        set_axis(*axis_x[i], true, sf);
-    }
+        set_axis(*axis_x[i], sf);
 
-    canvas.cd();
+        canvas.cd();
+
+        latex.SetTextFont(42);
+        latex.SetTextSize(0.055/sf);
+        latex.SetTextAlign(22);
+        latex.SetTextAngle(0);
+        latex.DrawLatex(pad_x0 + pad_dx * (i + 0.5), pad_y0 * 0.5, "#Deltaj");
+    }
 
     axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[0], ymaxs[0] * 0.999, 510, "S");
 
-    set_axis(*axis_y[0], false, sf);
+    set_axis(*axis_y[0], sf);
 
-    TLatex latex;
-    latex.SetNDC();
-    
     latex.SetTextFont(42);
     latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
-    latex.DrawLatex(pad_x0 * 0.3, pad_y0 + pad_dy * 0.5, "<#Deltaj>");
+    if (system == 2)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "PbPb / pp");
+    if (system < 2)     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
 
     latex.SetTextFont(62);
     latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy, text_cms.c_str());
+    latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
     latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_energy.c_str());
+    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
+
+    TGraph line;
+    if (system == 2)    line.SetPoint(0, xmin, 1);
+    if (system == 2)    line.SetPoint(1, xmax, 1);
+    if (system < 2)     line.SetPoint(0, xmin, 0);
+    if (system < 2)     line.SetPoint(1, xmax, 0);
+    line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = 0.65;
-    auto legend_y_max = 0.85;
-    auto legend_x_min = 0.05;
-    auto legend_x_max = 0.4;
+    auto legend_y_min = (system < 2) ? 0.75 : 0.25;
+    auto legend_y_max = (system < 2) ? 0.85 : 0.45;
+    auto legend_x_min = (system < 2) ? 0.05 : 0.6;
+    auto legend_x_max = (system < 2) ? 0.4 : 0.95;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
     legend.SetTextSize(0.07);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    legend.AddEntry((*systs_means_aa[0])[0], "PbPb", "plf");
-    legend.AddEntry((*systs_means_pp[0])[0], "pp", "plf");
+    if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS PbPb/pp", "plf");
+    if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS PbPb", "plf");
+    if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS pp", "plf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
 
         worlds[i]->Draw("axis");
 
-        (*systs_means_aa[i])[0]->Draw("same e2");
-        (*systs_means_pp[i])[0]->Draw("same e2");
-        (*hists_means_aa[i])[0]->Draw("same");
-        (*hists_means_pp[i])[0]->Draw("same");
+        if (system == 2)    (*systs_ratio[i])[j]->Draw("same e2");
+        if (system == 2)    (*hists_ratio[i])[j]->Draw("same");
+        if (system == 0)    (*systs_aa[i])[j]->Draw("same e2");
+        if (system == 0)    (*hists_aa[i])[0]->Draw("same");
+        if (system == 1)    (*systs_pp[i])[j]->Draw("same e2");
+        if (system == 1)    (*hists_pp[i])[0]->Draw("same");
+
+        line.Draw("l");
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
         pads[i]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.07);
-        latex.DrawLatex(0.5, 0.05, (text_jet_pt).c_str());
+        latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
+
+        if (system == 0)    latex.SetTextAlign(21);
+        if (system == 0)    latex.SetTextSize(0.07);
+        if (system == 0)    latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
+
+        if (system == 2)    latex.SetTextAlign(21);
+        if (system == 2)    latex.SetTextSize(0.07);
+        if (system == 2)    latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
     }
 
     pads[0]->cd();
@@ -362,7 +370,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (whole)      latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if (whole)      latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    canvas.SaveAs((set + "_final_means_" + name + ".pdf").c_str());
+    if (system == 2)    canvas.SaveAs((set + "_final_theory_ratio_" + name + ".pdf").c_str());
+    if (system == 1)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + ".pdf").c_str());
+    if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + ".pdf").c_str());
 
     in(output, []() {});
 
