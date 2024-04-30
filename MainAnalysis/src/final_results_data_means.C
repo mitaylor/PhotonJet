@@ -32,7 +32,7 @@ using namespace std::placeholders;
 
 void set_values(history<TH1F>* h_mean, history<TH1F>* s_mean, history<TH1F>* h, history<TH1F>* s, int system)
 {
-    for (int i = 0; i < h->size(); ++i) {
+    for (int i = 0; i < 4; ++i) {
         if (system == 0) {
             (*h_mean)[0]->SetBinContent((i + 1) * 2, (*h)[i]->GetBinContent(1));
             (*h_mean)[0]->SetBinError((i + 1) * 2, (*h)[i]->GetBinError(1));
@@ -98,7 +98,7 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis, double sf)
+void set_axis(TGaxis &axis, bool x, double sf)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.040/sf);
@@ -106,21 +106,19 @@ void set_axis(TGaxis &axis, double sf)
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
 
-    axis.Draw();
-}
+    if (x) {
+        axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(2, -1, -1, -1, -1, -1, "50-90%");
+        axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(4, -1, -1, -1, -1, -1, "30-50%");
+        axis.ChangeLabel(5, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(6, -1, -1, -1, -1, -1, "10-30%");
+        axis.ChangeLabel(7, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(8, -1, -1, -1, -1, -1, "0-10%");
+        axis.ChangeLabel(9, -1, -1, -1, -1, -1, " ");
+    }
 
-void set_world(TH2F* world) {
-    world->GetXaxis()->SetBinLabel(1, " ");
-    world->GetXaxis()->SetBinLabel(2, "50-90%");
-    world->GetXaxis()->SetBinLabel(3, " ");
-    world->GetXaxis()->SetBinLabel(4, "30-50%");
-    world->GetXaxis()->SetBinLabel(5, " ");
-    world->GetXaxis()->SetBinLabel(6, "10-30%");
-    world->GetXaxis()->SetBinLabel(7, " ");
-    world->GetXaxis()->SetBinLabel(8, "0-10%");
-    world->GetXaxis()->SetBinLabel(9, " ");
-    world->GetXaxis()->SetTickLength(0);
-    world->GetXaxis()->SetLabelSize(0.05);
+    axis.Draw();
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
@@ -244,9 +242,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
-    double xmin = bdr[0];
-    double xmax = bdr[1];
-
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
 
@@ -258,22 +253,21 @@ int congratulate(char const* config, char const* selections, char const* output)
     for (int i = 0; i < ncols; ++i) {
         worlds[i] = new TH2F("world", ";;", 9, 0.f, 9.f, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
-        set_world(worlds[i]);
 
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
         
         set_pad(*pads[i]);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, -900, "S");
         
-        set_axis(*axis_x[i], sf);
+        set_axis(*axis_x[i], true, sf);
     }
 
     canvas.cd();
 
     axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[0], ymaxs[0] * 0.999, 510, "S");
 
-    set_axis(*axis_y[0], sf);
+    set_axis(*axis_y[0], false, sf);
 
     TLatex latex;
     latex.SetNDC();
@@ -289,7 +283,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
-    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "<#Deltaj>");
+    latex.DrawLatex(pad_x0 * 0.3, pad_y0 + pad_dy * 0.5, "<#Deltaj>");
 
     latex.SetTextFont(62);
     latex.SetTextSize(0.07/sf);
@@ -304,8 +298,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
 
     /* declare legend */
-    auto legend_y_min = 0.75;
-    auto legend_y_max = 0.95;
+    auto legend_y_min = 0.05;
+    auto legend_y_max = 0.25;
     auto legend_x_min = 0.6;
     auto legend_x_max = 0.95;
 
