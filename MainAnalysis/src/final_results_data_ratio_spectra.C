@@ -115,7 +115,7 @@ void set_pad(TPad &pad)
 void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.060/sf);
+    axis.SetLabelSize(0.040/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
@@ -283,7 +283,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#deltaj");
@@ -292,7 +292,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#deltaj");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.045/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "PbPb / pp");
