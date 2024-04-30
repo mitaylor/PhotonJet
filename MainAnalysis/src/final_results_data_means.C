@@ -271,7 +271,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     canvas.cd();
 
-    axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[i], ymaxs[i] * 0.999, 510, "S");
+    axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[0], ymaxs[0] * 0.999, 510, "S");
 
     set_axis(*axis_y[0], sf);
 
@@ -322,9 +322,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         worlds[i]->Draw("axis");
 
-        (*systs_means_aa[i])[j]->Draw("same e2");
+        (*systs_means_aa[i])[0]->Draw("same e2");
         (*systs_means_pp[i])[0]->Draw("same e2");
-        (*hists_means_aa[i])[j]->Draw("same");
+        (*hists_means_aa[i])[0]->Draw("same");
         (*hists_means_pp[i])[0]->Draw("same");
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
