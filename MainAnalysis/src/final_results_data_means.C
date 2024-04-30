@@ -98,7 +98,7 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis, double sf)
+void set_axis(TGaxis &axis, bool x, double sf)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.040/sf);
@@ -287,14 +287,14 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 510, "S");
         
-        set_axis(*axis_x[i], sf);
+        set_axis(*axis_x[i], true, sf);
     }
 
     canvas.cd();
 
     axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[0], ymaxs[0] * 0.999, 510, "S");
 
-    set_axis(*axis_y[0], sf);
+    set_axis(*axis_y[0], false, sf);
 
     TLatex latex;
     latex.SetNDC();
