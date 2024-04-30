@@ -108,25 +108,25 @@ void set_axis(TGaxis &axis, double sf)
 
     if (x) {
         axis.SetNdivisions(18);
-        axis.ChangeLabel(1, " ");
-        axis.ChangeLabel(2, " ");
-        axis.ChangeLabel(3, " ");
-        axis.ChangeLabel(4, "50-90%");
-        axis.ChangeLabel(5, " ");
-        axis.ChangeLabel(6, " ");
-        axis.ChangeLabel(7, " ");
-        axis.ChangeLabel(8, "30-50%");
-        axis.ChangeLabel(9, " ");
-        axis.ChangeLabel(10, " ");
-        axis.ChangeLabel(11, " ");
-        axis.ChangeLabel(12, "10-30%");
-        axis.ChangeLabel(13, " ");
-        axis.ChangeLabel(14, " ");
-        axis.ChangeLabel(15, " ");
-        axis.ChangeLabel(16, "0-10%");
-        axis.ChangeLabel(17, " ");
-        axis.ChangeLabel(18, " ");
-        axis.ChangeLabel(19, " ");
+        axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(2, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(4, -1, -1, -1, -1, -1, "50-90%");
+        axis.ChangeLabel(5, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(6, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(7, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(8, -1, -1, -1, -1, -1, "30-50%");
+        axis.ChangeLabel(9, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(10, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(11, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(12, -1, -1, -1, -1, -1, "10-30%");
+        axis.ChangeLabel(13, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(14, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(15, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(16, -1, -1, -1, -1, -1, "0-10%");
+        axis.ChangeLabel(17, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(18, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabel(19, -1, -1, -1, -1, -1, " ");
     }
 
     axis.Draw();
