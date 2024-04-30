@@ -172,7 +172,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_pp = new TFile((base + input_pp).data(), "read");
 
     /* define kinematics and luminosity */
-    auto text_system = "#sqrt{s_{NN}} = 5.02 TeV, PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+    auto text_energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
+    auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
     auto text_cms = "CMS"s;
     auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
     auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
@@ -298,13 +299,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
+    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_energy.c_str());
 
     /* declare legend */
-    auto legend_y_min = 0.05;
-    auto legend_y_max = 0.25;
-    auto legend_x_min = 0.6;
-    auto legend_x_max = 0.95;
+    auto legend_y_min = 0.65;
+    auto legend_y_max = 0.85;
+    auto legend_x_min = 0.05;
+    auto legend_x_max = 0.4;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -329,11 +330,15 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.07);
-        latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
+        latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
     }
 
     pads[ncols-1]->cd();
     legend.Draw();
+
+    latex.SetTextSize(0.07);
+    latex.SetTextAlign(31);
+    latex.DrawLatex(0.95, 0.8, (text_system).c_str());
 
     latex.SetTextSize(0.07);
     latex.SetTextAlign(31);
