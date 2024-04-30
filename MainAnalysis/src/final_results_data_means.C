@@ -142,7 +142,8 @@ void set_world(TH2F* world) {
     // world->GetXaxis()->SetBinLabel(7, " ");
     // world->GetXaxis()->SetBinLabel(8, "0-10%");
     // world->GetXaxis()->SetBinLabel(9, " ");
-    world->GetXaxis()->SetTickLength(0);
+    // world->GetXaxis()->SetTickLength(0);
+    world->GetXaxis()->SetNdivisions(9);
     // world->GetXaxis()->SetLabelSize(0.05);
 }
 
