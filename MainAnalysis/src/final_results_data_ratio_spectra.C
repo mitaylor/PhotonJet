@@ -380,18 +380,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[nrows-1][2]->cd();
-    latex.SetTextAlign(31);
     latex.SetTextSize(0.07);
-    if (ratio)      latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (ratio)      latex.DrawLatex(0.95, 0.68, (text_photon_eta).c_str());
+    if (ratio)      latex.SetTextAlign(11);
+    if (ratio)      latex.DrawLatex(0.05, 0.78, (text_photon_pt).c_str());
+    if (ratio)      latex.DrawLatex(0.05, 0.68, (text_photon_eta).c_str());
+    if (spectra)    latex.SetTextAlign(31);
     if (spectra)    latex.DrawLatex(0.95, 0.38, (text_photon_pt).c_str());
     if (spectra)    latex.DrawLatex(0.95, 0.28, (text_photon_eta).c_str());
 
     pads[nrows-1][3]->cd();
-    latex.SetTextAlign(31);
     latex.SetTextSize(0.07);
-    if (ratio)      latex.DrawLatex(0.95, 0.78, (text_dphi + ", " + text_jet_eta).c_str());
-    if (ratio)      latex.DrawLatex(0.95, 0.68, (text_jet_alg).c_str());
+    if (ratio)      latex.SetTextAlign(11);
+    if (ratio)      latex.DrawLatex(0.05, 0.78, (text_dphi + ", " + text_jet_eta).c_str());
+    if (ratio)      latex.DrawLatex(0.05, 0.68, (text_jet_alg).c_str());
+    if (spectra)    latex.SetTextAlign(31);
     if (spectra)    latex.DrawLatex(0.95, 0.38, (text_dphi + ", " + text_jet_eta).c_str());
     if (spectra)    latex.DrawLatex(0.95, 0.28, (text_jet_alg).c_str());
 
