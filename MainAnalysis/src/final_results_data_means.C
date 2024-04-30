@@ -136,8 +136,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
-    // auto subsets = conf->get<bool>("subsets");
-    // auto whole = conf->get<bool>("whole");
+    auto subsets = conf->get<bool>("subsets");
+    auto whole = conf->get<bool>("whole");
 
     auto sel = new configurer(selections);
 
@@ -336,20 +336,24 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0]->cd();
     legend.Draw();
 
+    if (subsets)      latex.SetTextSize(0.06);
+    if (subsets)      latex.SetTextAlign(31);
+    if (subsets)      latex.DrawLatex(0.95, 0.9, (text_photon_pt).c_str());
+    if (subsets)      latex.DrawLatex(0.95, 0.82, (text_photon_eta).c_str());
+    if (subsets)      latex.DrawLatex(0.95, 0.74, (text_dphi + ", " + text_jet_eta).c_str());
+    if (subsets)      latex.DrawLatex(0.95, 0.66, (text_jet_alg).c_str());
+
     pads[ncols-1]->cd();
     latex.SetTextSize(0.07);
     latex.SetTextAlign(31);
     latex.DrawLatex(0.95, 0.9, (text_system).c_str());
 
-    latex.SetTextSize(0.07);
-    latex.SetTextAlign(31);
-    latex.DrawLatex(0.95, 0.8, (text_photon_pt).c_str());
-    latex.DrawLatex(0.95, 0.7, (text_photon_eta).c_str());
-
-    latex.SetTextSize(0.07);
-    latex.SetTextAlign(31);
-    latex.DrawLatex(0.95, 0.6, (text_dphi + ", " + text_jet_eta).c_str());
-    latex.DrawLatex(0.95, 0.5, (text_jet_alg).c_str());
+    if (whole)      latex.SetTextSize(0.06);
+    if (whole)      latex.SetTextAlign(31);
+    if (whole)      latex.DrawLatex(0.95, 0.8, (text_photon_pt).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.72, (text_photon_eta).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.64, (text_dphi + ", " + text_jet_eta).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.56, (text_jet_alg).c_str());
 
     canvas.SaveAs((set + "_final_means_" + name + ".pdf").c_str());
 
