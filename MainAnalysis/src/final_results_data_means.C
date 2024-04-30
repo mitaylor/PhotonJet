@@ -107,16 +107,10 @@ void set_axis(TGaxis &axis, bool x, double sf)
     axis.SetTickLength(0.0);
 
     if (x) {
-        axis.SetNdivisions(9);
-        axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(2, -1, -1, -1, -1, -1, "50-90%");
-        axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(4, -1, -1, -1, -1, -1, "30-50%");
-        axis.ChangeLabel(5, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(6, -1, -1, -1, -1, -1, "10-30%");
-        axis.ChangeLabel(7, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(8, -1, -1, -1, -1, -1, "0-10%");
-        axis.ChangeLabel(9, -1, -1, -1, -1, -1, " ");
+        axis.ChangeLabelByValue(1.5, -1, -1, -1, -1, -1, "50-90%");
+        axis.ChangeLabelByValue(3.5, -1, -1, -1, -1, -1, "30-50%");
+        axis.ChangeLabelByValue(5.5, -1, -1, -1, -1, -1, "10-30%");
+        axis.ChangeLabelByValue(7.5, -1, -1, -1, -1, -1, "0-10%");
     }
 
     axis.Draw();
@@ -259,7 +253,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         
         set_pad(*pads[i]);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 510, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, 0, 9, 9, "S");
         
         set_axis(*axis_x[i], true, sf);
     }
