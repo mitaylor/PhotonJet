@@ -286,17 +286,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#deltaj");
-    latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.5, "#deltaj");
-    latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.5, "#deltaj");
-    latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#deltaj");
+    latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#Deltaj");
+    latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.5, "#Deltaj");
+    latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.5, "#Deltaj");
+    latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#Deltaj");
 
     latex.SetTextFont(42);
     latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "PbPb / pp");
-    if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#deltaj}");
+    if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
 
     latex.SetTextFont(62);
     latex.SetTextSize(0.07/sf);
