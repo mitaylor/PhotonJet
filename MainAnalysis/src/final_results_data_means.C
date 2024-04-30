@@ -107,10 +107,7 @@ void set_axis(TGaxis &axis, bool x, double sf)
     axis.SetTickLength(0.0);
 
     if (x) {
-        axis.ChangeLabelByValue(1.5, -1, -1, -1, -1, -1, "50-90%");
-        axis.ChangeLabelByValue(3.5, -1, -1, -1, -1, -1, "30-50%");
-        axis.ChangeLabelByValue(5.5, -1, -1, -1, -1, -1, "10-30%");
-        axis.ChangeLabelByValue(7.5, -1, -1, -1, -1, -1, "0-10%");
+        axis.SetLabelSize(0);
     }
 
     axis.Draw();
@@ -246,7 +243,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TGaxis*> axis_y(1);
 
     for (int i = 0; i < ncols; ++i) {
-        worlds[i] = new TH2F("world", ";;", 9, 0.f, 9.f, 100, ymins[i], ymaxs[i]);
+        worlds[i] = new TH2F("world", ";;", 1, 0.f, 9.f, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
 
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
