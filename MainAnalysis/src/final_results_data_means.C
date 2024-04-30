@@ -350,10 +350,10 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (whole)      latex.SetTextSize(0.06);
     if (whole)      latex.SetTextAlign(31);
-    if (whole)      latex.DrawLatex(0.95, 0.8, (text_photon_pt).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.72, (text_photon_eta).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.64, (text_dphi + ", " + text_jet_eta).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.56, (text_jet_alg).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (whole)      latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     canvas.SaveAs((set + "_final_means_" + name + ".pdf").c_str());
 
