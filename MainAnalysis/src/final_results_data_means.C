@@ -111,19 +111,19 @@ void set_axis(TGaxis &axis, bool x, double sf)
         axis.ChangeLabel(1, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(2, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(3, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(4, 90, -1, -1, -1, -1, "50 - 90%");
+        axis.ChangeLabel(4, 60, -1, -1, -1, -1, "50- 90%");
         axis.ChangeLabel(5, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(6, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(7, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(8, 90, -1, -1, -1, -1, "30 - 50%");
+        axis.ChangeLabel(8, 60, -1, -1, -1, -1, "30- 50%");
         axis.ChangeLabel(9, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(10, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(11, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(12, 90, -1, -1, -1, -1, "10 - 30%");
+        axis.ChangeLabel(12, 60, -1, -1, -1, -1, "10- 30%");
         axis.ChangeLabel(13, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(14, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(15, -1, -1, -1, -1, -1, " ");
-        axis.ChangeLabel(16, 90, -1, -1, -1, -1, "0 - 10%");
+        axis.ChangeLabel(16, 60, -1, -1, -1, -1, "0- 10%");
         axis.ChangeLabel(17, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(18, -1, -1, -1, -1, -1, " ");
         axis.ChangeLabel(19, -1, -1, -1, -1, -1, " ");
@@ -133,18 +133,8 @@ void set_axis(TGaxis &axis, bool x, double sf)
 }
 
 void set_world(TH2F* world) {
-    // world->GetXaxis()->SetBinLabel(1, " ");
-    // world->GetXaxis()->SetBinLabel(2, "50-90%");
-    // world->GetXaxis()->SetBinLabel(3, " ");
-    // world->GetXaxis()->SetBinLabel(4, "30-50%");
-    // world->GetXaxis()->SetBinLabel(5, " ");
-    // world->GetXaxis()->SetBinLabel(6, "10-30%");
-    // world->GetXaxis()->SetBinLabel(7, " ");
-    // world->GetXaxis()->SetBinLabel(8, "0-10%");
-    // world->GetXaxis()->SetBinLabel(9, " ");
     // world->GetXaxis()->SetTickLength(0);
     world->GetXaxis()->SetNdivisions(9);
-    // world->GetXaxis()->SetLabelSize(0.05);
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
