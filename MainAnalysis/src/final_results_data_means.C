@@ -330,15 +330,16 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.07);
-        latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
+        latex.DrawLatex(0.5, 0.05, (text_jet_pt).c_str());
     }
 
-    pads[ncols-1]->cd();
+    pads[0]->cd();
     legend.Draw();
 
+    pads[ncols-1]->cd();
     latex.SetTextSize(0.07);
     latex.SetTextAlign(31);
-    latex.DrawLatex(0.95, 0.8, (text_system).c_str());
+    latex.DrawLatex(0.95, 0.9, (text_system).c_str());
 
     latex.SetTextSize(0.07);
     latex.SetTextAlign(31);
