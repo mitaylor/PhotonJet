@@ -209,14 +209,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto incl = new interval(""s, 9, 0.f, 9.f);
         auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
 
-        hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
-        systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
-        hists_pp[i] = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
-        systs_pp[i] = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
-        hists_means_aa[i] = new history<TH1F>("aa_base_aa_nominal_s_pure_raw_sub_"s + figures[i] + "_mean", "", fincl, 1);
-        systs_means_aa[i] = new history<TH1F>("aa_total_base_aa_nominal_s_pure_raw_sub_"s + figures[i] + "_mean", "", fincl, 1);
-        hists_means_pp[i] = new history<TH1F>("pp_base_pp_nominal_s_pure_raw_sub_"s + figures[i] + "_mean", "", fincl, 1);
-        systs_means_pp[i] = new history<TH1F>("pp_total_base_pp_nominal_s_pure_raw_sub_"s + figures[i] + "_mean", "", fincl, 1);
+        hists_aa[i] = new history<TH1F>(file_aa, "aa_base_mean_raw_sub_"s + figures[i]);
+        systs_aa[i] = new history<TH1F>(file_aa, "aa_syst_mean_raw_sub_"s + figures[i]);
+        hists_pp[i] = new history<TH1F>(file_pp, "pp_base_mean_raw_sub_"s + figures[i]);
+        systs_pp[i] = new history<TH1F>(file_pp, "pp_syst_mean_raw_sub_"s + figures[i]);
+        hists_means_aa[i] = new history<TH1F>("aa_base_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
+        systs_means_aa[i] = new history<TH1F>("aa_syst_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
+        hists_means_pp[i] = new history<TH1F>("pp_base_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
+        systs_means_pp[i] = new history<TH1F>("pp_syst_mean_raw_sub_"s + figures[i] + "_mean"s, "", fincl, 1);
 
         set_systematics(hists_aa[i], systs_aa[i]);
         set_systematics(hists_pp[i], systs_pp[i]);
