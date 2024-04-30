@@ -106,21 +106,44 @@ void set_axis(TGaxis &axis, double sf)
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
 
+    if (x) {
+        axis.SetNdivisions(18);
+        axis.ChangeLabel(1, " ");
+        axis.ChangeLabel(2, " ");
+        axis.ChangeLabel(3, " ");
+        axis.ChangeLabel(4, "50-90%");
+        axis.ChangeLabel(5, " ");
+        axis.ChangeLabel(6, " ");
+        axis.ChangeLabel(7, " ");
+        axis.ChangeLabel(8, "30-50%");
+        axis.ChangeLabel(9, " ");
+        axis.ChangeLabel(10, " ");
+        axis.ChangeLabel(11, " ");
+        axis.ChangeLabel(12, "10-30%");
+        axis.ChangeLabel(13, " ");
+        axis.ChangeLabel(14, " ");
+        axis.ChangeLabel(15, " ");
+        axis.ChangeLabel(16, "0-10%");
+        axis.ChangeLabel(17, " ");
+        axis.ChangeLabel(18, " ");
+        axis.ChangeLabel(19, " ");
+    }
+
     axis.Draw();
 }
 
 void set_world(TH2F* world) {
-    world->GetXaxis()->SetBinLabel(1, " ");
-    world->GetXaxis()->SetBinLabel(2, "50-90%");
-    world->GetXaxis()->SetBinLabel(3, " ");
-    world->GetXaxis()->SetBinLabel(4, "30-50%");
-    world->GetXaxis()->SetBinLabel(5, " ");
-    world->GetXaxis()->SetBinLabel(6, "10-30%");
-    world->GetXaxis()->SetBinLabel(7, " ");
-    world->GetXaxis()->SetBinLabel(8, "0-10%");
-    world->GetXaxis()->SetBinLabel(9, " ");
+    // world->GetXaxis()->SetBinLabel(1, " ");
+    // world->GetXaxis()->SetBinLabel(2, "50-90%");
+    // world->GetXaxis()->SetBinLabel(3, " ");
+    // world->GetXaxis()->SetBinLabel(4, "30-50%");
+    // world->GetXaxis()->SetBinLabel(5, " ");
+    // world->GetXaxis()->SetBinLabel(6, "10-30%");
+    // world->GetXaxis()->SetBinLabel(7, " ");
+    // world->GetXaxis()->SetBinLabel(8, "0-10%");
+    // world->GetXaxis()->SetBinLabel(9, " ");
     world->GetXaxis()->SetTickLength(0);
-    world->GetXaxis()->SetLabelSize(0.05);
+    // world->GetXaxis()->SetLabelSize(0.05);
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
