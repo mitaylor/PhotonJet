@@ -243,7 +243,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dy = panel_size / canvas_height;
 
     double xmin = (log) ? bdr[0] + 0.003 : bdr[0];
-    double xmax = (log) ? bdr[1] : bdr * 0.999;
+    double xmax = (log) ? bdr[1] : bdr[1] * 0.999;
 
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
