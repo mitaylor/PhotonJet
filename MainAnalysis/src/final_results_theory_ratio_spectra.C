@@ -437,8 +437,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 2)    legend_y_min = (subsets) ? 0.45 : 0.45;
     if (system == 2)    legend_y_max = (subsets) ? 0.80 : 0.80;
-    if (system == 2)    legend_x_min = (subsets) ? 0.01 : 0.01;
-    if (system == 2)    legend_x_max = (subsets) ? 0.31 : 0.31;
+    if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.05;
+    if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
     if (system == 1)    legend_y_min = (subsets) ? 0.64 : 0.24;
     if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.45;
@@ -525,7 +525,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[ncols-1]->cd();
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.05);
     latex.SetTextAlign(31);
     latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
