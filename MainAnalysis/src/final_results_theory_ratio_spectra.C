@@ -142,10 +142,10 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
                            TColor::GetColor("#A86B5B")
                            };
 
-    for (int i = 0; i < h.size(); ++i) {
+    for (size_t i = 0; i < h.size(); ++i) {
         for (int j = 1; j <= (*h[i])[0]->GetNbinsX(); ++j) {
-            double x = ((*h[i])[0]->GetBinLowEdge(j) + (*h[i])[0]->GetBinUpEdge(j)) / 2;
-            double dx = std::abs((*h[i])[0]->GetBinLowEdge(j) - (*h[i])[0]->GetBinUpEdge(j)) / 2;
+            double x = (*h[i])[0]->GetBinCenter(j);
+            double dx = (*h[i])[0]->GetBinWidth(j);
 
             result[i].SetPoint(j - 1, x, (*h[i])[0]->GetBinContent(j));
             result[i].SetPointError(j - 1, dx, dx, (*h[i])[0]->GetBinError(j), (*h[i])[0]->GetBinError(j));
