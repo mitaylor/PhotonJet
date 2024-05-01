@@ -369,8 +369,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
-    double xmin = bdr[0];
-    double xmax = bdr[1];
+    double xmin = (log) ? bdr[0] + 0.003 : bdr[0];
+    double xmax = (log) ? bdr[1] : bdr * 0.999;
 
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
@@ -391,8 +391,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         
         set_pad(*pads[i], log);
 
-        if (log)    axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin + 0.003, xmax, 510, "SG");
-        if (!log)   axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+        if (log)    axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
+        if (!log)   axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
 
         set_axis(*axis_x[i], sf);
 
