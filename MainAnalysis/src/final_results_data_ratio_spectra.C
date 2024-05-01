@@ -350,8 +350,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (!log)   legend_x_min = (ratio) ? 0.65 : 0.3;
     if (!log)   legend_x_max = (ratio) ? 0.95 : 0.6;
 
-    if (log)    legend_y_min = (ratio) ? 0.66 : 0.59;
-    if (log)    legend_y_max = (ratio) ? 0.73 : 0.73;
+    if (log)    legend_y_min = (ratio) ? 0.66 : 0.16;
+    if (log)    legend_y_max = (ratio) ? 0.73 : 0.30;
     if (log)    legend_x_min = (ratio) ? 0.65 : 0.05;
     if (log)    legend_x_max = (ratio) ? 0.95 : 0.35;
 
