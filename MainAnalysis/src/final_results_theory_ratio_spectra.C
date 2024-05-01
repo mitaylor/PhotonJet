@@ -142,7 +142,7 @@ void format(history<TH1F>* h, int type)
     for (int i = 0; i < h->size(); ++i) {
         (*h)[i]->SetMarkerStyle(style[type]);
         (*h)[i]->SetMarkerColor(1);
-        (*h)[i]->SetLineColor(1);
+        (*h)[i]->SetLineColor(color[type]);
         (*h)[i]->SetFillColor(color[type]);
         (*h)[i]->SetFillColorAlpha(color[type], 0.60);
         (*h)[i]->SetMarkerSize(0);
@@ -464,22 +464,22 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
         if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
-        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same e3");
+        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same le3");
+        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same le3");
+        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same le3");
+        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same le3");
 
         if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
         if (system == 0)    (*hists_aa[i])[3]->Draw("same");
-        if (system == 0)    (*hists_aa_jewel[i])[0]->Draw("same e3");
-        if (system == 0)    (*hists_aa_jewel_no_recoil[i])[0]->Draw("same e3");
-        if (system == 0)    (*hists_aa_pyquen_no_wide[i])[0]->Draw("same e3");
-        if (system == 0)    (*hists_aa_pyquen[i])[0]->Draw("same e3");
+        if (system == 0)    (*hists_aa_jewel[i])[0]->Draw("same le3");
+        if (system == 0)    (*hists_aa_jewel_no_recoil[i])[0]->Draw("same le3");
+        if (system == 0)    (*hists_aa_pyquen_no_wide[i])[0]->Draw("same le3");
+        if (system == 0)    (*hists_aa_pyquen[i])[0]->Draw("same le3");
 
         if (system == 1)    (*systs_pp[i])[0]->Draw("same e2");
         if (system == 1)    (*hists_pp[i])[0]->Draw("same");
-        if (system == 1)    (*hists_pp_jewel[i])[0]->Draw("same e3");
-        if (system == 1)    (*hists_pp_pyquen[i])[0]->Draw("same e3");
+        if (system == 1)    (*hists_pp_jewel[i])[0]->Draw("same le3");
+        if (system == 1)    (*hists_pp_pyquen[i])[0]->Draw("same le3");
 
         line.Draw("l");
 
