@@ -133,7 +133,7 @@ void set_axis(TGaxis &axis, bool x, double sf)
 }
 
 void set_world(TH2F* world) {
-    // world->GetXaxis()->SetTickLength(0);
+    world->GetXaxis()->SetTickLength(0);
     world->GetXaxis()->SetNdivisions(9);
 }
 
@@ -308,8 +308,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
 
     /* declare legend */
-    auto legend_y_min = 0.65;
-    auto legend_y_max = 0.85;
+    auto legend_y_min = 0.75;
+    auto legend_y_max = 0.95;
     auto legend_x_min = 0.05;
     auto legend_x_max = 0.4;
 
@@ -341,20 +341,14 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[0]->cd();
     legend.Draw();
-    if (subsets)      latex.SetTextSize(0.06);
-    if (subsets)      latex.SetTextAlign(31);
-    if (subsets)      latex.DrawLatex(0.95, 0.9, (text_photon_pt).c_str());
-    if (subsets)      latex.DrawLatex(0.95, 0.82, (text_photon_eta).c_str());
-    if (subsets)      latex.DrawLatex(0.95, 0.74, (text_dphi + ", " + text_jet_eta).c_str());
-    if (subsets)      latex.DrawLatex(0.95, 0.66, (text_jet_alg).c_str());
 
     pads[ncols-1]->cd();
-    if (whole)      latex.SetTextSize(0.06);
-    if (whole)      latex.SetTextAlign(31);
-    if (whole)      latex.DrawLatex(0.95, 0.9, (text_photon_pt).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.82, (text_photon_eta).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.74, (text_dphi + ", " + text_jet_eta).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.66, (text_jet_alg).c_str());
+    latex.SetTextSize(0.06);
+    latex.SetTextAlign(31);
+    latex.DrawLatex(0.95, 0.9, (text_photon_pt).c_str());
+    latex.DrawLatex(0.95, 0.82, (text_photon_eta).c_str());
+    latex.DrawLatex(0.95, 0.74, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.95, 0.66, (text_jet_alg).c_str());
 
     canvas.SaveAs((set + "_final_means_" + name + ".pdf").c_str());
 
