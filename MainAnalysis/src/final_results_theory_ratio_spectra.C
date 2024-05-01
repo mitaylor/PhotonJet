@@ -22,6 +22,7 @@
 #include "TGaxis.h"
 #include "TLegend.h"
 #include "TBox.h"
+#include "TGraphAsymmErrors.h"
 
 #include <string>
 #include <vector>
@@ -126,8 +127,10 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
     }
 }
 
-void format(history<TH1F>* h, int type)
+std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type)
 {
+    std::vector<TGraphAsymmErrors> result(h.size());
+
     static int style[8] = {20, 20, 20, 20, 20, 20, 20, 20};
     static int color[8] = {TColor::GetColor("#4492D8"), 
                            TColor::GetColor("#95DADD"), 
@@ -139,14 +142,21 @@ void format(history<TH1F>* h, int type)
                            TColor::GetColor("#A86B5B")
                            };
 
-    for (int i = 0; i < h->size(); ++i) {
-        (*h)[i]->SetMarkerStyle(style[type]);
-        (*h)[i]->SetMarkerColor(1);
-        (*h)[i]->SetLineColor(color[type]);
-        (*h)[i]->SetFillColor(color[type]);
-        (*h)[i]->SetFillColorAlpha(color[type], 0.60);
-        (*h)[i]->SetMarkerSize(0);
-        (*h)[i]->SetLineWidth(1.0);
+    for (int i = 0; i < h.size(); ++i) {
+        for (int j = 1; j <= (*h[i])[0]->GetNbinsX(); ++j) {
+            double x = ((*h[i])[0]->GetBinLowEdge(j) + (*h[i])[0]->GetBinUpEdge(j)) / 2;
+            double dx = std::abs((*h[i])[0]->GetBinLowEdge(j) - (*h[i])[0]->GetBinUpEdge(j)) / 2;
+
+            result[i].SetPoint(j - 1, x, (*h[i])[0]->GetBinContent(j));
+            result[i].SetPointError(j - 1, dx, dx, (*h[i])[0]->GetBinError(j), (*h[i])[0]->GetBinError(j));
+        }
+
+        result[i]->SetMarkerStyle(style[type]);
+        result[i]->SetMarkerColor(color[type]);
+        result[i]->SetLineColor(color[type]);
+        result[i]->SetFillColorAlpha(color[type], 0.60);
+        result[i]->SetMarkerSize(0);
+        result[i]->SetLineWidth(1.0);
     }
 }
 
@@ -336,6 +346,17 @@ int congratulate(char const* config, char const* selections, char const* output)
         format(hists_ratio_pyquen_no_wide[i], 3);
     }
 
+    auto graphs_aa_jewel = get_graph(hists_aa_jewel, 0);
+    auto graphs_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1);
+    auto graphs_aa_pyquen = get_graph(hists_aa_pyquen, 2);
+    auto graphs_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3);
+    auto graphs_pp_jewel = get_graph(hists_pp_jewel, 0);
+    auto graphs_pp_pyquen = get_graph(hists_pp_pyquen, 2);
+    auto graphs_ratio_jewel = get_graph(hists_ratio_jewel, 0);
+    auto graphs_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1);
+    auto graphs_ratio_pyquen = get_graph(hists_ratio_pyquen, 2);
+    auto graphs_ratio_pyquen_no_wide = get_graph(hists_ratio_pyquen_no_wide, 3);
+
     /* size canvas */
     double panel_size = 500;
     double padding_width_left = 140;
@@ -464,26 +485,32 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
         if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
-        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same hist l");
-        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same hist l");
-        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same hist l");
-        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same hist l");
-        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same e3");
+        if (system == 2)    graphs_ratio_pyquen_no_wide[i][0].Draw("same 3");
+        if (system == 2)    graphs_ratio_pyquen_no_wide[i][0].Draw("same lX");
+        if (system == 2)    graphs_ratio_pyquen[i][0].Draw("same 3");
+        if (system == 2)    graphs_ratio_pyquen[i][0].Draw("same lX");
+        if (system == 2)    graphs_ratio_jewel[i][0].Draw("same 3");
+        if (system == 2)    graphs_ratio_jewel[i][0].Draw("same lX");
+        if (system == 2)    graphs_ratio_jewel_no_recoil[i][0].Draw("same 3");
+        if (system == 2)    graphs_ratio_jewel_no_recoil[i][0].Draw("same lX");
 
         if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
         if (system == 0)    (*hists_aa[i])[3]->Draw("same");
-        if (system == 0)    (*hists_aa_jewel[i])[0]->Draw("same le3");
-        if (system == 0)    (*hists_aa_jewel_no_recoil[i])[0]->Draw("same le3");
-        if (system == 0)    (*hists_aa_pyquen_no_wide[i])[0]->Draw("same le3");
-        if (system == 0)    (*hists_aa_pyquen[i])[0]->Draw("same le3");
+        if (system == 0)    graphs_aa_jewel[i][0].Draw("same 3");
+        if (system == 0)    graphs_aa_jewel[i][0].Draw("same lX");
+        if (system == 0)    graphs_aa_jewel_no_recoil[i][0].Draw("same 3");
+        if (system == 0)    graphs_aa_jewel_no_recoil[i][0].Draw("same lX");
+        if (system == 0)    graphs_aa_pyquen_no_wide[i][0].Draw("same 3");
+        if (system == 0)    graphs_aa_pyquen_no_wide[i][0].Draw("same lX");
+        if (system == 0)    graphs_aa_pyquen[i][0].Draw("same 3");
+        if (system == 0)    graphs_aa_pyquen[i][0].Draw("same lX");
 
         if (system == 1)    (*systs_pp[i])[0]->Draw("same e2");
         if (system == 1)    (*hists_pp[i])[0]->Draw("same");
-        if (system == 1)    (*hists_pp_jewel[i])[0]->Draw("same le3");
-        if (system == 1)    (*hists_pp_pyquen[i])[0]->Draw("same le3");
+        if (system == 1)    graphs_pp_jewel[i][0].Draw("same 3");
+        if (system == 1)    graphs_pp_jewel[i][0].Draw("same lX");
+        if (system == 1)    graphs_pp_pyquen[i][0].Draw("same 3");
+        if (system == 1)    graphs_pp_pyquen[i][0].Draw("same lX");
 
         line.Draw("l");
 
