@@ -329,21 +329,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             set_values(hists_ratio_pyquen[i], hists_aa_pyquen[i], hists_pp_pyquen[i]);
             set_values(hists_ratio_pyquen_no_wide[i], hists_aa_pyquen_no_wide[i], hists_pp_pyquen[i]);
         }
-
-        format(hists_aa[i], systs_aa[i], 2);
-        format(hists_pp[i], systs_pp[i], 2);
-        format(hists_ratio[i], systs_ratio[i], 2);
-
-        format(hists_aa_jewel[i], 0);
-        format(hists_aa_jewel_no_recoil[i], 1);
-        format(hists_aa_pyquen[i], 2);
-        format(hists_aa_pyquen_no_wide[i], 3);
-        format(hists_pp_jewel[i], 0);
-        format(hists_pp_pyquen[i], 2);
-        format(hists_ratio_jewel[i], 0);
-        format(hists_ratio_jewel_no_recoil[i], 1);
-        format(hists_ratio_pyquen[i], 2);
-        format(hists_ratio_pyquen_no_wide[i], 3);
     }
 
     auto graphs_aa_jewel = get_graph(hists_aa_jewel, 0);
