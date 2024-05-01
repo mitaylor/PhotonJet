@@ -18,6 +18,7 @@
 #include "TLatex.h"
 #include "TLine.h"
 #include "TCanvas.h"
+#include "TStyle.h"
 #include "TPad.h"
 #include "TGaxis.h"
 #include "TLegend.h"
