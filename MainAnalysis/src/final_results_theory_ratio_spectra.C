@@ -310,7 +310,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.07);
+    legend.SetTextSize(0.06);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS PbPb/pp", "plf");
@@ -335,15 +335,15 @@ int congratulate(char const* config, char const* selections, char const* output)
     
         pads[i]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
 
         if (system == 0)    latex.SetTextAlign(21);
-        if (system == 0)    latex.SetTextSize(0.07);
+        if (system == 0)    latex.SetTextSize(0.06);
         if (system == 0)    latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
 
         if (system == 2)    latex.SetTextAlign(21);
-        if (system == 2)    latex.SetTextSize(0.07);
+        if (system == 2)    latex.SetTextSize(0.06);
         if (system == 2)    latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
     }
 

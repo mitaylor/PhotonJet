@@ -325,7 +325,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.07);
+    legend.SetTextSize(0.06);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     if (ratio)      legend.AddEntry((*systs_ratio[0])[0], "PbPb/pp", "plf");
@@ -353,26 +353,26 @@ int congratulate(char const* config, char const* selections, char const* output)
     
         pads[i][0]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
 
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 50-90%");
 
         pads[i][1]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 30-50%");
 
         pads[i][2]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 10-30%");
 
         pads[i][3]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
     }
 
@@ -380,7 +380,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[nrows-1][2]->cd();
-    latex.SetTextSize(0.07);
+    latex.SetTextSize(0.06);
     if (ratio)      latex.SetTextAlign(11);
     if (ratio)      latex.DrawLatex(0.05, 0.78, (text_photon_pt).c_str());
     if (ratio)      latex.DrawLatex(0.05, 0.68, (text_photon_eta).c_str());
@@ -389,7 +389,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (spectra)    latex.DrawLatex(0.95, 0.28, (text_photon_eta).c_str());
 
     pads[nrows-1][3]->cd();
-    latex.SetTextSize(0.07);
+    latex.SetTextSize(0.06);
     if (ratio)      latex.SetTextAlign(11);
     if (ratio)      latex.DrawLatex(0.05, 0.78, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05, 0.68, (text_jet_alg).c_str());

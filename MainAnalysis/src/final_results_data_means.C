@@ -315,7 +315,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.07);
+    legend.SetTextSize(0.06);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     legend.AddEntry((*systs_means_aa[0])[0], "PbPb", "plf");
@@ -335,7 +335,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     
         pads[i]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.07);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.05, (text_jet_pt).c_str());
     }
 
