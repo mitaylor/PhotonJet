@@ -265,7 +265,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         set_pad(*pads[i][0], log);
         set_pad(*pads[i][1], log);
         set_pad(*pads[i][2], log);
-        set_pad(*pads[i][3]m log);
+        set_pad(*pads[i][3], log);
 
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i] * 0.999, 510, "S");
         
