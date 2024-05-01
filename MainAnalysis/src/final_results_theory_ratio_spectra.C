@@ -172,8 +172,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_pp = new TFile((base + input_pp).data(), "read");
 
     /* define kinematics and luminosity */
-    auto text_energy = "#sqrt{s_{NN}} = 5.02 TeV"s;
-    auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+    auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} (5.02 TeV)"s;
     auto text_cms = "CMS"s;
     auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
     auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
@@ -285,16 +284,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system < 2)     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.06/sf);
+    latex.SetTextSize(0.05/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_energy.c_str());
+    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
 
     TGraph line;
     if (system == 2)    line.SetPoint(0, xmin, 1);
@@ -359,10 +358,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (subsets)      latex.DrawLatex(0.95, 0.66, (text_jet_alg).c_str());
 
     pads[ncols-1]->cd();
-    latex.SetTextSize(0.07);
-    latex.SetTextAlign(31);
-    latex.DrawLatex(0.95, 0.9, (text_system).c_str());
-
     if (whole)      latex.SetTextSize(0.06);
     if (whole)      latex.SetTextAlign(31);
     if (whole)      latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());

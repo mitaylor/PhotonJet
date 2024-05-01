@@ -172,7 +172,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_pp = new TFile((base + input_pp).data(), "read");
 
     /* define kinematics and luminosity */
-    auto text_system = "#sqrt{s_{NN}} = 5.02 TeV, PbPb 1.69 nb^{-1}, pp 302 pb^{-1}"s;
+    auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} (5.02 TeV)"s;
     auto text_cms = "CMS"s;
     auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
     auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
@@ -299,13 +299,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.06/sf);
+    latex.SetTextSize(0.05/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
