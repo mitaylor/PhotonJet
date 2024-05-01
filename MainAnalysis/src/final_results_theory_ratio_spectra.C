@@ -172,13 +172,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_pp = new TFile((base + input_pp).data(), "read");
 
     /* define kinematics and luminosity */
-    auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} (5.02 TeV)"s;
+    auto text_system = "(5.02 TeV)"s;
     auto text_cms = "CMS"s;
     auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
     auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
     auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
     auto text_jet_alg = "anti-k_{T} R = 0.3"s;
     auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
+
+    if (system == 0) text_system = "PbPb 1.69 nb^{-1} " + text_system;
+    if (system == 1) text system = "pp 302 pb^{-1} " + text_system;
+    if (system == 2) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
 
     std::vector<history<TH1F>*> hists_aa(ncols);
     std::vector<history<TH1F>*> systs_aa(ncols);
@@ -350,7 +354,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 0)    latex.SetTextAlign(11);
         if (system == 0)    latex.SetTextSize(0.06);
-        if (system == 0)    latex.DrawLatex(0.05, 0.05, "Cent. 0-10%");
+        if (system == 0)    latex.DrawLatex(0.05, 0.78, "Cent. 0-10%");
 
         if (system == 2)    latex.SetTextAlign(11);
         if (system == 2)    latex.SetTextSize(0.06);
