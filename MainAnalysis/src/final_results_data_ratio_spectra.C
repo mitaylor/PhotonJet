@@ -422,6 +422,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (spectra && !log)   latex.DrawLatex(0.95, 0.60, (text_photon_eta).c_str());
     if (spectra && !log)   latex.DrawLatex(0.95, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
     if (spectra && !log)   latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
+
+    pads[0][0]->cd();
+    latex.SetTextSize(0.05);
     if (spectra && log)    latex.SetTextAlign(31);
     if (spectra && log)    latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_eta).c_str());
     if (spectra && log)    latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
