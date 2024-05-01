@@ -135,8 +135,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
-    auto subsets = conf->get<bool>("subsets");
-    auto whole = conf->get<bool>("whole");
+    // auto subsets = conf->get<bool>("subsets");
+    // auto whole = conf->get<bool>("whole");
     auto system = conf->get<int64_t>("system");
 
     auto sel = new configurer(selections);
@@ -303,10 +303,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (system == 2) ? 0.75 : 0.35;
-    auto legend_y_max = (system == 2) ? 0.85 : 0.45;
-    auto legend_x_min = (system == 2) ? 0.05 : 0.6;
-    auto legend_x_max = (system == 2) ? 0.4 : 0.95;
+    auto legend_y_min = (system == 2) ? 0.85 : 0.85;
+    auto legend_y_max = (system == 2) ? 0.95 : 0.95;
+    auto legend_x_min = (system == 2) ? 0.05 : 0.05;
+    auto legend_x_max = (system == 2) ? 0.4 : 0.4;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -336,34 +336,27 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
+        latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
-        if (system == 0)    latex.SetTextAlign(21);
+        if (system == 0)    latex.SetTextAlign(11);
         if (system == 0)    latex.SetTextSize(0.06);
-        if (system == 0)    latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
+        if (system == 0)    latex.DrawLatex(0.05, 0.05, "Cent. 0-10%");
 
-        if (system == 2)    latex.SetTextAlign(21);
+        if (system == 2)    latex.SetTextAlign(11);
         if (system == 2)    latex.SetTextSize(0.06);
-        if (system == 2)    latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
+        if (system == 2)    latex.DrawLatex(0.05, 0.05, "Cent. 0-10%");
     }
 
     pads[0]->cd();
     legend.Draw();
 
-    if (subsets)      latex.SetTextSize(0.06);
-    if (subsets)      latex.SetTextAlign(31);
-    if (subsets)      latex.DrawLatex(0.95, 0.9, (text_photon_pt).c_str());
-    if (subsets)      latex.DrawLatex(0.95, 0.82, (text_photon_eta).c_str());
-    if (subsets)      latex.DrawLatex(0.95, 0.74, (text_dphi + ", " + text_jet_eta).c_str());
-    if (subsets)      latex.DrawLatex(0.95, 0.66, (text_jet_alg).c_str());
-
     pads[ncols-1]->cd();
-    if (whole)      latex.SetTextSize(0.06);
-    if (whole)      latex.SetTextAlign(31);
-    if (whole)      latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (whole)      latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    latex.SetTextSize(0.06);
+    latex.SetTextAlign(31);
+    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if (system == 2)    canvas.SaveAs((set + "_final_theory_ratio_" + name + ".pdf").c_str());
     if (system == 1)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + ".pdf").c_str());
