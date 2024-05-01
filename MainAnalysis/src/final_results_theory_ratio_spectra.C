@@ -64,6 +64,31 @@ void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history
     }
 }
 
+void set_values(history<TH1F>* h, history<TH1F>* h_aa, history<TH1F>* h_pp)
+{
+    for (int i = 0; i < h->size(); ++i) {
+        (*h_aa)[i]->Scale(1/(*h_aa)[i]->Integral("width"));
+        (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
+
+        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
+            double aa_val = (*h_aa)[i]->GetBinContent(j);
+            double aa_stat_err = (*h_aa)[i]->GetBinError(j);
+            auto aa_stat_err_scale = aa_stat_err/aa_val;
+
+            double pp_val = (*h_pp)[0]->GetBinContent(j);
+            double pp_stat_err = (*h_pp)[0]->GetBinError(j);
+            auto pp_stat_err_scale = pp_stat_err/pp_val;
+
+            auto ratio = aa_val / pp_val;
+
+            auto stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
+
+            (*h)[i]->SetBinContent(j, ratio);
+            (*h)[i]->SetBinError(j, stat_err);
+        }
+    }
+}
+
 void set_systematics(history<TH1F>* h, history<TH1F>* s)
 {
 
@@ -80,7 +105,7 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
 
 void format(history<TH1F>* h, history<TH1F>* s, int system)
 {
-    static int style[3] = {20, 24, 20};
+    static int style[3] = {20, 20, 20};
     static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
 
     for (int i = 0; i < h->size(); ++i) {
@@ -98,6 +123,29 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
         (*s)[i]->SetFillColorAlpha(color[system], 0.60);
         (*s)[i]->SetMarkerSize(1.5);
         (*s)[i]->SetLineWidth(1.0);
+    }
+}
+
+void format(history<TH1F>* h, int type)
+{
+    static int style[8] = {20, 20, 20, 20, 20, 20, 20, 20};
+    static int color[8] = {TColor::GetColor("#23B4F8"), 
+                           TColor::GetColor("#6266E6"), 
+                           TColor::GetColor("#A471A4"),
+                           TColor::GetColor("#95278D"),
+                           TColor::GetColor("#DE1F2A"),
+                           TColor::GetColor("#FB8C2C"),
+                           TColor::GetColor("#D4BB8E"),
+                           TColor::GetColor("#8E9382")
+                           };
+
+    for (int i = 0; i < h->size(); ++i) {
+        (*h)[i]->SetMarkerStyle(style[type]);
+        (*h)[i]->SetMarkerColor(1);
+        (*h)[i]->SetLineColor(1);
+        (*h)[i]->SetFillColor(color[type]);
+        (*h)[i]->SetMarkerSize(0);
+        (*h)[i]->SetLineWidth(1.0);
     }
 }
 
@@ -128,7 +176,23 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_aa = conf->get<std::string>("input_aa");
     auto input_pp = conf->get<std::string>("input_pp");
 
+    auto input_aa_jewel = conf->get<std::string>("input_aa_jewel");
+    auto input_aa_jewel_no_recoil = conf->get<std::string>("input_aa_jewel_no_recoil");
+    auto input_aa_pyquen = conf->get<std::string>("input_aa_pyquen");
+    auto input_aa_pyquen_no_wide = conf->get<std::string>("input_aa_pyquen_no_wide");
+    auto input_pp_jewel = conf->get<std::string>("input_pp_jewel");
+    auto input_pp_pyquen = conf->get<std::string>("input_pp_pyquen");
+
+    auto tag_aa_jewel = conf->get<std::string>("tag_aa_jewel");
+    auto tag_aa_jewel_no_recoil = conf->get<std::string>("tag_aa_jewel_no_recoil");
+    auto tag_aa_pyquen = conf->get<std::string>("tag_aa_pyquen");
+    auto tag_aa_pyquen_no_wide = conf->get<std::string>("tag_aa_pyquen_no_wide");
+    auto tag_pp_jewel = conf->get<std::string>("tag_pp_jewel");
+    auto tag_pp_pyquen = conf->get<std::string>("tag_pp_pyquen");
+
     auto figures = conf->get<std::vector<std::string>>("figures");
+    auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
+
     auto name = conf->get<std::string>("name");
     auto types = conf->get<std::vector<int64_t>>("types");
 
@@ -171,6 +235,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_aa = new TFile((base + input_aa).data(), "read");
     auto file_pp = new TFile((base + input_pp).data(), "read");
 
+    auto file_aa_jewel = new TFile((base + input_aa_jewel).data(), "read");
+    auto file_aa_jewel_no_recoil = new TFile((base + input_aa_jewel_no_recoil).data(), "read");
+    auto file_aa_pyquen = new TFile((base + input_aa_pyquen).data(), "read");
+    auto file_aa_pyquen_no_wide = new TFile((base + input_aa_pyquen_no_wide).data(), "read");
+    auto file_pp_jewel = new TFile((base + input_pp_jewel).data(), "read");
+    auto file_pp_pyquen = new TFile((base + input_pp_pyquen).data(), "read");
+
     /* define kinematics and luminosity */
     auto text_system = "(5.02 TeV)"s;
     auto text_cms = "CMS"s;
@@ -190,6 +261,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<history<TH1F>*> systs_pp(ncols);
     std::vector<history<TH1F>*> hists_ratio(ncols);
     std::vector<history<TH1F>*> systs_ratio(ncols);
+
+    std::vector<history<TH1F>*> hists_aa_jewel(ncols);
+    std::vector<history<TH1F>*> hists_aa_jewel_no_recoil(ncols);
+    std::vector<history<TH1F>*> hists_aa_pyquen(ncols);
+    std::vector<history<TH1F>*> hists_aa_pyquen_no_wide(ncols);
+    std::vector<history<TH1F>*> hists_pp_jewel(ncols);
+    std::vector<history<TH1F>*> hists_pp_pyquen(ncols);
+    std::vector<history<TH1F>*> hists_ratio_jewel(ncols);
+    std::vector<history<TH1F>*> hists_ratio_jewel_no_recoil(ncols);
+    std::vector<history<TH1F>*> hists_ratio_pyquen(ncols);
+    std::vector<history<TH1F>*> hists_ratio_pyquen_no_wide(ncols);
 
     for (int i = 0; i < ncols; ++i) {
         /* define jet pT bounds */
@@ -215,14 +297,42 @@ int congratulate(char const* config, char const* selections, char const* output)
         hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
         systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
 
+        hists_aa_jewel[i] = new history<TH1F>(file_aa_jewel, tag_aa_jewel + "_" + theory_figures[i]);
+        hists_aa_jewel_no_recoil[i] = new history<TH1F>(file_aa_jewel_no_recoil, tag_aa_jewel_no_recoil + "_" + theory_figures[i]);
+        hists_aa_pyquen[i] = new history<TH1F>(file_aa_pyquen, tag_aa_pyquen + "_" + theory_figures[i]);
+        hists_aa_pyquen_no_wide[i] = new history<TH1F>(file_aa_pyquen_no_wide, tag_aa_pyquen_no_wide + "_" + theory_figures[i]);
+        hists_pp_jewel[i] = new history<TH1F>(file_pp_jewel, tag_pp_jewel + "_" + theory_figures[i]);
+        hists_pp_pyquen[i] = new history<TH1F>(file_pp_pyquen, tag_pp_pyquen + "_" + theory_figures[i]);
+        hists_ratio_jewel[i] = new history<TH1F>(*hists_aa_jewel[i], "hist_jewel");
+        hists_ratio_jewel_no_recoil[i] = new history<TH1F>(*hists_aa_jewel_no_recoil[i], "hist_jewel_no_recoil");
+        hists_ratio_pyquen[i] = new history<TH1F>(*hists_aa_pyquen[i], "hist_pyquen");
+        hists_ratio_pyquen_no_wide[i] = new history<TH1F>(*hists_aa_pyquen_no_wide[i], "hist_pyquen_no_wide");
+
         set_systematics(hists_aa[i], systs_aa[i]);
         set_systematics(hists_pp[i], systs_pp[i]);
         
-        if (system == 2)    set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
+        if (system == 2) {
+            set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
+            set_values(hists_ratio_jewel[i], hists_aa_jewel[i], hists_pp_jewel[i]);
+            set_values(hists_ratio_jewel_no_recoil[i], hists_aa_jewel_no_recoil[i], hists_pp_jewel[i]);
+            set_values(hists_ratio_pyquen[i], hists_aa_pyquen[i], hists_pp_pyquen[i]);
+            set_values(hists_ratio_pyquen_no_wide[i], hists_aa_pyquen_no_wide[i], hists_pp_pyquen[i]);
+        }
 
         format(hists_aa[i], systs_aa[i], 2);
         format(hists_pp[i], systs_pp[i], 2);
         format(hists_ratio[i], systs_ratio[i], 2);
+
+        format(hists_aa_jewel[i], 0);
+        format(hists_aa_jewel_no_recoil[i], 1);
+        format(hists_aa_pyquen[i], 2);
+        format(hists_aa_pyquen_no_wide[i], 3);
+        format(hists_pp_jewel[i], 0);
+        format(hists_pp_pyquen[i], 2);
+        format(hists_ratio_jewel[i], 0);
+        format(hists_ratio_jewel_no_recoil[i], 1);
+        format(hists_ratio_pyquen[i], 2);
+        format(hists_ratio_pyquen_no_wide[i], 3);
     }
 
     /* size canvas */
@@ -307,29 +417,44 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    double legend_y_min = (system == 2) ? 0.75 : 0.85;
-    double legend_y_max = (system == 2) ? 0.85 : 0.95;
-    double legend_x_min = (system == 2) ? 0.05 : 0.05;
-    double legend_x_max = (system == 2) ? 0.4 : 0.4;
+    double legend_y_min;
+    double legend_y_max;
+    double legend_x_min;
+    double legend_x_max;
 
-    if (subsets) legend_y_min = (system == 2) ? 0.75 : 0.75;
-    if (subsets) legend_y_max = (system == 2) ? 0.85 : 0.85;
-    if (subsets) legend_x_min = (system == 2) ? 0.05 : 0.5;
-    if (subsets) legend_x_max = (system == 2) ? 0.4 : 0.85;
+    if (system == 2)    legend_y_min = (subsets) ? 0.35 : 0.35;
+    if (system == 2)    legend_y_max = (subsets) ? 0.85 : 0.85;
+    if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.01;
+    if (system == 2)    legend_x_max = (subsets) ? 0.4 : 0.36;
 
-    if (whole) legend_y_min = (system == 2) ? 0.75 : 0.35;
-    if (whole) legend_y_max = (system == 2) ? 0.85 : 0.45;
-    if (whole) legend_x_min = (system == 2) ? 0.01 : 0.5;
-    if (whole) legend_x_max = (system == 2) ? 0.36 : 0.85;
+    if (system == 1)    legend_y_min = (subsets) ? 0.55 : 0.15;
+    if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.45;
+    if (system == 1)    legend_x_min = (subsets) ? 0.5 : 0.5;
+    if (system == 1)    legend_x_max = (subsets) ? 0.85 : 0.85;
+
+    if (system == 0)    legend_y_min = (subsets) ? 0.35 : 0.05;
+    if (system == 0)    legend_y_max = (subsets) ? 0.85 : 0.55;
+    if (system == 0)    legend_x_min = (subsets) ? 0.5 : 0.5;
+    if (system == 0)    legend_x_max = (subsets) ? 0.85 : 0.85;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
     legend.SetTextSize(0.06);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS PbPb/pp", "plf");
-    if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS PbPb", "plf");
-    if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS pp", "plf");
+    if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS data", "plf");
+    if (system == 2)    legend.AddEntry((*hists_ratio_jewel[0])[0], "JEWEL, recoil", "f");
+    if (system == 2)    legend.AddEntry((*hists_ratio_jewel_no_recoil[0])[0], "JEWEL, no recoil", "f");
+    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen_no_wide[0])[0], "PYQUEN", "f");
+    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen[0])[0], "PYQUEN, wide angle rad.", "f");
+    if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS data", "plf");
+    if (system == 0)    legend.AddEntry((*hists_aa_jewel[0])[0], "JEWEL, recoil", "f");
+    if (system == 0)    legend.AddEntry((*hists_aa_jewel_no_recoil[0])[0], "JEWEL, no recoil", "f");
+    if (system == 0)    legend.AddEntry((*hists_aa_pyquen_no_wide[0])[0], "PYQUEN", "f");
+    if (system == 0)    legend.AddEntry((*hists_aa_pyquen[0])[0], "PYQUEN, wide angle rad.", "f");
+    if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS data", "plf");
+    if (system == 1)    legend.AddEntry((*hists_pp_jewel[0])[0], "JEWEL", "f");
+    if (system == 1)    legend.AddEntry((*hists_pp_pyquen[0])[0], "PYQUEN", "f");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
@@ -338,10 +463,22 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
         if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
+        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same e3");
+        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same e3");
+        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same e3");
+        if (system == 2)    (*hists_aa_pyquen[i])[0]->Draw("same e3");
+
         if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
         if (system == 0)    (*hists_aa[i])[3]->Draw("same");
+        if (system == 0)    (*hists_aa_jewel[i])[0]->Draw("same e3");
+        if (system == 0)    (*hists_aa_jewel_no_recoil[i])[0]->Draw("same e3");
+        if (system == 0)    (*hists_aa_pyquen_no_wide[i])[0]->Draw("same e3");
+        if (system == 0)    (*hists_aa_pyquen[i])[0]->Draw("same e3");
+
         if (system == 1)    (*systs_pp[i])[0]->Draw("same e2");
         if (system == 1)    (*hists_pp[i])[0]->Draw("same");
+        if (system == 1)    (*hists_pp_jewel[i])[0]->Draw("same e3");
+        if (system == 1)    (*hists_pp_pyquen[i])[0]->Draw("same e3");
 
         line.Draw("l");
 
