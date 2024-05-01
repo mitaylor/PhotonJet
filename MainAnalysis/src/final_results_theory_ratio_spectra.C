@@ -170,6 +170,7 @@ void set_pad(TPad &pad)
     pad.SetBottomMargin(0);
     pad.SetTickx();
     pad.SetTicky();
+    P.SetLogx();
     pad.Draw();
 }
 
