@@ -456,18 +456,18 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS data", "plf");
-    if (system == 2)    legend.AddEntry((*hists_ratio_jewel[0])[0], "JEWEL, recoil", "lf");
-    if (system == 2)    legend.AddEntry(graphs_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 2)    legend.AddEntry(graphs_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 2)    legend.AddEntry(graphs_ratio_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_ratio_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_ratio_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS data", "plf");
-    if (system == 0)    legend.AddEntry(graphs_aa_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 0)    legend.AddEntry(graphs_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 0)    legend.AddEntry(graphs_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0)    legend.AddEntry(graphs_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_aa_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS data", "plf");
-    if (system == 1)    legend.AddEntry(graphs_pp_jewel[0], "JEWEL", "lf");
-    if (system == 1)    legend.AddEntry(graphs_pp_pyquen[0], "PYQUEN", "lf");
+    if (system == 1)    legend.AddEntry(&graphs_pp_jewel[0], "JEWEL", "lf");
+    if (system == 1)    legend.AddEntry(&graphs_pp_pyquen[0], "PYQUEN", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
