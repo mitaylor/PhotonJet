@@ -150,9 +150,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
-    auto subsets = conf->get<bool>("subsets");
-    auto whole = conf->get<bool>("whole");
-
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
