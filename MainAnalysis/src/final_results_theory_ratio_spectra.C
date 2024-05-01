@@ -156,7 +156,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
         result[i].SetLineColor(color[type]);
         result[i].SetFillColorAlpha(color[type], 0.60);
         result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(1.0);
+        result[i].SetLineWidth(2.0);
     }
 
     return result;
@@ -331,6 +331,10 @@ int congratulate(char const* config, char const* selections, char const* output)
             set_values(hists_ratio_pyquen[i], hists_aa_pyquen[i], hists_pp_pyquen[i]);
             set_values(hists_ratio_pyquen_no_wide[i], hists_aa_pyquen_no_wide[i], hists_pp_pyquen[i]);
         }
+
+        format(hists_aa[i], systs_aa[i], 2);
+        format(hists_pp[i], systs_pp[i], 2);
+        format(hists_ratio[i], systs_ratio[i], 2);
     }
 
     auto graphs_aa_jewel = get_graph(hists_aa_jewel, 0);
@@ -453,17 +457,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetBorderSize(0);
     if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS data", "plf");
     if (system == 2)    legend.AddEntry((*hists_ratio_jewel[0])[0], "JEWEL, recoil", "lf");
-    if (system == 2)    legend.AddEntry((*hists_ratio_jewel_no_recoil[0])[0], "JEWEL, no recoil", "lf");
-    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen_no_wide[0])[0], "PYQUEN", "lf");
-    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen[0])[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 2)    legend.AddEntry(graphs_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 2)    legend.AddEntry(graphs_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 2)    legend.AddEntry(graphs_ratio_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS data", "plf");
-    if (system == 0)    legend.AddEntry((*hists_aa_jewel[0])[0], "JEWEL, recoil", "lf");
-    if (system == 0)    legend.AddEntry((*hists_aa_jewel_no_recoil[0])[0], "JEWEL, no recoil", "lf");
-    if (system == 0)    legend.AddEntry((*hists_aa_pyquen_no_wide[0])[0], "PYQUEN", "lf");
-    if (system == 0)    legend.AddEntry((*hists_aa_pyquen[0])[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 0)    legend.AddEntry(graphs_aa_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 0)    legend.AddEntry(graphs_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 0)    legend.AddEntry(graphs_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0)    legend.AddEntry(graphs_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS data", "plf");
-    if (system == 1)    legend.AddEntry((*hists_pp_jewel[0])[0], "JEWEL", "lf");
-    if (system == 1)    legend.AddEntry((*hists_pp_pyquen[0])[0], "PYQUEN", "lf");
+    if (system == 1)    legend.AddEntry(graphs_pp_jewel[0], "JEWEL", "lf");
+    if (system == 1)    legend.AddEntry(graphs_pp_pyquen[0], "PYQUEN", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
