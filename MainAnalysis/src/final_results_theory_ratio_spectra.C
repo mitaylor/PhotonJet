@@ -135,8 +135,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
-    // auto subsets = conf->get<bool>("subsets");
-    // auto whole = conf->get<bool>("whole");
+    auto subsets = conf->get<bool>("subsets");
+    auto whole = conf->get<bool>("whole");
     auto system = conf->get<int64_t>("system");
 
     auto sel = new configurer(selections);
@@ -303,10 +303,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (system == 2) ? 0.85 : 0.85;
-    auto legend_y_max = (system == 2) ? 0.95 : 0.95;
-    auto legend_x_min = (system == 2) ? 0.05 : 0.05;
-    auto legend_x_max = (system == 2) ? 0.4 : 0.4;
+    double legend_y_min = (system == 2) ? 0.75 : 0.85;
+    double legend_y_max = (system == 2) ? 0.85 : 0.95;
+    double legend_x_min = (system == 2) ? 0.05 : 0.05;
+    double legend_x_max = (system == 2) ? 0.4 : 0.4;
+
+    if (subsets) legend_y_min = (system == 2) ? 0.75 : 0.75;
+    if (subsets) legend_y_max = (system == 2) ? 0.85 : 0.85;
+    if (subsets) legend_x_min = (system == 2) ? 0.05 : 0.6;
+    if (subsets) legend_x_max = (system == 2) ? 0.4 : 0.95;
+
+    if (whole) legend_y_min = (system == 2) ? 0.75 : 0.35;
+    if (whole) legend_y_max = (system == 2) ? 0.85 : 0.45;
+    if (whole) legend_x_min = (system == 2) ? 0.05 : 0.6;
+    if (whole) legend_x_max = (system == 2) ? 0.4 : 0.95;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
