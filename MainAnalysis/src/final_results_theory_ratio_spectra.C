@@ -18,6 +18,7 @@
 #include "TLatex.h"
 #include "TLine.h"
 #include "TCanvas.h"
+#include "TStyle.h"
 #include "TPad.h"
 #include "TGaxis.h"
 #include "TLegend.h"
@@ -416,6 +417,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     double xmin = (log) ? bdr[0] + 0.003 : bdr[0];
     double xmax = (log) ? bdr[1] : bdr[1] * 0.999;
+
+    gStyle->SetLineScalePS(1)
 
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
