@@ -88,7 +88,7 @@ std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*
     static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
 
     for (size_t i = 0; i < h.size(); ++i) {
-        for (size_t k = 0; k < h[0]->size(); ++k) {
+        for (int64_t k = 0; k < h[0]->size(); ++k) {
                 for (int j = 1; j <= (*h[i])[k]->GetNbinsX(); ++j) {
                     double x = (*h[i])[k]->GetBinCenter(j);
                     double dx = (*h[i])[k]->GetBinWidth(j)/2;
