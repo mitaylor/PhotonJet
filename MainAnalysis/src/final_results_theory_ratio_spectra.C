@@ -485,32 +485,32 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
         if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
-        if (system == 2)    graphs_ratio_pyquen_no_wide[i][0].Draw("same 3");
-        if (system == 2)    graphs_ratio_pyquen_no_wide[i][0].Draw("same lX");
-        if (system == 2)    graphs_ratio_pyquen[i][0].Draw("same 3");
-        if (system == 2)    graphs_ratio_pyquen[i][0].Draw("same lX");
-        if (system == 2)    graphs_ratio_jewel[i][0].Draw("same 3");
-        if (system == 2)    graphs_ratio_jewel[i][0].Draw("same lX");
-        if (system == 2)    graphs_ratio_jewel_no_recoil[i][0].Draw("same 3");
-        if (system == 2)    graphs_ratio_jewel_no_recoil[i][0].Draw("same lX");
+        if (system == 2)    graphs_ratio_pyquen_no_wide[i].Draw("same 3");
+        if (system == 2)    graphs_ratio_pyquen_no_wide[i].Draw("same lX");
+        if (system == 2)    graphs_ratio_pyquen[i].Draw("same 3");
+        if (system == 2)    graphs_ratio_pyquen[i].Draw("same lX");
+        if (system == 2)    graphs_ratio_jewel[i].Draw("same 3");
+        if (system == 2)    graphs_ratio_jewel[i].Draw("same lX");
+        if (system == 2)    graphs_ratio_jewel_no_recoil[i].Draw("same 3");
+        if (system == 2)    graphs_ratio_jewel_no_recoil[i].Draw("same lX");
 
         if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
         if (system == 0)    (*hists_aa[i])[3]->Draw("same");
-        if (system == 0)    graphs_aa_jewel[i][0].Draw("same 3");
-        if (system == 0)    graphs_aa_jewel[i][0].Draw("same lX");
-        if (system == 0)    graphs_aa_jewel_no_recoil[i][0].Draw("same 3");
-        if (system == 0)    graphs_aa_jewel_no_recoil[i][0].Draw("same lX");
-        if (system == 0)    graphs_aa_pyquen_no_wide[i][0].Draw("same 3");
-        if (system == 0)    graphs_aa_pyquen_no_wide[i][0].Draw("same lX");
-        if (system == 0)    graphs_aa_pyquen[i][0].Draw("same 3");
-        if (system == 0)    graphs_aa_pyquen[i][0].Draw("same lX");
+        if (system == 0)    graphs_aa_jewel[i].Draw("same 3");
+        if (system == 0)    graphs_aa_jewel[i].Draw("same lX");
+        if (system == 0)    graphs_aa_jewel_no_recoil[i].Draw("same 3");
+        if (system == 0)    graphs_aa_jewel_no_recoil[i].Draw("same lX");
+        if (system == 0)    graphs_aa_pyquen_no_wide[i].Draw("same 3");
+        if (system == 0)    graphs_aa_pyquen_no_wide[i].Draw("same lX");
+        if (system == 0)    graphs_aa_pyquen[i].Draw("same 3");
+        if (system == 0)    graphs_aa_pyquen[i].Draw("same lX");
 
         if (system == 1)    (*systs_pp[i])[0]->Draw("same e2");
         if (system == 1)    (*hists_pp[i])[0]->Draw("same");
-        if (system == 1)    graphs_pp_jewel[i][0].Draw("same 3");
-        if (system == 1)    graphs_pp_jewel[i][0].Draw("same lX");
-        if (system == 1)    graphs_pp_pyquen[i][0].Draw("same 3");
-        if (system == 1)    graphs_pp_pyquen[i][0].Draw("same lX");
+        if (system == 1)    graphs_pp_jewel[i].Draw("same 3");
+        if (system == 1)    graphs_pp_jewel[i].Draw("same lX");
+        if (system == 1)    graphs_pp_pyquen[i].Draw("same 3");
+        if (system == 1)    graphs_pp_pyquen[i].Draw("same lX");
 
         line.Draw("l");
 
