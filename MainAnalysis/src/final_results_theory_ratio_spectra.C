@@ -162,7 +162,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
     return result;
 }
 
-void set_pad(TPad &pad)
+void set_pad(TPad &pad, bool log)
 {
     pad.SetLeftMargin(0);
     pad.SetTopMargin(0);
@@ -170,7 +170,9 @@ void set_pad(TPad &pad)
     pad.SetBottomMargin(0);
     pad.SetTickx();
     pad.SetTicky();
-    pad.SetLogx();
+
+    if (log)    pad.SetLogx();
+
     pad.Draw();
 }
 
@@ -196,6 +198,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_aa_pyquen_no_wide = conf->get<std::string>("input_aa_pyquen_no_wide");
     auto input_pp_jewel = conf->get<std::string>("input_pp_jewel");
     auto input_pp_pyquen = conf->get<std::string>("input_pp_pyquen");
+
+    auto log = conf->get<bool>("log");
 
     auto tag_aa_jewel = conf->get<std::string>("tag_aa_jewel");
     auto tag_aa_jewel_no_recoil = conf->get<std::string>("tag_aa_jewel_no_recoil");
@@ -385,10 +389,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
         
-        set_pad(*pads[i]);
+        set_pad(*pads[i], log);
 
-        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin+0.003, xmax * 0.999, 510, "SG");
-        
+        if (log)    axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin + 0.003, xmax, 510, "SG");
+        if (!log)   axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+
         set_axis(*axis_x[i], sf);
 
         canvas.cd();
@@ -533,9 +538,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    if (system == 2)    canvas.SaveAs((set + "_final_theory_ratio_" + name + ".pdf").c_str());
-    if (system == 1)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + ".pdf").c_str());
-    if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + ".pdf").c_str());
+    if (system == 2 && log)    canvas.SaveAs((set + "_final_theory_ratio_" + name + "_log.pdf").c_str());
+    if (system == 1 && log)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.pdf").c_str());
+    if (system == 0 && log)    canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + "_log.pdf").c_str());
+
+    if (system == 2 && !log)   canvas.SaveAs((set + "_final_theory_ratio_" + name + ".pdf").c_str());
+    if (system == 1 && !log)   canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + ".pdf").c_str());
+    if (system == 0 && !log)   canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + ".pdf").c_str());
 
     in(output, []() {});
 

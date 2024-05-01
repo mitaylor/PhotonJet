@@ -101,7 +101,7 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
     }
 }
 
-void set_pad(TPad &pad)
+void set_pad(TPad &pad, bool log)
 {
     pad.SetLeftMargin(0);
     pad.SetTopMargin(0);
@@ -109,6 +109,9 @@ void set_pad(TPad &pad)
     pad.SetBottomMargin(0);
     pad.SetTickx();
     pad.SetTicky();
+
+    if (log)    pad.SetLogx();
+
     pad.Draw();
 }
 
@@ -127,6 +130,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto input_aa = conf->get<std::string>("input_aa");
     auto input_pp = conf->get<std::string>("input_pp");
+
+    auto log = conf->get<bool>("log");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto name = conf->get<std::string>("name");
@@ -257,10 +262,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i][2] = new TPad("P3", "", pad_x0 + pad_dx * 2, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * (i + 1), 0);
         pads[i][3] = new TPad("P4", "", pad_x0 + pad_dx * 3, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * (i + 1), 0);
         
-        set_pad(*pads[i][0]);
-        set_pad(*pads[i][1]);
-        set_pad(*pads[i][2]);
-        set_pad(*pads[i][3]);
+        set_pad(*pads[i][0], log);
+        set_pad(*pads[i][1], log);
+        set_pad(*pads[i][2], log);
+        set_pad(*pads[i][3]m log);
 
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i], ymaxs[i] * 0.999, 510, "S");
         
@@ -269,10 +274,14 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     canvas.cd();
 
-    axis_x[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
-    axis_x[1] = new TGaxis(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
-    axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
-    axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+    if (log)    axis_x[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+    if (log)    axis_x[1] = new TGaxis(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+    if (log)    axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+    if (log)    axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax * 0.999, 510, "S");
+    if (log)    axis_x[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin + 0.003, xmax, 510, "SG");
+    if (log)    axis_x[1] = new TGaxis(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin + 0.003, xmax, 510, "SG");
+    if (log)    axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin + 0.003, xmax, 510, "SG");
+    if (log)    axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin + 0.003, xmax, 510, "SG");
 
     set_axis(*axis_x[0], sf);
     set_axis(*axis_x[1], sf);
@@ -391,8 +400,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (spectra)    latex.DrawLatex(0.95, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
     if (spectra)    latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
 
-    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
-    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
+    if (ratio && log)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.pdf").c_str());
+    if (spectra && log)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.pdf").c_str());
+
+    if (ratio && !log)     canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
+    if (spectra && !log)   canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
 
     in(output, []() {});
 
