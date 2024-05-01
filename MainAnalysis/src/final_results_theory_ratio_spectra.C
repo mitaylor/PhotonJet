@@ -310,13 +310,13 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (subsets) legend_y_min = (system == 2) ? 0.75 : 0.75;
     if (subsets) legend_y_max = (system == 2) ? 0.85 : 0.85;
-    if (subsets) legend_x_min = (system == 2) ? 0.05 : 0.6;
-    if (subsets) legend_x_max = (system == 2) ? 0.4 : 0.95;
+    if (subsets) legend_x_min = (system == 2) ? 0.05 : 0.5;
+    if (subsets) legend_x_max = (system == 2) ? 0.4 : 0.85;
 
     if (whole) legend_y_min = (system == 2) ? 0.75 : 0.35;
     if (whole) legend_y_max = (system == 2) ? 0.85 : 0.45;
-    if (whole) legend_x_min = (system == 2) ? 0.05 : 0.6;
-    if (whole) legend_x_max = (system == 2) ? 0.4 : 0.95;
+    if (whole) legend_x_min = (system == 2) ? 0.01 : 0.5;
+    if (whole) legend_x_max = (system == 2) ? 0.36 : 0.85;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
