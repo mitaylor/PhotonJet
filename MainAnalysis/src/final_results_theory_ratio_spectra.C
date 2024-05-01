@@ -144,6 +144,7 @@ void format(history<TH1F>* h, int type)
         (*h)[i]->SetMarkerColor(1);
         (*h)[i]->SetLineColor(1);
         (*h)[i]->SetFillColor(color[type]);
+        (*s)[i]->SetFillColorAlpha(color[type], 0.40);
         (*h)[i]->SetMarkerSize(0);
         (*h)[i]->SetLineWidth(1.0);
     }
@@ -466,7 +467,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same e3");
         if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same e3");
         if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same e3");
-        if (system == 2)    (*hists_aa_pyquen[i])[0]->Draw("same e3");
+        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same e3");
 
         if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
         if (system == 0)    (*hists_aa[i])[3]->Draw("same");
