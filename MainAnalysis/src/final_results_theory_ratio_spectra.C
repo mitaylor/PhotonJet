@@ -417,10 +417,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    double legend_y_min;
-    double legend_y_max;
-    double legend_x_min;
-    double legend_x_max;
+    double legend_y_min = 0;
+    double legend_y_max = 0;
+    double legend_x_min = 0;
+    double legend_x_max = 0;
 
     if (system == 2)    legend_y_min = (subsets) ? 0.35 : 0.35;
     if (system == 2)    legend_y_max = (subsets) ? 0.85 : 0.85;
