@@ -444,18 +444,18 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS data", "plf");
-    if (system == 2)    legend.AddEntry((*hists_ratio_jewel[0])[0], "JEWEL, recoil", "f");
-    if (system == 2)    legend.AddEntry((*hists_ratio_jewel_no_recoil[0])[0], "JEWEL, no recoil", "f");
-    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen_no_wide[0])[0], "PYQUEN", "f");
-    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen[0])[0], "PYQUEN, wide angle rad.", "f");
+    if (system == 2)    legend.AddEntry((*hists_ratio_jewel[0])[0], "JEWEL, recoil", "lf");
+    if (system == 2)    legend.AddEntry((*hists_ratio_jewel_no_recoil[0])[0], "JEWEL, no recoil", "lf");
+    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen_no_wide[0])[0], "PYQUEN", "lf");
+    if (system == 2)    legend.AddEntry((*hists_ratio_pyquen[0])[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS data", "plf");
-    if (system == 0)    legend.AddEntry((*hists_aa_jewel[0])[0], "JEWEL, recoil", "f");
-    if (system == 0)    legend.AddEntry((*hists_aa_jewel_no_recoil[0])[0], "JEWEL, no recoil", "f");
-    if (system == 0)    legend.AddEntry((*hists_aa_pyquen_no_wide[0])[0], "PYQUEN", "f");
-    if (system == 0)    legend.AddEntry((*hists_aa_pyquen[0])[0], "PYQUEN, wide angle rad.", "f");
+    if (system == 0)    legend.AddEntry((*hists_aa_jewel[0])[0], "JEWEL, recoil", "lf");
+    if (system == 0)    legend.AddEntry((*hists_aa_jewel_no_recoil[0])[0], "JEWEL, no recoil", "lf");
+    if (system == 0)    legend.AddEntry((*hists_aa_pyquen_no_wide[0])[0], "PYQUEN", "lf");
+    if (system == 0)    legend.AddEntry((*hists_aa_pyquen[0])[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS data", "plf");
-    if (system == 1)    legend.AddEntry((*hists_pp_jewel[0])[0], "JEWEL", "f");
-    if (system == 1)    legend.AddEntry((*hists_pp_pyquen[0])[0], "PYQUEN", "f");
+    if (system == 1)    legend.AddEntry((*hists_pp_jewel[0])[0], "JEWEL", "lf");
+    if (system == 1)    legend.AddEntry((*hists_pp_pyquen[0])[0], "PYQUEN", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
@@ -464,10 +464,14 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
         if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
-        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same le3");
-        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same le3");
-        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same le3");
-        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same le3");
+        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same 3");
+        if (system == 2)    (*hists_ratio_jewel[i])[0]->Draw("same lX");
+        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same 3");
+        if (system == 2)    (*hists_ratio_jewel_no_recoil[i])[0]->Draw("same lX");
+        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same 3");
+        if (system == 2)    (*hists_ratio_pyquen_no_wide[i])[0]->Draw("same lX");
+        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same 3");
+        if (system == 2)    (*hists_ratio_pyquen[i])[0]->Draw("same lX");
 
         if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
         if (system == 0)    (*hists_aa[i])[3]->Draw("same");
