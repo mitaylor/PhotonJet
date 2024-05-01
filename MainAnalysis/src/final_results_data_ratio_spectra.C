@@ -89,13 +89,12 @@ std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*
 
     for (size_t i = 0; i < h.size(); ++i) {
         for (int64_t k = 0; k < h[0]->size(); ++k) {
-                for (int j = 1; j <= (*h[i])[k]->GetNbinsX(); ++j) {
-                    double x = (*h[i])[k]->GetBinCenter(j);
-                    double dx = (*h[i])[k]->GetBinWidth(j)/2;
+            for (int j = 1; j <= (*h[i])[k]->GetNbinsX(); ++j) {
+                double x = (*h[i])[k]->GetBinCenter(j);
+                double dx = (*h[i])[k]->GetBinWidth(j)/2;
 
-                    result[i][k].SetPoint(j - 1, x, (*h[i])[k]->GetBinContent(j));
-                    result[i][k].SetPointError(j - 1, dx, dx, (*h[i])[k]->GetBinError(j), (*h[i])[k]->GetBinError(j));
-                }
+                result[i][k].SetPoint(j - 1, x, (*h[i])[k]->GetBinContent(j));
+                result[i][k].SetPointError(j - 1, dx, dx, (*h[i])[k]->GetBinError(j), (*h[i])[k]->GetBinError(j));
             }
 
             result[i][k].SetMarkerStyle(style[system]);
