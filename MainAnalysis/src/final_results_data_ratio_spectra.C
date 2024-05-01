@@ -78,27 +78,34 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
     }
 }
 
-void format(history<TH1F>* h, history<TH1F>* s, int system)
+std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*> h, int system)
 {
-    static int style[3] = {20, 24, 20};
+    std::vector<std::vector<TGraphAsymmErrors>> result(h.size(), std::vector<TGraphAsymmErrors>(h[0]->size()));
+
+    static int style[3] = {20, 20, 20};
     static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
 
-    for (int i = 0; i < h->size(); ++i) {
-        (*h)[i]->SetMarkerStyle(style[system]);
-        (*h)[i]->SetMarkerColor(1);
-        (*h)[i]->SetLineColor(1);
-        (*h)[i]->SetFillColor(color[system]);
-        (*h)[i]->SetMarkerSize(1.5);
-        (*h)[i]->SetLineWidth(1.0);
+    for (size_t i = 0; i < h.size(); ++i) {
+        for (size_t k = 0; k < h[0]->size(); ++k) {
+                for (int j = 1; j <= (*h[i])[k]->GetNbinsX(); ++j) {
+                    double x = (*h[i])[k]->GetBinCenter(j);
+                    double dx = (*h[i])[k]->GetBinWidth(j)/2;
 
-        (*s)[i]->SetMarkerStyle(style[system]);
-        (*s)[i]->SetMarkerColor(1);
-        (*s)[i]->SetLineColor(1);
-        (*s)[i]->SetFillColor(color[system]);
-        (*s)[i]->SetFillColorAlpha(color[system], 0.60);
-        (*s)[i]->SetMarkerSize(1.5);
-        (*s)[i]->SetLineWidth(1.0);
+                    result[i][k].SetPoint(j - 1, x, (*h[i])[k]->GetBinContent(j));
+                    result[i][k].SetPointError(j - 1, dx, dx, (*h[i])[k]->GetBinError(j), (*h[i])[k]->GetBinError(j));
+                }
+            }
+
+            result[i][k].SetMarkerStyle(style[system]);
+            result[i][k].SetMarkerColor(1);
+            result[i][k].SetLineColor(1);
+            result[i][k].SetFillColorAlpha(color[system], 0.60);
+            result[i][k].SetMarkerSize(1.5);
+            result[i][k].SetLineWidth(1.0);    
+        }
     }
+
+    return result;
 }
 
 void set_pad(TPad &pad, bool log)
@@ -220,11 +227,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         set_systematics(hists_pp[i], systs_pp[i]);
         
         if (ratio)      set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
-
-        format(hists_aa[i], systs_aa[i], 0);
-        format(hists_pp[i], systs_pp[i], 1);
-        format(hists_ratio[i], systs_ratio[i], 2);
     }
+
+    auto graphs_hists_aa = get_graph(hists_aa, 0);
+    auto graphs_systs_aa = get_graph(systs_aa, 0);
+    auto graphs_hists_pp = get_graph(hists_pp, 1);
+    auto graphs_systs_pp = get_graph(systs_pp, 1);
+    auto graphs_hists_ratio = get_graph(hists_ratio, 2);
+    auto graphs_systs_ratio = get_graph(systs_ratio, 2);
 
     /* size canvas */
     double panel_size = 500;
@@ -337,9 +347,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetTextSize(0.05);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    if (ratio)      legend.AddEntry((*systs_ratio[0])[0], "PbPb/pp", "plf");
-    if (spectra)    legend.AddEntry((*systs_aa[0])[0], "PbPb", "plf");
-    if (spectra)    legend.AddEntry((*systs_pp[0])[0], "pp", "plf");
+    if (ratio)      legend.AddEntry(&graphs_systs_ratio[0][0], "PbPb/pp", "plf");
+    if (spectra)    legend.AddEntry(&graphs_systs_aa[0][0], "PbPb", "plf");
+    if (spectra)    legend.AddEntry(&graphs_systs_pp[0][0], "pp", "plf");
 
     for (int i = 0; i < nrows; i++) {
         for(int j = 0; j < npads; j++)
@@ -348,12 +358,12 @@ int congratulate(char const* config, char const* selections, char const* output)
 
             worlds[i]->Draw("axis");
 
-            if (ratio)      (*systs_ratio[i])[j]->Draw("same e2");
-            if (ratio)      (*hists_ratio[i])[j]->Draw("same");
-            if (spectra)    (*systs_aa[i])[j]->Draw("same e2");
-            if (spectra)    (*systs_pp[i])[0]->Draw("same e2");
-            if (spectra)    (*hists_aa[i])[j]->Draw("same");
-            if (spectra)    (*hists_pp[i])[0]->Draw("same");
+            if (ratio)      graphs_systs_ratio[i][j].Draw("same 2");
+            if (ratio)      graphs_hists_ratio[i][j].Draw("same PZ");
+            if (spectra)    graphs_systs_aa[i][j].Draw("same 2");
+            if (spectra)    graphs_systs_pp[i][0].Draw("same 2");
+            if (spectra)    graphs_hists_aa[i][j].Draw("same PZ");
+            if (spectra)    graphs_hists_pp[i][0].Draw("same PZ");
 
             line.Draw("l");
         }

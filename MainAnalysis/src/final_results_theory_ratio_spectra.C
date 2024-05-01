@@ -105,29 +105,6 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
     }
 }
 
-void format(history<TH1F>* h, history<TH1F>* s, int system)
-{
-    static int style[3] = {20, 20, 20};
-    static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
-
-    for (int i = 0; i < h->size(); ++i) {
-        (*h)[i]->SetMarkerStyle(style[system]);
-        (*h)[i]->SetMarkerColor(1);
-        (*h)[i]->SetLineColor(1);
-        (*h)[i]->SetFillColor(color[system]);
-        (*h)[i]->SetMarkerSize(1.5);
-        (*h)[i]->SetLineWidth(1.0);
-
-        (*s)[i]->SetMarkerStyle(style[system]);
-        (*s)[i]->SetMarkerColor(1);
-        (*s)[i]->SetLineColor(1);
-        (*s)[i]->SetFillColor(color[system]);
-        (*s)[i]->SetFillColorAlpha(color[system], 0.60);
-        (*s)[i]->SetMarkerSize(1.5);
-        (*s)[i]->SetLineWidth(1.0);
-    }
-}
-
 std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int format, int system)
 {
     std::vector<TGraphAsymmErrors> result(h.size());
@@ -375,10 +352,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             set_values(hists_ratio_pyquen[i], hists_aa_pyquen[i], hists_pp_pyquen[i]);
             set_values(hists_ratio_pyquen_no_wide[i], hists_aa_pyquen_no_wide[i], hists_pp_pyquen[i]);
         }
-
-        // format(hists_aa[i], systs_aa[i], 2);
-        // format(hists_pp[i], systs_pp[i], 2);
-        // format(hists_ratio[i], systs_ratio[i], 2);
     }
 
     auto graphs_hists_aa = get_graph(hists_aa, 2, 0);
