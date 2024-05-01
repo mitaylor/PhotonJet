@@ -158,6 +158,8 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
         result[i].SetMarkerSize(0);
         result[i].SetLineWidth(1.0);
     }
+
+    return result;
 }
 
 void set_pad(TPad &pad)
