@@ -318,10 +318,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (ratio) ? 0.61 : 0.61;
-    auto legend_y_max = (ratio) ? 0.75 : 0.75;
-    auto legend_x_min = (ratio) ? 0.65 : 0.2;
-    auto legend_x_max = (ratio) ? 0.95 : 0.5;
+    auto legend_y_min = (ratio) ? 0.66 : 0.59;
+    auto legend_y_max = (ratio) ? 0.73 : 0.73;
+    auto legend_x_min = (ratio) ? 0.65 : 0.3;
+    auto legend_x_max = (ratio) ? 0.95 : 0.6;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
