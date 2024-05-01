@@ -305,14 +305,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
 
     /* declare legend */
-    auto legend_y_min = 0.75;
+    auto legend_y_min = 0.88;
     auto legend_y_max = 0.95;
     auto legend_x_min = 0.05;
-    auto legend_x_max = 0.4;
+    auto legend_x_max = 0.35;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.06);
+    legend.SetTextSize(0.05);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     legend.AddEntry((*systs_means_aa[0])[0], "PbPb", "plf");
@@ -340,7 +340,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[ncols-1]->cd();
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.05);
     latex.SetTextAlign(31);
     latex.DrawLatex(0.95, 0.9, (text_photon_pt).c_str());
     latex.DrawLatex(0.95, 0.82, (text_photon_eta).c_str());
