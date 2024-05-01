@@ -340,10 +340,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    auto legend_y_min = (ratio) ? 0.66 : 0.59;
-    auto legend_y_max = (ratio) ? 0.73 : 0.73;
-    auto legend_x_min = (ratio) ? 0.65 : 0.3;
-    auto legend_x_max = (ratio) ? 0.95 : 0.6;
+    double legend_y_min = 0;
+    double legend_y_max = 0;
+    double legend_x_min = 0;
+    double legend_x_max = 0;
+
+    if (!log)   legend_y_min = (ratio) ? 0.66 : 0.59;
+    if (!log)   legend_y_max = (ratio) ? 0.73 : 0.73;
+    if (!log)   legend_x_min = (ratio) ? 0.65 : 0.3;
+    if (!log)   legend_x_max = (ratio) ? 0.95 : 0.6;
+
+    if (log)    legend_y_min = (ratio) ? 0.66 : 0.59;
+    if (log)    legend_y_max = (ratio) ? 0.73 : 0.73;
+    if (log)    legend_x_min = (ratio) ? 0.65 : 0.05;
+    if (log)    legend_x_max = (ratio) ? 0.95 : 0.35;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -407,11 +417,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (ratio)      latex.DrawLatex(0.05, 0.60, (text_photon_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05, 0.44, (text_jet_alg).c_str());
-    if (spectra)    latex.SetTextAlign(31);
-    if (spectra)    latex.DrawLatex(0.95, 0.68, (text_photon_pt).c_str());
-    if (spectra)    latex.DrawLatex(0.95, 0.60, (text_photon_eta).c_str());
-    if (spectra)    latex.DrawLatex(0.95, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
-    if (spectra)    latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
+    if (spectra && !log)   latex.SetTextAlign(31);
+    if (spectra && !log)   latex.DrawLatex(0.95, 0.68, (text_photon_pt).c_str());
+    if (spectra && !log)   latex.DrawLatex(0.95, 0.60, (text_photon_eta).c_str());
+    if (spectra && !log)   latex.DrawLatex(0.95, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
+    if (spectra && !log)   latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
+    if (spectra && log)    latex.SetTextAlign(31);
+    if (spectra && log)    latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_eta).c_str());
+    if (spectra && log)    latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
+    if (spectra && log)    latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
+    if (spectra && log)    latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
 
     if (ratio && log)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.pdf").c_str());
     if (spectra && log)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.pdf").c_str());
