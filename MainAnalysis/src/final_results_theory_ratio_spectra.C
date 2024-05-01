@@ -435,8 +435,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.45 : 0.45;
-    if (system == 2)    legend_y_max = (subsets) ? 0.80 : 0.80;
+    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.48;
+    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.83;
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.05;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
