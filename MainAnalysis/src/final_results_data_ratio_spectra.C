@@ -409,14 +409,15 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[nrows-1][0]->cd();
-    legend.Draw();
+    if (ratio)             legend.Draw();
+    if (spectra && !log)   legend.Draw();
 
     latex.SetTextSize(0.05);
-    if (ratio)      latex.SetTextAlign(11);
-    if (ratio)      latex.DrawLatex(0.05, 0.68, (text_photon_pt).c_str());
-    if (ratio)      latex.DrawLatex(0.05, 0.60, (text_photon_eta).c_str());
-    if (ratio)      latex.DrawLatex(0.05, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
-    if (ratio)      latex.DrawLatex(0.05, 0.44, (text_jet_alg).c_str());
+    if (ratio)             latex.SetTextAlign(11);
+    if (ratio)             latex.DrawLatex(0.05, 0.68, (text_photon_pt).c_str());
+    if (ratio)             latex.DrawLatex(0.05, 0.60, (text_photon_eta).c_str());
+    if (ratio)             latex.DrawLatex(0.05, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
+    if (ratio)             latex.DrawLatex(0.05, 0.44, (text_jet_alg).c_str());
     if (spectra && !log)   latex.SetTextAlign(31);
     if (spectra && !log)   latex.DrawLatex(0.95, 0.68, (text_photon_pt).c_str());
     if (spectra && !log)   latex.DrawLatex(0.95, 0.60, (text_photon_eta).c_str());
@@ -425,6 +426,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[0][0]->cd();
     latex.SetTextSize(0.05);
+    if (spectra && log)    legend.Draw();
+
     if (spectra && log)    latex.SetTextAlign(31);
     if (spectra && log)    latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_eta).c_str());
     if (spectra && log)    latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
