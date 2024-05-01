@@ -437,22 +437,22 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 2)    legend_y_min = (subsets) ? 0.45 : 0.45;
     if (system == 2)    legend_y_max = (subsets) ? 0.85 : 0.85;
-    if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.01;
-    if (system == 2)    legend_x_max = (subsets) ? 0.4 : 0.36;
+    if (system == 2)    legend_x_min = (subsets) ? 0.01 : 0.01;
+    if (system == 2)    legend_x_max = (subsets) ? 0.031 : 0.31;
 
     if (system == 1)    legend_y_min = (subsets) ? 0.55 : 0.21;
     if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.45;
-    if (system == 1)    legend_x_min = (subsets) ? 0.5 : 0.5;
-    if (system == 1)    legend_x_max = (subsets) ? 0.85 : 0.85;
+    if (system == 1)    legend_x_min = (subsets) ? 0.4 : 0.4;
+    if (system == 1)    legend_x_max = (subsets) ? 0.7 : 0.7;
 
     if (system == 0)    legend_y_min = (subsets) ? 0.45 : 0.1;
     if (system == 0)    legend_y_max = (subsets) ? 0.85 : 0.5;
-    if (system == 0)    legend_x_min = (subsets) ? 0.5 : 0.5;
-    if (system == 0)    legend_x_max = (subsets) ? 0.85 : 0.85;
+    if (system == 0)    legend_x_min = (subsets) ? 0.4 : 0.4;
+    if (system == 0)    legend_x_max = (subsets) ? 0.7 : 0.7;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.06);
+    legend.SetTextSize(0.05);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS data", "plf");
