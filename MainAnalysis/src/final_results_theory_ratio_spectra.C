@@ -129,14 +129,14 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
 void format(history<TH1F>* h, int type)
 {
     static int style[8] = {20, 20, 20, 20, 20, 20, 20, 20};
-    static int color[8] = {TColor::GetColor("#23B4F8"), 
-                           TColor::GetColor("#6266E6"), 
-                           TColor::GetColor("#A471A4"),
-                           TColor::GetColor("#95278D"),
-                           TColor::GetColor("#DE1F2A"),
-                           TColor::GetColor("#FB8C2C"),
-                           TColor::GetColor("#D4BB8E"),
-                           TColor::GetColor("#8E9382")
+    static int color[8] = {TColor::GetColor("#4492D8"), 
+                           TColor::GetColor("#95DADD"), 
+                           TColor::GetColor("#E5631D"),
+                           TColor::GetColor("#BB2112"),
+                           TColor::GetColor("#FDA82D"),
+                           TColor::GetColor("#B9AB74"),
+                           TColor::GetColor("#8235B4"),
+                           TColor::GetColor("#A86B5B")
                            };
 
     for (int i = 0; i < h->size(); ++i) {
@@ -423,18 +423,18 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.35 : 0.35;
+    if (system == 2)    legend_y_min = (subsets) ? 0.45 : 0.45;
     if (system == 2)    legend_y_max = (subsets) ? 0.85 : 0.85;
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.01;
     if (system == 2)    legend_x_max = (subsets) ? 0.4 : 0.36;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.55 : 0.15;
+    if (system == 1)    legend_y_min = (subsets) ? 0.55 : 0.21;
     if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.45;
     if (system == 1)    legend_x_min = (subsets) ? 0.5 : 0.5;
     if (system == 1)    legend_x_max = (subsets) ? 0.85 : 0.85;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.35 : 0.05;
-    if (system == 0)    legend_y_max = (subsets) ? 0.85 : 0.55;
+    if (system == 0)    legend_y_min = (subsets) ? 0.45 : 0.1;
+    if (system == 0)    legend_y_max = (subsets) ? 0.85 : 0.5;
     if (system == 0)    legend_x_min = (subsets) ? 0.5 : 0.5;
     if (system == 0)    legend_x_max = (subsets) ? 0.85 : 0.85;
 
