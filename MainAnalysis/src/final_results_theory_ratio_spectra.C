@@ -127,6 +127,44 @@ void format(history<TH1F>* h, history<TH1F>* s, int system)
     }
 }
 
+std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int format, int system)
+{
+    std::vector<TGraphAsymmErrors> result(h.size());
+
+    static int style[3] = {20, 20, 20};
+    static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
+
+    for (size_t i = 0; i < h.size(); ++i) {
+        if (system == 2 || system == 0) {
+            for (int j = 1; j <= (*h[i])[3]->GetNbinsX(); ++j) {
+                double x = (*h[i])[3]->GetBinCenter(j);
+                double dx = (*h[i])[3]->GetBinWidth(j);
+
+                result[i].SetPoint(j - 1, x, (*h[i])[3]->GetBinContent(j));
+                result[i].SetPointError(j - 1, dx, dx, (*h[i])[3]->GetBinError(j), (*h[i])[3]->GetBinError(j));
+            }
+        }
+        else {
+            for (int j = 1; j <= (*h[i])[0]->GetNbinsX(); ++j) {
+                double x = (*h[i])[0]->GetBinCenter(j);
+                double dx = (*h[i])[0]->GetBinWidth(j);
+
+                result[i].SetPoint(j - 1, x, (*h[i])[0]->GetBinContent(j));
+                result[i].SetPointError(j - 1, dx, dx, (*h[i])[0]->GetBinError(j), (*h[i])[0]->GetBinError(j));
+            }
+        }
+
+        result[i].SetMarkerStyle(style[format]);
+        result[i].SetMarkerColor(1);
+        result[i].SetLineColor(1);
+        result[i].SetFillColorAlpha(color[format], 0.60);
+        result[i].SetMarkerSize(1.5);
+        result[i].SetLineWidth(1.0);
+    }
+
+    return result;
+}
+
 std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type)
 {
     std::vector<TGraphAsymmErrors> result(h.size());
@@ -337,21 +375,28 @@ int congratulate(char const* config, char const* selections, char const* output)
             set_values(hists_ratio_pyquen_no_wide[i], hists_aa_pyquen_no_wide[i], hists_pp_pyquen[i]);
         }
 
-        format(hists_aa[i], systs_aa[i], 2);
-        format(hists_pp[i], systs_pp[i], 2);
-        format(hists_ratio[i], systs_ratio[i], 2);
+        // format(hists_aa[i], systs_aa[i], 2);
+        // format(hists_pp[i], systs_pp[i], 2);
+        // format(hists_ratio[i], systs_ratio[i], 2);
     }
 
-    auto graphs_aa_jewel = get_graph(hists_aa_jewel, 0);
-    auto graphs_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1);
-    auto graphs_aa_pyquen = get_graph(hists_aa_pyquen, 2);
-    auto graphs_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3);
-    auto graphs_pp_jewel = get_graph(hists_pp_jewel, 0);
-    auto graphs_pp_pyquen = get_graph(hists_pp_pyquen, 2);
-    auto graphs_ratio_jewel = get_graph(hists_ratio_jewel, 0);
-    auto graphs_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1);
-    auto graphs_ratio_pyquen = get_graph(hists_ratio_pyquen, 2);
-    auto graphs_ratio_pyquen_no_wide = get_graph(hists_ratio_pyquen_no_wide, 3);
+    auto graphs_hists_aa = get_graph(hists_aa, 2, 0);
+    auto graphs_systs_aa = get_graph(systs_aa, 2, 0);
+    auto graphs_hists_pp = get_graph(hists_pp, 2, 1);
+    auto graphs_systs_pp = get_graph(systs_pp, 2, 1);
+    auto graphs_hists_ratio = get_graph(hists_ratio, 2, 2);
+    auto graphs_systs_ratio = get_graph(systs_ratio, 2, 2);
+
+    auto graphs_hists_aa_jewel = get_graph(hists_aa_jewel, 0);
+    auto graphs_hists_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1);
+    auto graphs_hists_aa_pyquen = get_graph(hists_aa_pyquen, 2);
+    auto graphs_hists_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3);
+    auto graphs_hists_pp_jewel = get_graph(hists_pp_jewel, 0);
+    auto graphs_hists_pp_pyquen = get_graph(hists_pp_pyquen, 2);
+    auto graphs_hists_ratio_jewel = get_graph(hists_ratio_jewel, 0);
+    auto graphs_hists_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1);
+    auto graphs_hists_ratio_pyquen = get_graph(hists_ratio_pyquen, 2);
+    auto graphs_hists_ratio_pyquen_no_wide = get_graph(hists_ratio_pyquen_no_wide, 3);
 
     /* size canvas */
     double panel_size = 500;
@@ -461,53 +506,53 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetTextSize(0.05);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    if (system == 2)    legend.AddEntry((*systs_ratio[0])[0], "CMS data", "plf");
-    if (system == 2)    legend.AddEntry(&graphs_ratio_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 2)    legend.AddEntry(&graphs_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 2)    legend.AddEntry(&graphs_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 2)    legend.AddEntry(&graphs_ratio_pyquen[0], "PYQUEN, wide angle rad.", "lf");
-    if (system == 0)    legend.AddEntry((*systs_aa[0])[0], "CMS data", "plf");
-    if (system == 0)    legend.AddEntry(&graphs_aa_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
-    if (system == 1)    legend.AddEntry((*systs_pp[0])[0], "CMS data", "plf");
-    if (system == 1)    legend.AddEntry(&graphs_pp_jewel[0], "JEWEL", "lf");
-    if (system == 1)    legend.AddEntry(&graphs_pp_pyquen[0], "PYQUEN", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
+    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 1)    legend.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
+    if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
+    if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
 
         worlds[i]->Draw("axis");
 
-        if (system == 2)    (*systs_ratio[i])[3]->Draw("same e2");
-        if (system == 2)    (*hists_ratio[i])[3]->Draw("same");
-        if (system == 2)    graphs_ratio_pyquen_no_wide[i].Draw("same 3");
-        if (system == 2)    graphs_ratio_pyquen_no_wide[i].Draw("same lX");
-        if (system == 2)    graphs_ratio_pyquen[i].Draw("same 3");
-        if (system == 2)    graphs_ratio_pyquen[i].Draw("same lX");
-        if (system == 2)    graphs_ratio_jewel[i].Draw("same 3");
-        if (system == 2)    graphs_ratio_jewel[i].Draw("same lX");
-        if (system == 2)    graphs_ratio_jewel_no_recoil[i].Draw("same 3");
-        if (system == 2)    graphs_ratio_jewel_no_recoil[i].Draw("same lX");
+        if (system == 2)    graphs_hists_ratio_pyquen_no_wide[i].Draw("same 3");
+        if (system == 2)    graphs_hists_ratio_pyquen_no_wide[i].Draw("same lX");
+        if (system == 2)    graphs_hists_ratio_pyquen[i].Draw("same 3");
+        if (system == 2)    graphs_hists_ratio_pyquen[i].Draw("same lX");
+        if (system == 2)    graphs_hists_ratio_jewel[i].Draw("same 3");
+        if (system == 2)    graphs_hists_ratio_jewel[i].Draw("same lX");
+        if (system == 2)    graphs_hists_ratio_jewel_no_recoil[i].Draw("same 3");
+        if (system == 2)    graphs_hists_ratio_jewel_no_recoil[i].Draw("same lX");
+        if (system == 2)    graphs_systs_ratio[i]->Draw("same e2");
+        if (system == 2)    graphs_hists_ratio[i]->Draw("same");
 
-        if (system == 0)    (*systs_aa[i])[3]->Draw("same e2");
-        if (system == 0)    (*hists_aa[i])[3]->Draw("same");
-        if (system == 0)    graphs_aa_jewel[i].Draw("same 3");
-        if (system == 0)    graphs_aa_jewel[i].Draw("same lX");
-        if (system == 0)    graphs_aa_jewel_no_recoil[i].Draw("same 3");
-        if (system == 0)    graphs_aa_jewel_no_recoil[i].Draw("same lX");
-        if (system == 0)    graphs_aa_pyquen_no_wide[i].Draw("same 3");
-        if (system == 0)    graphs_aa_pyquen_no_wide[i].Draw("same lX");
-        if (system == 0)    graphs_aa_pyquen[i].Draw("same 3");
-        if (system == 0)    graphs_aa_pyquen[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_pyquen_no_wide[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_pyquen_no_wide[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same lX");
+        if (system == 0)    graphs_systs_aa[i]->Draw("same e2");
+        if (system == 0)    graphs_hists_aa[i]->Draw("same");
 
-        if (system == 1)    (*systs_pp[i])[0]->Draw("same e2");
-        if (system == 1)    (*hists_pp[i])[0]->Draw("same");
-        if (system == 1)    graphs_pp_jewel[i].Draw("same 3");
-        if (system == 1)    graphs_pp_jewel[i].Draw("same lX");
-        if (system == 1)    graphs_pp_pyquen[i].Draw("same 3");
-        if (system == 1)    graphs_pp_pyquen[i].Draw("same lX");
+        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
+        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
+        if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same 3");
+        if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same lX");
+        if (system == 1)    graphs_systs_pp[i]->Draw("same e2");
+        if (system == 1)    graphs_hists_pp[i]->Draw("same");
 
         line.Draw("l");
 
