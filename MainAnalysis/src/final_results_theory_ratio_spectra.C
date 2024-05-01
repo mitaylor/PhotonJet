@@ -144,7 +144,7 @@ void format(history<TH1F>* h, int type)
         (*h)[i]->SetMarkerColor(1);
         (*h)[i]->SetLineColor(1);
         (*h)[i]->SetFillColor(color[type]);
-        (*s)[i]->SetFillColorAlpha(color[type], 0.40);
+        (*h)[i]->SetFillColorAlpha(color[type], 0.40);
         (*h)[i]->SetMarkerSize(0);
         (*h)[i]->SetLineWidth(1.0);
     }
