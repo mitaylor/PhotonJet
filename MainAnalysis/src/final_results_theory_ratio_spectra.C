@@ -200,7 +200,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
     auto subsets = conf->get<bool>("subsets");
-    auto whole = conf->get<bool>("whole");
+    // auto whole = conf->get<bool>("whole");
     auto system = conf->get<int64_t>("system");
 
     auto sel = new configurer(selections);
