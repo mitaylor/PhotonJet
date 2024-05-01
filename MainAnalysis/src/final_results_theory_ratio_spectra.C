@@ -151,12 +151,12 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
             result[i].SetPointError(j - 1, dx, dx, (*h[i])[0]->GetBinError(j), (*h[i])[0]->GetBinError(j));
         }
 
-        result[i]->SetMarkerStyle(style[type]);
-        result[i]->SetMarkerColor(color[type]);
-        result[i]->SetLineColor(color[type]);
-        result[i]->SetFillColorAlpha(color[type], 0.60);
-        result[i]->SetMarkerSize(0);
-        result[i]->SetLineWidth(1.0);
+        result[i].SetMarkerStyle(style[type]);
+        result[i].SetMarkerColor(color[type]);
+        result[i].SetLineColor(color[type]);
+        result[i].SetFillColorAlpha(color[type], 0.60);
+        result[i].SetMarkerSize(0);
+        result[i].SetLineWidth(1.0);
     }
 }
 
