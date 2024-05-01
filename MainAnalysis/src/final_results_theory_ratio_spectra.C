@@ -525,7 +525,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         worlds[i]->Draw("axis");
 
-        if (system == 2)    graphs_systs_ratio[i].Draw("same 3");
+        if (system == 2)    graphs_systs_ratio[i].Draw("same 2");
         if (system == 2)    graphs_hists_ratio_pyquen_no_wide[i].Draw("same 3");
         if (system == 2)    graphs_hists_ratio_pyquen_no_wide[i].Draw("same lX");
         if (system == 2)    graphs_hists_ratio_pyquen[i].Draw("same 3");
@@ -536,7 +536,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 2)    graphs_hists_ratio_jewel_no_recoil[i].Draw("same lX");
         if (system == 2)    graphs_hists_ratio[i].Draw("same PZ");
 
-        if (system == 0)    graphs_systs_aa[i].Draw("same 3");
+        if (system == 0)    graphs_systs_aa[i].Draw("same 2");
         if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same 3");
@@ -547,7 +547,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa[i].Draw("same PZ");
 
-        if (system == 1)    graphs_systs_pp[i].Draw("same 3");
+        if (system == 1)    graphs_systs_pp[i].Draw("same 2");
         if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same 3");
