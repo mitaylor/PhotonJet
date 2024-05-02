@@ -479,8 +479,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 0 && log)    legend_y_min = (subsets) ? 0.62 : 0.62;
     if (system == 0 && log)    legend_y_max = (subsets) ? 0.83 : 0.83;
-    if (system == 0 && log)    legend_x_min = (subsets) ? 0.02 : 0.05;
-    if (system == 0 && log)    legend_x_max = (subsets) ? 0.32 : 0.35;
+    if (system == 0 && log)    legend_x_min = (subsets) ? 0.05 : 0.05;
+    if (system == 0 && log)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
     if (system == 0 && !log)   legend_y_min = (subsets) ? 0.48 : 0.48;
     if (system == 0 && !log)   legend_y_max = (subsets) ? 0.83 : 0.83;
@@ -506,13 +506,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
 
-    TLegend legend_part2(legend_x_max + 0.05, legend_y_max - 0.14, legend_x_max + 0.35, legend_y_max);
+    TLegend legend_part2(legend_x_max + 0.15, legend_y_max - 0.21, legend_x_max + 0.35, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
     if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "#splitline{PYQUEN,}{wide angle rad.}", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
