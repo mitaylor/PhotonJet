@@ -467,20 +467,25 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.05;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
-    if (system == 1 && log)    legend_y_min = (subsets) ? 0.64 : 0.14;
-    if (system == 1 && log)    legend_y_max = (subsets) ? 0.85 : 0.35;
-    if (system == 1 && log)    legend_x_min = (subsets) ? 0.65 : 0.2;
-    if (system == 1 && log)    legend_x_max = (subsets) ? 0.95 : 0.5;
+    if (system == 1 && log)    legend_y_min = (subsets) ? 0.64 : 0.09;
+    if (system == 1 && log)    legend_y_max = (subsets) ? 0.85 : 0.30;
+    if (system == 1 && log)    legend_x_min = (subsets) ? 0.65 : 0.05;
+    if (system == 1 && log)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 1 && !log)    legend_y_min = (subsets) ? 0.64 : 0.24;
-    if (system == 1 && !log)    legend_y_max = (subsets) ? 0.85 : 0.45;
-    if (system == 1 && !log)    legend_x_min = (subsets) ? 0.65 : 0.65;
-    if (system == 1 && !log)    legend_x_max = (subsets) ? 0.95 : 0.95;
+    if (system == 1 && !log)   legend_y_min = (subsets) ? 0.64 : 0.24;
+    if (system == 1 && !log)   legend_y_max = (subsets) ? 0.85 : 0.45;
+    if (system == 1 && !log)   legend_x_min = (subsets) ? 0.65 : 0.65;
+    if (system == 1 && !log)   legend_x_max = (subsets) ? 0.95 : 0.95;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.40 : 0.15;
-    if (system == 0)    legend_y_max = (subsets) ? 0.75 : 0.5;
-    if (system == 0)    legend_x_min = (subsets) ? 0.4 : 0.4;
-    if (system == 0)    legend_x_max = (subsets) ? 0.7 : 0.7;
+    if (system == 0 && log)    legend_y_min = (subsets) ? 0.48 : 0.48;
+    if (system == 0 && log)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 0 && log)    legend_x_min = (subsets) ? 0.05 : 0.05;
+    if (system == 0 && log)    legend_x_max = (subsets) ? 0.35 : 0.35;
+
+    if (system == 0 && !log)   legend_y_min = (subsets) ? 0.40 : 0.15;
+    if (system == 0 && !log)   legend_y_max = (subsets) ? 0.75 : 0.5;
+    if (system == 0 && !log)   legend_x_min = (subsets) ? 0.4 : 0.4;
+    if (system == 0 && !log)   legend_x_max = (subsets) ? 0.7 : 0.7;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -544,9 +549,13 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
-        if (system == 0)    latex.SetTextAlign(11);
-        if (system == 0)    latex.SetTextSize(0.06);
-        if (system == 0)    latex.DrawLatex(0.05, 0.78, "Cent. 0-10%");
+        if (system == 0 && !log)    latex.SetTextAlign(11);
+        if (system == 0 && !log)    latex.SetTextSize(0.06);
+        if (system == 0 && !log)    latex.DrawLatex(0.05, 0.15, "Cent. 0-10%");
+
+        if (system == 0 && log)    latex.SetTextAlign(11);
+        if (system == 0 && log)    latex.SetTextSize(0.06);
+        if (system == 0 && log)    latex.DrawLatex(0.05, 0.15, "Cent. 0-10%");
 
         if (system == 2)    latex.SetTextAlign(11);
         if (system == 2)    latex.SetTextSize(0.06);
@@ -558,11 +567,17 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[ncols-1]->cd();
     latex.SetTextSize(0.05);
-    latex.SetTextAlign(31);
-    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if (system != 0 || !log)   latex.SetTextAlign(31);
+    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+
+    if (system == 0 && log)    latex.SetTextAlign(31);
+    if (system == 0 && log)    latex.DrawLatex(0.95, 0.58, (text_photon_pt).c_str());
+    if (system == 0 && log)    latex.DrawLatex(0.95, 0.50, (text_photon_eta).c_str());
+    if (system == 0 && log)    latex.DrawLatex(0.95, 0.42, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && log)    latex.DrawLatex(0.95, 0.34, (text_jet_alg).c_str());
 
     if (system == 2 && log)    canvas.SaveAs((set + "_final_theory_ratio_" + name + "_log.pdf").c_str());
     if (system == 1 && log)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.pdf").c_str());
