@@ -467,15 +467,15 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.05;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
-    if (system == 1)    legend_y_min = (subsets && log) ? 0.64 : 0.14;
-    if (system == 1)    legend_y_max = (subsets && log) ? 0.85 : 0.35;
-    if (system == 1)    legend_x_min = (subsets && log) ? 0.65 : 0.2;
-    if (system == 1)    legend_x_max = (subsets && log) ? 0.95 : 0.5;
+    if (system == 1 && log)    legend_y_min = (subsets) ? 0.64 : 0.14;
+    if (system == 1 && log)    legend_y_max = (subsets) ? 0.85 : 0.35;
+    if (system == 1 && log)    legend_x_min = (subsets) ? 0.65 : 0.2;
+    if (system == 1 && log)    legend_x_max = (subsets) ? 0.95 : 0.5;
 
-    if (system == 1)    legend_y_min = (subsets && !log) ? 0.64 : 0.24;
-    if (system == 1)    legend_y_max = (subsets && !log) ? 0.85 : 0.45;
-    if (system == 1)    legend_x_min = (subsets && !log) ? 0.65 : 0.65;
-    if (system == 1)    legend_x_max = (subsets && !log) ? 0.95 : 0.95;
+    if (system == 1 && !log)    legend_y_min = (subsets) ? 0.64 : 0.24;
+    if (system == 1 && !log)    legend_y_max = (subsets) ? 0.85 : 0.45;
+    if (system == 1 && !log)    legend_x_min = (subsets) ? 0.65 : 0.65;
+    if (system == 1 && !log)    legend_x_max = (subsets) ? 0.95 : 0.95;
 
     if (system == 0)    legend_y_min = (subsets) ? 0.40 : 0.15;
     if (system == 0)    legend_y_max = (subsets) ? 0.75 : 0.5;
