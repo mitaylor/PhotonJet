@@ -511,8 +511,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
-    if (system == 0 && log)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0 && log)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
@@ -583,10 +583,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system != 0)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if (system == 0 && !log && !subsets)  latex.SetTextAlign(31);
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.48, (text_photon_pt).c_str());
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.40, (text_photon_eta).c_str());
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.32, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.24, (text_jet_alg).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.38, (text_photon_pt).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.30, (text_photon_eta).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.22, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.14, (text_jet_alg).c_str());
 
     if (system == 0 && !log && subsets)   latex.SetTextAlign(31);
     if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
