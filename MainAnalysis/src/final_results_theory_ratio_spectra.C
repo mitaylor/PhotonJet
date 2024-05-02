@@ -565,9 +565,9 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 0 && log)    latex.SetTextSize(0.06);
         if (system == 0 && log)    latex.DrawLatex(0.5, 0.15, "Cent. 0-10%");
 
-        if (system == 2)    latex.SetTextAlign(11);
+        if (system == 2)    latex.SetTextAlign(21);
         if (system == 2)    latex.SetTextSize(0.06);
-        if (system == 2)    latex.DrawLatex(0.05, 0.05, "Cent. 0-10%");
+        if (system == 2)    latex.DrawLatex(0.5, 0.05, "Cent. 0-10%");
     }
 
     pads[0]->cd();
