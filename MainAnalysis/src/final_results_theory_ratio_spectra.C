@@ -479,8 +479,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 0 && log)    legend_y_min = (subsets) ? 0.62 : 0.62;
     if (system == 0 && log)    legend_y_max = (subsets) ? 0.83 : 0.83;
-    if (system == 0 && log)    legend_x_min = (subsets) ? 0.05 : 0.05;
-    if (system == 0 && log)    legend_x_max = (subsets) ? 0.35 : 0.35;
+    if (system == 0 && log)    legend_x_min = (subsets) ? 0.03 : 0.03;
+    if (system == 0 && log)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
     if (system == 0 && !log)   legend_y_min = (subsets) ? 0.48 : 0.48;
     if (system == 0 && !log)   legend_y_max = (subsets) ? 0.83 : 0.83;
@@ -506,7 +506,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
 
-    TLegend legend_part2(legend_x_max + 0.12, legend_y_max - 0.14, legend_x_max + 0.42, legend_y_max);
+    TLegend legend_part2(legend_x_max + 0.15, legend_y_max - 0.14, legend_x_max + 0.45, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
