@@ -500,11 +500,19 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    legend.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
     if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
     if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
+    if (system == 0 && !log)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0 && !log)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 1)    legend.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
+
+    TLegend legend_part2(legend_x_max + 0.05, legend_x_max + 0.35, legend_y_max - 0.14, legend_y_max);
+    legend_part2.SetTextFont(42);
+    legend_part2.SetTextSize(0.05);
+    legend_part2.SetFillStyle(0);
+    legend_part2.SetBorderSize(0);
+    if (system == 0 && log)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0 && log)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
@@ -564,6 +572,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[0]->cd();
     legend.Draw();
+    if (system == 0 && log)    legend_part2.Draw();
 
     pads[ncols-1]->cd();
     latex.SetTextSize(0.05);
@@ -573,11 +582,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system != 0 || !log)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if (system != 0 || !log)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    if (system == 0 && log)    latex.SetTextAlign(31);
-    if (system == 0 && log)    latex.DrawLatex(0.95, 0.58, (text_photon_pt).c_str());
-    if (system == 0 && log)    latex.DrawLatex(0.95, 0.50, (text_photon_eta).c_str());
-    if (system == 0 && log)    latex.DrawLatex(0.95, 0.42, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && log)    latex.DrawLatex(0.95, 0.34, (text_jet_alg).c_str());
+    if (system == 0 && log && !subsets)   latex.SetTextAlign(31);
+    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
+    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
+    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
+
+    if (system == 0 && log && subsets)    latex.SetTextAlign(31);
+    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if (system == 2 && log)    canvas.SaveAs((set + "_final_theory_ratio_" + name + "_log.pdf").c_str());
     if (system == 1 && log)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.pdf").c_str());
