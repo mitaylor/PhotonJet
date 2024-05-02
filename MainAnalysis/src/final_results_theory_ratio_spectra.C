@@ -498,8 +498,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend.AddEntry(&graphs_hists_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
     if (system == 2)    legend.AddEntry(&graphs_hists_ratio_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 0)    legend.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
-    if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
     if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
     if (system == 0 && !log)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
     if (system == 0 && !log)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle rad.", "lf");
     if (system == 1)    legend.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
