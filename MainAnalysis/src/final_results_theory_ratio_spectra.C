@@ -506,7 +506,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
 
-    TLegend legend_part2(legend_x_max + 0.15, legend_y_max - 0.14, legend_x_max + 0.45, legend_y_max);
+    TLegend legend_part2(legend_x_max + 0.1, legend_y_max - 0.14, legend_x_max + 0.4, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
