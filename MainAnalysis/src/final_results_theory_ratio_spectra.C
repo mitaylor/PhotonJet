@@ -482,8 +482,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0 && log)    legend_x_min = (subsets) ? 0.05 : 0.05;
     if (system == 0 && log)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
-    if (system == 0 && !log)   legend_y_min = (subsets) ? 0.40 : 0.15;
-    if (system == 0 && !log)   legend_y_max = (subsets) ? 0.75 : 0.5;
+    if (system == 0 && !log)   legend_y_min = (subsets) ? 0.48 : 0.48;
+    if (system == 0 && !log)   legend_y_max = (subsets) ? 0.83 : 0.83;
     if (system == 0 && !log)   legend_x_min = (subsets) ? 0.4 : 0.4;
     if (system == 0 && !log)   legend_x_max = (subsets) ? 0.7 : 0.7;
 
@@ -506,7 +506,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
 
-    TLegend legend_part2(legend_x_max + 0.05, legend_x_max + 0.35, legend_y_max - 0.14, legend_y_max);
+    TLegend legend_part2(legend_x_max + 0.05, legend_y_max - 0.14, legend_x_max + 0.35, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
@@ -559,7 +559,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 0 && !log)    latex.SetTextAlign(11);
         if (system == 0 && !log)    latex.SetTextSize(0.06);
-        if (system == 0 && !log)    latex.DrawLatex(0.05, 0.15, "Cent. 0-10%");
+        if (system == 0 && !log)    latex.DrawLatex(0.05, 0.78, "Cent. 0-10%");
 
         if (system == 0 && log)    latex.SetTextAlign(11);
         if (system == 0 && log)    latex.SetTextSize(0.06);
@@ -576,11 +576,23 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[ncols-1]->cd();
     latex.SetTextSize(0.05);
-    if (system != 0 || !log)   latex.SetTextAlign(31);
-    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system != 0 || !log)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if (system != 0)   latex.SetTextAlign(31);
+    if (system != 0)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system != 0)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system != 0)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system != 0)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+
+    if (system == 0 && !log && !subsets)  latex.SetTextAlign(31);
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.48, (text_photon_pt).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.40, (text_photon_eta).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.32, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.24, (text_jet_alg).c_str());
+
+    if (system == 0 && !log && subsets)   latex.SetTextAlign(31);
+    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if (system == 0 && log && !subsets)   latex.SetTextAlign(31);
     if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
