@@ -288,11 +288,11 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         total->apply(sqrt_);
 
-        for (int64_t i = 0; i <= sets->size(); ++i) {
+        for (int64_t i = 0; i <= sets.size(); ++i) {
             for (int64_t j = 0; j < total->size(); ++j) {
                 double avg;
 
-                if (i < sets->size()) {
+                if (i < sets.size()) {
                     avg = (*sets[i])[j]->GetMean(1);
                 }
                 else {
