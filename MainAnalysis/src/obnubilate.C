@@ -225,23 +225,23 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         for (auto const& batch : batches) {
             batch->add(*base, -1);
 
-            for (int64_t i = 0; i < batch->size(); ++i) {
-                std::vector<float> differences;
+            // for (int64_t i = 0; i < batch->size(); ++i) {
+            //     std::vector<float> differences;
 
-                for (int64_t j = 0; j <= (*batch)[i]->GetNbinsX(); ++j) {
-                    differences.push_back(std::abs((*batch)[i]->GetBinContent(j + 1)));
-                }
+            //     for (int64_t j = 0; j <= (*batch)[i]->GetNbinsX(); ++j) {
+            //         differences.push_back(std::abs((*batch)[i]->GetBinContent(j + 1)));
+            //     }
 
-                float min = 10000;
-                float max = 0;
-                for (auto difference : differences) {
-                    if (difference < min) { min = difference; }
-                    if (difference > max) { max = difference; }
-                }
+            //     float min = 10000;
+            //     float max = 0;
+            //     for (auto difference : differences) {
+            //         if (difference < min) { min = difference; }
+            //         if (difference > max) { max = difference; }
+            //     }
 
-                printf("%.2f-%.2f ", min, max);
-            }
-            std::cout << std::endl;
+            //     printf("%.2f-%.2f ", min, max);
+            // }
+            // std::cout << std::endl;
 
             batch->apply(square_);
             // batch->apply(sqrt_);
@@ -288,23 +288,39 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         total->apply(sqrt_);
 
-        for (int64_t i = 0; i < total->size(); ++i) {
-            std::vector<float> differences;
+        for (int64_t i = 0; i <= sets->size(); ++i) {
+            for (int64_t j = 0; j < total->size(); ++j) {
+                double avg;
 
-            for (int64_t j = 0; j <= (*total)[i]->GetNbinsX(); ++j) {
-                differences.push_back(std::abs((*total)[i]->GetBinContent(j + 1)));
+                if (i < sets->size()) {
+                    avg = (*sets[i])[j]->GetMean(1);
+                }
+                else {
+                    avg = (*total)[j]->GetMean(1);
+                }
+
+                printf("%.2f ", avg);
             }
-
-            float min = 10000;
-            float max = 0;
-            for (auto difference : differences) {
-                if (difference < min) { min = difference; }
-                if (difference > max) { max = difference; }
-            }
-
-            printf("%.2f-%.2f ", min, max);
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
+
+        // for (int64_t i = 0; i < total->size(); ++i) {
+        //     std::vector<float> differences;
+
+        //     for (int64_t j = 0; j <= (*total)[i]->GetNbinsX(); ++j) {
+        //         differences.push_back(std::abs((*total)[i]->GetBinContent(j + 1)));
+        //     }
+
+        //     float min = 10000;
+        //     float max = 0;
+        //     for (auto difference : differences) {
+        //         if (difference < min) { min = difference; }
+        //         if (difference > max) { max = difference; }
+        //     }
+
+        //     printf("%.2f-%.2f ", min, max);
+        // }
+        // std::cout << std::endl;
 
         /* add plots */
         for (int i = 0; i < cols; ++i) {
