@@ -300,7 +300,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                     avg = (*total)[j]->Integral("width")/jet_dr_max;
                 }
 
-                printf("%.2f ", avg);
+                printf("%.3f ", avg);
             }
             std::cout << std::endl;
         }
