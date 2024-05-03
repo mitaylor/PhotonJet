@@ -68,6 +68,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
     auto const jet_eta_abs = sel->get<float>("jet_eta_abs");
 
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
+    auto const jet_dr_max = sel->get<float>("jet_dr_max");
 
     auto bpho_pt = sel->get<std::vector<float>>("photon_pt_bounds");
     auto ptg_range = sel->get<std::vector<float>>("ptg_range");
@@ -293,10 +294,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 double avg;
 
                 if (i < sets.size()) {
-                    avg = (*sets[i])[j]->GetMean(2);
+                    avg = (*sets[i])[j]->Integral("width")/jet_dr_max;
                 }
                 else {
-                    avg = (*total)[j]->GetMean(2);
+                    avg = (*total)[j]->Integral("width")/jet_dr_max;
                 }
 
                 printf("%.2f ", avg);
