@@ -293,10 +293,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
                 double avg;
 
                 if (i < sets.size()) {
-                    avg = (*sets[i])[j]->GetMean(1);
+                    avg = (*sets[i])[j]->GetMean(2);
                 }
                 else {
-                    avg = (*total)[j]->GetMean(1);
+                    avg = (*total)[j]->GetMean(2);
                 }
 
                 printf("%.2f ", avg);
