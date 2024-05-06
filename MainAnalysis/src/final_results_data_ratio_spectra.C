@@ -84,7 +84,7 @@ std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*
 {
     std::vector<std::vector<TGraphAsymmErrors>> result(h.size(), std::vector<TGraphAsymmErrors>(h[0]->size()));
 
-    static int style[3] = {20, 20, 20};
+    static int style[3] = {20, 24, 20};
     static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
 
     for (size_t i = 0; i < h.size(); ++i) {
