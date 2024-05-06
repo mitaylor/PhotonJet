@@ -152,7 +152,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
                            TColor::GetColor("#95DADD"), 
                            TColor::GetColor("#E5631D"),
                            TColor::GetColor("#BB2112"),
-                           TColor::GetColor("#717581"),
+                           TColor::GetColor("#36db02"),
                            TColor::GetColor("#FDA82D"),
                            TColor::GetColor("#B9AB74"),
                            TColor::GetColor("#8235B4"),
