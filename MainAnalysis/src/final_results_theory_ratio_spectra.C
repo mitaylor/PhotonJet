@@ -147,11 +147,12 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
 {
     std::vector<TGraphAsymmErrors> result(h.size());
 
-    static int style[8] = {20, 20, 20, 20, 20, 20, 20, 20};
+    static int style[8] = {20, 20, 20, 20, 20, 20, 20, 20, 20};
     static int color[8] = {TColor::GetColor("#4492D8"), 
                            TColor::GetColor("#95DADD"), 
                            TColor::GetColor("#E5631D"),
                            TColor::GetColor("#BB2112"),
+                           TColor::GetColor("#717581"),
                            TColor::GetColor("#FDA82D"),
                            TColor::GetColor("#B9AB74"),
                            TColor::GetColor("#8235B4"),
@@ -214,6 +215,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_aa_pyquen_no_wide = conf->get<std::string>("input_aa_pyquen_no_wide");
     auto input_pp_jewel = conf->get<std::string>("input_pp_jewel");
     auto input_pp_pyquen = conf->get<std::string>("input_pp_pyquen");
+    auto input_pp_pythia = conf->get<std::string>("input_pp_pythia");
 
     auto log = conf->get<bool>("log");
 
@@ -223,6 +225,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto tag_aa_pyquen_no_wide = conf->get<std::string>("tag_aa_pyquen_no_wide");
     auto tag_pp_jewel = conf->get<std::string>("tag_pp_jewel");
     auto tag_pp_pyquen = conf->get<std::string>("tag_pp_pyquen");
+    auto tag_pp_pythia = conf->get<std::string>("tag_pp_pythia");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
@@ -275,6 +278,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_aa_pyquen_no_wide = new TFile((base + input_aa_pyquen_no_wide).data(), "read");
     auto file_pp_jewel = new TFile((base + input_pp_jewel).data(), "read");
     auto file_pp_pyquen = new TFile((base + input_pp_pyquen).data(), "read");
+    auto file_pp_pythia = new TFile((base + input_pp_pythia).data(), "read");
 
     /* define kinematics and luminosity */
     auto text_system = "(5.02 TeV)"s;
@@ -302,6 +306,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<history<TH1F>*> hists_aa_pyquen_no_wide(ncols);
     std::vector<history<TH1F>*> hists_pp_jewel(ncols);
     std::vector<history<TH1F>*> hists_pp_pyquen(ncols);
+    std::vector<history<TH1F>*> hists_pp_pythia(ncols);
     std::vector<history<TH1F>*> hists_ratio_jewel(ncols);
     std::vector<history<TH1F>*> hists_ratio_jewel_no_recoil(ncols);
     std::vector<history<TH1F>*> hists_ratio_pyquen(ncols);
@@ -323,6 +328,8 @@ int congratulate(char const* config, char const* selections, char const* output)
             bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg[3]];
         }
 
+        if (theory_figures[i] == "none") theory_figures[i] = "";
+
         /* get histograms */
         hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
         systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
@@ -331,12 +338,13 @@ int congratulate(char const* config, char const* selections, char const* output)
         hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
         systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
 
-        hists_aa_jewel[i] = new history<TH1F>(file_aa_jewel, tag_aa_jewel + "_" + theory_figures[i]);
-        hists_aa_jewel_no_recoil[i] = new history<TH1F>(file_aa_jewel_no_recoil, tag_aa_jewel_no_recoil + "_" + theory_figures[i]);
-        hists_aa_pyquen[i] = new history<TH1F>(file_aa_pyquen, tag_aa_pyquen + "_" + theory_figures[i]);
-        hists_aa_pyquen_no_wide[i] = new history<TH1F>(file_aa_pyquen_no_wide, tag_aa_pyquen_no_wide + "_" + theory_figures[i]);
-        hists_pp_jewel[i] = new history<TH1F>(file_pp_jewel, tag_pp_jewel + "_" + theory_figures[i]);
-        hists_pp_pyquen[i] = new history<TH1F>(file_pp_pyquen, tag_pp_pyquen + "_" + theory_figures[i]);
+        hists_aa_jewel[i] = new history<TH1F>(file_aa_jewel, tag_aa_jewel + "_dr" + theory_figures[i]);
+        hists_aa_jewel_no_recoil[i] = new history<TH1F>(file_aa_jewel_no_recoil, tag_aa_jewel_no_recoil + "_dr" + theory_figures[i]);
+        hists_aa_pyquen[i] = new history<TH1F>(file_aa_pyquen, tag_aa_pyquen + "_dr" + theory_figures[i]);
+        hists_aa_pyquen_no_wide[i] = new history<TH1F>(file_aa_pyquen_no_wide, tag_aa_pyquen_no_wide + "_dr" + theory_figures[i]);
+        hists_pp_jewel[i] = new history<TH1F>(file_pp_jewel, tag_pp_jewel + "_dr" + theory_figures[i]);
+        hists_pp_pyquen[i] = new history<TH1F>(file_pp_pyquen, tag_pp_pyquen + "_dr" + theory_figures[i]);
+        hists_pp_pythia[i] = new history<TH1F>(file_pp_pythia, tag_pp_pythia + theory_figures[i]);
         hists_ratio_jewel[i] = new history<TH1F>(*hists_aa_jewel[i], "hist_jewel");
         hists_ratio_jewel_no_recoil[i] = new history<TH1F>(*hists_aa_jewel_no_recoil[i], "hist_jewel_no_recoil");
         hists_ratio_pyquen[i] = new history<TH1F>(*hists_aa_pyquen[i], "hist_pyquen");
@@ -367,6 +375,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto graphs_hists_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3);
     auto graphs_hists_pp_jewel = get_graph(hists_pp_jewel, 0);
     auto graphs_hists_pp_pyquen = get_graph(hists_pp_pyquen, 2);
+    auto graphs_hists_pp_pythia = get_graph(hists_pp_pythia, 4);
     auto graphs_hists_ratio_jewel = get_graph(hists_ratio_jewel, 0);
     auto graphs_hists_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1);
     auto graphs_hists_ratio_pyquen = get_graph(hists_ratio_pyquen, 2);
@@ -467,12 +476,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.05;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
-    if (system == 1 && log)    legend_y_min = (subsets) ? 0.64 : 0.09;
-    if (system == 1 && log)    legend_y_max = (subsets) ? 0.85 : 0.30;
+    if (system == 1 && log)    legend_y_min = (subsets) ? 0.57 : 0.05;
+    if (system == 1 && log)    legend_y_max = (subsets) ? 0.85 : 0.33;
     if (system == 1 && log)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1 && log)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 1 && !log)   legend_y_min = (subsets) ? 0.64 : 0.24;
+    if (system == 1 && !log)   legend_y_min = (subsets) ? 0.57 : 0.17;
     if (system == 1 && !log)   legend_y_max = (subsets) ? 0.85 : 0.45;
     if (system == 1 && !log)   legend_x_min = (subsets) ? 0.65 : 0.65;
     if (system == 1 && !log)   legend_x_max = (subsets) ? 0.95 : 0.95;
@@ -505,6 +514,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
+    if (system == 1)    legend.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
 
     TLegend legend_part2(legend_x_max + 0.15, legend_y_max - 0.14, legend_x_max + 0.45, legend_y_max);
     legend_part2.SetTextFont(42);
@@ -546,6 +556,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same lX");
+        if (system == 1)    graphs_hists_pp_pythia[i].Draw("same 3");
+        if (system == 1)    graphs_hists_pp_pythia[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp[i].Draw("same PZ");
 
         line.Draw("l");

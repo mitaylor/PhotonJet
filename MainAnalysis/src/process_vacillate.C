@@ -243,8 +243,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     input_mc_gen_fold1->rename(tag + "_g_fold1");
     input_mc_gen_fold0_part1->rename(tag + "_g_fold0_part1");
     input_mc_gen_fold1_part1->rename(tag + "_g_fold1_part1");
-    input_mc_gen_fold0_part2->rename(tag + "_g_fold0_part2");
-    input_mc_gen_fold1_part2->rename(tag + "_g_fold1_part2");
+    input_mc_gen_fold0_part2->rename(tag + "_g_fold0_part1");
+    input_mc_gen_fold1_part2->rename(tag + "_g_fold1_part1");
 
     /* save histograms */
     input_mc_gen->save();
