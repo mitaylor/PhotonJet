@@ -176,7 +176,7 @@ int speculate(char const* config, char const* selections, char const* output) {
 
     auto c1 = new paper(set + "_" + tag + "_efficiency", hb);
     apply_style(c1, cms, system_tag, 0., 1.2);
-    c1->divide(ihf->size(), -1);
+    c1->divide(ihf->size()/2, -1);
     c1->accessory(hf_info);
     c1->accessory(std::bind(line_at, _1, 1., rpt.front(), rpt.back()));
 
