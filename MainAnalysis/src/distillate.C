@@ -228,7 +228,7 @@ int distillate(char const* config, char const* output) {
 std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[hf_x][pt_x] << std::endl; h->Print();
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, value);
+        mold(f, value); std::cout << f->Eval(0) << std::endl; std::cout << __LINE__ << std::endl;
         h->Fit(label.data(), "WLMQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 std::cout << __LINE__ << std::endl;
         (*s_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
