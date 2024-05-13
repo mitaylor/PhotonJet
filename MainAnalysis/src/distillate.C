@@ -229,7 +229,7 @@ std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[h
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value); std::cout << f->Eval(0) << std::endl; std::cout << __LINE__ << std::endl;
-        h->Fit(f, "WLMQ");
+        h->Fit(f);
 std::cout << __LINE__ << std::endl;
         (*s_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
         (*s_dpthf)[index]->SetBinError(1, f->GetParError(1));
