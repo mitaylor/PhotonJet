@@ -304,7 +304,7 @@ std::cout << __LINE__ << std::endl;
         auto label = "f_obj_detahf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
-        h->Fit(label.data(), "WLMQ", "", fle[hf_x][eta_x], fhe[hf_x][eta_x]);
+        h->Fit(label.data(), "MQ", "", fle[hf_x][eta_x], fhe[hf_x][eta_x]);
 std::cout << __LINE__ << std::endl;
         (*s_detahf)[index]->SetBinContent(1, f->GetParameter(1));
         (*s_detahf)[index]->SetBinError(1, f->GetParError(1));
@@ -381,7 +381,7 @@ std::cout << __LINE__ << std::endl;
         auto label = "f_obj_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
-        h->Fit(label.data(), "WLMQ", "",
+        h->Fit(label.data(), "MQ", "",
             fl[hf_x][eta_x][pt_x], fh[hf_x][eta_x][pt_x]);
 std::cout << __LINE__ << std::endl;
         (*s)[index]->SetBinContent(1, f->GetParameter(1));
