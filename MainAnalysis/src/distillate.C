@@ -225,7 +225,7 @@ int distillate(char const* config, char const* output) {
         auto indices = obj_dpthf->indices_for(index);
         auto pt_x = indices[0];
         auto hf_x = indices[1];
-std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[hf_x][pt_x] << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[hf_x][pt_x] << std::endl; h->Print();
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
