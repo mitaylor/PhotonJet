@@ -225,10 +225,10 @@ int distillate(char const* config, char const* output) {
         auto indices = obj_dpthf->indices_for(index);
         auto pt_x = indices[0];
         auto hf_x = indices[1];
-std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[hf_x][pt_x] << std::endl; h->Print();
+std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[hf_x][pt_x] << std::endl; h->Print("all");
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, v{flp[hf_x][pt_x], fhp[hf_x][pt_x]}); std::cout << f->Eval(0) << std::endl; std::cout << __LINE__ << std::endl;
+        mold(f, value); std::cout << f->Eval(0) << std::endl; std::cout << __LINE__ << std::endl;
         h->Fit(label.data(), "WLMQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 std::cout << __LINE__ << std::endl;
         (*s_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
