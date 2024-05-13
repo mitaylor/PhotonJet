@@ -59,7 +59,7 @@ int distillate(char const* config, char const* output) {
     auto s_range = conf->get<std::vector<float>>("s_range");
     auto s_lines = conf->get<std::vector<float>>("s_lines");
     auto r_range = conf->get<std::vector<float>>("r_range");
-std::cout << __LINE__ << std::endl;
+
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
@@ -67,66 +67,66 @@ std::cout << __LINE__ << std::endl;
     /* load input */
     TFile* f = new TFile(input.data(), "read");
     auto obj = new history<TH1F>(f, tag + "_" + object);
-std::cout << __LINE__ << std::endl;
+
     /* prepare histograms */
     auto idpt = new interval(dpt);
     auto ideta = new interval(deta);
     auto idhf = new interval(dhf);
-std::cout << __LINE__ << std::endl;
+
     auto plot_size = idhf->size() > 1 ? idhf->size()/2 : 1;
     auto hf_shape = x{ idhf->size() };
     auto pthf_shape = x{ idpt->size(), idhf->size() };
     auto etahf_shape = x{ ideta->size(), idhf->size() };
-std::cout << __LINE__ << std::endl;
+
     auto incl = new interval(""s, 1, 0., 1.);
     auto ipt = new interval("jet p_{T}"s, rpt);
     auto ieta = new interval("jet #eta"s, reta);
-std::cout << __LINE__ << std::endl;
+
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
     auto feta = std::bind(&interval::book<TH1F>, ieta, _1, _2, _3);
-std::cout << __LINE__ << std::endl;
+
     auto title = "#sigma("s + label + ")";
 
     /* fully differential (pt, eta, hf) */
     auto s = new history<TH1F>("s"s, "", fincl, obj->shape());
     auto r = new history<TH1F>("r"s, "", fincl, obj->shape());
-std::cout << __LINE__ << std::endl;
+
     auto s_f_pt = new history<TH1F>("s_f_pt"s, label.data(), fpt, etahf_shape);
     auto r_f_pt = new history<TH1F>("r_f_pt"s, title.data(), fpt, etahf_shape);
-std::cout << __LINE__ << std::endl;
+
     /* differential in pt, hf */
     auto obj_dpthf = obj->sum(1);
-std::cout << __LINE__ << std::endl;
+
     auto s_dpthf = new history<TH1F>("s_dpthf", "", fincl, pthf_shape);
     auto r_dpthf = new history<TH1F>("r_dpthf", "", fincl, pthf_shape);
-std::cout << __LINE__ << std::endl;
+
     auto s_dhf_f_pt = new history<TH1F>("s_dhf_f_pt"s,
         label.data(), fpt, hf_shape);
     auto r_dhf_f_pt = new history<TH1F>("r_dhf_f_pt"s,
         title.data(), fpt, hf_shape);
-std::cout << __LINE__ << std::endl;
+
     /* differential in eta, hf */
     auto resize = x{ idpt->size() - 1, ideta->size(), idhf->size() };
     auto obj_detahf = obj->shrink("valid", resize, remove)->sum(0);
-std::cout << __LINE__ << std::endl;
+
     auto s_detahf = new history<TH1F>("s_detahf", "", fincl, etahf_shape);
     auto r_detahf = new history<TH1F>("r_detahf", "", fincl, etahf_shape);
-std::cout << __LINE__ << std::endl;
+
     auto s_dhf_f_eta = new history<TH1F>("s_dhf_f_eta"s,
         label.data(), feta, hf_shape);
     auto r_dhf_f_eta = new history<TH1F>("r_dhf_f_eta"s,
         title.data(), feta, hf_shape);
-std::cout << __LINE__ << std::endl;
+
     /* load fitting parameters */
     auto fl = new std::vector<float>*[idhf->size()];
     auto fh = new std::vector<float>*[idhf->size()];
-std::cout << __LINE__ << std::endl;
+
     auto flp = new std::vector<float>[idhf->size()];
     auto fhp = new std::vector<float>[idhf->size()];
     auto fle = new std::vector<float>[idhf->size()];
     auto fhe = new std::vector<float>[idhf->size()];
-std::cout << __LINE__ << std::endl;
+
     for (int64_t i = 0; i < idhf->size(); ++i) {
         auto hf_str = std::to_string(i);
 
@@ -146,7 +146,7 @@ std::cout << __LINE__ << std::endl;
         fle[i] = conf->get<std::vector<float>>("fle_"s + hf_str);
         fhe[i] = conf->get<std::vector<float>>("fhe_"s + hf_str);
     }
-std::cout << __LINE__ << std::endl;
+
     auto resolution_function = [&](char const* label) {
         TF1* f = new TF1(label, "sqrt([0]*[0]+[1]*[1]/x+[2]*[2]/(x*x))");
 
@@ -164,7 +164,7 @@ std::cout << __LINE__ << std::endl;
 
         return f;
     };
-std::cout << __LINE__ << std::endl;
+
     /* info text */
     auto system_tag = system + "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Simulation}}"s;
@@ -190,7 +190,7 @@ std::cout << __LINE__ << std::endl;
         l->DrawLatexNDC(0.865, pos, buffer);
         x++;
     };
-    std::cout << __LINE__ << std::endl;
+    
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, obj_dpthf, pt_info, hf_info); };
 
@@ -206,7 +206,7 @@ std::cout << __LINE__ << std::endl;
             l->Draw();
         }
     };
-std::cout << __LINE__ << std::endl;
+
     auto tag_object = tag + "_" + object;
 
     /* draw plots */
@@ -225,7 +225,7 @@ std::cout << __LINE__ << std::endl;
         auto indices = obj_dpthf->indices_for(index);
         auto pt_x = indices[0];
         auto hf_x = indices[1];
-std::cout << __LINE__ << std::endl;
+std::cout << __LINE__ << std::endl; std::cout << flp[hf_x][pt_x] << " " << fhp[hf_x][pt_x] << std::endl;
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
