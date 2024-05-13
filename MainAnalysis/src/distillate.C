@@ -225,27 +225,27 @@ int distillate(char const* config, char const* output) {
         auto indices = obj_dpthf->indices_for(index);
         auto pt_x = indices[0];
         auto hf_x = indices[1];
-std::cout << __LINE__ << std::endl; 
+ 
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
         h->Fit(label.data(), "MQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
-std::cout << __LINE__ << std::endl;
+
         (*s_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
         (*s_dpthf)[index]->SetBinError(1, f->GetParError(1));
         (*r_dpthf)[index]->SetBinContent(1, f->GetParameter(2));
         (*r_dpthf)[index]->SetBinError(1, f->GetParError(2));
-std::cout << __LINE__ << std::endl;
+
         ++pt_x;
-std::cout << __LINE__ << std::endl;
+
         (*s_dhf_f_pt)[hf_x]->SetBinContent(pt_x, f->GetParameter(1));
         (*s_dhf_f_pt)[hf_x]->SetBinError(pt_x, f->GetParError(1));
         (*r_dhf_f_pt)[hf_x]->SetBinContent(pt_x, f->GetParameter(2));
         (*r_dhf_f_pt)[hf_x]->SetBinError(pt_x, f->GetParError(2));
-std::cout << __LINE__ << std::endl;
+
         c1->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     auto c2 = new paper(tag_object + "_dhf_f_pt_s", hb);
     apply_style(c2, cms, system_tag);
     if (!heavyion) c2->accessory(std::bind(kinematics, _1, 0.79));
@@ -256,16 +256,16 @@ std::cout << __LINE__ << std::endl;
 
     s_dhf_f_pt->apply([&](TH1* h, int64_t index) {
         h->SetAxisRange(s_range[0], s_range[1], "Y");
-std::cout << __LINE__ << std::endl;
+
         if (fit) {
             auto label = "f_s_dhf_f_pt_"s + std::to_string(index);
             TF1* f = new TF1(label.data(), func.data());
             h->Fit(f, "MEQ", "", 20, rpt.back());
         }
-std::cout << __LINE__ << std::endl;
+
         c2->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     auto c3 = new paper(tag_object + "_dhf_f_pt_r", hb);
     apply_style(c3, cms, system_tag);
     if (!heavyion) c3->accessory(std::bind(kinematics, _1, 0.79));
@@ -275,21 +275,21 @@ std::cout << __LINE__ << std::endl;
 
     r_dhf_f_pt->apply([&](TH1* h, int64_t index) {
         h->SetAxisRange(r_range[0], r_range[1], "Y");
-std::cout << __LINE__ << std::endl;
+
         auto label = "f_r_dhf_f_pt_"s + std::to_string(index);
         auto f = resolution_function(label.data());
         h->Fit(label.data(), "MEQ", "", 20, rpt.back());
-std::cout << __LINE__ << std::endl;
+
         csn[0] = f->GetParameter(0);
         csn[1] = f->GetParameter(1);
         csn[2] = f->GetParameter(2);
-std::cout << __LINE__ << std::endl;
+
         printf("%i - %i%%: %.3f, %.3f, %.3f\n",
             dcent[index + 1], dcent[index], csn[0], csn[1], csn[2]);
 
         c3->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     auto c4 = new paper(tag_object + "_detahf_sr_fits", hb);
     apply_style(c4, cms, system_tag);
     c4->accessory(etahf_info);
@@ -300,19 +300,19 @@ std::cout << __LINE__ << std::endl;
         auto indices = obj_detahf->indices_for(index);
         auto eta_x = indices[0];
         auto hf_x = indices[1];
-std::cout << __LINE__ << std::endl;
+
         auto label = "f_obj_detahf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
         h->Fit(label.data(), "MQ", "", fle[hf_x][eta_x], fhe[hf_x][eta_x]);
-std::cout << __LINE__ << std::endl;
+
         (*s_detahf)[index]->SetBinContent(1, f->GetParameter(1));
         (*s_detahf)[index]->SetBinError(1, f->GetParError(1));
         (*r_detahf)[index]->SetBinContent(1, f->GetParameter(2));
         (*r_detahf)[index]->SetBinError(1, f->GetParError(2));
 
         ++eta_x;
-std::cout << __LINE__ << std::endl;
+
         (*s_dhf_f_eta)[hf_x]->SetBinContent(eta_x, f->GetParameter(1));
         (*s_dhf_f_eta)[hf_x]->SetBinError(eta_x, f->GetParError(1));
         (*r_dhf_f_eta)[hf_x]->SetBinContent(eta_x, f->GetParameter(2));
@@ -320,7 +320,7 @@ std::cout << __LINE__ << std::endl;
 
         c4->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     auto c5 = new paper(tag_object + "_dhf_f_eta_s", hb);
     apply_style(c5, cms, system_tag);
     if (!heavyion) c5->accessory(std::bind(kinematics, _1, 0.79));
@@ -330,7 +330,7 @@ std::cout << __LINE__ << std::endl;
     s_dhf_f_eta->apply([&](TH1* h) {
         h->SetAxisRange(s_range[0], s_range[1], "Y");
         c5->add(h, "mc"); });
-std::cout << __LINE__ << std::endl;
+
     auto c6 = new paper(tag_object + "_dhf_f_eta_r", hb);
     apply_style(c6, cms, system_tag);
     if (!heavyion) c6->accessory(std::bind(kinematics, _1, 0.79));
@@ -340,11 +340,11 @@ std::cout << __LINE__ << std::endl;
     r_dhf_f_eta->apply([&](TH1* h) {
         h->SetAxisRange(r_range[0], r_range[1], "Y");
         c6->add(h, "mc"); });
-std::cout << __LINE__ << std::endl;
+
     auto c7 = std::vector<paper*>(ideta->size());
     auto c8 = std::vector<paper*>(ideta->size());
     auto c9 = std::vector<paper*>(ideta->size());
-std::cout << __LINE__ << std::endl;
+
     for (int64_t i = 0; i < ideta->size(); ++i) {
         c7[i] = new paper(tag_object + "_sr_fits_s" + std::to_string(i), hb);
         apply_style(c7[i], cms, system_tag);
@@ -370,55 +370,55 @@ std::cout << __LINE__ << std::endl;
         c9[i]->divide(plot_size, -1);
         c9[i]->set(paper::flags::logx);
     }
-std::cout << __LINE__ << std::endl;
+
     /* fit mean and resolution */
     obj->apply([&](TH1* h, int64_t index) {
         auto indices = obj->indices_for(index);
         auto pt_x = indices[0];
         auto eta_x = indices[1];
         auto hf_x = indices[2];
-std::cout << __LINE__ << std::endl;
+
         auto label = "f_obj_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
         h->Fit(label.data(), "MQ", "",
             fl[hf_x][eta_x][pt_x], fh[hf_x][eta_x][pt_x]);
-std::cout << __LINE__ << std::endl;
+
         (*s)[index]->SetBinContent(1, f->GetParameter(1));
         (*s)[index]->SetBinError(1, f->GetParError(1));
         (*r)[index]->SetBinContent(1, f->GetParameter(2));
         (*r)[index]->SetBinError(1, f->GetParError(2));
-std::cout << __LINE__ << std::endl;
+
         ++pt_x;
-std::cout << __LINE__ << std::endl;
+
         (*s_f_pt)[x{eta_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(1));
         (*s_f_pt)[x{eta_x, hf_x}]->SetBinError(pt_x, f->GetParError(1));
         (*r_f_pt)[x{eta_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(2));
         (*r_f_pt)[x{eta_x, hf_x}]->SetBinError(pt_x, f->GetParError(2));
-std::cout << __LINE__ << std::endl;
+
         c7[eta_x]->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     s_f_pt->apply([&](TH1* h, int64_t index) {
         h->SetAxisRange(s_range[0], s_range[1], "Y");
-std::cout << __LINE__ << std::endl;
+
         if (fit) {
             auto label = "f_s_f_pt_"s + std::to_string(index);
             TF1* f = new TF1(label.data(), func.data());
             h->Fit(f, "MEQ", "", 20, rpt.back());
         }
-std::cout << __LINE__ << std::endl;
+
         auto eta_x = s_f_pt->indices_for(index)[0];
         c8[eta_x]->add(h, "mc");
     });
-std::cout << __LINE__ << std::endl;
+
     r_f_pt->apply([&](TH1* h, int64_t index) {
         h->SetAxisRange(r_range[0], r_range[1], "Y");
-std::cout << __LINE__ << std::endl;
+
         auto label = "f_r_f_pt_"s + std::to_string(index);
         auto f = resolution_function(label.data());
         h->Fit(label.data(), "MEQ", "", 20, rpt.back());
-std::cout << __LINE__ << std::endl;
+
         csn[1] = f->GetParameter(1);
         csn[2] = f->GetParameter(2);
 
@@ -427,13 +427,13 @@ std::cout << __LINE__ << std::endl;
     });
 
     hb->sketch();
-std::cout << __LINE__ << std::endl;
+
     for (auto const& p : { c1, c2, c3, c4, c5, c6 })
         p->draw("pdf");
     for (auto const& c : { c7, c8, c9 })
         for (auto p : c)
             p->draw("pdf");
-std::cout << __LINE__ << std::endl;
+
     /* save output */
     in(output, [&]() {
         obj_dpthf->save(tag_object);
@@ -454,7 +454,7 @@ std::cout << __LINE__ << std::endl;
         s_dhf_f_eta->save(tag_object);
         r_dhf_f_eta->save(tag_object);
     });
-std::cout << __LINE__ << std::endl;
+
     return 0;
 }
 
