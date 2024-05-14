@@ -28,8 +28,8 @@ for sample in ${samples[@]}; do
     run_aa ${sample}
 done
 
-# samples=(aa_mebs_raw aa_mebs_bkg aa_qcd_mebs_raw aa_qcd_mebs_bkg)
+samples=(aa_mebs_raw aa_mebs_bkg)
 
-# for sample in ${samples[@]}; do
-#     run_aa ${sample}
-# done
+for sample in ${samples[@]}; do
+    run_aa ${sample}
+done
