@@ -140,13 +140,13 @@ int jubilate(char const* config, char const* selections, char const* output) {
     cms += "|#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} > " + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
     auto c3 = new paper(set + "_" + tag + "_mebs_mixing_dr_d_pthf", hb);
-    apply_style(c3, cms, system_tag, -1., 24.);
+    apply_style(c3, cms, system_tag, -2.7, 27.);
     c3->accessory(std::bind(line_at, _1, 0.f, rdr[0], rdr[1]));
     c3->accessory(pthf_info);
     c3->divide(-1 , ihf->size());
 
     auto c4 = new paper(set + "_" + tag + "_mebs_mixing_jpt_d_pthf", hb);
-    apply_style(c4, cms, system_tag, -0.007, 0.07);
+    apply_style(c4, cms, system_tag, -0.01, 0.01);
     c4->accessory(std::bind(line_at, _1, 0.f, rjpt[0], rjpt[1]));
     c4->accessory(pthf_info);
     c4->divide(-1 , ihf->size());
