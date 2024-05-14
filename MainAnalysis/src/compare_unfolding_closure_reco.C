@@ -276,7 +276,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p1 = new paper(set + "_unfolding_closure_reco_" + tag + "_" + label + "_dj", hb);
 
-    p1->divide(filenames.size(), -1);
+    p1->divide(filenames.size()/2, -1);
     p1->accessory(pthf_info);
     apply_style(p1, cms, system_tag, -2, 20);
 
@@ -287,7 +287,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p2 = new paper(set + "_unfolding_closure_reco_" + tag + "_" + label + "_jpt", hb);
 
-    p2->divide(filenames.size(), -1);
+    p2->divide(filenames.size()/2, -1);
     p2->accessory(pthf_info);
     apply_style(p2, cms, system_tag, -0.003, 0.03);
 
