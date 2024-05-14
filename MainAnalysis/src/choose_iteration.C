@@ -22,12 +22,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-template <typename... T>
-void normalise_to_unity(T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1. / obj->Integral("width")); }), 0)... };
-}
-
 template <typename T>
 T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;

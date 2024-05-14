@@ -26,12 +26,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-template <typename... T>
-void normalise_to_unity(T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1. / obj->Integral("width")); }), 0)... };
-}
-
 template <typename T>
 T* null(int64_t, std::string const&, std::string const&) {
     return nullptr;
@@ -256,19 +250,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_u_dr_jpt_merge->divide(*nevt_merge);
     pjet_u_dr_merge->divide(*nevt_merge);
     pjet_u_jpt_merge->divide(*nevt_merge);
-
-    // /* normalise to unity */
-    // normalise_to_unity(
-    //     pjet_u_dr,
-    //     pjet_u_dr_d_pt,
-    //     pjet_u_dr_d_hf, 
-    //     pjet_u_dr_merge);
-
-    // normalise_to_unity(
-    //     pjet_f_dr,
-    //     pjet_f_dr_d_pt,
-    //     pjet_f_dr_d_hf, 
-    //     pjet_f_dr_merge);
 
     title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"),
         pjet_u_dr,

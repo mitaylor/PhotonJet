@@ -28,12 +28,6 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-template <typename... T>
-void normalise_to_unity(T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1. / obj->Integral("width")); }), 0)... };
-}
-
 bool back_to_back(float photon_phi, float jet_phi, float threshold) {
     float dphi = std::abs(photon_phi - jet_phi);
     if (dphi > TMath::Pi()) dphi = std::abs(dphi - 2*TMath::Pi());

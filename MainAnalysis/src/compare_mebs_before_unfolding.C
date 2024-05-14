@@ -25,12 +25,6 @@ void title(std::function<void(TH1*)> f, T*&... args) {
     (void)(int [sizeof...(T)]) { (args->apply(f), 0)... };
 }
 
-template <typename... T>
-void normalise_to_unity(T*&... args) {
-    (void)(int [sizeof...(T)]) { (args->apply([](TH1* obj) {
-        obj->Scale(1. / obj->Integral("width")); }), 0)... };
-}
-
 int compare_before_unfolding(char const* config, char const* selections, const char* output) {
     auto conf = new configurer(config);
 
@@ -64,9 +58,6 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     auto h_noeff_dr = new history<TH1F>(f_noeff, "aa_nominal_mebs_s_pure_raw_sub_pjet_f_dr_sum0");
     auto h_eff_jtpt = new history<TH1F>(f_eff, "aa_nominal_s_pure_raw_sub_pjet_f_jpt_sum0");
     auto h_noeff_jtpt = new history<TH1F>(f_noeff, "aa_nominal_mebs_s_pure_raw_sub_pjet_f_jpt_sum0");
-
-    normalise_to_unity(h_eff_dr, h_noeff_dr, h_eff_jtpt, h_noeff_jtpt);
-
     
     /* set up figures */
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
@@ -96,7 +87,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     hb->alias("noeff", "Subtracted pfEnergy Matching");
 
     auto p1 = new paper(set + "_accumulate_aa_mebs_dr_comparison", hb);
-    p1->divide(ihf->size(), -1);
+    p1->divide(ihf->size()/2, -1);
     p1->accessory(hf_info);
     p1->accessory(kinematics);
     apply_style(p1, cms, system_tag);
@@ -105,7 +96,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     h_noeff_dr->apply([&](TH1* h, int64_t index) { p1->stack(index + 1, h, "noeff"); });
 
     auto p2 = new paper(set + "_accumulate_aa_mebs_jtpt_comparison", hb);
-    p2->divide(ihf->size(), -1);
+    p2->divide(ihf->size()/2, -1);
     p2->accessory(hf_info);
     p2->accessory(kinematics);
     apply_style(p2, cms, system_tag);
