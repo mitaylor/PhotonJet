@@ -76,6 +76,10 @@ int plot_qcd(char const* config, char const* output) {
     apply_style(p8, cms, system_tag);
     p8->add(pthat_w);
 
+    hb->sketch();
+
+    p8->draw("pdf");
+
     printf("destroying objects..\n");
 
     return 0;
