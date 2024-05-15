@@ -13,7 +13,6 @@
 #include "../git/paper-and-pencil/include/paper.h"
 #include "../git/paper-and-pencil/include/pencil.h"
 
-#include "../git/tricks-and-treats/include/overflow_angles.h"
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
 
@@ -32,10 +31,10 @@ using namespace std::placeholders;
 
 void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
                multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p,
-                bool heavyion, bool apply_er,
-               float pt_min, float photon_eta_abs, float hovere_max, float hf_min, float hf_max,
-               float iso_max, float noniso_min, float noniso_max, 
-               history<TH1F>* rho_weighting, history<TH1F>* efficiency, bool mc) {
+               bool heavyion, bool apply_er, float photon_pt_min, float photon_eta_abs,
+               float hovere_max, float hf_min, float hf_max, float iso_max, float noniso_min, float noniso_max, 
+               history<TH1F>* rho_weighting, history<TH1F>* eff_numerator, history<TH1F>* eff_denominator,
+               bool mc, bool apply_es, std::vector<float> photon_pt_es) {
     printf("fill data\n");
 
     auto nentries = static_cast<int64_t>(t->GetEntries());
@@ -44,46 +43,47 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
         t->GetEntry(i);
 
-        if (!mc && p->hiHF <= hf_min) { continue; }
-        if (!mc && p->hiHF > hf_max) { continue; }
+        double hf = p->hiHF;
+        auto hf_x = ihf->index_for(hf);
 
-        int64_t leading = -1;
-        float leading_pt = 0;
+        if (!mc && hf <= hf_min) { continue; }
+        if (!mc && hf > hf_max) { continue; }
+
+        auto photon_es = (apply_es && !mc) ? photon_pt_es[hf_x] : 1;
+
+        int64_t photon_index = -1;
+        float photon_pt = 0;
+
         for (int64_t j = 0; j < p->nPho; ++j) {
-            auto pho_et = (*p->phoEt)[j];
+            auto temp_photon_pt = (*p->phoEt)[j];
 
-            if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if (temp_photon_pt <= 30) { continue; }
+            if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            
-            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            if (apply_er) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
 
-            if (pho_et < pt_min) { continue; }
+            temp_photon_pt *= photon_es;
 
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
+            if (temp_photon_pt < photon_pt_min) { continue; }
+
+            if (temp_photon_pt > photon_pt) {
+                photon_index = j;
+                photon_pt = temp_photon_pt;
             }
         }
 
         /* require leading photon */
-        if (leading < 0) { continue; }
+        if (photon_index < 0) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, photon_index)) { continue; }
 
         /* isolation requirement */
-        float isolation = (*p->pho_ecalClusterIsoR3)[leading]
-            + (*p->pho_hcalRechitIsoR3)[leading]
-            + (*p->pho_trackIsoR3PtCut20)[leading];
-
-        if ((isolation > iso_max && isolation < noniso_min)
-            || isolation > noniso_max) { continue; }
+        float isolation = (*p->pho_ecalClusterIsoR3)[photon_index] + (*p->pho_hcalRechitIsoR3)[photon_index] + (*p->pho_trackIsoR3PtCut20)[photon_index];
+        if ((isolation > iso_max && isolation < noniso_min) || isolation > noniso_max) { continue; }
 
         // determine indices of photon pT and centrality to fill
-        auto pt_x = ipt->index_for(leading_pt);
-        auto hf_x = ihf->index_for(p->hiHF);
+        auto pt_x = ipt->index_for(photon_pt);
 
         std::vector<int64_t> pthf_x;
         if (mc) {
@@ -97,9 +97,9 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         // efficiency and rho weighting corrections
         auto weight = p->w;
 
-        if (efficiency != nullptr && leading_pt < 70) {
-            auto bin = (*efficiency)[1]->FindBin(leading_pt);
-            auto cor = (*efficiency)[0]->GetBinContent(bin) / (*efficiency)[1]->GetBinContent(bin);
+        if (eff_numerator != nullptr && eff_denominator != nullptr && photon_pt / photon_es < 70) {
+            auto bin = (*eff_numerator)[hf_x]->FindBin(photon_pt / photon_es);
+            auto cor = (*eff_denominator)[hf_x]->GetBinContent(bin) / (*eff_numerator)[hf_x]->GetBinContent(bin);
             if (cor < 1) { std::cout << "error" << std::endl; return; }
             weight *= cor;
         }
@@ -120,7 +120,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
         auto const& see = isolation > iso_max ? see_noniso : see_iso;
 
         zip([&](auto const& index, auto const& weight) {
-            (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[leading], weight);
+            (*see)[index]->Fill((*p->phoSigmaIEtaIEta_2012)[photon_index], weight);
         }, pthf_x, weights);
     }
 
@@ -129,7 +129,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
 
 void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
                  multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p, 
-                 bool heavyion, bool apply_er, float pt_min, float photon_eta_abs, 
+                 bool heavyion, bool apply_er, float photon_pt_min, float photon_eta_abs, 
                  float hovere_max, float hf_min, float hf_max, float iso_max,
                  float noniso_min, float noniso_max, float gen_iso_max, std::vector<float> offsets, 
                  std::vector<float> widths, history<TH1F>* rho_weighting) {
@@ -144,34 +144,33 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
         if (p->hiHF <= hf_min) { continue; }
         if (p->hiHF > hf_max) { continue; }
 
-        int64_t leading = -1;
-        float leading_pt = 0;
+        int64_t photon_index = -1;
+        float photon_pt = 0;
+
         for (int64_t j = 0; j < p->nPho; ++j) {
-            auto pho_et = (*p->phoEt)[j];
+            auto temp_photon_pt = (*p->phoEt)[j];
 
-            if (pho_et <= 30) { continue; }
-            if (std::abs((*p->phoSCEta)[j]) >= photon_eta_abs) { continue; }
+            if (temp_photon_pt <= 30) { continue; }
+            if (std::abs((*p->phoEta)[j]) >= photon_eta_abs) { continue; }
             if ((*p->phoHoverE)[j] > hovere_max) { continue; }
-            
-            if (heavyion && apply_er) pho_et = (*p->phoEtErNew)[j];
-            if (!heavyion && apply_er) pho_et = (*p->phoEtEr)[j];
+            if (apply_er) temp_photon_pt = (heavyion) ? (*p->phoEtErNew)[j] : (*p->phoEtEr)[j];
 
-            if (pho_et < pt_min) { continue; }
+            if (temp_photon_pt < photon_pt_min) { continue; }
 
-            if (pho_et > leading_pt) {
-                leading = j;
-                leading_pt = pho_et;
+            if (temp_photon_pt > photon_pt) {
+                photon_index = j;
+                photon_pt = temp_photon_pt;
             }
         }
 
         /* require leading photon */
-        if (leading < 0) { continue; }
+        if (photon_index < 0) { continue; }
 
         /* hem failure region exclusion */
-        if (heavyion && in_pho_failure_region(p, leading)) { continue; }
+        if (heavyion && in_pho_failure_region(p, photon_index)) { continue; }
 
         /* require gen-matching */
-        int64_t gen_index = (*p->pho_genMatchedIndex)[leading];
+        int64_t gen_index = (*p->pho_genMatchedIndex)[photon_index];
         if (gen_index == -1) { continue; }
 
         auto pid = (*p->mcPID)[gen_index];
@@ -194,22 +193,19 @@ void fill_signal(memory<TH1F>* see, memory<TH1F>* sfrac,
             }
         }
 
-        auto pt_x = ipt->index_for(leading_pt);
+        auto pt_x = ipt->index_for(photon_pt);
 
         for (int64_t hf_x = 0; hf_x < ihf->size(); ++hf_x) {
             auto pthf_x = mpthf->index_for(x{pt_x, hf_x});
-            auto sigma_eta_eta = (*p->phoSigmaIEtaIEta_2012)[leading];
+            auto sigma_eta_eta = (*p->phoSigmaIEtaIEta_2012)[photon_index];
             sigma_eta_eta = widths[pthf_x]*(sigma_eta_eta + offsets[pthf_x]);
 
             (*see)[pthf_x]->Fill(sigma_eta_eta, weight[hf_x]);
 
             /* isolation requirement */
-            float recoiso = (*p->pho_ecalClusterIsoR3)[leading]
-                + (*p->pho_hcalRechitIsoR3)[leading]
-                + (*p->pho_trackIsoR3PtCut20)[leading];
+            float recoiso = (*p->pho_ecalClusterIsoR3)[photon_index] + (*p->pho_hcalRechitIsoR3)[photon_index] + (*p->pho_trackIsoR3PtCut20)[photon_index];
 
-            if ((recoiso > iso_max && recoiso < noniso_min)
-                || recoiso > noniso_max) { continue; }
+            if ((recoiso > iso_max && recoiso < noniso_min) || recoiso > noniso_max) { continue; }
 
             (*sfrac)[pthf_x]->Fill(recoiso > iso_max ? 1.5 : 0.5, weight[hf_x]);
         }
@@ -271,6 +267,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
     auto rho_label = conf->get<std::string>("rho_label");
 
     auto apply_er = conf->get<bool>("apply_er");
+    auto apply_es = conf->get<bool>("apply_es");
     auto mc = conf->get<bool>("mc");
 
     auto noniso_min = conf->get<float>("noniso_min");
@@ -294,12 +291,14 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     auto gen_iso_max = sel->get<float>("gen_iso_max");
     auto see_max = sel->get<float>("see_max");
-    auto pt_min = sel->get<float>("photon_pt_min");
+    auto photon_pt_min = sel->get<float>("photon_pt_min");
     auto photon_eta_abs = sel->get<float>("photon_eta_abs");
     auto hovere_max = sel->get<float>("hovere_max");
     auto iso_max = sel->get<float>("iso_max");
 
     auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+
+    auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
     auto dpt_short = dpt;
     dpt_short.pop_back();
@@ -335,11 +334,13 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
     /* load efficiency correction */
     TFile* fe;
-    history<TH1F>* efficiency = nullptr;
+    history<TH1F>* eff_numerator = nullptr;
+    history<TH1F>* eff_denominator = nullptr;
 
     if (!eff_file.empty()) {
         fe = new TFile((base + eff_file).data(), "read");
-        efficiency = new history<TH1F>(fe, eff_label);
+        eff_numerator = new history<TH1F>(fe, eff_label + "_numerator"s);
+        eff_denominator = new history<TH1F>(fe, eff_label + "_denominator"s);
     }
 
     /* load centrality weighting for MC */
@@ -360,8 +361,9 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto pd = new pjtree(false, false, heavyion, td, { 1, 0, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_data(see_data, see_bkg, mpthf, ipt, ihf, td, pd, heavyion, apply_er,
-                pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
-                noniso_min, noniso_max, rho_weighting, efficiency, mc && heavyion);
+                photon_pt_min, photon_eta_abs, hovere_max, hf_min, hf_max, iso_max, 
+                noniso_min, noniso_max, rho_weighting, eff_numerator, eff_denominator, mc && heavyion,
+                apply_es, photon_pt_es);
     }
 
     /* fill signal with MC */
@@ -375,7 +377,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_signal(see_sig_initial, sfrac, mpthf, ipt, ihf, ts, ps, 
-                    heavyion, apply_er, pt_min, photon_eta_abs, 
+                    heavyion, apply_er, photon_pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
                     noniso_min, noniso_max, gen_iso_max, offsets, 
                     widths, rho_weighting);
@@ -417,7 +419,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         auto ps = new pjtree(true, false, heavyion, ts, { 1, 1, 1, 0, 0, 0, heavyion, 0, 0});
 
         fill_signal(see_sig, sfrac, mpthf, ipt, ihf, ts, ps, 
-                    heavyion, apply_er, pt_min, photon_eta_abs, 
+                    heavyion, apply_er, photon_pt_min, photon_eta_abs, 
                     hovere_max, hf_min, hf_max, iso_max, 
                     noniso_min, noniso_max, gen_iso_max, offsets, 
                     widths, rho_weighting);

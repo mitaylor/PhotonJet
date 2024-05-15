@@ -33,7 +33,7 @@ void fill_data(memory<TH1F>* see_iso, memory<TH1F>* see_noniso,
                multival* mpthf, interval* ipt, interval* ihf, TTree* t, pjtree* p,
                bool heavyion, bool apply_er, float photon_pt_min, float photon_eta_abs,
                float hovere_max, float hf_min, float hf_max, float iso_max, float noniso_min, float noniso_max, 
-               history<TH1F>* rho_weighting, history<TH1F>* eff_numerator, history<TH1F>* eff_denominator, 
+               history<TH1F>* rho_weighting, history<TH1F>* eff_numerator, history<TH1F>* eff_denominator,
                bool mc, bool apply_es, std::vector<float> photon_pt_es) {
     printf("fill data\n");
 
