@@ -39,7 +39,7 @@ int plot_qcd(char const* config, char const* output) {
 
     auto files = conf->get<std::vector<std::string>>("files");
 
-    auto pthat_w = new TH1F("pthat_w", "pthat", 100, 0, 200);
+    auto pthat_w = new TH1F("pthat_w", "", 100, 0, 200);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
