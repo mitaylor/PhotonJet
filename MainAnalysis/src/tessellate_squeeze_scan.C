@@ -402,9 +402,9 @@ int tessellate(char const* config, char const* selections, char const* output) {
         (*see_data)[i]->GetXaxis()->SetRangeUser(0, 0.01);
         pfit->GetXaxis()->SetRangeUser(0, 0.01);
 
-        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - pfit->GetMean();
+        offsets[i] = (*see_data)[i]->GetMaximumBin() / widths[i] - pfit->GetMaximumBin();
 
-        std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
+        std::cout << "offset: " << (*see_data)[i]->GetMaximumBin() - pfit->GetMaximumBin() 
                   << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
 
         (*see_data)[i]->GetXaxis()->SetRange(0, 0);
