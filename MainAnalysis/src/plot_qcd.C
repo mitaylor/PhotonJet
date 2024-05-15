@@ -72,7 +72,7 @@ int plot_qcd(char const* config, char const* output) {
 
     auto p8 = new paper("pthat_spectrum", hb);
     p8->set(paper::flags::logy);
-    p8->set(paper::flags::logx);
+    // p8->set(paper::flags::logx);
     apply_style(p8, cms, system_tag);
     p8->add(pthat_w);
 
