@@ -407,7 +407,7 @@ int tessellate(char const* config, char const* selections, char const* output) {
         offsets[i] = 1 / widths[i] * (1 - widths[i]) * pfit->GetBinCenter(pfit->GetMaximumBin());
 
         // std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
-                  << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
+                //   << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
 
         (*see_data)[i]->GetXaxis()->SetRange(0, 0);
         pfit->GetXaxis()->SetRange(0, 0);
