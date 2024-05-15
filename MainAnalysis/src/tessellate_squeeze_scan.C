@@ -521,22 +521,22 @@ int tessellate(char const* config, char const* selections, char const* output) {
             pfit->Scale(entries * fraction / pfit->Integral());
             pbkg->Scale(entries * (1. - fraction) / pbkg->Integral());
 
-            auto psig = (TH1F*)pfit->Clone((stub + "s").data());
+            // auto psig = (TH1F*)pfit->Clone((stub + "s").data());
 
             pfit->Add(pbkg);
 
             c1->add((*see_data)[i], "data");
-            c1->stack(psig, "sig");
+            c1->stack(pfit, "sig");
             c1->stack(pbkg, "bkg");
 
-            c1->adjust(psig, "hist f", "lf");
+            c1->adjust(pfit, "hist f", "lf");
             c1->adjust(pbkg, "hist f", "lf");
 
             c2->add((*see_data)[i], "data");
-            c2->stack(psig, "sig");
+            c2->stack(pfit, "sig");
             c2->stack(pbkg, "bkg");
 
-            c2->adjust(psig, "hist f", "lf");
+            c2->adjust(pfit, "hist f", "lf");
             c2->adjust(pbkg, "hist f", "lf");
 
             auto ntot = pfit->Integral(1, pfit->FindBin(see_max));
