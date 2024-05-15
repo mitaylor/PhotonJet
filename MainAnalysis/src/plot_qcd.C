@@ -8,6 +8,9 @@
 #include "../git/history/include/multival.h"
 #include "../git/history/include/memory.h"
 
+#include "../git/paper-and-pencil/include/paper.h"
+#include "../git/paper-and-pencil/include/pencil.h"
+
 #include "../git/tricks-and-treats/include/trunk.h"
 
 #include "TFile.h"
@@ -61,6 +64,15 @@ int plot_qcd(char const* config, char const* output) {
     pthat_w->Scale(1. / pthat_w->Integral());
 
     pthat_w->SaveAs(output);
+
+    auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
+    auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
+
+    auto p8 = new paper("pthat_spectrum", hb);
+    p8->set(paper::flags::logy);
+    p8->set(paper::flags::logx);
+    apply_style(p8, cms, system_tag);
+    p8->add(pthat_w);
 
     printf("destroying objects..\n");
 
