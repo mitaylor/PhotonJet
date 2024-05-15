@@ -56,6 +56,7 @@ int compare_before_unfolding(char const* config, char const* selections, const c
     auto ihf = new interval(dhf);
 
     /* load history objects */
+    std::cout << base + input_eff << std::endl; std::cout << base + input_noeff << std::endl;
     TFile* f_eff = new TFile((base + input_eff).data(), "read");
     TFile* f_noeff = new TFile((base + input_noeff).data(), "read");
 
