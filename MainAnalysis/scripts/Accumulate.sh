@@ -19,7 +19,7 @@ samples=(pp)
 for sample in ${samples[@]}; do
     run_pp $sample
 
-    for syst in qcd qcd_gen_iso closure wo_ele_rej tight_purity loose_purity es; do
+    for syst in qcd qcd_gen_iso closure wo_ele_rej tight_purity loose_purity es ex; do
         run_pp ${sample}_${syst}
     done
 done

@@ -16,7 +16,7 @@ run_aa() {
     ./bin/combine_populate configs/combine_populate/combine_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/populate_${tag}.root
 }
 
-samples=(pp_raw pp_bkg pp_qcd_raw pp_qcd_bkg pp_qcd_gen_iso_raw pp_qcd_gen_iso_bkg pp_closure_raw pp_closure_bkg pp_wo_ele_rej_raw pp_wo_ele_rej_bkg pp_er_raw pp_er_bkg pp_es_raw pp_es_bkg)
+samples=(pp_ex_raw pp_ex_bkg pp_raw pp_bkg pp_qcd_raw pp_qcd_bkg pp_qcd_gen_iso_raw pp_qcd_gen_iso_bkg pp_closure_raw pp_closure_bkg pp_wo_ele_rej_raw pp_wo_ele_rej_bkg pp_er_raw pp_er_bkg pp_es_raw pp_es_bkg)
 
 for sample in ${samples[@]}; do
     run_pp ${sample}
