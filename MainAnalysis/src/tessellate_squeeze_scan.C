@@ -399,15 +399,14 @@ int tessellate(char const* config, char const* selections, char const* output) {
 
         pfit->Add(pbkg);
 
-        (*see_data)[i]->GetXaxis()->SetRangeUser(0, 0.01);
-        pfit->GetXaxis()->SetRangeUser(0, 0.01);
+        (*see_data)[i]->GetXaxis()->SetRangeUser(0.008, 0.01);
+        pfit->GetXaxis()->SetRangeUser(0.008, 0.01);
 
-        // offsets[i] = (*see_data)[i]->GetMean() / widths[i] - pfit->GetMean();
+        offsets[i] = (*see_data)[i]->GetMean() / widths[i] - pfit->GetMean();
+        // offsets[i] = 1 / widths[i] * (1 - widths[i]) * pfit->GetBinCenter(pfit->GetMaximumBin());
 
-        offsets[i] = 1 / widths[i] * (1 - widths[i]) * pfit->GetBinCenter(pfit->GetMaximumBin());
-
-        // std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
-                //   << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
+        std::cout << "offset: " << (*see_data)[i]->GetMean() - pfit->GetMean() 
+                  << ", std data: " << (*see_data)[i]->GetRMS() << "std mc: " << pfit->GetRMS() << std::endl;
 
         (*see_data)[i]->GetXaxis()->SetRange(0, 0);
         pfit->GetXaxis()->SetRange(0, 0);
