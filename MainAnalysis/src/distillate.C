@@ -194,8 +194,8 @@ int distillate(char const* config, char const* output) {
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.75, 0.04, obj_dpthf, pt_info, hf_info); };
 
-    auto etahf_info = [&](int64_t index) {
-        stack_text(index, 0.75, 0.04, obj_detahf, eta_info, hf_info); };
+    // auto etahf_info = [&](int64_t index) {
+    //     stack_text(index, 0.75, 0.04, obj_detahf, eta_info, hf_info); };
 
     auto guide_lines = [&](int64_t index) {
         if (index > idhf->size()) { return; }
