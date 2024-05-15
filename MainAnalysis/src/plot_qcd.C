@@ -68,6 +68,8 @@ int plot_qcd(char const* config, char const* output) {
     auto system_tag = "  #sqrt{s_{NN}} = 5.02 TeV"s;
     auto cms = "#bf{#scale[1.4]{CMS}} #it{#scale[1.2]{Preliminary}}"s;
 
+    auto hb = new pencil();
+
     auto p8 = new paper("pthat_spectrum", hb);
     p8->set(paper::flags::logy);
     p8->set(paper::flags::logx);
