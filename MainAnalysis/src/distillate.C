@@ -290,149 +290,151 @@ int distillate(char const* config, char const* output) {
         c3->add(h, "mc");
     });
 
-    auto c4 = new paper(tag_object + "_detahf_sr_fits", hb);
-    apply_style(c4, cms, system_tag);
-    c4->accessory(etahf_info);
-    c4->divide(plot_size, -1);
+    // auto c4 = new paper(tag_object + "_detahf_sr_fits", hb);
+    // apply_style(c4, cms, system_tag);
+    // c4->accessory(etahf_info);
+    // c4->divide(plot_size, -1);
 
-    /* fit mean and resolution */
-    obj_detahf->apply([&](TH1* h, int64_t index) {
-        auto indices = obj_detahf->indices_for(index);
-        auto eta_x = indices[0];
-        auto hf_x = indices[1];
+    // /* fit mean and resolution */
+    // obj_detahf->apply([&](TH1* h, int64_t index) {
+    //     auto indices = obj_detahf->indices_for(index);
+    //     auto eta_x = indices[0];
+    //     auto hf_x = indices[1];
 
-        auto label = "f_obj_detahf_"s + std::to_string(index);
-        TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, value);
-        h->Fit(label.data(), "MQ", "", fle[hf_x][eta_x], fhe[hf_x][eta_x]);
+    //     auto label = "f_obj_detahf_"s + std::to_string(index);
+    //     TF1* f = new TF1(label.data(), pdf.data());
+    //     mold(f, value);
+    //     h->Fit(label.data(), "MQ", "", fle[hf_x][eta_x], fhe[hf_x][eta_x]);
 
-        (*s_detahf)[index]->SetBinContent(1, f->GetParameter(1));
-        (*s_detahf)[index]->SetBinError(1, f->GetParError(1));
-        (*r_detahf)[index]->SetBinContent(1, f->GetParameter(2));
-        (*r_detahf)[index]->SetBinError(1, f->GetParError(2));
+    //     (*s_detahf)[index]->SetBinContent(1, f->GetParameter(1));
+    //     (*s_detahf)[index]->SetBinError(1, f->GetParError(1));
+    //     (*r_detahf)[index]->SetBinContent(1, f->GetParameter(2));
+    //     (*r_detahf)[index]->SetBinError(1, f->GetParError(2));
 
-        ++eta_x;
+    //     ++eta_x;
 
-        (*s_dhf_f_eta)[hf_x]->SetBinContent(eta_x, f->GetParameter(1));
-        (*s_dhf_f_eta)[hf_x]->SetBinError(eta_x, f->GetParError(1));
-        (*r_dhf_f_eta)[hf_x]->SetBinContent(eta_x, f->GetParameter(2));
-        (*r_dhf_f_eta)[hf_x]->SetBinError(eta_x, f->GetParError(2));
+    //     (*s_dhf_f_eta)[hf_x]->SetBinContent(eta_x, f->GetParameter(1));
+    //     (*s_dhf_f_eta)[hf_x]->SetBinError(eta_x, f->GetParError(1));
+    //     (*r_dhf_f_eta)[hf_x]->SetBinContent(eta_x, f->GetParameter(2));
+    //     (*r_dhf_f_eta)[hf_x]->SetBinError(eta_x, f->GetParError(2));
 
-        c4->add(h, "mc");
-    });
+    //     c4->add(h, "mc");
+    // });
 
-    auto c5 = new paper(tag_object + "_dhf_f_eta_s", hb);
-    apply_style(c5, cms, system_tag);
-    if (!heavyion) c5->accessory(std::bind(kinematics, _1, 0.79));
-    c5->accessory(std::bind(hf_info, _1, 0.75));
-    c5->divide(plot_size, -1);
+    // auto c5 = new paper(tag_object + "_dhf_f_eta_s", hb);
+    // apply_style(c5, cms, system_tag);
+    // if (!heavyion) c5->accessory(std::bind(kinematics, _1, 0.79));
+    // c5->accessory(std::bind(hf_info, _1, 0.75));
+    // c5->divide(plot_size, -1);
 
-    s_dhf_f_eta->apply([&](TH1* h) {
-        h->SetAxisRange(s_range[0], s_range[1], "Y");
-        c5->add(h, "mc"); });
+    // s_dhf_f_eta->apply([&](TH1* h) {
+    //     h->SetAxisRange(s_range[0], s_range[1], "Y");
+    //     c5->add(h, "mc"); });
 
-    auto c6 = new paper(tag_object + "_dhf_f_eta_r", hb);
-    apply_style(c6, cms, system_tag);
-    if (!heavyion) c6->accessory(std::bind(kinematics, _1, 0.79));
-    c6->accessory(std::bind(hf_info, _1, 0.75));
-    c6->divide(plot_size, -1);
+    // auto c6 = new paper(tag_object + "_dhf_f_eta_r", hb);
+    // apply_style(c6, cms, system_tag);
+    // if (!heavyion) c6->accessory(std::bind(kinematics, _1, 0.79));
+    // c6->accessory(std::bind(hf_info, _1, 0.75));
+    // c6->divide(plot_size, -1);
 
-    r_dhf_f_eta->apply([&](TH1* h) {
-        h->SetAxisRange(r_range[0], r_range[1], "Y");
-        c6->add(h, "mc"); });
+    // r_dhf_f_eta->apply([&](TH1* h) {
+    //     h->SetAxisRange(r_range[0], r_range[1], "Y");
+    //     c6->add(h, "mc"); });
 
-    auto c7 = std::vector<paper*>(ideta->size());
-    auto c8 = std::vector<paper*>(ideta->size());
-    auto c9 = std::vector<paper*>(ideta->size());
+    // auto c7 = std::vector<paper*>(ideta->size());
+    // auto c8 = std::vector<paper*>(ideta->size());
+    // auto c9 = std::vector<paper*>(ideta->size());
 
-    for (int64_t i = 0; i < ideta->size(); ++i) {
-        c7[i] = new paper(tag_object + "_sr_fits_s" + std::to_string(i), hb);
-        apply_style(c7[i], cms, system_tag);
-        if (!heavyion) c7[i]->accessory(std::bind(kinematics, _1, 0.79));
-        c7[i]->accessory(pthf_info);
-        c7[i]->ornaments(std::bind(eta_info, i + 1, 0.67));
-        c7[i]->divide(plot_size, -1);
+    // for (int64_t i = 0; i < ideta->size(); ++i) {
+    //     c7[i] = new paper(tag_object + "_sr_fits_s" + std::to_string(i), hb);
+    //     apply_style(c7[i], cms, system_tag);
+    //     if (!heavyion) c7[i]->accessory(std::bind(kinematics, _1, 0.79));
+    //     c7[i]->accessory(pthf_info);
+    //     c7[i]->ornaments(std::bind(eta_info, i + 1, 0.67));
+    //     c7[i]->divide(plot_size, -1);
 
-        c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
-        apply_style(c8[i], cms, system_tag);
-        if (!heavyion) c8[i]->accessory(std::bind(kinematics, _1, 0.79));
-        c8[i]->accessory(std::bind(hf_info, _1, 0.75));
-        c8[i]->accessory(guide_lines);
-        c8[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
-        c8[i]->divide(plot_size, -1);
-        c8[i]->set(paper::flags::logx);
+    //     c8[i] = new paper(tag_object + "_f_pt_s_s" + std::to_string(i), hb);
+    //     apply_style(c8[i], cms, system_tag);
+    //     if (!heavyion) c8[i]->accessory(std::bind(kinematics, _1, 0.79));
+    //     c8[i]->accessory(std::bind(hf_info, _1, 0.75));
+    //     c8[i]->accessory(guide_lines);
+    //     c8[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
+    //     c8[i]->divide(plot_size, -1);
+    //     c8[i]->set(paper::flags::logx);
 
-        c9[i] = new paper(tag_object + "_f_pt_r_s" + std::to_string(i), hb);
-        apply_style(c9[i], cms, system_tag);
-        if (!heavyion) c9[i]->accessory(std::bind(kinematics, _1, 0.79));
-        c9[i]->accessory(std::bind(hf_info, _1, 0.75));
-        c9[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
-        c9[i]->divide(plot_size, -1);
-        c9[i]->set(paper::flags::logx);
-    }
+    //     c9[i] = new paper(tag_object + "_f_pt_r_s" + std::to_string(i), hb);
+    //     apply_style(c9[i], cms, system_tag);
+    //     if (!heavyion) c9[i]->accessory(std::bind(kinematics, _1, 0.79));
+    //     c9[i]->accessory(std::bind(hf_info, _1, 0.75));
+    //     c9[i]->ornaments(std::bind(eta_info, i + 1, 0.71));
+    //     c9[i]->divide(plot_size, -1);
+    //     c9[i]->set(paper::flags::logx);
+    // }
 
-    /* fit mean and resolution */
-    obj->apply([&](TH1* h, int64_t index) {
-        auto indices = obj->indices_for(index);
-        auto pt_x = indices[0];
-        auto eta_x = indices[1];
-        auto hf_x = indices[2];
+    // /* fit mean and resolution */
+    // obj->apply([&](TH1* h, int64_t index) {
+    //     auto indices = obj->indices_for(index);
+    //     auto pt_x = indices[0];
+    //     auto eta_x = indices[1];
+    //     auto hf_x = indices[2];
 
-        auto label = "f_obj_"s + std::to_string(index);
-        TF1* f = new TF1(label.data(), pdf.data());
-        mold(f, value);
-        h->Fit(label.data(), "MQ", "",
-            fl[hf_x][eta_x][pt_x], fh[hf_x][eta_x][pt_x]);
+    //     auto label = "f_obj_"s + std::to_string(index);
+    //     TF1* f = new TF1(label.data(), pdf.data());
+    //     mold(f, value);
+    //     h->Fit(label.data(), "MQ", "",
+    //         fl[hf_x][eta_x][pt_x], fh[hf_x][eta_x][pt_x]);
 
-        (*s)[index]->SetBinContent(1, f->GetParameter(1));
-        (*s)[index]->SetBinError(1, f->GetParError(1));
-        (*r)[index]->SetBinContent(1, f->GetParameter(2));
-        (*r)[index]->SetBinError(1, f->GetParError(2));
+    //     (*s)[index]->SetBinContent(1, f->GetParameter(1));
+    //     (*s)[index]->SetBinError(1, f->GetParError(1));
+    //     (*r)[index]->SetBinContent(1, f->GetParameter(2));
+    //     (*r)[index]->SetBinError(1, f->GetParError(2));
 
-        ++pt_x;
+    //     ++pt_x;
 
-        (*s_f_pt)[x{eta_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(1));
-        (*s_f_pt)[x{eta_x, hf_x}]->SetBinError(pt_x, f->GetParError(1));
-        (*r_f_pt)[x{eta_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(2));
-        (*r_f_pt)[x{eta_x, hf_x}]->SetBinError(pt_x, f->GetParError(2));
+    //     (*s_f_pt)[x{eta_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(1));
+    //     (*s_f_pt)[x{eta_x, hf_x}]->SetBinError(pt_x, f->GetParError(1));
+    //     (*r_f_pt)[x{eta_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(2));
+    //     (*r_f_pt)[x{eta_x, hf_x}]->SetBinError(pt_x, f->GetParError(2));
 
-        c7[eta_x]->add(h, "mc");
-    });
+    //     c7[eta_x]->add(h, "mc");
+    // });
 
-    s_f_pt->apply([&](TH1* h, int64_t index) {
-        h->SetAxisRange(s_range[0], s_range[1], "Y");
+    // s_f_pt->apply([&](TH1* h, int64_t index) {
+    //     h->SetAxisRange(s_range[0], s_range[1], "Y");
 
-        if (fit) {
-            auto label = "f_s_f_pt_"s + std::to_string(index);
-            TF1* f = new TF1(label.data(), func.data());
-            h->Fit(f, "MEQ", "", 20, rpt.back());
-        }
+    //     if (fit) {
+    //         auto label = "f_s_f_pt_"s + std::to_string(index);
+    //         TF1* f = new TF1(label.data(), func.data());
+    //         h->Fit(f, "MEQ", "", 20, rpt.back());
+    //     }
 
-        auto eta_x = s_f_pt->indices_for(index)[0];
-        c8[eta_x]->add(h, "mc");
-    });
+    //     auto eta_x = s_f_pt->indices_for(index)[0];
+    //     c8[eta_x]->add(h, "mc");
+    // });
 
-    r_f_pt->apply([&](TH1* h, int64_t index) {
-        h->SetAxisRange(r_range[0], r_range[1], "Y");
+    // r_f_pt->apply([&](TH1* h, int64_t index) {
+    //     h->SetAxisRange(r_range[0], r_range[1], "Y");
 
-        auto label = "f_r_f_pt_"s + std::to_string(index);
-        auto f = resolution_function(label.data());
-        h->Fit(label.data(), "MEQ", "", 20, rpt.back());
+    //     auto label = "f_r_f_pt_"s + std::to_string(index);
+    //     auto f = resolution_function(label.data());
+    //     h->Fit(label.data(), "MEQ", "", 20, rpt.back());
 
-        csn[1] = f->GetParameter(1);
-        csn[2] = f->GetParameter(2);
+    //     csn[1] = f->GetParameter(1);
+    //     csn[2] = f->GetParameter(2);
 
-        auto eta_x = r_f_pt->indices_for(index)[0];
-        c9[eta_x]->add(h, "mc");
-    });
+    //     auto eta_x = r_f_pt->indices_for(index)[0];
+    //     c9[eta_x]->add(h, "mc");
+    // });
 
     hb->sketch();
 
-    for (auto const& p : { c1, c2, c3, c4, c5, c6 })
+    // for (auto const& p : { c1, c2, c3, c4, c5, c6 })
+    //     p->draw("pdf");
+    for (auto const& p : { c1, c2, c3 })
         p->draw("pdf");
-    for (auto const& c : { c7, c8, c9 })
-        for (auto p : c)
-            p->draw("pdf");
+    // for (auto const& c : { c7, c8, c9 })
+    //     for (auto p : c)
+    //         p->draw("pdf");
 
     /* save output */
     in(output, [&]() {
