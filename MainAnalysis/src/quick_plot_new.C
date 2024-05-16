@@ -235,6 +235,7 @@ int congratulate() {
     latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
     latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    legend.Draw();
 
     canvas.SaveAs("hybrid_spectra_pp_new.pdf"); // change
 
