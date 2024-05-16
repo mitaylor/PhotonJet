@@ -200,8 +200,8 @@ int congratulate() {
 
     legend_y_min = 0.38;
     legend_y_max = 0.45;
-    legend_x_min = 0.45;
-    legend_x_max = 0.75;
+    legend_x_min = 0.55;
+    legend_x_max = 0.85;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
