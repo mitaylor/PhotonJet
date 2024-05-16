@@ -173,7 +173,7 @@ int congratulate() {
         latex.SetTextSize(0.06/sf);
         latex.SetTextAlign(22);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 + pad_dx * (i + 0.5), pad_y0 * 0.5, "#Deltaj");
+        latex.DrawLatex(pad_x0 + pad_dx * (i + 0.5), pad_y0 * 0.4, "#Deltaj");
     }
 
     axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymin * 0.999, ymax * 0.999, 510, "S");
