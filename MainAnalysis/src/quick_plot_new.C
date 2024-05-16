@@ -240,9 +240,6 @@ int congratulate() {
     return 0;
 }
 
-int main(int argc, char* argv[]) {
-    if (argc == 1)
-        return congratulate();
-
-    return 1;
+int main() {
+    return congratulate();
 }
