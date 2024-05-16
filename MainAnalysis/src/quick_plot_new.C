@@ -170,7 +170,7 @@ int congratulate() {
         canvas.cd();
 
         latex.SetTextFont(42);
-        latex.SetTextSize(0.07/sf);
+        latex.SetTextSize(0.06/sf);
         latex.SetTextAlign(22);
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0 + pad_dx * (i + 0.5), pad_y0 * 0.5, "#Deltaj");
@@ -181,10 +181,11 @@ int congratulate() {
     set_axis(*axis_y[0], sf);
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{j#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
+    latex.SetTextAngle(0);
 
     TGraph line;
     line.SetPoint(0, xmin, 0);
