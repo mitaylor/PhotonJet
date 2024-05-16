@@ -318,7 +318,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p1 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_SVD_" + prior + "_dj", hb);
 
-    p1->divide(filenames.size(), -1);
+    p1->divide(filenames.size()/2, -1);
     p1->accessory(pthf_info);
     p1->accessory(std::bind(minimum, _1, "SVD"));
     apply_style(p1, cms, system_tag, -2, 20);
@@ -332,7 +332,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p2 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_SVD_" + prior + "_jpt", hb);
 
-    p2->divide(filenames.size(), -1);
+    p2->divide(filenames.size()/2, -1);
     p2->accessory(pthf_info);
     p2->accessory(std::bind(minimum, _1, "SVD"));
     apply_style(p2, cms, system_tag, -0.003, 0.03);
@@ -346,7 +346,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p3 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_Bayes_" + prior + "_dj", hb);
 
-    p3->divide(filenames.size(), -1);
+    p3->divide(filenames.size()/2, -1);
     p3->accessory(pthf_info);
     p3->accessory(std::bind(minimum, _1, "Bayes"));
     apply_style(p3, cms, system_tag, -2, 20);
@@ -360,7 +360,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
     auto p4 = new paper(set + "_unfolding_closure_" + tag + "_" + label + "_Bayes_" + prior + "_jpt", hb);
 
-    p4->divide(filenames.size(), -1);
+    p4->divide(filenames.size()/2, -1);
     p4->accessory(pthf_info);
     p4->accessory(std::bind(minimum, _1, "Bayes"));
     apply_style(p4, cms, system_tag, -0.003, 0.03);
