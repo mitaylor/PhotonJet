@@ -232,6 +232,8 @@ int distillate(char const* config, char const* output) {
         mold(f, value);
         h->Fit(label.data(), "MQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 
+        std::cout << f->GetParameter(1) << std::endl;
+
         (*s_dpthf)[index]->SetBinContent(1, 0);
         (*s_dpthf)[index]->SetBinError(1, 0);
         (*r_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
@@ -306,6 +308,8 @@ int distillate(char const* config, char const* output) {
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
         h->Fit(label.data(), "MQ", "", fle[hf_x][dr_x], fhe[hf_x][dr_x]);
+
+        std::cout << f->GetParameter(1) << std::endl;
 
         (*s_ddrhf)[index]->SetBinContent(1, 0);
         (*s_ddrhf)[index]->SetBinError(1, 0);
@@ -384,6 +388,8 @@ int distillate(char const* config, char const* output) {
         mold(f, value);
         h->Fit(label.data(), "MQ", "",
             fl[hf_x][dr_x][pt_x], fh[hf_x][dr_x][pt_x]);
+
+        std::cout << f->GetParameter(1) << std::endl;
 
         (*s)[index]->SetBinContent(1, 0);
         (*s)[index]->SetBinError(1, 0);
