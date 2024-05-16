@@ -174,7 +174,7 @@ int gather_theory(char const* config, char const* output) {
 
     /* save histograms */
     in(output, [&]() {
-        for (size_t i = 0; i < inputs.size(); ++i) {
+        for (int i = 0; i < size; ++i) {
             hists_pp_selfnorm[i]->save();
             hists_pp_selfnorm_part1[i]->save();
             hists_pp_selfnorm_part2[i]->save();
