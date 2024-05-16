@@ -88,7 +88,7 @@ int distillate(char const* config, char const* output) {
     auto fpt = std::bind(&interval::book<TH1F>, ipt, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
 
-    auto title = "#mathbb{E}("s + label + ")";
+    auto title = "E("s + label + ")";
 
     /* fully differential (pt, dr, hf) */
     auto s = new history<TH1F>("s"s, "", fincl, obj->shape());
