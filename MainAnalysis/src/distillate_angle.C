@@ -232,19 +232,22 @@ int distillate(char const* config, char const* output) {
         mold(f, value);
         h->Fit(label.data(), "MQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 
-        std::cout << f->GetParameter(1) << std::endl;
+        auto value = -1/f->GetParameter(1);
+        auto error = std::abs(value + -1/(f->GetParameter(1) + f->GetParError(1)));
+
+        std::cout << value << " " << error << std::endl;
 
         (*s_dpthf)[index]->SetBinContent(1, 0);
         (*s_dpthf)[index]->SetBinError(1, 0);
-        (*r_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
-        (*r_dpthf)[index]->SetBinError(1, f->GetParError(1));
+        (*r_dpthf)[index]->SetBinContent(1, value);
+        (*r_dpthf)[index]->SetBinError(1, error);
 
         ++pt_x;
 
         (*s_dhf_f_pt)[hf_x]->SetBinContent(pt_x, 0);
         (*s_dhf_f_pt)[hf_x]->SetBinError(pt_x, 0);
-        (*r_dhf_f_pt)[hf_x]->SetBinContent(pt_x, f->GetParameter(1));
-        (*r_dhf_f_pt)[hf_x]->SetBinError(pt_x, f->GetParError(1));
+        (*r_dhf_f_pt)[hf_x]->SetBinContent(pt_x, value);
+        (*r_dhf_f_pt)[hf_x]->SetBinError(pt_x, error);
 
         c1->add(h, "mc");
     });
@@ -308,20 +311,23 @@ int distillate(char const* config, char const* output) {
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
         h->Fit(label.data(), "MQ", "", fle[hf_x][dr_x], fhe[hf_x][dr_x]);
+        
+        auto value = -1/f->GetParameter(1);
+        auto error = std::abs(value + -1/(f->GetParameter(1) + f->GetParError(1)));
 
-        std::cout << f->GetParameter(1) << std::endl;
+        std::cout << value << " " << error << std::endl;
 
         (*s_ddrhf)[index]->SetBinContent(1, 0);
         (*s_ddrhf)[index]->SetBinError(1, 0);
-        (*r_ddrhf)[index]->SetBinContent(1, f->GetParameter(1));
-        (*r_ddrhf)[index]->SetBinError(1, f->GetParError(1));
+        (*r_ddrhf)[index]->SetBinContent(1, value);
+        (*r_ddrhf)[index]->SetBinError(1, error);
 
         ++dr_x;
 
         (*s_dhf_f_dr)[hf_x]->SetBinContent(dr_x, 0);
         (*s_dhf_f_dr)[hf_x]->SetBinError(dr_x, 0);
-        (*r_dhf_f_dr)[hf_x]->SetBinContent(dr_x, f->GetParameter(1));
-        (*r_dhf_f_dr)[hf_x]->SetBinError(dr_x, f->GetParError(1));
+        (*r_dhf_f_dr)[hf_x]->SetBinContent(dr_x, value);
+        (*r_dhf_f_dr)[hf_x]->SetBinError(dr_x, error);
 
         c4->add(h, "mc");
     });
@@ -389,19 +395,22 @@ int distillate(char const* config, char const* output) {
         h->Fit(label.data(), "MQ", "",
             fl[hf_x][dr_x][pt_x], fh[hf_x][dr_x][pt_x]);
 
-        std::cout << f->GetParameter(1) << std::endl;
+        auto value = -1/f->GetParameter(1);
+        auto error = std::abs(value + -1/(f->GetParameter(1) + f->GetParError(1)));
+
+        std::cout << value << " " << error << std::endl;
 
         (*s)[index]->SetBinContent(1, 0);
         (*s)[index]->SetBinError(1, 0);
-        (*r)[index]->SetBinContent(1, f->GetParameter(1));
-        (*r)[index]->SetBinError(1, f->GetParError(1));
+        (*r)[index]->SetBinContent(1, value);
+        (*r)[index]->SetBinError(1, error);
 
         ++pt_x;
 
         (*s_f_pt)[x{dr_x, hf_x}]->SetBinContent(pt_x, 0);
         (*s_f_pt)[x{dr_x, hf_x}]->SetBinError(pt_x, 0);
-        (*r_f_pt)[x{dr_x, hf_x}]->SetBinContent(pt_x, f->GetParameter(1));
-        (*r_f_pt)[x{dr_x, hf_x}]->SetBinError(pt_x, f->GetParError(1));
+        (*r_f_pt)[x{dr_x, hf_x}]->SetBinContent(pt_x, value);
+        (*r_f_pt)[x{dr_x, hf_x}]->SetBinError(pt_x, error);
 
         c7[dr_x]->add(h, "mc");
     });
