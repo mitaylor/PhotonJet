@@ -169,7 +169,12 @@ int gather_theory(char const* config, char const* output) {
             (*hists_ratio_totnorm_part2[i])[0]->SetBinError(j, (ratio_up - ratio_down)/2);
         }
 
-        f.close();
+        file_selfnorm.close();
+        file_selfnorm_part1.close();
+        file_selfnorm_part2.close();
+        file_totnorm.close();
+        file_totnorm_part1.close();
+        file_totnorm_part2.close();
    }
 
     /* save histograms */
