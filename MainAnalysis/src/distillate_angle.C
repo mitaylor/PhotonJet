@@ -233,7 +233,7 @@ int distillate(char const* config, char const* output) {
         h->Fit(label.data(), "MQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 
         auto value = -1/f->GetParameter(1);
-        auto error = std::abs(value + -1/(f->GetParameter(1) + f->GetParError(1)));
+        auto error = std::abs(value + 1/(f->GetParameter(1) + f->GetParError(1)));
 
         std::cout << value << " " << error << std::endl;
 
