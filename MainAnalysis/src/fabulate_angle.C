@@ -159,7 +159,7 @@ int fabulate(char const* config, char const* output) {
                     auto dr_x = idr->index_for(rdr);
                     auto index = mptetahf->index_for(x{pt_x, dr_x, j});
 
-                    (*angle)[index]->Fill(gdr-rdr, weights[j]);
+                    (*angle)[index]->Fill(std::abs(gdr-rdr), weights[j]);
                 }
             }
         }
