@@ -364,7 +364,7 @@ int compare_binning(char const* config, char const* output) {
 
     auto p1 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_before_dj", hb);
 
-    p1->divide(size, -1);
+    p1->divide(size/2, -1);
     p1->accessory(pthf_info);
     p1->accessory(minimum);
     apply_style(p1, cms, system_tag, -2, 20);
@@ -378,7 +378,7 @@ int compare_binning(char const* config, char const* output) {
 
     auto p2 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_before_jpt", hb);
 
-    p2->divide(size, -1);
+    p2->divide(size/2, -1);
     p2->accessory(pthf_info);
     p2->accessory(minimum);
     apply_style(p2, cms, system_tag, -0.003, 0.03);
@@ -392,7 +392,7 @@ int compare_binning(char const* config, char const* output) {
 
     auto p3 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_after_dj", hb);
 
-    p3->divide(size, -1);
+    p3->divide(size/2, -1);
     p3->accessory(pthf_info);
     p3->accessory(minimum);
     apply_style(p3, cms, system_tag, -2, 20);
@@ -406,7 +406,7 @@ int compare_binning(char const* config, char const* output) {
 
     auto p4 = new paper("compare_binning_" + tag + "_" + algorithm + "_" + prior + "_after_jpt", hb);
 
-    p4->divide(size, -1);
+    p4->divide(size/2, -1);
     p4->accessory(pthf_info);
     p4->accessory(minimum);
     apply_style(p4, cms, system_tag, -0.003, 0.03);
