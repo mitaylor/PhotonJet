@@ -230,7 +230,7 @@ int distillate(char const* config, char const* output) {
         auto label = "f_obj_dpthf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
-        h->Fit(label.data(), "WLMQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
+        h->Fit(label.data(), "MQ", "", flp[hf_x][pt_x], fhp[hf_x][pt_x]);
 
         (*s_dpthf)[index]->SetBinContent(1, f->GetParameter(1));
         (*s_dpthf)[index]->SetBinError(1, f->GetParError(1));
@@ -305,7 +305,7 @@ int distillate(char const* config, char const* output) {
         auto label = "f_obj_ddrhf_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
-        h->Fit(label.data(), "WLMQ", "", fle[hf_x][dr_x], fhe[hf_x][dr_x]);
+        h->Fit(label.data(), "MQ", "", fle[hf_x][dr_x], fhe[hf_x][dr_x]);
 
         (*s_ddrhf)[index]->SetBinContent(1, f->GetParameter(1));
         (*s_ddrhf)[index]->SetBinError(1, f->GetParError(1));
@@ -382,7 +382,7 @@ int distillate(char const* config, char const* output) {
         auto label = "f_obj_"s + std::to_string(index);
         TF1* f = new TF1(label.data(), pdf.data());
         mold(f, value);
-        h->Fit(label.data(), "WLMQ", "",
+        h->Fit(label.data(), "MQ", "",
             fl[hf_x][dr_x][pt_x], fh[hf_x][dr_x][pt_x]);
 
         (*s)[index]->SetBinContent(1, f->GetParameter(1));
