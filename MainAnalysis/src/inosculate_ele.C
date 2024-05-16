@@ -117,13 +117,13 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
             
             t->GetEntry(i);
             // if ((*p->accepts)[0] == 0) { continue; }
-
+            std::cout << __LINE__ << std::endl;
             if (p->hiHF <= hf_min) { continue; }
             auto hf_x = ihf->index_for(p->hiHF);
             if (hf_x == ihf->size()) { continue; }
-
+std::cout << __LINE__ << std::endl;
             std::vector<float> masses;
-
+std::cout << __LINE__ << std::endl;
             for (int64_t j = 0; j < p->nPho; ++j) {
                 if ((*p->phoEt)[j] < 20) //15
                     continue;
@@ -131,12 +131,12 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     continue;
                 if (heavyion && in_pho_failure_region(p, j))
                     continue;
-
+std::cout << __LINE__ << std::endl;
                 if ((*p->phoHoverE)[j] > hovere_max) { continue; }
                 if ((*p->phoSigmaIEtaIEta_2012)[j] > 0.011) { continue; }
-
+std::cout << __LINE__ << std::endl;
                 auto pho_phi = convert_radian((*p->phoPhi)[j]);
-
+std::cout << __LINE__ << std::endl;
                 bool electron = false;
                 for (int64_t l = 0; l < p->nEle; ++l) {
                     if (std::abs((*p->eleEta)[l]) > 1.4442) { continue; }
@@ -153,9 +153,9 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                             >(p, l, heavyion)) {
                         electron = true; break; }
                 }
-
+std::cout << __LINE__ << std::endl;
                 if (!electron) { continue; }
-
+std::cout << __LINE__ << std::endl;
                 for (int64_t k = j + 1; k < p->nPho; ++k) {
                     if ((*p->phoEt)[k] < 20) //15
                         continue;
@@ -166,7 +166,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
                     if ((*p->phoHoverE)[k] > hovere_max) { continue; }
                     if ((*p->phoSigmaIEtaIEta_2012)[k] > 0.011) { continue; }
-
+std::cout << __LINE__ << std::endl;
                     auto pho_phi = convert_radian((*p->phoPhi)[k]);
 
                     bool electron = false;
@@ -185,7 +185,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                                 >(p, l, heavyion)) {
                             electron = true; break; }
                     }
-
+std::cout << __LINE__ << std::endl;
                     if (!electron) { continue; }
 
                     float phoEt_j = (*p->phoEt)[j];
@@ -195,7 +195,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                     float phoEt_k = (*p->phoEt)[k];
                     if ((*p->phoEt)[k] > 30 && heavyion && use_er) phoEt_k = (*p->phoEtErNew)[k];
                     if ((*p->phoEt)[k] > 30 && !heavyion && use_er) phoEt_k = (*p->phoEtEr)[k];
-
+std::cout << __LINE__ << std::endl;
                     /* double electron invariant mass */
                     auto mass = std::sqrt(ml_invariant_mass<coords::collider>(
                         phoEt_j,
@@ -206,20 +206,20 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
                         (*p->phoEta)[k],
                         (*p->phoPhi)[k],
                         0.f));
-
+std::cout << __LINE__ << std::endl;
                     masses.push_back(mass);
                 }
 
                 
             }
-
+std::cout << __LINE__ << std::endl;
             if (masses.empty()) { continue; }
 
             if (masses.size() > 1) {
                 std::sort(masses.begin(), masses.end(), [](float a, float b) {
                     return std::abs(a - 91.1876) < std::abs(b - 91.1876); });
             }
-
+std::cout << __LINE__ << std::endl;
             (*minv)[x{0, hf_x}]->Fill(masses[0], 1);
         }
     }
