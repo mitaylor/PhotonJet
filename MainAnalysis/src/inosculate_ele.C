@@ -109,7 +109,7 @@ int64_t inosculate(char const* config, char const* selections, char const* outpu
 
         TFile* f = new TFile(file.data(), "read");
         TTree* t = (TTree*)f->Get("pj");
-        auto p = new pjtree(false, true, false, t, { 1, 1, 1, 1, 0, 0, 0, 0, 0 });
+        auto p = new pjtree(false, false, false, t, { 1, 1, 1, 1, 0, 0, 0, 0, 0 });
         int64_t nentries = t->GetEntries();
 
         for (int64_t i = 0; i < nentries; ++i) {
