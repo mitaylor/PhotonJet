@@ -237,6 +237,9 @@ int distillate(char const* config, char const* output) {
 
         std::cout << value << " " << error << std::endl;
 
+        value = h->GetMean();
+        error = h->GetMeanError();
+
         (*s_dpthf)[index]->SetBinContent(1, 0);
         (*s_dpthf)[index]->SetBinError(1, 0);
         (*r_dpthf)[index]->SetBinContent(1, value);
@@ -316,6 +319,9 @@ int distillate(char const* config, char const* output) {
         auto error = std::abs(value + 1/(f->GetParameter(1) + f->GetParError(1)));
 
         std::cout << value << " " << error << std::endl;
+
+        value = h->GetMean();
+        error = h->GetMeanError();
 
         (*s_ddrhf)[index]->SetBinContent(1, 0);
         (*s_ddrhf)[index]->SetBinError(1, 0);
@@ -399,6 +405,9 @@ int distillate(char const* config, char const* output) {
         auto error = std::abs(value + 1/(f->GetParameter(1) + f->GetParError(1)));
 
         std::cout << value << " " << error << std::endl;
+
+        value = h->GetMean();
+        error = h->GetMeanError();
 
         (*s)[index]->SetBinContent(1, 0);
         (*s)[index]->SetBinError(1, 0);
