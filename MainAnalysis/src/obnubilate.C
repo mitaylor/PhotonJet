@@ -193,7 +193,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         for (int i = 0; i < cols; ++i) {
             cs[i] = new paper(set + "_" + tag + "_var"s + stub + "_" + to_text(i), hb);
-            apply_style(cs[i], "", "", 0.00001, range));
+            apply_style(cs[i], "", "", 0.00001, range);
             cs[i]->divide(2, -1);
 
             if (heavyion && cols == 4) { cs[i]->accessory(std::bind(hf_info, _1, i)); }
