@@ -235,8 +235,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
 
         (*input_mc_create_reco)[j] = ForwardFold((*input_mc_gen)[j], (*input_mc_response)[j]);
         (*input_mc_create_reco)[j]->Divide((*input_mc_purity)[j]);
-        (*input_mc_create_reco_fold0)[j] = fold((*input_mc_reco)[j], nullptr, mr, 0, osr);
-        (*input_mc_create_reco_fold1)[j] = fold((*input_mc_reco)[j], nullptr, mr, 1, osr);
+        (*input_mc_create_reco_fold0)[j] = fold((*input_mc_create_reco)[j], nullptr, mr, 0, osr);
+        (*input_mc_create_reco_fold1)[j] = fold((*input_mc_create_reco)[j], nullptr, mr, 1, osr);
 
         (*input_theory_reco)[j] = ForwardFold((*input_theory_gen)[j], (*input_mc_response)[j]);
         (*input_theory_reco)[j]->Divide((*input_mc_purity)[j]);
