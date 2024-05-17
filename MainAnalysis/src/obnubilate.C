@@ -107,12 +107,6 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         for_contents([](std::array<double, 1> v) {
             return std::sqrt(v[0]); }, h); };
 
-    auto shader = [&](TH1* h, float max) {
-        default_formatter(h, 0., max);
-        // auto col = h->GetLineColor();
-        // h->SetFillColorAlpha(col, 0.32); 
-    };
-
     auto kinematics = [&](int64_t index) {
         if (index > 0) {
             auto photon_selections = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs)  + 
@@ -199,7 +193,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
         for (int i = 0; i < cols; ++i) {
             cs[i] = new paper(set + "_" + tag + "_var"s + stub + "_" + to_text(i), hb);
-            apply_style(cs[i], "", "", std::bind(shader, _1, range));
+            apply_style(cs[i], "", "", 0.00001, range));
             cs[i]->divide(2, -1);
 
             if (heavyion && cols == 4) { cs[i]->accessory(std::bind(hf_info, _1, i)); }
