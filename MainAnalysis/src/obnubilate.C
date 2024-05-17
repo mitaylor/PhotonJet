@@ -207,6 +207,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
 
             cs[i]->accessory(kinematics);
             cs[i]->accessory(blurb);
+            cs[i]->set(paper::flags::logy);
         }
 
         auto base = new history<TH1F>(f, tag + "_"s + label + stub, "base_"s + tag + "_"s + label + stub);
