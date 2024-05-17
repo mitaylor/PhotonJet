@@ -190,7 +190,7 @@ int quantitate(char const* config, char const* selections, char const* output) {
     std::vector<TFile*> fdata(filenames.size(), nullptr);
 
     zip([&](auto& fdata, auto const& filename) {
-        fdata = new TFile(("/data/submit/mitay/unfolding/240325/Input/Theory/"s + set + "/"s + filename).data(), "read");
+        fdata = new TFile(("/data/submit/mitay/unfolding/240517/Input/Theory/"s + set + "/"s + filename).data(), "read");
     }, fdata, filenames);
 
     auto funfolding = new TFile((base + unfolding).data(), "read");
