@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
 
    // Copy over error input
    if (HInputErrors != nullptr) {
-      TH1D HDataErrors("HDataErrors", ";;", NGen, 0, NGen);
-      for(int i = 0; i <= NGen + 1; i++)
+      TH1D HDataErrors("HDataErrors", ";;", NReco, 0, NReco);
+      for(int i = 0; i <= NReco + 1; i++)
       {
          HDataErrors.SetBinContent(i, HInputErrors->GetBinContent(i));
          HDataErrors.SetBinError(i, HInputErrors->GetBinError(i));
