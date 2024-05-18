@@ -260,21 +260,6 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
 
     auto pthf_info = [&](int64_t index) {
         stack_text(index, 0.85, 0.04, mpthf, pt_info, hf_info); };
-
-    auto pthf_info_scaled = [&](int64_t index) {
-        int64_t scaled_index = (index + 1) / 2;
-        std::string cent_low = to_text(dcent[scaled_index]);
-        std::string cent_high = to_text(dcent[scaled_index-1]);
-        auto pri = "Cent. " + cent_low + " - " + cent_high + "%";
-        auto alg = to_text(rpt[0]) + " < p_{T}^{#gamma} < " + to_text(rpt[1]);
-
-        TLatex* l = new TLatex();
-        l->SetTextFont(43);
-        l->SetTextAlign(11);
-        l->SetTextSize(13);
-        l->DrawLatexNDC(0.125, 0.85, pri.data());
-        l->DrawLatexNDC(0.125, 0.80, alg.data());
-    };
     
     auto minimum = [&](int64_t index, int64_t choice) {
         if (index > -1) {
