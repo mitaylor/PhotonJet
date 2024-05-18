@@ -126,7 +126,7 @@ int obnubilate(char const* config, char const* selections, char const* output) {
         if (index > 0) {
             auto system_tag = (heavyion) ? "PbPb 1.69 nb^{-1}, "s : "pp 302 pb^{-1}, "s;
             system_tag += "#sqrt{s_{NN}} = 5.02 TeV"s;
-            auto cms = "#bf{#scale[1.4]{CMS}}#font[52]{Preliminary}"s;
+            auto cms = "#bf{#scale[1.4]{CMS}} #font[52]{Preliminary}"s;
 
             TLatex* l = new TLatex();
             l->SetTextAlign(11);
