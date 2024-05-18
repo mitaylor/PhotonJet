@@ -331,7 +331,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
     
     for (int64_t i = 0; i < size; ++i) {
-        // (*data_before)[i]->Multiply((*reco_eff)[i]);
         (*data_before_fold0)[i] = fold((*data_before)[i], nullptr, mr, 0, osr);
         (*data_before_fold1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
     }
@@ -411,7 +410,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     for (int64_t i = 0; i < size; ++i) {
         auto theory_after_base = new history<TH1F>(ftheory, theory_label);
-        (*theory_after_base)[0]->Scale(1.5);
 
         (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
