@@ -413,7 +413,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto theory_after_base = new history<TH1F>(ftheory, theory_label);
 
         (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
-        // (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
     }
@@ -458,6 +457,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_before_fold1 = new history<TH1F>("theory_before_fold1"s, "", null<TH1F>, theory_after->shape());
 
     for (int i = 0; i < size; ++i) {
+        (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
         (*theory_before)[i]->Divide((*reco_eff)[i]);
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
