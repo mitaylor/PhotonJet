@@ -308,13 +308,6 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto gen_eff = new history<TH1F>(fmatrix, tag + "_g_eff"s);
     auto reco_eff = new history<TH1F>(fmatrix, tag + "_r_eff"s);
 
-    /* set errors to be zero */
-    // for (int64_t i = 0; i < size; ++i) {
-    //     for (int64_t j = 0; j < (*reco_eff)[i]->GetNbinsX(); ++j) {
-    //         (*reco_eff)[i]->SetBinError(j + 1, 0);
-    //     }
-    // }
-
     matrix->rename("response"s);
     gen_eff->rename("gen_eff"s);
     reco_eff->rename("reco_eff"s);
@@ -331,7 +324,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto data_before_fold1 = new history<TH1F>("data_before_fold1"s, "", null<TH1F>, data_before->shape());
     
     for (int64_t i = 0; i < size; ++i) {
-        // (*data_before)[i]->Multiply((*reco_eff)[i]);
+        (*data_before)[i]->Multiply((*reco_eff)[i]);
         (*data_before_fold0)[i] = fold((*data_before)[i], nullptr, mr, 0, osr);
         (*data_before_fold1)[i] = fold((*data_before)[i], nullptr, mr, 1, osr);
     }
@@ -413,6 +406,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
         auto theory_after_base = new history<TH1F>(ftheory, theory_label);
 
         (*theory_after)[i] = (TH1F*) (*theory_after_base)[0]->Clone(to_text(i).data());
+        (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_after_fold0)[i] = fold((*theory_after)[i], nullptr, mg, 0, osg);
         (*theory_after_fold1)[i] = fold((*theory_after)[i], nullptr, mg, 1, osg);
     }
@@ -457,9 +451,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     auto theory_before_fold1 = new history<TH1F>("theory_before_fold1"s, "", null<TH1F>, theory_after->shape());
 
     for (int i = 0; i < size; ++i) {
-        (*theory_after)[i]->Multiply((*gen_eff)[i]);
         (*theory_before)[i] = forward_fold((*theory_after)[i], (*matrix)[i]);
-        (*theory_before)[i]->Divide((*reco_eff)[i]);
         (*theory_before_fold0)[i] = fold((*theory_before)[i], nullptr, mr, 0, osr);
         (*theory_before_fold1)[i] = fold((*theory_before)[i], nullptr, mr, 1, osr);
     }
@@ -640,7 +632,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
             auto MUnfoldedFold1 = (TH2F*) fafter[i]->Get(matrix_fold1_name.data());
 
             (*data_after)[i] = HUnfolded;
-            // (*data_after)[i]->Multiply((*gen_eff)[i]);
+            (*data_after)[i]->Multiply((*gen_eff)[i]);
             (*data_after_fold0)[i] = fold((*data_after)[i], MUnfolded, mg, 0, osg);
             (*data_after_fold1)[i] = fold((*data_after)[i], MUnfolded, mg, 1, osg);
 
@@ -875,7 +867,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto p0 = new paper(set + "_iteration_chi_squared_" + plot_name, hb);
 
-    p0->divide(size/2, -1);
+    p0->divide(size, -1);
     p0->accessory(pthf_info);
     apply_style(p0, cms, system_tag);
 
@@ -887,7 +879,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto p1 = new paper(set + "_iteration_chi_squared_" + plot_name + "_dj", hb);
 
-    p1->divide(size/2, -1);
+    p1->divide(size, -1);
     p1->accessory(pthf_info);
     p1->accessory(std::bind(pass, _1, choice_dj));
     apply_style(p1, cms, system_tag);
@@ -900,7 +892,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto p2 = new paper(set + "_iteration_chi_squared_" + plot_name + "_jpt", hb);
 
-    p2->divide(size/2, -1);
+    p2->divide(size, -1);
     p2->accessory(pthf_info);
     p2->accessory(std::bind(pass, _1, choice_jpt));
     apply_style(p2, cms, system_tag);
@@ -913,7 +905,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
 
     auto p3 = new paper(set + "_iteration_chi_squared_simple_" + plot_name, hb);
 
-    p3->divide(size/2, -1);
+    p3->divide(size, -1);
     p3->accessory(pthf_info);
     apply_style(p3, cms, system_tag);
 
@@ -925,7 +917,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto p4 = new paper(set + "_iteration_chi_squared_simple_" + plot_name + "_dj", hb);
 
-    p4->divide(size/2, -1);
+    p4->divide(size, -1);
     p4->accessory(pthf_info);
     p4->accessory(std::bind(pass, _1, choice_simple_dj));
     apply_style(p4, cms, system_tag);
@@ -938,7 +930,7 @@ int bottom_line_test(char const* config, char const* selections, char const* out
     
     auto p5 = new paper(set + "_iteration_chi_squared_simple_" + plot_name + "_jpt", hb);
 
-    p5->divide(size/2, -1);
+    p5->divide(size, -1);
     p5->accessory(pthf_info);
     p5->accessory(std::bind(pass, _1, choice_simple_jpt));
     apply_style(p5, cms, system_tag);
