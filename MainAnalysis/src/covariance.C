@@ -425,7 +425,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p2, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
-            p2->add((toy_covariance_fold0)[i], "Toy");
+            p2->add((*toy_covariance_fold0)[i], "Toy");
             p2->adjust((*toy_covariance_fold0)[i], "colz", "");
         }
 
