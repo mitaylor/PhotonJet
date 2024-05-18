@@ -393,7 +393,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         hb->category("type", "Calculated", "Toy");
 
         auto p1 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_index" + std::to_string(i), hb);
-        p1->divide(file_data.size(), -1);
+        p1->divide(file_data.size()/2, -1);
         p1->accessory(pthf_info);
         p1->accessory(std::bind(minimum, _1, i));
         apply_style(p1, cms, system_tag);
@@ -404,7 +404,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         }
 
         auto p2 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold0_index" + std::to_string(i), hb);
-        p2->divide(file_data.size(), -1);
+        p2->divide(file_data.size()/2, -1);
         p2->accessory(pthf_info);
         p2->accessory(std::bind(minimum, _1, i));
         apply_style(p2, cms, system_tag);
@@ -415,7 +415,7 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         }
 
         auto p3 = new paper(set + "_errors_" + tag + "_" + prior + "_" + algorithm + "_errors_fold1_index" + std::to_string(i), hb);
-        p3->divide(file_data.size(), -1);
+        p3->divide(file_data.size()/2, -1);
         p3->accessory(pthf_info);
         p3->accessory(std::bind(minimum, _1, i));
         apply_style(p3, cms, system_tag);
