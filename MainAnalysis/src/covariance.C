@@ -436,9 +436,6 @@ int compare_unfolding_errors(char const* config, char const* selections, char co
         apply_style(p3, cms, system_tag);
 
         for (size_t i = 0; i < file_data.size(); ++i) {
-            auto max = ((*toy_errors_fold1)[i]->GetMaximum() > (*calc_errors_fold1)[i]->GetMaximum()) ? (*toy_errors_fold1)[i]->GetMaximum() : (*calc_errors_fold1)[i]->GetMaximum();
-            auto min = ((*toy_errors_fold1)[i]->GetMinimum() < (*calc_errors_fold1)[i]->GetMinimum()) ? (*toy_errors_fold1)[i]->GetMinimum() : (*calc_errors_fold1)[i]->GetMinimum();
-
             p3->add((*toy_covariance_fold1)[i], "Toy");
             p3->adjust((*toy_covariance_fold1)[i], "colz", "");
         }
