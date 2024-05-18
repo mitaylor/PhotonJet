@@ -176,7 +176,7 @@ int regularization(char const* config, char const* selections, char const* outpu
 
     auto p = new paper(set + "_regularization_" + tag + "_" + object + "_" + algorithm + "_" + label + "_" + prior, hb);
 
-    p->divide(files.size(), -1);
+    p->divide(files.size()/2, -1);
     p->accessory(pthf_info);
     p->accessory(minimum);
     apply_style(p, cms, system_tag);
