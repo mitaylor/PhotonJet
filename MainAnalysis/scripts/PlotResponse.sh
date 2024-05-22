@@ -29,7 +29,7 @@ samples=(aa)
 for sample in ${samples[@]}; do
     run_aa $sample
 
-    for syst in qcd; do
+    for syst in qcd qcd_no_mebs; do
         run_aa ${sample}_${syst}
     done
 done
