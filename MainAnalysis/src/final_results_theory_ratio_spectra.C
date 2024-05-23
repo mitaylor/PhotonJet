@@ -533,8 +533,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    if (system == 3 && !subsets) legend_part1.SetTextSize(0.04);
-    else                         legend_part1.SetTextSize(0.05);
+    if (system == 3) legend_part1.SetTextSize(0.03);
+    else             legend_part1.SetTextSize(0.05);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
     if (system == 2)    legend_part1.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
@@ -550,8 +550,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
     if (system == 0)    legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
     if (system == 0)    legend_part1.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
-    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
+    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
@@ -572,7 +571,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)    legend_x_min = legend_x_max;
     if (system == 1 && !subsets)    legend_x_max = legend_x_min + 0.30;
 
-    if (system == 3 && subsets)    legend_y_min = legend_y_max - 0.21;
+    if (system == 3 && subsets)    legend_y_min = legend_y_max - 0.28;
     if (system == 3 && subsets)    legend_y_max = legend_y_max;
     if (system == 3 && subsets)    legend_x_min = legend_x_min;
     if (system == 3 && subsets)    legend_x_max = legend_x_max;
@@ -584,14 +583,16 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    legend_part2.SetTextSize(0.05);
+    if (system == 3) legend_part2.SetTextSize(0.03);
+    else             legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
     if (system == 0)    legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
     if (system == 0)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
     if (system == 1 && !subsets)   legend_part2.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
     if (system == 1 && !subsets)   legend_part2.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
-    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
     if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
     if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
     if (system == 3 && !subsets)   legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
@@ -681,20 +682,26 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)   legend_part2.Draw();
     if (system == 3 && !subsets)   legend_part2.Draw();
 
+    if (system == 3 && subsets)    latex.SetTextAlign(31);
+    if (system == 3 && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system == 3 && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system == 3 && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 3 && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+
     pads[ncols-1]->cd();
     latex.SetTextSize(0.05);
     if (system == 3 && subsets)    legend_part2.Draw();
-    if (system != 0)   latex.SetTextAlign(31);
-    if (system != 0)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system != 0)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system != 0)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system != 0)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if (system != 0 && system != 3)   latex.SetTextAlign(31);
+    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    if (system == 0 && !subsets)   latex.SetTextAlign(31);
-    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
-    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
-    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
 
     if (system == 0 && subsets)    latex.SetTextAlign(31);
     if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
