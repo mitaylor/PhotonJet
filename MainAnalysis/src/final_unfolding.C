@@ -250,7 +250,7 @@ int plot() {
             break;
         }
 
-        canvas.SaveAs(("unfolding_" + figures + ".pdf").c_str());
+        canvas.SaveAs(("unfolding_" + figures[i] + ".pdf").c_str());
 
         // auto graphs_hists_aa = get_graph(hists_aa, 2, 0);
         // auto graphs_hists_pp = get_graph(hists_pp, 2, 1);
