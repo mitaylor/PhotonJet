@@ -191,8 +191,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, pad_y0 * 0.5, "p_{T}^{jet}");
-                latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, pad_y0 * 0.5, "p_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "p_{T}^{jet}");
+                latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, "p_{T}^{jet}");
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
@@ -200,18 +200,18 @@ int plot() {
                 legend_part1.SetTextSize(legend_size);
                 legend_part1.SetFillStyle(0);
                 legend_part1.SetBorderSize(0);
-                legend_part1.AddEntry(hist_aa[3], "PbPb MC 0-10%", "");
+                legend_part1.AddEntry((TObject*) 0, "PbPb MC 0-10%", "");
 
                 TLegend legend_part2(0.65, 0.87, 0.95, 0.95);
                 legend_part2.SetTextFont(42);
                 legend_part2.SetTextSize(legend_size);
                 legend_part2.SetFillStyle(0);
                 legend_part2.SetBorderSize(0);
-                legend_part2.AddEntry(hist_pp[0], "pp MC", "");
+                legend_part2.AddEntry((TObject*) 0, "pp MC", "");
 
                 // plot histograms
                 pads[0]->cd();
-                hist_aa[3]->Draw("colz");
+                (*hist_aa)[3]->Draw("colz");
                 legend_part1.Draw();
                 gPad->SetLogz();
                 gPad->SetTicks();
@@ -230,7 +230,7 @@ int plot() {
                 latex.DrawLatex(0.05, 0.87, (text_aa).c_str());
 
                 pads[1]->cd();
-                hist_pp[0]->Draw("colz");
+                (*hist_pp)[0]->Draw("colz");
                 legend_part2.Draw();
                 gPad->SetLogz();
                 gPad->SetTicks();
