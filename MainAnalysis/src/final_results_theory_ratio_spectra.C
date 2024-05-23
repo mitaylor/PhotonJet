@@ -526,14 +526,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.69 : 0.62;
+    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.62;
     if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.83;
     if (system == 3)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 3)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
     TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    if (system == 3) legend_part1.SetTextSize(0.03);
+    if (system == 3 && !subsets) legend_part1.SetTextSize(0.03);
     else             legend_part1.SetTextSize(0.05);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
@@ -583,7 +583,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    if (system == 3) legend_part2.SetTextSize(0.03);
+    if (system == 3 && !subsets) legend_part2.SetTextSize(0.03);
     else             legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
