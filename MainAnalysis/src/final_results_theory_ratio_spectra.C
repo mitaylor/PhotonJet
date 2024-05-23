@@ -385,7 +385,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         set_systematics(hists_aa[i], systs_aa[i]);
         set_systematics(hists_pp[i], systs_pp[i]);
         
-        if (system == 2) {
+        if (system == 2 || system == 4) {
             set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
             set_values(hists_ratio_jewel[i], hists_aa_jewel[i], hists_pp_jewel[i]);
             set_values(hists_ratio_jewel_no_recoil[i], hists_aa_jewel_no_recoil[i], hists_pp_jewel[i]);
@@ -560,7 +560,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
 
-
     if (system == 0)    legend_y_min = legend_y_max - 0.14;
     if (system == 0)    legend_y_max = legend_y_max;
     if (system == 0)    legend_x_min = legend_x_max + 0.15;
@@ -682,6 +681,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)   legend_part2.Draw();
     if (system == 3 && !subsets)   legend_part2.Draw();
 
+    latex.SetTextSize(0.05);
     if (system == 3 && subsets)    latex.SetTextAlign(31);
     if (system == 3 && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     if (system == 3 && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
@@ -690,7 +690,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[ncols-1]->cd();
     latex.SetTextSize(0.05);
-    if (system == 3 && subsets)    legend_part2.Draw();
+    if (system == 3 && subsets)       legend_part2.Draw();
     if (system != 0 && system != 3)   latex.SetTextAlign(31);
     if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
