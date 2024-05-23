@@ -116,7 +116,7 @@ int plot() {
         /* styling */
         gStyle->SetLineScalePS(1);
         gStyle->SetPalette(kViridis);
-        gStyle->SetOptStat(0) 
+        gStyle->SetOptStat(0);
 
         /* size canvas */
         double panel_size = 500;
