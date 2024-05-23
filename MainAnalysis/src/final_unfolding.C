@@ -67,16 +67,17 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
 
 void set_pad(TPad &pad, bool logx, bool logy, bool logz)
 {
-    pad.SetLeftMargin(0.11);
-    pad.SetTopMargin(0.11);
-    pad.SetRightMargin(0.11);
-    pad.SetBottomMargin(0.11);
+    pad.SetLeftMargin(0);
+    pad.SetTopMargin(0);
+    pad.SetRightMargin(0);
+    pad.SetBottomMargin(0);
     pad.SetTickx();
     pad.SetTicky();
 
     if (logx) pad.SetLogx();
-    if (logy) pad.SetLogx();
-    if (logz) pad.SetLogx();
+    if (logy) pad.SetLogy();
+    if (logz) pad.SetLogz();
+    if (logz) pad.SetRightMargin(0.11);
 
     pad.Draw();
 }
@@ -137,7 +138,7 @@ int plot() {
         double pad_dix = padding_interim / canvas_width;
 
         /* text sizes */
-        double axis_label_size = 0.07/sf;
+        double axis_label_size = 0.05/sf;
         double legend_size = 0.05;
         double text_size = 0.05;
 
@@ -152,9 +153,6 @@ int plot() {
 
         pads[0] = new TPad("P1", "", pad_x0 + pad_dx * 0 + pad_dix * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1 + pad_dix * 0, pad_y0 + pad_dy * 1, 0);
         pads[1] = new TPad("P1", "", pad_x0 + pad_dx * 1 + pad_dix * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2 + pad_dix * 1, pad_y0 + pad_dy * 1, 0);
-        
-        set_pad(*pads[0], 0, 0, 0);
-        set_pad(*pads[1], 0, 0, 0);
 
         canvas.cd();
 
@@ -192,8 +190,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "p_{T}^{jet}");
-                latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, "p_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "Reconstructed Bin Index");
+                latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
@@ -209,6 +207,10 @@ int plot() {
                 legend_part2.SetFillStyle(0);
                 legend_part2.SetBorderSize(0);
                 legend_part2.AddEntry((TObject*) 0, "pp MC", "");
+
+                // set pads
+                set_pad(*pads[0], 0, 0, 1);
+                set_pad(*pads[1], 0, 0, 1);
 
                 // plot histograms
                 pads[0]->cd();
