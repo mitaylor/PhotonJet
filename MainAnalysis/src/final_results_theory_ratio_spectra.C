@@ -290,6 +290,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_pp_pyquen = new TFile((base + input_pp_pyquen).data(), "read");
     auto file_pp_pythia = new TFile((base + input_pp_pythia).data(), "read");
     auto file_pp_hybrid = new TFile((base + input_pp_hybrid).data(), "read");
+    auto file_ratio_hybrid = new TFile((base + input_ratio_hybrid).data(), "read");
 
     /* define kinematics and luminosity */
     auto text_system = "(5.02 TeV)"s;
