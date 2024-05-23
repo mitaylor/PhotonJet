@@ -653,6 +653,8 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pythia[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_pythia[i].Draw("same lX");
+        if (system == 1)    graphs_hists_pp_hybrid[i].Draw("same 3");
+        if (system == 1)    graphs_hists_pp_hybrid[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp[i].Draw("same PZ");
 
         line.Draw("l");
