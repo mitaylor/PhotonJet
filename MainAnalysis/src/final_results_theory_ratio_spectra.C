@@ -179,7 +179,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
     return result;
 }
 
-void set_pad(TPad &pad, bool log)
+void set_pad(TPad &pad)
 {
     pad.SetLeftMargin(0);
     pad.SetTopMargin(0);
@@ -187,8 +187,7 @@ void set_pad(TPad &pad, bool log)
     pad.SetBottomMargin(0);
     pad.SetTickx();
     pad.SetTicky();
-
-    if (log)    pad.SetLogx();
+    pad.SetLogx();
 
     pad.Draw();
 }
@@ -213,19 +212,29 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_aa_jewel_no_recoil = conf->get<std::string>("input_aa_jewel_no_recoil");
     auto input_aa_pyquen = conf->get<std::string>("input_aa_pyquen");
     auto input_aa_pyquen_no_wide = conf->get<std::string>("input_aa_pyquen_no_wide");
+    auto input_aa_hybrid = conf->get<std::string>("input_aa_hybrid");
     auto input_pp_jewel = conf->get<std::string>("input_pp_jewel");
     auto input_pp_pyquen = conf->get<std::string>("input_pp_pyquen");
     auto input_pp_pythia = conf->get<std::string>("input_pp_pythia");
-
-    auto log = conf->get<bool>("log");
+    auto input_pp_hybrid = conf->get<std::string>("input_pp_hybrid");
+    auto input_ratio_hybrid = conf->get<std::string>("input_ratio_hybrid");
 
     auto tag_aa_jewel = conf->get<std::string>("tag_aa_jewel");
     auto tag_aa_jewel_no_recoil = conf->get<std::string>("tag_aa_jewel_no_recoil");
     auto tag_aa_pyquen = conf->get<std::string>("tag_aa_pyquen");
     auto tag_aa_pyquen_no_wide = conf->get<std::string>("tag_aa_pyquen_no_wide");
+    auto tag_aa_hybrid_no_elastic_no_wake = conf->get<std::string>("tag_aa_hybrid_no_elastic_no_wake");
+    auto tag_aa_hybrid_elastic_no_wake = conf->get<std::string>("tag_aa_hybrid_elastic_no_wake");
+    auto tag_aa_hybrid_no_elastic_wake = conf->get<std::string>("tag_aa_hybrid_no_elastic_wake");
+    auto tag_aa_hybrid_elastic_wake = conf->get<std::string>("tag_aa_hybrid_elastic_wake");
     auto tag_pp_jewel = conf->get<std::string>("tag_pp_jewel");
     auto tag_pp_pyquen = conf->get<std::string>("tag_pp_pyquen");
     auto tag_pp_pythia = conf->get<std::string>("tag_pp_pythia");
+    auto tag_pp_hybrid = conf->get<std::string>("tag_pp_hybrid");
+    auto tag_ratio_hybrid_no_elastic_no_wake = conf->get<std::string>("tag_ratio_hybrid_no_elastic_no_wake");
+    auto tag_ratio_hybrid_elastic_no_wake = conf->get<std::string>("tag_ratio_hybrid_elastic_no_wake");
+    auto tag_ratio_hybrid_no_elastic_wake = conf->get<std::string>("tag_ratio_hybrid_no_elastic_wake");
+    auto tag_ratio_hybrid_elastic_wake = conf->get<std::string>("tag_ratio_hybrid_elastic_wake");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto theory_figures = conf->get<std::vector<std::string>>("theory_figures");
@@ -276,9 +285,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_aa_jewel_no_recoil = new TFile((base + input_aa_jewel_no_recoil).data(), "read");
     auto file_aa_pyquen = new TFile((base + input_aa_pyquen).data(), "read");
     auto file_aa_pyquen_no_wide = new TFile((base + input_aa_pyquen_no_wide).data(), "read");
+    auto file_aa_hybrid = new TFile((base + input_aa_hybrid).data(), "read");
     auto file_pp_jewel = new TFile((base + input_pp_jewel).data(), "read");
     auto file_pp_pyquen = new TFile((base + input_pp_pyquen).data(), "read");
     auto file_pp_pythia = new TFile((base + input_pp_pythia).data(), "read");
+    auto file_pp_hybrid = new TFile((base + input_pp_hybrid).data(), "read");
 
     /* define kinematics and luminosity */
     auto text_system = "(5.02 TeV)"s;
@@ -292,6 +303,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0) text_system = "PbPb 1.69 nb^{-1} " + text_system;
     if (system == 1) text_system = "pp 302 pb^{-1} " + text_system;
     if (system == 2) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
+    if (system == 3) text_system = "PbPb 1.69 nb^{-1} " + text_system;
+    if (system == 4) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
 
     std::vector<history<TH1F>*> hists_aa(ncols);
     std::vector<history<TH1F>*> systs_aa(ncols);
@@ -304,13 +317,22 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<history<TH1F>*> hists_aa_jewel_no_recoil(ncols);
     std::vector<history<TH1F>*> hists_aa_pyquen(ncols);
     std::vector<history<TH1F>*> hists_aa_pyquen_no_wide(ncols);
+    std::vector<history<TH1F>*> hists_aa_hybrid_elastic_no_wake(ncols);
+    std::vector<history<TH1F>*> hists_aa_hybrid_no_elastic_no_wake(ncols);
+    std::vector<history<TH1F>*> hists_aa_hybrid_elastic_wake(ncols);
+    std::vector<history<TH1F>*> hists_aa_hybrid_no_elastic_wake(ncols);
     std::vector<history<TH1F>*> hists_pp_jewel(ncols);
     std::vector<history<TH1F>*> hists_pp_pyquen(ncols);
     std::vector<history<TH1F>*> hists_pp_pythia(ncols);
+    std::vector<history<TH1F>*> hists_pp_hybrid(ncols);
     std::vector<history<TH1F>*> hists_ratio_jewel(ncols);
     std::vector<history<TH1F>*> hists_ratio_jewel_no_recoil(ncols);
     std::vector<history<TH1F>*> hists_ratio_pyquen(ncols);
     std::vector<history<TH1F>*> hists_ratio_pyquen_no_wide(ncols);
+    std::vector<history<TH1F>*> hists_ratio_hybrid_elastic_no_wake(ncols);
+    std::vector<history<TH1F>*> hists_ratio_hybrid_no_elastic_no_wake(ncols);
+    std::vector<history<TH1F>*> hists_ratio_hybrid_elastic_wake(ncols);
+    std::vector<history<TH1F>*> hists_ratio_hybrid_no_elastic_wake(ncols);
 
     for (int i = 0; i < ncols; ++i) {
         /* define jet pT bounds */
@@ -342,13 +364,22 @@ int congratulate(char const* config, char const* selections, char const* output)
         hists_aa_jewel_no_recoil[i] = new history<TH1F>(file_aa_jewel_no_recoil, tag_aa_jewel_no_recoil + "_dr" + theory_figures[i]);
         hists_aa_pyquen[i] = new history<TH1F>(file_aa_pyquen, tag_aa_pyquen + "_dr" + theory_figures[i]);
         hists_aa_pyquen_no_wide[i] = new history<TH1F>(file_aa_pyquen_no_wide, tag_aa_pyquen_no_wide + "_dr" + theory_figures[i]);
+        hists_aa_hybrid_elastic_no_wake[i] = new history<TH1F>(file_aa_hybrid, tag_aa_hybrid_elastic_no_wake + "_dr" + theory_figures[i]);
+        hists_aa_hybrid_no_elastic_no_wake[i] = new history<TH1F>(file_aa_hybrid, tag_aa_hybrid_no_elastic_no_wake + "_dr" + theory_figures[i]);
+        hists_aa_hybrid_elastic_wake[i] = new history<TH1F>(file_aa_hybrid, tag_aa_hybrid_elastic_wake + "_dr" + theory_figures[i]);
+        hists_aa_hybrid_no_elastic_wake[i] = new history<TH1F>(file_aa_hybrid, tag_aa_hybrid_no_elastic_wake + "_dr" + theory_figures[i]);
         hists_pp_jewel[i] = new history<TH1F>(file_pp_jewel, tag_pp_jewel + "_dr" + theory_figures[i]);
         hists_pp_pyquen[i] = new history<TH1F>(file_pp_pyquen, tag_pp_pyquen + "_dr" + theory_figures[i]);
         hists_pp_pythia[i] = new history<TH1F>(file_pp_pythia, tag_pp_pythia + theory_figures[i]);
+        hists_pp_hybrid[i] = new history<TH1F>(file_pp_hybrid, tag_pp_hybrid + "_dr" + theory_figures[i]);
         hists_ratio_jewel[i] = new history<TH1F>(*hists_aa_jewel[i], "hist_jewel");
         hists_ratio_jewel_no_recoil[i] = new history<TH1F>(*hists_aa_jewel_no_recoil[i], "hist_jewel_no_recoil");
         hists_ratio_pyquen[i] = new history<TH1F>(*hists_aa_pyquen[i], "hist_pyquen");
         hists_ratio_pyquen_no_wide[i] = new history<TH1F>(*hists_aa_pyquen_no_wide[i], "hist_pyquen_no_wide");
+        hists_ratio_hybrid_elastic_no_wake[i] = new history<TH1F>(file_ratio_hybrid, tag_ratio_hybrid_elastic_no_wake + "_dr" + theory_figures[i]);
+        hists_ratio_hybrid_no_elastic_no_wake[i] = new history<TH1F>(file_ratio_hybrid, tag_ratio_hybrid_no_elastic_no_wake + "_dr" + theory_figures[i]);
+        hists_ratio_hybrid_elastic_wake[i] = new history<TH1F>(file_ratio_hybrid, tag_ratio_hybrid_elastic_wake + "_dr" + theory_figures[i]);
+        hists_ratio_hybrid_no_elastic_wake[i] = new history<TH1F>(file_ratio_hybrid, tag_ratio_hybrid_no_elastic_wake + "_dr" + theory_figures[i]);
 
         set_systematics(hists_aa[i], systs_aa[i]);
         set_systematics(hists_pp[i], systs_pp[i]);
@@ -373,13 +404,22 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto graphs_hists_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1);
     auto graphs_hists_aa_pyquen = get_graph(hists_aa_pyquen, 2);
     auto graphs_hists_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3);
+    auto graphs_hists_aa_hybrid_elastic_no_wake = get_graph(hists_aa_hybrid_elastic_no_wake, 5);
+    auto graphs_hists_aa_hybrid_no_elastic_no_wake = get_graph(hists_aa_hybrid_no_elastic_no_wake, 6);
+    auto graphs_hists_aa_hybrid_elastic_wake = get_graph(hists_aa_hybrid_elastic_wake, 7);
+    auto graphs_hists_aa_hybrid_no_elastic_wake = get_graph(hists_aa_hybrid_no_elastic_wake, 8);
     auto graphs_hists_pp_jewel = get_graph(hists_pp_jewel, 0);
     auto graphs_hists_pp_pyquen = get_graph(hists_pp_pyquen, 2);
     auto graphs_hists_pp_pythia = get_graph(hists_pp_pythia, 4);
+    auto graphs_hists_pp_hybrid = get_graph(hists_pp_hybrid, 5);
     auto graphs_hists_ratio_jewel = get_graph(hists_ratio_jewel, 0);
     auto graphs_hists_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1);
     auto graphs_hists_ratio_pyquen = get_graph(hists_ratio_pyquen, 2);
     auto graphs_hists_ratio_pyquen_no_wide = get_graph(hists_ratio_pyquen_no_wide, 3);
+    auto graphs_hists_ratio_hybrid_elastic_no_wake = get_graph(hists_ratio_hybrid_elastic_no_wake, 5);
+    auto graphs_hists_ratio_hybrid_no_elastic_no_wake = get_graph(hists_ratio_hybrid_no_elastic_no_wake, 6);
+    auto graphs_hists_ratio_hybrid_elastic_wake = get_graph(hists_ratio_hybrid_elastic_wake, 7);
+    auto graphs_hists_ratio_hybrid_no_elastic_wake = get_graph(hists_ratio_hybrid_no_elastic_wake, 8);
 
     /* size canvas */
     double panel_size = 500;
@@ -397,8 +437,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
-    double xmin = (log) ? bdr[0] + 0.003 : bdr[0];
-    double xmax = (log) ? bdr[1] : bdr[1] * 0.999;
+    double xmin = bdr[0] + 0.003;
+    double xmax = bdr[1];
 
     gStyle->SetLineScalePS(1);
 
@@ -419,10 +459,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
         
-        set_pad(*pads[i], log);
+        set_pad(*pads[i]);
 
-        if (log)    axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
-        if (!log)   axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
+        axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
 
         set_axis(*axis_x[i], sf);
 
@@ -443,8 +482,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
-    if (system == 2)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "PbPb / pp");
-    if (system < 2)     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
+    if (system == 2 || system == 4)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "PbPb / pp");
+    if (system != 2 && system != 4)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
 
     latex.SetTextFont(62);
     latex.SetTextSize(0.07/sf);
@@ -459,10 +498,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
 
     TGraph line;
-    if (system == 2)    line.SetPoint(0, xmin, 1);
-    if (system == 2)    line.SetPoint(1, xmax, 1);
-    if (system < 2)     line.SetPoint(0, xmin, 0);
-    if (system < 2)     line.SetPoint(1, xmax, 0);
+    if (system == 2 || system == 4)    line.SetPoint(0, xmin, 1);
+    if (system == 2 || system == 4)    line.SetPoint(1, xmax, 1);
+    if (system != 2 && system != 4)    line.SetPoint(0, xmin, 0);
+    if (system != 2 && system != 4)    line.SetPoint(1, xmax, 0);
     line.SetLineStyle(kDashed);
 
     /* declare legend */
@@ -471,58 +510,91 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.48;
-    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.83;
-    if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.05;
-    if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.35;
+    if (system == 2 || system == 4)    legend_y_min = (subsets) ? 0.48 : 0.48;
+    if (system == 2 || system == 4)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 2 || system == 4)    legend_x_min = (subsets) ? 0.05 : 0.05;
+    if (system == 2 || system == 4)    legend_x_max = (subsets) ? 0.35 : 0.35;
 
-    if (system == 1 && log)    legend_y_min = (subsets) ? 0.57 : 0.05;
-    if (system == 1 && log)    legend_y_max = (subsets) ? 0.85 : 0.33;
-    if (system == 1 && log)    legend_x_min = (subsets) ? 0.65 : 0.05;
-    if (system == 1 && log)    legend_x_max = (subsets) ? 0.95 : 0.35;
+    if (system == 1)    legend_y_min = (subsets) ? 0.50 : 0.09;
+    if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.30;
+    if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
+    if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 1 && !log)   legend_y_min = (subsets) ? 0.57 : 0.17;
-    if (system == 1 && !log)   legend_y_max = (subsets) ? 0.85 : 0.45;
-    if (system == 1 && !log)   legend_x_min = (subsets) ? 0.65 : 0.65;
-    if (system == 1 && !log)   legend_x_max = (subsets) ? 0.95 : 0.95;
+    if (system == 0)    legend_y_min = (subsets) ? 0.62 : 0.62;
+    if (system == 0)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
+    if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
-    if (system == 0 && log)    legend_y_min = (subsets) ? 0.62 : 0.62;
-    if (system == 0 && log)    legend_y_max = (subsets) ? 0.83 : 0.83;
-    if (system == 0 && log)    legend_x_min = (subsets) ? 0.03 : 0.03;
-    if (system == 0 && log)    legend_x_max = (subsets) ? 0.33 : 0.33;
+    if (system == 3)    legend_y_min = (subsets) ? 0.69 : 0.62;
+    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 3)    legend_x_min = (subsets) ? 0.03 : 0.03;
+    if (system == 3)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
-    if (system == 0 && !log)   legend_y_min = (subsets) ? 0.48 : 0.48;
-    if (system == 0 && !log)   legend_y_max = (subsets) ? 0.83 : 0.83;
-    if (system == 0 && !log)   legend_x_min = (subsets) ? 0.45 : 0.45;
-    if (system == 0 && !log)   legend_x_max = (subsets) ? 0.75 : 0.75;
+    TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
+    legend_part1.SetTextFont(42);
+    if (system == 3 && !subsets) legend_part1.SetTextSize(0.04);
+    else                         legend_part1.SetTextSize(0.05);
+    legend_part1.SetFillStyle(0);
+    legend_part1.SetBorderSize(0);
+    if (system == 2)    legend_part1.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
+    if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_pyquen[0], "PYQUEN, wide angle", "lf");
+    if (system == 4)    legend_part1.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
+    if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
+    if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
+    if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
+    if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
+    if (system == 0)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 0)    legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 0)    legend_part1.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
+    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
+    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
+    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
+    if (system == 1)    legend_part1.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
+    if (system == 1)    legend_part1.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
+    if (system == 1)    legend_part1.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
+    if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
+    if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
 
-    TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.05);
-    legend.SetFillStyle(0);
-    legend.SetBorderSize(0);
-    if (system == 2)    legend.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
-    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 2)    legend.AddEntry(&graphs_hists_ratio_pyquen[0], "PYQUEN, wide angle", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
-    if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 0)    legend.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 0 && !log)    legend.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0 && !log)    legend.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
-    if (system == 1)    legend.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
-    if (system == 1)    legend.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
-    if (system == 1)    legend.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
-    if (system == 1)    legend.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
 
-    TLegend legend_part2(legend_x_max + 0.15, legend_y_max - 0.14, legend_x_max + 0.45, legend_y_max);
+    if (system == 0)    legend_y_min = legend_y_max - 0.14;
+    if (system == 0)    legend_y_max = legend_y_max;
+    if (system == 0)    legend_x_min = legend_x_max + 0.15;
+    if (system == 0)    legend_x_max = legend_x_min + 0.30;
+
+    if (system == 1 && !subsets)    legend_y_min = legend_y_min;
+    if (system == 1 && !subsets)    legend_y_max = legend_y_min + 0.14;
+    if (system == 1 && !subsets)    legend_x_min = legend_x_max;
+    if (system == 1 && !subsets)    legend_x_max = legend_x_min + 0.30;
+
+    if (system == 3 && subsets)    legend_y_min = legend_y_max - 0.21;
+    if (system == 3 && subsets)    legend_y_max = legend_y_max;
+    if (system == 3 && subsets)    legend_x_min = legend_x_min;
+    if (system == 3 && subsets)    legend_x_max = legend_x_max;
+
+    if (system == 3 && !subsets)    legend_y_min = legend_y_max - 0.14;
+    if (system == 3 && !subsets)    legend_y_max = legend_y_max;
+    if (system == 3 && !subsets)    legend_x_min = legend_x_max + 0.15;
+    if (system == 3 && !subsets)    legend_x_max = legend_x_min + 0.30;
+
+    TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
-    if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0 && log)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
+    if (system == 0)    legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
+    if (system == 1 && !subsets)   legend_part2.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
+    if (system == 1 && !subsets)   legend_part2.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
+    if (system == 3 && !subsets)   legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
+    if (system == 3 && !subsets)   legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
 
     for (int i = 0; i < ncols; i++) {
         pads[i]->cd();
@@ -540,6 +612,17 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 2)    graphs_hists_ratio_jewel_no_recoil[i].Draw("same lX");
         if (system == 2)    graphs_hists_ratio[i].Draw("same PZ");
 
+        if (system == 4)    graphs_systs_ratio[i].Draw("same 2");
+        if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_no_wake[i].Draw("same 3");
+        if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_no_wake[i].Draw("same lX");
+        if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_wake[i].Draw("same 3");
+        if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_wake[i].Draw("same lX");
+        if (system == 4)    graphs_hists_ratio_hybrid_elastic_no_wake[i].Draw("same 3");
+        if (system == 4)    graphs_hists_ratio_hybrid_elastic_no_wake[i].Draw("same lX");
+        if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same 3");
+        if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same lX");
+        if (system == 4)    graphs_hists_ratio[i].Draw("same PZ");
+
         if (system == 0)    graphs_systs_aa[i].Draw("same 2");
         if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
@@ -550,6 +633,17 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa[i].Draw("same PZ");
+
+        if (system == 1)    graphs_systs_aa[i].Draw("same 2");
+        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_no_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_no_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa._hybrid_elastic_no_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa._hybrid_elastic_no_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa._hybrid_elastic_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa._hybrid_elastic_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 1)    graphs_systs_pp[i].Draw("same 2");
         if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
@@ -569,13 +663,9 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
-        if (system == 0 && !log)    latex.SetTextAlign(11);
-        if (system == 0 && !log)    latex.SetTextSize(0.06);
-        if (system == 0 && !log)    latex.DrawLatex(0.05, 0.78, "Cent. 0-10%");
-
-        if (system == 0 && log)    latex.SetTextAlign(21);
-        if (system == 0 && log)    latex.SetTextSize(0.06);
-        if (system == 0 && log)    latex.DrawLatex(0.5, 0.12, "Cent. 0-10%");
+        if (system == 0)    latex.SetTextAlign(21);
+        if (system == 0)    latex.SetTextSize(0.06);
+        if (system == 0)    latex.DrawLatex(0.5, 0.12, "Cent. 0-10%");
 
         if (system == 2)    latex.SetTextAlign(21);
         if (system == 2)    latex.SetTextSize(0.06);
@@ -583,48 +673,37 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[0]->cd();
-    legend.Draw();
-    if (system == 0 && log)    legend_part2.Draw();
+    legend_part1.Draw();
+    if (system == 0)    legend_part2.Draw();
+    if (system == 1 && !subsets)   legend_part2.Draw();
+    if (system == 3 && !subsets)   legend_part2.Draw();
 
     pads[ncols-1]->cd();
     latex.SetTextSize(0.05);
+    if (system == 3 && subsets)    legend_part2.Draw();
     if (system != 0)   latex.SetTextAlign(31);
     if (system != 0)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     if (system != 0)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
     if (system != 0)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if (system != 0)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    if (system == 0 && !log && !subsets)  latex.SetTextAlign(31);
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.38, (text_photon_pt).c_str());
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.30, (text_photon_eta).c_str());
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.22, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && !log && !subsets)  latex.DrawLatex(0.95, 0.14, (text_jet_alg).c_str());
+    if (system == 0 && !subsets)   latex.SetTextAlign(31);
+    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
+    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
+    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
 
-    if (system == 0 && !log && subsets)   latex.SetTextAlign(31);
-    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && !log && subsets)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if (system == 0 && subsets)    latex.SetTextAlign(31);
+    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    if (system == 0 && log && !subsets)   latex.SetTextAlign(31);
-    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
-    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
-    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && log && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
-
-    if (system == 0 && log && subsets)    latex.SetTextAlign(31);
-    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && log && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
-
-    if (system == 2 && log)    canvas.SaveAs((set + "_final_theory_ratio_" + name + "_log.pdf").c_str());
-    if (system == 1 && log)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.pdf").c_str());
-    if (system == 0 && log)    canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + "_log.pdf").c_str());
-
-    if (system == 2 && !log)   canvas.SaveAs((set + "_final_theory_ratio_" + name + ".pdf").c_str());
-    if (system == 1 && !log)   canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + ".pdf").c_str());
-    if (system == 0 && !log)   canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + ".pdf").c_str());
+    if (system == 4)    canvas.SaveAs((set + "_final_theory_ratio_hybrid_" + name + "_log.pdf").c_str());
+    if (system == 3)    canvas.SaveAs((set + "_final_theory_spectra_aa_hybrid_" + name + "_log.pdf").c_str());
+    if (system == 2)    canvas.SaveAs((set + "_final_theory_ratio_mc_" + name + "_log.pdf").c_str());
+    if (system == 1)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.pdf").c_str());
+    if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_mc_" + name + "_log.pdf").c_str());
 
     in(output, []() {});
 
