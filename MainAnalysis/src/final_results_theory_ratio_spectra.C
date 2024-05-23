@@ -666,13 +666,13 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
-        if (system == 0)    latex.SetTextAlign(21);
-        if (system == 0)    latex.SetTextSize(0.06);
-        if (system == 0)    latex.DrawLatex(0.5, 0.12, "Cent. 0-10%");
+        if (system == 0 || system == 3)    latex.SetTextAlign(21);
+        if (system == 0 || system == 3)    latex.SetTextSize(0.06);
+        if (system == 0 || system == 3)    latex.DrawLatex(0.5, 0.12, "Cent. 0-10%");
 
-        if (system == 2)    latex.SetTextAlign(21);
-        if (system == 2)    latex.SetTextSize(0.06);
-        if (system == 2)    latex.DrawLatex(0.5, 0.05, "Cent. 0-10%");
+        if (system == 2 || system == 4)    latex.SetTextAlign(21);
+        if (system == 2 || system == 4)    latex.SetTextSize(0.06);
+        if (system == 2 || system == 4)    latex.DrawLatex(0.5, 0.05, "Cent. 0-10%");
     }
 
     pads[0]->cd();
