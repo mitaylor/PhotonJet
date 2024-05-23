@@ -714,12 +714,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
 
-    if (system == 0 && subsets)    latex.SetTextAlign(31);
-    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 0 && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
-
     if (system == 4)    canvas.SaveAs((set + "_final_theory_ratio_hybrid_" + name + "_log.pdf").c_str());
     if (system == 3)    canvas.SaveAs((set + "_final_theory_spectra_aa_hybrid_" + name + "_log.pdf").c_str());
     if (system == 2)    canvas.SaveAs((set + "_final_theory_ratio_mc_" + name + "_log.pdf").c_str());
