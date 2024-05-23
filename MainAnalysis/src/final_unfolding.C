@@ -67,10 +67,10 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
 
 void set_pad(TPad &pad, bool logx, bool logy, bool logz)
 {
-    pad.SetLeftMargin(0);
-    pad.SetTopMargin(0);
-    pad.SetRightMargin(0);
-    pad.SetBottomMargin(0);
+    pad.SetLeftMargin(0.11);
+    pad.SetTopMargin(0.11);
+    pad.SetRightMargin(0.11);
+    pad.SetBottomMargin(0.11);
     pad.SetTickx();
     pad.SetTicky();
 
@@ -116,6 +116,7 @@ int plot() {
         /* styling */
         gStyle->SetLineScalePS(1);
         gStyle->SetPalette(kViridis);
+        gStyle->SetOptStat(0) 
 
         /* size canvas */
         double panel_size = 500;
