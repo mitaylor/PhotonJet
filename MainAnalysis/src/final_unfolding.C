@@ -152,8 +152,8 @@ int plot() {
         pads[0] = new TPad("P1", "", pad_x0 + pad_dx * 0 + pad_dix * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1 + pad_dix * 0, pad_y0 + pad_dy * 1, 0);
         pads[1] = new TPad("P1", "", pad_x0 + pad_dx * 1 + pad_dix * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2 + pad_dix * 1, pad_y0 + pad_dy * 1, 0);
         
-        set_pad(*pads[0]);
-        set_pad(*pads[1]);
+        set_pad(*pads[0], 0, 0, 0);
+        set_pad(*pads[1], 0, 0, 0);
 
         canvas.cd();
 
@@ -250,7 +250,7 @@ int plot() {
             break;
         }
 
-        canvas.SaveAs(("unfolding_" + name + ".pdf").c_str());
+        canvas.SaveAs(("unfolding_" + figures + ".pdf").c_str());
 
         // auto graphs_hists_aa = get_graph(hists_aa, 2, 0);
         // auto graphs_hists_pp = get_graph(hists_pp, 2, 1);
