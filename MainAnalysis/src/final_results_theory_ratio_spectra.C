@@ -635,14 +635,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 0)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 1)    graphs_systs_aa[i].Draw("same 2");
-        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_no_wake[i].Draw("same 3");
-        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_no_wake[i].Draw("same lX");
-        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_wake[i].Draw("same 3");
-        if (system == 1)    graphs_hists_aa._hybrid_no_elastic_wake[i].Draw("same lX");
-        if (system == 1)    graphs_hists_aa._hybrid_elastic_no_wake[i].Draw("same 3");
-        if (system == 1)    graphs_hists_aa._hybrid_elastic_no_wake[i].Draw("same lX");
-        if (system == 1)    graphs_hists_aa._hybrid_elastic_wake[i].Draw("same 3");
-        if (system == 1)    graphs_hists_aa._hybrid_elastic_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa_hybrid_no_elastic_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa_hybrid_no_elastic_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa_hybrid_elastic_no_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa_hybrid_elastic_no_wake[i].Draw("same lX");
+        if (system == 1)    graphs_hists_aa_hybrid_elastic_wake[i].Draw("same 3");
+        if (system == 1)    graphs_hists_aa_hybrid_elastic_wake[i].Draw("same lX");
         if (system == 1)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 1)    graphs_systs_pp[i].Draw("same 2");
