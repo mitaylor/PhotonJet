@@ -207,16 +207,16 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
+                latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.5, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.17, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.17, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
+                latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
 
                 pads[1]->cd();
                 (*hist_pp)[0]->Draw("colz");
@@ -226,16 +226,16 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
+                latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.5, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.17, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.17, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
+                latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
 
                 // x axis label
                 canvas.cd();
@@ -259,10 +259,10 @@ int plot() {
                 canvas.cd();
                 latex.SetTextFont(42);
                 latex.SetTextSize(axis_label_size/2);
-                latex.SetTextAlign(22);
-                latex.SetTextAngle(270);
-                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.55, pad_y0 + pad_dy * 0.5, "Counts");
-                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.55, pad_y0 + pad_dy * 0.5, "Counts");
+                latex.SetTextAlign(12);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.5, pad_y0 * 0.8, "Counts");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.5, pad_y0 * 0.8, "Counts");
             break;
         }
 
@@ -272,13 +272,13 @@ int plot() {
         latex.SetTextSize(0.07/sf);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_cms.c_str());
+        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.2, text_cms.c_str());
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045/sf);
         latex.SetTextAlign(31);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_system.c_str());
+        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.2, text_system.c_str());
 
         canvas.SaveAs(("unfolding_" + figures[i] + ".pdf").c_str());
 
