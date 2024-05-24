@@ -251,8 +251,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size/2);
                 latex.SetTextAlign(12);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
-                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.15, pad_y0 * 0.8, "Counts");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.15, pad_y0 * 0.8, "Counts");
                 break;
             }
             case 1: // response matrix
@@ -302,6 +302,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.17, 0.74, "PbPb 0-10%");
 
                 pads[1]->cd();
                 
@@ -322,6 +323,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.17, 0.74, "pp");
 
                 // x axis label
                 canvas.cd();
