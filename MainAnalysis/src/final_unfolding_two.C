@@ -21,7 +21,7 @@
 #include "TStyle.h"
 #include "TPad.h"
 #include "TGaxis.h"
-#include "Tlegend_part1.h"
+#include "Tlegend.h"
 #include "TBox.h"
 #include "TGraphAsymmErrors.h"
 
