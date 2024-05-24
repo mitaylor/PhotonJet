@@ -260,8 +260,8 @@ int plot() {
                 gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin3/process_vacillate_aa_qcd.root", "read");
-                auto file_pp = new TFile("data/arc/pho_60_rebin3/process_vacillate_pp_qcd.root", "read");
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/process_vacillate_aa_qcd.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/process_vacillate_pp_qcd.root", "read");
 
                 auto hist_aa = new history<TH2F>(file_aa, "aa_c"s);
                 auto hist_pp = new history<TH2F>(file_pp, "pp_c"s);
@@ -353,56 +353,35 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
                 break;
             }
-            case 2:
+            case 2: // flattened inputs
             {
-                gStyle->SetPalette(kBird);
-
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin3/process_vacillate_aa_qcd.root", "read");
-                auto file_pp = new TFile("data/arc/pho_60_rebin3/process_vacillate_pp_qcd.root", "read");
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/accumulate_aa_qcd.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/accumulate_pp_qcd.root", "read");
 
-                auto hist_aa = new history<TH2F>(file_aa, "aa_c"s);
-                auto hist_pp = new history<TH2F>(file_pp, "pp_c"s);
+                auto hist_aa = new history<TH2F>(file_aa, "aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0"s);
+                auto hist_pp = new history<TH2F>(file_pp, "pp_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0"s);
 
-                (*hist_aa)[3]->GetZaxis()->SetTitle("");
-                (*hist_pp)[0]->GetZaxis()->SetTitle("");
                 (*hist_aa)[3]->GetYaxis()->SetTitle("");
                 (*hist_pp)[0]->GetYaxis()->SetTitle("");
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
 
-                (*hist_aa)[3]->SetMinimum(0.1);
-                (*hist_pp)[0]->SetMinimum(0.1);
-                (*hist_aa)[3]->SetMaximum(1000);
-                (*hist_pp)[0]->SetMaximum(1000);
-
-                // declare legends
-                TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
-                // legend_part1.SetTextFont(42);
-                // legend_part1.SetTextSize(legend_size);
-                // legend_part1.SetFillStyle(0);
-                // legend_part1.SetBorderSize(0);
-                legend_part1.AddEntry((*hist_aa)[3], "PbPb 0-10%", "p");
-
-                TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
-                // legend_part2.SetTextFont(42);
-                // legend_part2.SetTextSize(legend_size);
-                // legend_part2.SetFillStyle(0);
-                // legend_part2.SetBorderSize(0);
-                legend_part2.AddEntry((*hist_pp)[0], "pp", "p");
+                // (*hist_aa)[3]->SetMinimum(0.1);
+                // (*hist_pp)[0]->SetMinimum(0.1);
+                // (*hist_aa)[3]->SetMaximum(1000);
+                // (*hist_pp)[0]->SetMaximum(1000);
 
                 // set pads
-                set_pad(*pads[0], 0, 0, 1);
-                set_pad(*pads[1], 0, 0, 1);
+                set_pad(*pads[0], 0, 0, 0);
+                set_pad(*pads[1], 0, 0, 0);
 
                 // plot histograms
                 pads[0]->cd();
 
-                gPad->SetLogz();
                 gPad->SetTicks();
 
-                (*hist_aa)[3]->Draw("colz");
-                legend_part1.Draw();
+                (*hist_aa)[3]->Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -416,14 +395,13 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.17, 0.74, "PbPb 0-10%");
 
                 pads[1]->cd();
                 
-                gPad->SetLogz();
                 gPad->SetTicks();
 
-                (*hist_pp)[0]->Draw("colz");
-                legend_part2.Draw();
+                (*hist_pp)[0]->Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -437,6 +415,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.17, 0.74, "pp");
 
                 // x axis label
                 canvas.cd();
@@ -453,17 +432,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
-                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
-
-                 // z axis label
-                canvas.cd();
-                latex.SetTextFont(42);
-                latex.SetTextSize(axis_label_size/2);
-                latex.SetTextAlign(12);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
-                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "Counts");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Counts");
                 break;
             }
         }
@@ -497,6 +467,20 @@ int plot() {
 
         //     line.Draw("l");
         // }
+        
+        // TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
+        // // legend_part1.SetTextFont(42);
+        // // legend_part1.SetTextSize(legend_size);
+        // // legend_part1.SetFillStyle(0);
+        // // legend_part1.SetBorderSize(0);
+        // legend_part1.AddEntry((*hist_aa)[3], "PbPb 0-10%", "p");
+
+        // TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
+        // // legend_part2.SetTextFont(42);
+        // // legend_part2.SetTextSize(legend_size);
+        // // legend_part2.SetFillStyle(0);
+        // // legend_part2.SetBorderSize(0);
+        // legend_part2.AddEntry((*hist_pp)[0], "pp", "p");
     }
 
     return 0;
