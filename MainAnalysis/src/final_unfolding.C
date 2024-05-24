@@ -676,7 +676,7 @@ int plot() {
                 set_format((*hist_pp_variance)[0], 2);
 
                 // set legends
-                auto legend_part1 = new TLegend(0.6, 0.18, 0.8, 0.32);
+                auto legend_part1 = new TLegend(0.6, 0.2, 0.8, 0.34);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
@@ -685,7 +685,7 @@ int plot() {
                 legend_part1->AddEntry((*hist_aa_bias)[3], "Bias^{2}", "l");
                 legend_part1->AddEntry((*hist_aa_variance)[3], "Variance", "l");
 
-                auto legend_part2 = new TLegend(0.6, 0.18, 0.8, 0.32);
+                auto legend_part2 = new TLegend(0.6, 0.2, 0.8, 0.34);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
