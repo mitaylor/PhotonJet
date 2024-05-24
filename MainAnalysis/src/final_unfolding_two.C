@@ -143,7 +143,7 @@ int plot() {
         latex.SetNDC();
 
         std::vector<TH2F*> worlds(ncols);
-        std::vector<TPad*> pads(ncols);
+        std::vector<TPad*> pads(ncols * nrows);
 
         pads[0] = new TPad("P1", "", pad_x0 * 0 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
         pads[1] = new TPad("P2", "", pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 2 + pad_dx * 2 + pad_x1 * 2, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
@@ -214,7 +214,7 @@ int plot() {
                 (*hist_pp_pyquen_pp_fold1)[0]->SetMinimum(0);
                 (*hist_aa_pyquen_pp_fold1)[3]->SetMaximum(0.03);
                 (*hist_pp_pyquen_pp_fold1)[0]->SetMaximum(0.03);
-                
+
                 set_format((*hist_aa_pyquen_pp_fold0)[3], 0);
                 set_format((*hist_pp_pyquen_pp_fold0)[0], 0);
                 set_format((*hist_aa_pyquen_pp_fold1)[3], 0);
