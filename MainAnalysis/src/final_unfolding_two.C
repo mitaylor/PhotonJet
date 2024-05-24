@@ -214,24 +214,7 @@ int plot() {
                 (*hist_pp_pyquen_pp_fold1)[0]->SetMinimum(0);
                 (*hist_aa_pyquen_pp_fold1)[3]->SetMaximum(0.03);
                 (*hist_pp_pyquen_pp_fold1)[0]->SetMaximum(0.03);
-
-
-                auto hist_aa_pyquen_pp_fold1 = new history<TH1F>(file_aa_pyquen_pp, "input_theory_reco_fold1"s);
-                auto hist_pp_pyquen_pp_fold1 = new history<TH1F>(file_pp_pyquen_pp, "input_theory_reco_fold1"s);
-
-                auto hist_aa_pyquen_aa_fold1 = new history<TH1F>(file_aa_pyquen_aa, "input_theory_reco_fold1"s);
-                auto hist_pp_pyquen_aa_fold1 = new history<TH1F>(file_pp_pyquen_aa, "input_theory_reco_fold1"s);
                 
-                auto hist_aa_jewel_pp_fold1 = new history<TH1F>(file_aa_jewel_pp, "input_theory_reco_fold1"s);
-                auto hist_pp_jewel_pp_fold1 = new history<TH1F>(file_pp_jewel_pp, "input_theory_reco_fold1"s);
-
-                auto hist_aa_jewel_aa_fold1 = new history<TH1F>(file_aa_jewel_aa, "input_theory_reco_fold1"s);
-                auto hist_pp_jewel_aa_fold1 = new history<TH1F>(file_pp_jewel_aa, "input_theory_reco_fold1"s);
-
-                auto hist_aa_pythia_fold1 = new history<TH1F>(file_aa_jewel_aa, "input_mc_create_reco_fold1"s);
-                auto hist_pp_pythia_fold1 = new history<TH1F>(file_pp_jewel_aa, "input_mc_create_reco_fold1"s);
-                
-
                 set_format((*hist_aa_pyquen_pp_fold0)[3], 0);
                 set_format((*hist_pp_pyquen_pp_fold0)[0], 0);
                 set_format((*hist_aa_pyquen_pp_fold1)[3], 0);
