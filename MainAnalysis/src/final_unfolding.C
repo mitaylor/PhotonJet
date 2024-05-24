@@ -259,7 +259,7 @@ int plot() {
                 canvas.cd();
                 latex.SetTextFont(42);
                 latex.SetTextSize(axis_label_size/2);
-                latex.SetTextAlign(12);
+                latex.SetTextAlign(22);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.5, pad_y0 * 0.8, "Counts");
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.5, pad_y0 * 0.8, "Counts");
