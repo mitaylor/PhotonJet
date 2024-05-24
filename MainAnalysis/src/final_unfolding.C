@@ -203,7 +203,6 @@ int plot() {
                 (*hist_aa)[3]->Draw("colz");
                 gPad->SetLogz();
                 gPad->SetTicks();
-                legend_part1.Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -218,11 +217,12 @@ int plot() {
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
 
+                legend_part1.Draw();
+
                 pads[1]->cd();
                 (*hist_pp)[0]->Draw("colz");
                 gPad->SetLogz();
                 gPad->SetTicks();
-                legend_part2.Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -236,6 +236,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
+
+                legend_part2.Draw();
 
                 // x axis label
                 canvas.cd();
