@@ -35,10 +35,8 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type)
+void set_format(TH1F>* h, int type)
 {
-    std::vector<TGraphAsymmErrors> result(h.size());
-
     static int style[6] = {20, 25, 34, 32, 22, 27};
     static int color[6] = {TColor::GetColor("#5790FC"), 
                            TColor::GetColor("#F89C20"), 
@@ -48,24 +46,14 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
                            TColor::GetColor("#7A21DD")
                            };
 
-    for (size_t i = 0; i < h.size(); ++i) {
-        for (int j = 1; j <= (*h[i])[0]->GetNbinsX(); ++j) {
-            double x = (*h[i])[0]->GetBinCenter(j);
-            double dx = (*h[i])[0]->GetBinWidth(j)/2;
 
-            result[i].SetPoint(j - 1, x, (*h[i])[0]->GetBinContent(j));
-            result[i].SetPointError(j - 1, dx, dx, (*h[i])[0]->GetBinError(j), (*h[i])[0]->GetBinError(j));
-        }
+    h->SetMarkerStyle(style[type]);
+    h->SetMarkerColor(color[type]);
+    h->SetLineColor(color[type]);
+    h->SetMarkerSize(1);
+    h->SetLineWidth(2.0);
 
-        result[i].SetMarkerStyle(style[type]);
-        result[i].SetMarkerColor(color[type]);
-        result[i].SetLineColor(color[type]);
-        result[i].SetFillColorAlpha(color[type], 0.60);
-        result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(2.0);
-    }
-
-    return result;
+    return;
 }
 
 void set_pad(TPad &pad, bool logx, bool logy, bool logz)
@@ -100,7 +88,7 @@ int plot() {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s, "efficiency"s};
+    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s, "efficiency"s, "mse_bayes_mc"s};
 
     /* open input files */
     for (size_t i = 0; i < figures.size(); ++i) {
@@ -655,6 +643,133 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Bin Efficiency");
                 break;
             }
+            case 5: // mse, jewel, bayes, mc
+            {
+                // get histograms
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/regularization_aa_bayes_jewel_pp_mc.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/regularization_pp_bayes_jewel_pp_mc.root", "read");
+
+                auto hist_aa_mse = new history<TH1F>(file_aa, "aa_mse"s);
+                auto hist_pp_mse = new history<TH1F>(file_pp, "pp_mse"s);
+
+                auto hist_aa_bias = new history<TH1F>(file_aa, "aa_bias"s);
+                auto hist_pp_bias = new history<TH1F>(file_pp, "pp_bias"s);
+
+                auto hist_aa_variance = new history<TH1F>(file_aa, "aa_variance"s);
+                auto hist_pp_variance = new history<TH1F>(file_pp, "pp_variance"s);
+
+                (*hist_aa_mse)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp_mse)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa_mse)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp_mse)[0]->GetXaxis()->SetTitle("");
+
+                (*hist_aa_mse)[3]->SetMinimum(1E-10);
+                (*hist_pp_mse)[0]->SetMinimum(1E-10);
+                (*hist_aa_mse)[3]->SetMaximum(1E-2);
+                (*hist_pp_mse)[0]->SetMaximum(1E-2);
+
+                set_format((*hist_aa_mse)[3], 0);
+                set_format((*hist_pp_mse)[3], 0);
+                set_format((*hist_aa_bias)[3], 1);
+                set_format((*hist_pp_bias)[3], 1);
+                set_format((*hist_aa_variance)[3], 2);
+                set_format((*hist_pp_variance)[3], 2);
+
+                // set legends
+                TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
+                legend_part1.SetTextFont(42);
+                legend_part1.SetTextSize(legend_size);
+                legend_part1.SetFillStyle(0);
+                legend_part1.SetBorderSize(0);
+                legend_part1.AddEntry((*hist_aa_mse)[3], "MSE", "pl");
+                legend_part1.AddEntry((*hist_aa_bias)[3], "Bias^{2}", "pl");
+                legend_part1.AddEntry((*hist_aa_variance)[3], "Variance", "pl");
+
+                TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
+                legend_part2.SetTextFont(42);
+                legend_part2.SetTextSize(legend_size);
+                legend_part2.SetFillStyle(0);
+                legend_part2.SetBorderSize(0);
+                legend_part1.AddEntry((*hist_pp_mse)[0], "MSE", "pl");
+                legend_part1.AddEntry((*hist_pp_bias)[0], "Bias^{2}", "pl");
+                legend_part1.AddEntry((*hist_pp_variance)[0], "Variance", "pl");
+
+                // set pads
+                set_pad(*pads[0], 0, 1, 0);
+                set_pad(*pads[1], 0, 1, 0);
+
+                // plot histograms
+                pads[0]->cd();
+
+                gPad->SetTicks();
+                gPad->SetLogy();
+
+                (*hist_aa_mse)[3]->Draw();
+                (*hist_aa_bias)[3]->Draw();
+                (*hist_aa_variance)[3]->Draw();
+
+                legend_part1.Draw();
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.30, "Source: \tJewel pp");
+                latex.DrawLatex(0.18, 0.24, "Algorithm: \tD'Agostini");
+                latex.DrawLatex(0.18, 0.18, "Prior: \t MC");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.18, 0.74, "PbPb 0-10%");
+
+                pads[1]->cd();
+                
+                gPad->SetTicks();
+                gPad->SetLogy();
+
+                (*hist_pp_mse)[0]->Draw();
+                (*hist_pp_bias)[0]->Draw();
+                (*hist_pp_variance)[0]->Draw();
+
+                legend_part2.Draw();
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.30, "Source: \tJewel pp");
+                latex.DrawLatex(0.18, 0.24, "Algorithm: \tD'Agostini");
+                latex.DrawLatex(0.18, 0.18, "Prior: \t MC");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.18, 0.74, "pp");
+
+                // x axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "Iteration");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "Iteration");
+
+                // y axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(90);
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "");
+                break;
+            }
         }
 
         canvas.cd();
@@ -672,34 +787,6 @@ int plot() {
         latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.2, text_system.c_str());
 
         canvas.SaveAs(("unfolding_" + figures[i] + ".pdf").c_str());
-
-        // auto graphs_hists_aa = get_graph(hists_aa, 2, 0);
-        // auto graphs_hists_pp = get_graph(hists_pp, 2, 1);
-
-        // TGraph line;
-        // if (system == 2 || system == 4)    line.SetPoint(0, xmin, 1);
-        // if (system == 2 || system == 4)    line.SetPoint(1, xmax, 1);
-        // line.SetLineStyle(kDashed);
-
-        // for (int i = 0; i < ncols; i++) {
-        //     worlds[i]->Draw("axis");
-
-        //     line.Draw("l");
-        // }
-        
-        // TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
-        // // legend_part1.SetTextFont(42);
-        // // legend_part1.SetTextSize(legend_size);
-        // // legend_part1.SetFillStyle(0);
-        // // legend_part1.SetBorderSize(0);
-        // legend_part1.AddEntry((*hist_aa)[3], "PbPb 0-10%", "p");
-
-        // TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
-        // // legend_part2.SetTextFont(42);
-        // // legend_part2.SetTextSize(legend_size);
-        // // legend_part2.SetFillStyle(0);
-        // // legend_part2.SetBorderSize(0);
-        // legend_part2.AddEntry((*hist_pp)[0], "pp", "p");
     }
 
     return 0;
