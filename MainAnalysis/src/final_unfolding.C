@@ -35,7 +35,7 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void set_format(TH1F>* h, int type)
+void set_format(TH1F* h, int type)
 {
     static int style[6] = {20, 25, 34, 32, 22, 27};
     static int color[6] = {TColor::GetColor("#5790FC"), 
