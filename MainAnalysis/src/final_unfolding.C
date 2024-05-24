@@ -164,13 +164,13 @@ int plot() {
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_cms.c_str());
+        std::cout << pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1 << std::endl;
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045/sf);
         latex.SetTextAlign(31);
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_system.c_str());
-        std::cout << pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1 << std::endl;
         switch (i) {
             case 0:
                 // get histograms
