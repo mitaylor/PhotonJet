@@ -150,9 +150,8 @@ int plot() {
         pads[2] = new TPad("P3", "", pad_x0 * 0 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 2 + pad_dy * 2 + pad_y1 * 2, 0);
         pads[3] = new TPad("P4", "", pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, pad_x0 * 2 + pad_dx * 2 + pad_x1 * 2, pad_y0 * 2 + pad_dy * 2 + pad_y1 * 2, 0);
 
-
         switch (i) {
-            case 5: // folded theory comparison
+            case 0: // folded theory comparison
             {
                 // get histograms
                 auto file_aa_pyquen_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_aa_pyquen_pp.root", "read");
