@@ -172,7 +172,8 @@ int quantitate(char const* config, char const* selections, char const* output) {
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
 
-    auto osr = sel->get<std::vector<int64_t>>("osr");
+    // auto osr = sel->get<std::vector<int64_t>>("osr");
+    std::vector<int64_t> osr = {0,0,0,0};
 
     auto rpt = sel->get<std::vector<float>>("photon_pt_bounds");
 
