@@ -459,10 +459,10 @@ int plot() {
 
                 for (int j = 0; j < (*hist_aa)[3]->GetNbinsX(); ++j) {
                     (*hist_aa)[3]->SetBinContent(j + 1, graph_aa->GetPointY(j));
-                    (*hist_aa)[3]->SetBinContent(j + 1, graph_aa->GetErrorY(j));
+                    (*hist_aa)[3]->SetBinError(j + 1, graph_aa->GetErrorY(j));
 
                     (*hist_pp)[0]->SetBinContent(j + 1, graph_pp->GetPointY(j));
-                    (*hist_pp)[0]->SetBinContent(j + 1, graph_pp->GetErrorY(j));
+                    (*hist_pp)[0]->SetBinError(j + 1, graph_pp->GetErrorY(j));
                 }
 
                 (*hist_aa)[3]->GetYaxis()->SetTitle("");
