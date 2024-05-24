@@ -252,7 +252,7 @@ int plot() {
                 latex.SetTextAngle(0);
                 latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
-            break;
+                break;
             case 1:
                 gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
