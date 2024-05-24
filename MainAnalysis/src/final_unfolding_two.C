@@ -122,7 +122,7 @@ int plot() {
         double canvas_width = panel_width * ncols;
         double canvas_height = panel_height * nrows;
 
-        double sf = 1;
+        double sf = 1/2;
 
         double pad_x0 = panel_width * panel_left_margin / canvas_width;
         double pad_y0 = panel_height * panel_bottom_margin / canvas_height;
@@ -236,27 +236,27 @@ int plot() {
                 set_format((*hist_pp_pythia_fold1)[0], 4);
 
                 // set legend_part1s
-                auto legend_part1 = new TLegend(0.6, 0.2, 0.8, 0.43);
+                auto legend_part1 = new TLegend(0.4, 0.6, 0.6, 0.83);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
                 legend_part1->SetBorderSize(0);
-                legend_part1->AddEntry((*hist_aa_pyquen_pp_fold0)[3], "Folded Pyquen pp", "l");
-                legend_part1->AddEntry((*hist_aa_pyquen_aa_fold0)[3], "Folded Pyquen PbPb 0-10%", "l");
-                legend_part1->AddEntry((*hist_aa_jewel_pp_fold0)[3], "Folded Jewel pp", "l");
-                legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Folded Jewel PbPb 0-10%", "l");
-                legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Folded Pythia PbPb 0-10%", "l");
+                legend_part1->AddEntry((*hist_aa_pyquen_pp_fold0)[3], "Smeared Pyquen pp", "lp");
+                legend_part1->AddEntry((*hist_aa_pyquen_aa_fold0)[3], "Smeared Pyquen PbPb 0-10%", "lp");
+                legend_part1->AddEntry((*hist_aa_jewel_pp_fold0)[3], "Smeared Jewel pp", "lp");
+                legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Smeared Jewel PbPb 0-10%", "lp");
+                legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Smeared Pythia PbPb 0-10%", "lp");
 
-                auto legend_part2 = new TLegend(0.6, 0.2, 0.8, 0.43);
+                auto legend_part2 = new TLegend(0.4, 0.6, 0.6, 0.83);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
                 legend_part2->SetBorderSize(0);
-                legend_part2->AddEntry((*hist_pp_pyquen_pp_fold0)[0], "Folded Pyquen pp", "l");
-                legend_part2->AddEntry((*hist_pp_pyquen_aa_fold0)[0], "Folded Pyquen PbPb 0-10%", "l");
-                legend_part2->AddEntry((*hist_pp_jewel_pp_fold0)[0], "Folded Jewel pp", "l");
-                legend_part2->AddEntry((*hist_pp_jewel_aa_fold0)[0], "Folded Jewel PbPb 0-10%", "l");
-                legend_part2->AddEntry((*hist_pp_pythia_fold0)[0], "Folded Pythia pp", "l");
+                legend_part2->AddEntry((*hist_pp_pyquen_pp_fold0)[0], "Smeared Pyquen pp", "lp");
+                legend_part2->AddEntry((*hist_pp_pyquen_aa_fold0)[0], "Smeared Pyquen PbPb 0-10%", "lp");
+                legend_part2->AddEntry((*hist_pp_jewel_pp_fold0)[0], "Smeared Jewel pp", "lp");
+                legend_part2->AddEntry((*hist_pp_jewel_aa_fold0)[0], "Smeared Jewel PbPb 0-10%", "lp");
+                legend_part2->AddEntry((*hist_pp_pythia_fold0)[0], "Smeared Pythia pp", "lp");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
@@ -277,6 +277,15 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.42, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.36, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.30, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.24, (text_jet_alg + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
@@ -293,6 +302,15 @@ int plot() {
                 (*hist_pp_pythia_fold0)[0]->Draw("same");
 
                 legend_part2->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.42, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.36, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.30, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.24, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
