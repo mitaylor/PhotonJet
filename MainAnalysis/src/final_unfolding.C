@@ -470,10 +470,10 @@ int plot() {
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
 
-                // (*hist_aa)[3]->SetMinimum(0);
-                // (*hist_pp)[0]->SetMinimum(0);
-                // (*hist_aa)[3]->SetMaximum(0.05);
-                // (*hist_pp)[0]->SetMaximum(0.05);
+                (*hist_aa)[3]->SetMinimum(0);
+                (*hist_pp)[0]->SetMinimum(0);
+                (*hist_aa)[3]->SetMaximum(1.2);
+                (*hist_pp)[0]->SetMaximum(1.2);
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
