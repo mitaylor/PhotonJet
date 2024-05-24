@@ -166,8 +166,8 @@ int plot() {
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
 
-                (*hist_aa)[3]->SetMinimum(1);
-                (*hist_pp)[0]->SetMinimum(1);
+                (*hist_aa)[3]->SetMinimum(0.5);
+                (*hist_pp)[0]->SetMinimum(0.5);
                 (*hist_aa)[3]->SetMaximum(3000);
                 (*hist_pp)[0]->SetMaximum(3000);
 
