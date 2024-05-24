@@ -715,14 +715,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("Iteration = " + std::to_string((*hist_aa_mse)[3]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.18, 0.18, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -747,14 +741,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("Iteration = " + std::to_string((*hist_pp_mse)[0]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.18, 0.18, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -854,14 +842,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("Iteration = " + std::to_string((*hist_aa_mse)[3]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.18, 0.18, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -886,14 +868,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("Iteration = " + std::to_string((*hist_pp_mse)[0]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.18, 0.18, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -993,14 +969,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("k_{reg} = " + std::to_string((*hist_aa_mse)[3]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: SVD");
+                latex.DrawLatex(0.18, 0.18, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -1025,14 +995,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("k_{reg} = " + std::to_string((*hist_pp_mse)[0]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: SVD");
+                latex.DrawLatex(0.18, 0.18, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -1132,14 +1096,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("k_{reg} = " + std::to_string((*hist_aa_mse)[3]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: SVD");
+                latex.DrawLatex(0.18, 0.18, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -1164,14 +1122,8 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("k_{reg} = " + std::to_string((*hist_pp_mse)[0]->GetMinimumBin())).c_str());
+                latex.DrawLatex(0.18, 0.24, "Algorithm: SVD");
+                latex.DrawLatex(0.18, 0.18, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
