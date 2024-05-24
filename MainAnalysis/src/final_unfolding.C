@@ -356,10 +356,10 @@ int plot() {
             case 2: // flattened inputs
             {
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin1/accumulate_aa_qcd.root", "read");
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/accumulate_aa_qcd_mebs_nonclosure.root", "read");
                 auto file_pp = new TFile("data/arc/pho_60_rebin1/accumulate_pp_qcd.root", "read");
 
-                auto hist_aa = new history<TH2F>(file_aa, "aa_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0"s);
+                auto hist_aa = new history<TH2F>(file_aa, "aa_qcd_mebs_nonclosure_s_pure_raw_sub_pjet_u_dr_jpt_sum0"s);
                 auto hist_pp = new history<TH2F>(file_pp, "pp_qcd_nominal_s_pure_raw_sub_pjet_u_dr_jpt_sum0"s);
 
                 (*hist_aa)[3]->GetYaxis()->SetTitle("");
