@@ -181,12 +181,13 @@ int plot() {
                 // (*hist_pp)[0]->SetMaximum(1000);
 
                 // set pads
-                set_pad(*pads[0], 0, 0, 0);
-                set_pad(*pads[1], 0, 0, 0);
+                set_pad(*pads[0], 0, 0, 1);
+                set_pad(*pads[1], 0, 0, 1);
 
                 // plot histograms
                 pads[0]->cd();
 
+                gPad->SetLogz();
                 gPad->SetTicks();
 
                 (*hist_aa)[3]->Draw("colz");
