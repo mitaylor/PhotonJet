@@ -236,27 +236,27 @@ int plot() {
                 set_format((*hist_pp_pythia_fold1)[0], 4);
 
                 // set legend_part1s
-                auto legend_part1 = new TLegend(0.35, 0.5, 0.55, 0.73);
+                auto legend_part1 = new TLegend(0.4, 0.5, 0.6, 0.73);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
                 legend_part1->SetBorderSize(0);
-                legend_part1->AddEntry((*hist_aa_pyquen_pp_fold0)[3], "Smeared Pyquen pp", "lp");
-                legend_part1->AddEntry((*hist_aa_pyquen_aa_fold0)[3], "Smeared Pyquen PbPb 0-10%", "lp");
-                legend_part1->AddEntry((*hist_aa_jewel_pp_fold0)[3], "Smeared Jewel pp", "lp");
-                legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Smeared Jewel PbPb 0-10%", "lp");
-                legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Smeared Pythia PbPb 0-10%", "lp");
+                legend_part1->AddEntry((*hist_aa_pyquen_pp_fold0)[3], "Pyquen pp", "lp");
+                legend_part1->AddEntry((*hist_aa_pyquen_aa_fold0)[3], "Pyquen PbPb 0-10%", "lp");
+                legend_part1->AddEntry((*hist_aa_jewel_pp_fold0)[3], "Jewel pp", "lp");
+                legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Jewel PbPb 0-10%", "lp");
+                legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Pythia PbPb 0-10%", "lp");
 
-                auto legend_part2 = new TLegend(0.35, 0.5, 0.55, 0.73);
+                auto legend_part2 = new TLegend(0.4, 0.5, 0.6, 0.73);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
                 legend_part2->SetBorderSize(0);
-                legend_part2->AddEntry((*hist_pp_pyquen_pp_fold0)[0], "Smeared Pyquen pp", "lp");
-                legend_part2->AddEntry((*hist_pp_pyquen_aa_fold0)[0], "Smeared Pyquen PbPb 0-10%", "lp");
-                legend_part2->AddEntry((*hist_pp_jewel_pp_fold0)[0], "Smeared Jewel pp", "lp");
-                legend_part2->AddEntry((*hist_pp_jewel_aa_fold0)[0], "Smeared Jewel PbPb 0-10%", "lp");
-                legend_part2->AddEntry((*hist_pp_pythia_fold0)[0], "Smeared Pythia pp", "lp");
+                legend_part2->AddEntry((*hist_pp_pyquen_pp_fold0)[0], "Pyquen pp", "lp");
+                legend_part2->AddEntry((*hist_pp_pyquen_aa_fold0)[0], "Pyquen PbPb 0-10%", "lp");
+                legend_part2->AddEntry((*hist_pp_jewel_pp_fold0)[0], "Jewel pp", "lp");
+                legend_part2->AddEntry((*hist_pp_jewel_aa_fold0)[0], "Jewel PbPb 0-10%", "lp");
+                legend_part2->AddEntry((*hist_pp_pythia_fold0)[0], "Pythia pp", "lp");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
@@ -289,7 +289,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
-                latex.DrawLatex(0.18, 0.74, "PbPb 0-10%");
+                latex.DrawLatex(0.18, 0.74, "Smeared to PbPb 0-10% Reco");
 
                 pads[1]->cd();
                 
@@ -317,7 +317,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_pp).c_str());
-                latex.DrawLatex(0.18, 0.74, "pp");
+                latex.DrawLatex(0.18, 0.74, "Smeared to pp Reco");
 
                 // x axis label
                 canvas.cd();
