@@ -1487,8 +1487,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.3 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "#Delta j Resolution");
-                latex.DrawLatex(pad_x0 * 1.3 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "#Delta j Resolution");
+                latex.DrawLatex(pad_x0 * 0.3 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "#Deltaj Resolution");
+                latex.DrawLatex(pad_x0 * 1.3 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "#Deltaj Resolution");
                 break;
             }
         }
