@@ -122,7 +122,7 @@ int plot() {
         double canvas_width = panel_width * ncols;
         double canvas_height = panel_height * nrows;
 
-        double sf = 1/2;
+        double sf = 2;
 
         double pad_x0 = panel_width * panel_left_margin / canvas_width;
         double pad_y0 = panel_height * panel_bottom_margin / canvas_height;
@@ -291,7 +291,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
-                latex.DrawLatex(0.18, 0.74, "Smeared to PbPb 0-10% Reco");
+                latex.DrawLatex(0.18, 0.74, "Smeared to PbPb 0-10% reco");
 
                 pads[1]->cd();
                 
@@ -319,7 +319,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_pp).c_str());
-                latex.DrawLatex(0.18, 0.74, "Smeared to pp Reco");
+                latex.DrawLatex(0.18, 0.74, "Smeared to pp reco");
 
                 pads[2]->cd();
 
@@ -347,7 +347,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
-                latex.DrawLatex(0.18, 0.74, "Smeared to PbPb 0-10% Reco");
+                latex.DrawLatex(0.18, 0.74, "Smeared to PbPb 0-10% reco");
 
                 pads[3]->cd();
 
@@ -375,7 +375,7 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
-                latex.DrawLatex(0.18, 0.74, "Smeared to pp Reco");
+                latex.DrawLatex(0.18, 0.74, "Smeared to pp reco");
 
                 // x axis label
                 canvas.cd();
