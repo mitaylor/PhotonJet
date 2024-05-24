@@ -1156,7 +1156,7 @@ int plot() {
         canvas.cd();
 
         latex.SetTextFont(62);
-        latex.SetTextSize(0.07/sf);
+        latex.SetTextSize(0.06/sf);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
         latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.2, text_cms.c_str());
