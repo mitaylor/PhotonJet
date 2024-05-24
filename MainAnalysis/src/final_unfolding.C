@@ -115,7 +115,7 @@ int plot() {
 
         /* styling */
         gStyle->SetLineScalePS(1);
-        gStyle->SetPalette(kBird); // kViridis
+        gStyle->SetPalette(kViridis); // kViridis
         gStyle->SetOptStat(0);
 
         /* size canvas */
@@ -172,6 +172,8 @@ int plot() {
                 (*hist_pp)[0]->GetYaxis()->SetTitle("");
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
+                (*hist_aa)[3]->GetZaxis()->SetMinimum(-0.00001);
+                (*hist_pp)[0]->GetZaxis()->SetMinimum(-0.00001);
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
@@ -203,7 +205,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.SetTextColor(46);
+                latex.SetTextColor(0);
                 latex.DrawLatex(0.83, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
                 latex.DrawLatex(0.83, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
@@ -211,7 +213,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.SetTextColor(46);
+                latex.SetTextColor(0);
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
 
                 pads[1]->cd();
@@ -224,7 +226,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.SetTextColor(46);
+                latex.SetTextColor(0);
                 latex.DrawLatex(0.83, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
                 latex.DrawLatex(0.83, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
@@ -232,7 +234,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.SetTextColor(46);
+                latex.SetTextColor(0);
                 latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
 
                 // x axis label
