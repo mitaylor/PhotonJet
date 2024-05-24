@@ -21,7 +21,7 @@
 #include "TStyle.h"
 #include "TPad.h"
 #include "TGaxis.h"
-#include "TLegend.h"
+#include "Tlegend_part1.h"
 #include "TBox.h"
 #include "TGraphAsymmErrors.h"
 
@@ -155,77 +155,143 @@ int plot() {
             case 5: // folded theory comparison
             {
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin1/regularization_aa_bayes_jewel_pp_mc.root", "read");
-                auto file_pp = new TFile("data/arc/pho_60_rebin1/regularization_pp_bayes_jewel_pp_mc.root", "read");
+                auto file_aa_pyquen_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_aa_pyquen_pp.root", "read");
+                auto file_pp_pyquen_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_pp_pyquen_pp.root", "read");
 
-                auto hist_aa_mse = new history<TH1F>(file_aa, "aa_mse"s);
-                auto hist_pp_mse = new history<TH1F>(file_pp, "pp_mse"s);
+                auto file_aa_pyquen_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_aa_pyquen_aa.root", "read");
+                auto file_pp_pyquen_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_pp_pyquen_aa.root", "read");
 
-                (*hist_aa_mse)[3]->GetYaxis()->SetTitle("");
-                (*hist_pp_mse)[0]->GetYaxis()->SetTitle("");
-                (*hist_aa_mse)[3]->GetXaxis()->SetTitle("");
-                (*hist_pp_mse)[0]->GetXaxis()->SetTitle("");
+                auto file_aa_jewel_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_aa_jewel_pp.root", "read");
+                auto file_pp_jewel_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_pp_jewel_pp.root", "read");
 
-                (*hist_aa_mse)[3]->SetMinimum(1E-10);
-                (*hist_pp_mse)[0]->SetMinimum(1E-10);
-                (*hist_aa_mse)[3]->SetMaximum(1E-2);
-                (*hist_pp_mse)[0]->SetMaximum(1E-2);
+                auto file_aa_jewel_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_aa_jewel_aa.root", "read");
+                auto file_pp_jewel_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_inputs_pp_jewel_aa.root", "read");
 
-                set_format((*hist_aa_mse)[3], 0);
-                set_format((*hist_pp_mse)[0], 0);
-                set_format((*hist_aa_bias)[3], 1);
-                set_format((*hist_pp_bias)[0], 1);
-                set_format((*hist_aa_variance)[3], 2);
-                set_format((*hist_pp_variance)[0], 2);
+                auto hist_aa_pyquen_pp_fold0 = new history<TH1F>(file_aa_pyquen_pp, "input_theory_reco_fold0"s);
+                auto hist_pp_pyquen_pp_fold0 = new history<TH1F>(file_pp_pyquen_pp, "input_theory_reco_fold0"s);
 
-                // set legends
-                auto legend_part1 = new TLegend(0.6, 0.2, 0.8, 0.34);
+                auto hist_aa_pyquen_aa_fold0 = new history<TH1F>(file_aa_pyquen_aa, "input_theory_reco_fold0"s);
+                auto hist_pp_pyquen_aa_fold0 = new history<TH1F>(file_pp_pyquen_aa, "input_theory_reco_fold0"s);
+                
+                auto hist_aa_jewel_pp_fold0 = new history<TH1F>(file_aa_jewel_pp, "input_theory_reco_fold0"s);
+                auto hist_pp_jewel_pp_fold0 = new history<TH1F>(file_pp_jewel_pp, "input_theory_reco_fold0"s);
+
+                auto hist_aa_jewel_aa_fold0 = new history<TH1F>(file_aa_jewel_aa, "input_theory_reco_fold0"s);
+                auto hist_pp_jewel_aa_fold0 = new history<TH1F>(file_pp_jewel_aa, "input_theory_reco_fold0"s);
+
+                auto hist_aa_pythia_fold0 = new history<TH1F>(file_aa_jewel_aa, "input_mc_create_reco_fold0"s);
+                auto hist_pp_pythia_fold0 = new history<TH1F>(file_pp_jewel_aa, "input_mc_create_reco_fold0"s);
+
+                auto hist_aa_pyquen_pp_fold1 = new history<TH1F>(file_aa_pyquen_pp, "input_theory_reco_fold1"s);
+                auto hist_pp_pyquen_pp_fold1 = new history<TH1F>(file_pp_pyquen_pp, "input_theory_reco_fold1"s);
+
+                auto hist_aa_pyquen_aa_fold1 = new history<TH1F>(file_aa_pyquen_aa, "input_theory_reco_fold1"s);
+                auto hist_pp_pyquen_aa_fold1 = new history<TH1F>(file_pp_pyquen_aa, "input_theory_reco_fold1"s);
+                
+                auto hist_aa_jewel_pp_fold1 = new history<TH1F>(file_aa_jewel_pp, "input_theory_reco_fold1"s);
+                auto hist_pp_jewel_pp_fold1 = new history<TH1F>(file_pp_jewel_pp, "input_theory_reco_fold1"s);
+
+                auto hist_aa_jewel_aa_fold1 = new history<TH1F>(file_aa_jewel_aa, "input_theory_reco_fold1"s);
+                auto hist_pp_jewel_aa_fold1 = new history<TH1F>(file_pp_jewel_aa, "input_theory_reco_fold1"s);
+
+                auto hist_aa_pythia_fold1 = new history<TH1F>(file_aa_jewel_aa, "input_mc_create_reco_fold1"s);
+                auto hist_pp_pythia_fold1 = new history<TH1F>(file_pp_jewel_aa, "input_mc_create_reco_fold1"s);
+
+                (*hist_aa_pyquen_pp_fold0)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp_pyquen_pp_fold0)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa_pyquen_pp_fold0)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp_pyquen_pp_fold0)[0]->GetXaxis()->SetTitle("");
+                (*hist_aa_pyquen_pp_fold1)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp_pyquen_pp_fold1)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa_pyquen_pp_fold1)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp_pyquen_pp_fold1)[0]->GetXaxis()->SetTitle("");
+
+                (*hist_aa_pyquen_pp_fold0)[3]->SetMinimum(0);
+                (*hist_pp_pyquen_pp_fold0)[0]->SetMinimum(0);
+                (*hist_aa_pyquen_pp_fold0)[3]->SetMaximum(25);
+                (*hist_pp_pyquen_pp_fold0)[0]->SetMaximum(25);
+                (*hist_aa_pyquen_pp_fold1)[3]->SetMinimum(0);
+                (*hist_pp_pyquen_pp_fold1)[0]->SetMinimum(0);
+                (*hist_aa_pyquen_pp_fold1)[3]->SetMaximum(0.03);
+                (*hist_pp_pyquen_pp_fold1)[0]->SetMaximum(0.03);
+
+
+                auto hist_aa_pyquen_pp_fold1 = new history<TH1F>(file_aa_pyquen_pp, "input_theory_reco_fold1"s);
+                auto hist_pp_pyquen_pp_fold1 = new history<TH1F>(file_pp_pyquen_pp, "input_theory_reco_fold1"s);
+
+                auto hist_aa_pyquen_aa_fold1 = new history<TH1F>(file_aa_pyquen_aa, "input_theory_reco_fold1"s);
+                auto hist_pp_pyquen_aa_fold1 = new history<TH1F>(file_pp_pyquen_aa, "input_theory_reco_fold1"s);
+                
+                auto hist_aa_jewel_pp_fold1 = new history<TH1F>(file_aa_jewel_pp, "input_theory_reco_fold1"s);
+                auto hist_pp_jewel_pp_fold1 = new history<TH1F>(file_pp_jewel_pp, "input_theory_reco_fold1"s);
+
+                auto hist_aa_jewel_aa_fold1 = new history<TH1F>(file_aa_jewel_aa, "input_theory_reco_fold1"s);
+                auto hist_pp_jewel_aa_fold1 = new history<TH1F>(file_pp_jewel_aa, "input_theory_reco_fold1"s);
+
+                auto hist_aa_pythia_fold1 = new history<TH1F>(file_aa_jewel_aa, "input_mc_create_reco_fold1"s);
+                auto hist_pp_pythia_fold1 = new history<TH1F>(file_pp_jewel_aa, "input_mc_create_reco_fold1"s);
+                
+
+                set_format((*hist_aa_pyquen_pp_fold0)[3], 0);
+                set_format((*hist_pp_pyquen_pp_fold0)[0], 0);
+                set_format((*hist_aa_pyquen_pp_fold1)[3], 0);
+                set_format((*hist_pp_pyquen_pp_fold1)[0], 0);
+                set_format((*hist_aa_pyquen_aa_fold0)[3], 1);
+                set_format((*hist_pp_pyquen_aa_fold0)[0], 1);
+                set_format((*hist_aa_pyquen_aa_fold1)[3], 1);
+                set_format((*hist_pp_pyquen_aa_fold1)[0], 1);
+                set_format((*hist_aa_jewel_pp_fold0)[3], 2);
+                set_format((*hist_pp_jewel_pp_fold0)[0], 2);
+                set_format((*hist_aa_jewel_pp_fold1)[3], 2);
+                set_format((*hist_pp_jewel_pp_fold1)[0], 2);
+                set_format((*hist_aa_jewel_aa_fold0)[3], 3);
+                set_format((*hist_pp_jewel_aa_fold0)[0], 3);
+                set_format((*hist_aa_jewel_aa_fold1)[3], 3);
+                set_format((*hist_pp_jewel_aa_fold1)[0], 3);
+                set_format((*hist_aa_pythia_fold0)[3], 4);
+                set_format((*hist_pp_pythia_fold0)[0], 4);
+                set_format((*hist_aa_pythia_fold1)[3], 4);
+                set_format((*hist_pp_pythia_fold1)[0], 4);
+
+                // set legend_part1s
+                auto legend_part1 = new Tlegend_part1(0.6, 0.2, 0.8, 0.43);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
                 legend_part1->SetBorderSize(0);
-                legend_part1->AddEntry((*hist_aa_mse)[3], "MSE", "l");
-                legend_part1->AddEntry((*hist_aa_bias)[3], "Bias^{2}", "l");
-                legend_part1->AddEntry((*hist_aa_variance)[3], "Variance", "l");
+                legend_part1->AddEntry((*hist_aa_pyquen_pp_fold0)[3], "Folded Pyquen pp", "l");
+                legend_part1->AddEntry((*hist_aa_pyquen_aa_fold0)[3], "Folded Pyquen PbPb 0-10%", "l");
+                legend_part1->AddEntry((*hist_aa_jewel_pp_fold0)[3], "Folded Jewel pp", "l");
+                legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Folded Jewel PbPb 0-10%", "l");
+                legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Folded Pythia PbPb 0-10%", "l");
 
-                auto legend_part2 = new TLegend(0.6, 0.2, 0.8, 0.34);
+                auto legend_part2 = new Tlegend_part2(0.6, 0.2, 0.8, 0.43);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
                 legend_part2->SetBorderSize(0);
-                legend_part2->AddEntry((*hist_pp_mse)[0], "MSE", "l");
-                legend_part2->AddEntry((*hist_pp_bias)[0], "Bias^{2}", "l");
-                legend_part2->AddEntry((*hist_pp_variance)[0], "Variance", "l");
+                legend_part2->AddEntry((*hist_pp_pyquen_pp_fold0)[0], "Folded Pyquen pp", "l");
+                legend_part2->AddEntry((*hist_pp_pyquen_aa_fold0)[0], "Folded Pyquen PbPb 0-10%", "l");
+                legend_part2->AddEntry((*hist_pp_jewel_pp_fold0)[0], "Folded Jewel pp", "l");
+                legend_part2->AddEntry((*hist_pp_jewel_aa_fold0)[0], "Folded Jewel PbPb 0-10%", "l");
+                legend_part2->AddEntry((*hist_pp_pythia_fold0)[0], "Folded Pythia pp", "l");
 
                 // set pads
-                set_pad(*pads[0], 0, 1, 0);
-                set_pad(*pads[1], 0, 1, 0);
+                set_pad(*pads[0], 0, 0, 0);
+                set_pad(*pads[1], 0, 0, 0);
 
                 // plot histograms
                 pads[0]->cd();
 
                 gPad->SetTicks();
-                gPad->SetLogy();
 
-                (*hist_aa_mse)[3]->Draw();
-                (*hist_aa_bias)[3]->Draw("same");
-                (*hist_aa_variance)[3]->Draw("same");
+                (*hist_aa_pyquen_pp_fold0)[3]->Draw();
+                (*hist_aa_pyquen_aa_fold0)[3]->Draw("same");
+                (*hist_aa_jewel_pp_fold0)[3]->Draw("same");
+                (*hist_aa_jewel_aa_fold0)[3]->Draw("same");
+                (*hist_aa_pythia_fold0)[3]->Draw("same");
 
                 legend_part1->Draw("same");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.21, "Prior: MC");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("Iteration = " + std::to_string((*hist_aa_mse)[3]->GetMinimumBin())).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -237,27 +303,14 @@ int plot() {
                 pads[1]->cd();
                 
                 gPad->SetTicks();
-                gPad->SetLogy();
 
-                (*hist_pp_mse)[0]->Draw();
-                (*hist_pp_bias)[0]->Draw("same");
-                (*hist_pp_variance)[0]->Draw("same");
+                (*hist_pp_pyquen_pp_fold0)[0]->Draw();
+                (*hist_pp_pyquen_aa_fold0)[0]->Draw("same");
+                (*hist_pp_jewel_pp_fold0)[0]->Draw("same");
+                (*hist_pp_jewel_aa_fold0)[0]->Draw("same");
+                (*hist_pp_pythia_fold0)[0]->Draw("same");
 
                 legend_part2->Draw("same");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
-                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.21, "Prior: MC");
-
-                latex.SetTextFont(42);
-                latex.SetTextSize(text_size);
-                latex.SetTextAlign(21);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(0.5, 0.18,("Iteration = " + std::to_string((*hist_pp_mse)[0]->GetMinimumBin())).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -272,8 +325,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "Iteration");
-                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "Iteration");
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "#Deltaj");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "#Deltaj");
 
                 // y axis label
                 canvas.cd();
@@ -281,8 +334,8 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "Bin Averaged Value");
-                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Bin Averaged Value");
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "1/N^{#gamma} dN/d#Deltaj");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "1/N^{#gamma} dN/d#Deltaj");
                 break;
             }
         }
@@ -293,13 +346,13 @@ int plot() {
         latex.SetTextSize(0.05/sf);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.2, text_cms.c_str());
+        latex.DrawLatex(pad_x0, pad_y0 * 2 + pad_dy * 2 + pad_y1 * 1.2, text_cms.c_str());
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045/sf);
         latex.SetTextAlign(31);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.2, text_system.c_str());
+        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 2 + pad_dy * 2 + pad_y1 * 1.2, text_system.c_str());
 
         canvas.SaveAs(("unfolding_" + figures[i] + ".pdf").c_str());
     }
