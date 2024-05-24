@@ -1217,8 +1217,8 @@ int plot() {
                 (*hist_pp_before)[0]->GetXaxis()->SetTitle("");
 
                 (*hist_aa_before)[3]->SetMinimum(0);
-                (*hist_pp_before)[0]->SetMinimum(25000);
-                (*hist_aa_before)[3]->SetMaximum(11000);
+                (*hist_pp_before)[0]->SetMinimum(26000);
+                (*hist_aa_before)[3]->SetMaximum(10000);
                 (*hist_pp_before)[0]->SetMaximum(31000);
 
                 set_format((*hist_aa_before)[3], 0);
