@@ -349,14 +349,44 @@ int plot() {
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
                 latex.DrawLatex(0.18, 0.74, "Smeared to PbPb 0-10% Reco");
 
+                pads[3]->cd();
+
+                gPad->SetTicks();
+
+                (*hist_pp_pyquen_pp_fold1)[0]->Draw();
+                (*hist_pp_pyquen_aa_fold1)[0]->Draw("same");
+                (*hist_pp_jewel_pp_fold1)[0]->Draw("same");
+                (*hist_pp_jewel_aa_fold1)[0]->Draw("same");
+                (*hist_pp_pythia_fold1)[0]->Draw("same");
+
+                legend_part2->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.45, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.39, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.33, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.27, (text_jet_alg + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.18, 0.74, "Smeared to pp Reco");
+
                 // x axis label
                 canvas.cd();
                 latex.SetTextFont(42);
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "p_{T}^{jet}");
-                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "p_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5 + pad_dy * 0 + pad_y1 * 0, "#Deltaj");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5 + pad_dy * 0 + pad_y1 * 0, "#Deltaj");
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 1.5 + pad_dy * 1 + pad_y1 * 1, "p_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 1.5 + pad_dy * 1 + pad_y1 * 1, "p_{T}^{jet}");
 
                 // y axis label
                 canvas.cd();
@@ -364,8 +394,10 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "1/N^{#gamma} dN/dp_{T}^{jet}");
-                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "1/N^{#gamma} dN/dp_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 1 + pad_dy * 0.5 + pad_y1 * 0, "1/N^{#gamma} dN/#Deltaj");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 0.5 + pad_y1 * 0, "1/N^{#gamma} dN/#Deltaj");
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 2 + pad_dy * 1.5 + pad_y1 * 1, "1/N^{#gamma} dN/#Deltaj");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 2 + pad_dy * 1.5 + pad_y1 * 1, "1/N^{#gamma} dN/#Deltaj");
                 break;
             }
         }
