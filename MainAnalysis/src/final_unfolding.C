@@ -97,7 +97,7 @@ int plot() {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<std::string> figures = {"response"s};
+    std::vector<std::string> figures = {"binning"s, "response"s};
 
     /* open input files */
     for (size_t i = 0; i < figures.size(); ++i) {
@@ -157,7 +157,104 @@ int plot() {
         pads[1] = new TPad("P1", "", pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 2 + pad_dx * 2 + pad_x1 * 2, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
 
         switch (i) {
-            case 0: 
+            case 0: // binning
+            {
+                gStyle->SetPalette(kBird);
+
+                // get histograms
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/plot_binning_aa_qcd_raw.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/plot_binning_pp_qcd_raw.root", "read");
+
+                auto hist_aa = new history<TH2F>(file_aa, "hist2d_sub_d_hf"s);
+                auto hist_pp = new history<TH2F>(file_pp, "hist2d_sub_d_hf"s);
+
+                (*hist_aa)[3]->GetZaxis()->SetTitle("");
+                (*hist_pp)[0]->GetZaxis()->SetTitle("");
+                (*hist_aa)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp)[0]->GetXaxis()->SetTitle("");
+
+                // (*hist_aa)[3]->SetMinimum(0.1);
+                // (*hist_pp)[0]->SetMinimum(0.1);
+                // (*hist_aa)[3]->SetMaximum(1000);
+                // (*hist_pp)[0]->SetMaximum(1000);
+
+                // set pads
+                set_pad(*pads[0], 0, 0, 0);
+                set_pad(*pads[1], 0, 0, 0);
+
+                // plot histograms
+                pads[0]->cd();
+
+                gPad->SetTicks();
+
+                (*hist_aa)[3]->Draw("colz");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.17, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.17, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.17, 0.74, "PbPb 0-10%");
+
+                pads[1]->cd();
+                
+                gPad->SetLogz();
+                gPad->SetTicks();
+
+                (*hist_pp)[0]->Draw("colz");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.17, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.17, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.17, 0.74, "pp");
+
+                // x axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "#Deltaj");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "#Deltaj");
+
+                // y axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(90);
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "p_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "p_{T}^{jet}");
+
+                 // z axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size/2);
+                latex.SetTextAlign(12);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
+                break;
+            }
+            case 1: // response matrix
             {
                 gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
@@ -204,7 +301,6 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
-                latex.DrawLatex(0.17, 0.74, "PbPb 0-10%");
 
                 pads[1]->cd();
                 
@@ -225,7 +321,6 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
-                latex.DrawLatex(0.17, 0.74, "pp");
 
                 // x axis label
                 canvas.cd();
@@ -255,9 +350,9 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
                 break;
             }
-            case 1:
+            case 2:
             {
-                gStyle->SetPalette(kInvertedDarkBodyRadiator);
+                gStyle->SetPalette(kBird);
 
                 // get histograms
                 auto file_aa = new TFile("data/arc/pho_60_rebin3/process_vacillate_aa_qcd.root", "read");
@@ -366,7 +461,7 @@ int plot() {
                 latex.SetTextAngle(0);
                 latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
-            break;
+                break;
             }
         }
 
