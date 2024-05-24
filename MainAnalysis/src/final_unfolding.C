@@ -201,9 +201,9 @@ int plot() {
                 // plot histograms
                 pads[0]->cd();
                 (*hist_aa)[3]->Draw("colz");
-                legend_part1.Draw("same");
                 gPad->SetLogz();
                 gPad->SetTicks();
+                legend_part1.Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -220,9 +220,9 @@ int plot() {
 
                 pads[1]->cd();
                 (*hist_pp)[0]->Draw("colz");
-                legend_part2.Draw("same");
                 gPad->SetLogz();
                 gPad->SetTicks();
+                legend_part2.Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
