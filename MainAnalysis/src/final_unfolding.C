@@ -120,17 +120,16 @@ int plot() {
 
         /* size canvas */
         double panel_left_margin = 0.15;
-        double panel_top_margin = 0;
+        double panel_top_margin = 0.15;
         double panel_right_margin = 0.15;
         double panel_bottom_margin = 0.15;
 
         double panel_size = 500;
         double panel_width = panel_size / (1 - panel_left_margin - panel_right_margin);
         double panel_height = panel_size / (1 - panel_top_margin - panel_bottom_margin);
-        double padding_height = 70;
 
         double canvas_width = panel_width * ncols;
-        double canvas_height = panel_height + padding_height;
+        double canvas_height = panel_height;
 
         double sf = 1;
 
@@ -140,7 +139,6 @@ int plot() {
         double pad_dy = panel_size / canvas_height;
         double pad_x1 = panel_width * panel_right_margin / canvas_width;
         double pad_y1 = panel_height * panel_top_margin / canvas_height;
-        double pad_dh = padding_height / canvas_height;
 
         /* text sizes */
         // double axis_label_size = 0.05/sf;
@@ -165,13 +163,13 @@ int plot() {
         latex.SetTextSize(0.07/sf);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1 + pad_dh * 0.1, text_cms.c_str());
+        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_cms.c_str());
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045/sf);
         latex.SetTextAlign(31);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1 + pad_dh * 0.1, text_system.c_str());
+        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_system.c_str());
         std::cout << pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1 << std::endl;
         switch (i) {
             case 0:
