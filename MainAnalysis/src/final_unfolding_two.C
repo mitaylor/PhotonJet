@@ -265,7 +265,7 @@ int plot() {
                 legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Folded Jewel PbPb 0-10%", "l");
                 legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Folded Pythia PbPb 0-10%", "l");
 
-                auto legend_part2 = new Tlegend_part2(0.6, 0.2, 0.8, 0.43);
+                auto legend_part2 = new TLegend(0.6, 0.2, 0.8, 0.43);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
