@@ -180,19 +180,19 @@ int plot() {
                 (*hist_pp)[0]->SetMaximum(1000);
 
                 // declare legends
-                TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
+                TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
                 legend_part1.SetTextFont(42);
                 legend_part1.SetTextSize(legend_size);
                 legend_part1.SetFillStyle(0);
                 legend_part1.SetBorderSize(0);
-                legend_part1.AddEntry((TObject*) 0, "PbPb MC 0-10%", "");
+                legend_part1.AddEntry((*hist_aa)[3], "PbPb MC 0-10%", "l");
 
-                TLegend legend_part2(0.65, 0.87, 0.95, 0.95);
+                TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
                 legend_part2.SetTextFont(42);
                 legend_part2.SetTextSize(legend_size);
                 legend_part2.SetFillStyle(0);
                 legend_part2.SetBorderSize(0);
-                legend_part2.AddEntry((TObject*) 0, "pp MC", "");
+                legend_part2.AddEntry((*hist_pp)[0], "pp MC", "l");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 1);
