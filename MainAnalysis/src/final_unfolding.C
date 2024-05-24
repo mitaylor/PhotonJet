@@ -669,11 +669,11 @@ int plot() {
                 (*hist_pp_mse)[0]->SetMaximum(1E-2);
 
                 set_format((*hist_aa_mse)[3], 0);
-                set_format((*hist_pp_mse)[3], 0);
+                set_format((*hist_pp_mse)[0], 0);
                 set_format((*hist_aa_bias)[3], 1);
-                set_format((*hist_pp_bias)[3], 1);
+                set_format((*hist_pp_bias)[0], 1);
                 set_format((*hist_aa_variance)[3], 2);
-                set_format((*hist_pp_variance)[3], 2);
+                set_format((*hist_pp_variance)[0], 2);
 
                 // set legends
                 TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
