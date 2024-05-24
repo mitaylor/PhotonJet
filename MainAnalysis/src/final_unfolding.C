@@ -67,10 +67,10 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
 
 void set_pad(TPad &pad, bool logx, bool logy, bool logz)
 {
-    pad.SetLeftMargin(0.1);
-    pad.SetTopMargin(0.1);
-    pad.SetRightMargin(0.1);
-    pad.SetBottomMargin(0.1);
+    pad.SetLeftMargin(0.15);
+    pad.SetTopMargin(0);
+    pad.SetRightMargin(0.11);
+    pad.SetBottomMargin(0.15);
     pad.SetTickx();
     pad.SetTicky();
 
@@ -119,22 +119,27 @@ int plot() {
         gStyle->SetOptStat(0);
 
         /* size canvas */
-        double panel_size = 500;
-        double padding_width_left = 10;
-        double padding_width_right = 10;
-        double padding_height = 10;
-        double padding_interim = 0;
+        double panel_left_margin = 0.15;
+        double panel_top_margin = 0;
+        double panel_right_margin = 0.15;
+        double panel_bottom_margin = 0.15;
 
-        double canvas_width = panel_size * ncols + padding_width_left + padding_width_right + padding_interim;
-        double canvas_height = panel_size * 1 + padding_height * 2;
+        double panel_size = 500;
+        double panel_width = panel_size / (1 - panel_left_margin - panel_right_margin);
+        double panel_height = panel_size / (1 - panel_top_margin - panel_bottom_margin);
+        double padding_height = 70;
+
+        double canvas_width = panel_width * ncols;
+        double canvas_height = panel_height + padding_height;
 
         double sf = 1;
 
-        double pad_x0 = padding_width_left / canvas_width;
-        double pad_y0 = padding_height / canvas_height;
+        double pad_x0 = panel_width * panel_left_margin / canvas_width;
+        double pad_y0 = panel_height * panel_bottom_margin / canvas_height;
         double pad_dx = panel_size / canvas_width;
         double pad_dy = panel_size / canvas_height;
-        double pad_dix = padding_interim / canvas_width;
+        double pad_x1 = panel_width * panel_right_margin / canvas_width;
+        double pad_y1 = panel_height * panel_top_margin / canvas_height;
 
         /* text sizes */
         // double axis_label_size = 0.05/sf;
@@ -150,8 +155,8 @@ int plot() {
         std::vector<TH2F*> worlds(ncols);
         std::vector<TPad*> pads(ncols);
 
-        pads[0] = new TPad("P1", "", pad_x0 + pad_dx * 0 + pad_dix * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1 + pad_dix * 0, pad_y0 + pad_dy * 1, 0);
-        pads[1] = new TPad("P1", "", pad_x0 + pad_dx * 1 + pad_dix * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2 + pad_dix * 1, pad_y0 + pad_dy * 1, 0);
+        pads[0] = new TPad("P1", "", pad_x0 * 0 + pad_dx * 0 + pax_x1 * 0, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 1 + pad_dx * 1 + pax_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
+        pads[1] = new TPad("P1", "", pad_x0 * 1 + pad_dx * 1 + pax_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, pad_x0 * 2 + pad_dx * 2 + pax_x1 * 2, pad_y0 * 2 + pad_dy * 2 + pad_y1 * 2, 0);
 
         canvas.cd();
 
