@@ -67,17 +67,16 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
 
 void set_pad(TPad &pad, bool logx, bool logy, bool logz)
 {
-    pad.SetLeftMargin(0);
-    pad.SetTopMargin(0);
-    pad.SetRightMargin(0);
-    pad.SetBottomMargin(0);
+    pad.SetLeftMargin(0.1);
+    pad.SetTopMargin(0.1);
+    pad.SetRightMargin(0.1);
+    pad.SetBottomMargin(0.1);
     pad.SetTickx();
     pad.SetTicky();
 
     if (logx) pad.SetLogx();
     if (logy) pad.SetLogy();
     if (logz) pad.SetLogz();
-    if (logz) pad.SetRightMargin(0.11);
 
     pad.Draw();
 }
@@ -111,8 +110,8 @@ int plot() {
         auto text_jet_alg = "anti-k_{T} R = 0.3"s;
         auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
         auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
-        auto text_aa = "Pythia8 CP5 QCD Photon + Hydjet Drum5F"s;
-        auto text_pp = "Pythia8 CP5 QCD Photon"s;
+        auto text_aa = "Pythia8 (CP5) QCD Photon + Hydjet (Drum5F)"s;
+        auto text_pp = "Pythia8 (CP5) QCD Photon"s;
 
         /* styling */
         gStyle->SetLineScalePS(1);
@@ -121,10 +120,10 @@ int plot() {
 
         /* size canvas */
         double panel_size = 500;
-        double padding_width_left = 70;
-        double padding_width_right = 70;
-        double padding_height = 70;
-        double padding_interim = 70;
+        double padding_width_left = 10;
+        double padding_width_right = 10;
+        double padding_height = 10;
+        double padding_interim = 0;
 
         double canvas_width = panel_size * ncols + padding_width_left + padding_width_right + padding_interim;
         double canvas_height = panel_size * 1 + padding_height * 2;
@@ -140,7 +139,7 @@ int plot() {
         /* text sizes */
         double axis_label_size = 0.05/sf;
         double legend_size = 0.05;
-        double text_size = 0.05;
+        double text_size = 0.04;
 
         /* declare canvas, pads, axes, and titles */
         TCanvas canvas("canvas", "", canvas_width, canvas_height);
@@ -177,21 +176,24 @@ int plot() {
                 auto hist_aa = new history<TH2F>(file_aa, "aa_c"s);
                 auto hist_pp = new history<TH2F>(file_pp, "pp_c"s);
 
-                // x axis label
-                latex.SetTextFont(42);
-                latex.SetTextSize(axis_label_size);
-                latex.SetTextAlign(22);
-                latex.SetTextAngle(0);
-                latex.DrawLatex(pad_x0 + pad_dx * 0.5 + pad_dix * 0, pad_y0 * 0.5, "#Deltaj");
-                latex.DrawLatex(pad_x0 + pad_dx * 1.5 + pad_dix * 1, pad_y0 * 0.5, "#Deltaj");
+                (*hist_aa)[3]->GetZaxis()->SetTitle("");
+                (*hist_pp)[0]->GetZaxis()->SetTitle("");
 
-                // y axis label
-                latex.SetTextFont(42);
-                latex.SetTextSize(axis_label_size);
-                latex.SetTextAlign(22);
-                latex.SetTextAngle(90);
-                latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "Reconstructed Bin Index");
-                latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
+                // // x axis label
+                // latex.SetTextFont(42);
+                // latex.SetTextSize(axis_label_size);
+                // latex.SetTextAlign(22);
+                // latex.SetTextAngle(0);
+                // latex.DrawLatex(pad_x0 + pad_dx * 0.5 + pad_dix * 0, pad_y0 * 0.5, "Reconstructed Bin Index");
+                // latex.DrawLatex(pad_x0 + pad_dx * 1.5 + pad_dix * 1, pad_y0 * 0.5, "Reconstructed Bin Index");
+
+                // // y axis label
+                // latex.SetTextFont(42);
+                // latex.SetTextSize(axis_label_size);
+                // latex.SetTextAlign(22);
+                // latex.SetTextAngle(90);
+                // latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
+                // latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
