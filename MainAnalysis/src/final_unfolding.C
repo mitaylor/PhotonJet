@@ -132,7 +132,7 @@ int plot() {
 
         /* text sizes */
         double axis_label_size = 0.05/sf;
-        double legend_size = 0.05;
+        double legend_size = 0.035;
         double text_size = 0.035;
 
         /* declare canvas, pads, axes, and titles */
@@ -676,7 +676,7 @@ int plot() {
                 set_format((*hist_pp_variance)[0], 2);
 
                 // set legends
-                auto legend_part1 = new TLegend(0.63, 0.75, 0.83, 0.83);
+                auto legend_part1 = new TLegend(0.18, 0.65, 0.38, 0.72);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
@@ -685,7 +685,7 @@ int plot() {
                 legend_part1->AddEntry((*hist_aa_bias)[3], "Bias^{2}", "l");
                 legend_part1->AddEntry((*hist_aa_variance)[3], "Variance", "l");
 
-                auto legend_part2 = new TLegend(0.63, 0.75, 0.83, 0.83);
+                auto legend_part2 = new TLegend(0.18, 0.65, 0.38, 0.72);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
