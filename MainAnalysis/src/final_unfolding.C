@@ -157,7 +157,8 @@ int plot() {
         pads[1] = new TPad("P1", "", pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 2 + pad_dx * 2 + pad_x1 * 2, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
 
         switch (i) {
-            case 0:
+            case 0: 
+            {
                 gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
                 // get histograms
@@ -253,7 +254,9 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
                 break;
+            }
             case 1:
+            {
                 gStyle->SetPalette(kInvertedDarkBodyRadiator);
 
                 // get histograms
@@ -364,6 +367,7 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.1, pad_y0 * 0.8, "Counts");
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.1, pad_y0 * 0.8, "Counts");
             break;
+            }
         }
 
         canvas.cd();
