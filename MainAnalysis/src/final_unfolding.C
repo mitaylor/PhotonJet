@@ -1227,7 +1227,7 @@ int plot() {
                 set_format((*hist_pp_after)[0], 1);
 
                 // set legends
-                auto legend_part1 = new TLegend(0.6, 0.2, 0.8, 0.29);
+                auto legend_part1 = new TLegend(0.6, 0.25, 0.8, 0.34);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
@@ -1235,7 +1235,7 @@ int plot() {
                 legend_part1->AddEntry((*hist_aa_before)[3], "#chi^{2}_{smeared}", "l");
                 legend_part1->AddEntry((*hist_aa_after)[3], "#chi^{2}_{unfolded}", "l");
 
-                auto legend_part2 = new TLegend(0.6, 0.2, 0.8, 0.29);
+                auto legend_part2 = new TLegend(0.6, 0.25, 0.8, 0.34);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
@@ -1253,8 +1253,8 @@ int plot() {
                 gPad->SetTicks();
                 gPad->SetLogy();
 
-                (*hist_aa_before)[3]->Draw();
-                (*hist_aa_after)[3]->Draw("same");
+                (*hist_aa_before)[3]->Draw("p");
+                (*hist_aa_after)[3]->Draw("same p");
 
                 legend_part1->Draw("same");
 
@@ -1285,8 +1285,8 @@ int plot() {
                 gPad->SetTicks();
                 gPad->SetLogy();
 
-                (*hist_pp_before)[0]->Draw();
-                (*hist_pp_after)[0]->Draw("same");
+                (*hist_pp_before)[0]->Draw("p");
+                (*hist_pp_after)[0]->Draw("same p");
 
                 legend_part2->Draw("same");
 
