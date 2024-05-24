@@ -88,7 +88,7 @@ int plot() {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s, "efficiency"s, "mse_bayes_mc"s, "mse_bayes_flat"s, "mse_svd_mc"s, "mse_svd_flat"s, "bottom_line"s, "jer"s};
+    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s, "efficiency"s, "mse_bayes_mc"s, "mse_bayes_flat"s, "mse_svd_mc"s, "mse_svd_flat"s, "bottom_line"s, "jer"s, "djr"s};
 
     /* open input files */
     for (size_t i = 0; i < figures.size(); ++i) {
@@ -1410,7 +1410,7 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1.3 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Jet Energy Resolution");
                 break;
             }
-            case 10: // djr
+            case 11: // djr
             {
                 // get histograms
                 auto file_aa = new TFile("data/arc/distillate_aa_angle.root", "read");
