@@ -261,6 +261,8 @@ int plot() {
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
                 set_pad(*pads[1], 0, 0, 0);
+                set_pad(*pads[2], 0, 0, 0);
+                set_pad(*pads[3], 0, 0, 0);
 
                 // plot histograms
                 pads[0]->cd();
