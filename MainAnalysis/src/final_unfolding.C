@@ -172,8 +172,8 @@ int plot() {
                 (*hist_pp)[0]->GetYaxis()->SetTitle("");
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
-                (*hist_aa)[3]->SetMinimum(-0.00001);
-                (*hist_pp)[0]->SetMinimum(-0.00001);
+                (*hist_aa)[3]->SetMinimum(-1);
+                (*hist_pp)[0]->SetMinimum(-1);
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
