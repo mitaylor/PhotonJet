@@ -491,7 +491,7 @@ int plot() {
                 gPad->SetTicks();
 
                 (*hist_aa)[3]->Draw();
-                line.Draw();
+                line.Draw("same");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -512,7 +512,7 @@ int plot() {
                 gPad->SetTicks();
 
                 (*hist_pp)[0]->Draw();
-                line.Draw();
+                line.Draw("same");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
