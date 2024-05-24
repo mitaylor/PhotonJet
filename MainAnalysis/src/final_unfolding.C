@@ -714,9 +714,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
+                latex.DrawLatex(0.18, 0.21, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -746,9 +746,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
+                latex.DrawLatex(0.18, 0.21, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -853,9 +853,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
+                latex.DrawLatex(0.18, 0.21, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -885,9 +885,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
+                latex.DrawLatex(0.18, 0.21, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -992,9 +992,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
+                latex.DrawLatex(0.18, 0.21, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -1024,9 +1024,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: MC");
+                latex.DrawLatex(0.18, 0.21, "Prior: MC");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -1131,9 +1131,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
+                latex.DrawLatex(0.18, 0.21, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -1163,9 +1163,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.30, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
                 latex.DrawLatex(0.18, 0.26, "Algorithm: SVD");
-                latex.DrawLatex(0.18, 0.22, "Prior: Flat");
+                latex.DrawLatex(0.18, 0.21, "Prior: Flat");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
