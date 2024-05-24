@@ -236,7 +236,7 @@ int plot() {
                 set_format((*hist_pp_pythia_fold1)[0], 4);
 
                 // set legend_part1s
-                auto legend_part1 = new TLegend(0.4, 0.5, 0.6, 0.73);
+                auto legend_part1 = new TLegend(0.5, 0.5, 0.7, 0.73);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
@@ -247,7 +247,7 @@ int plot() {
                 legend_part1->AddEntry((*hist_aa_jewel_aa_fold0)[3], "Jewel PbPb 0-10%", "lp");
                 legend_part1->AddEntry((*hist_aa_pythia_fold0)[3], "Pythia PbPb 0-10%", "lp");
 
-                auto legend_part2 = new TLegend(0.4, 0.5, 0.6, 0.73);
+                auto legend_part2 = new TLegend(0.5, 0.5, 0.7, 0.73);
                 legend_part2->SetTextFont(42);
                 legend_part2->SetTextSize(legend_size);
                 legend_part2->SetFillStyle(0);
