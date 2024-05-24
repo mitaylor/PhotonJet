@@ -140,6 +140,7 @@ int plot() {
         double pad_dy = panel_size / canvas_height;
         double pad_x1 = panel_width * panel_right_margin / canvas_width;
         double pad_y1 = panel_height * panel_top_margin / canvas_height;
+        double pad_dh = padding_height / canvas_height;
 
         /* text sizes */
         // double axis_label_size = 0.05/sf;
@@ -156,7 +157,7 @@ int plot() {
         std::vector<TPad*> pads(ncols);
 
         pads[0] = new TPad("P1", "", pad_x0 * 0 + pad_dx * 0 + pax_x1 * 0, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 1 + pad_dx * 1 + pax_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
-        pads[1] = new TPad("P1", "", pad_x0 * 1 + pad_dx * 1 + pax_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, pad_x0 * 2 + pad_dx * 2 + pax_x1 * 2, pad_y0 * 2 + pad_dy * 2 + pad_y1 * 2, 0);
+        pads[1] = new TPad("P1", "", pad_x0 * 1 + pad_dx * 1 + pax_x1 * 1, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 2 + pad_dx * 2 + pax_x1 * 2, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
 
         canvas.cd();
 
@@ -164,13 +165,13 @@ int plot() {
         latex.SetTextSize(0.07/sf);
         latex.SetTextAlign(11);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy, text_cms.c_str());
+        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1 + pad_dh * 0.1, text_cms.c_str());
 
         latex.SetTextFont(42);
         latex.SetTextSize(0.045/sf);
         latex.SetTextAlign(31);
         latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 + pad_dx * ncols + pad_dix * (ncols - 1), pad_y0 * 1.15 + pad_dy, text_system.c_str());
+        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pax_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1 + pad_dh * 0.1, text_system.c_str());
 
         switch (i) {
             case 0:
