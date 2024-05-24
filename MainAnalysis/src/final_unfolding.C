@@ -770,7 +770,7 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "");
                 break;
             }
-            case 5: // mse, jewel, bayes, flat
+            case 6: // mse, jewel, bayes, flat
             {
                 // get histograms
                 auto file_aa = new TFile("data/arc/pho_60_rebin1/regularization_aa_bayes_jewel_pp_flat.root", "read");
