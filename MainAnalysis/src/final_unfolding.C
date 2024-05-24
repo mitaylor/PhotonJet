@@ -181,18 +181,18 @@ int plot() {
 
                 // declare legends
                 TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
-                legend_part1.SetTextFont(42);
-                legend_part1.SetTextSize(legend_size);
-                legend_part1.SetFillStyle(0);
-                legend_part1.SetBorderSize(0);
-                legend_part1.AddEntry((*hist_aa)[3], "PbPb 0-10%", "l");
+                // legend_part1.SetTextFont(42);
+                // legend_part1.SetTextSize(legend_size);
+                // legend_part1.SetFillStyle(0);
+                // legend_part1.SetBorderSize(0);
+                legend_part1.AddEntry((*hist_aa)[3], "PbPb 0-10%", "p");
 
                 TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
-                legend_part2.SetTextFont(42);
-                legend_part2.SetTextSize(legend_size);
-                legend_part2.SetFillStyle(0);
-                legend_part2.SetBorderSize(0);
-                legend_part2.AddEntry((*hist_pp)[0], "pp", "l");
+                // legend_part2.SetTextFont(42);
+                // legend_part2.SetTextSize(legend_size);
+                // legend_part2.SetFillStyle(0);
+                // legend_part2.SetBorderSize(0);
+                legend_part2.AddEntry((*hist_pp)[0], "pp", "p");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 1);
