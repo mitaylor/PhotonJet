@@ -25,6 +25,9 @@
 #include "TBox.h"
 #include "TGraphAsymmErrors.h"
 
+#include "TUnfoldBinning.h"
+#include "TUnfoldDensity.h"
+
 #include <string>
 #include <vector>
 #include <cmath>
@@ -452,7 +455,7 @@ int plot() {
                 auto hist_pp_proj = new history<TH1F>(file_pp, "pp_proj_r"s);
 
                 auto graph_aa = new TGraphAsymmErrors((*hist_aa_proj)[3], (*hist_aa_reco)[3], "cl=0.683 b(1,1) mode");
-                auto graph_pp = new TGraphAsymmErrors((*hist_pp_proj)[3], (*hist_pp_reco)[3], "cl=0.683 b(1,1) mode");
+                auto graph_pp = new TGraphAsymmErrors((*hist_pp_proj)[0], (*hist_pp_reco)[0], "cl=0.683 b(1,1) mode");
 
                 for (int j = 0; j < (*hist_aa)[3]->GetNbinsX(); ++j) {
                     (*hist_aa)[3]->SetBinContent(j + 1, graph_aa->GetPointY(j));
