@@ -1216,10 +1216,10 @@ int plot() {
                 (*hist_aa_before)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp_before)[0]->GetXaxis()->SetTitle("");
 
-                // (*hist_aa_before)[3]->SetMinimum(1E-10);
-                // (*hist_pp_before)[0]->SetMinimum(1E-10);
-                // (*hist_aa_before)[3]->SetMaximum(1E-2);
-                // (*hist_pp_before)[0]->SetMaximum(1E-2);
+                (*hist_aa_before)[3]->SetMinimum(1E2);
+                (*hist_pp_before)[0]->SetMinimum(1E2);
+                (*hist_aa_before)[3]->SetMaximum(1E4);
+                (*hist_pp_before)[0]->SetMaximum(1E4);
 
                 set_format((*hist_aa_before)[3], 0);
                 set_format((*hist_pp_before)[0], 0);
