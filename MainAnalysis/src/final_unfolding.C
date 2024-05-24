@@ -68,8 +68,8 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
 void set_pad(TPad &pad, bool logx, bool logy, bool logz)
 {
     pad.SetLeftMargin(0.15);
-    pad.SetTopMargin(0);
-    pad.SetRightMargin(0.11);
+    pad.SetTopMargin(0.15);
+    pad.SetRightMargin(0.15);
     pad.SetBottomMargin(0.15);
     pad.SetTickx();
     pad.SetTicky();
