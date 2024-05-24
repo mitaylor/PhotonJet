@@ -97,7 +97,7 @@ int plot() {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s};
+    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s};
 
     /* open input files */
     for (size_t i = 0; i < figures.size(); ++i) {
