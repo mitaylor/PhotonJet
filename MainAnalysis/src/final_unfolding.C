@@ -690,9 +690,9 @@ int plot() {
                 legend_part2.SetTextSize(legend_size);
                 legend_part2.SetFillStyle(0);
                 legend_part2.SetBorderSize(0);
-                legend_part1.AddEntry((*hist_pp_mse)[0], "MSE", "pl");
-                legend_part1.AddEntry((*hist_pp_bias)[0], "Bias^{2}", "pl");
-                legend_part1.AddEntry((*hist_pp_variance)[0], "Variance", "pl");
+                legend_part2.AddEntry((*hist_pp_mse)[0], "MSE", "pl");
+                legend_part2.AddEntry((*hist_pp_bias)[0], "Bias^{2}", "pl");
+                legend_part2.AddEntry((*hist_pp_variance)[0], "Variance", "pl");
 
                 // set pads
                 set_pad(*pads[0], 0, 1, 0);
@@ -705,8 +705,8 @@ int plot() {
                 gPad->SetLogy();
 
                 (*hist_aa_mse)[3]->Draw();
-                (*hist_aa_bias)[3]->Draw();
-                (*hist_aa_variance)[3]->Draw();
+                (*hist_aa_bias)[3]->Draw("same");
+                (*hist_aa_variance)[3]->Draw("same");
 
                 legend_part1.Draw();
 
@@ -731,8 +731,8 @@ int plot() {
                 gPad->SetLogy();
 
                 (*hist_pp_mse)[0]->Draw();
-                (*hist_pp_bias)[0]->Draw();
-                (*hist_pp_variance)[0]->Draw();
+                (*hist_pp_bias)[0]->Draw("same");
+                (*hist_pp_variance)[0]->Draw("same");
 
                 legend_part2.Draw();
 
