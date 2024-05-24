@@ -168,22 +168,10 @@ int plot() {
 
                 (*hist_aa)[3]->GetZaxis()->SetTitle("");
                 (*hist_pp)[0]->GetZaxis()->SetTitle("");
-
-                // // x axis label
-                // latex.SetTextFont(42);
-                // latex.SetTextSize(axis_label_size);
-                // latex.SetTextAlign(22);
-                // latex.SetTextAngle(0);
-                // latex.DrawLatex(pad_x0 + pad_dx * 0.5 + pad_dix * 0, pad_y0 * 0.5, "Reconstructed Bin Index");
-                // latex.DrawLatex(pad_x0 + pad_dx * 1.5 + pad_dix * 1, pad_y0 * 0.5, "Reconstructed Bin Index");
-
-                // // y axis label
-                // latex.SetTextFont(42);
-                // latex.SetTextSize(axis_label_size);
-                // latex.SetTextAlign(22);
-                // latex.SetTextAngle(90);
-                // latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
-                // latex.DrawLatex(pad_dix * 0.4 + pad_dx + pad_x0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
+                (*hist_aa)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp)[0]->GetXaxis()->SetTitle("");
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
@@ -242,6 +230,24 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.05, 0.87, (text_pp).c_str());
+
+                // x axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "Reconstructed Bin Index");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "Reconstructed Bin Index");
+
+                // y axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(90);
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
             break;
         }
 
