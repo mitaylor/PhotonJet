@@ -115,7 +115,6 @@ int plot() {
 
         /* styling */
         gStyle->SetLineScalePS(1);
-        gStyle->SetPalette(kInvertedDarkBodyRadiator); // kViridis
         gStyle->SetOptStat(0);
 
         /* size canvas */
@@ -159,6 +158,8 @@ int plot() {
 
         switch (i) {
             case 0:
+                gStyle->SetPalette(kInvertedDarkBodyRadiator);
+
                 // get histograms
                 auto file_aa = new TFile("data/arc/pho_60_rebin3/process_vacillate_aa_qcd.root", "read");
                 auto file_pp = new TFile("data/arc/pho_60_rebin3/process_vacillate_pp_qcd.root", "read");
@@ -172,6 +173,11 @@ int plot() {
                 (*hist_pp)[0]->GetYaxis()->SetTitle("");
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
+
+                (*hist_aa)[3]->SetMinimum(0.1);
+                (*hist_pp)[0]->SetMinimum(0.1);
+                (*hist_aa)[3]->SetMaximum(1000);
+                (*hist_pp)[0]->SetMaximum(1000);
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
@@ -201,18 +207,16 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(31);
+                latex.SetTextAlign(21);
                 latex.SetTextAngle(0);
-                // latex.SetTextColor(0);
-                latex.DrawLatex(0.83, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.83, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.5, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.5, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(21);
                 latex.SetTextAngle(0);
-                // latex.SetTextColor(0);
-                latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.5, 0.80, (text_aa).c_str());
 
                 pads[1]->cd();
                 (*hist_pp)[0]->Draw("colz");
@@ -222,18 +226,16 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(31);
+                latex.SetTextAlign(21);
                 latex.SetTextAngle(0);
-                // latex.SetTextColor(0);
-                latex.DrawLatex(0.83, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.83, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.5, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.5, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(21);
                 latex.SetTextAngle(0);
-                // latex.SetTextColor(0);
-                latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.5, 0.80, (text_pp).c_str());
 
                 // x axis label
                 canvas.cd();
@@ -241,7 +243,6 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(0);
-                // latex.SetTextColor(1);
                 latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "Reconstructed Bin Index");
                 latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "Reconstructed Bin Index");
 
@@ -251,9 +252,17 @@ int plot() {
                 latex.SetTextSize(axis_label_size);
                 latex.SetTextAlign(22);
                 latex.SetTextAngle(90);
-                // latex.SetTextColor(1);
                 latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
                 latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Generator Bin Index");
+
+                 // z axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size/2);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(270);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 1 + pad_x1 * 0.55, pad_y0 + pad_dy * 0.5, "Counts");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1.55, pad_y0 + pad_dy * 0.5, "Counts");
             break;
         }
 
