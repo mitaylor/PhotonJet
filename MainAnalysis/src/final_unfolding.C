@@ -676,23 +676,23 @@ int plot() {
                 set_format((*hist_pp_variance)[0], 2);
 
                 // set legends
-                TLegend legend_part1(0.63, 0.75, 0.83, 0.83);
-                legend_part1.SetTextFont(42);
-                legend_part1.SetTextSize(legend_size);
-                legend_part1.SetFillStyle(0);
-                legend_part1.SetBorderSize(0);
-                legend_part1.AddEntry((*hist_aa_mse)[3], "MSE", "pl");
-                legend_part1.AddEntry((*hist_aa_bias)[3], "Bias^{2}", "pl");
-                legend_part1.AddEntry((*hist_aa_variance)[3], "Variance", "pl");
+                auto legend_part1 = new TLegend(0.63, 0.75, 0.83, 0.83);
+                legend_part1->SetTextFont(42);
+                legend_part1->SetTextSize(legend_size);
+                legend_part1->SetFillStyle(0);
+                legend_part1->SetBorderSize(0);
+                legend_part1->AddEntry((*hist_aa_mse)[3], "MSE", "l");
+                legend_part1->AddEntry((*hist_aa_bias)[3], "Bias^{2}", "l");
+                legend_part1->AddEntry((*hist_aa_variance)[3], "Variance", "l");
 
-                TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
-                legend_part2.SetTextFont(42);
-                legend_part2.SetTextSize(legend_size);
-                legend_part2.SetFillStyle(0);
-                legend_part2.SetBorderSize(0);
-                legend_part2.AddEntry((*hist_pp_mse)[0], "MSE", "pl");
-                legend_part2.AddEntry((*hist_pp_bias)[0], "Bias^{2}", "pl");
-                legend_part2.AddEntry((*hist_pp_variance)[0], "Variance", "pl");
+                auto legend_part2 = new TLegend(0.63, 0.75, 0.83, 0.83);
+                legend_part2->SetTextFont(42);
+                legend_part2->SetTextSize(legend_size);
+                legend_part2->SetFillStyle(0);
+                legend_part2->SetBorderSize(0);
+                legend_part2->AddEntry((*hist_pp_mse)[0], "MSE", "l");
+                legend_part2->AddEntry((*hist_pp_bias)[0], "Bias^{2}", "l");
+                legend_part2->AddEntry((*hist_pp_variance)[0], "Variance", "l");
 
                 // set pads
                 set_pad(*pads[0], 0, 1, 0);
@@ -708,7 +708,7 @@ int plot() {
                 (*hist_aa_bias)[3]->Draw("same");
                 (*hist_aa_variance)[3]->Draw("same");
 
-                legend_part1.Draw();
+                legend_part1->Draw("same");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -734,7 +734,7 @@ int plot() {
                 (*hist_pp_bias)[0]->Draw("same");
                 (*hist_pp_variance)[0]->Draw("same");
 
-                legend_part2.Draw();
+                legend_part2->Draw("same");
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
