@@ -141,7 +141,7 @@ int plot() {
         double pad_y1 = panel_height * panel_top_margin / canvas_height;
 
         /* text sizes */
-        // double axis_label_size = 0.05/sf;
+        double axis_label_size = 0.05/sf;
         double legend_size = 0.05;
         double text_size = 0.04;
 
