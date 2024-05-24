@@ -1216,10 +1216,10 @@ int plot() {
                 (*hist_aa_before)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp_before)[0]->GetXaxis()->SetTitle("");
 
-                (*hist_aa_before)[3]->SetMinimum(1E3);
-                (*hist_pp_before)[0]->SetMinimum(1E4);
-                (*hist_aa_before)[3]->SetMaximum(1E4);
-                (*hist_pp_before)[0]->SetMaximum(1E5);
+                (*hist_aa_before)[3]->SetMinimum(2000);
+                (*hist_pp_before)[0]->SetMinimum(20000);
+                (*hist_aa_before)[3]->SetMaximum(8000);
+                (*hist_pp_before)[0]->SetMaximum(40000);
 
                 set_format((*hist_aa_before)[3], 0);
                 set_format((*hist_pp_before)[0], 0);
@@ -1244,14 +1244,13 @@ int plot() {
                 legend_part2->AddEntry((*hist_pp_after)[0], "#chi^{2}_{unfolded}", "l");
 
                 // set pads
-                set_pad(*pads[0], 0, 1, 0);
-                set_pad(*pads[1], 0, 1, 0);
+                set_pad(*pads[0], 0, 0, 0);
+                set_pad(*pads[1], 0, 0, 0);
 
                 // plot histograms
                 pads[0]->cd();
 
                 gPad->SetTicks();
-                gPad->SetLogy();
 
                 (*hist_aa_before)[3]->Draw("p");
                 (*hist_aa_after)[3]->Draw("same p");
@@ -1283,7 +1282,6 @@ int plot() {
                 pads[1]->cd();
                 
                 gPad->SetTicks();
-                gPad->SetLogy();
 
                 (*hist_pp_before)[0]->Draw("p");
                 (*hist_pp_after)[0]->Draw("same p");
