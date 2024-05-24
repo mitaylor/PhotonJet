@@ -254,7 +254,7 @@ int plot() {
                 set_format((*hist_pp_pythia_fold1)[0], 4);
 
                 // set legend_part1s
-                auto legend_part1 = new Tlegend_part1(0.6, 0.2, 0.8, 0.43);
+                auto legend_part1 = new TLegend(0.6, 0.2, 0.8, 0.43);
                 legend_part1->SetTextFont(42);
                 legend_part1->SetTextSize(legend_size);
                 legend_part1->SetFillStyle(0);
