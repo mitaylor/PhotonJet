@@ -1199,6 +1199,138 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "Bin Averaged Value");
                 break;
             }
+            case 9: // bottom line test
+            {
+                // get histograms
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/bottom_line_test_aa_jewel_pp.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/bottom_line_test_pp_jewel_pp.root", "read");
+
+                auto hist_aa_before = new history<TH1F>(file_aa, "chi2_before_dj"s);
+                auto hist_pp_before = new history<TH1F>(file_pp, "chi2_before_dj"s);
+
+                auto hist_aa_after = new history<TH1F>(file_aa, "chi2_after_dj"s);
+                auto hist_pp_after = new history<TH1F>(file_pp, "chi2_after_dj"s);
+
+                (*hist_aa_before)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp_before)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa_before)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp_before)[0]->GetXaxis()->SetTitle("");
+
+                // (*hist_aa_before)[3]->SetMinimum(1E-10);
+                // (*hist_pp_before)[0]->SetMinimum(1E-10);
+                // (*hist_aa_before)[3]->SetMaximum(1E-2);
+                // (*hist_pp_before)[0]->SetMaximum(1E-2);
+
+                set_format((*hist_aa_before)[3], 0);
+                set_format((*hist_pp_before)[0], 0);
+                set_format((*hist_aa_after)[3], 1);
+                set_format((*hist_pp_after)[0], 1);
+
+                // set legends
+                auto legend_part1 = new TLegend(0.6, 0.2, 0.8, 0.29);
+                legend_part1->SetTextFont(42);
+                legend_part1->SetTextSize(legend_size);
+                legend_part1->SetFillStyle(0);
+                legend_part1->SetBorderSize(0);
+                legend_part1->AddEntry((*hist_aa_before)[3], "#chi^{2}_{smeared}", "l");
+                legend_part1->AddEntry((*hist_aa_after)[3], "#chi^{2}_{unfolded}", "l");
+
+                auto legend_part2 = new TLegend(0.6, 0.2, 0.8, 0.29);
+                legend_part2->SetTextFont(42);
+                legend_part2->SetTextSize(legend_size);
+                legend_part2->SetFillStyle(0);
+                legend_part2->SetBorderSize(0);
+                legend_part2->AddEntry((*hist_pp_before)[0], "#chi^{2}_{smeared}", "l");
+                legend_part2->AddEntry((*hist_pp_after)[0], "#chi^{2}_{unfolded}", "l");
+
+                // set pads
+                set_pad(*pads[0], 0, 1, 0);
+                set_pad(*pads[1], 0, 1, 0);
+
+                // plot histograms
+                pads[0]->cd();
+
+                gPad->SetTicks();
+                gPad->SetLogy();
+
+                (*hist_aa_before)[3]->Draw();
+                (*hist_aa_after)[3]->Draw("same");
+
+                legend_part1->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.18, 0.21, "Prior: MC");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.64, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.18, 0.58, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.18, 0.74, "PbPb 0-10%");
+
+                pads[1]->cd();
+                
+                gPad->SetTicks();
+                gPad->SetLogy();
+
+                (*hist_pp_before)[0]->Draw();
+                (*hist_pp_after)[0]->Draw("same");
+
+                legend_part2->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.31, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.26, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.18, 0.21, "Prior: MC");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.64, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.18, 0.58, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.18, 0.74, "pp");
+
+                // x axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5, "k_{reg}");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5, "k_{reg}");
+
+                // y axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(90);
+                latex.DrawLatex(pad_x0 * 0.4 + pad_dx * 0 + pad_x1 * 0, pad_y0 + pad_dy * 0.5, "");
+                latex.DrawLatex(pad_x0 * 1.4 + pad_dx * 1 + pad_x1 * 1, pad_y0 + pad_dy * 0.5, "");
+                break;
+            }
         }
 
         canvas.cd();
