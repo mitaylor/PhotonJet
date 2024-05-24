@@ -367,10 +367,10 @@ int plot() {
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
 
-                // (*hist_aa)[3]->SetMinimum(0.1);
-                // (*hist_pp)[0]->SetMinimum(0.1);
-                // (*hist_aa)[3]->SetMaximum(1000);
-                // (*hist_pp)[0]->SetMaximum(1000);
+                (*hist_aa)[3]->SetMinimum(0);
+                (*hist_pp)[0]->SetMinimum(0);
+                (*hist_aa)[3]->SetMaximum(0.05);
+                (*hist_pp)[0]->SetMaximum(0.05);
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
@@ -387,8 +387,8 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.17, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.17, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.17, 0.64, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.17, 0.58, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -407,8 +407,8 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.17, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.17, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.17, 0.64, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.17, 0.58, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
