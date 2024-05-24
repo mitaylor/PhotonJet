@@ -185,14 +185,14 @@ int plot() {
                 legend_part1.SetTextSize(legend_size);
                 legend_part1.SetFillStyle(0);
                 legend_part1.SetBorderSize(0);
-                legend_part1.AddEntry((*hist_aa)[3], "PbPb MC 0-10%", "l");
+                legend_part1.AddEntry((*hist_aa)[3], "PbPb 0-10%", "l");
 
                 TLegend legend_part2(0.63, 0.75, 0.83, 0.83);
                 legend_part2.SetTextFont(42);
                 legend_part2.SetTextSize(legend_size);
                 legend_part2.SetFillStyle(0);
                 legend_part2.SetBorderSize(0);
-                legend_part2.AddEntry((*hist_pp)[0], "pp MC", "l");
+                legend_part2.AddEntry((*hist_pp)[0], "pp", "l");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 1);
@@ -200,9 +200,12 @@ int plot() {
 
                 // plot histograms
                 pads[0]->cd();
-                (*hist_aa)[3]->Draw("colz");
+
                 gPad->SetLogz();
                 gPad->SetTicks();
+
+                (*hist_aa)[3]->Draw("colz");
+                legend_part1.Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -217,12 +220,13 @@ int plot() {
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
 
-                legend_part1.Draw();
-
                 pads[1]->cd();
-                (*hist_pp)[0]->Draw("colz");
+                
                 gPad->SetLogz();
                 gPad->SetTicks();
+
+                (*hist_pp)[0]->Draw("colz");
+                legend_part2.Draw();
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -236,8 +240,6 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.17, 0.80, (text_pp).c_str());
-
-                legend_part2.Draw();
 
                 // x axis label
                 canvas.cd();
