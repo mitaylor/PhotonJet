@@ -115,7 +115,7 @@ int plot() {
 
         /* styling */
         gStyle->SetLineScalePS(1);
-        gStyle->SetPalette(kBird); // kViridis
+        gStyle->SetPalette(kInvertedDarkBodyRadiator); // kViridis
         gStyle->SetOptStat(0);
 
         /* size canvas */
@@ -172,8 +172,6 @@ int plot() {
                 (*hist_pp)[0]->GetYaxis()->SetTitle("");
                 (*hist_aa)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp)[0]->GetXaxis()->SetTitle("");
-                (*hist_aa)[3]->SetMinimum(-1);
-                (*hist_pp)[0]->SetMinimum(-1);
 
                 // declare legends
                 TLegend legend_part1(0.65, 0.87, 0.95, 0.95);
@@ -196,7 +194,7 @@ int plot() {
 
                 // plot histograms
                 pads[0]->cd();
-                (*hist_aa)[3]->Draw("colz0");
+                (*hist_aa)[3]->Draw("colz");
                 legend_part1.Draw();
                 gPad->SetLogz();
                 gPad->SetTicks();
@@ -217,7 +215,7 @@ int plot() {
                 latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
 
                 pads[1]->cd();
-                (*hist_pp)[0]->Draw("colz0");
+                (*hist_pp)[0]->Draw("colz");
                 legend_part2.Draw();
                 gPad->SetLogz();
                 gPad->SetTicks();
