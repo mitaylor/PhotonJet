@@ -157,20 +157,6 @@ int plot() {
         pads[0] = new TPad("P1", "", pad_x0 * 0 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
         pads[1] = new TPad("P1", "", pad_x0 * 1 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 0 + pad_dy * 0 + pad_y1 * 0, pad_x0 * 2 + pad_dx * 2 + pad_x1 * 2, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 1, 0);
 
-        canvas.cd();
-
-        latex.SetTextFont(62);
-        latex.SetTextSize(0.07/sf);
-        latex.SetTextAlign(11);
-        latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_cms.c_str());
-        std::cout << pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1 << std::endl;
-
-        latex.SetTextFont(42);
-        latex.SetTextSize(0.045/sf);
-        latex.SetTextAlign(31);
-        latex.SetTextAngle(0);
-        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_system.c_str());
         switch (i) {
             case 0:
                 // get histograms
@@ -258,6 +244,20 @@ int plot() {
                 latex.DrawLatex(0.05, 0.87, (text_pp).c_str());
             break;
         }
+
+        canvas.cd();
+
+        latex.SetTextFont(62);
+        latex.SetTextSize(0.07/sf);
+        latex.SetTextAlign(11);
+        latex.SetTextAngle(0);
+        latex.DrawLatex(pad_x0, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_cms.c_str());
+
+        latex.SetTextFont(42);
+        latex.SetTextSize(0.045/sf);
+        latex.SetTextAlign(31);
+        latex.SetTextAngle(0);
+        latex.DrawLatex(pad_x0 * 2 + pad_dx * 2 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 1 + pad_y1 * 0.1, text_system.c_str());
 
         canvas.SaveAs(("unfolding_" + figures[i] + ".pdf").c_str());
 
