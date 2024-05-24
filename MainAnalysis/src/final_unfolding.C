@@ -115,7 +115,7 @@ int plot() {
 
         /* styling */
         gStyle->SetLineScalePS(1);
-        gStyle->SetPalette(kViridis);
+        gStyle->SetPalette(kBird); // kViridis
         gStyle->SetOptStat(0);
 
         /* size canvas */
@@ -203,14 +203,14 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.95, 0.13, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.95, 0.05, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.83, 0.24, (text_photon_pt + ", " + text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.83, 0.18, (text_jet_alg + ", " + text_jet_pt + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.05, 0.87, (text_aa).c_str());
+                latex.DrawLatex(0.17, 0.80, (text_aa).c_str());
 
                 pads[1]->cd();
                 (*hist_pp)[0]->Draw("colz");
