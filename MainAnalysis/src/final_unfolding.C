@@ -88,7 +88,7 @@ int plot() {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s, "efficiency"s, "mse_bayes_mc"s, "mse_bayes_flat"s, "mse_svd_mc"s, "mse_svd_flat"s};
+    std::vector<std::string> figures = {"binning"s, "response"s, "flattened_input"s, "purity"s, "efficiency"s, "mse_bayes_mc"s, "mse_bayes_flat"s, "mse_svd_mc"s, "mse_svd_flat"s, "bottom_line"s};
 
     /* open input files */
     for (size_t i = 0; i < figures.size(); ++i) {
