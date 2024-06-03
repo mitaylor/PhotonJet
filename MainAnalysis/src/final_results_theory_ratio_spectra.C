@@ -470,9 +470,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         double arrow_y = 0.0;
         
-        if (system == 2 || system == 4) arrow_y = graphs_hists_ratio[i]->GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
-        if (system == 1)                arrow_y = graphs_hists_pp[i]->GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
-        if (system == 0 || system == 3) arrow_y = graphs_hists_aa[i]->GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
+        if (system == 2 || system == 4) arrow_y = graphs_hists_ratio[i].GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
+        if (system == 1)                arrow_y = graphs_hists_pp[i].GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
+        if (system == 0 || system == 3) arrow_y = graphs_hists_aa[i].GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
 
         arrows[i] = new TArrow(0.03, arrow_y, 0.08, arrow_y, "<");
 
