@@ -470,11 +470,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         double arrow_y = 0.0;
         
-        if (system == 2 || system == 4) arrow_y = (graphs_systs_ratio[i].GetPointY(0) + graphs_systs_ratio[i].GetErrorY(0)) + subsets * 0.1 + (1 - subsets) * 0.1;
-        if (system == 1)                arrow_y = (graphs_systs_pp[i].GetPointY(0) + graphs_systs_pp[i].GetErrorY(0)) + subsets * 0.4 + (1 - subsets) * 0.7;
-        if (system == 0 || system == 3) arrow_y = (graphs_systs_aa[i].GetPointY(0) + graphs_systs_aa[i].GetErrorY(0)) + subsets * 0.4 + (1 - subsets) * 0.7;
+        if (system == 2 || system == 4) arrow_y = (graphs_systs_ratio[i].GetPointY(0) + graphs_systs_ratio[i].GetErrorY(0)) + subsets * 0.05 + (1 - subsets) * 0.05;
+        if (system == 1)                arrow_y = (graphs_systs_pp[i].GetPointY(0) + graphs_systs_pp[i].GetErrorY(0)) + subsets * 0.2 + (1 - subsets) * 0.35;
+        if (system == 0 || system == 3) arrow_y = (graphs_systs_aa[i].GetPointY(0) + graphs_systs_aa[i].GetErrorY(0)) + subsets * 0.2 + (1 - subsets) * 0.35;
 
-        arrows[i] = new TArrow(0.0035, arrow_y, 0.0045, arrow_y, 0.02 / ncols, "<l");
+        arrows[i] = new TArrow(0.0032, arrow_y, 0.0045, arrow_y, 0.02 / ncols, "<|");
         arrows[i]->SetAngle(40);
         arrows[i]->SetLineWidth(2);
 
