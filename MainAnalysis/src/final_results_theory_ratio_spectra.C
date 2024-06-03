@@ -470,11 +470,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         double arrow_y = 0.0;
         
-        if (system == 2 || system == 4) arrow_y = (graphs_systs_ratio[i].GetPointY(0);
-        if (system == 1)                arrow_y = (graphs_systs_pp[i].GetPointY(0);
-        if (system == 0 || system == 3) arrow_y = (graphs_systs_aa[i].GetPointY(0);
+        if (system == 2 || system == 4) arrow_y = graphs_systs_ratio[i].GetPointY(0);
+        if (system == 1)                arrow_y = graphs_systs_pp[i].GetPointY(0);
+        if (system == 0 || system == 3) arrow_y = graphs_systs_aa[i].GetPointY(0);
 
-        arrows[i] = new TArrow(0.0032, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
+        arrows[i] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
         arrows[i]->SetAngle(40);
         arrows[i]->SetLineWidth(1);
 
