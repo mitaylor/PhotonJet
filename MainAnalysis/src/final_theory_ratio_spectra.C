@@ -173,7 +173,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
         result[i].SetLineColor(color[type]);
         result[i].SetFillColorAlpha(color[type], 0.60);
         result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(7.0);
+        result[i].SetLineWidth(5.0);
     }
 
     return result;
@@ -617,14 +617,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same 3");
         if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same lX");
 
-        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
-        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
-        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same 3");
-        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa_pyquen_no_wide[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_pyquen_no_wide[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same lX");
 
         if (system == 3)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same 3");
         if (system == 3)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same lX");
@@ -635,14 +635,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 3)    graphs_hists_aa_hybrid_elastic_wake[i].Draw("same 3");
         if (system == 3)    graphs_hists_aa_hybrid_elastic_wake[i].Draw("same lX");
 
-        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
-        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pythia[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_pythia[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_hybrid[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_hybrid[i].Draw("same lX");
+        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
+        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
 
         line.Draw("l");
 

@@ -22,6 +22,7 @@
 #include "TPad.h"
 #include "TGaxis.h"
 #include "TLegend.h"
+#include "TArrow.h"
 #include "TBox.h"
 #include "TGraphAsymmErrors.h"
 
@@ -173,7 +174,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
         result[i].SetLineColor(color[type]);
         result[i].SetFillColorAlpha(color[type], 0.60);
         result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(7.0);
+        result[i].SetLineWidth(5.0);
     }
 
     return result;
@@ -450,6 +451,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetNDC();
 
     std::vector<TH2F*> worlds(ncols);
+    std::vector<TArrow*> arrows(ncols);
     std::vector<TPad*> pads(ncols);
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(1);
@@ -465,6 +467,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
 
         set_axis(*axis_x[i], sf);
+
+        double arrow_y = 0.0;
+        
+        if (system == 2 || system == 4) arrow_y = graphs_hists_ratio[i]->GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
+        if (system == 1)                arrow_y = graphs_hists_pp[i]->GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
+        if (system == 0 || system == 3) arrow_y = graphs_hists_aa[i]->GetPointY(0) / (ymaxs[0] - ymins[0]) + 0.05;
+
+        arrows[i] = new TArrow(0.03, xxx, 0.08, ccc, "<");
 
         canvas.cd();
 
@@ -635,14 +645,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 4)    graphs_hists_ratio[i].Draw("same PZ");
 
         if (system == 0)    graphs_systs_aa[i].Draw("same 2");
-        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
-        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
-        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same 3");
-        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa_pyquen_no_wide[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_pyquen_no_wide[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same 3");
         if (system == 0)    graphs_hists_aa_pyquen[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_jewel[i].Draw("same lX");
+        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same 3");
+        if (system == 0)    graphs_hists_aa_jewel_no_recoil[i].Draw("same lX");
         if (system == 0)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 3)    graphs_systs_aa[i].Draw("same 2");
@@ -657,17 +667,18 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 3)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 1)    graphs_systs_pp[i].Draw("same 2");
-        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
-        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_pyquen[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_pythia[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_pythia[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp_hybrid[i].Draw("same 3");
         if (system == 1)    graphs_hists_pp_hybrid[i].Draw("same lX");
+        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same 3");
+        if (system == 1)    graphs_hists_pp_jewel[i].Draw("same lX");
         if (system == 1)    graphs_hists_pp[i].Draw("same PZ");
 
         line.Draw("l");
+        arrows[i]->Draw();
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
