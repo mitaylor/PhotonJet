@@ -474,7 +474,9 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 1)                arrow_y = (graphs_systs_pp[i].GetPointY(0) + graphs_systs_pp[i].GetErrorY(0)) + subsets * 0.4 + (1 - subsets) * 0.7;
         if (system == 0 || system == 3) arrow_y = (graphs_systs_aa[i].GetPointY(0) + graphs_systs_aa[i].GetErrorY(0)) + subsets * 0.4 + (1 - subsets) * 0.7;
 
-        arrows[i] = new TArrow(0.0035, arrow_y, 0.005, arrow_y, 0.01, "<l");
+        arrows[i] = new TArrow(0.0035, arrow_y, 0.0045, arrow_y, 0.02 / nrows, "<l");
+        arrows[i]->SetAngle(40);
+        arrows[i]->SetLineWidth(2);
 
         canvas.cd();
 
