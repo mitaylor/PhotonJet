@@ -1,18 +1,19 @@
-#include "../include/lambdas.h"
-#include "../include/specifics.h"
 #include "../include/text.h"
+#include "../include/lambdas.h"
+#include "../include/pjtree.h"
+#include "../include/specifics.h"
 
 #include "../git/config/include/configurer.h"
 
 #include "../git/history/include/interval.h"
 #include "../git/history/include/multival.h"
-#include "../git/history/include/history.h"
-
-#include "../git/paper-and-pencil/include/paper.h"
-#include "../git/paper-and-pencil/include/pencil.h"
+#include "../git/history/include/memory.h"
 
 #include "../git/tricks-and-treats/include/trunk.h"
 #include "../git/tricks-and-treats/include/zip.h"
+
+#include "../git/paper-and-pencil/include/paper.h"
+#include "../git/paper-and-pencil/include/pencil.h"
 
 #include "TFile.h"
 #include "TH1.h"
