@@ -178,7 +178,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         for (size_t j = 0; j < rptr.size() - 1; ++j) {
             double jet_pt = (rptr[j] + rptr[j + 1]) / 2;
 
-            if (rptr[j] == 6) {
+            if (rptr[j] == 60) {
                 x_average /= normalization;
                 std::cout << x_average << " ";
                 x_average = 0;
