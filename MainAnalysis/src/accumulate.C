@@ -178,7 +178,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         for (size_t j = 0; j < rptr.size() - 1; ++j) {
             double jet_pt = (rptr[j] + rptr[j + 1]) / 2;
 
-            if (rptr[j] == 60) {
+            if (rptr[j] == 6) {
                 x_average /= normalization;
                 std::cout << x_average << " ";
                 x_average = 0;
@@ -190,7 +190,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
                 int index = mpthf->index_for( x{k, i} );
                 x_average += jet_pt / photon_pt * (*pjet_f_jpt)[index]->GetBinContent(j + 1);
                 normalization += (*pjet_f_jpt)[index]->GetBinContent(j + 1);
-
             }
         }
 
@@ -198,6 +197,28 @@ int accumulate(char const* config, char const* selections, char const* output) {
         std::cout << x_average << " ";
         x_average = 0;
         normalization = 0;
+
+        std::cout << std::endl;
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        std::cout << i << std::endl;
+        double x_average = 0;
+        double normalization = 0;
+
+        for (size_t j = 0; j < rptr.size() - 1; ++j) {
+            double jet_pt = (rptr[j] + rptr[j + 1]) / 2;
+
+            for (int k = 0; k < (int) dpt.size() - 2; ++k) {
+                double photon_pt = (dpt[k] + dpt[k + 1]) / 2;
+                int index = mpthf->index_for( x{k, i} );
+                x_average += jet_pt / photon_pt * (*pjet_f_jpt)[index]->GetBinContent(j + 1);
+                normalization += (*pjet_f_jpt)[index]->GetBinContent(j + 1);
+            }
+        }
+
+        x_average /= normalization;
+        std::cout << x_average << " ";
 
         std::cout << std::endl;
     }
