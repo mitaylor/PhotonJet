@@ -434,7 +434,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
                 x_average += jet_pt / photon_pt * (*pjet_f_jpt)[index]->GetBinContent(j + 1);
                 normalization += (*pjet_f_jpt)[index]->GetBinContent(j + 1);
 
-                std::cout << x_average << " " << normalization << " " << photon_pt << " " << jet_pt << " " << index <<  " " << (*pjet_f_jpt)[index]->GetBinContent(j + 1) << std::endl;
+                std::cout << x_average << " " << normalization << " " << photon_pt << " " << jet_pt << " " << k << " " << i << " " << index <<  " " << (*pjet_f_jpt)[index]->GetBinContent(j + 1) << std::endl;
             }
 
             x_average /= normalization;
