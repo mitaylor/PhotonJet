@@ -170,6 +170,29 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto pjet_u_dr_jpt = new history<TH1F>(
         f, label + "_"s + type + "_pjet_u_dr_jpt"s);
 
+    for (int i = 0; i < 4; ++i) {
+        std::cout << i << std::endl;
+        for (size_t j = 0; j < rptr.size() - 1; ++j) {
+            double jet_pt = (rptr[j] + rptr[j + 1]) / 2;
+            double x_average = 0;
+            double normalization = 0;
+
+            for (int k = 0; k < (int) dpt.size() - 2; ++k) {
+                double photon_pt = (dpt[k] + dpt[k + 1]) / 2;
+                int index = mpthf->index_for( x{k, i} );
+                x_average += jet_pt / photon_pt * (*pjet_f_jpt)[index]->GetBinContent(j + 1);
+                normalization += (*pjet_f_jpt)[index]->GetBinContent(j + 1);
+
+                std::cout << x_average << " " << normalization << " " << photon_pt << " " << jet_pt << " " << k << " " << i << " " << index <<  " " << (*pjet_f_jpt)[index]->GetBinContent(j + 1) << std::endl;
+            }
+
+            x_average /= normalization;
+            std::cout << x_average << " " << std::endl << std::endl;
+        }
+
+        std::cout << std::endl;
+    }
+
     /* rescale by number of signal photons (events) */
     pjet_f_dr->multiply(*nevt);
     pjet_f_jpt->multiply(*nevt);
@@ -419,29 +442,6 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
         for (auto const& c : { c1, c2, c3, c4, c5 })
             for (auto p : c) { p->draw("pdf"); }
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        std::cout << i << std::endl;
-        for (size_t j = 0; j < rptr.size() - 1; ++j) {
-            double jet_pt = (rptr[j] + rptr[j + 1]) / 2;
-            double x_average = 0;
-            double normalization = 0;
-
-            for (int k = 0; k < (int) dpt.size() - 2; ++k) {
-                double photon_pt = (dpt[k] + dpt[k + 1]) / 2;
-                int index = mpthf->index_for( x{k, i} );
-                x_average += jet_pt / photon_pt * (*pjet_f_jpt)[index]->GetBinContent(j + 1);
-                normalization += (*pjet_f_jpt)[index]->GetBinContent(j + 1);
-
-                std::cout << x_average << " " << normalization << " " << photon_pt << " " << jet_pt << " " << k << " " << i << " " << index <<  " " << (*pjet_f_jpt)[index]->GetBinContent(j + 1) << std::endl;
-            }
-
-            x_average /= normalization;
-            std::cout << x_average << " " << std::endl << std::endl;
-        }
-
-        std::cout << std::endl;
     }
 
     return 0;
