@@ -431,7 +431,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
             for (int k = 0; k < (int) dpt.size() - 1; ++k) {
                 double photon_pt = (dpt[k] + dpt[k + 1]) / 2;
                 double x = jet_pt / photon_pt;
-                int index = mpthf->index_for( x{k, i} );
+                int index = mpthf->index_for( std::initializer_list<int64_t>{k, i} );
                 x_average += x * pjet_f_jpt[index]->GetBinContent(j + 1);
                 normalization += pjet_f_jpt[index]->GetBinContent(j + 1);
             }
