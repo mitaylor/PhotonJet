@@ -427,7 +427,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
             double x_average = 0;
             double normalization = 0;
 
-            for (size_t k = 0; k < dpt.size() - 1; ++k) {
+            for (int k = 0; k < (int) dpt.size() - 1; ++k) {
                 double photon_pt = (dpt[k] + dpt[k + 1]) / 2;
                 double x = jet_pt / photon_pt;
                 int index = mpthf->index_for(x{k, i});
