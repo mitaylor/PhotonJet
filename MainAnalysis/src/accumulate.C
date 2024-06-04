@@ -146,6 +146,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto ihf = new interval(dhf);
 
     auto mr = new multival(rdrr, rptr);
+    auto mpthf = new multival(dpt, dhf);
 
     std::vector<int32_t> drange = { dcent.front(), dcent.back() };
     std::vector<int64_t> osr = {0, 0, 0, 0};
@@ -416,6 +417,28 @@ int accumulate(char const* config, char const* selections, char const* output) {
 
         for (auto const& c : { c1, c2, c3, c4, c5 })
             for (auto p : c) { p->draw("pdf"); }
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        std::cout << i << std::endl;
+        for (size_t j = 0; j < rptr.size() - 1; ++j) {
+            double jet_pt = (rptr[j] + rptr[j + 1]) / 2;
+            double x_average = 0;
+            double normalization = 0;
+
+            for (size_t k = 0; k < dpt.size() - 1; ++k) {
+                double photon_pt = (dpt[k] + dpt[k + 1]) / 2;
+                double x = jet_pt / photon_pt;
+                auto index = mpthf->index_for(x{k, i});
+                x_average += x * pjet_f_jpt[index]->GetBinContent(j + 1);
+                normalization += pjet_f_jpt[index]->GetBinContent(j + 1);
+            }
+
+            x_average /= normalization;
+            std::cout << x_average << " ";
+        }
+
+        std::cout << std::endl;
     }
 
     return 0;
