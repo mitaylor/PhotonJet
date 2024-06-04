@@ -433,10 +433,12 @@ int accumulate(char const* config, char const* selections, char const* output) {
                 int index = mpthf->index_for( x{k, i} );
                 x_average += jet_pt / photon_pt * (*pjet_f_jpt)[index]->GetBinContent(j + 1);
                 normalization += (*pjet_f_jpt)[index]->GetBinContent(j + 1);
+
+                std::cout << x_average << " " << normalization << " " << photon_pt << " " << jet_pt << " " << index <<  <<  " " << (*pjet_f_jpt)[index]->GetBinContent(j + 1) << std::endl;
             }
 
             x_average /= normalization;
-            std::cout << x_average << " ";
+            std::cout << x_average << " " << std::endl << std::endl;
         }
 
         std::cout << std::endl;
