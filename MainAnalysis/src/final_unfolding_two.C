@@ -555,8 +555,8 @@ int plot() {
 
                 gPad->SetTicks();
 
-                (*hist_pp_unfolded_fold1)[3]->Draw();
-                (*hist_pp_gen_fold1)[3]->Draw("same");
+                (*hist_pp_unfolded_fold1)[0]->Draw();
+                (*hist_pp_gen_fold1)[0]->Draw("same");
 
                 legend->Draw("same");
 
