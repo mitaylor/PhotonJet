@@ -474,10 +474,10 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.4, 0.54, (text_photon_pt).c_str());
-                latex.DrawLatex(0.4, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.4, 0.42, (text_jet_pt).c_str());
-                latex.DrawLatex(0.4, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.45, 0.54, (text_photon_pt).c_str());
+                latex.DrawLatex(0.45, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.45, 0.42, (text_jet_pt).c_str());
+                latex.DrawLatex(0.45, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -490,9 +490,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.4, 0.74, "Source: MC");
-                latex.DrawLatex(0.4, 0.68, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.4, 0.62, "Prior: MC");
+                latex.DrawLatex(0.55, 0.74, "Source: MC");
+                latex.DrawLatex(0.55, 0.68, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.55, 0.62, "Prior: MC");
 
                 pads[1]->cd();
                 
@@ -507,10 +507,10 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.4, 0.54, (text_photon_pt).c_str());
-                latex.DrawLatex(0.4, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.4, 0.42, (text_jet_pt).c_str());
-                latex.DrawLatex(0.4, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.45, 0.54, (text_photon_pt).c_str());
+                latex.DrawLatex(0.45, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.45, 0.42, (text_jet_pt).c_str());
+                latex.DrawLatex(0.45, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -523,9 +523,9 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.4, 0.74, "Source: MC");
-                latex.DrawLatex(0.4, 0.68, "Algorithm: D'Agostini");
-                latex.DrawLatex(0.4, 0.62, "Prior: MC");
+                latex.DrawLatex(0.55, 0.74, "Source: MC");
+                latex.DrawLatex(0.55, 0.68, "Algorithm: D'Agostini");
+                latex.DrawLatex(0.55, 0.62, "Prior: MC");
 
                 pads[2]->cd();
 
@@ -540,10 +540,10 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.4, 0.66, (text_photon_pt).c_str());
-                latex.DrawLatex(0.4, 0.60, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.4, 0.54, (text_jet_pt).c_str());
-                latex.DrawLatex(0.4, 0.48, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.45, 0.74, (text_photon_pt).c_str());
+                latex.DrawLatex(0.45, 0.68, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.45, 0.62, (text_jet_pt).c_str());
+                latex.DrawLatex(0.45, 0.56, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -573,10 +573,10 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.4, 0.66, (text_photon_pt).c_str());
-                latex.DrawLatex(0.4, 0.60, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.4, 0.54, (text_jet_pt).c_str());
-                latex.DrawLatex(0.4, 0.48, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.45, 0.74, (text_photon_pt).c_str());
+                latex.DrawLatex(0.45, 0.68, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.45, 0.62, (text_jet_pt).c_str());
+                latex.DrawLatex(0.45, 0.56, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
