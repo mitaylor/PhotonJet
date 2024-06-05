@@ -1048,7 +1048,7 @@ int plot() {
                 latex.DrawLatex(pad_x0 * 1.3 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 2 + pad_dy * 1.5 + pad_y1 * 1, "1/N^{#gamma} dN/dp_{T}^{jet}");
                 break;
             }
-            case 3: // closure Jewel, SVD, MC prior
+            case 4: // closure Jewel, SVD, MC prior
             {
                 // get histograms
                 auto file_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_aa_jewel_aa_mc.root", "read");
