@@ -619,8 +619,8 @@ int plot() {
             case 2: // closure Jewel, D'Agostini, MC prior
             {
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_aa_jewel_pp_mc.root", "read");
-                auto file_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_pp_jewel_pp_mc.root", "read");
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_aa_jewel_aa_mc.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_pp_jewel_aa_mc.root", "read");
 
                 auto hist_aa_unfolded_fold0 = new history<TH1F>(file_aa, "unfolded_bayes_fold0"s);
                 auto hist_pp_unfolded_fold0 = new history<TH1F>(file_pp, "unfolded_bayes_fold0"s);
@@ -706,7 +706,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.50, 0.74, "Source: Jewel pp");
+                latex.DrawLatex(0.50, 0.74, "Source: Jewel PbPb");
                 latex.DrawLatex(0.50, 0.68, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.50, 0.62, "Prior: MC");
 
@@ -739,7 +739,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.50, 0.74, "Source: Jewel pp");
+                latex.DrawLatex(0.50, 0.74, "Source: Jewel PbPb");
                 latex.DrawLatex(0.50, 0.68, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.50, 0.62, "Prior: MC");
 
@@ -772,7 +772,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.50, 0.74, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.74, "Source: Jewel PbPb");
                 latex.DrawLatex(0.18, 0.60, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.18, 0.54, "Prior: MC");
 
@@ -805,7 +805,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.50, 0.74, "Source: Jewel pp");
+                latex.DrawLatex(0.18, 0.74, "Source: Jewel PbPb");
                 latex.DrawLatex(0.18, 0.60, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.18, 0.54, "Prior: MC");
 
