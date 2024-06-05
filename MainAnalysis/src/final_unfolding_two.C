@@ -89,7 +89,7 @@ int plot() {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    std::vector<std::string> figures = {"comparison"s, "closure_mc_bayes_mc"s, "closure_jewel_bayes_mc"s};
+    std::vector<std::string> figures = {"comparison"s, "closure_mc_bayes_mc"s, "closure_jewel_bayes_mc"s, "closure_jewel_bayes_flat"s, "closure_jewel_svd_mc"s};
 
     /* open input files */
     for (size_t i = 0; i < figures.size(); ++i) {
@@ -1024,6 +1024,222 @@ int plot() {
                 latex.DrawLatex(0.18, 0.66, "Source: Jewel PbPb");
                 latex.DrawLatex(0.18, 0.60, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.18, 0.54, "Prior: Flat");
+
+                // x axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 0.5 + pad_dy * 0 + pad_y1 * 0, "#Deltaj");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 0.5 + pad_dy * 0 + pad_y1 * 0, "#Deltaj");
+                latex.DrawLatex(pad_x0 * 1 + pad_dx * 0.5 + pad_x1 * 0, pad_y0 * 1.5 + pad_dy * 1 + pad_y1 * 1, "p_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 2 + pad_dx * 1.5 + pad_x1 * 1, pad_y0 * 1.5 + pad_dy * 1 + pad_y1 * 1, "p_{T}^{jet}");
+
+                // y axis label
+                canvas.cd();
+                latex.SetTextFont(42);
+                latex.SetTextSize(axis_label_size);
+                latex.SetTextAlign(22);
+                latex.SetTextAngle(90);
+                latex.DrawLatex(pad_x0 * 0.3 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 1 + pad_dy * 0.5 + pad_y1 * 0, "1/N^{#gamma} dN/d#Deltaj");
+                latex.DrawLatex(pad_x0 * 1.3 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 1 + pad_dy * 0.5 + pad_y1 * 0, "1/N^{#gamma} dN/d#Deltaj");
+                latex.DrawLatex(pad_x0 * 0.3 + pad_dx * 0 + pad_x1 * 0, pad_y0 * 2 + pad_dy * 1.5 + pad_y1 * 1, "1/N^{#gamma} dN/dp_{T}^{jet}");
+                latex.DrawLatex(pad_x0 * 1.3 + pad_dx * 1 + pad_x1 * 1, pad_y0 * 2 + pad_dy * 1.5 + pad_y1 * 1, "1/N^{#gamma} dN/dp_{T}^{jet}");
+                break;
+            }
+            case 3: // closure Jewel, SVD, MC prior
+            {
+                // get histograms
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_aa_jewel_aa_mc.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_pp_jewel_aa_mc.root", "read");
+
+                auto hist_aa_unfolded_fold0 = new history<TH1F>(file_aa, "unfolded_svd_fold0"s);
+                auto hist_pp_unfolded_fold0 = new history<TH1F>(file_pp, "unfolded_svd_fold0"s);
+
+                auto hist_aa_unfolded_fold1 = new history<TH1F>(file_aa, "unfolded_svd_fold1"s);
+                auto hist_pp_unfolded_fold1 = new history<TH1F>(file_pp, "unfolded_svd_fold1"s);
+
+                auto hist_aa_gen_fold0 = new history<TH1F>(file_aa, "gen_svd_fold0"s);
+                auto hist_pp_gen_fold0 = new history<TH1F>(file_pp, "gen_svd_fold0"s);
+                
+                auto hist_aa_gen_fold1 = new history<TH1F>(file_aa, "gen_svd_fold1"s);
+                auto hist_pp_gen_fold1 = new history<TH1F>(file_pp, "gen_svd_fold1"s);
+
+                (*hist_aa_unfolded_fold0)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp_unfolded_fold0)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa_unfolded_fold1)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp_unfolded_fold1)[0]->GetXaxis()->SetTitle("");
+                (*hist_aa_gen_fold0)[3]->GetYaxis()->SetTitle("");
+                (*hist_pp_gen_fold0)[0]->GetYaxis()->SetTitle("");
+                (*hist_aa_gen_fold1)[3]->GetXaxis()->SetTitle("");
+                (*hist_pp_gen_fold1)[0]->GetXaxis()->SetTitle("");
+
+                (*hist_aa_unfolded_fold0)[3]->SetMinimum(0);
+                (*hist_pp_unfolded_fold0)[0]->SetMinimum(0);
+                (*hist_aa_unfolded_fold0)[3]->SetMaximum(25);
+                (*hist_pp_unfolded_fold0)[0]->SetMaximum(25);
+                (*hist_aa_unfolded_fold1)[3]->SetMinimum(0);
+                (*hist_pp_unfolded_fold1)[0]->SetMinimum(0);
+                (*hist_aa_unfolded_fold1)[3]->SetMaximum(0.05);
+                (*hist_pp_unfolded_fold1)[0]->SetMaximum(0.05);
+
+                set_format((*hist_aa_unfolded_fold0)[3], 0);
+                set_format((*hist_pp_unfolded_fold0)[0], 0);
+                set_format((*hist_aa_unfolded_fold1)[3], 0);
+                set_format((*hist_pp_unfolded_fold1)[0], 0);
+                set_format((*hist_aa_gen_fold0)[3], 1);
+                set_format((*hist_pp_gen_fold0)[0], 1);
+                set_format((*hist_aa_gen_fold1)[3], 1);
+                set_format((*hist_pp_gen_fold1)[0], 1);
+
+                // set legends
+                auto legend = new TLegend(0.18, 0.18, 0.38, 0.27);
+                legend->SetTextFont(42);
+                legend->SetTextSize(legend_size);
+                legend->SetFillStyle(0);
+                legend->SetBorderSize(0);
+                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Truth", "lp");
+                legend->AddEntry((*hist_aa_gen_fold0)[3], "Unfolded", "lp");
+
+                // set pads
+                set_pad(*pads[0], 0, 0, 0);
+                set_pad(*pads[1], 0, 0, 0);
+                set_pad(*pads[2], 0, 0, 0);
+                set_pad(*pads[3], 0, 0, 0);
+
+                // plot histograms
+                pads[0]->cd();
+
+                gPad->SetTicks();
+
+                (*hist_aa_unfolded_fold0)[3]->Draw();
+                (*hist_aa_gen_fold0)[3]->Draw("same");
+
+                legend->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.54, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.42, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.18, 0.74, "PbPb 0-10%");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.50, 0.74, "Source: Jewel PbPb");
+                latex.DrawLatex(0.50, 0.68, "Algorithm: SVD");
+                latex.DrawLatex(0.50, 0.62, "Prior: MC");
+
+                pads[1]->cd();
+                
+                gPad->SetTicks();
+
+                (*hist_pp_unfolded_fold0)[0]->Draw();
+                (*hist_pp_gen_fold0)[0]->Draw("same");
+
+                legend->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.54, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.42, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_pp).c_str());
+                latex.DrawLatex(0.18, 0.74, "pp");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.50, 0.74, "Source: Jewel PbPb");
+                latex.DrawLatex(0.50, 0.68, "Algorithm: SVD");
+                latex.DrawLatex(0.50, 0.62, "Prior: MC");
+
+                pads[2]->cd();
+
+                gPad->SetTicks();
+
+                (*hist_aa_unfolded_fold1)[3]->Draw();
+                (*hist_aa_gen_fold1)[3]->Draw("same");
+
+                legend->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.72, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.66, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.60, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.54, (text_jet_alg + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.18, 0.74, "PbPb 0-10%");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.66, "Source: Jewel PbPb");
+                latex.DrawLatex(0.18, 0.60, "Algorithm: SVD");
+                latex.DrawLatex(0.18, 0.54, "Prior: MC");
+
+                pads[3]->cd();
+
+                gPad->SetTicks();
+
+                (*hist_pp_unfolded_fold1)[0]->Draw();
+                (*hist_pp_gen_fold1)[0]->Draw("same");
+
+                legend->Draw("same");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(31);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.82, 0.72, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.66, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.60, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.54, (text_jet_alg + ", " + text_jet_eta).c_str());
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
+                latex.DrawLatex(0.18, 0.74, "pp");
+
+                latex.SetTextFont(42);
+                latex.SetTextSize(text_size);
+                latex.SetTextAlign(11);
+                latex.SetTextAngle(0);
+                latex.DrawLatex(0.18, 0.66, "Source: Jewel PbPb");
+                latex.DrawLatex(0.18, 0.60, "Algorithm: SVD");
+                latex.DrawLatex(0.18, 0.54, "Prior: MC");
 
                 // x axis label
                 canvas.cd();
