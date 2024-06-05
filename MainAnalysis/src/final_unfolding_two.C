@@ -472,12 +472,12 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.45, 0.54, (text_photon_pt).c_str());
-                latex.DrawLatex(0.45, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.45, 0.42, (text_jet_pt).c_str());
-                latex.DrawLatex(0.45, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.82, 0.54, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.42, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -505,12 +505,12 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.45, 0.54, (text_photon_pt).c_str());
-                latex.DrawLatex(0.45, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.45, 0.42, (text_jet_pt).c_str());
-                latex.DrawLatex(0.45, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.82, 0.54, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.48, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.42, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.36, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -538,12 +538,12 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.45, 0.74, (text_photon_pt).c_str());
-                latex.DrawLatex(0.45, 0.68, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.45, 0.62, (text_jet_pt).c_str());
-                latex.DrawLatex(0.45, 0.56, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.82, 0.74, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.68, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.62, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.56, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -571,12 +571,12 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.45, 0.74, (text_photon_pt).c_str());
-                latex.DrawLatex(0.45, 0.68, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.45, 0.62, (text_jet_pt).c_str());
-                latex.DrawLatex(0.45, 0.56, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.82, 0.74, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.68, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.62, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.56, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
