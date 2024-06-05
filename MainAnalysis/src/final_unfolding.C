@@ -1507,8 +1507,8 @@ int plot() {
 
                 (*hist_aa)[3]->SetMinimum(0);
                 (*hist_pp)[0]->SetMinimum(0);
-                (*hist_aa)[3]->SetMaximum(25);
-                (*hist_pp)[0]->SetMaximum(25);
+                (*hist_aa)[3]->SetMaximum(30);
+                (*hist_pp)[0]->SetMaximum(30);
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
