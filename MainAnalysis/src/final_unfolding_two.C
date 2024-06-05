@@ -772,7 +772,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.74, "Source: Jewel PbPb");
+                latex.DrawLatex(0.18, 0.66, "Source: Jewel PbPb");
                 latex.DrawLatex(0.18, 0.60, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.18, 0.54, "Prior: MC");
 
@@ -805,7 +805,7 @@ int plot() {
                 latex.SetTextSize(text_size);
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.74, "Source: Jewel PbPb");
+                latex.DrawLatex(0.18, 0.66, "Source: Jewel PbPb");
                 latex.DrawLatex(0.18, 0.60, "Algorithm: D'Agostini");
                 latex.DrawLatex(0.18, 0.54, "Prior: MC");
 
