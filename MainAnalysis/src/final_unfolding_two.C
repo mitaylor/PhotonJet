@@ -451,8 +451,8 @@ int plot() {
                 legend->SetTextSize(legend_size);
                 legend->SetFillStyle(0);
                 legend->SetBorderSize(0);
-                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Truth", "lp");
-                legend->AddEntry((*hist_aa_gen_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_gen_fold0)[3], "Truth", "lp");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
@@ -667,8 +667,8 @@ int plot() {
                 legend->SetTextSize(legend_size);
                 legend->SetFillStyle(0);
                 legend->SetBorderSize(0);
-                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Truth", "lp");
-                legend->AddEntry((*hist_aa_gen_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_gen_fold0)[3], "Truth", "lp");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
@@ -883,8 +883,8 @@ int plot() {
                 legend->SetTextSize(legend_size);
                 legend->SetFillStyle(0);
                 legend->SetBorderSize(0);
-                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Truth", "lp");
-                legend->AddEntry((*hist_aa_gen_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_gen_fold0)[3], "Truth", "lp");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
@@ -1099,8 +1099,8 @@ int plot() {
                 legend->SetTextSize(legend_size);
                 legend->SetFillStyle(0);
                 legend->SetBorderSize(0);
-                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Truth", "lp");
-                legend->AddEntry((*hist_aa_gen_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_unfolded_fold0)[3], "Unfolded", "lp");
+                legend->AddEntry((*hist_aa_gen_fold0)[3], "Truth", "lp");
 
                 // set pads
                 set_pad(*pads[0], 0, 0, 0);
