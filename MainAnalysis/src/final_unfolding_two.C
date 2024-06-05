@@ -403,7 +403,7 @@ int plot() {
             case 1: // closure MC, D'Agostini, MC prior
             {
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_aa_pythia_mc.root", "read");
+                auto file_aa = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_aa_pythia_mebs_nonclosure_mc.root", "read");
                 auto file_pp = new TFile("data/arc/pho_60_rebin1/compare_unfolding_closure_gen_pp_pythia_mc.root", "read");
 
                 auto hist_aa_unfolded_fold0 = new history<TH1F>(file_aa, "unfolded_bayes_fold0"s);
@@ -426,6 +426,15 @@ int plot() {
                 (*hist_pp_gen_fold0)[0]->GetYaxis()->SetTitle("");
                 (*hist_aa_gen_fold1)[3]->GetXaxis()->SetTitle("");
                 (*hist_pp_gen_fold1)[0]->GetXaxis()->SetTitle("");
+
+                (*hist_aa_unfolded_fold0)[3]->SetMinimum(0);
+                (*hist_pp_unfolded_fold0)[0]->SetMinimum(0);
+                (*hist_aa_unfolded_fold0)[3]->SetMaximum(25);
+                (*hist_pp_unfolded_fold0)[0]->SetMaximum(25);
+                (*hist_aa_unfolded_fold1)[3]->SetMinimum(0);
+                (*hist_pp_unfolded_fold1)[0]->SetMinimum(0);
+                (*hist_aa_unfolded_fold1)[3]->SetMaximum(0.03);
+                (*hist_pp_unfolded_fold1)[0]->SetMaximum(0.03);
 
                 set_format((*hist_aa_unfolded_fold0)[3], 0);
                 set_format((*hist_pp_unfolded_fold0)[0], 0);
