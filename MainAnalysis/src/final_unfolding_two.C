@@ -105,6 +105,8 @@ int plot() {
         auto text_aa = "Pythia8 (CP5) QCD Photon + Hydjet (Drum5F)"s;
         auto text_pp = "Pythia8 (CP5) QCD Photon"s;
 
+        if (i != 0) text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < 120 GeV"s;
+
         /* styling */
         gStyle->SetLineScalePS(1);
         gStyle->SetOptStat(0);
