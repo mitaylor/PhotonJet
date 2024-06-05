@@ -446,7 +446,7 @@ int plot() {
                 set_format((*hist_pp_gen_fold1)[0], 1);
 
                 // set legends
-                auto legend = new TLegend(0.18, 0.31, 0.38, 0.40);
+                auto legend = new TLegend(0.18, 0.18, 0.38, 0.27);
                 legend->SetTextFont(42);
                 legend->SetTextSize(legend_size);
                 legend->SetFillStyle(0);
@@ -472,12 +472,12 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.68, (text_photon_pt).c_str());
-                latex.DrawLatex(0.18, 0.62, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.18, 0.56, (text_jet_pt).c_str());
-                latex.DrawLatex(0.18, 0.50, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.82, 0.55, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.49, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.43, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.37, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
@@ -505,12 +505,12 @@ int plot() {
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
-                latex.SetTextAlign(11);
+                latex.SetTextAlign(31);
                 latex.SetTextAngle(0);
-                latex.DrawLatex(0.18, 0.68, (text_photon_pt).c_str());
-                latex.DrawLatex(0.18, 0.62, (text_photon_eta + ", " + text_dphi).c_str());
-                latex.DrawLatex(0.18, 0.56, (text_jet_pt).c_str());
-                latex.DrawLatex(0.18, 0.50, (text_jet_alg + ", " + text_jet_eta).c_str());
+                latex.DrawLatex(0.82, 0.55, (text_photon_pt).c_str());
+                latex.DrawLatex(0.82, 0.49, (text_photon_eta + ", " + text_dphi).c_str());
+                latex.DrawLatex(0.82, 0.43, (text_jet_pt).c_str());
+                latex.DrawLatex(0.82, 0.37, (text_jet_alg + ", " + text_jet_eta).c_str());
 
                 latex.SetTextFont(42);
                 latex.SetTextSize(text_size);
