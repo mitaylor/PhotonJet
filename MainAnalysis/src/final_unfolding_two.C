@@ -649,8 +649,8 @@ int plot() {
                 (*hist_pp_unfolded_fold0)[0]->SetMaximum(25);
                 (*hist_aa_unfolded_fold1)[3]->SetMinimum(0);
                 (*hist_pp_unfolded_fold1)[0]->SetMinimum(0);
-                (*hist_aa_unfolded_fold1)[3]->SetMaximum(0.03);
-                (*hist_pp_unfolded_fold1)[0]->SetMaximum(0.03);
+                (*hist_aa_unfolded_fold1)[3]->SetMaximum(0.05);
+                (*hist_pp_unfolded_fold1)[0]->SetMaximum(0.05);
 
                 set_format((*hist_aa_unfolded_fold0)[3], 0);
                 set_format((*hist_pp_unfolded_fold0)[0], 0);
