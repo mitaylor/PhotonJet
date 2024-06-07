@@ -1201,6 +1201,8 @@ int plot() {
             }
             case 9: // bottom line test
             {
+                text_cms = "CMS #scale[0.8]{#font[52]{Preliminary}}"s;
+
                 // get histograms
                 auto file_aa = new TFile("data/arc/pho_60_rebin1/bottom_line_test_aa_jewel_pp.root", "read");
                 auto file_pp = new TFile("data/arc/pho_60_rebin1/bottom_line_test_pp_jewel_pp.root", "read");
