@@ -5,13 +5,13 @@ set=$1
 run_pp() {
     tag=$1
 
-    ./bin/bottom_line_test_toys configs/bottom_line_test/bottom_line_test_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/bottom_line_test_${tag}.root
+    ./bin/bottom_line_test_toys_temp configs/bottom_line_test/bottom_line_test_${tag}.conf configs/analysis/${set}/analysis_pp.conf data/arc/${set}/bottom_line_test_${tag}.root
 }
 
 run_aa() {
     tag=$1
 
-    ./bin/bottom_line_test_toys configs/bottom_line_test/bottom_line_test_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/bottom_line_test_${tag}.root
+    ./bin/bottom_line_test_toys_temp configs/bottom_line_test/bottom_line_test_${tag}.conf configs/analysis/${set}/analysis_aa.conf data/arc/${set}/bottom_line_test_${tag}.root
 }
 
 samples=(pp)
