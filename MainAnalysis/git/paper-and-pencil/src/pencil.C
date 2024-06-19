@@ -20,6 +20,7 @@ static std::vector<int32_t> const colours = {
     TColor::GetColor("#484EFF"),
     TColor::GetColor("#9E48FF"),
     TColor::GetColor("#F948FF"),
+    TColor::GetColor("#F734C6"),
     TColor::GetColor("#FF484E"),
     TColor::GetColor("#FF9E48"),
     TColor::GetColor("#bdb933"),
