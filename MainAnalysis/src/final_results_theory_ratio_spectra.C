@@ -545,8 +545,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    if (system == 3 && !subsets) legend_part1.SetTextSize(0.03);
-    else             legend_part1.SetTextSize(0.05);
+    legend_part1.SetTextSize(0.05);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
     if (system == 2)    legend_part1.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
@@ -600,8 +599,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    if (system == 3 && !subsets) legend_part2.SetTextSize(0.03);
-    else             legend_part2.SetTextSize(0.05);
+    legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
     if (system == 0 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
@@ -715,7 +713,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)    latex.DrawLatex(0.95, 0.43, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(11);
-    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.05, 0.15, "PbPb 1.69 nb^{-1}");
+    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.05, 0.20, "PbPb 1.69 nb^{-1}");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
