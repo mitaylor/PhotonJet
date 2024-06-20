@@ -711,8 +711,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    if (system == 1 && !subsets)    latex.SetTextAlign(11);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.05, 0.78, "pp 302 pb^{-1}");
+    if (system == 1 && !subsets)    latex.SetTextAlign(31);
+    if (system == 1 && !subsets)    latex.DrawLatex(0.95, 0.46, "pp 302 pb^{-1}");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
