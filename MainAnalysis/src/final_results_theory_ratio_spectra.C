@@ -538,8 +538,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.46;
-    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.51;
+    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.88;
     if (system == 3)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 3)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
@@ -596,7 +596,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 3 && !subsets)    legend_y_min = legend_y_max - 0.07;
     if (system == 3 && !subsets)    legend_y_max = legend_y_max;
-    if (system == 3 && !subsets)    legend_x_min = legend_x_max + 0.15;
+    if (system == 3 && !subsets)    legend_x_min = legend_x_max + 0.20;
     if (system == 3 && !subsets)    legend_x_max = legend_x_min + 0.30;
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
@@ -716,7 +716,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)    latex.DrawLatex(0.95, 0.43, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
-    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.95, 0.26, "PbPb 1.69 nb^{-1}");
+    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.95, 0.30, "PbPb 1.69 nb^{-1}");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
@@ -730,10 +730,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
-    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
-    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
-    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.44, (text_dphi + ", " + text_jet_eta).c_str());
-    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.36, (text_jet_alg).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.64, (text_photon_pt).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.56, (text_photon_eta).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.48, (text_dphi + ", " + text_jet_eta).c_str());
+    if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.40, (text_jet_alg).c_str());
 
     if (system == 4)    canvas.SaveAs((set + "_final_theory_ratio_hybrid_" + name + "_log.pdf").c_str());
     if (system == 3)    canvas.SaveAs((set + "_final_theory_spectra_aa_hybrid_" + name + "_log.pdf").c_str());
