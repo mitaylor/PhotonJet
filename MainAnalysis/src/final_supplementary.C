@@ -80,7 +80,7 @@ int plot() {
 
     std::vector<float> bpho_pt = {60, 200};
     std::vector<float> bdr = {0, 0.2};
-    std::vector<float> bjet_pt = {30, 200};
+    std::vector<float> bjet_pt = {30, 100};
 
     const int ncols = 2;
 
@@ -153,8 +153,8 @@ int plot() {
                 gStyle->SetPalette(kBird);
 
                 // get histograms
-                auto file_aa = new TFile("data/arc/pho_60_rebin3/compare_unfolding_errors_aa_bayes_original.root.root", "read");
-                auto file_pp = new TFile("data/arc/pho_60_rebin3/compare_unfolding_errors_pp_bayes_original.root.root", "read");
+                auto file_aa = new TFile("data/arc/pho_60_rebin3/compare_unfolding_errors_aa_bayes_original.root", "read");
+                auto file_pp = new TFile("data/arc/pho_60_rebin3/compare_unfolding_errors_pp_bayes_original.root", "read");
 
                 auto hist_aa = new history<TH2F>(file_aa, "toy_covariance_fold0_index2"s);
                 auto hist_pp = new history<TH2F>(file_pp, "toy_covariance_fold0_index2"s);
