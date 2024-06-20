@@ -711,12 +711,13 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextSize(0.03);
     latex.SetTextAlign(11);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.03, 0.95, "pp 302 pb^{-1}");
-    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.03, 0.95, "PbPb 1.69 nb^{-1}");
+    if (system == 1 && !subsets)    latex.DrawLatex(0.04, 0.94, "pp 302 pb^{-1}");
+    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.04, 0.94, "PbPb 1.69 nb^{-1}");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
     if (system == 3 && subsets)       legend_part2.Draw();
+
     latex.SetTextSize(0.05);
     if (system != 0 && system != 3)   latex.SetTextAlign(31);
     if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
