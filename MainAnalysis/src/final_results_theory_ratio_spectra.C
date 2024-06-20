@@ -605,8 +605,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 4 && !subsets)    legend_y_max = legend_y_max - 0.10;
     if (system == 4 && !subsets)    legend_y_min = legend_y_max - 0.28;
-    if (system == 4 && !subsets)    legend_x_min = legend_x_max;
-    if (system == 4 && !subsets)    legend_x_max = legend_x_min;
+    if (system == 4 && !subsets)    legend_x_min = legend_x_min;
+    if (system == 4 && !subsets)    legend_x_max = legend_x_max;
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
