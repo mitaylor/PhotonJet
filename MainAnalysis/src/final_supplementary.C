@@ -101,8 +101,8 @@ int plot() {
         auto text_jet_alg = "anti-k_{T} R = 0.3"s;
         auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
         auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
-        auto text_aa = "Pythia8 (CP5) QCD Photon + Hydjet (Drum5F)"s;
-        auto text_pp = "Pythia8 (CP5) QCD Photon"s;
+        auto text_aa = "PbPb 1.69 nb^{-1}"s;
+        auto text_pp = "pp 302 pb^{-1}"s;
 
         /* styling */
         gStyle->SetLineScalePS(1);
@@ -176,7 +176,7 @@ int plot() {
                 set_pad(*pads[1], 0, 0, 1);
 
                 // plot histograms
-                pads[0]->cd();
+                pads[1]->cd();
 
                 gPad->SetLogz();
                 gPad->SetTicks();
@@ -195,9 +195,9 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_aa).c_str());
-                latex.DrawLatex(0.18, 0.74, "PbPb 0-10%");
+                latex.DrawLatex(0.18, 0.74, "0-10%");
 
-                pads[1]->cd();
+                pads[0]->cd();
                 
                 gPad->SetLogz();
                 gPad->SetTicks();
@@ -216,7 +216,6 @@ int plot() {
                 latex.SetTextAlign(11);
                 latex.SetTextAngle(0);
                 latex.DrawLatex(0.18, 0.80, (text_pp).c_str());
-                latex.DrawLatex(0.18, 0.74, "pp");
 
                 // x axis label
                 canvas.cd();
