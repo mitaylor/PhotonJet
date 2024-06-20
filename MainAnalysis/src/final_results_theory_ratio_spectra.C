@@ -737,6 +737,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
     if (system == 3 && subsets)       legend_part2.Draw();
+    if (system == 4 && !subsets)      legend_part2.Draw();
 
     latex.SetTextSize(0.05);
     if (system != 0 && system != 3)   latex.SetTextAlign(31);
