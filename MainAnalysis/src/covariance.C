@@ -132,7 +132,7 @@ TH2F* convert_covariance(TMatrixT<double>* matrix, TH1* efficiency) {
 
 TH2F* collapse_covariance(TH2F* cov, interval const* idrg, interval const* iptg, int64_t axis) {
     int NX = idrg->size();
-    int NY = iptg->size();
+    int NY = iptg->size()-1;
 
     TH2F *proj;
 

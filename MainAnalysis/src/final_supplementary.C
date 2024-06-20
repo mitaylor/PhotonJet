@@ -132,7 +132,7 @@ int plot() {
 
         /* text sizes */
         double axis_label_size = 0.05/sf;
-        double legend_size = 0.035;
+        // double legend_size = 0.035;
         double text_size = 0.035;
 
         /* declare canvas, pads, axes, and titles */
