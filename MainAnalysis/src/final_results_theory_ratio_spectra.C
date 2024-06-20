@@ -559,6 +559,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
     if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_pyquen[0], "PYQUEN, wide angle", "lf");
     if (system == 4)    legend_part1.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
+    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
+    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
+    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
+    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
     if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
