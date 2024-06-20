@@ -558,15 +558,15 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
     if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
     if (system == 4)    legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
-    if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
-    if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
+    if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
-    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS data", "plf");
+    if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
+    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
-    if (system == 1)    legend_part1.AddEntry(&graphs_systs_pp[0], "CMS data", "plf");
+    if (system == 1)    legend_part1.AddEntry(&graphs_systs_pp[0], "CMS pp", "plf");
     if (system == 1)    legend_part1.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend_part1.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
@@ -709,10 +709,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
-    latex.SetTextSize(0.04);
-    latex.SetTextAlign(11);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.05, 0.94, "pp 302 pb^{-1}");
-    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.05, 0.94, "PbPb 1.69 nb^{-1}");
+    if (system == 1 && !subsets)    latex.SetTextAlign(31);
+    if (system == 1 && !subsets)    latex.DrawLatex(0.95, 0.43, "pp 302 pb^{-1}");
+
+    if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(11);
+    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.03, 0.20, "PbPb 1.69 nb^{-1}");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
