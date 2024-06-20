@@ -302,11 +302,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto text_jet_alg = "anti-k_{T} R = 0.3"s;
     auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
 
-    if (system == 0 && !subsets) text_system = "PbPb 1.69 nb^{-1} " + text_system;
-    if (system == 1 && !subsets) text_system = "pp 302 pb^{-1} " + text_system;
-    if (system == 2 && !subsets) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
-    if (system == 3 && !subsets) text_system = "PbPb 1.69 nb^{-1} " + text_system;
-    if (system == 4 && !subsets) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
+    if (system == 0 && subsets) text_system = "PbPb 1.69 nb^{-1} " + text_system;
+    if (system == 1 && subsets) text_system = "pp 302 pb^{-1} " + text_system;
+    if (system == 2 && subsets) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
+    if (system == 3 && subsets) text_system = "PbPb 1.69 nb^{-1} " + text_system;
+    if (system == 4 && subsets) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
 
     std::vector<history<TH1F>*> hists_aa(ncols);
     std::vector<history<TH1F>*> systs_aa(ncols);
