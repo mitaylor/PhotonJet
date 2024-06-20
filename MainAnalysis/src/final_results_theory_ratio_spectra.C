@@ -712,10 +712,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if (system == 1 && !subsets)    latex.SetTextAlign(31);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.95, 0.43, "pp 302 pb^{-1}");
+    if (system == 1 && !subsets)    latex.DrawLatex(0.97, 0.43, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
-    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.96, 0.30, "PbPb 1.69 nb^{-1}");
+    if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");
 
     if (system == 3 && !subsets)    latex.SetTextAlign(11);
     if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.85, "HYBRID");
