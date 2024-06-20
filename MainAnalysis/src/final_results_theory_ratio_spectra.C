@@ -533,13 +533,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.76 : 0.62;
-    if (system == 0)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 0)    legend_y_min = (subsets) ? 0.76 : 0.64;
+    if (system == 0)    legend_y_max = (subsets) ? 0.83 : 0.85;
     if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.51;
-    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.88;
+    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.55;
+    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.83;
     if (system == 3)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 3)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
@@ -563,7 +563,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
     if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
-    if (system == 3 && !subsets)   legend_part1.AddEntry((TObject*) 0, "HYBRID", "");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "no elastic, no wake", "lf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "no elastic, wake", "lf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "elastic, no wake", "lf");
@@ -717,6 +716,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.95, 0.30, "PbPb 1.69 nb^{-1}");
+
+    if (system == 3 && !subsets)    latex.SetTextAlign(11);
+    if (system == 3 && !subsets)    latex.DrawLatex(0.05, 0.83, "Hybrid");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
