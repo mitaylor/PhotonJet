@@ -129,8 +129,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto type = conf->get<int>("type");
 
-    auto ymins = conf->get<float>("ymin");
-    auto ymaxs = conf->get<float>("ymax");
+    auto ymin = conf->get<float>("ymin");
+    auto ymax = conf->get<float>("ymax");
 
     auto sel = new configurer(selections);
 
@@ -276,7 +276,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TArrow*> arrows(ncols * nrows);
 
     for (int i = 0; i < ncols; ++i) {
-        for (int j = 0; k < nrows; ++j) {
+        for (int j = 0; j < nrows; ++j) {
             worlds[i + ncols*j] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymin, ymax);
             worlds[i + ncols*j]->SetStats(0);
 
