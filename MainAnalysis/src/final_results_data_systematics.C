@@ -209,7 +209,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     // auto data_pp = new history<TH1F>(file_pp, "pp_base_pp_" + tag_data + suffix);
     auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_" + tag_total + suffix);
-    std::cout << (*syst_pp)->GetBinContent(0) << std::endl;
+    std::cout << (*syst_pp)[0]->GetBinContent(0) << std::endl;
     auto ele_pp = new history<TH1F>(file_pp, "pp_" + tag_ele + suffix);
     auto purity_pp = new history<TH1F>(file_pp, "pp_" + tag_purity + suffix);
     auto iso_pp = new history<TH1F>(file_pp, "pp_" + tag_iso + suffix);
