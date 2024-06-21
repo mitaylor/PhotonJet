@@ -249,7 +249,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TPad*> pads(ncols * nrows);
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(nrows);
-    std::vector<TArrow*> arrows(ncols * nrows);
+    // std::vector<TArrow*> arrows(ncols * nrows);
 
     for (int i = 0; i < ncols; ++i) {
         for (int j = 0; j < nrows; ++j) {
@@ -266,17 +266,17 @@ int congratulate(char const* config, char const* selections, char const* output)
             set_axis(*axis_x[i], sf, 0);
             set_axis(*axis_y[j], sf, 1);
 
-            double arrow_y = 0.0;
+            // double arrow_y = 0.0;
 
-            if (i == 0) arrow_y = (*syst_pp)[0]->GetBinContent(1);
-            if (i == 1) arrow_y = (*syst_aa)[0]->GetBinContent(1);
-            if (i == 2) arrow_y = (*syst_aa)[1]->GetBinContent(1);
-            if (i == 3) arrow_y = (*syst_aa)[2]->GetBinContent(1);
-            if (i == 4) arrow_y = (*syst_aa)[3]->GetBinContent(1);
+            // if (i == 0) arrow_y = (*syst_pp)[0]->GetBinContent(1);
+            // if (i == 1) arrow_y = (*syst_aa)[0]->GetBinContent(1);
+            // if (i == 2) arrow_y = (*syst_aa)[1]->GetBinContent(1);
+            // if (i == 3) arrow_y = (*syst_aa)[2]->GetBinContent(1);
+            // if (i == 4) arrow_y = (*syst_aa)[3]->GetBinContent(1);
         
-            arrows[i + ncols*j] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
-            arrows[i + ncols*j]->SetAngle(40);
-            arrows[i + ncols*j]->SetLineWidth(5);
+            // arrows[i + ncols*j] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
+            // arrows[i + ncols*j]->SetAngle(40);
+            // arrows[i + ncols*j]->SetLineWidth(5);
 
             canvas.cd();
 
@@ -350,7 +350,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     
     pads[0]->cd();
     worlds[0]->Draw("axis");
-    arrows[0]->Draw();
+    // arrows[0]->Draw();
     (*purity_pp)[0]->Draw("same hist ][");
     (*es_pp)[0]->Draw("same hist ][");
     (*jer_pp)[0]->Draw("same hist ][");
@@ -368,7 +368,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
-    arrows[5]->Draw();
+    // arrows[5]->Draw();
     (*ele_pp)[0]->Draw("same hist ][");
     (*iso_pp)[0]->Draw("same hist ][");
     (*jec_pp)[0]->Draw("same hist ][");
@@ -383,7 +383,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[1]->cd();
     worlds[1]->Draw("axis");
-    arrows[1]->Draw();
+    // arrows[1]->Draw();
     (*purity_aa)[0]->Draw("same hist ][");
     (*es_aa)[0]->Draw("same hist ][");
     (*jer_aa)[0]->Draw("same hist ][");
@@ -402,7 +402,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
-    arrows[6]->Draw();
+    // arrows[6]->Draw();
     (*ele_aa)[0]->Draw("same hist ][");
     (*iso_aa)[0]->Draw("same hist ][");
     (*jec_aa)[0]->Draw("same hist ][");
@@ -418,7 +418,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[2]->cd();
     worlds[2]->Draw("axis");
-    arrows[2]->Draw();
+    // arrows[2]->Draw();
     (*purity_aa)[1]->Draw("same hist ][");
     (*es_aa)[1]->Draw("same hist ][");
     (*jer_aa)[1]->Draw("same hist ][");
@@ -436,7 +436,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
-    arrows[7]->Draw();
+    // arrows[7]->Draw();
     (*ele_aa)[1]->Draw("same hist ][");
     (*iso_aa)[1]->Draw("same hist ][");
     (*jec_aa)[1]->Draw("same hist ][");
@@ -452,7 +452,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[3]->cd();
     worlds[3]->Draw("axis");
-    arrows[3]->Draw();
+    // arrows[3]->Draw();
     (*purity_aa)[2]->Draw("same hist ][");
     (*es_aa)[2]->Draw("same hist ][");
     (*jer_aa)[2]->Draw("same hist ][");
@@ -466,7 +466,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[8]->cd();
     worlds[8]->Draw("axis");
-    arrows[8]->Draw();
+    // arrows[8]->Draw();
     (*ele_aa)[2]->Draw("same hist ][");
     (*iso_aa)[2]->Draw("same hist ][");
     (*jec_aa)[2]->Draw("same hist ][");
@@ -482,7 +482,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[4]->cd();
     worlds[4]->Draw("axis");
-    arrows[4]->Draw();
+    // arrows[4]->Draw();
     (*purity_aa)[3]->Draw("same hist ][");
     (*es_aa)[3]->Draw("same hist ][");
     (*jer_aa)[3]->Draw("same hist ][");
@@ -496,7 +496,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[9]->cd();
     worlds[9]->Draw("axis");
-    arrows[9]->Draw();
+    // arrows[9]->Draw();
     (*ele_aa)[3]->Draw("same hist ][");
     (*iso_aa)[3]->Draw("same hist ][");
     (*jec_aa)[3]->Draw("same hist ][");
