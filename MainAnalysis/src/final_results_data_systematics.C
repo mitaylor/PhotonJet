@@ -51,8 +51,7 @@ std::vector<TGraphAsymmErrors> get_graph(history<TH1F>* h, int type)
 {
     std::vector<TGraphAsymmErrors> result(h->size());
 
-    static int style[9] = {20, 20, 20, 20, 20, 20, 20, 20, 20};
-    static int color[9] = { TColor::GetColor("#515151"),
+    static int color[12] = { TColor::GetColor("#515151"),
                             TColor::GetColor("#FF484E"),
                             TColor::GetColor("#FF9E48"),
                             TColor::GetColor("#bdb933"),
@@ -66,8 +65,8 @@ std::vector<TGraphAsymmErrors> get_graph(history<TH1F>* h, int type)
                             TColor::GetColor("#F734C6")
                            };
 
-    for (size_t i = 0; i < h->size(); ++i) {
-        for (int j = 1; j <= (*h[i])[0]->GetNbinsX(); ++j) {
+    for (int i = 0; i < h->size(); ++i) {
+        for (int j = 1; j <= *h[i]->GetNbinsX(); ++j) {
             double x = *h[i]->GetBinCenter(j);
             double dx = *h[i]->GetBinWidth(j)/2;
 
