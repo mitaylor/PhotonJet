@@ -308,7 +308,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     /* declare legend */
     double legend_y_max = 0.93;
     double legend_x_min = 0.07;
-    double legend_x_max = 0.37;
+    double legend_x_max = 0.5;
 
     TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
