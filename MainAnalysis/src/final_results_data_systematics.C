@@ -332,115 +332,151 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0]->cd();
     worlds[0]->Draw("axis");
     arrows[0]->Draw();
-    (*syst_pp)[0]->Draw("same hist ][");
     (*purity_pp)[0]->Draw("same hist ][");
     (*es_pp)[0]->Draw("same hist ][");
     (*jer_pp)[0]->Draw("same hist ][");
     (*stat_pp)[0]->Draw("same hist ][");
+    (*syst_pp)[0]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "pp");
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
     arrows[5]->Draw();
-    (*syst_pp)[0]->Draw("same hist ][");
     (*ele_pp)[0]->Draw("same hist ][");
     (*iso_pp)[0]->Draw("same hist ][");
     (*jec_pp)[0]->Draw("same hist ][");
     (*prior_pp)[0]->Draw("same hist ][");
     (*reg_pp)[0]->Draw("same hist ][");
+    (*syst_pp)[0]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "pp");
 
     pads[1]->cd();
     worlds[1]->Draw("axis");
     arrows[1]->Draw();
-    (*syst_aa)[0]->Draw("same hist ][");
     (*purity_aa)[0]->Draw("same hist ][");
     (*es_aa)[0]->Draw("same hist ][");
     (*jer_aa)[0]->Draw("same hist ][");
     (*stat_aa)[0]->Draw("same hist ][");
     (*mebs_aa)[0]->Draw("same hist ][");
+    (*syst_aa)[0]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 50-90%");
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
     arrows[6]->Draw();
-    (*syst_aa)[0]->Draw("same hist ][");
     (*ele_aa)[0]->Draw("same hist ][");
     (*iso_aa)[0]->Draw("same hist ][");
     (*jec_aa)[0]->Draw("same hist ][");
     (*prior_aa)[0]->Draw("same hist ][");
     (*reg_aa)[0]->Draw("same hist ][");
     (*cent_aa)[0]->Draw("same hist ][");
+    (*syst_aa)[0]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 50-90%");
 
     pads[2]->cd();
     worlds[2]->Draw("axis");
     arrows[2]->Draw();
-    (*syst_aa)[1]->Draw("same hist ][");
     (*purity_aa)[1]->Draw("same hist ][");
     (*es_aa)[1]->Draw("same hist ][");
     (*jer_aa)[1]->Draw("same hist ][");
     (*stat_aa)[1]->Draw("same hist ][");
     (*mebs_aa)[1]->Draw("same hist ][");
+    (*syst_aa)[1]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 30-50%");
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
     arrows[7]->Draw();
-    (*syst_aa)[1]->Draw("same hist ][");
     (*ele_aa)[1]->Draw("same hist ][");
     (*iso_aa)[1]->Draw("same hist ][");
     (*jec_aa)[1]->Draw("same hist ][");
     (*prior_aa)[1]->Draw("same hist ][");
     (*reg_aa)[1]->Draw("same hist ][");
     (*cent_aa)[1]->Draw("same hist ][");
+    (*syst_aa)[1]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 30-50%");
 
     pads[3]->cd();
     worlds[3]->Draw("axis");
     arrows[3]->Draw();
-    (*syst_aa)[2]->Draw("same hist ][");
     (*purity_aa)[2]->Draw("same hist ][");
     (*es_aa)[2]->Draw("same hist ][");
     (*jer_aa)[2]->Draw("same hist ][");
     (*stat_aa)[2]->Draw("same hist ][");
     (*mebs_aa)[2]->Draw("same hist ][");
+    (*syst_aa)[2]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 10-30%");
 
     pads[8]->cd();
     worlds[8]->Draw("axis");
     arrows[8]->Draw();
-    (*syst_aa)[2]->Draw("same hist ][");
     (*ele_aa)[2]->Draw("same hist ][");
     (*iso_aa)[2]->Draw("same hist ][");
     (*jec_aa)[2]->Draw("same hist ][");
     (*prior_aa)[2]->Draw("same hist ][");
     (*reg_aa)[2]->Draw("same hist ][");
     (*cent_aa)[2]->Draw("same hist ][");
+    (*syst_aa)[2]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 10-30%");
 
     pads[4]->cd();
     worlds[4]->Draw("axis");
     arrows[4]->Draw();
-    (*syst_aa)[3]->Draw("same hist ][");
     (*purity_aa)[3]->Draw("same hist ][");
     (*es_aa)[3]->Draw("same hist ][");
     (*jer_aa)[3]->Draw("same hist ][");
     (*stat_aa)[3]->Draw("same hist ][");
     (*mebs_aa)[3]->Draw("same hist ][");
+    (*syst_aa)[3]->Draw("same hist ][");
+
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 0-10%");
 
     pads[9]->cd();
     worlds[9]->Draw("axis");
     arrows[9]->Draw();
-    (*syst_aa)[3]->Draw("same hist ][");
     (*ele_aa)[3]->Draw("same hist ][");
     (*iso_aa)[3]->Draw("same hist ][");
     (*jec_aa)[3]->Draw("same hist ][");
     (*prior_aa)[3]->Draw("same hist ][");
     (*reg_aa)[3]->Draw("same hist ][");
     (*cent_aa)[3]->Draw("same hist ][");
+    (*syst_aa)[3]->Draw("same hist ][");
 
-    // auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
+    latex.SetTextAlign(21);
+    latex.SetTextSize(0.06);
+    latex.DrawLatex(0.5, 0.12, "PbPb 0-10%");
+
+    auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
 
     // latex.SetTextAlign(21);
     // latex.SetTextSize(0.06);
     // latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
-
-    // latex.SetTextAlign(21);
-    // latex.SetTextSize(0.06);
-    // latex.DrawLatex(0.5, 0.12, "Cent. 0-10%");
 
     // latex.SetTextSize(0.05);
     // latex.SetTextAlign(31);
