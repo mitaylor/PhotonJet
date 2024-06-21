@@ -472,7 +472,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06);
     latex.DrawLatex(0.5, 0.12, "PbPb 0-10%");
 
-    auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
+    // auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
 
     // latex.SetTextAlign(21);
     // latex.SetTextSize(0.06);
