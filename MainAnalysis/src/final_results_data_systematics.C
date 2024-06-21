@@ -126,6 +126,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto tag_cent = conf->get<std::string>("tag_cent");
 
     auto suffix = conf->get<std::string>("suffix");
+    auto name = conf->get<std::string>("name");
 
     auto type = conf->get<int>("type");
 
