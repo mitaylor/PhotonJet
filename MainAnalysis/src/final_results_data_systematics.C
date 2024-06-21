@@ -165,6 +165,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
     auto text_jet_alg = "anti-k_{T} R = 0.3"s;
     auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
+    auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
 
     /* get histograms */
     // auto data_aa = new history<TH1F>(file_aa, "aa_base_aa_" + tag_data + suffix);
@@ -305,14 +306,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
-    auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
-
-    latex.SetTextFont(42);
-    latex.SetTextSize(0.045/sf);
-    latex.SetTextAlign(21);
-    latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * ncols / 2, pad_y0 * 1.15 + pad_dy * nrows, text_jet_pt.c_str());
-
     /* declare legend */
     double legend_y_max = 0.93;
     double legend_x_min = 0.07;
@@ -367,6 +360,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "pp");
+
+    latex.SetTextSize(0.05*sf);
+    latex.SetTextAlign(11);
+    latex.DrawLatex(0.07, 0.85, (text_photon_pt).c_str());
+    latex.DrawLatex(0.07, 0.85, (text_photon_eta).c_str());
+    latex.DrawLatex(0.07, 0.85, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.07, 0.85, (text_jet_alg).c_str());
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
@@ -501,13 +501,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "PbPb 0-10%");
-
-    // latex.SetTextSize(0.05);
-    // latex.SetTextAlign(31);
-    // latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    // latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    // latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    // latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     canvas.SaveAs((set + "_final_data_systematics_" + name + "_log.pdf").c_str());
 
