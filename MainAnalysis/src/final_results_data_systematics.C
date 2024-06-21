@@ -45,7 +45,7 @@ void set_format(history<TH1F>* h, int type)
                             TColor::GetColor("#484EFF"),
                             TColor::GetColor("#9E48FF"),
                             TColor::GetColor("#F948FF"),
-                            TColor::GetColor("#F734C6")
+                            TColor::GetColor("#ff669e")
                            };
 
     for (int i = 0; i < h->size(); ++i) {
