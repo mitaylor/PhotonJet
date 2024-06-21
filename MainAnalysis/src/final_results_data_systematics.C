@@ -369,9 +369,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[5]->cd();
     worlds[5]->Draw("axis");
     // arrows[5]->Draw();
-    if (type == 0) (*ele_pp)[0]->Draw("same hist ][");
-    if (type == 1) (*ele_pp)[0]->Draw("same hist [");
-    if (type == 2) (*ele_pp)[0]->Draw("same hist ]");
+    (*ele_pp)[0]->Draw("same hist ][");
     (*iso_pp)[0]->Draw("same hist ][");
     (*jec_pp)[0]->Draw("same hist ][");
     (*prior_pp)[0]->Draw("same hist ][");
@@ -425,9 +423,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*es_aa)[1]->Draw("same hist ][");
     (*jer_aa)[1]->Draw("same hist ][");
     (*stat_aa)[1]->Draw("same hist ][");
-    if (type == 0) (*mebs_aa)[1]->Draw("same hist ][");
-    if (type == 1) (*mebs_aa)[1]->Draw("same hist [[");
-    if (type == 2) (*mebs_aa)[1]->Draw("same hist ]");
+    (*mebs_aa)[1]->Draw("same hist ][");
     (*syst_aa)[1]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
