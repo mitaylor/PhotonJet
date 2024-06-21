@@ -32,11 +32,9 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-std::vector<TH1F> get_graph(history<TH1F>* h, int type)
+void set_format(history<TH1F>* h, int type)
 {
-    std::vector<TH1F> result(h->size());
-
-    static int color[12] = { TColor::GetColor("#515151"),
+    static int color[12] = {TColor::GetColor("#515151"),
                             TColor::GetColor("#FF484E"),
                             TColor::GetColor("#FF9E48"),
                             TColor::GetColor("#bdb933"),
@@ -51,16 +49,10 @@ std::vector<TH1F> get_graph(history<TH1F>* h, int type)
                            };
 
     for (int i = 0; i < h->size(); ++i) {
-        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            result[i].SetBinContent(j, (*h)[i]->GetBinContent(j));
-        }
-
-        result[i].SetLineColor(color[type]);
-        result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(5.0);
+        (*h)[i]->SetLineColor(color[type]);
+        (*h)[i]->SetMarkerSize(0);
+        (*h)[i]->SetLineWidth(5.0);
     }
-
-    return result;
 }
 
 void set_pad(TPad &pad)
@@ -201,29 +193,29 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto stat_pp = new history<TH1F>(file_pp, "pp_" + tag_stat + suffix);
     auto reg_pp = new history<TH1F>(file_pp, "pp_" + tag_reg + suffix);
 
-    auto graphs_syst_aa = get_graph(syst_aa, 0);
-    auto graphs_ele_aa = get_graph(ele_aa, 1);
-    auto graphs_purity_aa = get_graph(purity_aa, 2);
-    auto graphs_iso_aa = get_graph(iso_aa, 3);
-    auto graphs_es_aa = get_graph(es_aa, 4);
-    auto graphs_jec_aa = get_graph(jec_aa, 5);
-    auto graphs_jer_aa = get_graph(jer_aa, 6);
-    auto graphs_prior_aa = get_graph(prior_aa, 7);
-    auto graphs_stat_aa = get_graph(stat_aa, 8);
-    auto graphs_reg_aa = get_graph(reg_aa, 9);
-    auto graphs_mebs_aa = get_graph(mebs_aa, 10);
-    auto graphs_cent_aa = get_graph(cent_aa, 11);
+    set_format(syst_aa, 0);
+    set_format(ele_aa, 1);
+    set_format(purity_aa, 2);
+    set_format(iso_aa, 3);
+    set_format(es_aa, 4);
+    set_format(jec_aa, 5);
+    set_format(jer_aa, 6);
+    set_format(prior_aa, 7);
+    set_format(stat_aa, 8);
+    set_format(reg_aa, 9);
+    set_format(mebs_aa, 10);
+    set_format(cent_aa, 11);
 
-    auto graphs_syst_pp = get_graph(syst_pp, 0);
-    auto graphs_ele_pp = get_graph(ele_pp, 1);
-    auto graphs_purity_pp = get_graph(purity_pp, 2);
-    auto graphs_iso_pp = get_graph(iso_pp, 3);
-    auto graphs_es_pp = get_graph(es_pp, 4);
-    auto graphs_jec_pp = get_graph(jec_pp, 5);
-    auto graphs_jer_pp = get_graph(jer_pp, 6);
-    auto graphs_prior_pp = get_graph(prior_pp, 7);
-    auto graphs_stat_pp = get_graph(stat_pp, 8);
-    auto graphs_reg_pp = get_graph(reg_pp, 9);
+    set_format(syst_pp, 0);
+    set_format(ele_pp, 1);
+    set_format(purity_pp, 2);
+    set_format(iso_pp, 3);
+    set_format(es_pp, 4);
+    set_format(jec_pp, 5);
+    set_format(jer_pp, 6);
+    set_format(prior_pp, 7);
+    set_format(stat_pp, 8);
+    set_format(reg_pp, 9);
 
     /* size canvas */
     double panel_size = 350;
@@ -275,11 +267,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
             double arrow_y = 0.0;
 
-            if (i == 0) arrow_y = graphs_syst_pp[0].GetBinContent(1);
-            if (i == 1) arrow_y = graphs_syst_aa[0].GetBinContent(1);
-            if (i == 2) arrow_y = graphs_syst_aa[1].GetBinContent(1);
-            if (i == 3) arrow_y = graphs_syst_aa[2].GetBinContent(1);
-            if (i == 4) arrow_y = graphs_syst_aa[3].GetBinContent(1);
+            if (i == 0) arrow_y = (*syst_pp)[0]->GetBinContent(1);
+            if (i == 1) arrow_y = (*syst_aa)[0]->GetBinContent(1);
+            if (i == 2) arrow_y = (*syst_aa)[1]->GetBinContent(1);
+            if (i == 3) arrow_y = (*syst_aa)[2]->GetBinContent(1);
+            if (i == 4) arrow_y = (*syst_aa)[3]->GetBinContent(1);
         
             arrows[i + ncols*j] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
             arrows[i + ncols*j]->SetAngle(40);
@@ -324,121 +316,121 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.SetTextSize(0.03);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    legend.AddEntry(&graphs_syst_aa[0], "Total", "l");
-    legend.AddEntry(&graphs_ele_aa[0], "Electron Rejection", "l");
-    legend.AddEntry(&graphs_purity_aa[0], "Purity", "l");
-    legend.AddEntry(&graphs_iso_aa[0], "Photon Isolation", "l");
-    legend.AddEntry(&graphs_es_aa[0], "Photon Energy Scale", "l");
-    legend.AddEntry(&graphs_jec_aa[0], "Jet Energy Correction", "l");
-    legend.AddEntry(&graphs_jer_aa[0], "Jet Energy Resolution", "l");
-    legend.AddEntry(&graphs_prior_aa[0], "Unfolding Prior", "l");
-    legend.AddEntry(&graphs_stat_aa[0], "Response Matrix Statistics", "l");
-    legend.AddEntry(&graphs_reg_aa[0], "Unfolding Regularization", "l");
-    legend.AddEntry(&graphs_mebs_aa[0], "Mixed-Event Background Subtraction", "l");
-    legend.AddEntry(&graphs_cent_aa[0], "Centrality", "l");
+    legend.AddEntry((*syst_aa)[0], "Total", "l");
+    legend.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
+    legend.AddEntry((*purity_aa)[0], "Purity", "l");
+    legend.AddEntry((*iso_aa)[0], "Photon Isolation", "l");
+    legend.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
+    legend.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
+    legend.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
+    legend.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
+    legend.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
+    legend.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
+    legend.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
+    legend.AddEntry((*cent_aa)[0], "Centrality", "l");
     
     pads[0]->cd();
     worlds[0]->Draw("axis");
     arrows[0]->Draw();
-    graphs_syst_pp[0].Draw("same hist");
-    graphs_purity_pp[0].Draw("same hist");
-    graphs_es_pp[0].Draw("same hist");
-    graphs_jer_pp[0].Draw("same hist");
-    graphs_stat_pp[0].Draw("same hist");
+    (*syst_pp[0])->Draw("same hist");
+    (*purity_pp[0])->Draw("same hist");
+    (*es_pp[0])->Draw("same hist");
+    (*jer_pp[0])->Draw("same hist");
+    (*stat_pp[0])->Draw("same hist");
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
     arrows[5]->Draw();
-    graphs_syst_pp[0].Draw("same hist");
-    graphs_ele_pp[0].Draw("same hist");
-    graphs_iso_pp[0].Draw("same hist");
-    graphs_jec_pp[0].Draw("same hist");
-    graphs_prior_pp[0].Draw("same hist");
-    graphs_reg_pp[0].Draw("same hist");
+    (*syst_pp[0])->Draw("same hist");
+    (*ele_pp[0])->Draw("same hist");
+    (*iso_pp[0])->Draw("same hist");
+    (*jec_pp[0])->Draw("same hist");
+    (*prior_pp[0])->Draw("same hist");
+    (*reg_pp[0])->Draw("same hist");
 
     pads[1]->cd();
     worlds[1]->Draw("axis");
     arrows[1]->Draw();
-    graphs_syst_aa[0].Draw("same hist");
-    graphs_purity_aa[0].Draw("same hist");
-    graphs_es_aa[0].Draw("same hist");
-    graphs_jer_aa[0].Draw("same hist");
-    graphs_stat_aa[0].Draw("same hist");
-    graphs_mebs_aa[0].Draw("same hist");
+    (*syst_aa[0])->Draw("same hist");
+    (*purity_aa[0])->Draw("same hist");
+    (*es_aa[0])->Draw("same hist");
+    (*jer_aa[0])->Draw("same hist");
+    (*stat_aa[0])->Draw("same hist");
+    (*mebs_aa[0])->Draw("same hist");
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
     arrows[6]->Draw();
-    graphs_syst_aa[0].Draw("same hist");
-    graphs_ele_aa[0].Draw("same hist");
-    graphs_iso_aa[0].Draw("same hist");
-    graphs_jec_aa[0].Draw("same hist");
-    graphs_prior_aa[0].Draw("same hist");
-    graphs_reg_aa[0].Draw("same hist");
-    graphs_cent_aa[0].Draw("same hist");
+    (*syst_aa[0])->Draw("same hist");
+    (*ele_aa[0])->Draw("same hist");
+    (*iso_aa[0])->Draw("same hist");
+    (*jec_aa[0])->Draw("same hist");
+    (*prior_aa[0])->Draw("same hist");
+    (*reg_aa[0])->Draw("same hist");
+    (*cent_aa[0])->Draw("same hist");
 
     pads[2]->cd();
     worlds[2]->Draw("axis");
     arrows[2]->Draw();
-    graphs_syst_aa[1].Draw("same hist");
-    graphs_purity_aa[1].Draw("same hist");
-    graphs_es_aa[1].Draw("same hist");
-    graphs_jer_aa[1].Draw("same hist");
-    graphs_stat_aa[1].Draw("same hist");
-    graphs_mebs_aa[1].Draw("same hist");
+    (*syst_aa[1])->Draw("same hist");
+    (*purity_aa[1])->Draw("same hist");
+    (*es_aa[1])->Draw("same hist");
+    (*jer_aa[1])->Draw("same hist");
+    (*stat_aa[1])->Draw("same hist");
+    (*mebs_aa[1])->Draw("same hist");
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
     arrows[7]->Draw();
-    graphs_syst_aa[1].Draw("same hist");
-    graphs_ele_aa[1].Draw("same hist");
-    graphs_iso_aa[1].Draw("same hist");
-    graphs_jec_aa[1].Draw("same hist");
-    graphs_prior_aa[1].Draw("same hist");
-    graphs_reg_aa[1].Draw("same hist");
-    graphs_cent_aa[1].Draw("same hist");
+    (*syst_aa[1])->Draw("same hist");
+    (*ele_aa[1])->Draw("same hist");
+    (*iso_aa[1])->Draw("same hist");
+    (*jec_aa[1])->Draw("same hist");
+    (*prior_aa[1])->Draw("same hist");
+    (*reg_aa[1])->Draw("same hist");
+    (*cent_aa[1])->Draw("same hist");
 
     pads[3]->cd();
     worlds[3]->Draw("axis");
     arrows[3]->Draw();
-    graphs_syst_aa[2].Draw("same hist");
-    graphs_purity_aa[2].Draw("same hist");
-    graphs_es_aa[2].Draw("same hist");
-    graphs_jer_aa[2].Draw("same hist");
-    graphs_stat_aa[2].Draw("same hist");
-    graphs_mebs_aa[2].Draw("same hist");
+    (*syst_aa[2])->Draw("same hist");
+    (*purity_aa[2])->Draw("same hist");
+    (*es_aa[2])->Draw("same hist");
+    (*jer_aa[2])->Draw("same hist");
+    (*stat_aa[2])->Draw("same hist");
+    (*mebs_aa[2])->Draw("same hist");
 
     pads[8]->cd();
     worlds[8]->Draw("axis");
     arrows[8]->Draw();
-    graphs_syst_aa[2].Draw("same hist");
-    graphs_ele_aa[2].Draw("same hist");
-    graphs_iso_aa[2].Draw("same hist");
-    graphs_jec_aa[2].Draw("same hist");
-    graphs_prior_aa[2].Draw("same hist");
-    graphs_reg_aa[2].Draw("same hist");
-    graphs_cent_aa[2].Draw("same hist");
+    (*syst_aa[2])->Draw("same hist");
+    (*ele_aa[2])->Draw("same hist");
+    (*iso_aa[2])->Draw("same hist");
+    (*jec_aa[2])->Draw("same hist");
+    (*prior_aa[2])->Draw("same hist");
+    (*reg_aa[2])->Draw("same hist");
+    (*cent_aa[2])->Draw("same hist");
 
     pads[4]->cd();
     worlds[4]->Draw("axis");
     arrows[4]->Draw();
-    graphs_syst_aa[3].Draw("same hist");
-    graphs_purity_aa[3].Draw("same hist");
-    graphs_es_aa[3].Draw("same hist");
-    graphs_jer_aa[3].Draw("same hist");
-    graphs_stat_aa[3].Draw("same hist");
-    graphs_mebs_aa[3].Draw("same hist");
+    (*syst_aa[3])->Draw("same hist");
+    (*purity_aa[3])->Draw("same hist");
+    (*es_aa[3])->Draw("same hist");
+    (*jer_aa[3])->Draw("same hist");
+    (*stat_aa[3])->Draw("same hist");
+    (*mebs_aa[3])->Draw("same hist");
 
     pads[9]->cd();
     worlds[9]->Draw("axis");
     arrows[9]->Draw();
-    graphs_syst_aa[3].Draw("same hist");
-    graphs_ele_aa[3].Draw("same hist");
-    graphs_iso_aa[3].Draw("same hist");
-    graphs_jec_aa[3].Draw("same hist");
-    graphs_prior_aa[3].Draw("same hist");
-    graphs_reg_aa[3].Draw("same hist");
-    graphs_cent_aa[3].Draw("same hist");
+    (*syst_aa[3])->Draw("same hist");
+    (*ele_aa[3])->Draw("same hist");
+    (*iso_aa[3])->Draw("same hist");
+    (*jec_aa[3])->Draw("same hist");
+    (*prior_aa[3])->Draw("same hist");
+    (*reg_aa[3])->Draw("same hist");
+    (*cent_aa[3])->Draw("same hist");
 
     // auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
 
