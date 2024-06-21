@@ -252,7 +252,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double canvas_width = panel_size * ncols + padding_width_left + padding_width_right;
     double canvas_height = panel_size * nrows + padding_height * 2;
 
-    double sf = 1;
+    double sf = 1140.0/840.0;
 
     double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
