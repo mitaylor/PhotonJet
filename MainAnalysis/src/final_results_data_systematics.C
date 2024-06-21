@@ -425,7 +425,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*es_aa)[1]->Draw("same hist ][");
     (*jer_aa)[1]->Draw("same hist ][");
     (*stat_aa)[1]->Draw("same hist ][");
-    (*mebs_aa)[1]->Draw("same hist ][");
+    if (type == 0) (*mebs_aa)[1]->Draw("same hist ][");
+    if (type == 1) (*mebs_aa)[1]->Draw("same hist [[");
+    if (type == 2) (*mebs_aa)[1]->Draw("same hist ]");
     (*syst_aa)[1]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
