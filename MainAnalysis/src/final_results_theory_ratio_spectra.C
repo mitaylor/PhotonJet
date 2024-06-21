@@ -744,11 +744,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4 && !subsets)      legend_part2.Draw();
 
     latex.SetTextSize(0.05);
-    if (system != 0 && system != 3)   latex.SetTextAlign(31);
-    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system != 0 && system != 3)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if (system == 1)   latex.SetTextAlign(31);
+    if (system == 1)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+
+    if (system == 2 || system == 4)   latex.SetTextAlign(11);
+    if (system == 2 || system == 4)   latex.DrawLatex(0.05, 0.78, (text_photon_pt).c_str());
+    if (system == 2 || system == 4)   latex.DrawLatex(0.05, 0.70, (text_photon_eta).c_str());
+    if (system == 2 || system == 4)   latex.DrawLatex(0.05, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 2 || system == 4)   latex.DrawLatex(0.05, 0.54, (text_jet_alg).c_str());
 
     if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.64, (text_photon_pt).c_str());
