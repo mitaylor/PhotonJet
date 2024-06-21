@@ -306,28 +306,51 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_min = 0.6;
     double legend_y_max = 0.83;
     double legend_x_min = 0.6;
     double legend_x_max = 0.9;
 
-    TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
-    legend.SetTextFont(42);
-    legend.SetTextSize(0.03);
-    legend.SetFillStyle(0);
-    legend.SetBorderSize(0);
-    legend.AddEntry((*syst_aa)[0], "Total", "l");
-    legend.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
-    legend.AddEntry((*purity_aa)[0], "Purity", "l");
-    legend.AddEntry((*iso_aa)[0], "Photon Isolation", "l");
-    legend.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
-    legend.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
-    legend.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
-    legend.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
-    legend.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
-    legend.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
-    legend.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
-    legend.AddEntry((*cent_aa)[0], "Centrality", "l");
+    TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.04, legend_x_max, legend_y_max);
+    legend_part1.SetTextFont(42);
+    legend_part1.SetTextSize(0.03);
+    legend_part1.SetFillStyle(0);
+    legend_part1.SetBorderSize(0);
+    legend_part1.AddEntry((*syst_aa)[0], "Total", "l");
+
+    TLegend legend_part2(legend_x_min, legend_y_max - 1 * 0.12, legend_x_max, legend_y_max);
+    legend_part2.SetTextFont(42);
+    legend_part2.SetTextSize(0.03);
+    legend_part2.SetFillStyle(0);
+    legend_part2.SetBorderSize(0);
+    legend_part2.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
+    legend_part2.AddEntry((*purity_aa)[0], "Purity", "l");
+    legend_part2.AddEntry((*iso_aa)[0], "Photon Isolation", "l");
+
+    TLegend legend_part3(legend_x_min, legend_y_max - 1 * 0.12, legend_x_max, legend_y_max);
+    legend_part3.SetTextFont(42);
+    legend_part3.SetTextSize(0.03);
+    legend_part3.SetFillStyle(0);
+    legend_part3.SetBorderSize(0);
+    legend_part3.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
+    legend_part3.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
+    legend_part3.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
+
+    TLegend legend_part4(legend_x_min, legend_y_max - 1 * 0.12, legend_x_max, legend_y_max);
+    legend_part4.SetTextFont(42);
+    legend_part4.SetTextSize(0.03);
+    legend_part4.SetFillStyle(0);
+    legend_part4.SetBorderSize(0);
+    legend_part4.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
+    legend_part4.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
+    legend_part4.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
+
+    TLegend legend_part5(legend_x_min, legend_y_max - 1 * 0.08, legend_x_max, legend_y_max);
+    legend_part5.SetTextFont(42);
+    legend_part5.SetTextSize(0.03);
+    legend_part5.SetFillStyle(0);
+    legend_part5.SetBorderSize(0);
+    legend_part5.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
+    legend_part5.AddEntry((*cent_aa)[0], "Centrality", "l");
     
     pads[0]->cd();
     worlds[0]->Draw("axis");
@@ -351,6 +374,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*prior_pp)[0]->Draw("same hist ][");
     (*reg_pp)[0]->Draw("same hist ][");
     (*syst_pp)[0]->Draw("same hist ][");
+    legend_part1.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -380,6 +404,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[0]->Draw("same hist ][");
     (*cent_aa)[0]->Draw("same hist ][");
     (*syst_aa)[0]->Draw("same hist ][");
+    legend_part2.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -409,6 +434,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[1]->Draw("same hist ][");
     (*cent_aa)[1]->Draw("same hist ][");
     (*syst_aa)[1]->Draw("same hist ][");
+    legend_part3.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -438,6 +464,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[2]->Draw("same hist ][");
     (*cent_aa)[2]->Draw("same hist ][");
     (*syst_aa)[2]->Draw("same hist ][");
+    legend_part4.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -467,6 +494,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[3]->Draw("same hist ][");
     (*cent_aa)[3]->Draw("same hist ][");
     (*syst_aa)[3]->Draw("same hist ][");
+    legend_part5.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
