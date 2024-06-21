@@ -311,7 +311,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.045/sf);
     latex.SetTextAlign(21);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows / 2, text_jet_pt.c_str());
+    latex.DrawLatex(pad_x0 + pad_dx * ncols / 2, pad_y0 * 1.15 + pad_dy * nrows, text_jet_pt.c_str());
 
     /* declare legend */
     double legend_y_max = 0.93;
