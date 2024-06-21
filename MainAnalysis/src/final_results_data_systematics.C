@@ -485,11 +485,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[4]->cd();
     worlds[4]->Draw("axis");
     // arrows[4]->Draw();
+    (*mebs_aa)[3]->Draw("same hist ][");
     (*purity_aa)[3]->Draw("same hist ][");
     (*es_aa)[3]->Draw("same hist ][");
     (*jer_aa)[3]->Draw("same hist ][");
     (*stat_aa)[3]->Draw("same hist ][");
-    (*mebs_aa)[3]->Draw("same hist ][");
     (*syst_aa)[3]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
