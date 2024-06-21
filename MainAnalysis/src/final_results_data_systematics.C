@@ -307,50 +307,45 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* declare legend */
     double legend_y_max = 0.83;
-    double legend_x_min = 0.6;
-    double legend_x_max = 0.9;
+    double legend_x_min = 0.5;
+    double legend_x_max = 0.8;
 
-    TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.04, legend_x_max, legend_y_max);
+    TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
     legend_part1.SetTextSize(0.03);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
-    legend_part1.AddEntry((*syst_aa)[0], "Total", "l");
 
-    TLegend legend_part2(legend_x_min, legend_y_max - 1 * 0.12, legend_x_max, legend_y_max);
+    TLegend legend_part2(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.03);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
-    legend_part2.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
-    legend_part2.AddEntry((*purity_aa)[0], "Purity", "l");
-    legend_part2.AddEntry((*iso_aa)[0], "Photon Isolation", "l");
 
-    TLegend legend_part3(legend_x_min, legend_y_max - 1 * 0.12, legend_x_max, legend_y_max);
+    TLegend legend_part3(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
     legend_part3.SetTextFont(42);
     legend_part3.SetTextSize(0.03);
     legend_part3.SetFillStyle(0);
     legend_part3.SetBorderSize(0);
-    legend_part3.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
-    legend_part3.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
-    legend_part3.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
 
-    TLegend legend_part4(legend_x_min, legend_y_max - 1 * 0.12, legend_x_max, legend_y_max);
+    TLegend legend_part4(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
     legend_part4.SetTextFont(42);
     legend_part4.SetTextSize(0.03);
     legend_part4.SetFillStyle(0);
     legend_part4.SetBorderSize(0);
-    legend_part4.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
-    legend_part4.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
-    legend_part4.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
 
-    TLegend legend_part5(legend_x_min, legend_y_max - 1 * 0.08, legend_x_max, legend_y_max);
-    legend_part5.SetTextFont(42);
-    legend_part5.SetTextSize(0.03);
-    legend_part5.SetFillStyle(0);
-    legend_part5.SetBorderSize(0);
-    legend_part5.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
-    legend_part5.AddEntry((*cent_aa)[0], "Centrality", "l");
+    legend_part1.AddEntry((*syst_aa)[0], "Total", "l");
+    legend_part1.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
+    legend_part1.AddEntry((*purity_aa)[0], "Purity", "l");
+    legend_part2.AddEntry((*iso_aa)[0], "Photon Isolation", "l");
+    legend_part2.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
+    legend_part2.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
+    legend_part3.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
+    legend_part3.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
+    legend_part3.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
+    legend_part4.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
+    legend_part4.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
+    legend_part4.AddEntry((*cent_aa)[0], "Centrality", "l");
     
     pads[0]->cd();
     worlds[0]->Draw("axis");
@@ -494,7 +489,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[3]->Draw("same hist ][");
     (*cent_aa)[3]->Draw("same hist ][");
     (*syst_aa)[3]->Draw("same hist ][");
-    legend_part5.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
