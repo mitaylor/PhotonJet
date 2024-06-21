@@ -275,11 +275,11 @@ int congratulate(char const* config, char const* selections, char const* output)
 
             double arrow_y = 0.0;
 
-            if (i == 0) arrow_y = graphs_syst_pp[0].GetPointY(0);
-            if (i == 1) arrow_y = graphs_syst_aa[0].GetPointY(0);
-            if (i == 2) arrow_y = graphs_syst_aa[1].GetPointY(0);
-            if (i == 3) arrow_y = graphs_syst_aa[2].GetPointY(0);
-            if (i == 4) arrow_y = graphs_syst_aa[3].GetPointY(0);
+            if (i == 0) arrow_y = graphs_syst_pp[0].GetBinContent(1);
+            if (i == 1) arrow_y = graphs_syst_aa[0].GetBinContent(1);
+            if (i == 2) arrow_y = graphs_syst_aa[1].GetBinContent(1);
+            if (i == 3) arrow_y = graphs_syst_aa[2].GetBinContent(1);
+            if (i == 4) arrow_y = graphs_syst_aa[3].GetBinContent(1);
         
             arrows[i + ncols*j] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
             arrows[i + ncols*j]->SetAngle(40);
