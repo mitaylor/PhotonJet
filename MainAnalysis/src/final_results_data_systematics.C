@@ -101,7 +101,7 @@ void set_axis(TGaxis &axis, double sf)
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.040/sf);
     axis.SetMaxDigits(6);
-    axis.SetNoExponent();
+    // axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
 }
