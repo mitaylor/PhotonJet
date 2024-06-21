@@ -209,6 +209,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     // auto data_pp = new history<TH1F>(file_pp, "pp_base_pp_" + tag_data + suffix);
     auto syst_pp = new history<TH1F>(file_pp, "pp_total_base_pp_" + tag_total + suffix);
+    std::cout << (*syst_pp)->GetBinContent(0) << std::endl;
     auto ele_pp = new history<TH1F>(file_pp, "pp_" + tag_ele + suffix);
     auto purity_pp = new history<TH1F>(file_pp, "pp_" + tag_purity + suffix);
     auto iso_pp = new history<TH1F>(file_pp, "pp_" + tag_iso + suffix);
@@ -315,7 +316,7 @@ int congratulate(char const* config, char const* selections, char const* output)
             if (i == 0) latex.SetTextSize(0.07/sf);
             if (i == 0) latex.SetTextAlign(22);
             if (i == 0) latex.SetTextAngle(90);
-            if (i == 0) latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
+            if (i == 0) latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * (j + 0.5), "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
         }
     }
 
