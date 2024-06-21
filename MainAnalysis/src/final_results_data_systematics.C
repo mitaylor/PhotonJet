@@ -363,7 +363,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextSize(0.05*sf);
     latex.SetTextAlign(11);
-    latex.DrawLatex(0.07, 0.87, (text_photon_pt).c_str());
+    latex.DrawLatex(0.07, 0.87, (text_jet_pt).c_str());
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
@@ -396,7 +396,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextSize(0.05*sf);
     latex.SetTextAlign(11);
-    latex.DrawLatex(0.07, 0.87, (text_photon_eta).c_str());
+    latex.DrawLatex(0.07, 0.87, (text_jet_alg).c_str());
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
@@ -464,7 +464,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextSize(0.05*sf);
     latex.SetTextAlign(11);
-    latex.DrawLatex(0.07, 0.87, (text_jet_alg).c_str());
+    latex.DrawLatex(0.07, 0.87, (text_photon_pt).c_str());
 
     pads[8]->cd();
     worlds[8]->Draw("axis");
@@ -495,6 +495,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "PbPb 0-10%");
+
+    latex.SetTextSize(0.05*sf);
+    latex.SetTextAlign(11);
+    latex.DrawLatex(0.07, 0.87, (text_photon_eta).c_str());
 
     pads[9]->cd();
     worlds[9]->Draw("axis");
