@@ -342,6 +342,10 @@ int obnubilate(char const* config, char const* selections, char const* output) {
             batch->save(tag);
         }, batches);
 
+        for (size_t i = 0; i < sets.size(); ++i) {
+            sets[i]->rename(tag + "_" + label + "_" + figure + "_" + legend_keys[i]);
+        }
+
         /* save histograms */
         for (auto const& set : sets)
             set->save(tag);
