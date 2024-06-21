@@ -369,7 +369,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[5]->cd();
     worlds[5]->Draw("axis");
     // arrows[5]->Draw();
-    (*ele_pp)[0]->Draw("same hist ][");
+    if (type == 0) (*ele_pp)[0]->Draw("same hist ][");
+    if (type == 1) (*ele_pp)[0]->Draw("same hist ][");
+    if (type == 2) (*ele_pp)[0]->Draw("same hist ]");
     (*iso_pp)[0]->Draw("same hist ][");
     (*jec_pp)[0]->Draw("same hist ][");
     (*prior_pp)[0]->Draw("same hist ][");
