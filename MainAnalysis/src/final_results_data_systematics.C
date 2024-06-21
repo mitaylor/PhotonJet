@@ -52,7 +52,7 @@ std::vector<TH1F> get_graph(history<TH1F>* h, int type)
 
     for (int i = 0; i < h->size(); ++i) {
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            result[i].SetBinContent(j, x, (*h)[i]->GetBinContent(j));
+            result[i].SetBinContent(j, (*h)[i]->GetBinContent(j));
         }
 
         result[i].SetLineColor(color[type]);
