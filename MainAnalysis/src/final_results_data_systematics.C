@@ -91,6 +91,7 @@ void set_pad(TPad &pad)
     pad.SetTickx();
     pad.SetTicky();
     pad.SetLogx();
+    pad.SetLogy();
 
     pad.Draw();
 }
@@ -233,7 +234,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto graphs_cent_aa = get_graph(cent_aa, 11);
 
     auto graphs_syst_pp = get_graph(syst_pp, 0);
-    std::cout << (*syst_pp)[0]->GetBinContent(1) << " " << graphs_syst_pp[0].GetPointY(0) << std::endl;
     auto graphs_ele_pp = get_graph(ele_pp, 1);
     auto graphs_purity_pp = get_graph(purity_pp, 2);
     auto graphs_iso_pp = get_graph(iso_pp, 3);
