@@ -339,7 +339,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_pp)[0]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "pp");
 
     pads[5]->cd();
@@ -353,7 +353,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_pp)[0]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "pp");
 
     pads[1]->cd();
@@ -367,7 +367,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[0]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 50-90%");
 
     pads[6]->cd();
@@ -382,7 +382,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[0]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 50-90%");
 
     pads[2]->cd();
@@ -396,7 +396,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[1]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 30-50%");
 
     pads[7]->cd();
@@ -411,7 +411,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[1]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 30-50%");
 
     pads[3]->cd();
@@ -425,7 +425,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[2]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 10-30%");
 
     pads[8]->cd();
@@ -440,7 +440,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[2]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 10-30%");
 
     pads[4]->cd();
@@ -454,7 +454,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[3]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 0-10%");
 
     pads[9]->cd();
@@ -469,13 +469,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[3]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
-    latex.SetTextSize(0.06);
+    latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.12, "PbPb 0-10%");
 
     // auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
 
     // latex.SetTextAlign(21);
-    // latex.SetTextSize(0.06);
+    // latex.SetTextSize(0.06*sf);
     // latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
     // latex.SetTextSize(0.05);
