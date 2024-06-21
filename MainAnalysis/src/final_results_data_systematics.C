@@ -306,31 +306,31 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_max = 0.83;
-    double legend_x_min = 0.5;
+    double legend_y_max = 0.93;
+    double legend_x_min = 0.3;
     double legend_x_max = 0.8;
 
-    TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
+    TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    legend_part1.SetTextSize(0.03);
+    legend_part1.SetTextSize(0.05);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
 
-    TLegend legend_part2(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
+    TLegend legend_part2(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    legend_part2.SetTextSize(0.03);
+    legend_part2.SetTextSize(0.05);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
 
-    TLegend legend_part3(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
+    TLegend legend_part3(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
     legend_part3.SetTextFont(42);
-    legend_part3.SetTextSize(0.03);
+    legend_part3.SetTextSize(0.05);
     legend_part3.SetFillStyle(0);
     legend_part3.SetBorderSize(0);
 
-    TLegend legend_part4(legend_x_min, legend_y_max - 1 * 0.18, legend_x_max, legend_y_max);
+    TLegend legend_part4(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
     legend_part4.SetTextFont(42);
-    legend_part4.SetTextSize(0.03);
+    legend_part4.SetTextSize(0.05);
     legend_part4.SetFillStyle(0);
     legend_part4.SetBorderSize(0);
 
