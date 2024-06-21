@@ -455,11 +455,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[3]->cd();
     worlds[3]->Draw("axis");
     // arrows[3]->Draw();
+    (*mebs_aa)[2]->Draw("same hist ][");
     (*purity_aa)[2]->Draw("same hist ][");
     (*es_aa)[2]->Draw("same hist ][");
     (*jer_aa)[2]->Draw("same hist ][");
     (*stat_aa)[2]->Draw("same hist ][");
-    (*mebs_aa)[2]->Draw("same hist ][");
     (*syst_aa)[2]->Draw("same hist ][");
 
     latex.SetTextAlign(21);
