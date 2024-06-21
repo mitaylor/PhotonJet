@@ -66,12 +66,12 @@ std::vector<TGraphAsymmErrors> get_graph(history<TH1F>* h, int type)
                            };
 
     for (int i = 0; i < h->size(); ++i) {
-        for (int j = 1; j <= *h[i]->GetNbinsX(); ++j) {
-            double x = *h[i]->GetBinCenter(j);
-            double dx = *h[i]->GetBinWidth(j)/2;
+        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
+            double x = (*h)[i]->GetBinCenter(j);
+            double dx = (*h)[i]->GetBinWidth(j)/2;
 
-            result[i].SetPoint(j - 1, x, *h[i]->GetBinContent(j));
-            result[i].SetPointError(j - 1, dx, dx, *h[i]->GetBinError(j), *h[i]->GetBinError(j));
+            result[i].SetPoint(j - 1, x, (*h)[i]->GetBinContent(j));
+            result[i].SetPointError(j - 1, dx, dx, (*h)[i]->GetBinError(j), (*h)[i]->GetBinError(j));
         }
 
         result[i].SetLineColor(color[type]);
