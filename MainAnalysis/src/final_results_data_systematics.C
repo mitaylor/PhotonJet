@@ -275,7 +275,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         
             arrows[i + ncols*j] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
             arrows[i + ncols*j]->SetAngle(40);
-            arrows[i + ncols*j]->SetLineWidth(1);
+            arrows[i + ncols*j]->SetLineWidth(5);
 
             canvas.cd();
 
