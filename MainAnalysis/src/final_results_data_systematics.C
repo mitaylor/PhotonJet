@@ -155,7 +155,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     const int ncols = 5;
     const int nrows = 2;
 
-    std::vector<std::vector<float>> bjet_pt(ncols, std::vector<float>(2, 0));
+    std::vector<float> bjet_pt(2, 0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -168,16 +168,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     /* define jet pT bounds */
     switch (type) {
     case 1:
-        bjet_pt[i][0] = ptg_range[osg_part1[2]];
-        bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
+        bjet_pt[0] = ptg_range[osg_part1[2]];
+        bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
         break;
     case 2:
-        bjet_pt[i][0] = ptg_range[osg_part2[2]];
-        bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
+        bjet_pt[0] = ptg_range[osg_part2[2]];
+        bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
         break;
     default:
-        bjet_pt[i][0] = ptg_range[osg[2]];
-        bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg[3]];
+        bjet_pt[0] = ptg_range[osg[2]];
+        bjet_pt[1] = ptg_range[ptg_range.size() - 1 - osg[3]];
     }
 
     if (suffix == "none") suffix = "";
