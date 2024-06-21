@@ -305,6 +305,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
+    auto text_jet_pt = to_text(bjet_pt[0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[1]) + " GeV"s;
+
+    latex.SetTextFont(42);
+    latex.SetTextSize(0.045/sf);
+    latex.SetTextAlign(21);
+    latex.SetTextAngle(0);
+    latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows / 2, text_jet_pt.c_str());
+
     /* declare legend */
     double legend_y_max = 0.93;
     double legend_x_min = 0.07;
@@ -493,12 +501,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "PbPb 0-10%");
-
-    // auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-
-    // latex.SetTextAlign(21);
-    // latex.SetTextSize(0.06*sf);
-    // latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
     // latex.SetTextSize(0.05);
     // latex.SetTextAlign(31);
