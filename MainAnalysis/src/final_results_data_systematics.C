@@ -102,7 +102,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto suffix = conf->get<std::string>("suffix");
     auto name = conf->get<std::string>("name");
 
-    auto type = conf->get<int>("type");
+    auto type = conf->get<int>("type"); std::cout << type << std::endl;
 
     auto ymin = conf->get<float>("ymin");
     auto ymax = conf->get<float>("ymax");
