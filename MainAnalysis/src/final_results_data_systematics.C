@@ -24,7 +24,6 @@
 #include "TLegend.h"
 #include "TArrow.h"
 #include "TBox.h"
-#include "TGraphAsymmErrors.h"
 
 #include <string>
 #include <vector>
@@ -33,23 +32,9 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void set_systematics(history<TH1F>* h, history<TH1F>* s)
+std::vector<TH1F> get_graph(history<TH1F>* h, int type)
 {
-
-    for (int i = 0; i < h->size(); ++i) {
-        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            double val = (*h)[i]->GetBinContent(j);
-            double err = (*s)[i]->GetBinContent(j);
-
-            (*s)[i]->SetBinContent(j, val);
-            (*s)[i]->SetBinError(j, err);
-        }
-    }
-}
-
-std::vector<TGraphAsymmErrors> get_graph(history<TH1F>* h, int type)
-{
-    std::vector<TGraphAsymmErrors> result(h->size());
+    std::vector<TH1F> result(h->size());
 
     static int color[12] = { TColor::GetColor("#515151"),
                             TColor::GetColor("#FF484E"),
@@ -67,11 +52,7 @@ std::vector<TGraphAsymmErrors> get_graph(history<TH1F>* h, int type)
 
     for (int i = 0; i < h->size(); ++i) {
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            double x = (*h)[i]->GetBinCenter(j);
-            double dx = (*h)[i]->GetBinWidth(j)/2;
-
-            result[i].SetPoint(j - 1, x, (*h)[i]->GetBinContent(j));
-            result[i].SetPointError(j - 1, dx, dx, (*h)[i]->GetBinError(j), (*h)[i]->GetBinError(j));
+            result[i].SetBinContent(j, x, (*h)[i]->GetBinContent(j));
         }
 
         result[i].SetLineColor(color[type]);
@@ -359,105 +340,105 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0]->cd();
     worlds[0]->Draw("axis");
     arrows[0]->Draw();
-    graphs_syst_pp[0].Draw("same lX");
-    graphs_purity_pp[0].Draw("same lX");
-    graphs_es_pp[0].Draw("same lX");
-    graphs_jer_pp[0].Draw("same lX");
-    graphs_stat_pp[0].Draw("same lX");
+    graphs_syst_pp[0].Draw("same hist");
+    graphs_purity_pp[0].Draw("same hist");
+    graphs_es_pp[0].Draw("same hist");
+    graphs_jer_pp[0].Draw("same hist");
+    graphs_stat_pp[0].Draw("same hist");
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
     arrows[5]->Draw();
-    graphs_syst_pp[0].Draw("same lX");
-    graphs_ele_pp[0].Draw("same lX");
-    graphs_iso_pp[0].Draw("same lX");
-    graphs_jec_pp[0].Draw("same lX");
-    graphs_prior_pp[0].Draw("same lX");
-    graphs_reg_pp[0].Draw("same lX");
+    graphs_syst_pp[0].Draw("same hist");
+    graphs_ele_pp[0].Draw("same hist");
+    graphs_iso_pp[0].Draw("same hist");
+    graphs_jec_pp[0].Draw("same hist");
+    graphs_prior_pp[0].Draw("same hist");
+    graphs_reg_pp[0].Draw("same hist");
 
     pads[1]->cd();
     worlds[1]->Draw("axis");
     arrows[1]->Draw();
-    graphs_syst_aa[0].Draw("same lX");
-    graphs_purity_aa[0].Draw("same lX");
-    graphs_es_aa[0].Draw("same lX");
-    graphs_jer_aa[0].Draw("same lX");
-    graphs_stat_aa[0].Draw("same lX");
-    graphs_mebs_aa[0].Draw("same lX");
+    graphs_syst_aa[0].Draw("same hist");
+    graphs_purity_aa[0].Draw("same hist");
+    graphs_es_aa[0].Draw("same hist");
+    graphs_jer_aa[0].Draw("same hist");
+    graphs_stat_aa[0].Draw("same hist");
+    graphs_mebs_aa[0].Draw("same hist");
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
     arrows[6]->Draw();
-    graphs_syst_aa[0].Draw("same lX");
-    graphs_ele_aa[0].Draw("same lX");
-    graphs_iso_aa[0].Draw("same lX");
-    graphs_jec_aa[0].Draw("same lX");
-    graphs_prior_aa[0].Draw("same lX");
-    graphs_reg_aa[0].Draw("same lX");
-    graphs_cent_aa[0].Draw("same lX");
+    graphs_syst_aa[0].Draw("same hist");
+    graphs_ele_aa[0].Draw("same hist");
+    graphs_iso_aa[0].Draw("same hist");
+    graphs_jec_aa[0].Draw("same hist");
+    graphs_prior_aa[0].Draw("same hist");
+    graphs_reg_aa[0].Draw("same hist");
+    graphs_cent_aa[0].Draw("same hist");
 
     pads[2]->cd();
     worlds[2]->Draw("axis");
     arrows[2]->Draw();
-    graphs_syst_aa[1].Draw("same lX");
-    graphs_purity_aa[1].Draw("same lX");
-    graphs_es_aa[1].Draw("same lX");
-    graphs_jer_aa[1].Draw("same lX");
-    graphs_stat_aa[1].Draw("same lX");
-    graphs_mebs_aa[1].Draw("same lX");
+    graphs_syst_aa[1].Draw("same hist");
+    graphs_purity_aa[1].Draw("same hist");
+    graphs_es_aa[1].Draw("same hist");
+    graphs_jer_aa[1].Draw("same hist");
+    graphs_stat_aa[1].Draw("same hist");
+    graphs_mebs_aa[1].Draw("same hist");
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
     arrows[7]->Draw();
-    graphs_syst_aa[1].Draw("same lX");
-    graphs_ele_aa[1].Draw("same lX");
-    graphs_iso_aa[1].Draw("same lX");
-    graphs_jec_aa[1].Draw("same lX");
-    graphs_prior_aa[1].Draw("same lX");
-    graphs_reg_aa[1].Draw("same lX");
-    graphs_cent_aa[1].Draw("same lX");
+    graphs_syst_aa[1].Draw("same hist");
+    graphs_ele_aa[1].Draw("same hist");
+    graphs_iso_aa[1].Draw("same hist");
+    graphs_jec_aa[1].Draw("same hist");
+    graphs_prior_aa[1].Draw("same hist");
+    graphs_reg_aa[1].Draw("same hist");
+    graphs_cent_aa[1].Draw("same hist");
 
     pads[3]->cd();
     worlds[3]->Draw("axis");
     arrows[3]->Draw();
-    graphs_syst_aa[2].Draw("same lX");
-    graphs_purity_aa[2].Draw("same lX");
-    graphs_es_aa[2].Draw("same lX");
-    graphs_jer_aa[2].Draw("same lX");
-    graphs_stat_aa[2].Draw("same lX");
-    graphs_mebs_aa[2].Draw("same lX");
+    graphs_syst_aa[2].Draw("same hist");
+    graphs_purity_aa[2].Draw("same hist");
+    graphs_es_aa[2].Draw("same hist");
+    graphs_jer_aa[2].Draw("same hist");
+    graphs_stat_aa[2].Draw("same hist");
+    graphs_mebs_aa[2].Draw("same hist");
 
     pads[8]->cd();
     worlds[8]->Draw("axis");
     arrows[8]->Draw();
-    graphs_syst_aa[2].Draw("same lX");
-    graphs_ele_aa[2].Draw("same lX");
-    graphs_iso_aa[2].Draw("same lX");
-    graphs_jec_aa[2].Draw("same lX");
-    graphs_prior_aa[2].Draw("same lX");
-    graphs_reg_aa[2].Draw("same lX");
-    graphs_cent_aa[2].Draw("same lX");
+    graphs_syst_aa[2].Draw("same hist");
+    graphs_ele_aa[2].Draw("same hist");
+    graphs_iso_aa[2].Draw("same hist");
+    graphs_jec_aa[2].Draw("same hist");
+    graphs_prior_aa[2].Draw("same hist");
+    graphs_reg_aa[2].Draw("same hist");
+    graphs_cent_aa[2].Draw("same hist");
 
     pads[4]->cd();
     worlds[4]->Draw("axis");
     arrows[4]->Draw();
-    graphs_syst_aa[3].Draw("same lX");
-    graphs_purity_aa[3].Draw("same lX");
-    graphs_es_aa[3].Draw("same lX");
-    graphs_jer_aa[3].Draw("same lX");
-    graphs_stat_aa[3].Draw("same lX");
-    graphs_mebs_aa[3].Draw("same lX");
+    graphs_syst_aa[3].Draw("same hist");
+    graphs_purity_aa[3].Draw("same hist");
+    graphs_es_aa[3].Draw("same hist");
+    graphs_jer_aa[3].Draw("same hist");
+    graphs_stat_aa[3].Draw("same hist");
+    graphs_mebs_aa[3].Draw("same hist");
 
     pads[9]->cd();
     worlds[9]->Draw("axis");
     arrows[9]->Draw();
-    graphs_syst_aa[3].Draw("same lX");
-    graphs_ele_aa[3].Draw("same lX");
-    graphs_iso_aa[3].Draw("same lX");
-    graphs_jec_aa[3].Draw("same lX");
-    graphs_prior_aa[3].Draw("same lX");
-    graphs_reg_aa[3].Draw("same lX");
-    graphs_cent_aa[3].Draw("same lX");
+    graphs_syst_aa[3].Draw("same hist");
+    graphs_ele_aa[3].Draw("same hist");
+    graphs_iso_aa[3].Draw("same hist");
+    graphs_jec_aa[3].Draw("same hist");
+    graphs_prior_aa[3].Draw("same hist");
+    graphs_reg_aa[3].Draw("same hist");
+    graphs_cent_aa[3].Draw("same hist");
 
     // auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
 
