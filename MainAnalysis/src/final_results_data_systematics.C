@@ -96,12 +96,12 @@ void set_pad(TPad &pad)
     pad.Draw();
 }
 
-void set_axis(TGaxis &axis, double sf)
+void set_axis(TGaxis &axis, double sf, bool exp)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.040/sf);
     axis.SetMaxDigits(6);
-    // axis.SetNoExponent();
+    if (!exp) axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
 }
@@ -246,7 +246,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* size canvas */
     double panel_size = 350;
-    double padding_width_left = 140;
+    double padding_width_left = 200;
     double padding_width_right = 50;
     double padding_height = 70;
 
@@ -289,8 +289,8 @@ int congratulate(char const* config, char const* selections, char const* output)
             if (j == 0) axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
             if (i == 0) axis_y[j] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * j, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (j + 1), ymin, ymax, 510, "SG");
 
-            set_axis(*axis_x[i], sf);
-            set_axis(*axis_y[j], sf);
+            set_axis(*axis_x[i], sf, 0);
+            set_axis(*axis_y[j], sf, 1);
 
             double arrow_y = 0.0;
 
