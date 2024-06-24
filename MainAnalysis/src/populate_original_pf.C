@@ -293,7 +293,7 @@ int populate(char const* config, char const* selections, char const* output) {
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
-    frequency *= 10;
+    frequency *= 100;
 
     /* load efficiency correction */
     TFile* fe;
