@@ -294,9 +294,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto pjet_f_dr_pho_up_part2 = new memory<TH1F>("pjet_f_dr_pho_up_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto pjet_f_dr_pho_down_part2 = new memory<TH1F>("pjet_f_dr_pho_down_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
 
-    /* random number for mb selection */
-    auto rng = new TRandom3(0);
-
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
