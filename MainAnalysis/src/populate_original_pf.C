@@ -342,7 +342,7 @@ int populate(char const* config, char const* selections, char const* output) {
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        if (nentries > 1000) nentries = 1000;
+        // if (nentries > 1000) nentries = 1000;
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
