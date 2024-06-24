@@ -245,7 +245,8 @@ int populate(char const* config, char const* selections, char const* output) {
     auto rdrr = sel->get<std::vector<float>>("drr_range");
     auto rptr = sel->get<std::vector<float>>("ptr_range");
 
-    auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+    // auto dpt = sel->get<std::vector<float>>("photon_pt_diff");
+    std::vector<float> dpt = {60, 999999999};
 
     auto photon_pt_es = sel->get<std::vector<float>>("photon_pt_es");
 
