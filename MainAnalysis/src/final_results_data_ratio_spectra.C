@@ -126,7 +126,7 @@ void set_pad(TPad &pad, bool log)
 void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.040/sf);
+    axis.SetLabelSize(0.050/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
