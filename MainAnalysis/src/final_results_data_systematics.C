@@ -72,7 +72,7 @@ void set_pad(TPad &pad)
 void set_axis(TGaxis &axis, double sf, bool exp)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.050/sf);
+    axis.SetLabelSize(0.070/sf);
     axis.SetMaxDigits(6);
     if (!exp) axis.SetNoExponent();
     axis.SetTickLength(0.0);
