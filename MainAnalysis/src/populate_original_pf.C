@@ -184,115 +184,6 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
     }
 }
 
-/* version for background events */
-void fill_axes(std::vector<std::map<std::string,float>> pjt, std::vector<int64_t>& pthf_x, std::vector<float>& weights, bool exclude, 
-               interval* idphi, float pho_cor, float photon_eta, float photon_phi, 
-               float jet_eta_abs, float dphi_min_numerator, float dphi_min_denominator,
-               memory<TH1F>* nevt,
-               memory<TH1F>* pjet_f_dr_base_part1, memory<TH1F>* pjet_f_dr_base_part2, 
-               memory<TH1F>* pjet_f_dr_chg_up_part1, memory<TH1F>* pjet_f_dr_chg_up_part2,
-               memory<TH1F>* pjet_f_dr_chg_down_part1, memory<TH1F>* pjet_f_dr_chg_down_part2,
-               memory<TH1F>* pjet_f_dr_neu_up_part1, memory<TH1F>* pjet_f_dr_neu_up_part2,
-               memory<TH1F>* pjet_f_dr_neu_down_part1, memory<TH1F>* pjet_f_dr_neu_down_part2,
-               memory<TH1F>* pjet_f_dr_pho_up_part1, memory<TH1F>* pjet_f_dr_pho_up_part2,
-               memory<TH1F>* pjet_f_dr_pho_down_part1, memory<TH1F>* pjet_f_dr_pho_down_part2,
-               history<TH2D>* acceptance, history<TH2D>* total) {
-    
-    zip([&](auto const& index, auto const& weight) {
-        (*nevt)[index]->Fill(1., weight * pho_cor);
-    }, pthf_x, weights);
-
-    for (size_t j = 0; j < pjt.size(); ++j) {
-        auto jet_pt = pjt[j]["jet_pt"];
-        auto jet_eta = pjt[j]["jet_eta"];
-        auto jet_phi = pjt[j]["jet_phi"];
-        // auto jet_wta_eta = pjt[j]["jet_wta_eta"];
-        // auto jet_wta_phi = pjt[j]["jet_wta_phi"];
-
-        if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-
-        auto photon_jet_dphi = std::sqrt(dr2(0, 0, jet_phi, photon_phi)) / TMath::Pi();
-        auto photon_jet_dr = std::sqrt(dr2(jet_eta, photon_eta, jet_phi, photon_phi));
-
-        if (photon_jet_dr < 0.4) { continue; }
-        if (!back_to_back(photon_phi, jet_phi, dphi_min_numerator/dphi_min_denominator)) { continue; }
-        if (jet_pt < 30)  { continue; }
-        if (jet_pt > 200) { continue; }
-
-        /* do acceptance weighting */
-        double cor = 1;
-
-        if (exclude) {
-            auto dphi_x = idphi->index_for(photon_jet_dphi);
-            auto bin = (*total)[dphi_x]->FindBin(jet_eta, photon_eta);
-            
-            cor = (*total)[dphi_x]->GetBinContent(bin) / (*acceptance)[dphi_x]->GetBinContent(bin);
-        }
-
-        std::vector<float> pf_pt_nominal;
-        std::vector<float> pf_pt_chg_up;
-        std::vector<float> pf_pt_chg_down;
-        std::vector<float> pf_pt_neu_up;
-        std::vector<float> pf_pt_neu_down;
-        std::vector<float> pf_pt_pho_up;
-        std::vector<float> pf_pt_pho_down;
-        std::vector<float> pf_eta;
-        std::vector<float> pf_phi;
-
-        for (size_t i = 0; i < pjt->pfPt->size(); ++i) {
-            if (std::sqrt(dr2(jet_eta, (*pjt->pfEta)[i], jet_phi, (*pjt->pfPhi)[i])) < 0.3) {
-                pf_eta.push_back((*pjt->pfEta)[i]);
-                pf_phi.push_back((*pjt->pfPhi)[i]);
-                pf_pt_nominal.push_back((*pjt->pfPt)[i]);
-
-                auto pf_id = (*pjt->pfId)[i];
-
-                if (pf_id == 1) { // charged hadron
-                    pf_pt_chg_up.push_back((*pjt->pfPt)[i]*1.01);
-                    pf_pt_chg_down.push_back((*pjt->pfPt)[i]*0.99);
-                }
-                else if (pf_id == 4) { // photon
-                    pf_pt_pho_up.push_back((*pjt->pfPt)[i]*1.01);
-                    pf_pt_pho_down.push_back((*pjt->pfPt)[i]*0.99);
-                }
-                else if (pf_id == 5) { // neutral hadron
-                    pf_pt_neu_up.push_back((*pjt->pfPt)[i]*1.03);
-                    pf_pt_neu_down.push_back((*pjt->pfPt)[i]*0.97);
-                }
-            }
-        }
-
-        auto dj_nominal = get_dj(pf_pt_nominal, pf_eta, pf_phi);
-        auto dj_chg_up = get_dj(pf_pt_chg_up, pf_eta, pf_phi);
-        auto dj_chg_down = get_dj(pf_pt_chg_down, pf_eta, pf_phi);
-        auto dj_neu_up = get_dj(pf_pt_neu_up, pf_eta, pf_phi);
-        auto dj_neu_down = get_dj(pf_pt_neu_down, pf_eta, pf_phi);
-        auto dj_pho_up = get_dj(pf_pt_pho_up, pf_eta, pf_phi);
-        auto dj_pho_down = get_dj(pf_pt_pho_down, pf_eta, pf_phi);
-
-        zip([&](auto const& index, auto const& weight) {
-            if (jet_pt < 60) {
-                (*pjet_f_dr_base_part1)[index]->Fill(dj_nominal, cor * weight);
-                (*pjet_f_dr_chg_up_part1)[index]->Fill(dj_chg_up, cor * weight);
-                (*pjet_f_dr_chg_down_part1)[index]->Fill(dj_chg_down, cor * weight);
-                (*pjet_f_dr_neu_up_part1)[index]->Fill(dj_neu_up, cor * weight);
-                (*pjet_f_dr_neu_down_part1)[index]->Fill(dj_neu_down, cor * weight);
-                (*pjet_f_dr_pho_up_part1)[index]->Fill(dj_pho_up, cor * weight);
-                (*pjet_f_dr_pho_down_part1)[index]->Fill(dj_pho_down, cor * weight);
-            }
-            else {
-                (*pjet_f_dr_base_part2)[index]->Fill(dj_nominal, cor * weight);
-                (*pjet_f_dr_chg_up_part2)[index]->Fill(dj_chg_up, cor * weight);
-                (*pjet_f_dr_chg_down_part2)[index]->Fill(dj_chg_down, cor * weight);
-                (*pjet_f_dr_neu_up_part2)[index]->Fill(dj_neu_up, cor * weight);
-                (*pjet_f_dr_neu_down_part2)[index]->Fill(dj_neu_down, cor * weight);
-                (*pjet_f_dr_pho_up_part2)[index]->Fill(dj_pho_up, cor * weight);
-                (*pjet_f_dr_pho_down_part2)[index]->Fill(dj_pho_down, cor * weight);
-            }
-        }, pthf_x, weights);
-    }
-}
-
 int populate(char const* config, char const* selections, char const* output) {
     auto conf = new configurer(config);
 
@@ -312,7 +203,6 @@ int populate(char const* config, char const* selections, char const* output) {
     auto modulo = conf->get<int64_t>("modulo");
     auto parity = conf->get<bool>("parity");
 
-    auto mix = conf->get<int64_t>("mix");
     auto frequency = conf->get<int64_t>("frequency");
     auto tag = conf->get<std::string>("tag");
 
@@ -387,7 +277,6 @@ int populate(char const* config, char const* selections, char const* output) {
 
     /* create histograms */
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
-    auto nmix = new memory<TH1F>("nmix"s, "", fincl, mpthf);
 
     auto pjet_f_dr_base_part1 = new memory<TH1F>("pjet_f_dr_base_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto pjet_f_dr_chg_up_part1 = new memory<TH1F>("pjet_f_dr_chg_up_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
@@ -405,121 +294,12 @@ int populate(char const* config, char const* selections, char const* output) {
     auto pjet_f_dr_pho_up_part2 = new memory<TH1F>("pjet_f_dr_pho_up_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
     auto pjet_f_dr_pho_down_part2 = new memory<TH1F>("pjet_f_dr_pho_down_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
 
-    auto mix_pjet_f_dr_base_part1 = new memory<TH1F>("mix_pjet_f_dr_base_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_chg_up_part1 = new memory<TH1F>("mix_pjet_f_dr_chg_up_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_chg_down_part1 = new memory<TH1F>("mix_pjet_f_dr_chg_down_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_neu_up_part1 = new memory<TH1F>("mix_pjet_f_dr_neu_up_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_neu_down_part1 = new memory<TH1F>("mix_pjet_f_dr_neu_down_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_pho_up_part1 = new memory<TH1F>("mix_pjet_f_dr_pho_up_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_pho_down_part1 = new memory<TH1F>("mix_pjet_f_dr_pho_down_part1"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-
-    auto mix_pjet_f_dr_base_part2 = new memory<TH1F>("mix_pjet_f_dr_base_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_chg_up_part2 = new memory<TH1F>("mix_pjet_f_dr_chg_up_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_chg_down_part2 = new memory<TH1F>("mix_pjet_f_dr_chg_down_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_neu_up_part2 = new memory<TH1F>("mix_pjet_f_dr_neu_up_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_neu_down_part2 = new memory<TH1F>("mix_pjet_f_dr_neu_down_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_pho_up_part2 = new memory<TH1F>("mix_pjet_f_dr_pho_up_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-    auto mix_pjet_f_dr_pho_down_part2 = new memory<TH1F>("mix_pjet_f_dr_pho_down_part2"s, "1/N^{#gamma} dN/d#deltaj", fdr, mpthf);
-
     /* random number for mb selection */
     auto rng = new TRandom3(0);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
-    /* set up mixed event background subtraction */
-    // bin construction, 10% intervals
-    std::vector<float> hf_bins = {0, dhf.front()};
-    float bin_factor = 1.1;
-
-    if (mix > 0) while (hf_bins.back() < dhf.back()) {
-        hf_bins.push_back(hf_bins.back()*bin_factor);
-    }
-
-    if (rho_file.empty()) {
-        hf_bins.pop_back(); hf_bins.pop_back();
-    }
-    
-    hf_bins.push_back(10000);
-
-    auto ihfm = new interval(hf_bins);
-
-    // map: tag, events, jets, jet kinematics
-    std::map<int64_t, std::vector<std::vector<std::map<std::string,float>>>> hf_map;
-    for (size_t i = 0; i < hf_bins.size() - 1; ++i) { hf_map[i] = {}; }
-
-    if (mix > 0) {
-        // read in variables
-        int index_m = rng->Integer(mb.size());
-        TFile* fm = new TFile(mb[index_m].data(), "read");
-        TTree* tm = (TTree*) fm->Get("pj");
-
-        // variables used for mixing
-        float vz;
-        float hiHF;
-
-        std::vector<float> *jtptCor = 0;
-        std::vector<float> *jtpt = 0;
-        std::vector<float> *jteta = 0;
-        std::vector<float> *jtphi = 0;
-        std::vector<float> *WTAeta = 0;
-        std::vector<float> *WTAphi = 0;
-
-        tm->SetBranchAddress("vz", &vz);
-        tm->SetBranchAddress("hiHF", &hiHF);
-        tm->SetBranchAddress("jtptCor", &jtptCor);
-        tm->SetBranchAddress("jtpt", &jtpt);
-        tm->SetBranchAddress("jteta", &jteta);
-        tm->SetBranchAddress("jtphi", &jtphi);
-        tm->SetBranchAddress("WTAeta", &WTAeta);
-        tm->SetBranchAddress("WTAphi", &WTAphi);
-
-        int64_t mentries = static_cast<int64_t>(tm->GetEntries());
-        if (mentries > 900000) mentries = 900000;
-
-        for (int64_t i = 0; i < mentries; ++i){
-            tm->GetEntry(i);
-
-            auto hfm_x = ihfm->index_for(hiHF);
-            int64_t nref = jtpt->size();
-
-            if (std::abs(vz) > 15) { continue; }
-            if (rho_file.empty() && hiHF <= dhf.front()) { continue; }
-            if (rho_file.empty() && hiHF >= dhf.back()) { continue; }
-
-            std::vector<std::map<std::string, float>> jet_vector;
-
-            for (int64_t j = 0; j < nref; ++j) {
-                auto jet_pt = (jet_cor) ? (*jtptCor)[j] : (*jtpt)[j];
-                auto jet_eta = (*jteta)[j];
-                auto jet_phi = (*jtphi)[j];
-                auto jet_wta_eta = (*WTAeta)[j];
-                auto jet_wta_phi = (*WTAphi)[j];
-
-                if (exclude && in_jet_failure_region(jet_eta, jet_phi)) { continue; }
-                if (std::abs(jet_eta) >= jet_eta_abs) { continue; }
-
-                std::map<std::string, float> jet_map;
-                
-                jet_map["jet_pt"] = jet_pt;
-                jet_map["jet_eta"] = jet_eta;
-                jet_map["jet_phi"] = jet_phi;
-                jet_map["jet_wta_eta"] = jet_wta_eta;
-                jet_map["jet_wta_phi"] = jet_wta_phi;
-
-                jet_vector.push_back(jet_map);
-            }
-        
-            hf_map[hfm_x].push_back(jet_vector);
-        }
-    }
-
-    std::cout << "Bin: Events" << std::endl;
-
-    for (size_t i = 0; i < hf_bins.size() - 1; ++i) {
-        std::cout << " " << i << ", " << hf_bins[i] << "-" << hf_bins[i+1] << ": " << hf_map[i].size() << std::endl;
-    }
 
     /* load efficiency correction */
     TFile* fe;
@@ -694,45 +474,9 @@ int populate(char const* config, char const* selections, char const* output) {
                 pjet_f_dr_pho_up_part1, pjet_f_dr_pho_up_part2,
                 pjet_f_dr_pho_down_part1, pjet_f_dr_pho_down_part2,
                 acceptance, total);
-
-            if (mix > 0) {
-                auto hfm_x = ihfm->index_for(hf);
-                size_t map_x = rng->Integer(hf_map[hfm_x].size());
-
-                /* mixing events in minimum bias */
-                for (int64_t k = 0; k < mix; k++) {
-                    std::vector<std::map<std::string, float>> jet_vector = hf_map[hfm_x][map_x];
-
-                    fill_axes(jet_vector, pthf_x, weights, exclude, idphi,
-                        pho_cor, photon_eta, photon_phi, jet_eta_abs, 
-                        dphi_min_numerator, dphi_min_denominator, nmix,
-                        mix_pjet_f_dr_base_part1, mix_pjet_f_dr_base_part2,
-                        mix_pjet_f_dr_chg_up_part1, mix_pjet_f_dr_chg_up_part2,
-                        mix_pjet_f_dr_chg_down_part1, mix_pjet_f_dr_chg_down_part2,
-                        mix_pjet_f_dr_neu_up_part1, mix_pjet_f_dr_neu_up_part2,
-                        mix_pjet_f_dr_neu_down_part1, mix_pjet_f_dr_neu_down_part2,
-                        mix_pjet_f_dr_pho_up_part1, mix_pjet_f_dr_pho_up_part2,
-                        mix_pjet_f_dr_pho_down_part1, mix_pjet_f_dr_pho_down_part2,
-                        acceptance, total);
-
-                    map_x++;
-                    if (map_x >= hf_map[hfm_x].size()) { map_x = 0; }
-                }
-            }
         }
 
         f->Close();
-    }
-
-    /* normalise histograms */
-    if (mix > 0) { 
-        scale(1. / mix, mix_pjet_f_dr_base_part1, mix_pjet_f_dr_base_part2); 
-        scale(1. / mix, mix_pjet_f_dr_chg_up_part1, mix_pjet_f_dr_chg_up_part2); 
-        scale(1. / mix, mix_pjet_f_dr_chg_down_part1, mix_pjet_f_dr_chg_down_part2); 
-        scale(1. / mix, mix_pjet_f_dr_neu_up_part1, mix_pjet_f_dr_neu_up_part2); 
-        scale(1. / mix, mix_pjet_f_dr_neu_down_part1, mix_pjet_f_dr_neu_down_part2); 
-        scale(1. / mix, mix_pjet_f_dr_pho_up_part1, mix_pjet_f_dr_pho_up_part2); 
-        scale(1. / mix, mix_pjet_f_dr_pho_down_part1, mix_pjet_f_dr_pho_down_part2); 
     }
 
     /* normalise by number of photons (events) */
@@ -751,43 +495,9 @@ int populate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_pho_down_part1->divide(*nevt);
     pjet_f_dr_pho_down_part2->divide(*nevt);
 
-    mix_pjet_f_dr_base_part1->divide(*nevt);
-    mix_pjet_f_dr_base_part2->divide(*nevt);
-    mix_pjet_f_dr_chg_up_part1->divide(*nevt);
-    mix_pjet_f_dr_chg_up_part2->divide(*nevt);
-    mix_pjet_f_dr_chg_down_part1->divide(*nevt);
-    mix_pjet_f_dr_chg_down_part2->divide(*nevt);
-    mix_pjet_f_dr_neu_up_part1->divide(*nevt);
-    mix_pjet_f_dr_neu_up_part2->divide(*nevt);
-    mix_pjet_f_dr_neu_down_part1->divide(*nevt);
-    mix_pjet_f_dr_neu_down_part2->divide(*nevt);
-    mix_pjet_f_dr_pho_up_part1->divide(*nevt);
-    mix_pjet_f_dr_pho_up_part2->divide(*nevt);
-    mix_pjet_f_dr_pho_down_part1->divide(*nevt);
-    mix_pjet_f_dr_pho_down_part2->divide(*nevt);
-
-    /* subtract histograms */
-    auto sub_pjet_f_dr_base_part1 = new memory<TH1F>(*pjet_f_dr_base_part1, "sub");
-    auto sub_pjet_f_dr_base_part2 = new memory<TH1F>(*pjet_f_dr_base_part2, "sub");
-    auto sub_pjet_f_dr_chg_up_part1 = new memory<TH1F>(*pjet_f_dr_chg_up_part1, "sub");
-    auto sub_pjet_f_dr_chg_up_part2 = new memory<TH1F>(*pjet_f_dr_chg_up_part2, "sub");
-    auto sub_pjet_f_dr_chg_down_part1 = new memory<TH1F>(*pjet_f_dr_chg_down_part1, "sub");
-    auto sub_pjet_f_dr_chg_down_part2 = new memory<TH1F>(*pjet_f_dr_chg_down_part2, "sub");
-    auto sub_pjet_f_dr_neu_up_part1 = new memory<TH1F>(*pjet_f_dr_neu_up_part1, "sub");
-    auto sub_pjet_f_dr_neu_up_part2 = new memory<TH1F>(*pjet_f_dr_neu_up_part2, "sub");
-    auto sub_pjet_f_dr_neu_down_part1 = new memory<TH1F>(*pjet_f_dr_neu_down_part1, "sub");
-    auto sub_pjet_f_dr_neu_down_part2 = new memory<TH1F>(*pjet_f_dr_neu_down_part2, "sub");
-    auto sub_pjet_f_dr_pho_up_part1 = new memory<TH1F>(*pjet_f_dr_pho_up_part1, "sub");
-    auto sub_pjet_f_dr_pho_up_part2 = new memory<TH1F>(*pjet_f_dr_pho_up_part2, "sub");
-    auto sub_pjet_f_dr_pho_down_part1 = new memory<TH1F>(*pjet_f_dr_pho_down_part1, "sub");
-    auto sub_pjet_f_dr_pho_down_part2 = new memory<TH1F>(*pjet_f_dr_pho_down_part2, "sub");
-
-    *sub_pjet_f_dr -= *mix_pjet_f_dr;
-
     /* save histograms */
     in(output, [&]() {
         nevt->save(tag);
-        nmix->save(tag);
 
         pjet_f_dr_base_part1->save(tag);
         pjet_f_dr_base_part2->save(tag);
@@ -803,36 +513,6 @@ int populate(char const* config, char const* selections, char const* output) {
         pjet_f_dr_pho_up_part2->save(tag);
         pjet_f_dr_pho_down_part1->save(tag);
         pjet_f_dr_pho_down_part2->save(tag);
-
-        mix_pjet_f_dr_base_part1->save(tag);
-        mix_pjet_f_dr_base_part2->save(tag);
-        mix_pjet_f_dr_chg_up_part1->save(tag);
-        mix_pjet_f_dr_chg_up_part2->save(tag);
-        mix_pjet_f_dr_chg_down_part1->save(tag);
-        mix_pjet_f_dr_chg_down_part2->save(tag);
-        mix_pjet_f_dr_neu_up_part1->save(tag);
-        mix_pjet_f_dr_neu_up_part2->save(tag);
-        mix_pjet_f_dr_neu_down_part1->save(tag);
-        mix_pjet_f_dr_neu_down_part2->save(tag);
-        mix_pjet_f_dr_pho_up_part1->save(tag);
-        mix_pjet_f_dr_pho_up_part2->save(tag);
-        mix_pjet_f_dr_pho_down_part1->save(tag);
-        mix_pjet_f_dr_pho_down_part2->save(tag);
-
-        sub_pjet_f_dr_base_part1->save(tag);
-        sub_pjet_f_dr_base_part2->save(tag);
-        sub_pjet_f_dr_chg_up_part1->save(tag);
-        sub_pjet_f_dr_chg_up_part2->save(tag);
-        sub_pjet_f_dr_chg_down_part1->save(tag);
-        sub_pjet_f_dr_chg_down_part2->save(tag);
-        sub_pjet_f_dr_neu_up_part1->save(tag);
-        sub_pjet_f_dr_neu_up_part2->save(tag);
-        sub_pjet_f_dr_neu_down_part1->save(tag);
-        sub_pjet_f_dr_neu_down_part2->save(tag);
-        sub_pjet_f_dr_pho_up_part1->save(tag);
-        sub_pjet_f_dr_pho_up_part2->save(tag);
-        sub_pjet_f_dr_pho_down_part1->save(tag);
-        sub_pjet_f_dr_pho_down_part2->save(tag);
     });
 
     printf("destroying objects..\n");
