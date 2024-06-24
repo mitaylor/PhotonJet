@@ -194,7 +194,7 @@ void set_pad(TPad &pad)
 
 void set_axis(TGaxis &axis, double sf)
 {
-    axis.SetLabelFont(42);
+    axis.SetLabelFont(42);std::cout<<sf<<std::endl;
     // axis.SetLabelSize(0.070/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
