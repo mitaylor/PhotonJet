@@ -266,14 +266,9 @@ int populate(char const* config, char const* selections, char const* output) {
     auto incl = new interval(""s, 1, 0.f, 9999.f);
 
     auto mpthf = new multival(dpt, dhf);
-    auto mdrjpt = new multival(rdrr, rptr);
 
     auto fincl = std::bind(&interval::book<TH1F>, incl, _1, _2, _3);
     auto fdr = std::bind(&interval::book<TH1F>, idr, _1, _2, _3);
-    auto fjpt = std::bind(&interval::book<TH1F>, ijpt, _1, _2, _3);
-
-    auto frdr = [&](int64_t, std::string const& name, std::string const&) {
-        return new TH1F(name.data(), ";index;", mdrjpt->size(), 0, mdrjpt->size()); };
 
     /* create histograms */
     auto nevt = new memory<TH1F>("nevt"s, "", fincl, mpthf);
