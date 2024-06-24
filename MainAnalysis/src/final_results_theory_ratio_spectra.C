@@ -425,7 +425,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* size canvas */
     double panel_size = 500;
-    double padding_width_left = 140;
+    double padding_width_left = 170;
     double padding_width_right = 50;
     double padding_height = 70;
 
@@ -703,7 +703,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 0 || system == 3)    latex.SetTextAlign(21);
         if (system == 0 || system == 3)    latex.SetTextSize(0.06);
-        if (system == 0 || system == 3)    latex.DrawLatex(0.5, 0.12, "Cent. 0-10%");
+        if (system == 0 || system == 3)    latex.DrawLatex(0.5, 0.03, "Cent. 0-10%");
 
         if (system == 2 || system == 4)    latex.SetTextAlign(21);
         if (system == 2 || system == 4)    latex.SetTextSize(0.06);
