@@ -145,7 +145,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     hb->alias("pho_up", "Pho PF +1%");
     hb->alias("pho_down", "Pho PF -1%");
 
-    auto c1 = new paper(set + "_" + tag + "_dr_chg_up_part1", hb);
+    auto c1 = new paper(set + "_aa_dr_chg_up_part1", hb);
     c1->divide(4, -1);
     c1->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -154,7 +154,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part1->apply([&](TH1* h) { c1->add(h, "base"); });
     pjet_f_dr_chg_up_part1->apply([&](TH1* h, int64_t index) { c1->stack(index, h, "chg_up"); });
 
-    auto c2 = new paper(set + "_" + tag + "_dr_chg_down_part1", hb);
+    auto c2 = new paper(set + "_aa_dr_chg_down_part1", hb);
     c2->divide(4, -1);
     c2->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -163,7 +163,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part1->apply([&](TH1* h) { c2->add(h, "base"); });
     pjet_f_dr_chg_down_part1->apply([&](TH1* h, int64_t index) { c2->stack(index, h, "chg_down"); });
 
-    auto c3 = new paper(set + "_" + tag + "_dr_neu_up_part1", hb);
+    auto c3 = new paper(set + "_aa_dr_neu_up_part1", hb);
     c3->divide(4, -1);
     c3->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -172,7 +172,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part1->apply([&](TH1* h) { c3->add(h, "base"); });
     pjet_f_dr_neu_up_part1->apply([&](TH1* h, int64_t index) { c3->stack(index, h, "neu_up"); });
 
-    auto c4 = new paper(set + "_" + tag + "_dr_neu_down_part1", hb);
+    auto c4 = new paper(set + "_aa_dr_neu_down_part1", hb);
     c4->divide(4, -1);
     c4->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -181,7 +181,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part1->apply([&](TH1* h) { c4->add(h, "base"); });
     pjet_f_dr_neu_down_part1->apply([&](TH1* h, int64_t index) { c4->stack(index, h, "neu_down"); });
 
-    auto c5 = new paper(set + "_" + tag + "_dr_pho_up_part1", hb);
+    auto c5 = new paper(set + "_aa_dr_pho_up_part1", hb);
     c5->divide(4, -1);
     c5->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -190,7 +190,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part1->apply([&](TH1* h) { c5->add(h, "base"); });
     pjet_f_dr_pho_up_part1->apply([&](TH1* h, int64_t index) { c5->stack(index, h, "pho_up"); });
 
-    auto c6 = new paper(set + "_" + tag + "_dr_pho_down_part1", hb);
+    auto c6 = new paper(set + "_aa_dr_pho_down_part1", hb);
     c6->divide(4, -1);
     c6->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -206,7 +206,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     cms += ", p_{T}^{#gamma} > 60 GeV, |#eta^{#gamma}| < "s + to_text(photon_eta_abs) + ", #Delta#phi_{j#gamma} > "s + to_text(dphi_min_numerator) + "#pi/"s + to_text(dphi_min_denominator);
 
 
-    auto c7 = new paper(set + "_" + tag + "_dr_chg_up_part2", hb);
+    auto c7 = new paper(set + "_aa_dr_chg_up_part2", hb);
     c7->divide(4, -1);
     c7->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -215,7 +215,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part2->apply([&](TH1* h) { c7->add(h, "base"); });
     pjet_f_dr_chg_up_part2->apply([&](TH1* h, int64_t index) { c7->stack(index, h, "chg_up"); });
 
-    auto c8 = new paper(set + "_" + tag + "_dr_chg_down_part2", hb);
+    auto c8 = new paper(set + "_aa_dr_chg_down_part2", hb);
     c8->divide(4, -1);
     c8->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -224,7 +224,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part2->apply([&](TH1* h) { c8->add(h, "base"); });
     pjet_f_dr_chg_down_part2->apply([&](TH1* h, int64_t index) { c8->stack(index, h, "chg_down"); });
 
-    auto c9 = new paper(set + "_" + tag + "_dr_neu_up_part2", hb);
+    auto c9 = new paper(set + "_aa_dr_neu_up_part2", hb);
     c9->divide(4, -1);
     c9->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -233,7 +233,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part2->apply([&](TH1* h) { c9->add(h, "base"); });
     pjet_f_dr_neu_up_part2->apply([&](TH1* h, int64_t index) { c9->stack(index, h, "neu_up"); });
 
-    auto c10 = new paper(set + "_" + tag + "_dr_neu_down_part2", hb);
+    auto c10 = new paper(set + "_aa_dr_neu_down_part2", hb);
     c10->divide(4, -1);
     c10->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -242,7 +242,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part2->apply([&](TH1* h) { c10->add(h, "base"); });
     pjet_f_dr_neu_down_part2->apply([&](TH1* h, int64_t index) { c10->stack(index, h, "neu_down"); });
 
-    auto c11 = new paper(set + "_" + tag + "_dr_pho_up_part2", hb);
+    auto c11 = new paper(set + "_aa_dr_pho_up_part2", hb);
     c11->divide(4, -1);
     c11->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
@@ -251,7 +251,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
     pjet_f_dr_base_part2->apply([&](TH1* h) { c11->add(h, "base"); });
     pjet_f_dr_pho_up_part2->apply([&](TH1* h, int64_t index) { c11->stack(index, h, "pho_up"); });
 
-    auto c12 = new paper(set + "_" + tag + "_dr_pho_down_part2", hb);
+    auto c12 = new paper(set + "_aa_dr_pho_down_part2", hb);
     c12->divide(4, -1);
     c12->accessory(std::bind(hf_info, _1, 0.75));
     apply_style(c, cms, system_tag, -1., 15.);
