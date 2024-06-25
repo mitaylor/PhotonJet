@@ -530,8 +530,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 4)    legend_y_min = (subsets) ? 0.48 : 0.34;
     if (system == 4)    legend_y_max = (subsets) ? 0.83 : 0.62;
-    if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.33;
-    if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.63;
+    if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.36;
+    if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.66;
 
     if (system == 1)    legend_y_min = (subsets) ? 0.50 : 0.09;
     if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.30;
@@ -609,8 +609,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 4 && !subsets)    legend_y_min = legend_y_max;
     if (system == 4 && !subsets)    legend_y_max = legend_y_min + 0.07;
-    if (system == 4 && !subsets)    legend_x_min = legend_x_min - 0.3;
-    if (system == 4 && !subsets)    legend_x_max = legend_x_max - 0.3;
+    if (system == 4 && !subsets)    legend_x_min = legend_x_min - 0.33;
+    if (system == 4 && !subsets)    legend_x_max = legend_x_max - 0.33;
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
