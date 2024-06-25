@@ -39,7 +39,7 @@ void scale_bin_width(T*... args) {
         obj->Scale(1., "width"); }), 0)... };
 }
 
-int accumulate(char const* config, char const* selections, char const* output) {
+int accumulate(char const* config, char const* selections) {
     auto conf = new configurer(config);
 
     auto rdr = conf->get<std::vector<float>>("dr_range");
@@ -279,8 +279,8 @@ int accumulate(char const* config, char const* selections, char const* output) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc == 4)
-        return accumulate(argv[1], argv[2], argv[3]);
+    if (argc == 3)
+        return accumulate(argv[1], argv[2]);
 
     printf("usage: %s [config] [selections] [output]\n", argv[0]);
     return 1;
