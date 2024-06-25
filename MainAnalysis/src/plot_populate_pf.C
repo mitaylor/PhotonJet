@@ -59,18 +59,16 @@ int accumulate(char const* config, char const* selections, char const* output) {
     auto const photon_eta_abs = sel->get<float>("photon_eta_abs");
 
     std::vector<float> dpt = {60.0, 99999.0};
-    auto ihf = new interval(dhf);
-
-    auto mpthf = new multival(dpt, dhf);
 
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
 
     /* open input files */
-    TFile* f = new TFile(data/arc/pho_60_rebin3/populate_pf_aa_raw.root, "read");
+    TFile* f = new TFile("data/arc/pho_60_rebin3/populate_pf_aa_raw.root", "read");
 
     /* load histograms */
+    auto nevt = new history<TH1F>(f, "raw_nevt");
     auto pjet_f_dr_base_part1 = new history<TH1F>(f, "raw_pjet_f_dr_base_part1");
     auto pjet_f_dr_base_part2 = new history<TH1F>(f, "raw_pjet_f_dr_base_part2");
     auto pjet_f_dr_chg_up_part1 = new history<TH1F>(f, "raw_pjet_f_dr_chg_up_part1");
