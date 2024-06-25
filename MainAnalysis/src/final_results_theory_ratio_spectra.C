@@ -607,8 +607,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 3 && !subsets)    legend_x_min = legend_x_max + 0.20;
     if (system == 3 && !subsets)    legend_x_max = legend_x_min + 0.30;
 
-    if (system == 4 && !subsets)    legend_y_max = 0.15;
-    if (system == 4 && !subsets)    legend_y_min = 0.08;
+    if (system == 4 && !subsets)    legend_y_min = legend_y_max;
+    if (system == 4 && !subsets)    legend_y_max = legend_y_min + 0.07;
     if (system == 4 && !subsets)    legend_x_min = legend_x_min;
     if (system == 4 && !subsets)    legend_x_max = legend_x_max;
 
