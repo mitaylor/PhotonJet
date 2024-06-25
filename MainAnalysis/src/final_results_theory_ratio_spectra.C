@@ -697,9 +697,13 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
         pads[i]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
+        if (!((system == 2 || system == 4) && !subsets))    latex.SetTextAlign(21);
+        if (!((system == 2 || system == 4) && !subsets))    latex.SetTextSize(0.06);
+        if (!((system == 2 || system == 4) && !subsets))    latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
+
+        if ((system == 2 || system == 4) && !subsets)       latex.SetTextAlign(21);
+        if ((system == 2 || system == 4) && !subsets)       latex.SetTextSize(0.06);
+        if ((system == 2 || system == 4) && !subsets)       latex.DrawLatex(0.5, 0.93, (text_jet_pt).c_str());
 
         if (system == 0 || system == 3)    latex.SetTextAlign(21);
         if (system == 0 || system == 3)    latex.SetTextSize(0.06);
@@ -711,7 +715,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if ((system == 2 || system == 4) && !subsets)   latex.SetTextAlign(21);
         if ((system == 2 || system == 4) && !subsets)   latex.SetTextSize(0.06);
-        if ((system == 2 || system == 4) && !subsets)   latex.DrawLatex(0.5, 0.15, "Cent. 0-10%");
+        if ((system == 2 || system == 4) && !subsets)   latex.DrawLatex(0.5, 0.10, "Cent. 0-10%");
     }
 
     pads[0]->cd();
@@ -734,13 +738,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");
 
     if ((system == 2 || system == 4) && !subsets)    latex.SetTextAlign(21);
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.5, 0.05, "pp 302 pb^{-1}, PbPb 1.69 nb^{-1}");
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.5, 0.03, "pp 302 pb^{-1}, PbPb 1.69 nb^{-1}");
 
     if (system == 3 && !subsets)    latex.SetTextAlign(11);
     if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.85, "HYBRID");
 
     if (system == 4 && !subsets)    latex.SetTextAlign(11);
-    if (system == 4 && !subsets)    latex.DrawLatex(0.06, 0.70, "HYBRID");
+    if (system == 4 && !subsets)    latex.DrawLatex(0.06, legend_y_min - 0.08, "HYBRID");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
