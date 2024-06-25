@@ -603,8 +603,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 3 && !subsets)    legend_x_min = legend_x_max + 0.20;
     if (system == 3 && !subsets)    legend_x_max = legend_x_min + 0.30;
 
-    if (system == 4 && !subsets)    legend_y_max = legend_y_min - 0.10;
-    if (system == 4 && !subsets)    legend_y_min = legend_y_max - 0.28;
+    if (system == 4 && !subsets)    legend_y_max = legend_y_min - 0.08;
+    if (system == 4 && !subsets)    legend_y_min = legend_y_max - 0.26;
     if (system == 4 && !subsets)    legend_x_min = legend_x_min;
     if (system == 4 && !subsets)    legend_x_max = legend_x_max;
 
@@ -764,11 +764,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.54, (text_jet_alg).c_str());
 
-    if ((system == 2 || system == 4) && !subsets)    latex.SetTextAlign(31);
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if (system == 2 && !subsets)    latex.SetTextAlign(21);
+    if (system == 2 && !subsets)    latex.DrawLatex(0.2, 0.80, (text_photon_pt).c_str());
+    if (system == 2 && !subsets)    latex.DrawLatex(0.2, 0.72, (text_photon_eta).c_str());
+    if (system == 2 && !subsets)    latex.DrawLatex(0.6, 0.80, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 2 && !subsets)    latex.DrawLatex(0.6, 0.72, (text_jet_alg).c_str());
+
+    if (system == 4 && !subsets)    latex.SetTextAlign(31);
+    if (system == 4 && !subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
+    if (system == 4 && !subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
+    if (system == 4 && !subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 4 && !subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.64, (text_photon_pt).c_str());
