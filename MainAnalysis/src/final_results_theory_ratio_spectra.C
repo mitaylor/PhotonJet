@@ -523,8 +523,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.33;
-    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.68;
+    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.31;
+    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.66;
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
@@ -697,13 +697,13 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
         pads[i]->cd();
-        if (!((system == 2 || system == 4) && !subsets))    latex.SetTextAlign(21);
-        if (!((system == 2 || system == 4) && !subsets))    latex.SetTextSize(0.06);
-        if (!((system == 2 || system == 4) && !subsets))    latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
+        if (!((system == 4) && !subsets))    latex.SetTextAlign(21);
+        if (!((system == 4) && !subsets))    latex.SetTextSize(0.06);
+        if (!((system == 4) && !subsets))    latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
 
-        if ((system == 2 || system == 4) && !subsets)       latex.SetTextAlign(21);
-        if ((system == 2 || system == 4) && !subsets)       latex.SetTextSize(0.06);
-        if ((system == 2 || system == 4) && !subsets)       latex.DrawLatex(0.5, 0.92, (text_jet_pt).c_str());
+        if ((system == 4) && !subsets)       latex.SetTextAlign(21);
+        if ((system == 4) && !subsets)       latex.SetTextSize(0.06);
+        if ((system == 4) && !subsets)       latex.DrawLatex(0.5, 0.92, (text_jet_pt).c_str());
 
         if (system == 0 || system == 3)    latex.SetTextAlign(21);
         if (system == 0 || system == 3)    latex.SetTextSize(0.06);
