@@ -98,7 +98,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         pjet_f_dr_pho_up_part1, 
         pjet_f_dr_pho_up_part2,
         pjet_f_dr_pho_down_part1,
-        pjet_f_dr_pho_down_part2,
+        pjet_f_dr_pho_down_part2
     );
 
     title(std::bind(rename_axis, _1, "1/N^{#gamma}dN/d#deltaj"),
@@ -115,7 +115,7 @@ int accumulate(char const* config, char const* selections, char const* output) {
         pjet_f_dr_pho_up_part1, 
         pjet_f_dr_pho_up_part2,
         pjet_f_dr_pho_down_part1,
-        pjet_f_dr_pho_down_part2,
+        pjet_f_dr_pho_down_part2
     );
 
     auto system_tag = "PbPb #sqrt{s_{NN}} = 5.02 TeV, 1.69 nb^{-1}"s;
