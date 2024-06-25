@@ -134,21 +134,44 @@ void fill_axes(pjtree* pjt, std::vector<int64_t>& pthf_x, std::vector<float>& we
             if (std::sqrt(dr2(jet_eta, (*pjt->pfEta)[i], jet_phi, (*pjt->pfPhi)[i])) < 0.3) {
                 pf_eta.push_back((*pjt->pfEta)[i]);
                 pf_phi.push_back((*pjt->pfPhi)[i]);
-                pf_pt_nominal.push_back((*pjt->pfPt)[i]);
 
                 auto pf_id = (*pjt->pfId)[i];
 
                 if (pf_id == 1) { // charged hadron
+                    pf_pt_nominal.push_back((*pjt->pfPt)[i]);
                     pf_pt_chg_up.push_back((*pjt->pfPt)[i]*1.01);
                     pf_pt_chg_down.push_back((*pjt->pfPt)[i]*0.99);
+                    pf_pt_pho_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_pho_down.push_back((*pjt->pfPt)[i]);
+                    pf_pt_neu_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_neu_down.push_back((*pjt->pfPt)[i]);
                 }
                 else if (pf_id == 4) { // photon
+                    pf_pt_nominal.push_back((*pjt->pfPt)[i]);
+                    pf_pt_chg_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_chg_down.push_back((*pjt->pfPt)[i]);
                     pf_pt_pho_up.push_back((*pjt->pfPt)[i]*1.01);
                     pf_pt_pho_down.push_back((*pjt->pfPt)[i]*0.99);
+                    pf_pt_neu_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_neu_down.push_back((*pjt->pfPt)[i]);
                 }
                 else if (pf_id == 5) { // neutral hadron
+                    pf_pt_nominal.push_back((*pjt->pfPt)[i]);
+                    pf_pt_chg_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_chg_down.push_back((*pjt->pfPt)[i]);
+                    pf_pt_pho_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_pho_down.push_back((*pjt->pfPt)[i]);
                     pf_pt_neu_up.push_back((*pjt->pfPt)[i]*1.03);
                     pf_pt_neu_down.push_back((*pjt->pfPt)[i]*0.97);
+                }
+                else {
+                    pf_pt_nominal.push_back((*pjt->pfPt)[i]);
+                    pf_pt_chg_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_chg_down.push_back((*pjt->pfPt)[i]);
+                    pf_pt_pho_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_pho_down.push_back((*pjt->pfPt)[i]);
+                    pf_pt_neu_up.push_back((*pjt->pfPt)[i]);
+                    pf_pt_neu_down.push_back((*pjt->pfPt)[i]);
                 }
             }
         }
@@ -344,7 +367,7 @@ int populate(char const* config, char const* selections, char const* output) {
         auto pjt = new pjtree(gen_iso, false, heavyion, t, { 1, 1, 1, 1, 1, 0, heavyion, 1, !heavyion });
         int64_t nentries = static_cast<int64_t>(t->GetEntries());
 
-        // if (nentries > 1000) nentries = 1000;
+        if (nentries > 1000) nentries = 1000;
 
         for (int64_t i = 0; i < nentries; ++i) {
             if (i % frequency == 0) { printf("entry: %li/%li\n", i, nentries); }
