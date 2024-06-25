@@ -528,8 +528,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 4)    legend_y_min = (subsets) ? 0.48 : 0.35;
-    if (system == 4)    legend_y_max = (subsets) ? 0.83 : 0.63;
+    if (system == 4)    legend_y_min = (subsets) ? 0.48 : 0.34;
+    if (system == 4)    legend_y_max = (subsets) ? 0.83 : 0.62;
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
@@ -741,7 +741,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.85, "HYBRID");
 
     if (system == 4 && !subsets)    latex.SetTextAlign(11);
-    if (system == 4 && !subsets)    latex.DrawLatex(0.06, 0.65, "HYBRID");
+    if (system == 4 && !subsets)    latex.DrawLatex(0.06, 0.64, "HYBRID");
 
     pads[ncols-1]->cd();
     if (system == 0 && subsets)       legend_part2.Draw();
@@ -762,8 +762,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.54, (text_jet_alg).c_str());
 
     if ((system == 2 || system == 4) && !subsets)    latex.SetTextAlign(21);
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.49, 0.80, (text_photon_pt + ", " + text_photon_eta).c_str());
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.49, 0.72, (text_dphi + ", " + text_jet_eta + ", " + text_jet_alg).c_str());
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.49, 0.81, (text_photon_pt + ", " + text_photon_eta).c_str());
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.49, 0.73, (text_dphi + ", " + text_jet_eta + ", " + text_jet_alg).c_str());
 
     if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.64, (text_photon_pt).c_str());
