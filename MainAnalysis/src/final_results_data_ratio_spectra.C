@@ -109,7 +109,7 @@ std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*
     return result;
 }
 
-void set_pad(TPad &pad, bool log)
+void set_pad(TPad &pad)
 {
     pad.SetLeftMargin(0);
     pad.SetTopMargin(0);
@@ -117,8 +117,7 @@ void set_pad(TPad &pad, bool log)
     pad.SetBottomMargin(0);
     pad.SetTickx();
     pad.SetTicky();
-
-    if (log)    pad.SetLogx();
+    pad.SetLogx();
 
     pad.Draw();
 }
@@ -138,8 +137,6 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     auto input_aa = conf->get<std::string>("input_aa");
     auto input_pp = conf->get<std::string>("input_pp");
-
-    auto log = conf->get<bool>("log");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto name = conf->get<std::string>("name");
@@ -253,8 +250,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
-    double xmin = (log) ? bdr[0] + 0.003 : bdr[0];
-    double xmax = (log) ? bdr[1] : bdr[1] * 0.999;
+    double xmin = bdr[0] + 0.003;
+    double xmax = bdr[1];
 
     gStyle->SetLineScalePS(1);
 
@@ -275,10 +272,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i][2] = new TPad("P3", "", pad_x0 + pad_dx * 2, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * (i + 1), 0);
         pads[i][3] = new TPad("P4", "", pad_x0 + pad_dx * 3, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * (i + 1), 0);
         
-        set_pad(*pads[i][0], log);
-        set_pad(*pads[i][1], log);
-        set_pad(*pads[i][2], log);
-        set_pad(*pads[i][3], log);
+        set_pad(*pads[i][0]);
+        set_pad(*pads[i][1]);
+        set_pad(*pads[i][2]);
+        set_pad(*pads[i][3]);
 
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i] * 0.999, ymaxs[i] * 0.999, 510, "S");
         
@@ -287,14 +284,10 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     canvas.cd();
 
-    if (!log)   axis_x[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
-    if (!log)   axis_x[1] = new TGaxis(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
-    if (!log)   axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
-    if (!log)   axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax, 510, "S");
-    if (log)    axis_x[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
-    if (log)    axis_x[1] = new TGaxis(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
-    if (log)    axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
-    if (log)    axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
+    axis_x[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
+    axis_x[1] = new TGaxis(pad_x0 + pad_dx * 1, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
+    axis_x[2] = new TGaxis(pad_x0 + pad_dx * 2, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
+    axis_x[3] = new TGaxis(pad_x0 + pad_dx * 3, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
 
     set_axis(*axis_x[0], sf);
     set_axis(*axis_x[1], sf);
@@ -340,20 +333,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    double legend_y_min = 0;
-    double legend_y_max = 0;
-    double legend_x_min = 0;
-    double legend_x_max = 0;
-
-    if (!log)   legend_y_min = (ratio) ? 0.66 : 0.59;
-    if (!log)   legend_y_max = (ratio) ? 0.73 : 0.73;
-    if (!log)   legend_x_min = (ratio) ? 0.65 : 0.3;
-    if (!log)   legend_x_max = (ratio) ? 0.95 : 0.6;
-
-    if (log)    legend_y_min = (ratio) ? 0.66 : 0.16;
-    if (log)    legend_y_max = (ratio) ? 0.73 : 0.30;
-    if (log)    legend_x_min = (ratio) ? 0.65 : 0.05;
-    if (log)    legend_x_max = (ratio) ? 0.95 : 0.35;
+    double legend_y_min = (ratio) ? 0.66 : 0.16;
+    double legend_y_max = (ratio) ? 0.73 : 0.30;
+    double legend_x_min = (ratio) ? 0.65 : 0.05;
+    double legend_x_max = (ratio) ? 0.95 : 0.35;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -410,7 +393,6 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[nrows-1][0]->cd();
     if (ratio)             legend.Draw();
-    if (spectra && !log)   legend.Draw();
 
     latex.SetTextSize(0.05);
     if (ratio)             latex.SetTextAlign(11);
@@ -418,27 +400,22 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (ratio)             latex.DrawLatex(0.05, 0.60, (text_photon_eta).c_str());
     if (ratio)             latex.DrawLatex(0.05, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)             latex.DrawLatex(0.05, 0.44, (text_jet_alg).c_str());
-    if (spectra && !log)   latex.SetTextAlign(31);
-    if (spectra && !log)   latex.DrawLatex(0.95, 0.68, (text_photon_pt).c_str());
-    if (spectra && !log)   latex.DrawLatex(0.95, 0.60, (text_photon_eta).c_str());
-    if (spectra && !log)   latex.DrawLatex(0.95, 0.52, (text_dphi + ", " + text_jet_eta).c_str());
-    if (spectra && !log)   latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
 
     pads[0][0]->cd();
     latex.SetTextSize(0.05);
-    if (spectra && log)    legend.Draw();
+    if (spectra)    legend.Draw();
 
-    if (spectra && log)    latex.SetTextAlign(31);
-    if (spectra && log)    latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_eta).c_str());
-    if (spectra && log)    latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
-    if (spectra && log)    latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
-    if (spectra && log)    latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
+    if (spectra)    latex.SetTextAlign(31);
+    if (spectra)    latex.DrawLatex(0.95, 0.68, (text_dphi + ", " + text_jet_eta).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.60, (text_photon_pt).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.52, (text_photon_eta).c_str());
+    if (spectra)    latex.DrawLatex(0.95, 0.44, (text_jet_alg).c_str());
 
-    if (ratio && log)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.pdf").c_str());
-    if (spectra && log)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.pdf").c_str());
+    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.pdf").c_str());
+    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.pdf").c_str());
 
-    if (ratio && !log)     canvas.SaveAs((set + "_final_ratio_" + name + ".pdf").c_str());
-    if (spectra && !log)   canvas.SaveAs((set + "_final_spectra_" + name + ".pdf").c_str());
+    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.C").c_str());
+    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.C").c_str());
 
     in(output, []() {});
 

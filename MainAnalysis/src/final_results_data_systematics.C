@@ -512,6 +512,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(0.5, 0.05, "PbPb 0-10%");
 
     canvas.SaveAs((set + "_final_data_systematics_" + name + "_log.pdf").c_str());
+    
+    canvas.SaveAs((set + "_final_data_systematics_" + name + "_log.C").c_str());
 
     in(output, []() {});
 

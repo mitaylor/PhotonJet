@@ -777,6 +777,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.pdf").c_str());
     if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_mc_" + name + "_log.pdf").c_str());
 
+    if (system == 4)    canvas.SaveAs((set + "_final_theory_ratio_hybrid_" + name + "_log.C").c_str());
+    if (system == 3)    canvas.SaveAs((set + "_final_theory_spectra_aa_hybrid_" + name + "_log.C").c_str());
+    if (system == 2)    canvas.SaveAs((set + "_final_theory_ratio_mc_" + name + "_log.C").c_str());
+    if (system == 1)    canvas.SaveAs((set + "_final_theory_spectra_pp_" + name + "_log.C").c_str());
+    if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_mc_" + name + "_log.C").c_str());
+
     in(output, []() {});
 
     return 0;
