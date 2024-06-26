@@ -520,7 +520,7 @@ void pho_60_rebin3_final_theory_spectra_pp_whole_log()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("","CMS pp","plf");
+   TLegendEntry *entry=leg->AddEntry(Graph_Graph3001,"CMS pp","plf");
 
    ci = 1181;
    color = new TColor(ci, 0.6, 0.6, 0.6, " ", 0.6);
@@ -533,7 +533,7 @@ void pho_60_rebin3_final_theory_spectra_pp_whole_log()
    entry->SetMarkerStyle(20);
    entry->SetMarkerSize(1.5);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("","JEWEL","lf");
+   entry=leg->AddEntry(Graph_Graph3008,"JEWEL","lf");
 
    ci = 1191;
    color = new TColor(ci, 0.2666667, 0.572549, 0.8470588, " ", 0.6);
@@ -548,7 +548,7 @@ void pho_60_rebin3_final_theory_spectra_pp_whole_log()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("","PYQUEN","lf");
+   entry=leg->AddEntry(Graph_Graph3002,"PYQUEN","lf");
 
    ci = 1193;
    color = new TColor(ci, 0.8980392, 0.3882353, 0.1137255, " ", 0.6);
@@ -573,7 +573,7 @@ void pho_60_rebin3_final_theory_spectra_pp_whole_log()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   entry=leg->AddEntry("","PYTHIA","lf");
+   entry=leg->AddEntry(Graph_Graph3004,"PYTHIA","lf");
 
    ci = 1199;
    color = new TColor(ci, 0.1333333, 0.5294118, 0.172549, " ", 0.6);
@@ -588,7 +588,7 @@ void pho_60_rebin3_final_theory_spectra_pp_whole_log()
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("","HYBRID","lf");
+   entry=leg->AddEntry(Graph_Graph3006,"HYBRID","lf");
 
    ci = 1195;
    color = new TColor(ci, 0.9921569, 0.6588235, 0.1764706, " ", 0.6);
