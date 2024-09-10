@@ -238,7 +238,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     /* size canvas */
     double factor = 0.72;
 
-    double panel_size = 500;
+    double panel_size = 500 * factor;
     double padding_width_left = 170 / factor;
     double padding_width_right = 50 / factor;
     double padding_height = 70 / factor;
@@ -392,33 +392,33 @@ int congratulate(char const* config, char const* selections, char const* output)
     
         pads[i][0]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06/factor);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
 
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06/factor);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 50-90%");
 
         pads[i][1]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06/factor);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 30-50%");
 
         pads[i][2]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06/factor);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 10-30%");
 
         pads[i][3]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06/factor);
+        latex.SetTextSize(0.06);
         latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
     }
 
     pads[nrows-1][0]->cd();
     if (ratio)             legend.Draw();
 
-    latex.SetTextSize(0.05/factor);
+    latex.SetTextSize(0.05);
     if (ratio)             latex.SetTextAlign(11);
     if (ratio)             latex.DrawLatex(0.05, 0.68, (text_photon_pt).c_str());
     if (ratio)             latex.DrawLatex(0.05, 0.60, (text_photon_eta).c_str());
@@ -426,7 +426,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (ratio)             latex.DrawLatex(0.05, 0.44, (text_jet_alg).c_str());
 
     pads[0][0]->cd();
-    latex.SetTextSize(0.05/factor);
+    latex.SetTextSize(0.05);
     if (spectra)    legend.Draw();
 
     if (spectra)    latex.SetTextAlign(31);
