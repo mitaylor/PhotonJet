@@ -259,12 +259,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     gStyle->SetLineScalePS(1);
 
     /* get graphs */
-    auto graphs_hists_aa = get_graph(hists_aa, 0, factor_y);
-    auto graphs_systs_aa = get_graph(systs_aa, 0, factor_y);
-    auto graphs_hists_pp = get_graph(hists_pp, 1, factor_y);
-    auto graphs_systs_pp = get_graph(systs_pp, 1, factor_y);
-    auto graphs_hists_ratio = get_graph(hists_ratio, 2, factor_y);
-    auto graphs_systs_ratio = get_graph(systs_ratio, 2, factor_y);
+    auto graphs_hists_aa = get_graph(hists_aa, 0, factor_x);
+    auto graphs_systs_aa = get_graph(systs_aa, 0, factor_x);
+    auto graphs_hists_pp = get_graph(hists_pp, 1, factor_x);
+    auto graphs_systs_pp = get_graph(systs_pp, 1, factor_x);
+    auto graphs_hists_ratio = get_graph(hists_ratio, 2, factor_x);
+    auto graphs_systs_ratio = get_graph(systs_ratio, 2, factor_x);
 
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
@@ -404,23 +404,23 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(0.5, 0.8, (text_jet_pt).c_str());
 
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.9, "Cent. 50-90%");
+        latex.SetTextSize(0.06 / factor_y);
+        latex.DrawLatex(0.5, 1 - 0.1 / factor_y, "Cent. 50-90%");
 
         pads[i][1]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.9, "Cent. 30-50%");
+        latex.SetTextSize(0.06 / factor_y);
+        latex.DrawLatex(0.5, 1 - 0.1 / factor_y, "Cent. 30-50%");
 
         pads[i][2]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.9, "Cent. 10-30%");
+        latex.SetTextSize(0.06 / factor_y);
+        latex.DrawLatex(0.5, 1 - 0.1 / factor_y, "Cent. 10-30%");
 
         pads[i][3]->cd();
         latex.SetTextAlign(21);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.9, "Cent. 0-10%");
+        latex.SetTextSize(0.06 / factor_y);
+        latex.DrawLatex(0.5, 1 - 0.1 / factor_y, "Cent. 0-10%");
     }
 
     pads[nrows-1][0]->cd();
