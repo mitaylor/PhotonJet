@@ -183,7 +183,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* define kinematics and luminosity */
     auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} (5.02 TeV)"s;
-    auto text_cms = "CMS #scale[0.8]{#font[52]{Preliminary}}"s;
+    auto text_cms = "CMS"s; // "CMS #scale[0.8]{#font[52]{Preliminary}}"s;
     auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
     auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
     auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
@@ -259,6 +259,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
 
     std::vector<TH2F*> worlds(nrows);
+    std::vector<std::vector<TArrow*>> arrows_ratio(nrows, std::vector<TArrow*>(npads));
+    std::vector<std::vector<TArrow*>> arrows_pp(nrows, std::vector<TArrow*>(npads));
+    std::vector<std::vector<TArrow*>> arrows_aa(nrows, std::vector<TArrow*>(npads));
     std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
@@ -267,19 +270,33 @@ int congratulate(char const* config, char const* selections, char const* output)
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
 
-        pads[i][0] = new TPad("P1", "", pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 1, pad_y0 + pad_dy * (i + 1), 0);
-        pads[i][1] = new TPad("P2", "", pad_x0 + pad_dx * 1, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 2, pad_y0 + pad_dy * (i + 1), 0);
-        pads[i][2] = new TPad("P3", "", pad_x0 + pad_dx * 2, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 3, pad_y0 + pad_dy * (i + 1), 0);
-        pads[i][3] = new TPad("P4", "", pad_x0 + pad_dx * 3, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 4, pad_y0 + pad_dy * (i + 1), 0);
-        
-        set_pad(*pads[i][0]);
-        set_pad(*pads[i][1]);
-        set_pad(*pads[i][2]);
-        set_pad(*pads[i][3]);
-
         axis_y[i] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * i, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * (i + 1), ymins[i] * 0.999, ymaxs[i] * 0.999, 510, "S");
         
         set_axis(*axis_y[i], sf);
+
+        for (int j = 0; j < npads; ++j) {
+            pads[i][j] = new TPad("P", "", pad_x0 + pad_dx * j, pad_y0 + pad_dy * i, pad_x0 + pad_dx * (j + 1), pad_y0 + pad_dy * (i + 1), 0);
+            
+            set_pad(*pads[i][j]);
+
+            double arrow_y_pp = 0.0;
+            double arrow_y_aa = 0.0;
+            double arrow_y_ratio = 0.0;
+
+            if (spectra)    arrow_y_pp = graphs_systs_pp[i][0];
+            if (spectra)    arrow_y_aa = graphs_systs_aa[i][j];
+            if (ratio)      arrow_y_ratio = graphs_systs_ratio[i][j];
+
+            if (spectra)    arrows_pp[i][j] = new TArrow(0.003, arrow_y_pp, 0.0040, arrow_y_pp, 0.02 / npads, "<|");
+            if (spectra)    arrows_pp[i][j]->SetAngle(40);
+            if (spectra)    arrows_pp[i][j]->SetLineWidth(1);
+            if (spectra)    arrows_aa[i][j] = new TArrow(0.003, arrow_y_aa, 0.0040, arrow_y_aa, 0.02 / npads, "<|");
+            if (spectra)    arrows_aa[i][j]->SetAngle(40);
+            if (spectra)    arrows_aa[i][j]->SetLineWidth(1);
+            if (ratio)      arrows_ratio[i][j] = new TArrow(0.003, arrow_y_ratio, 0.0040, arrow_y_ratio, 0.02 / npads, "<|");
+            if (ratio)      arrows_ratio[i][j]->SetAngle(40);
+            if (ratio)      arrows_ratio[i][j]->SetLineWidth(1);
+        }
     }
 
     canvas.cd();
@@ -362,6 +379,10 @@ int congratulate(char const* config, char const* selections, char const* output)
             if (spectra)    graphs_hists_pp[i][0].Draw("same PZ");
 
             line.Draw("l");
+
+            if (ratio)      arrows_ratio[i][j]->Draw();
+            if (spectra)    arrows_aa[i][j]->Draw();
+            if (spectra)    arrows_pp[i][j]->Draw();
         }
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
