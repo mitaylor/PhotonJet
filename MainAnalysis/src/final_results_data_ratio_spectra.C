@@ -426,7 +426,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[nrows-1][0]->cd();
     if (ratio)             legend.Draw();
 
-    latex.SetTextSize(0.05 / factor_y * factor_);
+    latex.SetTextSize(0.05 / factor_y * factor_x);
     if (ratio)             latex.SetTextAlign(11);
     if (ratio)             latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_photon_pt).c_str());
     if (ratio)             latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_photon_eta).c_str());
@@ -436,7 +436,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (ratio)             latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_jet_alg).c_str());
 
     pads[0][0]->cd();
-    latex.SetTextSize(0.05 / factor_y * factor_);
+    latex.SetTextSize(0.05 / factor_y * factor_x);
     if (spectra)    legend.Draw();
 
     if (spectra)    latex.SetTextAlign(31);
