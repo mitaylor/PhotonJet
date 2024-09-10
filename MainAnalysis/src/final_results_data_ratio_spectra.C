@@ -243,17 +243,17 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     double factor_x = 0.72;
     double factor_y = (2 * panel_size + (1 - factor_x) * padding_width_left + (1 - factor_x) * padding_width_right) / 4 / panel_size;
-    std::cout << factor_y << " " << factor_x << std::endl;
+
     panel_size *= factor_y;
     padding_height *= factor_x;
     padding_width_right *= factor_x;
     padding_width_left *= factor_x;
-    std::cout << panel_size << " " << padding_height << " " << padding_width_right << " " << padding_width_left << std::endl;
 
     double canvas_width = panel_size * 4 + padding_width_left + padding_width_right;
     double canvas_height = panel_size * nrows + padding_height * 2;
 
-    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2) * factor_x;
+    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2);
+    sf = sf * (panel_size + padding_height * 2) / (640) / factor_x;
 
     double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
