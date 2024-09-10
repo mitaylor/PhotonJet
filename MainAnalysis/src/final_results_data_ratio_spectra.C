@@ -242,7 +242,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double padding_height = 70;
 
     double factor_x = 0.72;
-    double factor_y = (2 * panel_size + (1 - factor_x) * padding_width_left + (1 - factor_x) * padding_width_right) / 4;
+    double factor_y = (2 * panel_size + (1 - factor_x) * padding_width_left + (1 - factor_x) * padding_width_right) / 4 / panel_size;
     std::cout << factor_y << " " << factor_x << std::endl;
     panel_size *= factor_y;
     padding_height *= factor_x;
