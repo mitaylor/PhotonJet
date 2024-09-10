@@ -434,7 +434,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     double sf = 1;
 
-    double pad_x0 = padding_width_left / canvas_width; std::cout << pad_x0 << std::endl;
+    double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
