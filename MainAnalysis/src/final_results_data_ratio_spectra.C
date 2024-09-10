@@ -228,13 +228,6 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (ratio)      set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
     }
 
-    auto graphs_hists_aa = get_graph(hists_aa, 0, factor_y);
-    auto graphs_systs_aa = get_graph(systs_aa, 0, factor_y);
-    auto graphs_hists_pp = get_graph(hists_pp, 1, factor_y);
-    auto graphs_systs_pp = get_graph(systs_pp, 1, factor_y);
-    auto graphs_hists_ratio = get_graph(hists_ratio, 2, factor_y);
-    auto graphs_systs_ratio = get_graph(systs_ratio, 2, factor_y);
-
     /* size canvas */
     double panel_size = 500;
     double padding_width_left = 170;
@@ -264,6 +257,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     double xmax = bdr[1];
 
     gStyle->SetLineScalePS(1);
+
+    /* get graphs */
+    auto graphs_hists_aa = get_graph(hists_aa, 0, factor_y);
+    auto graphs_systs_aa = get_graph(systs_aa, 0, factor_y);
+    auto graphs_hists_pp = get_graph(hists_pp, 1, factor_y);
+    auto graphs_systs_pp = get_graph(systs_pp, 1, factor_y);
+    auto graphs_hists_ratio = get_graph(hists_ratio, 2, factor_y);
+    auto graphs_systs_ratio = get_graph(systs_ratio, 2, factor_y);
 
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
