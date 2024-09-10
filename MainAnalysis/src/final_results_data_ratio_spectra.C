@@ -22,6 +22,7 @@
 #include "TPad.h"
 #include "TGaxis.h"
 #include "TLegend.h"
+#include "TArrow.h"
 #include "TBox.h"
 #include "TGraphAsymmErrors.h"
 
@@ -283,9 +284,9 @@ int congratulate(char const* config, char const* selections, char const* output)
             double arrow_y_aa = 0.0;
             double arrow_y_ratio = 0.0;
 
-            if (spectra)    arrow_y_pp = graphs_systs_pp[i][0];
-            if (spectra)    arrow_y_aa = graphs_systs_aa[i][j];
-            if (ratio)      arrow_y_ratio = graphs_systs_ratio[i][j];
+            if (spectra)    arrow_y_pp = graphs_systs_pp[i][0].GetPointY(0);
+            if (spectra)    arrow_y_aa = graphs_systs_aa[i][j].GetPointY(0);
+            if (ratio)      arrow_y_ratio = graphs_systs_ratio[i][j].GetPointY(0);
 
             if (spectra)    arrows_pp[i][j] = new TArrow(0.003, arrow_y_pp, 0.0040, arrow_y_pp, 0.02 / npads, "<|");
             if (spectra)    arrows_pp[i][j]->SetAngle(40);
