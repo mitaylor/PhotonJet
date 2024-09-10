@@ -103,7 +103,7 @@ std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*
             result[i][k].SetLineColor(1);
             result[i][k].SetFillColorAlpha(color[system], 0.60);
             result[i][k].SetMarkerSize(1.5);
-            result[i][k].SetLineWidth(1.0);    
+            result[i][k].SetLineWidth(1.5);    
         }
     }
 
@@ -244,7 +244,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double canvas_width = panel_size * 4 + padding_width_left + padding_width_right;
     double canvas_height = panel_size * nrows + padding_height * 2;
 
-    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2);
+    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2) / 0.72;
 
     double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
