@@ -81,7 +81,7 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
     }
 }
 
-std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*> h, int system)
+std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*> h, int system, double sf)
 {
     std::vector<std::vector<TGraphAsymmErrors>> result(h.size(), std::vector<TGraphAsymmErrors>(h[0]->size()));
 
@@ -102,7 +102,7 @@ std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*
             result[i][k].SetMarkerColor(1);
             result[i][k].SetLineColor(1);
             result[i][k].SetFillColorAlpha(color[system], 0.60);
-            result[i][k].SetMarkerSize(1.5);
+            result[i][k].SetMarkerSize(1.5*sf);
             result[i][k].SetLineWidth(1.5);    
         }
     }
@@ -228,12 +228,12 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (ratio)      set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
     }
 
-    auto graphs_hists_aa = get_graph(hists_aa, 0);
-    auto graphs_systs_aa = get_graph(systs_aa, 0);
-    auto graphs_hists_pp = get_graph(hists_pp, 1);
-    auto graphs_systs_pp = get_graph(systs_pp, 1);
-    auto graphs_hists_ratio = get_graph(hists_ratio, 2);
-    auto graphs_systs_ratio = get_graph(systs_ratio, 2);
+    auto graphs_hists_aa = get_graph(hists_aa, 0, factor_y);
+    auto graphs_systs_aa = get_graph(systs_aa, 0, factor_y);
+    auto graphs_hists_pp = get_graph(hists_pp, 1, factor_y);
+    auto graphs_systs_pp = get_graph(systs_pp, 1, factor_y);
+    auto graphs_hists_ratio = get_graph(hists_ratio, 2, factor_y);
+    auto graphs_systs_ratio = get_graph(systs_ratio, 2, factor_y);
 
     /* size canvas */
     double panel_size = 500;
