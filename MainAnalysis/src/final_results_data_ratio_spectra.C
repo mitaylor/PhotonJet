@@ -236,17 +236,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto graphs_systs_ratio = get_graph(systs_ratio, 2);
 
     /* size canvas */
-    // double factor = 0.72;
+    double factor = 0.72;
 
-    double panel_size = 140;
-    double padding_width_left = 170;
-    double padding_width_right = 50;
-    double padding_height = 70;
+    double panel_size = 500;
+    double padding_width_left = 170 * factor;
+    double padding_width_right = 50 * factor;
+    double padding_height = 70 * factor;
 
     double canvas_width = panel_size * 4 + padding_width_left + padding_width_right;
     double canvas_height = panel_size * nrows + padding_height * 2;
 
-    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2) / 2;
+    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2) / factor;
 
     double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
