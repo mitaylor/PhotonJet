@@ -298,13 +298,13 @@ int congratulate(char const* config, char const* selections, char const* output)
             if (spectra)    arrow_y_aa = graphs_systs_aa[i][j].GetPointY(0);
             if (ratio)      arrow_y_ratio = graphs_systs_ratio[i][j].GetPointY(0);
 
-            if (spectra)    arrows_pp[i][j] = new TArrow(0.003, arrow_y_pp, 0.0040, arrow_y_pp, 0.02 / npads, "<|");
+            if (spectra)    arrows_pp[i][j] = new TArrow(0.003, arrow_y_pp, 0.0040, arrow_y_pp, 0.02 / npads / factor_y * factor_x, "<|");
             if (spectra)    arrows_pp[i][j]->SetAngle(40);
             if (spectra)    arrows_pp[i][j]->SetLineWidth(1);
-            if (spectra)    arrows_aa[i][j] = new TArrow(0.003, arrow_y_aa, 0.0040, arrow_y_aa, 0.02 / npads, "<|");
+            if (spectra)    arrows_aa[i][j] = new TArrow(0.003, arrow_y_aa, 0.0040, arrow_y_aa, 0.02 / npads / factor_y * factor_x, "<|");
             if (spectra)    arrows_aa[i][j]->SetAngle(40);
             if (spectra)    arrows_aa[i][j]->SetLineWidth(1);
-            if (ratio)      arrows_ratio[i][j] = new TArrow(0.003, arrow_y_ratio, 0.0040, arrow_y_ratio, 0.02 / npads, "<|");
+            if (ratio)      arrows_ratio[i][j] = new TArrow(0.003, arrow_y_ratio, 0.0040, arrow_y_ratio, 0.02 / npads / factor_y * factor_x, "<|");
             if (ratio)      arrows_ratio[i][j]->SetAngle(40);
             if (ratio)      arrows_ratio[i][j]->SetLineWidth(1);
         }
@@ -361,10 +361,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    double legend_y_min = (ratio) ? 1 - 0.34 / factor_y * factor_x : 1 - 0.34 / factor_y * factor_x;
-    double legend_y_max = (ratio) ? 1 - 0.27 / factor_y * factor_x : 1 - 0.20 / factor_y * factor_x;
-    double legend_x_min = (ratio) ? 0.05 / factor_y * factor_x : 0.05 / factor_y * factor_x;
-    double legend_x_max = (ratio) ? 0.35 / factor_y * factor_x : 0.35 / factor_y * factor_x;
+    double legend_y_min = (ratio) ? 1 - 0.34 / factor_y * factor_x : 1 - 0.41 / factor_y * factor_x;
+    double legend_y_max = (ratio) ? 1 - 0.27 / factor_y * factor_x : 1 - 0.27 / factor_y * factor_x;
+    double legend_x_min = (ratio) ? 0.05 / factor_y * factor_x : 0.55 / factor_y * factor_x;
+    double legend_x_max = (ratio) ? 0.35 / factor_y * factor_x : 0.85 / factor_y * factor_x;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -424,25 +424,26 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[nrows-1][0]->cd();
-    if (nrows == 2)      legend.Draw();
-
-    pads[0][2]->cd();
-    if (nrows != 2)      legend.Draw();
+    legend.Draw();
 
     pads[0][0]->cd();
     latex.SetTextSize(0.05 / factor_y * factor_x);
     latex.SetTextAlign(11);
 
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_photon_pt).c_str());
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_photon_pt).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_photon_eta).c_str());
 
     pads[0][1]->cd();
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_jet_alg).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_jet_alg).c_str());
+
+    pads[0][2]->cd();
+    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_eta).c_str());
+
+    pads[0][3]->cd();
+    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_jet_alg).c_str());
 
     if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.pdf").c_str());
     if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.pdf").c_str());
