@@ -363,8 +363,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     /* declare legend */
     double legend_y_min = (ratio) ? 1 - 0.34 / factor_y * factor_x : 1 - 0.41 / factor_y * factor_x;
     double legend_y_max = (ratio) ? 1 - 0.27 / factor_y * factor_x : 1 - 0.27 / factor_y * factor_x;
-    double legend_x_min = (ratio) ? 0.05 / factor_y * factor_x : 0.55 / factor_y * factor_x;
-    double legend_x_max = (ratio) ? 0.35 / factor_y * factor_x : 0.85 / factor_y * factor_x;
+    double legend_x_min = (ratio) ? 0.05 / factor_y * factor_x : 0.50 / factor_y * factor_x;
+    double legend_x_max = (ratio) ? 0.35 / factor_y * factor_x : 0.70 / factor_y * factor_x;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -424,23 +424,24 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[nrows-1][0]->cd();
-    legend.Draw();
+    if (nrows == 2) legend.Draw();
 
     pads[0][0]->cd();
     latex.SetTextSize(0.05 / factor_y * factor_x);
     latex.SetTextAlign(11);
 
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_photon_pt).c_str());
+    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_pt).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_photon_pt).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_photon_eta).c_str());
 
     pads[0][1]->cd();
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_jet_alg).c_str());
 
     pads[0][2]->cd();
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_eta).c_str());
+    if (nrows != 2) legend.Draw();
 
     pads[0][3]->cd();
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_jet_alg).c_str());
