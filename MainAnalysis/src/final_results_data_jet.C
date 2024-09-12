@@ -172,29 +172,31 @@ int congratulate(char const* config, char const* selections, char const* output)
     double panel_size = 500;
     double padding_width_left = 170;
     double padding_width_right = 50;
-    double padding_height = 70;
+    double padding_height_top = 70;
+    double padding_height_bottom = 140;
 
     double factor_x = 0.72;
     double factor_y = (2 * panel_size + (1 - factor_x) * padding_width_left + (1 - factor_x) * padding_width_right) / 4 / panel_size;
 
     panel_size *= factor_y;
-    padding_height *= factor_x;
+    padding_height_top *= factor_x;
+    padding_height_bottom *= factor_x;
     padding_width_right *= factor_x;
     padding_width_left *= factor_x;
 
     double canvas_width = panel_size * 4 + padding_width_left + padding_width_right;
-    double canvas_height = panel_size * nrows + padding_height * 2;
+    double canvas_height = panel_size * nrows + padding_height_top + padding_height_bottom;
 
-    double sf = (panel_size * nrows + padding_height * 2) / (panel_size * 1 + padding_height * 2);
-    sf = sf * (panel_size + padding_height * 2) / (640) / factor_x;
+    double sf = (panel_size * nrows + padding_height_top + padding_height_bottom) / (panel_size * 1 + padding_height_top + padding_height_bottom);
+    sf = sf * (panel_size + padding_height_top + padding_height_bottom) / (640) / factor_x;
 
     double pad_x0 = padding_width_left / canvas_width;
-    double pad_y0 = padding_height / canvas_height;
+    double pad_y0 = padding_height_bottom / canvas_height;
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
     double xmin = 29.999;
-    double xmax = 99;
+    double xmax = 99.999;
 
     gStyle->SetLineScalePS(1);
 
