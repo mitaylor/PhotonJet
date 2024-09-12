@@ -239,7 +239,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "p_{T}^{jet}");
@@ -248,7 +248,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "p_{T}^{jet}");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{dp_{T}^{jet}}");
@@ -265,16 +265,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
-    TGraph line;
-    line.SetPoint(0, xmin, 0);
-    line.SetPoint(1, xmax, 0);
-    line.SetLineStyle(kDashed);
-
     /* declare legend */
-    double legend_y_min = 1 - 0.41 / factor_y * factor_x;
-    double legend_y_max = 1 - 0.27 / factor_y * factor_x;
-    double legend_x_min = 0.50 / factor_y * factor_x;
-    double legend_x_max = 0.80 / factor_y * factor_x;
+    double legend_y_min = 1 - 0.51 / factor_y * factor_x;
+    double legend_y_max = 1 - 0.37 / factor_y * factor_x;
+    double legend_x_min = 0.05 / factor_y * factor_x;
+    double legend_x_max = 0.35 / factor_y * factor_x;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
@@ -295,8 +290,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             graphs_systs_pp[i][0].Draw("same 2");
             graphs_hists_aa[i][j].Draw("same PZ");
             graphs_hists_pp[i][0].Draw("same PZ");
-
-            line.Draw("l");
         }
 
         pads[i][0]->cd();
@@ -324,9 +317,6 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(0.5, 1 - 0.1 / factor_y * factor_x, "Cent. 0-10%");
     }
 
-    pads[nrows-1][0]->cd();
-    legend.Draw();
-
     pads[0][0]->cd();
     latex.SetTextSize(0.05 / factor_y * factor_x);
     latex.SetTextAlign(11);
@@ -337,6 +327,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0][1]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_jet_alg).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+
+    legend.Draw();
 
     canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
 
