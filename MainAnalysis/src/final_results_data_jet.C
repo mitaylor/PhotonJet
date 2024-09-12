@@ -258,8 +258,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextFont(42);
     latex.SetTextSize(0.05/sf);
-    latex.SetTextAlign(23);
-    latex.SetTextAngle(90);
+    latex.SetTextAlign(31);
+    latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 * 0.95, pad_y0 + pad_dy * nrows * 0.95, "#times 10^{-3}");
 
     latex.SetTextFont(62);
