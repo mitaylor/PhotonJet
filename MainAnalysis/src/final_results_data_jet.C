@@ -194,7 +194,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dy = panel_size / canvas_height;
 
     double xmin = 29.999;
-    double xmax = 99.999;
+    double xmax = 99;
 
     gStyle->SetLineScalePS(1);
 
