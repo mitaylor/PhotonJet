@@ -196,7 +196,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dy = panel_size / canvas_height;
 
     double xmin = 30.0001;
-    double xmax = 99.9999;
+    double xmax = 99.999;
 
     gStyle->SetLineScalePS(1);
 
@@ -248,10 +248,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.33, "p_{T}^{jet}");
-    latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.33, "p_{T}^{jet}");
-    latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.33, "p_{T}^{jet}");
-    latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.33, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.34, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.34, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.34, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.34, "p_{T}^{jet}");
 
     latex.SetTextFont(42);
     latex.SetTextSize(0.07/sf);
