@@ -102,6 +102,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto suffix = conf->get<std::string>("suffix");
     auto name = conf->get<std::string>("name");
 
+    auto supplementary = conf->get<bool>("supplementary");
+
     auto type = conf->get<int64_t>("type");
 
     auto ymin = conf->get<float>("ymin");
@@ -159,7 +161,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* define kinematics and luminosity */
     auto text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} (5.02 TeV)"s;
-    auto text_cms = "CMS"s; // "CMS #scale[0.8]{#font[52]{Preliminary}}"s;
+    auto text_cms = (supplementary) ? "CMS #scale[0.8]{#font[52]{Supplementary}}"s : "CMS"s;
     auto text_photon_pt = to_text(bpho_pt[0]) + " < p_{T}^{#gamma} < "s + to_text(bpho_pt[1]) + " GeV"s;
     auto text_photon_eta = "|#eta^{#gamma}| < "s + to_text(photon_eta_abs);
     auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
