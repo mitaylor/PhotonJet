@@ -95,6 +95,7 @@ void set_axis(TGaxis &axis, double sf)
     // axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
+    TGaxis::SetExponentOffset(-0.01, -0.01, "y");
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
