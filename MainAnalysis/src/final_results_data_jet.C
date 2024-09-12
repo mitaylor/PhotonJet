@@ -42,10 +42,10 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
             (*s)[i]->SetBinContent(j, val);
             (*s)[i]->SetBinError(j, err);
         }
-    }
 
-    (*h)[i]->Scale(1000);
-    (*s)[i]->Scale(1000);
+        (*h)[i]->Scale(1000);
+        (*s)[i]->Scale(1000);
+    }
 }
 
 std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*> h, int system, double sf)
