@@ -257,7 +257,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{dp_{T}^{jet}}");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.05/sf);
+    latex.SetTextSize(0.04/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 * 0.95, pad_y0 + pad_dy * nrows * 0.95, "#times 10^{-3}");
