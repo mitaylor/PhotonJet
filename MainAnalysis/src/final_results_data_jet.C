@@ -22,7 +22,6 @@
 #include "TPad.h"
 #include "TGaxis.h"
 #include "TLegend.h"
-#include "TArrow.h"
 #include "TBox.h"
 #include "TGraphAsymmErrors.h"
 
@@ -110,9 +109,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
-    auto ratio = conf->get<bool>("ratio");
-    auto spectra = conf->get<bool>("spectra");
-
     auto sel = new configurer(selections);
 
     auto set = sel->get<std::string>("set");
@@ -130,13 +126,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto ptg_range = sel->get<std::vector<float>>("ptg_range");
 
     auto osg = sel->get<std::vector<int64_t>>("osg");
-    auto osg_part1 = sel->get<std::vector<int64_t>>("osg_part1");
-    auto osg_part2 = sel->get<std::vector<int64_t>>("osg_part2");
 
     const int nrows = figures.size();
     const int npads = 4;
-
-    std::vector<std::vector<float>> bjet_pt(nrows, std::vector<float>(2, 0));
 
     /* manage memory manually */
     TH1::AddDirectory(false);
@@ -154,42 +146,22 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto text_dphi = "#Delta#phi_{j#gamma} > #frac{"s + to_text(dphi_min_numerator) + "#pi}{"s + to_text(dphi_min_denominator) + "}"s;
     auto text_jet_alg = "anti-k_{T} R = 0.3"s;
     auto text_jet_eta = "|#eta^{jet}| < "s + to_text(jet_eta_abs);
+    auto text_jet_pt = to_text(ptg_range[osg[2]]) + " < p_{T}^{jet} < "s + to_text(ptg_range[ptg_range.size() - 1 - osg[3]]) + " GeV"s;
 
     std::vector<history<TH1F>*> hists_aa(nrows);
     std::vector<history<TH1F>*> systs_aa(nrows);
     std::vector<history<TH1F>*> hists_pp(nrows);
     std::vector<history<TH1F>*> systs_pp(nrows);
-    std::vector<history<TH1F>*> hists_ratio(nrows);
-    std::vector<history<TH1F>*> systs_ratio(nrows);
 
     for (int i = 0; i < nrows; ++i) {
-        /* define jet pT bounds */
-        switch (types[i]) {
-        case 1:
-            bjet_pt[i][0] = ptg_range[osg_part1[2]];
-            bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg_part1[3]];
-            break;
-        case 2:
-            bjet_pt[i][0] = ptg_range[osg_part2[2]];
-            bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg_part2[3]];
-            break;
-        default:
-            bjet_pt[i][0] = ptg_range[osg[2]];
-            bjet_pt[i][1] = ptg_range[ptg_range.size() - 1 - osg[3]];
-        }
-
         /* get histograms */
         hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
         systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
         hists_pp[i] = new history<TH1F>(file_pp, "pp_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
         systs_pp[i] = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
-        hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
-        systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
 
         set_systematics(hists_aa[i], systs_aa[i]);
         set_systematics(hists_pp[i], systs_pp[i]);
-        
-        if (ratio)      set_values(hists_ratio[i], systs_ratio[i], hists_aa[i], systs_aa[i], hists_pp[i], systs_pp[i]);
     }
 
     /* size canvas */
@@ -217,8 +189,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     double pad_dx = panel_size / canvas_width;
     double pad_dy = panel_size / canvas_height;
 
-    double xmin = bdr[0] + 0.003;
-    double xmax = bdr[1];
+    double xmin = 30;
+    double xmax = 100;
 
     gStyle->SetLineScalePS(1);
 
@@ -227,16 +199,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto graphs_systs_aa = get_graph(systs_aa, 0, factor_x);
     auto graphs_hists_pp = get_graph(hists_pp, 1, factor_x);
     auto graphs_systs_pp = get_graph(systs_pp, 1, factor_x);
-    auto graphs_hists_ratio = get_graph(hists_ratio, 2, factor_x);
-    auto graphs_systs_ratio = get_graph(systs_ratio, 2, factor_x);
 
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
 
     std::vector<TH2F*> worlds(nrows);
-    std::vector<std::vector<TArrow*>> arrows_ratio(nrows, std::vector<TArrow*>(npads));
-    std::vector<std::vector<TArrow*>> arrows_pp(nrows, std::vector<TArrow*>(npads));
-    std::vector<std::vector<TArrow*>> arrows_aa(nrows, std::vector<TArrow*>(npads));
     std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
@@ -253,24 +220,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             pads[i][j] = new TPad("P", "", pad_x0 + pad_dx * j, pad_y0 + pad_dy * i, pad_x0 + pad_dx * (j + 1), pad_y0 + pad_dy * (i + 1), 0);
             
             set_pad(*pads[i][j]);
-
-            double arrow_y_pp = 0.0;
-            double arrow_y_aa = 0.0;
-            double arrow_y_ratio = 0.0;
-
-            if (spectra)    arrow_y_pp = graphs_systs_pp[i][0].GetPointY(0);
-            if (spectra)    arrow_y_aa = graphs_systs_aa[i][j].GetPointY(0);
-            if (ratio)      arrow_y_ratio = graphs_systs_ratio[i][j].GetPointY(0);
-
-            if (spectra)    arrows_pp[i][j] = new TArrow(0.003, arrow_y_pp, 0.0040, arrow_y_pp, 0.02 / npads / factor_y * factor_x, "<|");
-            if (spectra)    arrows_pp[i][j]->SetAngle(40);
-            if (spectra)    arrows_pp[i][j]->SetLineWidth(1);
-            if (spectra)    arrows_aa[i][j] = new TArrow(0.003, arrow_y_aa, 0.0040, arrow_y_aa, 0.02 / npads / factor_y * factor_x, "<|");
-            if (spectra)    arrows_aa[i][j]->SetAngle(40);
-            if (spectra)    arrows_aa[i][j]->SetLineWidth(1);
-            if (ratio)      arrows_ratio[i][j] = new TArrow(0.003, arrow_y_ratio, 0.0040, arrow_y_ratio, 0.02 / npads / factor_y * factor_x, "<|");
-            if (ratio)      arrows_ratio[i][j]->SetAngle(40);
-            if (ratio)      arrows_ratio[i][j]->SetLineWidth(1);
         }
     }
 
@@ -293,17 +242,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
-    latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#Deltaj");
-    latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.5, "#Deltaj");
-    latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.5, "#Deltaj");
-    latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#Deltaj");
+    latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 1.5, pad_y0 * 0.5, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 2.5, pad_y0 * 0.5, "p_{T}^{jet}");
+    latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "p_{T}^{jet}");
 
     latex.SetTextFont(42);
     latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
-    if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "PbPb / pp");
-    if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
+    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{dp_{T}^{jet}}");
 
     latex.SetTextFont(62);
     latex.SetTextSize(0.07/sf);
@@ -318,26 +266,23 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
     TGraph line;
-    if (ratio)      line.SetPoint(0, xmin, 1);
-    if (ratio)      line.SetPoint(1, xmax, 1);
-    if (spectra)    line.SetPoint(0, xmin, 0);
-    if (spectra)    line.SetPoint(1, xmax, 0);
+    line.SetPoint(0, xmin, 0);
+    line.SetPoint(1, xmax, 0);
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    double legend_y_min = (ratio) ? 1 - 0.34 / factor_y * factor_x : 1 - 0.41 / factor_y * factor_x;
-    double legend_y_max = (ratio) ? 1 - 0.27 / factor_y * factor_x : 1 - 0.27 / factor_y * factor_x;
-    double legend_x_min = (ratio) ? 0.05 / factor_y * factor_x : 0.50 / factor_y * factor_x;
-    double legend_x_max = (ratio) ? 0.35 / factor_y * factor_x : 0.80 / factor_y * factor_x;
+    double legend_y_min = 1 - 0.41 / factor_y * factor_x;
+    double legend_y_max = 1 - 0.27 / factor_y * factor_x;
+    double legend_x_min = 0.50 / factor_y * factor_x;
+    double legend_x_max = 0.80 / factor_y * factor_x;
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
     legend.SetTextSize(0.05 / factor_y * factor_x);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
-    if (ratio)      legend.AddEntry(&graphs_systs_ratio[0][0], "PbPb/pp", "plf");
-    if (spectra)    legend.AddEntry(&graphs_systs_aa[0][0], "PbPb", "plf");
-    if (spectra)    legend.AddEntry(&graphs_systs_pp[0][0], "pp", "plf");
+    legend.AddEntry(&graphs_systs_aa[0][0], "PbPb", "plf");
+    legend.AddEntry(&graphs_systs_pp[0][0], "pp", "plf");
 
     for (int i = 0; i < nrows; i++) {
         for(int j = 0; j < npads; j++)
@@ -346,22 +291,14 @@ int congratulate(char const* config, char const* selections, char const* output)
 
             worlds[i]->Draw("axis");
 
-            if (ratio)      graphs_systs_ratio[i][j].Draw("same 2");
-            if (ratio)      graphs_hists_ratio[i][j].Draw("same PZ");
-            if (spectra)    graphs_systs_aa[i][j].Draw("same 2");
-            if (spectra)    graphs_systs_pp[i][0].Draw("same 2");
-            if (spectra)    graphs_hists_aa[i][j].Draw("same PZ");
-            if (spectra)    graphs_hists_pp[i][0].Draw("same PZ");
+            graphs_systs_aa[i][j].Draw("same 2");
+            graphs_systs_pp[i][0].Draw("same 2");
+            graphs_hists_aa[i][j].Draw("same PZ");
+            graphs_hists_pp[i][0].Draw("same PZ");
 
             line.Draw("l");
-
-            if (ratio)      arrows_ratio[i][j]->Draw();
-            if (spectra)    arrows_aa[i][j]->Draw();
-            if (spectra)    arrows_pp[i][j]->Draw();
         }
 
-        auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-    
         pads[i][0]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
@@ -388,29 +325,22 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[nrows-1][0]->cd();
-    if (nrows == 2 || !ratio) legend.Draw();
+    legend.Draw();
 
     pads[0][0]->cd();
     latex.SetTextSize(0.05 / factor_y * factor_x);
     latex.SetTextAlign(11);
 
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_photon_eta).c_str());
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_pt).c_str());
-    if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_photon_pt).c_str());
-    if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_photon_eta).c_str());
-
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_photon_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_pt).c_str());
+    
     pads[0][1]->cd();
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_jet_alg).c_str());
-    if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
-    if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.32 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
-    if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.4 / factor_y * factor_x, (text_jet_alg).c_str());
-
-    pads[0][2]->cd();
-    if (nrows != 2 && ratio) legend.Draw();
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_jet_alg).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
 
     canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
 
-    canvas.SaveAs((set + "_final_ratio_jet_log.C").c_str());
+    canvas.SaveAs((set + "_final_jet_log.C").c_str());
 
     in(output, []() {});
 
