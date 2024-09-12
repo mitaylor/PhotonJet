@@ -43,6 +43,9 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
             (*s)[i]->SetBinError(j, err);
         }
     }
+
+    (*h)[i]->Scale(1000);
+    (*s)[i]->Scale(1000);
 }
 
 std::vector<std::vector<TGraphAsymmErrors>> get_graph(std::vector<history<TH1F>*> h, int system, double sf)
@@ -91,11 +94,10 @@ void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.050/sf);
-    axis.SetMaxDigits(3);
-    // axis.SetNoExponent();
+    axis.SetMaxDigits(6);
+    axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
-    axis.SetExponentOffset(-0.1, -0.1);
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
@@ -253,6 +255,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{dp_{T}^{jet}}");
+
+    latex.SetTextFont(42);
+    latex.SetTextSize(0.05/sf);
+    latex.SetTextAlign(23);
+    latex.SetTextAngle(90);
+    latex.DrawLatex(pad_x0 * 0.95, pad_y0 + pad_dy * nrows * 0.95, "#times 10^{-3}");
 
     latex.SetTextFont(62);
     latex.SetTextSize(0.07/sf);
