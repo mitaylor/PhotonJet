@@ -97,6 +97,7 @@ void set_axis(TGaxis &axis, double sf)
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
+    axis.SetMoreLogLabels();
     axis.Draw();
 }
 
