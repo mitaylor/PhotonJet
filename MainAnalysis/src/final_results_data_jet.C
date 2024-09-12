@@ -92,7 +92,7 @@ void set_axis(TGaxis &axis, double sf)
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.050/sf);
     axis.SetMaxDigits(3);
-    axis.SetNoExponent();
+    // axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
 }
@@ -321,12 +321,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.05 / factor_y * factor_x);
     latex.SetTextAlign(11);
 
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_photon_eta).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_photon_pt).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_photon_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.5 / factor_y * factor_x, (text_photon_pt).c_str());
     
     pads[0][1]->cd();
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.55 / factor_y * factor_x, (text_jet_alg).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.63 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_jet_alg).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.5 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
 
     legend.Draw();
 
