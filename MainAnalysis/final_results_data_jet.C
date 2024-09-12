@@ -33,40 +33,6 @@
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
 
-void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history<TH1F>* s_aa, history<TH1F>* h_pp, history<TH1F>* s_pp)
-{
-    for (int i = 0; i < h->size(); ++i) {
-        (*s_aa)[i]->Scale(1/(*h_aa)[i]->Integral("width"));
-        (*h_aa)[i]->Scale(1/(*h_aa)[i]->Integral("width"));
-        (*s_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
-        (*h_pp)[0]->Scale(1/(*h_pp)[0]->Integral("width"));
-
-        for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
-            double aa_val = (*h_aa)[i]->GetBinContent(j);
-            double aa_stat_err = (*h_aa)[i]->GetBinError(j);
-            double aa_syst_err = (*s_aa)[i]->GetBinError(j);
-            auto aa_stat_err_scale = aa_stat_err/aa_val;
-            auto aa_syst_err_scale = aa_syst_err/aa_val;
-
-            double pp_val = (*h_pp)[0]->GetBinContent(j);
-            double pp_stat_err = (*h_pp)[0]->GetBinError(j);
-            double pp_syst_err = (*s_pp)[0]->GetBinError(j);
-            auto pp_stat_err_scale = pp_stat_err/pp_val;
-            auto pp_syst_err_scale = pp_syst_err/pp_val;
-
-            auto ratio = aa_val / pp_val;
-
-            auto stat_err = ratio * std::sqrt(aa_stat_err_scale * aa_stat_err_scale + pp_stat_err_scale * pp_stat_err_scale);
-            auto syst_err = ratio * std::sqrt(aa_syst_err_scale * aa_syst_err_scale + pp_syst_err_scale * pp_syst_err_scale);
-
-            (*h)[i]->SetBinContent(j, ratio);
-            (*h)[i]->SetBinError(j, stat_err);
-            (*s)[i]->SetBinContent(j, ratio);
-            (*s)[i]->SetBinError(j, syst_err);
-        }
-    }
-}
-
 void set_systematics(history<TH1F>* h, history<TH1F>* s)
 {
     for (int i = 0; i < h->size(); ++i) {
@@ -139,7 +105,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto input_pp = conf->get<std::string>("input_pp");
 
     auto figures = conf->get<std::vector<std::string>>("figures");
-    auto name = conf->get<std::string>("name");
     auto types = conf->get<std::vector<int64_t>>("types");
 
     auto ymins = conf->get<std::vector<float>>("ymins");
@@ -443,11 +408,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0][2]->cd();
     if (nrows != 2 && ratio) legend.Draw();
 
-    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.pdf").c_str());
-    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.pdf").c_str());
+    canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
 
-    if (ratio)      canvas.SaveAs((set + "_final_ratio_" + name + "_log.C").c_str());
-    if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.C").c_str());
+    canvas.SaveAs((set + "_final_ratio_jet_log.C").c_str());
 
     in(output, []() {});
 

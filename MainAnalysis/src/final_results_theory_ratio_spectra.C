@@ -94,7 +94,6 @@ void set_values(history<TH1F>* h, history<TH1F>* h_aa, history<TH1F>* h_pp)
 
 void set_systematics(history<TH1F>* h, history<TH1F>* s)
 {
-
     for (int i = 0; i < h->size(); ++i) {
         for (int j = 1; j <= (*h)[i]->GetNbinsX(); ++j) {
             double val = (*h)[i]->GetBinContent(j);
