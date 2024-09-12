@@ -91,8 +91,8 @@ void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
     axis.SetLabelSize(0.050/sf);
-    axis.SetMaxDigits(6);
-    // axis.SetNoExponent();
+    axis.SetMaxDigits(3);
+    axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
 }
@@ -266,8 +266,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_min = 1 - 0.27 / factor_y * factor_x;
-    double legend_y_max = 1 - 0.13 / factor_y * factor_x;
+    double legend_y_min = 1 - 0.28 / factor_y * factor_x;
+    double legend_y_max = 1 - 0.14 / factor_y * factor_x;
     double legend_x_min = 0.05 / factor_y * factor_x;
     double legend_x_max = 0.35 / factor_y * factor_x;
 
