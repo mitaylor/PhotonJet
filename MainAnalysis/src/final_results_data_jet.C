@@ -266,8 +266,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_min = 1 - 0.51 / factor_y * factor_x;
-    double legend_y_max = 1 - 0.37 / factor_y * factor_x;
+    double legend_y_min = 1 - 0.31 / factor_y * factor_x;
+    double legend_y_max = 1 - 0.17 / factor_y * factor_x;
     double legend_x_min = 0.05 / factor_y * factor_x;
     double legend_x_max = 0.35 / factor_y * factor_x;
 
