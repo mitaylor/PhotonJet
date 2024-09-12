@@ -95,7 +95,7 @@ void set_axis(TGaxis &axis, double sf)
     // axis.SetNoExponent();
     axis.SetTickLength(0.0);
     axis.Draw();
-    TGaxis::SetExponentOffset(-0.01, -0.01, "y");
+    TGaxis::SetExponentOffset(-0.1, -0.1, "y");
 }
 
 int congratulate(char const* config, char const* selections, char const* output) {
@@ -323,11 +323,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(11);
 
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_photon_eta).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.5 / factor_y * factor_x, (text_photon_pt).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_photon_pt).c_str());
     
     pads[0][1]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_jet_alg).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.5 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
 
     legend.Draw();
 
