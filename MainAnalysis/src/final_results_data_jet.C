@@ -235,6 +235,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto types = conf->get<std::vector<int64_t>>("types");
 
+    auto hep = conf->get<std::string>("hep");
+
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");
 
@@ -474,6 +476,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     canvas.SaveAs((set + "_final_jet_log.C").c_str());
 
     in(output, []() {});
+
+    hep_data_spectra(hep, graphs_hists_aa, graphs_systs_aa, graphs_hists_pp, graphs_systs_pp);
 
     return 0;
 }
