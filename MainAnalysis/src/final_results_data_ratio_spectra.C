@@ -46,7 +46,7 @@ void hep_data_spectra(std::string hep, bool subsets,
 
     // write x ranges: taking from the first one
     out << "independent_variables:" << std::endl;
-    out << "- header: {name: '$\Deltaj$'}" << std::endl;
+    out << "- header: {name: '$\\Deltaj$'}" << std::endl;
     out << "  values:" << std::endl;
 
     int nbins = graphs_hists_aa[0][0].GetN();
@@ -69,7 +69,7 @@ void hep_data_spectra(std::string hep, bool subsets,
     // aa results for all centrality classes
     for (size_t i = 0; i < graphs_hists_aa.size(); ++i) {           // nrows
         for (size_t j = 0; j < graphs_hists_aa[0].size(); ++i) {    // npads
-            out << "- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}" << std::endl;
+            out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Deltaj}$'}" << std::endl;
             out << "  qualifiers:" << std::endl;
             out << "  - {name: SQRT(S)/NUCLEON, units: TEV, value: 5.02}" << std::endl;
             out << "  - {name: JET ALGO, value: ANTI-KT R = 0.3}" << std::endl;
@@ -89,10 +89,9 @@ void hep_data_spectra(std::string hep, bool subsets,
             if (j == 2) out << "  - {name: CENTRALITY, value: 10-30%}" << std::endl;
             if (j == 3) out << "  - {name: CENTRALITY, value: 0-10%}" << std::endl;
 
-            out << "  - {name: CENTRALITY}"
+            out << "  - {name: CENTRALITY}" << std::endl;
 
-            for (int k = 0; k < nbins; k++)
-            {
+            for (int k = 0; k < nbins; k++) {
                 double x, y, eyl, eyh, syl, syh;
 
                 graphs_hists_aa[i][j].GetPoint(j, x, y);
@@ -553,7 +552,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     in(output, []() {});
 
-    if (spectra)    hep_data_spectra(hep, graphs_hists_aa, graphs_systs_aa);
+    if (spectra)    hep_data_spectra(hep, subsets, graphs_hists_aa, graphs_systs_aa);
 
     return 0;
 }
