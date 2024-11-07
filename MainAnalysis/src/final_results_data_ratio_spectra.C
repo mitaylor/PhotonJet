@@ -1,6 +1,7 @@
 #include "../include/lambdas.h"
 #include "../include/specifics.h"
 #include "../include/text.h"
+#include "../include/significant.h"
 
 #include "../git/config/include/configurer.h"
 
@@ -29,9 +30,106 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <iomanip>
 
 using namespace std::literals::string_literals;
 using namespace std::placeholders;
+
+void hep_data_spectra(std::string hep, bool subsets,
+                      std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_aa, 
+                      std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_aa)
+                    //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_pp,
+                    //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_pp)
+{
+    ofstream out(hep);
+
+    // write x ranges: taking from the first one
+    out << "independent_variables:" << std::endl;
+    out << "- header: {name: '$\Deltaj$'}" << std::endl;
+    out << "  values:" << std::endl;
+
+    int nbins = graphs_hists_aa[0][0].GetN();
+
+    for (int i = 0; i < nbins; ++i) {
+        double x, y, exl, exh;
+        graphs_hists_aa[0][0].GetPoint(i, x, y);
+        exl = graphs_hists_aa[0][0].GetErrorXlow(i);
+        exh = graphs_hists_aa[0][0].GetErrorXhigh(i);
+
+        double low = x - exl;
+        double high = x + exh;
+
+        out << "  - {low: " << round(low, -5) << ", high: " << round(high, -5) << "}" << std::endl;
+    }
+
+    // write y ranges: loop over graphs
+    out << "dependent_variables:" << std::endl;
+
+    // aa results for all centrality classes
+    for (size_t i = 0; i < graphs_hists_aa.size(); ++i) {           // nrows
+        for (size_t j = 0; j < graphs_hists_aa[0].size(); ++i) {    // npads
+            out << "- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}" << std::endl;
+            out << "  qualifiers:" << std::endl;
+            out << "  - {name: SQRT(S)/NUCLEON, units: TEV, value: 5.02}" << std::endl;
+            out << "  - {name: JET ALGO, value: ANTI-KT R = 0.3}" << std::endl;
+            out << "  - {name: |JET ETA|, value: < 1.6}" << std::endl;
+            out << "  - {name: PHOTON PT, units: GEV, value: 60 - 200}" << std::endl;
+            out << "  - {name: |PHOTON ETA|, value: < 1.44}" << std::endl;
+            out << "  - {name: |PHOTON-JET DPHI|, value: > 2*PI/3}" << std::endl;
+
+            if (subsets && i == 0)  out << "  - {name: JET PT, units: GEV, value: 30 - 60}" << std::endl;
+            if (subsets && i == 1)  out << "  - {name: JET PT, units: GEV, value: 60 - 100}" << std::endl;
+            if (!subsets)           out << "  - {name: JET PT, units: GEV, value: 30 - 100}" << std::endl;
+
+            out << "  - {name: SYSTEM, value: PBPB}" << std::endl;
+
+            if (j == 0) out << "  - {name: CENTRALITY, value: 50-90%}" << std::endl;
+            if (j == 1) out << "  - {name: CENTRALITY, value: 30-50%}" << std::endl;
+            if (j == 2) out << "  - {name: CENTRALITY, value: 10-30%}" << std::endl;
+            if (j == 3) out << "  - {name: CENTRALITY, value: 0-10%}" << std::endl;
+
+            out << "  - {name: CENTRALITY}"
+
+            for (int k = 0; k < nbins; k++)
+            {
+                double x, y, eyl, eyh, syl, syh;
+
+                graphs_hists_aa[i][j].GetPoint(j, x, y);
+
+                ey = graphs_hists_aa[i][j].GetErrorYhigh(j);
+                sy = graphs_systs_aa[i][j].GetErrorYhigh(j);
+
+                int d = -10000;
+                int digit = 0;
+
+                d = std::max(d, first_sig_digit(ey));
+                d = std::max(d, first_sig_digit(sy));
+
+                d = d - 1;
+
+                if (d < 0)          digit = -d;
+                if (digit > 100)    digit = 0;
+
+                out << fixed << setprecision(digit);
+
+                out << "  - value: " << round(y, d) << std::endl;
+                out << "    errors:" << std::endl;
+                out << "    - {label: stat, symerror: " << round(ey, D) << "}" << std::endl;
+                out << "    - {label: syst, symerror: " << round(sy, D) << "}" << std::endl;
+            }
+        }
+    }
+
+    // pp results
+    // for (size_t i = 0; i < graphs_hists_pp.size(); ++i) {           // nrows
+    //     for (size_t j = 0; j < graphs_hists_pp[0].size(); ++i) {    // npads
+            
+    //     }
+    // }
+
+    out.close();
+}
 
 void set_values(history<TH1F>* h, history<TH1F>* s, history<TH1F>* h_aa, history<TH1F>* s_aa, history<TH1F>* h_pp, history<TH1F>* s_pp)
 {
@@ -452,6 +550,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (spectra)    canvas.SaveAs((set + "_final_spectra_" + name + "_log.C").c_str());
 
     in(output, []() {});
+
+    if (spectra)    hep_data_spectra(hep, graphs_hists_aa, graphs_systs_aa);
 
     return 0;
 }
