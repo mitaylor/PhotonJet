@@ -1,0 +1,455 @@
+independent_variables:
+- header: {name: '$\Deltaj$'}
+  values:
+  - {low: 0, high: 0.01}
+  - {low: 0.01, high: 0.016}
+  - {low: 0.016, high: 0.024}
+  - {low: 0.024, high: 0.032}
+  - {low: 0.032, high: 0.04}
+  - {low: 0.04, high: 0.05}
+  - {low: 0.05, high: 0.06}
+  - {low: 0.06, high: 0.08}
+  - {low: 0.08, high: 0.1}
+  - {low: 0.1, high: 0.15}
+  - {low: 0.15, high: 0.3}
+dependent_variables:
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '50-90%'}
+  - value: 2.37
+    errors:
+    - {label: stat, symerror: 0.21}
+    - {label: syst, symerror: 0.36}
+  - value: 5.16
+    errors:
+    - {label: stat, symerror: 0.36}
+    - {label: syst, symerror: 0.65}
+  - value: 6.46
+    errors:
+    - {label: stat, symerror: 0.39}
+    - {label: syst, symerror: 0.65}
+  - value: 6.66
+    errors:
+    - {label: stat, symerror: 0.37}
+    - {label: syst, symerror: 0.80}
+  - value: 6.20
+    errors:
+    - {label: stat, symerror: 0.35}
+    - {label: syst, symerror: 0.51}
+  - value: 4.97
+    errors:
+    - {label: stat, symerror: 0.29}
+    - {label: syst, symerror: 0.29}
+  - value: 3.64
+    errors:
+    - {label: stat, symerror: 0.23}
+    - {label: syst, symerror: 0.20}
+  - value: 2.36
+    errors:
+    - {label: stat, symerror: 0.18}
+    - {label: syst, symerror: 0.13}
+  - value: 1.25
+    errors:
+    - {label: stat, symerror: 0.12}
+    - {label: syst, symerror: 0.13}
+  - value: 0.528
+    errors:
+    - {label: stat, symerror: 0.073}
+    - {label: syst, symerror: 0.100}
+  - value: 0.038
+    errors:
+    - {label: stat, symerror: 0.010}
+    - {label: syst, symerror: 0.030}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '30-50%'}
+  - value: 2.43
+    errors:
+    - {label: stat, symerror: 0.18}
+    - {label: syst, symerror: 0.45}
+  - value: 4.88
+    errors:
+    - {label: stat, symerror: 0.28}
+    - {label: syst, symerror: 0.78}
+  - value: 6.00
+    errors:
+    - {label: stat, symerror: 0.30}
+    - {label: syst, symerror: 0.84}
+  - value: 5.64
+    errors:
+    - {label: stat, symerror: 0.25}
+    - {label: syst, symerror: 0.74}
+  - value: 4.95
+    errors:
+    - {label: stat, symerror: 0.22}
+    - {label: syst, symerror: 0.47}
+  - value: 4.13
+    errors:
+    - {label: stat, symerror: 0.20}
+    - {label: syst, symerror: 0.21}
+  - value: 3.49
+    errors:
+    - {label: stat, symerror: 0.18}
+    - {label: syst, symerror: 0.16}
+  - value: 2.63
+    errors:
+    - {label: stat, symerror: 0.14}
+    - {label: syst, symerror: 0.13}
+  - value: 1.53
+    errors:
+    - {label: stat, symerror: 0.11}
+    - {label: syst, symerror: 0.15}
+  - value: 0.633
+    errors:
+    - {label: stat, symerror: 0.061}
+    - {label: syst, symerror: 0.089}
+  - value: 0.049
+    errors:
+    - {label: stat, symerror: 0.011}
+    - {label: syst, symerror: 0.030}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '10-30%'}
+  - value: 2.41
+    errors:
+    - {label: stat, symerror: 0.15}
+    - {label: syst, symerror: 0.35}
+  - value: 4.81
+    errors:
+    - {label: stat, symerror: 0.22}
+    - {label: syst, symerror: 0.67}
+  - value: 5.52
+    errors:
+    - {label: stat, symerror: 0.21}
+    - {label: syst, symerror: 0.71}
+  - value: 5.52
+    errors:
+    - {label: stat, symerror: 0.20}
+    - {label: syst, symerror: 0.75}
+  - value: 5.20
+    errors:
+    - {label: stat, symerror: 0.18}
+    - {label: syst, symerror: 0.44}
+  - value: 4.08
+    errors:
+    - {label: stat, symerror: 0.15}
+    - {label: syst, symerror: 0.32}
+  - value: 3.23
+    errors:
+    - {label: stat, symerror: 0.14}
+    - {label: syst, symerror: 0.21}
+  - value: 2.32
+    errors:
+    - {label: stat, symerror: 0.11}
+    - {label: syst, symerror: 0.20}
+  - value: 1.39
+    errors:
+    - {label: stat, symerror: 0.09}
+    - {label: syst, symerror: 0.17}
+  - value: 0.69
+    errors:
+    - {label: stat, symerror: 0.06}
+    - {label: syst, symerror: 0.16}
+  - value: 0.058
+    errors:
+    - {label: stat, symerror: 0.013}
+    - {label: syst, symerror: 0.030}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '0-10%'}
+  - value: 2.16
+    errors:
+    - {label: stat, symerror: 0.15}
+    - {label: syst, symerror: 0.46}
+  - value: 4.63
+    errors:
+    - {label: stat, symerror: 0.26}
+    - {label: syst, symerror: 0.83}
+  - value: 5.55
+    errors:
+    - {label: stat, symerror: 0.25}
+    - {label: syst, symerror: 0.70}
+  - value: 5.38
+    errors:
+    - {label: stat, symerror: 0.24}
+    - {label: syst, symerror: 0.75}
+  - value: 4.89
+    errors:
+    - {label: stat, symerror: 0.25}
+    - {label: syst, symerror: 0.53}
+  - value: 4.27
+    errors:
+    - {label: stat, symerror: 0.21}
+    - {label: syst, symerror: 0.48}
+  - value: 3.36
+    errors:
+    - {label: stat, symerror: 0.18}
+    - {label: syst, symerror: 0.37}
+  - value: 2.63
+    errors:
+    - {label: stat, symerror: 0.14}
+    - {label: syst, symerror: 0.38}
+  - value: 1.52
+    errors:
+    - {label: stat, symerror: 0.12}
+    - {label: syst, symerror: 0.29}
+  - value: 0.58
+    errors:
+    - {label: stat, symerror: 0.07}
+    - {label: syst, symerror: 0.20}
+  - value: 0.053
+    errors:
+    - {label: stat, symerror: 0.012}
+    - {label: syst, symerror: 0.042}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '50-90%'}
+  - value: 4.17
+    errors:
+    - {label: stat, symerror: 0.34}
+    - {label: syst, symerror: 0.26}
+  - value: 7.62
+    errors:
+    - {label: stat, symerror: 0.50}
+    - {label: syst, symerror: 0.52}
+  - value: 7.38
+    errors:
+    - {label: stat, symerror: 0.42}
+    - {label: syst, symerror: 0.62}
+  - value: 6.04
+    errors:
+    - {label: stat, symerror: 0.34}
+    - {label: syst, symerror: 0.74}
+  - value: 4.52
+    errors:
+    - {label: stat, symerror: 0.27}
+    - {label: syst, symerror: 0.62}
+  - value: 3.34
+    errors:
+    - {label: stat, symerror: 0.23}
+    - {label: syst, symerror: 0.67}
+  - value: 2.10
+    errors:
+    - {label: stat, symerror: 0.17}
+    - {label: syst, symerror: 0.43}
+  - value: 1.15
+    errors:
+    - {label: stat, symerror: 0.11}
+    - {label: syst, symerror: 0.24}
+  - value: 0.555
+    errors:
+    - {label: stat, symerror: 0.079}
+    - {label: syst, symerror: 0.072}
+  - value: 0.208
+    errors:
+    - {label: stat, symerror: 0.042}
+    - {label: syst, symerror: 0.034}
+  - value: 0.0065
+    errors:
+    - {label: stat, symerror: 0.0038}
+    - {label: syst, symerror: 0.0020}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '30-50%'}
+  - value: 3.60
+    errors:
+    - {label: stat, symerror: 0.25}
+    - {label: syst, symerror: 0.21}
+  - value: 6.69
+    errors:
+    - {label: stat, symerror: 0.36}
+    - {label: syst, symerror: 0.46}
+  - value: 6.34
+    errors:
+    - {label: stat, symerror: 0.29}
+    - {label: syst, symerror: 0.61}
+  - value: 4.84
+    errors:
+    - {label: stat, symerror: 0.23}
+    - {label: syst, symerror: 0.53}
+  - value: 3.27
+    errors:
+    - {label: stat, symerror: 0.18}
+    - {label: syst, symerror: 0.45}
+  - value: 2.19
+    errors:
+    - {label: stat, symerror: 0.14}
+    - {label: syst, symerror: 0.39}
+  - value: 1.46
+    errors:
+    - {label: stat, symerror: 0.11}
+    - {label: syst, symerror: 0.31}
+  - value: 0.99
+    errors:
+    - {label: stat, symerror: 0.09}
+    - {label: syst, symerror: 0.25}
+  - value: 0.62
+    errors:
+    - {label: stat, symerror: 0.07}
+    - {label: syst, symerror: 0.17}
+  - value: 0.270
+    errors:
+    - {label: stat, symerror: 0.039}
+    - {label: syst, symerror: 0.073}
+  - value: 0.0106
+    errors:
+    - {label: stat, symerror: 0.0035}
+    - {label: syst, symerror: 0.0031}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '10-30%'}
+  - value: 2.98
+    errors:
+    - {label: stat, symerror: 0.17}
+    - {label: syst, symerror: 0.14}
+  - value: 5.36
+    errors:
+    - {label: stat, symerror: 0.22}
+    - {label: syst, symerror: 0.33}
+  - value: 4.97
+    errors:
+    - {label: stat, symerror: 0.17}
+    - {label: syst, symerror: 0.34}
+  - value: 3.61
+    errors:
+    - {label: stat, symerror: 0.14}
+    - {label: syst, symerror: 0.40}
+  - value: 2.50
+    errors:
+    - {label: stat, symerror: 0.11}
+    - {label: syst, symerror: 0.38}
+  - value: 1.71
+    errors:
+    - {label: stat, symerror: 0.09}
+    - {label: syst, symerror: 0.35}
+  - value: 1.21
+    errors:
+    - {label: stat, symerror: 0.08}
+    - {label: syst, symerror: 0.29}
+  - value: 0.75
+    errors:
+    - {label: stat, symerror: 0.05}
+    - {label: syst, symerror: 0.22}
+  - value: 0.38
+    errors:
+    - {label: stat, symerror: 0.04}
+    - {label: syst, symerror: 0.13}
+  - value: 0.139
+    errors:
+    - {label: stat, symerror: 0.020}
+    - {label: syst, symerror: 0.051}
+  - value: 0.0154
+    errors:
+    - {label: stat, symerror: 0.0041}
+    - {label: syst, symerror: 0.0099}
+- header: {name: '$\frac{1}{N_{\gamma}} \frac{dN_{j\gamma}}{d\Deltaj}$'}
+  qualifiers:
+  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}
+  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}
+  - {name: '|JET ETA|', value: '< 1.6'}
+  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}
+  - {name: '|PHOTON ETA|', value: '< 1.44'}
+  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}
+  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}
+  - {name: 'SYSTEM', value: 'PBPB'}
+  - {name: 'CENTRALITY', value: '0-10%'}
+  - value: 2.59
+    errors:
+    - {label: stat, symerror: 0.15}
+    - {label: syst, symerror: 0.22}
+  - value: 4.47
+    errors:
+    - {label: stat, symerror: 0.22}
+    - {label: syst, symerror: 0.36}
+  - value: 3.95
+    errors:
+    - {label: stat, symerror: 0.17}
+    - {label: syst, symerror: 0.37}
+  - value: 2.93
+    errors:
+    - {label: stat, symerror: 0.13}
+    - {label: syst, symerror: 0.40}
+  - value: 2.03
+    errors:
+    - {label: stat, symerror: 0.10}
+    - {label: syst, symerror: 0.35}
+  - value: 1.34
+    errors:
+    - {label: stat, symerror: 0.07}
+    - {label: syst, symerror: 0.32}
+  - value: 0.93
+    errors:
+    - {label: stat, symerror: 0.06}
+    - {label: syst, symerror: 0.30}
+  - value: 0.56
+    errors:
+    - {label: stat, symerror: 0.04}
+    - {label: syst, symerror: 0.22}
+  - value: 0.30
+    errors:
+    - {label: stat, symerror: 0.03}
+    - {label: syst, symerror: 0.13}
+  - value: 0.150
+    errors:
+    - {label: stat, symerror: 0.019}
+    - {label: syst, symerror: 0.090}
+  - value: 0.0075
+    errors:
+    - {label: stat, symerror: 0.0024}
+    - {label: syst, symerror: 0.0052}

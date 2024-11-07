@@ -42,7 +42,7 @@ void hep_data_spectra(std::string hep, bool subsets,
                     //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_pp,
                     //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_pp)
 {
-    std::ofstream out(hep);
+    std::ofstream out("hep/"s + hep);
     int nrows = (subsets) ? 2 : 1;
 
     // write x ranges: taking from the first one
