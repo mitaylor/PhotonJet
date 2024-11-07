@@ -88,10 +88,10 @@ void hep_data_spectra(std::string hep, bool subsets,
         for (int k = 0; k < nbins; k++) {
             double x, y, ey, sy;
 
-            graphs_hists_pp[i][j].GetPoint(k, x, y);
+            graphs_hists_pp[i][0].GetPoint(k, x, y);
 
-            ey = graphs_hists_pp[i][j].GetErrorYhigh(k);
-            sy = graphs_systs_pp[i][j].GetErrorYhigh(k);
+            ey = graphs_hists_pp[i][0].GetErrorYhigh(k);
+            sy = graphs_systs_pp[i][0].GetErrorYhigh(k);
 
             int d = -10000;
             int digit = 0;
