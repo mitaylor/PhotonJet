@@ -129,10 +129,10 @@ void hep_data_spectra(std::string hep, bool subsets,
 
             out << "  - {name: 'SYSTEM', value: 'PBPB'}" << std::endl;
 
-            if (j == 0) out << "  - {name: 'CENTRALITY', value: '50-90%'}" << std::endl;
-            if (j == 1) out << "  - {name: 'CENTRALITY', value: '30-50%'}" << std::endl;
-            if (j == 2) out << "  - {name: 'CENTRALITY', value: '10-30%'}" << std::endl;
-            if (j == 3) out << "  - {name: 'CENTRALITY', value: '0-10%'}" << std::endl;
+            if (j == 0) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '50-90'}" << std::endl;
+            if (j == 1) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '30-50'}" << std::endl;
+            if (j == 2) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '10-30'}" << std::endl;
+            if (j == 3) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '0-10'}" << std::endl;
 
             out << "  values:" << std::endl;
 
@@ -143,6 +143,90 @@ void hep_data_spectra(std::string hep, bool subsets,
 
                 ey = graphs_hists_aa[i][j].GetErrorYhigh(k);
                 sy = graphs_systs_aa[i][j].GetErrorYhigh(k);
+
+                int d = -10000;
+                int digit = 0;
+
+                d = std::max(d, first_sig_digit(ey));
+                d = std::max(d, first_sig_digit(sy));
+
+                d = d - 1;
+
+                if (d < 0)          digit = -d;
+                if (digit > 100)    digit = 0;
+
+                out << std::fixed << std::setprecision(digit);
+
+                out << "  - value: " << round(y, d) << std::endl;
+                out << "    errors:" << std::endl;
+                out << "    - {label: stat, symerror: " << round(ey, d) << "}" << std::endl;
+                out << "    - {label: syst, symerror: " << round(sy, d) << "}" << std::endl;
+            }
+        }
+    }
+
+    out.close();
+}
+
+void hep_data_ratio(std::string hep, bool subsets,
+                    std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_ratio, 
+                    std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_ratio)
+{
+    std::ofstream out("hep/"s + hep);
+    int nrows = (subsets) ? 2 : 1;
+
+    // write x ranges: taking from the first one
+    out << "independent_variables:" << std::endl;
+    out << "- header: {name: '$\\Deltaj$'}" << std::endl;
+    out << "  values:" << std::endl;
+
+    int nbins = graphs_hists_ratio[0][0].GetN();
+
+    for (int i = 0; i < nbins; ++i) {
+        double x, y, exl, exh;
+        graphs_hists_ratio[0][0].GetPoint(i, x, y);
+        exl = graphs_hists_ratio[0][0].GetErrorXlow(i);
+        exh = graphs_hists_ratio[0][0].GetErrorXhigh(i);
+
+        double low = x - exl;
+        double high = x + exh;
+
+        out << "  - {low: " << round(low, -5) << ", high: " << round(high, -5) << "}" << std::endl;
+    }
+
+    // write y ranges: loop over graphs
+    out << "dependent_variables:" << std::endl;
+
+    for (int i = nrows - 1; i >= 0; --i) {           // nrows
+        // ratio results for all centrality classes
+        for (size_t j = 0; j < graphs_hists_ratio[0].size(); ++j) {    // npads
+            out << "- header: {name: 'PbPb / pp'}" << std::endl;
+            out << "  qualifiers:" << std::endl;
+            out << "  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}" << std::endl;
+            out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
+            out << "  - {name: '|JET ETA|', value: '< 1.6'}" << std::endl;
+            out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
+            out << "  - {name: '|PHOTON ETA|', value: '< 1.44'}" << std::endl;
+            out << "  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}" << std::endl;
+
+            if (subsets && i == 1)  out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}" << std::endl;
+            if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
+            if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
+
+            if (j == 0) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '50-90'}" << std::endl;
+            if (j == 1) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '30-50'}" << std::endl;
+            if (j == 2) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '10-30'}" << std::endl;
+            if (j == 3) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '0-10'}" << std::endl;
+
+            out << "  values:" << std::endl;
+
+            for (int k = 0; k < nbins; k++) {
+                double x, y, ey, sy;
+
+                graphs_hists_ratio[i][j].GetPoint(k, x, y);
+
+                ey = graphs_hists_ratio[i][j].GetErrorYhigh(k);
+                sy = graphs_systs_ratio[i][j].GetErrorYhigh(k);
 
                 int d = -10000;
                 int digit = 0;
@@ -590,6 +674,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     in(output, []() {});
 
+    if (ratio)      hep_data_ratio(hep, nrows == 2, graphs_hists_ratio, graphs_systs_ratio);
     if (spectra)    hep_data_spectra(hep, nrows == 2, graphs_hists_aa, graphs_systs_aa, graphs_hists_pp, graphs_systs_pp);
 
     return 0;
