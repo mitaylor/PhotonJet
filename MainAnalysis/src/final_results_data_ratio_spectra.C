@@ -552,7 +552,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     in(output, []() {});
 
-    if (spectra)    hep_data_spectra(hep, subsets, graphs_hists_aa, graphs_systs_aa);
+    if (spectra)    hep_data_spectra(hep, nrows == 2, graphs_hists_aa, graphs_systs_aa);
 
     return 0;
 }
