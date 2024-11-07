@@ -92,7 +92,7 @@ void hep_data_spectra(std::string hep, bool subsets,
             out << "  - {name: CENTRALITY}" << std::endl;
 
             for (int k = 0; k < nbins; k++) {
-                double x, y, eyl, eyh, syl, syh;
+                double x, y, ey, sy;
 
                 graphs_hists_aa[i][j].GetPoint(j, x, y);
 
@@ -110,12 +110,12 @@ void hep_data_spectra(std::string hep, bool subsets,
                 if (d < 0)          digit = -d;
                 if (digit > 100)    digit = 0;
 
-                out << fixed << setprecision(digit);
+                out << std::fixed << std::setprecision(digit);
 
                 out << "  - value: " << round(y, d) << std::endl;
                 out << "    errors:" << std::endl;
-                out << "    - {label: stat, symerror: " << round(ey, D) << "}" << std::endl;
-                out << "    - {label: syst, symerror: " << round(sy, D) << "}" << std::endl;
+                out << "    - {label: stat, symerror: " << round(ey, d) << "}" << std::endl;
+                out << "    - {label: syst, symerror: " << round(sy, d) << "}" << std::endl;
             }
         }
     }
