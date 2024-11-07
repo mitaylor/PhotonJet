@@ -87,6 +87,10 @@ void hep_data_spectra(std::string hep,
         ey = graphs_hists_pp[0][0].GetErrorYhigh(k);
         sy = graphs_systs_pp[0][0].GetErrorYhigh(k);
 
+        y /= 1000;
+        ey /= 1000;
+        sy /= 1000;
+
         int d = -10000;
         int digit = 0;
 
@@ -133,6 +137,10 @@ void hep_data_spectra(std::string hep,
 
             ey = graphs_hists_aa[0][j].GetErrorYhigh(k);
             sy = graphs_systs_aa[0][j].GetErrorYhigh(k);
+
+            y /= 1000;
+            ey /= 1000;
+            sy /= 1000;
 
             int d = -10000;
             int digit = 0;
