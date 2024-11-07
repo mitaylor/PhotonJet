@@ -69,7 +69,7 @@ void hep_data_spectra(std::string hep, bool subsets,
     std::cout << graphs_hists_aa.size() << " " << graphs_hists_aa[0].size() << std::endl;
 
     // aa results for all centrality classes
-    for (size_t i = nrows - 1; i >= 0; --i) {           // nrows
+    for (int i = nrows - 1; i >= 0; --i) {           // nrows
         for (size_t j = 0; j < graphs_hists_aa[0].size(); ++j) {    // npads
             out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Deltaj}$'}" << std::endl;
             out << "  qualifiers:" << std::endl;
