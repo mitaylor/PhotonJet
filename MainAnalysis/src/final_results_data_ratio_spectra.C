@@ -70,7 +70,7 @@ void hep_data_spectra(std::string hep, bool subsets,
 
     // aa results for all centrality classes
     for (size_t i = 0; i < graphs_hists_aa.size(); ++i) {           // nrows
-        for (size_t j = 0; j < graphs_hists_aa[0].size(); ++i) {    // npads
+        for (size_t j = 0; j < graphs_hists_aa[0].size(); ++j) {    // npads
             out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Deltaj}$'}" << std::endl;
             out << "  qualifiers:" << std::endl;
             out << "  - {name: SQRT(S)/NUCLEON, units: TEV, value: 5.02}" << std::endl;
@@ -90,8 +90,6 @@ void hep_data_spectra(std::string hep, bool subsets,
             if (j == 1) out << "  - {name: CENTRALITY, value: 30-50%}" << std::endl;
             if (j == 2) out << "  - {name: CENTRALITY, value: 10-30%}" << std::endl;
             if (j == 3) out << "  - {name: CENTRALITY, value: 0-10%}" << std::endl;
-
-            out << "  - {name: CENTRALITY}" << std::endl;
 
             for (int k = 0; k < nbins; k++) {
                 double x, y, ey, sy;
