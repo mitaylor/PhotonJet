@@ -92,6 +92,8 @@ void hep_data_spectra(std::string hep, bool subsets,
             if (j == 2) out << "  - {name: 'CENTRALITY', value: '10-30%'}" << std::endl;
             if (j == 3) out << "  - {name: 'CENTRALITY', value: '0-10%'}" << std::endl;
 
+            out << "  values:" << endl;
+
             for (int k = 0; k < nbins; k++) {
                 double x, y, ey, sy;
 
