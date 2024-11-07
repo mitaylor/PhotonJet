@@ -66,6 +66,8 @@ void hep_data_spectra(std::string hep, bool subsets,
     // write y ranges: loop over graphs
     out << "dependent_variables:" << std::endl;
 
+    std::cout << graphs_hists_aa.size() << " " << graphs_hists_aa[0].size() << std::endl;
+
     // aa results for all centrality classes
     for (size_t i = 0; i < graphs_hists_aa.size(); ++i) {           // nrows
         for (size_t j = 0; j < graphs_hists_aa[0].size(); ++i) {    // npads
