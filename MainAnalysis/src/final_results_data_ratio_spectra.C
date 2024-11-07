@@ -69,27 +69,27 @@ void hep_data_spectra(std::string hep, bool subsets,
     std::cout << graphs_hists_aa.size() << " " << graphs_hists_aa[0].size() << std::endl;
 
     // aa results for all centrality classes
-    for (size_t i = 0; i < graphs_hists_aa.size(); ++i) {           // nrows
+    for (size_t i = nrows - 1; i >= 0; --i) {           // nrows
         for (size_t j = 0; j < graphs_hists_aa[0].size(); ++j) {    // npads
             out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Deltaj}$'}" << std::endl;
             out << "  qualifiers:" << std::endl;
-            out << "  - {name: SQRT(S)/NUCLEON, units: TEV, value: 5.02}" << std::endl;
-            out << "  - {name: JET ALGO, value: ANTI-KT R = 0.3}" << std::endl;
-            out << "  - {name: |JET ETA|, value: < 1.6}" << std::endl;
-            out << "  - {name: PHOTON PT, units: GEV, value: 60 - 200}" << std::endl;
-            out << "  - {name: |PHOTON ETA|, value: < 1.44}" << std::endl;
-            out << "  - {name: |PHOTON-JET DPHI|, value: > 2*PI/3}" << std::endl;
+            out << "  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}" << std::endl;
+            out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
+            out << "  - {name: '|JET ETA|', value: '< 1.6'}" << std::endl;
+            out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
+            out << "  - {name: '|PHOTON ETA|', value: '< 1.44'}" << std::endl;
+            out << "  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}" << std::endl;
 
-            if (subsets && i == 0)  out << "  - {name: JET PT, units: GEV, value: 30 - 60}" << std::endl;
-            if (subsets && i == 1)  out << "  - {name: JET PT, units: GEV, value: 60 - 100}" << std::endl;
-            if (!subsets)           out << "  - {name: JET PT, units: GEV, value: 30 - 100}" << std::endl;
+            if (subsets && i == 1)  out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}" << std::endl;
+            if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
+            if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
 
-            out << "  - {name: SYSTEM, value: PBPB}" << std::endl;
+            out << "  - {name: 'SYSTEM', value: 'PBPB'}" << std::endl;
 
-            if (j == 0) out << "  - {name: CENTRALITY, value: 50-90%}" << std::endl;
-            if (j == 1) out << "  - {name: CENTRALITY, value: 30-50%}" << std::endl;
-            if (j == 2) out << "  - {name: CENTRALITY, value: 10-30%}" << std::endl;
-            if (j == 3) out << "  - {name: CENTRALITY, value: 0-10%}" << std::endl;
+            if (j == 0) out << "  - {name: 'CENTRALITY', value: '50-90%'}" << std::endl;
+            if (j == 1) out << "  - {name: 'CENTRALITY', value: '30-50%'}" << std::endl;
+            if (j == 2) out << "  - {name: 'CENTRALITY', value: '10-30%'}" << std::endl;
+            if (j == 3) out << "  - {name: 'CENTRALITY', value: '0-10%'}" << std::endl;
 
             for (int k = 0; k < nbins; k++) {
                 double x, y, ey, sy;
