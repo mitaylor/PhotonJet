@@ -16,7 +16,7 @@ description: Photon-tagged jet axis decorrelation in pp and PbPb collisions for 
 keywords:
    - {name: CMEnergies, values: [5020]}
    - {name: Reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: Observables, values: ["$\Delta j$"]}
+   - {name: Observables, values: [$\Delta j$]}
    - {name: Phrases, values: ["Photon", "Jet", "Substructure"]}
 data_file: Figure1.yaml
 
@@ -28,6 +28,6 @@ description: Photon-tagged jet axis decorrelation in pp and PbPb collisions for 
 keywords:
    - {name: CMEnergies, values: [5020]}
    - {name: Reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: Observables, values: ["$\Delta j$"]}
+   - {name: Observables, values: [$\Delta j$]}
    - {name: Phrases, values: ["Photon", "Jet", "Substructure"]}
 data_file: SupFigure2.yaml
