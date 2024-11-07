@@ -34,6 +34,18 @@ data_file: Figure2.yaml
 
 ---
 
+name: "Supplemental Figure 1"
+location: Data is featured in Supplemental Figure 1.
+description: Photon-tagged jet $p_T$ spectrum in pp and PbPb collisions for jets with $30 < p_T^{jet} < 100$ GeV recoiling from photons with $60 < p_T^{\gamma} < 200$ GeV, normalized per photon. Results are included for PbPb centrality 0-10%, 10-30%, 30-50%, and 50-90%.
+keywords:
+   - {name: cmenergies, values: [5020]}
+   - {name: reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
+   - {name: observables, values: ["$p_T^{jet}$"]}
+   - {name: phrases, values: ["Photon", "Jet"]}
+data_file: SupFigure1.yaml
+
+---
+
 name: "Supplemental Figure 2"
 location: Data is featured in Supplemental Figures 2, 4, and 5.
 description: Photon-tagged jet axis decorrelation in pp and PbPb collisions for jets with $30 < p_T^{jet} < 100$ GeV recoiling from photons with $60 < p_T^{\gamma} < 200$ GeV, normalized per photon. Results are included for PbPb centrality 0-10%, 10-30%, 30-50%, and 50-90%.
