@@ -83,6 +83,8 @@ void hep_data_spectra(std::string hep, bool subsets,
         if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
 
         out << "  - {name: 'SYSTEM', value: 'PP'}" << std::endl;
+        out << "  - {name: 'CENTRALITY', value: 'N/A'}" << std::endl;
+
         out << "  values:" << std::endl;
 
         for (int k = 0; k < nbins; k++) {
@@ -129,10 +131,10 @@ void hep_data_spectra(std::string hep, bool subsets,
 
             out << "  - {name: 'SYSTEM', value: 'PBPB'}" << std::endl;
 
-            if (j == 0) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '50-90'}" << std::endl;
-            if (j == 1) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '30-50'}" << std::endl;
-            if (j == 2) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '10-30'}" << std::endl;
-            if (j == 3) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '0-10'}" << std::endl;
+            if (j == 0) out << "  - {name: 'CENTRALITY', value: '50-90%'}" << std::endl;
+            if (j == 1) out << "  - {name: 'CENTRALITY', value: '30-50%'}" << std::endl;
+            if (j == 2) out << "  - {name: 'CENTRALITY', value: '10-30%'}" << std::endl;
+            if (j == 3) out << "  - {name: 'CENTRALITY', value: '0-10%'}" << std::endl;
 
             out << "  values:" << std::endl;
 
@@ -213,10 +215,10 @@ void hep_data_ratio(std::string hep, bool subsets,
             if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
             if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
 
-            if (j == 0) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '50-90'}" << std::endl;
-            if (j == 1) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '30-50'}" << std::endl;
-            if (j == 2) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '10-30'}" << std::endl;
-            if (j == 3) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '0-10'}" << std::endl;
+            if (j == 0) out << "  - {name: 'CENTRALITY', value: '50-90%'}" << std::endl;
+            if (j == 1) out << "  - {name: 'CENTRALITY', value: '30-50%'}" << std::endl;
+            if (j == 2) out << "  - {name: 'CENTRALITY', value: '10-30%'}" << std::endl;
+            if (j == 3) out << "  - {name: 'CENTRALITY', value: '0-10%'}" << std::endl;
 
             out << "  values:" << std::endl;
 

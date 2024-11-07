@@ -76,6 +76,7 @@ void hep_data_spectra(std::string hep,
     out << "  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}" << std::endl;
     out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
     out << "  - {name: 'SYSTEM', value: 'PP'}" << std::endl;
+    out << "  - {name: 'CENTRALITY', value: 'N/A'}" << std::endl;
 
     out << "  values:" << std::endl;
 
@@ -123,10 +124,10 @@ void hep_data_spectra(std::string hep,
         out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
         out << "  - {name: 'SYSTEM', value: 'PBPB'}" << std::endl;
 
-        if (j == 0) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '50-90'}" << std::endl;
-        if (j == 1) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '30-50'}" << std::endl;
-        if (j == 2) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '10-30'}" << std::endl;
-        if (j == 3) out << "  - {name: 'CENTRALITY', units: 'PERCENTILE', value: '0-10'}" << std::endl;
+        if (j == 0) out << "  - {name: 'CENTRALITY', value: '50-90%'}" << std::endl;
+        if (j == 1) out << "  - {name: 'CENTRALITY', value: '30-50%'}" << std::endl;
+        if (j == 2) out << "  - {name: 'CENTRALITY', value: '10-30%'}" << std::endl;
+        if (j == 3) out << "  - {name: 'CENTRALITY', value: '0-10%'}" << std::endl;
 
         out << "  values:" << std::endl;
 
