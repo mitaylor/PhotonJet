@@ -42,7 +42,7 @@ void hep_data_spectra(std::string hep, bool subsets,
                     //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_pp,
                     //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_pp)
 {
-    ofstream out(hep);
+    std::ofstream out(hep);
 
     // write x ranges: taking from the first one
     out << "independent_variables:" << std::endl;
@@ -239,6 +239,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto figures = conf->get<std::vector<std::string>>("figures");
     auto name = conf->get<std::string>("name");
     auto types = conf->get<std::vector<int64_t>>("types");
+
+    auto hep = conf->get<std::string>("hep");
 
     auto ymins = conf->get<std::vector<float>>("ymins");
     auto ymaxs = conf->get<std::vector<float>>("ymaxs");

@@ -2,7 +2,6 @@
 
 int first_sig_digit(double X);
 int count_digit(double X, int D);
-int count_digit_below(double X, int D);
 int count_digit_below(int D);
 double round(double X, int D);
 
@@ -41,11 +40,6 @@ int first_sig_digit(double X)
 int count_digit(double X, int D)
 {
    return first_sig_digit(X) - D + 1;
-}
-
-int count_digit_below(double X, int D)
-{
-   return count_digit_below(D);
 }
 
 int count_digit_below(int D)

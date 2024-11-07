@@ -9638,7 +9638,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -9714,7 +9714,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -9840,9 +9840,9 @@ void pho_60_rebin3_final_spectra_whole_log()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("a","PbPb","plf");
+   TLegendEntry *entry=leg->AddEntry("","PbPb","plf");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    entry->SetFillColor(ci);
    entry->SetFillStyle(1000);
@@ -9926,7 +9926,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10002,7 +10002,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10171,7 +10171,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10247,7 +10247,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10404,7 +10404,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10480,7 +10480,7 @@ void pho_60_rebin3_final_spectra_whole_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10763,7 +10763,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -10839,7 +10839,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11015,7 +11015,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11091,7 +11091,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11260,7 +11260,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11336,7 +11336,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11493,7 +11493,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11569,7 +11569,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11738,7 +11738,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11814,7 +11814,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -11940,9 +11940,9 @@ void pho_60_rebin3_final_spectra_subsets_log()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("a","PbPb","plf");
+   TLegendEntry *entry=leg->AddEntry("","PbPb","plf");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    entry->SetFillColor(ci);
    entry->SetFillStyle(1000);
@@ -12014,7 +12014,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -12090,7 +12090,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -12247,7 +12247,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -12323,7 +12323,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -12480,7 +12480,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -12556,7 +12556,7 @@ void pho_60_rebin3_final_spectra_subsets_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -25927,7 +25927,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26003,7 +26003,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26141,7 +26141,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26217,7 +26217,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26312,7 +26312,7 @@ void pho_60_rebin3_final_jet_log()
    leg->SetFillStyle(0);
    TLegendEntry *entry=leg->AddEntry("a","PbPb","plf");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    entry->SetFillColor(ci);
    entry->SetFillStyle(1000);
@@ -26384,7 +26384,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26460,7 +26460,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26579,7 +26579,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
@@ -26655,7 +26655,7 @@ void pho_60_rebin3_final_jet_log()
    grae->SetName("");
    grae->SetTitle("");
 
-   ci = 1181;
+   ci = 1184;
    color = new TColor(ci, 0.3411765, 0.5647059, 0.9882353, " ", 0.6);
    grae->SetFillColor(ci);
    grae->SetFillStyle(1000);
