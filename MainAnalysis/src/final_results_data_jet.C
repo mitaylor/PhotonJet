@@ -45,7 +45,7 @@ void hep_data_spectra(std::string hep,
 
     // write x ranges: taking from the first one
     out << "independent_variables:" << std::endl;
-    out << "- header: {name: 'p_{T}^{jet}'}" << std::endl;
+    out << "- header: {name: '$p_{T}^{jet}$'}" << std::endl;
     out << "  values:" << std::endl;
 
     int nbins = graphs_hists_aa[0][0].GetN();
