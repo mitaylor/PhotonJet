@@ -38,9 +38,9 @@ using namespace std::placeholders;
 
 void hep_data_spectra(std::string hep, bool subsets,
                       std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_aa, 
-                      std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_aa)
-                    //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_pp,
-                    //   std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_pp)
+                      std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_aa,
+                      std::vector<std::vector<TGraphAsymmErrors>> &graphs_hists_pp,
+                      std::vector<std::vector<TGraphAsymmErrors>> &graphs_systs_pp)
 {
     std::ofstream out("hep/"s + hep);
     int nrows = (subsets) ? 2 : 1;
@@ -67,10 +67,52 @@ void hep_data_spectra(std::string hep, bool subsets,
     // write y ranges: loop over graphs
     out << "dependent_variables:" << std::endl;
 
-    std::cout << graphs_hists_aa.size() << " " << graphs_hists_aa[0].size() << std::endl;
-
-    // aa results for all centrality classes
     for (int i = nrows - 1; i >= 0; --i) {           // nrows
+        // pp results
+        out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Deltaj}$'}" << std::endl;
+        out << "  qualifiers:" << std::endl;
+        out << "  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}" << std::endl;
+        out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
+        out << "  - {name: '|JET ETA|', value: '< 1.6'}" << std::endl;
+        out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
+        out << "  - {name: '|PHOTON ETA|', value: '< 1.44'}" << std::endl;
+        out << "  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}" << std::endl;
+
+        if (subsets && i == 1)  out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}" << std::endl;
+        if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
+        if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
+
+        out << "  - {name: 'SYSTEM', value: 'PP'}" << std::endl;
+        out << "  values:" << std::endl;
+
+        for (int k = 0; k < nbins; k++) {
+            double x, y, ey, sy;
+
+            graphs_hists_pp[i][j].GetPoint(k, x, y);
+
+            ey = graphs_hists_pp[i][j].GetErrorYhigh(k);
+            sy = graphs_systs_pp[i][j].GetErrorYhigh(k);
+
+            int d = -10000;
+            int digit = 0;
+
+            d = std::max(d, first_sig_digit(ey));
+            d = std::max(d, first_sig_digit(sy));
+
+            d = d - 1;
+
+            if (d < 0)          digit = -d;
+            if (digit > 100)    digit = 0;
+
+            out << std::fixed << std::setprecision(digit);
+
+            out << "  - value: " << round(y, d) << std::endl;
+            out << "    errors:" << std::endl;
+            out << "    - {label: stat, symerror: " << round(ey, d) << "}" << std::endl;
+            out << "    - {label: syst, symerror: " << round(sy, d) << "}" << std::endl;
+        }
+
+        // aa results for all centrality classes
         for (size_t j = 0; j < graphs_hists_aa[0].size(); ++j) {    // npads
             out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Deltaj}$'}" << std::endl;
             out << "  qualifiers:" << std::endl;
@@ -122,13 +164,6 @@ void hep_data_spectra(std::string hep, bool subsets,
             }
         }
     }
-
-    // pp results
-    // for (size_t i = 0; i < graphs_hists_pp.size(); ++i) {           // nrows
-    //     for (size_t j = 0; j < graphs_hists_pp[0].size(); ++i) {    // npads
-            
-    //     }
-    // }
 
     out.close();
 }
@@ -555,7 +590,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     in(output, []() {});
 
-    if (spectra)    hep_data_spectra(hep, nrows == 2, graphs_hists_aa, graphs_systs_aa);
+    if (spectra)    hep_data_spectra(hep, nrows == 2, graphs_hists_aa, graphs_systs_aa, graphs_hists_pp, graphs_systs_pp);
 
     return 0;
 }
