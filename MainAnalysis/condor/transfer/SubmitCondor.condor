@@ -3,7 +3,7 @@ Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/
 Max_Retries             = 5
 Should_Transfer_Files   = YES
 Transfer_Input_Files    = x509up_u168456
-Name == "submit06.mit.edu"
+Name = "submit06.mit.edu"
 
 Arguments               = $(source) $(folder)
 
