@@ -1,0 +1,12 @@
+Universe                = vanilla
+Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/transfer/RunTransfer.sh
+Should_Transfer_Files   = NO
++MaxRuntime             = 14400
++RequestMemory          = 4096
++DESIRED_Sites          = "mit_tier3"
+Max_Retries             = 5
+When_To_Transfer_Output = ON_EXIT
+
+Arguments               = $(source) $(folder)
+
+Queue source,folder from __MASTER__.list
