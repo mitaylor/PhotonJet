@@ -5,7 +5,6 @@ Should_Transfer_Files   = NO
 +RequestMemory          = 4096
 +DESIRED_Sites          = "mit_tier3"
 Max_Retries             = 5
-When_To_Transfer_Output = ON_EXIT
 
 Arguments               = $(source) $(folder)
 
