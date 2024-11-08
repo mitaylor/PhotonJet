@@ -1,9 +1,6 @@
 Universe                = vanilla
 Executable              = /home/submit/mitay/physics/PhotonJet2018/MainAnalysis/condor/transfer/RunTransfer.sh
 Max_Retries             = 5
-Requirements            = ( BOSCOCluster =!= "t3serv008.mit.edu" && BOSCOCluster =!= "ce03.cmsaf.mit.edu" && BOSCOCluster =!= "eofe8.mit.edu")
-+DESIRED_Sites          = "mit_tier2"
-
 Should_Transfer_Files   = YES
 Transfer_Input_Files    = x509up_u168456
 
