@@ -13,6 +13,7 @@ sed -i 's/^.*\/submit/root:\/\/submit50.mit.edu\//' inputs
 inputs=($(cat inputs))
 
 rm inputs
+rm *.list
 
 touch ${tag}.list
 
