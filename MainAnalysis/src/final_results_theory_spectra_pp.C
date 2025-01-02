@@ -56,7 +56,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int form
 
     for (size_t i = 0; i < h.size(); ++i) {
         if (system != 1) continue;
-        
+
         for (int j = 1; j <= (*h[i])[0]->GetNbinsX(); ++j) {
             double x = (*h[i])[0]->GetBinCenter(j);
             double dx = (*h[i])[0]->GetBinWidth(j)/2;
@@ -344,12 +344,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetPoint(1, xmax, 0);
     line.SetLineStyle(kDashed);
 
-    /* declare legend */
-    double legend_y_min = 0;
-    double legend_y_max = 0;
-    double legend_x_min = 0;
-    double legend_x_max = 0;
-
+/* declare legend */
     double legend_y_min = (subsets) ? 0.45 : 0.05;
     double legend_y_max = (subsets) ? 0.80 : 0.26;
     double legend_x_min = (subsets) ? 0.65 : 0.05;
