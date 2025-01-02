@@ -17,6 +17,7 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TLatex.h"
+#include "TPaveText.h"
 #include "TLine.h"
 #include "TCanvas.h"
 #include "TStyle.h"
@@ -351,6 +352,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
+    std::vector<TPaveText*> boxes(nrows);
 
     for (int i = 0; i < nrows; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
@@ -442,6 +444,18 @@ int congratulate(char const* config, char const* selections, char const* output)
             graphs_hists_pp[i][0].Draw("same PZ");
         }
 
+        boxes[i] = new TPaveText(0.15, 1 - 0.23 / factor_y * factor_x, 0.85, 1 - 0.12 / factor_y * factor_x, "NDC");
+        boxes[i]->SetBorderSize(1);
+        boxes[i]->SetTextFont(42);
+        boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
+        boxes[i]->SetLineWidth(3);
+        boxes[i]->SetFillColor(0);
+        boxes[i]->SetShadowColor(0);
+        boxes[i]->AddText((text_jet_pt).c_str());
+    
+        pads[i][0]->cd();
+        boxes[i]->Draw("same");
+
         pads[i][0]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
@@ -463,21 +477,18 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 0-10%");
     }
 
-    pads[0][0]->cd();
+    pads[0][1]->cd();
     legend.Draw();
 
-    pads[0][1]->cd();
+    pads[0][2]->cd();
     latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_photon_eta).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.26 / factor_y * factor_x, (text_photon_pt).c_str());
     
-    pads[0][2]->cd();
+    pads[0][3]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_jet_alg).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.26 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
-
-    pads[0][3]->cd();
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_jet_pt).c_str());
 
     canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
 

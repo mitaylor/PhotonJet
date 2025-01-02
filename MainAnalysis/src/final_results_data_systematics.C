@@ -16,6 +16,7 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TLatex.h"
+#include "TPaveText.h"
 #include "TLine.h"
 #include "TCanvas.h"
 #include "TStyle.h"
@@ -251,7 +252,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TPad*> pads(ncols * nrows);
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(nrows);
-    // std::vector<TArrow*> arrows(ncols * nrows);
 
     for (int i = 0; i < ncols; ++i) {
         for (int j = 0; j < nrows; ++j) {
@@ -310,45 +310,57 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* declare legend */
     double legend_y_max = 0.93;
-    double legend_x_min = 0.07;
-    double legend_x_max = 0.5;
+    double legend_x_min = 0.05;
+    double legend_x_max = 0.35;
 
-    TLegend legend_part1(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
+    TLegend legend_part1(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    legend_part1.SetTextSize(0.05);
+    legend_part1.SetTextSize(0.055);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
 
-    TLegend legend_part2(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
+    TLegend legend_part2(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    legend_part2.SetTextSize(0.05);
+    legend_part2.SetTextSize(0.055);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
 
-    TLegend legend_part3(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
+    TLegend legend_part3(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part3.SetTextFont(42);
-    legend_part3.SetTextSize(0.05);
+    legend_part3.SetTextSize(0.055);
     legend_part3.SetFillStyle(0);
     legend_part3.SetBorderSize(0);
 
-    TLegend legend_part4(legend_x_min, legend_y_max - 1 * 0.21, legend_x_max, legend_y_max);
+    TLegend legend_part4(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part4.SetTextFont(42);
-    legend_part4.SetTextSize(0.05);
+    legend_part4.SetTextSize(0.055);
+    legend_part4.SetFillStyle(0);
+    legend_part4.SetBorderSize(0);
+
+    TLegend legend_part5(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    legend_part4.SetTextFont(42);
+    legend_part4.SetTextSize(0.055);
+    legend_part4.SetFillStyle(0);
+    legend_part4.SetBorderSize(0);
+
+    TLegend legend_part6(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    legend_part4.SetTextFont(42);
+    legend_part4.SetTextSize(0.055);
     legend_part4.SetFillStyle(0);
     legend_part4.SetBorderSize(0);
 
     legend_part1.AddEntry((*syst_aa)[0], "Total", "l");
     legend_part1.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
-    legend_part1.AddEntry((*purity_aa)[0], "Purity", "l");
+    legend_part2.AddEntry((*purity_aa)[0], "Purity", "l");
     legend_part2.AddEntry((*iso_aa)[0], "Photon Isolation", "l");
-    legend_part2.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
-    legend_part2.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
-    legend_part3.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
-    legend_part3.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
-    legend_part3.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
-    legend_part4.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
-    legend_part4.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
-    legend_part4.AddEntry((*cent_aa)[0], "Centrality", "l");
+    legend_part3.AddEntry((*es_aa)[0], "Photon Energy Scale", "l");
+    legend_part3.AddEntry((*jec_aa)[0], "Jet Energy Correction", "l");
+    legend_part4.AddEntry((*jer_aa)[0], "Jet Energy Resolution", "l");
+    legend_part4.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
+    legend_part5.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
+    legend_part5.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
+    legend_part6.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
+    legend_part6.AddEntry((*cent_aa)[0], "Centrality", "l");
     
     pads[0]->cd();
     worlds[0]->Draw("axis");
@@ -363,10 +375,15 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "pp");
 
-    latex.SetTextSize(0.055*sf);
-    latex.SetTextAlign(11);
-    latex.DrawLatex(0.07, 0.87, (text_jet_pt).c_str());
-    latex.DrawLatex(0.07, 0.77, (text_jet_alg).c_str());
+    TPaveText box(0.15, 0.84, 0.85, 0.95, "NDC");
+    box.SetBorderSize(1);
+    box.SetTextFont(42);
+    box.SetTextSize(0.06*sf);
+    box.SetLineWidth(3);
+    box.SetFillColor(0);
+    box.SetShadowColor(0);
+    box.AddText((text_jet_pt).c_str());
+    box.Draw("same");
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
@@ -379,7 +396,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*prior_pp)[0]->Draw("same hist ][");
     (*reg_pp)[0]->Draw("same hist ][");
     (*syst_pp)[0]->Draw("same hist ][");
-    legend_part1.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -414,7 +430,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[0]->Draw("same hist ][");
     (*cent_aa)[0]->Draw("same hist ][");
     (*syst_aa)[0]->Draw("same hist ][");
-    legend_part2.Draw();
+    legend_part1.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -437,6 +453,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.07, 0.87, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.07, 0.77, (text_jet_alg).c_str());
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
@@ -448,7 +465,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[1]->Draw("same hist ][");
     (*cent_aa)[1]->Draw("same hist ][");
     (*syst_aa)[1]->Draw("same hist ][");
-    legend_part3.Draw();
+    legend_part2.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -463,6 +480,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*jer_aa)[2]->Draw("same hist ][");
     (*stat_aa)[2]->Draw("same hist ][");
     (*syst_aa)[2]->Draw("same hist ][");
+    legend_part5.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -478,7 +496,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[2]->Draw("same hist ][");
     (*cent_aa)[2]->Draw("same hist ][");
     (*syst_aa)[2]->Draw("same hist ][");
-    legend_part4.Draw();
+    legend_part3.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -493,6 +511,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*jer_aa)[3]->Draw("same hist ][");
     (*stat_aa)[3]->Draw("same hist ][");
     (*syst_aa)[3]->Draw("same hist ][");
+    legend_part6.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -508,6 +527,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_aa)[3]->Draw("same hist ][");
     (*cent_aa)[3]->Draw("same hist ][");
     (*syst_aa)[3]->Draw("same hist ][");
+    legend_part4.Draw();
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
