@@ -627,6 +627,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i][0]->cd();
         TPaveText text(0.25, 1 - 0.24 / factor_y * factor_x, 0.75, 1 - 0.16 / factor_y * factor_x);
         text.AddText((text_jet_pt).c_str());
+        text.Draw();
         // latex.SetTextAlign(22);
         // latex.SetTextSize(0.06 / factor_y * factor_x);
         // latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
