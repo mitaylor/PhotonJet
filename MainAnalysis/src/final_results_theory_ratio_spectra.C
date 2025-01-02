@@ -536,8 +536,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.36;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.66;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.50 : 0.09;
-    if (system == 1)    legend_y_max = (subsets) ? 0.85 : 0.30;
+    if (system == 1)    legend_y_min = (subsets) ? 0.45 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.80 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
@@ -699,7 +699,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         arrows[i]->Draw();
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-        boxes[i] = new TPaveText(0.2, 1 - 0.16, 0.8, 1 - 0.05, "NDC");
+        boxes[i] = new TPaveText(0.22, 1 - 0.16, 0.78, 1 - 0.05, "NDC");
         boxes[i]->SetBorderSize(1);
         boxes[i]->SetTextFont(42);
         boxes[i]->SetTextSize(0.06);
@@ -728,12 +728,18 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[0]->cd();
-    legend_part1.Draw();
+    if (system != 1)                  legend_part1.Draw();
     if (system == 0 && !subsets)      legend_part2.Draw();
     if (system == 1 && !subsets)      legend_part2.Draw();
     if (system == 3 && !subsets)      legend_part2.Draw();
 
     latex.SetTextSize(0.055);
+    if (system == 1)   latex.SetTextAlign(31);
+    if (system == 1)   latex.DrawLatex(0.95, 0.73, (text_photon_pt).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.65, (text_photon_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.57, (text_dphi + ", " + text_jet_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.49, (text_jet_alg).c_str());
+
     if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
@@ -741,7 +747,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
 
     if (system == 1 && !subsets)    latex.SetTextAlign(31);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.97, 0.43, "pp 302 pb^{-1}");
+    if (system == 1 && !subsets)    latex.DrawLatex(0.97, 0.48, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");
@@ -756,17 +762,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4 && !subsets)    latex.DrawLatex(0.36, 0.64, "HYBRID");
 
     pads[ncols-1]->cd();
+    if (system == 1)                  legend_part1.Draw();
+
     if (system == 0 && subsets)       legend_part2.Draw();
     if (system == 3 && subsets)       legend_part2.Draw();
     if (system == 4 && !subsets)      legend_part2.Draw();
 
     latex.SetTextSize(0.055);
-    if (system == 1)   latex.SetTextAlign(31);
-    if (system == 1)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
-
     if ((system == 2 || system == 4) && subsets)     latex.SetTextAlign(11);
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.78, (text_photon_pt).c_str());
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.70, (text_photon_eta).c_str());
