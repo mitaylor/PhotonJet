@@ -106,7 +106,7 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
     }
 }
 
-std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int format, int system)
+std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int format, int system, double ncols)
 {
     std::vector<TGraphAsymmErrors> result(h.size());
 
@@ -138,13 +138,13 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int form
         result[i].SetLineColor(1);
         result[i].SetFillColorAlpha(color[format], 0.60);
         result[i].SetMarkerSize(1.5);
-        result[i].SetLineWidth(5);
+        result[i].SetLineWidth(10.0 / ncols);
     }
 
     return result;
 }
 
-std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type)
+std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type, double ncols)
 {
     std::vector<TGraphAsymmErrors> result(h.size());
 
@@ -174,7 +174,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
         result[i].SetLineColor(color[type]);
         result[i].SetFillColorAlpha(color[type], 0.35);
         result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(10.0);
+        result[i].SetLineWidth(10.0 / ncols);
     }
 
     return result;
@@ -397,33 +397,33 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
     }
 
-    auto graphs_hists_aa = get_graph(hists_aa, 2, 0);
-    auto graphs_systs_aa = get_graph(systs_aa, 2, 0);
-    auto graphs_hists_pp = get_graph(hists_pp, 2, 1);
-    auto graphs_systs_pp = get_graph(systs_pp, 2, 1);
-    auto graphs_hists_ratio = get_graph(hists_ratio, 2, 2);
-    auto graphs_systs_ratio = get_graph(systs_ratio, 2, 2);
+    auto graphs_hists_aa = get_graph(hists_aa, 2, 0, ncols);
+    auto graphs_systs_aa = get_graph(systs_aa, 2, 0, ncols);
+    auto graphs_hists_pp = get_graph(hists_pp, 2, 1, ncols);
+    auto graphs_systs_pp = get_graph(systs_pp, 2, 1, ncols);
+    auto graphs_hists_ratio = get_graph(hists_ratio, 2, 2, ncols);
+    auto graphs_systs_ratio = get_graph(systs_ratio, 2, 2, ncols);
 
-    auto graphs_hists_aa_jewel = get_graph(hists_aa_jewel, 0);
-    auto graphs_hists_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1);
-    auto graphs_hists_aa_pyquen = get_graph(hists_aa_pyquen, 2);
-    auto graphs_hists_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3);
-    auto graphs_hists_aa_hybrid_elastic_no_wake = get_graph(hists_aa_hybrid_elastic_no_wake, 5);
-    auto graphs_hists_aa_hybrid_no_elastic_no_wake = get_graph(hists_aa_hybrid_no_elastic_no_wake, 6);
-    auto graphs_hists_aa_hybrid_elastic_wake = get_graph(hists_aa_hybrid_elastic_wake, 7);
-    auto graphs_hists_aa_hybrid_no_elastic_wake = get_graph(hists_aa_hybrid_no_elastic_wake, 8);
-    auto graphs_hists_pp_jewel = get_graph(hists_pp_jewel, 0);
-    auto graphs_hists_pp_pyquen = get_graph(hists_pp_pyquen, 2);
-    auto graphs_hists_pp_pythia = get_graph(hists_pp_pythia, 4);
-    auto graphs_hists_pp_hybrid = get_graph(hists_pp_hybrid, 5);
-    auto graphs_hists_ratio_jewel = get_graph(hists_ratio_jewel, 0);
-    auto graphs_hists_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1);
-    auto graphs_hists_ratio_pyquen = get_graph(hists_ratio_pyquen, 2);
-    auto graphs_hists_ratio_pyquen_no_wide = get_graph(hists_ratio_pyquen_no_wide, 3);
-    auto graphs_hists_ratio_hybrid_elastic_no_wake = get_graph(hists_ratio_hybrid_elastic_no_wake, 5);
-    auto graphs_hists_ratio_hybrid_no_elastic_no_wake = get_graph(hists_ratio_hybrid_no_elastic_no_wake, 6);
-    auto graphs_hists_ratio_hybrid_elastic_wake = get_graph(hists_ratio_hybrid_elastic_wake, 7);
-    auto graphs_hists_ratio_hybrid_no_elastic_wake = get_graph(hists_ratio_hybrid_no_elastic_wake, 8);
+    auto graphs_hists_aa_jewel = get_graph(hists_aa_jewel, 0, ncols);
+    auto graphs_hists_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1, ncols);
+    auto graphs_hists_aa_pyquen = get_graph(hists_aa_pyquen, 2, ncols);
+    auto graphs_hists_aa_pyquen_no_wide = get_graph(hists_aa_pyquen_no_wide, 3, ncols);
+    auto graphs_hists_aa_hybrid_elastic_no_wake = get_graph(hists_aa_hybrid_elastic_no_wake, 5, ncols);
+    auto graphs_hists_aa_hybrid_no_elastic_no_wake = get_graph(hists_aa_hybrid_no_elastic_no_wake, 6, ncols);
+    auto graphs_hists_aa_hybrid_elastic_wake = get_graph(hists_aa_hybrid_elastic_wake, 7, ncols);
+    auto graphs_hists_aa_hybrid_no_elastic_wake = get_graph(hists_aa_hybrid_no_elastic_wake, 8, ncols);
+    auto graphs_hists_pp_jewel = get_graph(hists_pp_jewel, 0, ncols);
+    auto graphs_hists_pp_pyquen = get_graph(hists_pp_pyquen, 2, ncols);
+    auto graphs_hists_pp_pythia = get_graph(hists_pp_pythia, 4, ncols);
+    auto graphs_hists_pp_hybrid = get_graph(hists_pp_hybrid, 5, ncols);
+    auto graphs_hists_ratio_jewel = get_graph(hists_ratio_jewel, 0, ncols);
+    auto graphs_hists_ratio_jewel_no_recoil = get_graph(hists_ratio_jewel_no_recoil, 1, ncols);
+    auto graphs_hists_ratio_pyquen = get_graph(hists_ratio_pyquen, 2, ncols);
+    auto graphs_hists_ratio_pyquen_no_wide = get_graph(hists_ratio_pyquen_no_wide, 3, ncols);
+    auto graphs_hists_ratio_hybrid_elastic_no_wake = get_graph(hists_ratio_hybrid_elastic_no_wake, 5, ncols);
+    auto graphs_hists_ratio_hybrid_no_elastic_no_wake = get_graph(hists_ratio_hybrid_no_elastic_no_wake, 6, ncols);
+    auto graphs_hists_ratio_hybrid_elastic_wake = get_graph(hists_ratio_hybrid_elastic_wake, 7, ncols);
+    auto graphs_hists_ratio_hybrid_no_elastic_wake = get_graph(hists_ratio_hybrid_no_elastic_wake, 8, ncols);
 
     /* size canvas */
     double panel_size = 500;
@@ -674,14 +674,14 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 0)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 3)    graphs_systs_aa[i].Draw("same 2");
-        if (system == 3)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same 3");
-        if (system == 3)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same lX");
         if (system == 3)    graphs_hists_aa_hybrid_no_elastic_wake[i].Draw("same 3");
         if (system == 3)    graphs_hists_aa_hybrid_no_elastic_wake[i].Draw("same lX");
-        if (system == 3)    graphs_hists_aa_hybrid_elastic_no_wake[i].Draw("same 3");
-        if (system == 3)    graphs_hists_aa_hybrid_elastic_no_wake[i].Draw("same lX");
         if (system == 3)    graphs_hists_aa_hybrid_elastic_wake[i].Draw("same 3");
         if (system == 3)    graphs_hists_aa_hybrid_elastic_wake[i].Draw("same lX");
+        if (system == 3)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same 3");
+        if (system == 3)    graphs_hists_aa_hybrid_no_elastic_no_wake[i].Draw("same lX");
+        if (system == 3)    graphs_hists_aa_hybrid_elastic_no_wake[i].Draw("same 3");
+        if (system == 3)    graphs_hists_aa_hybrid_elastic_no_wake[i].Draw("same lX");
         if (system == 3)    graphs_hists_aa[i].Draw("same PZ");
 
         if (system == 1)    graphs_systs_pp[i].Draw("same 2");
@@ -741,13 +741,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)   latex.DrawLatex(0.95, 0.49, (text_jet_alg).c_str());
 
     if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(31);
-    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
-    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
-    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.54, (text_jet_alg).c_str());
+    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.76, (text_photon_pt).c_str());
+    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.68, (text_photon_eta).c_str());
+    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.60, (text_dphi + ", " + text_jet_eta).c_str());
+    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.52, (text_jet_alg).c_str());
 
     if (system == 1 && !subsets)    latex.SetTextAlign(31);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.97, 0.38, "pp 302 pb^{-1}");
+    if (system == 1 && !subsets)    latex.DrawLatex(0.97, 0.36, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");
