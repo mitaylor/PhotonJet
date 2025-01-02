@@ -227,7 +227,7 @@ void set_pad(TPad &pad)
 void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.070/sf);
+    axis.SetLabelSize(0.06/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
@@ -308,10 +308,10 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* size canvas */
     double panel_size = 500;
-    double padding_width_left = 240;
+    double padding_width_left = 170;
     double padding_width_right = 50;
-    double padding_height_top = 100;
-    double padding_height_bottom = 140;
+    double padding_height_top = 70;
+    double padding_height_bottom = 100;
 
     double factor_x = 0.72;
     double factor_y = (2 * panel_size + (1 - factor_x) * padding_width_left + (1 - factor_x) * padding_width_right) / 4 / panel_size;
@@ -383,7 +383,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.095/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.36, "p_{T}^{jet}");
@@ -392,7 +392,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.36, "p_{T}^{jet}");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.095/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     latex.DrawLatex(pad_x0 * 0.37, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{dp_{T}^{jet}}");
@@ -404,13 +404,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 * 0.95, pad_y0 + pad_dy * nrows * 0.95, "#times 10^{-3}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.095/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * (1 + 0.15 * padding_height_top / padding_height_bottom) + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.065/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * (1 + 0.15 * padding_height_top / padding_height_bottom) + pad_dy * nrows, text_system.c_str());

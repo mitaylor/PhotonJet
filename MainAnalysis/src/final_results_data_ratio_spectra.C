@@ -346,7 +346,7 @@ void set_pad(TPad &pad)
 void set_axis(TGaxis &axis, double sf)
 {
     axis.SetLabelFont(42);
-    axis.SetLabelSize(0.070/sf);
+    axis.SetLabelSize(0.06/sf);
     axis.SetMaxDigits(6);
     axis.SetNoExponent();
     axis.SetTickLength(0.0);
@@ -454,9 +454,9 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     /* size canvas */
     double panel_size = 500;
-    double padding_width_left = 240;
+    double padding_width_left = 170;
     double padding_width_right = 50;
-    double padding_height = 100;
+    double padding_height = 70;
 
     double factor_x = 0.72;
     double factor_y = (2 * panel_size + (1 - factor_x) * padding_width_left + (1 - factor_x) * padding_width_right) / 4 / panel_size;
@@ -550,7 +550,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.095/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.5, "#Deltaj");
@@ -559,20 +559,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.5, "#Deltaj");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.095/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     if (ratio)      latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "PbPb / pp");
     if (spectra)    latex.DrawLatex(pad_x0 * 0.4, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{d#Deltaj}");
 
     latex.SetTextFont(62);
-    latex.SetTextSize(0.095/sf);
+    latex.SetTextSize(0.07/sf);
     latex.SetTextAlign(11);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.065/sf);
+    latex.SetTextSize(0.06/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
