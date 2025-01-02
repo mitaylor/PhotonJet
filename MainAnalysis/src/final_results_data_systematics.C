@@ -338,16 +338,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend_part4.SetBorderSize(0);
 
     TLegend legend_part5(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
-    legend_part4.SetTextFont(42);
-    legend_part4.SetTextSize(0.055);
-    legend_part4.SetFillStyle(0);
-    legend_part4.SetBorderSize(0);
+    legend_part5.SetTextFont(42);
+    legend_part5.SetTextSize(0.055);
+    legend_part5.SetFillStyle(0);
+    legend_part5.SetBorderSize(0);
 
     TLegend legend_part6(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
-    legend_part4.SetTextFont(42);
-    legend_part4.SetTextSize(0.055);
-    legend_part4.SetFillStyle(0);
-    legend_part4.SetBorderSize(0);
+    legend_part6.SetTextFont(42);
+    legend_part6.SetTextSize(0.055);
+    legend_part6.SetFillStyle(0);
+    legend_part6.SetBorderSize(0);
 
     legend_part1.AddEntry((*syst_aa)[0], "Total", "l");
     legend_part1.AddEntry((*ele_aa)[0], "Electron Rejection", "l");
@@ -375,16 +375,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "pp");
 
-    TPaveText box(0.15, 0.84, 0.85, 0.95, "NDC");
-    box.SetBorderSize(1);
-    box.SetTextFont(42);
-    box.SetTextSize(0.06*sf);
-    box.SetLineWidth(3);
-    box.SetFillColor(0);
-    box.SetShadowColor(0);
-    box.AddText((text_jet_pt).c_str());
-    box.Draw("same");
-
     pads[5]->cd();
     worlds[5]->Draw("axis");
     // arrows[5]->Draw();
@@ -396,6 +386,16 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*prior_pp)[0]->Draw("same hist ][");
     (*reg_pp)[0]->Draw("same hist ][");
     (*syst_pp)[0]->Draw("same hist ][");
+
+    TPaveText box(0.15, 0.80, 0.85, 0.95, "NDC");
+    box.SetBorderSize(1);
+    box.SetTextFont(42);
+    box.SetTextSize(0.06*sf);
+    box.SetLineWidth(3);
+    box.SetFillColor(0);
+    box.SetShadowColor(0);
+    box.AddText((text_jet_pt).c_str());
+    box.Draw("same");
 
     latex.SetTextAlign(21);
     latex.SetTextSize(0.06*sf);
@@ -418,7 +418,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.07, 0.87, (text_photon_pt).c_str());
-    latex.DrawLatex(0.07, 0.77, (text_photon_eta).c_str());
+    latex.DrawLatex(0.07, 0.75, (text_photon_eta).c_str());
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
@@ -453,7 +453,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.07, 0.87, (text_dphi + ", " + text_jet_eta).c_str());
-    latex.DrawLatex(0.07, 0.77, (text_jet_alg).c_str());
+    latex.DrawLatex(0.07, 0.75, (text_jet_alg).c_str());
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
