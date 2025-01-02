@@ -501,8 +501,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
 
-    0.5, 1 - 0.2 / factor_y * factor_x,
-
     TBox* jet_box = new TBox(0, 0, 0.5, 0.06 / factor_y * factor_x * 1.2);
     jet_box->SetBBoxCenterX(0.5);
     jet_box->SetBBoxCenterY(1 - 0.2 / factor_y * factor_x);
