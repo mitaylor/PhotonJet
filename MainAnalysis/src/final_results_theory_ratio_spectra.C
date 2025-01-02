@@ -136,7 +136,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int form
         result[i].SetMarkerStyle(style[format]);
         result[i].SetMarkerColor(1);
         result[i].SetLineColor(1);
-        result[i].SetFillColorAlpha(color[format], 0.60);
+        result[i].SetFillColorAlpha(color[format], 0.80);
         result[i].SetMarkerSize(1.5);
         result[i].SetLineWidth(5);
     }
