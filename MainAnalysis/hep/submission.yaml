@@ -16,7 +16,7 @@ description: Photon-tagged jet axis decorrelation in pp and PbPb collisions for 
 keywords:
    - {name: cmenergies, values: [5020]}
    - {name: reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: observables, values: [$\Delta j$]}
+   - {name: observables, values: ["\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Delta j}"]}
    - {name: phrases, values: ["Photon", "Jet", "Substructure"]}
 data_file: Figure1.yaml
 
@@ -28,7 +28,7 @@ description: Ratios of photon-tagged jet axis decorrelation in pp and PbPb colli
 keywords:
    - {name: cmenergies, values: [5020]}
    - {name: reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: observables, values: [$\Delta j$]}
+   - {name: observables, values: ["PbPb / pp"]}
    - {name: phrases, values: ["Photon", "Jet", "Substructure"]}
 data_file: Figure2.yaml
 
@@ -40,7 +40,7 @@ description: Photon-tagged jet $p_T$ spectrum in pp and PbPb collisions for jets
 keywords:
    - {name: cmenergies, values: [5020]}
    - {name: reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: observables, values: ["$p_T^{jet}$"]}
+   - {name: observables, values: ["\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{dp_{T}^{jet}}"]}
    - {name: phrases, values: ["Photon", "Jet"]}
 data_file: SupFigure1.yaml
 
@@ -52,7 +52,7 @@ description: Photon-tagged jet axis decorrelation in pp and PbPb collisions for 
 keywords:
    - {name: cmenergies, values: [5020]}
    - {name: reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: observables, values: [$\Delta j$]}
+   - {name: observables, values: ["\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Delta j}"]}
    - {name: phrases, values: ["Photon", "Jet", "Substructure"]}
 data_file: SupFigure2.yaml
 
@@ -64,6 +64,6 @@ description: Ratios of photon-tagged jet axis decorrelation in pp and PbPb colli
 keywords:
    - {name: cmenergies, values: [5020]}
    - {name: reactions, values: ["P P --> JET + PHOTON", "Pb Pb --> JET + PHOTON"]}
-   - {name: observables, values: [$\Delta j$]}
+   - {name: observables, values: ["PbPb / pp"]}
    - {name: phrases, values: ["Photon", "Jet", "Substructure"]}
 data_file: SupFigure3.yaml

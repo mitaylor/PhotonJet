@@ -71,7 +71,7 @@ void hep_data_spectra(std::string hep, bool subsets,
         // pp results
         out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Delta j}$'}" << std::endl;
         out << "  qualifiers:" << std::endl;
-        out << "  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}" << std::endl;
+        out << "  - {name: 'SQRT(S)/NUCLEON', units: 'GEV', value: '5020'}" << std::endl;
         out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
         out << "  - {name: '|JET ETA|', value: '< 1.6'}" << std::endl;
         out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
@@ -82,7 +82,7 @@ void hep_data_spectra(std::string hep, bool subsets,
         if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
         if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
 
-        out << "  - {name: 'SYSTEM', value: 'PP'}" << std::endl;
+        out << "  - {name: 'RE', value: 'P P --> JET + PHOTON'}" << std::endl;
         out << "  - {name: 'CENTRALITY', value: 'N/A'}" << std::endl;
 
         out << "  values:" << std::endl;
@@ -118,7 +118,7 @@ void hep_data_spectra(std::string hep, bool subsets,
         for (size_t j = 0; j < graphs_hists_aa[0].size(); ++j) {    // npads
             out << "- header: {name: '$\\frac{1}{N_{\\gamma}} \\frac{dN_{j\\gamma}}{d\\Delta j}$'}" << std::endl;
             out << "  qualifiers:" << std::endl;
-            out << "  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}" << std::endl;
+            out << "  - {name: 'SQRT(S)/NUCLEON', units: 'GEV', value: '5020'}" << std::endl;
             out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
             out << "  - {name: '|JET ETA|', value: '< 1.6'}" << std::endl;
             out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
@@ -129,7 +129,7 @@ void hep_data_spectra(std::string hep, bool subsets,
             if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
             if (!subsets)           out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 100'}" << std::endl;
 
-            out << "  - {name: 'SYSTEM', value: 'PBPB'}" << std::endl;
+            out << "  - {name: 'RE', value: 'Pb Pb --> JET + PHOTON'}" << std::endl;
 
             if (j == 0) out << "  - {name: 'CENTRALITY', value: '50-90%'}" << std::endl;
             if (j == 1) out << "  - {name: 'CENTRALITY', value: '30-50%'}" << std::endl;
@@ -204,7 +204,7 @@ void hep_data_ratio(std::string hep, bool subsets,
         for (size_t j = 0; j < graphs_hists_ratio[0].size(); ++j) {    // npads
             out << "- header: {name: 'PbPb / pp'}" << std::endl;
             out << "  qualifiers:" << std::endl;
-            out << "  - {name: 'SQRT(S)/NUCLEON', units: 'TEV', value: '5.02'}" << std::endl;
+            out << "  - {name: 'SQRT(S)/NUCLEON', units: 'GEV', value: '5020'}" << std::endl;
             out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
             out << "  - {name: '|JET ETA|', value: '< 1.6'}" << std::endl;
             out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
