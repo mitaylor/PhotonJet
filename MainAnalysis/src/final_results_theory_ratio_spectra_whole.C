@@ -108,7 +108,7 @@ void set_systematics(history<TH1F>* h, history<TH1F>* s)
 
 std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int format, int system, double ncols)
 {
-    std::vector<TGraphAsymmErrors> result(ncols);
+    std::vector<TGraphAsymmErrors> result(h.size());
 
     static int style[3] = {20, 20, 20};
     static int color[3] = {TColor::GetColor("#5790FC"), TColor::GetColor("#E42536"), TColor::GetColor("#9C9C9C")};
@@ -278,7 +278,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     /* manage memory manually */
     TH1::AddDirectory(false);
     TH1::SetDefaultSumw2();
-
+std::cout << __LINE__ << std::endl;
     /* open input files */
     auto file_aa = new TFile((base + input_aa).data(), "read");
     auto file_pp = new TFile((base + input_pp).data(), "read");
@@ -293,7 +293,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     auto file_pp_pythia = new TFile((base + input_pp_pythia).data(), "read");
     auto file_pp_hybrid = new TFile((base + input_pp_hybrid).data(), "read");
     auto file_ratio_hybrid = new TFile((base + input_ratio_hybrid).data(), "read");
-
+std::cout << __LINE__ << std::endl;
     /* define kinematics and luminosity */
     auto text_system = "(5.02 TeV)"s;
     auto text_cms = (supplementary) ? "CMS #scale[0.8]{#font[52]{Supplementary}}"s : "CMS"s;
@@ -305,7 +305,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 0) text_system = "PbPb 1.69 nb^{-1} " + text_system;
     if (system == 1) text_system = "PbPb 1.69 nb^{-1}, pp 302 pb^{-1} " + text_system;
-
+std::cout << __LINE__ << std::endl;
     std::vector<history<TH1F>*> hists_aa(nsystems);
     std::vector<history<TH1F>*> systs_aa(nsystems);
     std::vector<history<TH1F>*> hists_pp(nsystems);
@@ -333,7 +333,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<history<TH1F>*> hists_ratio_hybrid_no_elastic_no_wake(nsystems);
     std::vector<history<TH1F>*> hists_ratio_hybrid_elastic_wake(nsystems);
     std::vector<history<TH1F>*> hists_ratio_hybrid_no_elastic_wake(nsystems);
-
+std::cout << __LINE__ << std::endl;
     for (int i = 0; i < nsystems; ++i) {
         /* define jet pT bounds */
         switch (types[i]) {
@@ -351,7 +351,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         if (theory_figures[i] == "none") theory_figures[i] = "";
-
+std::cout << __LINE__ << std::endl;
         /* get histograms */
         hists_aa[i] = new history<TH1F>(file_aa, "aa_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
         systs_aa[i] = new history<TH1F>(file_aa, "aa_total_base_aa_nominal_s_pure_raw_sub_" + figures[i]);
@@ -359,7 +359,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         systs_pp[i] = new history<TH1F>(file_pp, "pp_total_base_pp_nominal_s_pure_raw_sub_" + figures[i]);
         hists_ratio[i] = new history<TH1F>(*hists_aa[i], "hist");
         systs_ratio[i] = new history<TH1F>(*systs_aa[i], "syst");
-
+std::cout << __LINE__ << std::endl;
         hists_aa_jewel[i] = new history<TH1F>(file_aa_jewel, tag_aa_jewel + "_dr" + theory_figures[i]);
         hists_aa_jewel_no_recoil[i] = new history<TH1F>(file_aa_jewel_no_recoil, tag_aa_jewel_no_recoil + "_dr" + theory_figures[i]);
         hists_aa_pyquen[i] = new history<TH1F>(file_aa_pyquen, tag_aa_pyquen + "_dr" + theory_figures[i]);
@@ -392,14 +392,14 @@ int congratulate(char const* config, char const* selections, char const* output)
             set_values(hists_ratio_pyquen_no_wide[i], hists_aa_pyquen_no_wide[i], hists_pp_pyquen[i]);
         }
     }
-
+std::cout << __LINE__ << std::endl;
     auto graphs_hists_aa = get_graph(hists_aa, 2, 0, ncols);
     auto graphs_systs_aa = get_graph(systs_aa, 2, 0, ncols);
     auto graphs_hists_pp = get_graph(hists_pp, 2, 0, ncols);
     auto graphs_systs_pp = get_graph(systs_pp, 2, 0, ncols);
     auto graphs_hists_ratio = get_graph(hists_ratio, 2, 1, ncols);
     auto graphs_systs_ratio = get_graph(systs_ratio, 2, 1, ncols);
-
+std::cout << __LINE__ << std::endl;
     auto graphs_hists_aa_jewel = get_graph(hists_aa_jewel, 0, ncols);
     auto graphs_hists_aa_jewel_no_recoil = get_graph(hists_aa_jewel_no_recoil, 1, ncols);
     auto graphs_hists_aa_pyquen = get_graph(hists_aa_pyquen, 2, ncols);
@@ -431,7 +431,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double canvas_height = panel_size * 1 + padding_height * 2;
 
     double sf = 1;
-
+std::cout << __LINE__ << std::endl;
     double pad_x0 = padding_width_left / canvas_width;
     double pad_y0 = padding_height / canvas_height;
     double pad_dx = panel_size / canvas_width;
@@ -441,7 +441,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     double xmax = bdr[1];
 
     gStyle->SetLineScalePS(1);
-
+std::cout << __LINE__ << std::endl;
     /* declare canvas, pads, axes, and titles */
     TCanvas canvas("canvas", "", canvas_width, canvas_height);
 
@@ -454,27 +454,27 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(1);
     std::vector<TPaveText*> boxes(nsystems);
-
+std::cout << __LINE__ << std::endl;
     for (int i = 0; i < ncols; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
-
+std::cout << __LINE__ << std::endl;
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
         
         set_pad(*pads[i]);
 
         axis_x[i] = new TGaxis(pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 0, xmin, xmax, 510, "SG");
-
+std::cout << __LINE__ << std::endl;
         set_axis(*axis_x[i], sf);
 
         double arrow_y = 0.0;
         
-        if (system == 1) arrow_y = graphs_systs_ratio[i].GetPointY(0);
-        if (system == 0) arrow_y = graphs_systs_aa[i].GetPointY(0);
-
-        arrows[i] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
-        arrows[i]->SetAngle(40);
-        arrows[i]->SetLineWidth(1);
+        if (system == 1) arrow_y = graphs_systs_ratio[0].GetPointY(0);
+        if (system == 0) arrow_y = graphs_systs_aa[0].GetPointY(0);
+std::cout << __LINE__ << std::endl;
+        arrows[0] = new TArrow(0.003, arrow_y, 0.0040, arrow_y, 0.02 / ncols, "<|");
+        arrows[0]->SetAngle(40);
+        arrows[0]->SetLineWidth(1);
 
         canvas.cd();
 
@@ -486,7 +486,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     axis_y[0] = new TGaxis(pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * 0, pad_y0 + pad_dy * 1, ymins[0] * 0.999, ymaxs[0] * 0.999, 510, "S");
-
+std::cout << __LINE__ << std::endl;
     set_axis(*axis_y[0], sf);
 
     latex.SetTextFont(42);
@@ -507,7 +507,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());
-
+std::cout << __LINE__ << std::endl;
     TGraph line;
     if (system == 1)    line.SetPoint(0, xmin, 1);
     if (system == 1)    line.SetPoint(1, xmax, 1);
@@ -530,7 +530,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    legend_y_max = 0.83;
     if (system == 0)    legend_x_min = 0.03;
     if (system == 0)    legend_x_max = 0.33;
-
+std::cout << __LINE__ << std::endl;
     if (system == 1)    legend_y_min = 0.31;
     if (system == 1)    legend_y_max = 0.66;
     if (system == 1)    legend_x_min = 0.03;
@@ -541,7 +541,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend_x_min = 0.36;
     if (system == 1)    legend_x_max = 0.66;
 
-
+std::cout << __LINE__ << std::endl;
     TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
     legend_part1.SetTextSize(0.055);
@@ -573,7 +573,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    legend_y_max = legend_y_min + 0.14;
     if (system == 1)    legend_x_min = legend_x_max;
     if (system == 1)    legend_x_max = legend_x_min + 0.30;
-
+std::cout << __LINE__ << std::endl;
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.055);
@@ -587,7 +587,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0]->cd();
 
     worlds[0]->Draw("axis");
-
+std::cout << __LINE__ << std::endl;
     if (system == 1)    graphs_systs_ratio[0].Draw("same 2");
     if (system == 1)    graphs_hists_ratio_hybrid_no_elastic_no_wake[0].Draw("same 3");
     if (system == 1)    graphs_hists_ratio_hybrid_no_elastic_no_wake[0].Draw("same lX");
@@ -598,7 +598,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    graphs_hists_ratio_hybrid_elastic_wake[0].Draw("same 3");
     if (system == 1)    graphs_hists_ratio_hybrid_elastic_wake[0].Draw("same lX");
     if (system == 1)    graphs_hists_ratio[0].Draw("same PZ");
-
+std::cout << __LINE__ << std::endl;
     if (system == 0)    graphs_systs_aa[0].Draw("same 2");
     if (system == 0)    graphs_hists_aa_hybrid_no_elastic_wake[0].Draw("same 3");
     if (system == 0)    graphs_hists_aa_hybrid_no_elastic_wake[0].Draw("same lX");
@@ -609,10 +609,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    graphs_hists_aa_hybrid_elastic_no_wake[0].Draw("same 3");
     if (system == 0)    graphs_hists_aa_hybrid_elastic_no_wake[0].Draw("same lX");
     if (system == 0)    graphs_hists_aa[0].Draw("same PZ");
-
+std::cout << __LINE__ << std::endl;
     line.Draw("l");
     arrows[0]->Draw();
-
+std::cout << __LINE__ << std::endl;
     auto text_jet_pt = to_text(bjet_pt[0][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[0][1]) + " GeV"s;
     boxes[0] = new TPaveText(0.22, 1 - 0.16, 0.78, 1 - 0.05, "NDC");
     boxes[0]->SetBorderSize(1);
@@ -623,7 +623,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     boxes[0]->SetShadowColor(0);
     boxes[0]->AddText((text_jet_pt).c_str());
     boxes[0]->Draw("same");
-
+std::cout << __LINE__ << std::endl;
     if (system == 0)    latex.SetTextAlign(21);
     if (system == 0)    latex.SetTextSize(0.06);
     if (system == 0)    latex.DrawLatex(0.5, 0.03, "Cent. 0-10%");
@@ -631,12 +631,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)   latex.SetTextAlign(21);
     if (system == 1)   latex.SetTextSize(0.06);
     if (system == 1)   latex.DrawLatex(0.5, 0.10, "Cent. 0-10%");
-
+std::cout << __LINE__ << std::endl;
     pads[1]->cd();
 
     worlds[1]->Draw("axis");
-
-    if (system == 1)    graphs_systs_ratio[1].Draw("same 2");
+std::cout << __LINE__ << std::endl;
+    if (system == 1)    graphs_systs_ratio[0].Draw("same 2");
     if (system == 1)    graphs_hists_ratio_pyquen_no_wide[0].Draw("same 3");
     if (system == 1)    graphs_hists_ratio_pyquen_no_wide[0].Draw("same lX");
     if (system == 1)    graphs_hists_ratio_pyquen[0].Draw("same 3");
@@ -645,9 +645,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)    graphs_hists_ratio_jewel[0].Draw("same lX");
     if (system == 1)    graphs_hists_ratio_jewel_no_recoil[0].Draw("same 3");
     if (system == 1)    graphs_hists_ratio_jewel_no_recoil[0].Draw("same lX");
-    if (system == 1)    graphs_hists_ratio[1].Draw("same PZ");
+    if (system == 1)    graphs_hists_ratio[0].Draw("same PZ");
 
-    if (system == 0)    graphs_systs_aa[1].Draw("same 2");
+    if (system == 0)    graphs_systs_aa[0].Draw("same 2");
     if (system == 0)    graphs_hists_aa_pyquen_no_wide[0].Draw("same 3");
     if (system == 0)    graphs_hists_aa_pyquen_no_wide[0].Draw("same lX");
     if (system == 0)    graphs_hists_aa_pyquen[0].Draw("same 3");
@@ -656,22 +656,11 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    graphs_hists_aa_jewel[0].Draw("same lX");
     if (system == 0)    graphs_hists_aa_jewel_no_recoil[0].Draw("same 3");
     if (system == 0)    graphs_hists_aa_jewel_no_recoil[0].Draw("same lX");
-    if (system == 0)    graphs_hists_aa[1].Draw("same PZ");
-
-    if (system == 0)    graphs_systs_aa[1].Draw("same 2");
-    if (system == 0)    graphs_hists_aa_hybrid_no_elastic_wake[0].Draw("same 3");
-    if (system == 0)    graphs_hists_aa_hybrid_no_elastic_wake[0].Draw("same lX");
-    if (system == 0)    graphs_hists_aa_hybrid_elastic_wake[0].Draw("same 3");
-    if (system == 0)    graphs_hists_aa_hybrid_elastic_wake[0].Draw("same lX");
-    if (system == 0)    graphs_hists_aa_hybrid_no_elastic_no_wake[0].Draw("same 3");
-    if (system == 0)    graphs_hists_aa_hybrid_no_elastic_no_wake[0].Draw("same lX");
-    if (system == 0)    graphs_hists_aa_hybrid_elastic_no_wake[0].Draw("same 3");
-    if (system == 0)    graphs_hists_aa_hybrid_elastic_no_wake[0].Draw("same lX");
-    if (system == 0)    graphs_hists_aa[1].Draw("same PZ");
-
+    if (system == 0)    graphs_hists_aa[0].Draw("same PZ");
+std::cout << __LINE__ << std::endl;
     line.Draw("l");
-    arrows[1]->Draw();
-
+    arrows[0]->Draw();
+std::cout << __LINE__ << std::endl;
     if (system == 0)    latex.SetTextAlign(21);
     if (system == 0)    latex.SetTextSize(0.06);
     if (system == 0)    latex.DrawLatex(0.5, 0.03, "Cent. 0-10%");
@@ -679,29 +668,24 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)   latex.SetTextAlign(21);
     if (system == 1)   latex.SetTextSize(0.06);
     if (system == 1)   latex.DrawLatex(0.5, 0.10, "Cent. 0-10%");
-
+std::cout << __LINE__ << std::endl;
     pads[0]->cd();
     // legend_part1.Draw();
     // if (system == 0)      legend_part2.Draw();
-
+std::cout << __LINE__ << std::endl;
     latex.SetTextSize(0.055);
-    if (system == 0)    latex.SetTextAlign(31);
-    if (system == 0)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");
-
-    if (system == 1)    latex.SetTextAlign(21);
-    if (system == 1)    latex.DrawLatex(0.5, 0.03, "pp 302 pb^{-1}, PbPb 1.69 nb^{-1}");
 
     if (system == 0)    latex.SetTextAlign(11);
     if (system == 0)    latex.DrawLatex(0.04, 0.85, "HYBRID");
 
     if (system == 1)    latex.SetTextAlign(11);
     if (system == 1)    latex.DrawLatex(0.36, 0.64, "HYBRID");
-
+std::cout << __LINE__ << std::endl;
     pads[ncols-1]->cd();
     // if (system == 1)      legend_part2.Draw();
 
     latex.SetTextSize(0.055);
-
+std::cout << __LINE__ << std::endl;
     if (system == 1)    latex.SetTextAlign(21);
     if (system == 1)    latex.DrawLatex(0.49, 0.81, (text_photon_pt + ", " + text_photon_eta).c_str());
     if (system == 1)    latex.DrawLatex(0.49, 0.73, (text_dphi + ", " + text_jet_eta + ", " + text_jet_alg).c_str());
@@ -711,13 +695,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)   latex.DrawLatex(0.95, 0.56, (text_photon_eta).c_str());
     if (system == 0)   latex.DrawLatex(0.95, 0.48, (text_dphi + ", " + text_jet_eta).c_str());
     if (system == 0)   latex.DrawLatex(0.95, 0.40, (text_jet_alg).c_str());
-
+std::cout << __LINE__ << std::endl;
     if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + "_log.pdf").c_str());
     if (system == 1)    canvas.SaveAs((set + "_final_theory_ratio_" + name + "_log.pdf").c_str());
 
     if (system == 0)    canvas.SaveAs((set + "_final_theory_spectra_aa_" + name + "_log.C").c_str());
     if (system == 1)    canvas.SaveAs((set + "_final_theory_ratio_" + name + "_log.C").c_str());
-
+std::cout << __LINE__ << std::endl;
     in(output, []() {});
 
     return 0;
