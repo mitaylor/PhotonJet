@@ -457,7 +457,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TPad*> pads(ncols);
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(1);
-    std::vector<TPaveText*> boxes(nrows);
+    std::vector<TPaveText*> boxes(ncols);
 
     for (int i = 0; i < ncols; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
