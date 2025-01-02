@@ -456,7 +456,7 @@ std::cout << __LINE__ << std::endl;
     std::vector<TPaveText*> boxes(nsystems);
 std::cout << __LINE__ << std::endl;
     for (int i = 0; i < ncols; ++i) {
-        worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
+        worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[0], ymaxs[0]);
         worlds[i]->SetStats(0);
 std::cout << __LINE__ << std::endl;
         pads[i] = new TPad("P1", "", pad_x0 + pad_dx * i, pad_y0 + pad_dy * 0, pad_x0 + pad_dx * (i + 1), pad_y0 + pad_dy * 1, 0);
