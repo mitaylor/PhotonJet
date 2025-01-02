@@ -626,7 +626,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         boxes[i] = new TPaveText(0.15, 1 - 0.22 / factor_y * factor_x, 0.85, 1 - 0.10 / factor_y * factor_x, "NDC");
         boxes[i]->SetBorderSize(1);
         boxes[i]->SetTextFont(42);
-        boxes[i]->SetTextSize(12);
+        boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
         boxes[i]->SetFillColor(0);
         boxes[i]->SetShadowColor(0);
         boxes[i]->AddText((text_jet_pt).c_str());
