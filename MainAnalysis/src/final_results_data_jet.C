@@ -416,8 +416,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * (1 + 0.15 * padding_height_top / padding_height_bottom) + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_min = 1 - 0.28 / factor_y * factor_x;
-    double legend_y_max = 1 - 0.14 / factor_y * factor_x;
+    double legend_y_min = 1 - 0.74 / factor_y * factor_x;
+    double legend_y_max = 1 - 0.60 / factor_y * factor_x;
     double legend_x_min = 0.05 / factor_y * factor_x;
     double legend_x_max = 0.35 / factor_y * factor_x;
 
@@ -464,18 +464,19 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[0][0]->cd();
-    latex.SetTextSize(0.055 / factor_y * factor_x);
-    latex.SetTextAlign(11);
     legend.Draw();
 
+    pads[0][1]->cd();
+    latex.SetTextSize(0.055 / factor_y * factor_x);
+    latex.SetTextAlign(11);
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_photon_eta).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_photon_pt).c_str());
     
-    pads[0][1]->cd();
+    pads[0][2]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_jet_alg).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
 
-    pads[0][2]->cd();
+    pads[0][3]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_jet_pt).c_str());
 
     canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
