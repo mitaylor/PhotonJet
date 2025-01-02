@@ -501,7 +501,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
-    std::vector<TBox*> boxes(nrows);
+    std::vector<TPaveText*> boxes(nrows);
 
     for (int i = 0; i < nrows; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
@@ -623,11 +623,11 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
+        boxes[i] = new TPaveText(0.25, 1 - 0.24 / factor_y * factor_x, 0.75, 1 - 0.16 / factor_y * factor_x);
+        boxes[i]->AddText((text_jet_pt).c_str());
     
         pads[i][0]->cd();
-        TPaveText text(0.25, 1 - 0.24 / factor_y * factor_x, 0.75, 1 - 0.16 / factor_y * factor_x);
-        text.AddText((text_jet_pt).c_str());
-        text.Draw();
+        text[i]->Draw("same");
         // latex.SetTextAlign(22);
         // latex.SetTextSize(0.06 / factor_y * factor_x);
         // latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
