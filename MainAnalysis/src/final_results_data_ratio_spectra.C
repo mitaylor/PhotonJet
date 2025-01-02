@@ -587,8 +587,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     line.SetLineStyle(kDashed);
 
     /* declare legend */
-    double legend_y_min = (ratio) ? 1 - 0.24 / factor_y * factor_x : 1 - 0.32 / factor_y * factor_x;
-    double legend_y_max = (ratio) ? 1 - 0.16 / factor_y * factor_x : 1 - 0.16 / factor_y * factor_x;
+    double legend_y_min = (ratio) ? 1 - 0.21 / factor_y * factor_x : 1 - 0.28 / factor_y * factor_x;
+    double legend_y_max = (ratio) ? 1 - 0.14 / factor_y * factor_x : 1 - 0.14 / factor_y * factor_x;
     double legend_x_min = (ratio) ? 0.05 / factor_y * factor_x : 0.05 / factor_y * factor_x;
     double legend_x_max = (ratio) ? 0.35 / factor_y * factor_x : 0.35 / factor_y * factor_x;
 
