@@ -624,11 +624,11 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
         pads[i][0]->cd();
-        latex.SetTextAlign(22);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.SetLineColor(1);
-        latex.SetLineWidth(3);
-        latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
+        TPaveText text(0.25, 1 - 0.24 / factor_y * factor_x, 0.75, 1 - 0.16 / factor_y * factor_x);
+        text.AddText((text_jet_pt).c_str());
+        // latex.SetTextAlign(22);
+        // latex.SetTextSize(0.06 / factor_y * factor_x);
+        // latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
 
         latex.SetTextAlign(21);
         latex.SetLineWidth(0);
