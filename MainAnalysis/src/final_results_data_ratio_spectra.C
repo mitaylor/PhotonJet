@@ -500,11 +500,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
-
-    TBox* jet_box = new TBox(0, 0, 0.5, 0.06 / factor_y * factor_x * 1.2);
-    jet_box->SetBBoxCenterX(0.5);
-    jet_box->SetBBoxCenterY(1 - 0.2 / factor_y * factor_x);
-    jet_box->SetLineColor(1); 
+    std::vector<TBox*> boxes(nrows);
 
     for (int i = 0; i < nrows; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
@@ -536,6 +532,11 @@ int congratulate(char const* config, char const* selections, char const* output)
             if (ratio)      arrows_ratio[i][j] = new TArrow(0.003, arrow_y_ratio, 0.0040, arrow_y_ratio, 0.02 / npads / factor_y * factor_x, "<|");
             if (ratio)      arrows_ratio[i][j]->SetAngle(40);
             if (ratio)      arrows_ratio[i][j]->SetLineWidth(1);
+
+            boxes[i] = new TBox(0, 0, 0.5, 0.06 / factor_y * factor_x * 1.2);
+            boxes[i]->SetBBoxCenterX(0.5 * (xmax - xmin));
+            boxes[i]->SetBBoxCenterY((1 - 0.2 / factor_y * factor_x) * (ymaxs[i] - ymins[i]));
+            boxes[i]->SetLineColor(1); 
         }
     }
 
@@ -631,7 +632,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAlign(22);
         latex.SetTextSize(0.06 / factor_y * factor_x);
         latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
-        jet_box->Draw("l");
+        boxes[i]->Draw("l");
 
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
