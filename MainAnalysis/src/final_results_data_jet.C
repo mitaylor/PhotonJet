@@ -383,7 +383,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetNDC();
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.065/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 0.5, pad_y0 * 0.36, "p_{T}^{jet}");
@@ -392,7 +392,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 3.5, pad_y0 * 0.36, "p_{T}^{jet}");
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.07/sf);
+    latex.SetTextSize(0.065/sf);
     latex.SetTextAlign(22);
     latex.SetTextAngle(90);
     latex.DrawLatex(pad_x0 * 0.37, pad_y0 + pad_dy * nrows * 0.5, "#frac{1}{N_{#gamma}} #frac{dN_{j#gamma}}{dp_{T}^{jet}}");
@@ -423,7 +423,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.05 / factor_y * factor_x);
+    legend.SetTextSize(0.055 / factor_y * factor_x);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     legend.AddEntry(&graphs_systs_aa[0][0], "PbPb", "plf");
@@ -443,10 +443,6 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         pads[i][0]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
-
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
         latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 50-90%");
@@ -477,6 +473,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0][1]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_jet_alg).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+
+    pads[0][2]->cd();
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_jet_pt).c_str());
 
     legend.Draw();
 
