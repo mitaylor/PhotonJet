@@ -501,6 +501,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
 
+    0.5, 1 - 0.2 / factor_y * factor_x,
+
+    TBox* jet_box = new TBox(0, 0, 0.5, 0.06 / factor_y * factor_x * 1.2);
+    jet_box->SetBBoxCenterX(0.5);
+    jet_box->SetBBoxCenterY(1 - 0.2 / factor_y * factor_x);
+    jet_box->SetLineColor(1); 
+
     for (int i = 0; i < nrows; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
         worlds[i]->SetStats(0);
@@ -623,9 +630,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
     
         pads[i][0]->cd();
-        latex.SetTextAlign(21);
+        latex.SetTextAlign(22);
         latex.SetTextSize(0.06 / factor_y * factor_x);
         latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
+        jet_box->Draw("l")
 
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
