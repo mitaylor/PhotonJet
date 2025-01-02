@@ -457,6 +457,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<TPad*> pads(ncols);
     std::vector<TGaxis*> axis_x(ncols);
     std::vector<TGaxis*> axis_y(1);
+    std::vector<TPaveText*> boxes(nrows);
 
     for (int i = 0; i < ncols; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
@@ -698,11 +699,20 @@ int congratulate(char const* config, char const* selections, char const* output)
         arrows[i]->Draw();
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
+        boxes[i] = new TPaveText(0.15, 1 - 0.16 / factor_y * factor_x, 0.85, 1 - 0.05 / factor_y * factor_x, "NDC");
+        boxes[i]->SetBorderSize(1);
+        boxes[i]->SetTextFont(42);
+        boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
+        boxes[i]->SetLineWidth(3);
+        boxes[i]->SetFillColor(0);
+        boxes[i]->SetShadowColor(0);
+        boxes[i]->AddText((text_jet_pt).c_str());
     
         pads[i]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextSize(0.06);
-        latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
+        // latex.SetTextAlign(21);
+        // latex.SetTextSize(0.06);
+        // latex.DrawLatex(0.5, 0.9, (text_jet_pt).c_str());
+        boxes[i]->Draw("same");
 
         if (system == 0 || system == 3)    latex.SetTextAlign(21);
         if (system == 0 || system == 3)    latex.SetTextSize(0.06);
@@ -750,7 +760,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 3 && subsets)       legend_part2.Draw();
     if (system == 4 && !subsets)      legend_part2.Draw();
 
-    latex.SetTextSize(0.05);
+    latex.SetTextSize(0.055);
     if (system == 1)   latex.SetTextAlign(31);
     if (system == 1)   latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     if (system == 1)   latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());
