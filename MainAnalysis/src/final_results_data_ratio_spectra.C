@@ -631,7 +631,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         latex.SetTextAlign(22);
         latex.SetTextSize(0.06 / factor_y * factor_x);
         latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
-        jet_box->Draw("l")
+        jet_box->Draw("l");
 
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
