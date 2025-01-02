@@ -699,10 +699,10 @@ int congratulate(char const* config, char const* selections, char const* output)
         arrows[i]->Draw();
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-        boxes[i] = new TPaveText(0.15, 1 - 0.16 / factor_y * factor_x, 0.85, 1 - 0.05 / factor_y * factor_x, "NDC");
+        boxes[i] = new TPaveText(0.15, 1 - 0.16, 0.85, 1 - 0.05, "NDC");
         boxes[i]->SetBorderSize(1);
         boxes[i]->SetTextFont(42);
-        boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
+        boxes[i]->SetTextSize(0.06);
         boxes[i]->SetLineWidth(3);
         boxes[i]->SetFillColor(0);
         boxes[i]->SetShadowColor(0);
