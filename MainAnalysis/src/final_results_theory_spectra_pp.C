@@ -106,7 +106,7 @@ std::vector<TGraphAsymmErrors> get_graph(std::vector<history<TH1F>*> h, int type
         result[i].SetLineColor(color[type]);
         result[i].SetFillColorAlpha(color[type], 0.35);
         result[i].SetMarkerSize(0);
-        result[i].SetLineWidth(10.0 / ncols);
+        result[i].SetLineWidth(15.0 / ncols);
     }
 
     return result;
@@ -410,9 +410,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0]->cd();
     latex.SetTextSize(0.055);
     latex.SetTextAlign(31);
-    latex.DrawLatex(0.95, 0.73, (text_photon_pt).c_str());
-    latex.DrawLatex(0.95, 0.65, (text_photon_eta).c_str());
-    latex.DrawLatex(0.95, 0.57, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.95, 0.73, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.95, 0.65, (text_photon_pt).c_str());
+    latex.DrawLatex(0.95, 0.57, (text_photon_eta).c_str());
     latex.DrawLatex(0.95, 0.49, (text_jet_alg).c_str());
 
     if (!subsets)    latex.SetTextAlign(31);
