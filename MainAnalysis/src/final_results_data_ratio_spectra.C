@@ -594,7 +594,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend.SetTextFont(42);
-    legend.SetTextSize(0.065 / factor_y * factor_x);
+    legend.SetTextSize(0.055 / factor_y * factor_x);
     legend.SetFillStyle(0);
     legend.SetBorderSize(0);
     if (ratio)      legend.AddEntry(&graphs_systs_ratio[0][0], "PbPb/pp", "plf");
