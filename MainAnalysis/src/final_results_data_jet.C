@@ -464,19 +464,20 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[0][0]->cd();
-    latex.SetTextSize(0.055 / factor_y * factor_x);
-    latex.SetTextAlign(11);
     legend.Draw();
 
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_photon_eta).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_photon_pt).c_str());
-    
     pads[0][1]->cd();
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_jet_alg).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
-
+    latex.SetTextSize(0.055 / factor_y * factor_x);
+    latex.SetTextAlign(11);
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_photon_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.26 / factor_y * factor_x, (text_photon_pt).c_str());
+    
     pads[0][2]->cd();
-    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, (text_jet_pt).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_jet_alg).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.26 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+
+    pads[0][3]->cd();
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_jet_pt).c_str());
 
     canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
 
