@@ -363,7 +363,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "pp");
 
-    latex.SetTextSize(0.05*sf);
+    latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.07, 0.87, (text_jet_pt).c_str());
     latex.DrawLatex(0.07, 0.77, (text_jet_alg).c_str());
@@ -399,7 +399,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "PbPb 50-90%");
 
-    latex.SetTextSize(0.05*sf);
+    latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.07, 0.87, (text_photon_pt).c_str());
     latex.DrawLatex(0.07, 0.77, (text_photon_eta).c_str());
@@ -434,7 +434,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.06*sf);
     latex.DrawLatex(0.5, 0.05, "PbPb 30-50%");
 
-    latex.SetTextSize(0.05*sf);
+    latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.07, 0.87, (text_dphi + ", " + text_jet_eta).c_str());
 

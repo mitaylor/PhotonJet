@@ -468,7 +468,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[0][0]->cd();
-    latex.SetTextSize(0.05 / factor_y * factor_x);
+    latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.SetTextAlign(11);
 
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.13 / factor_y * factor_x, (text_photon_eta).c_str());

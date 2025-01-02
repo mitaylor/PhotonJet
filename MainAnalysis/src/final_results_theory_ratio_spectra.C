@@ -722,7 +722,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)      legend_part2.Draw();
     if (system == 3 && !subsets)      legend_part2.Draw();
 
-    latex.SetTextSize(0.05);
+    latex.SetTextSize(0.055);
     if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.78, (text_photon_pt).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.70, (text_photon_eta).c_str());

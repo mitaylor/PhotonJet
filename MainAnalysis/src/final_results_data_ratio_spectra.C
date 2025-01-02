@@ -662,20 +662,17 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend.Draw();
 
     pads[nrows-1][2]->cd();
-    latex.SetTextSize(0.05 / factor_y * factor_x);
-    
-    if (spectra)    latex.SetTextAlign(31);
+    latex.SetTextSize(0.055 / factor_y * factor_x);
+    latex.SetTextAlign(11);
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.2 / factor_y * factor_x, (text_photon_eta).c_str());
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.28 / factor_y * factor_x, (text_photon_pt).c_str());
-    if (ratio)      latex.SetTextAlign(11);
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.2 / factor_y * factor_x, (text_photon_pt).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.28 / factor_y * factor_x, (text_photon_eta).c_str());
 
     pads[nrows-1][3]->cd();
-    if (spectra)    latex.SetTextAlign(31);
+    latex.SetTextAlign(11);
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.2 / factor_y * factor_x, (text_jet_alg).c_str());
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.28 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
-    if (ratio)      latex.SetTextAlign(11);
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.2 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
     if (ratio)      latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.28 / factor_y * factor_x, (text_jet_alg).c_str());
 
