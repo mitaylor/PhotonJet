@@ -506,7 +506,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.06/sf);
+    latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy, text_system.c_str());

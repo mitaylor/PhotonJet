@@ -572,7 +572,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0, pad_y0 * 1.15 + pad_dy * nrows, text_cms.c_str());
 
     latex.SetTextFont(42);
-    latex.SetTextSize(0.06/sf);
+    latex.SetTextSize(0.055/sf);
     latex.SetTextAlign(31);
     latex.SetTextAngle(0);
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
@@ -629,22 +629,22 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.1 / factor_y * factor_x, "Cent. 50-90%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 50-90%");
 
         pads[i][1]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.1 / factor_y * factor_x, "Cent. 30-50%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 30-50%");
 
         pads[i][2]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.1 / factor_y * factor_x, "Cent. 10-30%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 10-30%");
 
         pads[i][3]->cd();
         latex.SetTextAlign(21);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.1 / factor_y * factor_x, "Cent. 0-10%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 0-10%");
     }
 
     pads[nrows-1][0]->cd();
