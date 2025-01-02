@@ -532,10 +532,6 @@ int congratulate(char const* config, char const* selections, char const* output)
             if (ratio)      arrows_ratio[i][j] = new TArrow(0.003, arrow_y_ratio, 0.0040, arrow_y_ratio, 0.02 / npads / factor_y * factor_x, "<|");
             if (ratio)      arrows_ratio[i][j]->SetAngle(40);
             if (ratio)      arrows_ratio[i][j]->SetLineWidth(1);
-
-            boxes[i] = new TBox(0.006, 0, 0.15, (0.06 / factor_y * factor_x * 1.2) * (ymaxs[i] - ymins[i]));
-            boxes[i]->SetBBoxCenterY((1 - 0.2 / factor_y * factor_x) * (ymaxs[i] - ymins[i]));
-            boxes[i]->SetLineColor(1); 
         }
     }
 
@@ -630,10 +626,12 @@ int congratulate(char const* config, char const* selections, char const* output)
         pads[i][0]->cd();
         latex.SetTextAlign(22);
         latex.SetTextSize(0.06 / factor_y * factor_x);
+        latex.SetLineColor(1);
+        latex.SetLineWidth(3);
         latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
-        boxes[i]->Draw("l");
 
         latex.SetTextAlign(21);
+        latex.SetLineWidth(0);
         latex.SetTextSize(0.06 / factor_y * factor_x);
         latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 50-90%");
 
