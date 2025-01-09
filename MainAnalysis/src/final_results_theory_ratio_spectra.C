@@ -716,15 +716,18 @@ int congratulate(char const* config, char const* selections, char const* output)
 
         if (system == 0 || system == 3)    latex.SetTextAlign(21);
         if (system == 0 || system == 3)    latex.SetTextSize(0.06);
-        if (system == 0 || system == 3)    latex.DrawLatex(0.5, 0.03, "Cent. 0-10%");
+        if (system == 0 || system == 3)    latex.SetTextFont(42);
+        if (system == 0 || system == 3)    latex.DrawLatex(0.5, 0.03, "0-10%");
 
         if ((system == 2 || system == 4) && subsets)    latex.SetTextAlign(21);
         if ((system == 2 || system == 4) && subsets)    latex.SetTextSize(0.06);
-        if ((system == 2 || system == 4) && subsets)    latex.DrawLatex(0.5, 0.05, "Cent. 0-10%");
+        if ((system == 2 || system == 4) && subsets)    latex.SetTextFont(42);
+        if ((system == 2 || system == 4) && subsets)    latex.DrawLatex(0.5, 0.05, "0-10%");
 
         if ((system == 2 || system == 4) && !subsets)   latex.SetTextAlign(21);
         if ((system == 2 || system == 4) && !subsets)   latex.SetTextSize(0.06);
-        if ((system == 2 || system == 4) && !subsets)   latex.DrawLatex(0.5, 0.10, "Cent. 0-10%");
+        if ((system == 2 || system == 4) && !subsets)   latex.SetTextFont(42);
+        if ((system == 2 || system == 4) && !subsets)   latex.DrawLatex(0.5, 0.10, "0-10%");
     }
 
     pads[0]->cd();
@@ -734,6 +737,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 3 && !subsets)      legend_part2.Draw();
 
     latex.SetTextSize(0.055);
+    latex.SetTextFont(42);
     if (system == 1)   latex.SetTextAlign(31);
     if (system == 1)   latex.DrawLatex(0.95, 0.73, (text_photon_pt).c_str());
     if (system == 1)   latex.DrawLatex(0.95, 0.65, (text_photon_eta).c_str());

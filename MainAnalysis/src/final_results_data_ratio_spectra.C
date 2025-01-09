@@ -640,29 +640,34 @@ int congratulate(char const* config, char const* selections, char const* output)
         // latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
 
         latex.SetTextAlign(21);
+        latex.SetTextFont(62);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 50-90%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "50-90%");
 
         pads[i][1]->cd();
         latex.SetTextAlign(21);
+        latex.SetTextFont(62);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 30-50%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "30-50%");
 
         pads[i][2]->cd();
         latex.SetTextAlign(21);
+        latex.SetTextFont(62);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 10-30%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "10-30%");
 
         pads[i][3]->cd();
         latex.SetTextAlign(21);
+        latex.SetTextFont(62);
         latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "Cent. 0-10%");
+        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "0-10%");
     }
 
     pads[nrows-1][1]->cd();
     legend.Draw();
 
     pads[nrows-1][2]->cd();
+    latex.SetTextFont(42);
     latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.SetTextAlign(11);
     if (spectra)    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_photon_eta).c_str());
