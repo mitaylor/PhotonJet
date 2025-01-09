@@ -777,7 +777,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4 && !subsets)      legend_part2.Draw();
 
     if (system == 3 && subsets)     latex.SetTextAlign(11);
-    if (system == 3 && subsets)     latex.DrawLatex(0.58, 0.65, "HYBRID");
+    if (system == 3 && subsets)     latex.DrawLatex(0.59, 0.66, "HYBRID");
 
     if (system == 3 && !subsets)    latex.SetTextAlign(11);
     if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.29, "HYBRID");
