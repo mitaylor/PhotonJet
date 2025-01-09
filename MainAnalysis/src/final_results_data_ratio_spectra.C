@@ -203,7 +203,7 @@ void hep_data_ratio(std::string hep, bool subsets,
     for (int i = nrows - 1; i >= 0; --i) {           // nrows
         // ratio results for all centrality classes
         for (size_t j = 0; j < graphs_hists_ratio[0].size(); ++j) {    // npads
-            out << "- header: {name: 'PbPb / pp'}" << std::endl;
+            out << "- header: {name: '$\\frac{1}{N_{j\\gamma}} \\frac{dN_{j\\gamma}}{d\\Delta j}$ PbPb / pp ratio'}" << std::endl;
             out << "  qualifiers:" << std::endl;
             out << "  - {name: 'SQRT(S)/NUCLEON', units: 'GEV', value: '5020'}" << std::endl;
             out << "  - {name: 'JET ALGO', value: 'ANTI-KT R = 0.3'}" << std::endl;
@@ -211,6 +211,7 @@ void hep_data_ratio(std::string hep, bool subsets,
             out << "  - {name: 'PHOTON PT', units: 'GEV', value: '60 - 200'}" << std::endl;
             out << "  - {name: '|PHOTON ETA|', value: '< 1.44'}" << std::endl;
             out << "  - {name: '|PHOTON-JET DPHI|', value: '> 2*PI/3'}" << std::endl;
+            out << "  - {name: 'RE', value: 'Pb Pb --> JET + PHOTON and P P --> JET + PHOTON'}" << std::endl;
 
             if (subsets && i == 1)  out << "  - {name: 'JET PT', units: 'GEV', value: '30 - 60'}" << std::endl;
             if (subsets && i == 0)  out << "  - {name: 'JET PT', units: 'GEV', value: '60 - 100'}" << std::endl;
