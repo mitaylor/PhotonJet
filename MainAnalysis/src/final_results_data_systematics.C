@@ -313,39 +313,39 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0.05;
     double legend_x_max = 0.35;
 
-    TLegend legend_part1(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    TLegend legend_part1(legend_x_min, legend_y_max - 0.18, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    legend_part1.SetTextSize(0.06);
+    legend_part1.SetTextSize(0.07);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
 
-    TLegend legend_part2(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    TLegend legend_part2(legend_x_min, legend_y_max - 0.18, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    legend_part2.SetTextSize(0.06);
+    legend_part2.SetTextSize(0.07);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
 
-    TLegend legend_part3(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    TLegend legend_part3(legend_x_min, legend_y_max - 0.18, legend_x_max, legend_y_max);
     legend_part3.SetTextFont(42);
-    legend_part3.SetTextSize(0.06);
+    legend_part3.SetTextSize(0.07);
     legend_part3.SetFillStyle(0);
     legend_part3.SetBorderSize(0);
 
-    TLegend legend_part4(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    TLegend legend_part4(legend_x_min, legend_y_max - 0.18, legend_x_max, legend_y_max);
     legend_part4.SetTextFont(42);
-    legend_part4.SetTextSize(0.06);
+    legend_part4.SetTextSize(0.07);
     legend_part4.SetFillStyle(0);
     legend_part4.SetBorderSize(0);
 
-    TLegend legend_part5(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    TLegend legend_part5(legend_x_min, legend_y_max - 0.18, legend_x_max, legend_y_max);
     legend_part5.SetTextFont(42);
-    legend_part5.SetTextSize(0.06);
+    legend_part5.SetTextSize(0.07);
     legend_part5.SetFillStyle(0);
     legend_part5.SetBorderSize(0);
 
-    TLegend legend_part6(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
+    TLegend legend_part6(legend_x_min, legend_y_max - 0.18, legend_x_max, legend_y_max);
     legend_part6.SetTextFont(42);
-    legend_part6.SetTextSize(0.06);
+    legend_part6.SetTextSize(0.07);
     legend_part6.SetFillStyle(0);
     legend_part6.SetBorderSize(0);
 
