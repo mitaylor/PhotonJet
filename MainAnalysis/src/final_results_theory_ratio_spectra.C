@@ -531,8 +531,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 4)    legend_y_min = (subsets) ? 0.45 : 0.31;
-    if (system == 4)    legend_y_max = (subsets) ? 0.80 : 0.59;
+    if (system == 4)    legend_y_min = (subsets) ? 0.45 : 0.30;
+    if (system == 4)    legend_y_max = (subsets) ? 0.80 : 0.58;
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
@@ -654,12 +654,12 @@ int congratulate(char const* config, char const* selections, char const* output)
         if (system == 4)    graphs_systs_ratio[i].Draw("same 2");
         if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_no_wake[i].Draw("same 3");
         if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_no_wake[i].Draw("same lX");
+        if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same 3");
+        if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same lX");
         if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_wake[i].Draw("same 3");
         if (system == 4)    graphs_hists_ratio_hybrid_no_elastic_wake[i].Draw("same lX");
         if (system == 4)    graphs_hists_ratio_hybrid_elastic_no_wake[i].Draw("same 3");
         if (system == 4)    graphs_hists_ratio_hybrid_elastic_no_wake[i].Draw("same lX");
-        if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same 3");
-        if (system == 4)    graphs_hists_ratio_hybrid_elastic_wake[i].Draw("same lX");
         if (system == 4)    graphs_hists_ratio[i].Draw("same PZ");
 
         if (system == 0)    graphs_systs_aa[i].Draw("same 2");
@@ -766,7 +766,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.87, "PbPb 1.69 nb^{-1}");
 
     if (system == 4 && !subsets)    latex.SetTextAlign(11);
-    if (system == 4 && !subsets)    latex.DrawLatex(0.04, 0.60, "HYBRID");
+    if (system == 4 && !subsets)    latex.DrawLatex(0.04, 0.59, "HYBRID");
 
     pads[ncols-1]->cd();
     if (system == 1)                  legend_part1.Draw();
