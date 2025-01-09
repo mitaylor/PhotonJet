@@ -624,7 +624,7 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-        boxes[i] = new TPaveText(0.15 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, 0.85, 1 - 0.05 / factor_y * factor_x, "NDC");
+        boxes[i] = new TPaveText(0.15, 1 - 0.17 / factor_y * factor_x, 0.85, 1 - 0.05 / factor_y * factor_x, "NDC");
         boxes[i]->SetBorderSize(1);
         boxes[i]->SetTextFont(42);
         boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
