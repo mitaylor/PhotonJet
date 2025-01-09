@@ -526,28 +526,28 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.40 : 0.29;
-    if (system == 2)    legend_y_max = (subsets) ? 0.75 : 0.64;
+    if (system == 2)    legend_y_min = (subsets) ? 0.42 : 0.27;
+    if (system == 2)    legend_y_max = (subsets) ? 0.77 : 0.62;
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 4)    legend_y_min = (subsets) ? 0.40 : 0.34;
-    if (system == 4)    legend_y_max = (subsets) ? 0.75 : 0.62;
+    if (system == 4)    legend_y_min = (subsets) ? 0.42 : 0.34;
+    if (system == 4)    legend_y_max = (subsets) ? 0.77 : 0.62;
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.40 : 0.05;
-    if (system == 1)    legend_y_max = (subsets) ? 0.75 : 0.26;
+    if (system == 1)    legend_y_min = (subsets) ? 0.42 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.77 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.40 : 0.03;
-    if (system == 0)    legend_y_max = (subsets) ? 0.75 : 0.31;
+    if (system == 0)    legend_y_min = (subsets) ? 0.42 : 0.03;
+    if (system == 0)    legend_y_max = (subsets) ? 0.77 : 0.31;
     if (system == 0)    legend_x_min = (subsets) ? 0.53 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.83 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.68 : 0.03;
-    if (system == 3)    legend_y_max = (subsets) ? 0.75 : 0.31;
+    if (system == 3)    legend_y_min = (subsets) ? 0.70 : 0.00;
+    if (system == 3)    legend_y_max = (subsets) ? 0.77 : 0.28;
     if (system == 3)    legend_x_min = (subsets) ? 0.53 : 0.03;
     if (system == 3)    legend_x_max = (subsets) ? 0.83 : 0.33;
 
@@ -590,10 +590,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
 
-    if (system == 0 && !subsets)    legend_y_min = 0.80;
-    if (system == 0 && !subsets)    legend_y_max = 0.87;
-    if (system == 0 && !subsets)    legend_x_min = 0.58;
-    if (system == 0 && !subsets)    legend_x_max = 0.88;
+    if (system == 0 && !subsets)    legend_y_min = 0.75;
+    if (system == 0 && !subsets)    legend_y_max = 0.82;
+    if (system == 0 && !subsets)    legend_x_min = 0.61;
+    if (system == 0 && !subsets)    legend_x_max = 0.91;
 
     if (system == 1 && !subsets)    legend_y_min = legend_y_min;
     if (system == 1 && !subsets)    legend_y_max = legend_y_min + 0.14;
@@ -605,15 +605,15 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 3 && subsets)    legend_x_min = legend_x_min;
     if (system == 3 && subsets)    legend_x_max = legend_x_max;
 
-    if (system == 3 && !subsets)    legend_y_min = 0.80;
-    if (system == 3 && !subsets)    legend_y_max = 0.87;
-    if (system == 3 && !subsets)    legend_x_min = 0.58;
-    if (system == 3 && !subsets)    legend_x_max = 0.88;
+    if (system == 3 && !subsets)    legend_y_min = 0.75;
+    if (system == 3 && !subsets)    legend_y_max = 0.82;
+    if (system == 3 && !subsets)    legend_x_min = 0.61;
+    if (system == 3 && !subsets)    legend_x_max = 0.91;
 
-    if (system == 4 && !subsets)    legend_y_min = legend_y_max;
-    if (system == 4 && !subsets)    legend_y_max = legend_y_min + 0.07;
-    if (system == 4 && !subsets)    legend_x_min = legend_x_min + 0.33;
-    if (system == 4 && !subsets)    legend_x_max = legend_x_max + 0.33;
+    if (system == 4 && !subsets)    legend_y_min = 0.13;
+    if (system == 4 && !subsets)    legend_y_max = 0.20;
+    if (system == 4 && !subsets)    legend_x_min = legend_x_min;
+    if (system == 4 && !subsets)    legend_x_max = legend_x_max;
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
@@ -713,7 +713,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     }
 
     pads[0]->cd();
-    if (system != 1)                  legend_part1.Draw();
+    if (system == 0 || system == 2 || system == 4) legend_part1.Draw();
     if (system == 0 && !subsets)      legend_part2.Draw();
     if (system == 1 && !subsets)      legend_part2.Draw();
     if (system == 3 && !subsets)      legend_part2.Draw();
@@ -760,31 +760,32 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.95, "pp 302 pb^{-1}");
     if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.87, "PbPb 1.69 nb^{-1}");
 
-    if (system == 3 && !subsets)    latex.SetTextAlign(11);
-    if (system == 3 && !subsets)    latex.DrawLatex(0.54, 0.69, "HYBRID");
-
-    if (system == 3 && subsets)     latex.SetTextAlign(11);
-    if (system == 3 && subsets)     latex.DrawLatex(0.04, 0.33, "HYBRID");
-
     if (system == 4 && !subsets)    latex.SetTextAlign(11);
-    if (system == 4 && !subsets)    latex.DrawLatex(0.36, 0.64, "HYBRID");
+    if (system == 4 && !subsets)    latex.DrawLatex(0.04, 0.64, "HYBRID");
 
     pads[ncols-1]->cd();
     if (system == 1)                  legend_part1.Draw();
-
+    if (system == 0)                  legend_part1.Draw();
+    if (system == 3)                  legend_part1.Draw();
     if (system == 3 && subsets)       legend_part2.Draw();
     if (system == 4 && !subsets)      legend_part2.Draw();
 
+    if (system == 3 && subsets)     latex.SetTextAlign(11);
+    if (system == 3 && subsets)     latex.DrawLatex(0.54, 0.69, "HYBRID");
+
+    if (system == 3 && !subsets)    latex.SetTextAlign(11);
+    if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.30, "HYBRID");
+
     latex.SetTextSize(0.055);
     if ((system == 2 || system == 4) && subsets)     latex.SetTextAlign(11);
-    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.78, (text_photon_pt).c_str());
-    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.70, (text_photon_eta).c_str());
-    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
-    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.54, (text_jet_alg).c_str());
+    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.74, (text_photon_pt).c_str());
+    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.66, (text_photon_eta).c_str());
+    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.58, (text_dphi + ", " + text_jet_eta).c_str());
+    if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.50, (text_jet_alg).c_str());
 
     if ((system == 2 || system == 4) && !subsets)    latex.SetTextAlign(11);
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.05, 0.77, (text_photon_pt + ", " + text_photon_eta).c_str());
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.05, 0.69, (text_dphi + ", " + text_jet_eta + ", " + text_jet_alg).c_str());
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.05, 0.75, (text_photon_pt + ", " + text_photon_eta).c_str());
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.05, 0.67, (text_jet_alg + ", " + text_jet_eta + ", " + text_dphi).c_str());
 
     if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.64, (text_photon_pt).c_str());
