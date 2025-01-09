@@ -502,7 +502,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     std::vector<std::vector<TPad*>> pads(nrows, std::vector<TPad*>(npads));
     std::vector<TGaxis*> axis_x(npads);
     std::vector<TGaxis*> axis_y(nrows);
-    // std::vector<TPaveText*> boxes(nrows);
+    std::vector<TPaveText*> boxes(nrows);
 
     for (int i = 0; i < nrows; ++i) {
         worlds[i] = new TH2F("world", ";;", 100, xmin, xmax, 100, ymins[i], ymaxs[i]);
@@ -624,21 +624,21 @@ int congratulate(char const* config, char const* selections, char const* output)
         }
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-        // boxes[i] = new TPaveText(0.05 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, 0.75, 1 - 0.05 / factor_y * factor_x, "NDC");
-        // boxes[i]->SetBorderSize(1);
-        // boxes[i]->SetTextFont(42);
-        // boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
-        // boxes[i]->SetLineWidth(3 * factor_x);
-        // boxes[i]->SetFillColor(0);
-        // boxes[i]->SetShadowColor(0);
-        // boxes[i]->AddText((text_jet_pt).c_str());
+        boxes[i] = new TPaveText(0.15 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, 0.85, 1 - 0.05 / factor_y * factor_x, "NDC");
+        boxes[i]->SetBorderSize(1);
+        boxes[i]->SetTextFont(42);
+        boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
+        boxes[i]->SetLineWidth(3 * factor_x);
+        boxes[i]->SetFillColor(0);
+        boxes[i]->SetShadowColor(0);
+        boxes[i]->AddText((text_jet_pt).c_str());
     
         pads[i][0]->cd();
-        // boxes[i]->Draw("same");
-        latex.SetTextAlign(13);
-        latex.SetTextFont(62);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.05 / factor_y * factor_x, (text_jet_pt).c_str());
+        boxes[i]->Draw("same");
+        // latex.SetTextAlign(13);
+        // latex.SetTextFont(62);
+        // latex.SetTextSize(0.06 / factor_y * factor_x);
+        // latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.05 / factor_y * factor_x, (text_jet_pt).c_str());
     }
 
     pads[0][0]->cd();
