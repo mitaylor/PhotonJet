@@ -546,8 +546,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.55;
-    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.83;
+    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.05;
+    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.33;
     if (system == 3)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 3)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
@@ -723,9 +723,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1 && !subsets)      legend_part2.Draw();
     if (system == 3 && !subsets)      legend_part2.Draw();
 
-    if (system == 0 || system == 3)    latex.SetTextAlign(11);
-    if (system == 0 || system == 3)    latex.SetTextSize(0.055);
-    if (system == 0 || system == 3)    latex.DrawLatex(0.05, 0.05, "0-10%");
+    if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(11);
+    if ((system == 0 || system == 3) && subsets)    latex.SetTextSize(0.055);
+    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.05, 0.05, "0-10%");
+
+    if ((system == 0 || system == 3) && !subsets)   latex.SetTextAlign(11);
+    if ((system == 0 || system == 3) && !subsets)   latex.SetTextSize(0.055);
+    if ((system == 0 || system == 3) && !subsets)   latex.DrawLatex(0.05, 0.77, "0-10%");
 
     if ((system == 2 || system == 4) && subsets)    latex.SetTextAlign(11);
     if ((system == 2 || system == 4) && subsets)    latex.SetTextSize(0.055);
