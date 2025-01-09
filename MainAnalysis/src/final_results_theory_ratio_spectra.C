@@ -747,7 +747,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.74, (text_photon_pt).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.66, (text_photon_eta).c_str());
-    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.58, (text_jet_alg).c_str();
+    if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.58, (text_jet_alg).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.50, (text_jet_eta).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.42, (text_dphi).c_str());
 
