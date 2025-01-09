@@ -418,8 +418,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * 4, pad_y0 * (1 + 0.15 * padding_height_top / padding_height_bottom) + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_min = 1 - 0.28 / factor_y * factor_x;
-    double legend_y_max = 1 - 0.14 / factor_y * factor_x;
+    double legend_y_min = 1 - 0.19 / factor_y * factor_x;
+    double legend_y_max = 1 - 0.05 / factor_y * factor_x;
     double legend_x_min = 0.05 / factor_y * factor_x;
     double legend_x_max = 0.35 / factor_y * factor_x;
 
@@ -444,7 +444,7 @@ int congratulate(char const* config, char const* selections, char const* output)
             graphs_hists_pp[i][0].Draw("same PZ");
         }
 
-        boxes[i] = new TPaveText(0.15, 1 - 0.23 / factor_y * factor_x, 0.85, 1 - 0.12 / factor_y * factor_x, "NDC");
+        boxes[i] = new TPaveText(0.15, 1 - 0.17 / factor_y * factor_x, 0.85, 1 - 0.05 / factor_y * factor_x, "NDC");
         boxes[i]->SetBorderSize(1);
         boxes[i]->SetTextFont(42);
         boxes[i]->SetTextSize(0.06 / factor_y * factor_x);
@@ -455,35 +455,31 @@ int congratulate(char const* config, char const* selections, char const* output)
     
         pads[i][0]->cd();
         boxes[i]->Draw("same");
-        // latex.SetTextAlign(22);
+        // latex.SetTextAlign(13);
         // latex.SetTextFont(62);
         // latex.SetTextSize(0.06 / factor_y * factor_x);
-        // latex.DrawLatex(0.5, 1 - 0.2 / factor_y * factor_x, (text_jet_pt).c_str());
-
-        pads[i][0]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextFont(62);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "50-90%");
-
-        pads[i][1]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextFont(62);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "30-50%");
-
-        pads[i][2]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextFont(62);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "10-30%");
-
-        pads[i][3]->cd();
-        latex.SetTextAlign(21);
-        latex.SetTextFont(62);
-        latex.SetTextSize(0.06 / factor_y * factor_x);
-        latex.DrawLatex(0.5, 1 - 0.08 / factor_y * factor_x, "0-10%");
+        // latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.05 / factor_y * factor_x, (text_jet_pt).c_str());
     }
+
+    pads[0][0]->cd();
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "50-90%");
+
+    pads[0][1]->cd();
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "30-50%");
+
+    pads[0][2]->cd();
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "10-30%");
+
+    pads[0][3]->cd();
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "0-10%");
 
     pads[0][1]->cd();
     legend.Draw();
@@ -492,12 +488,12 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextFont(42);
     latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.SetTextAlign(11);
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_photon_eta).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.26 / factor_y * factor_x, (text_photon_pt).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.09 / factor_y * factor_x, (text_photon_pt).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, (text_photon_eta).c_str());
     
     pads[0][2]->cd();
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.18 / factor_y * factor_x, (text_jet_alg).c_str());
-    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.26 / factor_y * factor_x, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.09 / factor_y * factor_x, (text_jet_alg + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, (text_dphi).c_str());
 
     canvas.SaveAs((set + "_final_jet_log.pdf").c_str());
 
