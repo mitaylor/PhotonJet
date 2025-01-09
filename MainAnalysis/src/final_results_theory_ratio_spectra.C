@@ -543,13 +543,13 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if (system == 0)    legend_y_min = (subsets) ? 0.59 : 0.03;
     if (system == 0)    legend_y_max = (subsets) ? 0.80 : 0.31;
-    if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
-    if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
+    if (system == 0)    legend_x_min = (subsets) ? 0.02 : 0.03;
+    if (system == 0)    legend_x_max = (subsets) ? 0.32 : 0.33;
 
     if (system == 3)    legend_y_min = (subsets) ? 0.73 : 0.00;
     if (system == 3)    legend_y_max = (subsets) ? 0.80 : 0.28;
-    if (system == 3)    legend_x_min = (subsets) ? 0.50 : 0.03;
-    if (system == 3)    legend_x_max = (subsets) ? 0.80 : 0.33;
+    if (system == 3)    legend_x_min = (subsets) ? 0.51 : 0.03;
+    if (system == 3)    legend_x_max = (subsets) ? 0.81 : 0.33;
 
     TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
@@ -593,8 +593,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 0 && !subsets)    legend_x_min = 0.62;
     if (system == 0 && !subsets)    legend_x_max = 0.92;
 
-    if (system == 0 && subsets)     legend_y_min = 0.77;
-    if (system == 0 && subsets)     legend_y_max = 0.63;
+    if (system == 0 && subsets)     legend_y_min = 0.80;
+    if (system == 0 && subsets)     legend_y_max = 0.66;
     if (system == 0 && subsets)     legend_x_min = 0.43;
     if (system == 0 && subsets)     legend_x_max = 0.73;
 
@@ -777,10 +777,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4 && !subsets)      legend_part2.Draw();
 
     if (system == 3 && subsets)     latex.SetTextAlign(11);
-    if (system == 3 && subsets)     latex.DrawLatex(0.54, 0.63, "HYBRID");
+    if (system == 3 && subsets)     latex.DrawLatex(0.58, 0.64, "HYBRID");
 
     if (system == 3 && !subsets)    latex.SetTextAlign(11);
-    if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.30, "HYBRID");
+    if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.29, "HYBRID");
 
     latex.SetTextSize(0.055);
     if ((system == 2 || system == 4) && subsets)     latex.SetTextAlign(11);
