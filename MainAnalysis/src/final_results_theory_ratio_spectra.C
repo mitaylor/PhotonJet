@@ -526,30 +526,30 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.31;
-    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.66;
+    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.29;
+    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.64;
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
     if (system == 4)    legend_y_min = (subsets) ? 0.48 : 0.34;
     if (system == 4)    legend_y_max = (subsets) ? 0.83 : 0.62;
-    if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.36;
-    if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.66;
+    if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.03;
+    if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.43 : 0.05;
-    if (system == 1)    legend_y_max = (subsets) ? 0.78 : 0.26;
+    if (system == 1)    legend_y_min = (subsets) ? 0.48 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.83 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.76 : 0.64;
-    if (system == 0)    legend_y_max = (subsets) ? 0.83 : 0.85;
-    if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
-    if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
+    if (system == 0)    legend_y_min = (subsets) ? 0.48 : 0.03;
+    if (system == 0)    legend_y_max = (subsets) ? 0.83 : 0.31;
+    if (system == 0)    legend_x_min = (subsets) ? 0.53 : 0.03;
+    if (system == 0)    legend_x_max = (subsets) ? 0.83 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.05;
-    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.33;
-    if (system == 3)    legend_x_min = (subsets) ? 0.03 : 0.03;
-    if (system == 3)    legend_x_max = (subsets) ? 0.33 : 0.33;
+    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.03;
+    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.31;
+    if (system == 3)    legend_x_min = (subsets) ? 0.53 : 0.03;
+    if (system == 3)    legend_x_max = (subsets) ? 0.83 : 0.33;
 
     TLegend legend_part1(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
@@ -562,76 +562,71 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_pyquen_no_wide[0], "PYQUEN", "lf");
     if (system == 2)    legend_part1.AddEntry(&graphs_hists_ratio_pyquen[0], "PYQUEN, wide angle", "lf");
     if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
-    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
+    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic or wake", "lf");
     if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
     if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
-    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
-    if (system == 4 && !subsets)   legend_part1.AddEntry(&graphs_hists_ratio_hybrid_no_elastic_no_wake[0], "no elastic, no wake", "lf");
+    if (system == 4 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic and wake", "lf");
+    if (system == 4 && !subsets)   legend_part1.AddEntry(&graphs_hists_ratio_hybrid_no_elastic_no_wake[0], "no elastic or wake", "lf");
     if (system == 4 && !subsets)   legend_part1.AddEntry(&graphs_hists_ratio_hybrid_no_elastic_wake[0], "no elastic, wake", "lf");
     if (system == 4 && !subsets)   legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_no_wake[0], "elastic, no wake", "lf");
-    if (system == 4 && !subsets)   legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_wake[0], "elastic, wake", "lf");
+    if (system == 4 && !subsets)   legend_part1.AddEntry(&graphs_hists_ratio_hybrid_elastic_wake[0], "elastic and wake", "lf");
     if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
-    if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
+    if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
+    if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_hists_ratio_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0 && subsets)    legend_part1.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
     if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_jewel[0], "JEWEL, recoil", "lf");
+    if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
+    if (system == 0 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
     if (system == 3 && subsets)    legend_part1.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
-    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "no elastic, no wake", "lf");
+    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "no elastic or wake", "lf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "no elastic, wake", "lf");
     if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "elastic, no wake", "lf");
-    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "elastic, wake", "lf");
+    if (system == 3 && !subsets)   legend_part1.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "elastic and wake", "lf");
     if (system == 1)    legend_part1.AddEntry(&graphs_systs_pp[0], "CMS pp", "plf");
     if (system == 1)    legend_part1.AddEntry(&graphs_hists_pp_jewel[0], "JEWEL", "lf");
     if (system == 1)    legend_part1.AddEntry(&graphs_hists_pp_pyquen[0], "PYQUEN", "lf");
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
     if (system == 1 && subsets)    legend_part1.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
 
-    if (system == 0 && subsets)    legend_y_min = legend_y_max - 0.28;
-    if (system == 0 && subsets)    legend_y_max = legend_y_max;
-    if (system == 0 && subsets)    legend_x_min = legend_x_min;
-    if (system == 0 && subsets)    legend_x_max = legend_x_max;
-
-    if (system == 0 && !subsets)    legend_y_min = legend_y_max - 0.14;
-    if (system == 0 && !subsets)    legend_y_max = legend_y_max;
-    if (system == 0 && !subsets)    legend_x_min = legend_x_max + 0.15;
-    if (system == 0 && !subsets)    legend_x_max = legend_x_min + 0.30;
+    if (system == 0 && !subsets)    legend_y_min = 0.80;
+    if (system == 0 && !subsets)    legend_y_max = 0.87;
+    if (system == 0 && !subsets)    legend_x_min = 0.58;
+    if (system == 0 && !subsets)    legend_x_max = 0.88;
 
     if (system == 1 && !subsets)    legend_y_min = legend_y_min;
     if (system == 1 && !subsets)    legend_y_max = legend_y_min + 0.14;
     if (system == 1 && !subsets)    legend_x_min = legend_x_max;
     if (system == 1 && !subsets)    legend_x_max = legend_x_min + 0.30;
 
+    if (system == 3 && subsets)    legend_y_max = legend_y_min - 0.09;
     if (system == 3 && subsets)    legend_y_min = legend_y_max - 0.28;
-    if (system == 3 && subsets)    legend_y_max = legend_y_max;
     if (system == 3 && subsets)    legend_x_min = legend_x_min;
     if (system == 3 && subsets)    legend_x_max = legend_x_max;
 
-    if (system == 3 && !subsets)    legend_y_min = legend_y_max - 0.07;
-    if (system == 3 && !subsets)    legend_y_max = legend_y_max;
-    if (system == 3 && !subsets)    legend_x_min = legend_x_max + 0.20;
-    if (system == 3 && !subsets)    legend_x_max = legend_x_min + 0.30;
+    if (system == 3 && !subsets)    legend_y_min = 0.80;
+    if (system == 3 && !subsets)    legend_y_max = 0.87;
+    if (system == 3 && !subsets)    legend_x_min = 0.58;
+    if (system == 3 && !subsets)    legend_x_max = 0.88;
 
     if (system == 4 && !subsets)    legend_y_min = legend_y_max;
     if (system == 4 && !subsets)    legend_y_max = legend_y_min + 0.07;
-    if (system == 4 && !subsets)    legend_x_min = legend_x_min - 0.33;
-    if (system == 4 && !subsets)    legend_x_max = legend_x_max - 0.33;
+    if (system == 4 && !subsets)    legend_x_min = legend_x_min + 0.33;
+    if (system == 4 && !subsets)    legend_x_max = legend_x_max + 0.33;
 
     TLegend legend_part2(legend_x_min, legend_y_min, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
     legend_part2.SetTextSize(0.055);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
-    if (system == 0 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_jewel_no_recoil[0], "JEWEL, no recoil", "lf");
-    if (system == 0 && subsets)    legend_part2.AddEntry(&graphs_hists_ratio_jewel[0], "JEWEL, recoil", "lf");
-    if (system == 0 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
-    if (system == 0 && !subsets)   legend_part2.AddEntry(&graphs_hists_aa_pyquen_no_wide[0], "PYQUEN", "lf");
-    if (system == 0 && !subsets)   legend_part2.AddEntry(&graphs_hists_aa_pyquen[0], "PYQUEN, wide angle", "lf");
+    if (system == 0 && !subsets)   legend_part2.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
     if (system == 1 && !subsets)   legend_part2.AddEntry(&graphs_hists_pp_pythia[0], "PYTHIA", "lf");
     if (system == 1 && !subsets)   legend_part2.AddEntry(&graphs_hists_pp_hybrid[0], "HYBRID", "lf");
-    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "HYBRID, no elastic, no wake", "lf");
-    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "HYBRID, no elastic, wake", "lf");
-    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "HYBRID, elastic, no wake", "lf");
-    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "HYBRID, elastic, wake", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_no_elastic_no_wake[0], "no elastic or wake", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_no_elastic_wake[0], "no elastic, wake", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_no_wake[0], "elastic, no wake", "lf");
+    if (system == 3 && subsets)    legend_part2.AddEntry(&graphs_hists_aa_hybrid_elastic_wake[0], "elastic and wake", "lf");
     if (system == 3 && !subsets)   legend_part2.AddEntry(&graphs_systs_aa[0], "CMS PbPb", "plf");
     if (system == 4 && !subsets)   legend_part2.AddEntry(&graphs_systs_ratio[0], "CMS data", "plf");
 
@@ -727,9 +722,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.SetTextSize(0.055);
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.05, 0.05, "0-10%");
 
-    if ((system == 0 || system == 3) && !subsets)   latex.SetTextAlign(11);
+    if ((system == 0 || system == 3) && !subsets)   latex.SetTextAlign(33);
     if ((system == 0 || system == 3) && !subsets)   latex.SetTextSize(0.055);
-    if ((system == 0 || system == 3) && !subsets)   latex.DrawLatex(0.05, 0.77, "0-10%");
+    if ((system == 0 || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.87, "0-10%");
 
     if ((system == 2 || system == 4) && subsets)    latex.SetTextAlign(11);
     if ((system == 2 || system == 4) && subsets)    latex.SetTextSize(0.055);
@@ -737,7 +732,7 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     if ((system == 2 || system == 4) && !subsets)   latex.SetTextAlign(11);
     if ((system == 2 || system == 4) && !subsets)   latex.SetTextSize(0.055);
-    if ((system == 2 || system == 4) && !subsets)   latex.DrawLatex(0.05, 0.77, "0-10%");
+    if ((system == 2 || system == 4) && !subsets)   latex.DrawLatex(0.05, 0.05, "0-10%");
 
     latex.SetTextSize(0.055);
     latex.SetTextFont(42);
@@ -766,7 +761,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.95, 0.87, "PbPb 1.69 nb^{-1}");
 
     if (system == 3 && !subsets)    latex.SetTextAlign(11);
-    if (system == 3 && !subsets)    latex.DrawLatex(0.04, 0.85, "HYBRID");
+    if (system == 3 && !subsets)    latex.DrawLatex(0.54, 0.69, "HYBRID");
+
+    if (system == 3 && subsets)     latex.SetTextAlign(11);
+    if (system == 3 && subsets)     latex.DrawLatex(0.04, 0.33, "HYBRID");
 
     if (system == 4 && !subsets)    latex.SetTextAlign(11);
     if (system == 4 && !subsets)    latex.DrawLatex(0.36, 0.64, "HYBRID");
@@ -774,7 +772,6 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[ncols-1]->cd();
     if (system == 1)                  legend_part1.Draw();
 
-    if (system == 0 && subsets)       legend_part2.Draw();
     if (system == 3 && subsets)       legend_part2.Draw();
     if (system == 4 && !subsets)      legend_part2.Draw();
 
@@ -785,9 +782,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.62, (text_dphi + ", " + text_jet_eta).c_str());
     if ((system == 2 || system == 4) && subsets)     latex.DrawLatex(0.05, 0.54, (text_jet_alg).c_str());
 
-    if ((system == 2 || system == 4) && !subsets)    latex.SetTextAlign(21);
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.49, 0.81, (text_photon_pt + ", " + text_photon_eta).c_str());
-    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.49, 0.73, (text_dphi + ", " + text_jet_eta + ", " + text_jet_alg).c_str());
+    if ((system == 2 || system == 4) && !subsets)    latex.SetTextAlign(11);
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.05, 0.77, (text_photon_pt + ", " + text_photon_eta).c_str());
+    if ((system == 2 || system == 4) && !subsets)    latex.DrawLatex(0.05, 0.69, (text_dphi + ", " + text_jet_eta + ", " + text_jet_alg).c_str());
 
     if ((system == 0  || system == 3) && !subsets)   latex.SetTextAlign(31);
     if ((system == 0  || system == 3) && !subsets)   latex.DrawLatex(0.95, 0.64, (text_photon_pt).c_str());
