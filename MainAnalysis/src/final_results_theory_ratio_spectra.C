@@ -526,28 +526,28 @@ int congratulate(char const* config, char const* selections, char const* output)
     double legend_x_min = 0;
     double legend_x_max = 0;
 
-    if (system == 2)    legend_y_min = (subsets) ? 0.48 : 0.29;
-    if (system == 2)    legend_y_max = (subsets) ? 0.83 : 0.64;
+    if (system == 2)    legend_y_min = (subsets) ? 0.40 : 0.29;
+    if (system == 2)    legend_y_max = (subsets) ? 0.75 : 0.64;
     if (system == 2)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 2)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 4)    legend_y_min = (subsets) ? 0.48 : 0.34;
-    if (system == 4)    legend_y_max = (subsets) ? 0.83 : 0.62;
+    if (system == 4)    legend_y_min = (subsets) ? 0.40 : 0.34;
+    if (system == 4)    legend_y_max = (subsets) ? 0.75 : 0.62;
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.48 : 0.05;
-    if (system == 1)    legend_y_max = (subsets) ? 0.83 : 0.26;
+    if (system == 1)    legend_y_min = (subsets) ? 0.40 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.75 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.48 : 0.03;
-    if (system == 0)    legend_y_max = (subsets) ? 0.83 : 0.31;
+    if (system == 0)    legend_y_min = (subsets) ? 0.40 : 0.03;
+    if (system == 0)    legend_y_max = (subsets) ? 0.75 : 0.31;
     if (system == 0)    legend_x_min = (subsets) ? 0.53 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.83 : 0.33;
 
-    if (system == 3)    legend_y_min = (subsets) ? 0.76 : 0.03;
-    if (system == 3)    legend_y_max = (subsets) ? 0.83 : 0.31;
+    if (system == 3)    legend_y_min = (subsets) ? 0.68 : 0.03;
+    if (system == 3)    legend_y_max = (subsets) ? 0.75 : 0.31;
     if (system == 3)    legend_x_min = (subsets) ? 0.53 : 0.03;
     if (system == 3)    legend_x_max = (subsets) ? 0.83 : 0.33;
 
