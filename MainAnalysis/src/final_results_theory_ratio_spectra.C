@@ -536,13 +536,13 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.03;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.33;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.45 : 0.05;
-    if (system == 1)    legend_y_max = (subsets) ? 0.80 : 0.26;
+    if (system == 1)    legend_y_min = (subsets) ? 0.42 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.77 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
-    if (system == 0)    legend_y_min = (subsets) ? 0.56 : 0.03;
-    if (system == 0)    legend_y_max = (subsets) ? 0.77 : 0.31;
+    if (system == 0)    legend_y_min = (subsets) ? 0.59 : 0.03;
+    if (system == 0)    legend_y_max = (subsets) ? 0.80 : 0.31;
     if (system == 0)    legend_x_min = (subsets) ? 0.03 : 0.03;
     if (system == 0)    legend_x_max = (subsets) ? 0.33 : 0.33;
 
