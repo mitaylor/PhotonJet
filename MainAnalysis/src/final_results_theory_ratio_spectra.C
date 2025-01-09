@@ -536,8 +536,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.36;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.66;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.46 : 0.05;
-    if (system == 1)    legend_y_max = (subsets) ? 0.81 : 0.26;
+    if (system == 1)    legend_y_min = (subsets) ? 0.45 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.80 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
@@ -744,8 +744,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 1)   latex.SetTextAlign(31);
     if (system == 1)   latex.DrawLatex(0.95, 0.74, (text_photon_pt).c_str());
     if (system == 1)   latex.DrawLatex(0.95, 0.66, (text_photon_eta).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.58, (text_jet_alg + ", " + text_jet_eta).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.50, (text_dphi).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.58, (text_jet_alg).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.50, (text_jet_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.42, (text_dphi).c_str());
 
     if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.76, (text_photon_pt).c_str());
@@ -754,7 +755,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.52, (text_jet_alg).c_str());
 
     if (system == 1 && !subsets)    latex.SetTextAlign(33);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.05, 0.95, "pp 302 pb^{-1}");
+    if (system == 1 && !subsets)    latex.DrawLatex(0.95, 0.95, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");
