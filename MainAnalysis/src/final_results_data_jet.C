@@ -484,14 +484,14 @@ int congratulate(char const* config, char const* selections, char const* output)
     pads[0][1]->cd();
     legend.Draw();
 
-    pads[0][3]->cd();
+    pads[0][2]->cd();
     latex.SetTextFont(42);
     latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.SetTextAlign(11);
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.09 / factor_y * factor_x, (text_photon_pt).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, (text_photon_eta).c_str());
     
-    pads[0][2]->cd();
+    pads[0][3]->cd();
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.09 / factor_y * factor_x, (text_jet_alg + ", " + text_jet_eta).c_str());
     latex.DrawLatex(0.05 / factor_y * factor_x, 1 - 0.17 / factor_y * factor_x, (text_dphi).c_str());
 
