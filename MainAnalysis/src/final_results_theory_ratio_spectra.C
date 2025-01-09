@@ -536,8 +536,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if (system == 4)    legend_x_min = (subsets) ? 0.05 : 0.36;
     if (system == 4)    legend_x_max = (subsets) ? 0.35 : 0.66;
 
-    if (system == 1)    legend_y_min = (subsets) ? 0.45 : 0.05;
-    if (system == 1)    legend_y_max = (subsets) ? 0.80 : 0.26;
+    if (system == 1)    legend_y_min = (subsets) ? 0.46 : 0.05;
+    if (system == 1)    legend_y_max = (subsets) ? 0.81 : 0.26;
     if (system == 1)    legend_x_min = (subsets) ? 0.65 : 0.05;
     if (system == 1)    legend_x_max = (subsets) ? 0.95 : 0.35;
 
@@ -699,7 +699,9 @@ int congratulate(char const* config, char const* selections, char const* output)
         arrows[i]->Draw();
 
         auto text_jet_pt = to_text(bjet_pt[i][0]) + " < p_{T}^{jet} < "s + to_text(bjet_pt[i][1]) + " GeV"s;
-        boxes[i] = new TPaveText(0.22, 1 - 0.16, 0.78, 1 - 0.05, "NDC");
+        if (system == 1 && !subsets)    boxes[i] = new TPaveText(0.05, 1 - 0.17, 0.57, 1 - 0.05, "NDC");
+        if (system == 1 && subsets)     boxes[i] = new TPaveText(0.24, 1 - 0.17, 0.76, 1 - 0.05, "NDC");
+        if (system != 1)                boxes[i] = new TPaveText(0.24, 1 - 0.17, 0.76, 1 - 0.05, "NDC");
         boxes[i]->SetBorderSize(1);
         boxes[i]->SetTextFont(42);
         boxes[i]->SetTextSize(0.06);
@@ -740,10 +742,10 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.SetTextSize(0.055);
     latex.SetTextFont(42);
     if (system == 1)   latex.SetTextAlign(31);
-    if (system == 1)   latex.DrawLatex(0.95, 0.73, (text_photon_pt).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.65, (text_photon_eta).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.57, (text_dphi + ", " + text_jet_eta).c_str());
-    if (system == 1)   latex.DrawLatex(0.95, 0.49, (text_jet_alg).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.74, (text_photon_pt).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.66, (text_photon_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.58, (text_jet_alg + ", " + text_jet_eta).c_str());
+    if (system == 1)   latex.DrawLatex(0.95, 0.50, (text_dphi).c_str());
 
     if ((system == 0 || system == 3) && subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.76, (text_photon_pt).c_str());
@@ -751,8 +753,8 @@ int congratulate(char const* config, char const* selections, char const* output)
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.60, (text_dphi + ", " + text_jet_eta).c_str());
     if ((system == 0 || system == 3) && subsets)    latex.DrawLatex(0.95, 0.52, (text_jet_alg).c_str());
 
-    if (system == 1 && !subsets)    latex.SetTextAlign(31);
-    if (system == 1 && !subsets)    latex.DrawLatex(0.97, 0.36, "pp 302 pb^{-1}");
+    if (system == 1 && !subsets)    latex.SetTextAlign(33);
+    if (system == 1 && !subsets)    latex.DrawLatex(0.05, 0.95, "pp 302 pb^{-1}");
 
     if ((system == 0 || system == 3) && !subsets)    latex.SetTextAlign(31);
     if ((system == 0 || system == 3) && !subsets)    latex.DrawLatex(0.97, 0.30, "PbPb 1.69 nb^{-1}");

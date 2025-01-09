@@ -309,7 +309,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     latex.DrawLatex(pad_x0 + pad_dx * ncols, pad_y0 * 1.15 + pad_dy * nrows, text_system.c_str());
 
     /* declare legend */
-    double legend_y_max = 0.93;
+    double legend_y_max = 0.95;
     double legend_x_min = 0.05;
     double legend_x_max = 0.35;
 
@@ -387,7 +387,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*reg_pp)[0]->Draw("same hist ][");
     (*syst_pp)[0]->Draw("same hist ][");
 
-    TPaveText box(0.15, 0.80, 0.85, 0.95, "NDC");
+    TPaveText box(0.15, 0.79, 0.85, 0.94, "NDC");
     box.SetBorderSize(1);
     box.SetTextFont(42);
     box.SetTextSize(0.06*sf);
@@ -417,8 +417,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
-    latex.DrawLatex(0.07, 0.87, (text_photon_pt).c_str());
-    latex.DrawLatex(0.07, 0.75, (text_photon_eta).c_str());
+    latex.DrawLatex(0.07, 0.88, (text_photon_pt).c_str());
+    latex.DrawLatex(0.07, 0.76, (text_photon_eta).c_str());
 
     pads[6]->cd();
     worlds[6]->Draw("axis");
@@ -452,8 +452,8 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
-    latex.DrawLatex(0.07, 0.87, (text_dphi + ", " + text_jet_eta).c_str());
-    latex.DrawLatex(0.07, 0.75, (text_jet_alg).c_str());
+    latex.DrawLatex(0.07, 0.88, (text_dphi + ", " + text_jet_eta).c_str());
+    latex.DrawLatex(0.07, 0.76, (text_jet_alg).c_str());
 
     pads[7]->cd();
     worlds[7]->Draw("axis");
