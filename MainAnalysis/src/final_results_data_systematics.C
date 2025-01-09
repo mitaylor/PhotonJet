@@ -315,37 +315,37 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     TLegend legend_part1(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part1.SetTextFont(42);
-    legend_part1.SetTextSize(0.055);
+    legend_part1.SetTextSize(0.06);
     legend_part1.SetFillStyle(0);
     legend_part1.SetBorderSize(0);
 
     TLegend legend_part2(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part2.SetTextFont(42);
-    legend_part2.SetTextSize(0.055);
+    legend_part2.SetTextSize(0.06);
     legend_part2.SetFillStyle(0);
     legend_part2.SetBorderSize(0);
 
     TLegend legend_part3(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part3.SetTextFont(42);
-    legend_part3.SetTextSize(0.055);
+    legend_part3.SetTextSize(0.06);
     legend_part3.SetFillStyle(0);
     legend_part3.SetBorderSize(0);
 
     TLegend legend_part4(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part4.SetTextFont(42);
-    legend_part4.SetTextSize(0.055);
+    legend_part4.SetTextSize(0.06);
     legend_part4.SetFillStyle(0);
     legend_part4.SetBorderSize(0);
 
     TLegend legend_part5(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part5.SetTextFont(42);
-    legend_part5.SetTextSize(0.055);
+    legend_part5.SetTextSize(0.06);
     legend_part5.SetFillStyle(0);
     legend_part5.SetBorderSize(0);
 
     TLegend legend_part6(legend_x_min, legend_y_max - 0.14, legend_x_max, legend_y_max);
     legend_part6.SetTextFont(42);
-    legend_part6.SetTextSize(0.055);
+    legend_part6.SetTextSize(0.06);
     legend_part6.SetFillStyle(0);
     legend_part6.SetBorderSize(0);
 
@@ -359,7 +359,7 @@ int congratulate(char const* config, char const* selections, char const* output)
     legend_part4.AddEntry((*prior_aa)[0], "Unfolding Prior", "l");
     legend_part5.AddEntry((*stat_aa)[0], "Response Matrix Statistics", "l");
     legend_part5.AddEntry((*reg_aa)[0], "Unfolding Regularization", "l");
-    legend_part6.AddEntry((*mebs_aa)[0], "Mixed-Event Background Subtraction", "l");
+    legend_part6.AddEntry((*mebs_aa)[0], "Mixed-Event Subtraction", "l");
     legend_part6.AddEntry((*cent_aa)[0], "Centrality", "l");
     
     pads[0]->cd();
@@ -371,9 +371,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*stat_pp)[0]->Draw("same hist ][");
     (*syst_pp)[0]->Draw("same hist ][");
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "pp");
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.055*sf);
+    latex.DrawLatex(0.05, 0.05, "pp");
 
     pads[5]->cd();
     worlds[5]->Draw("axis");
@@ -397,9 +397,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     box.AddText((text_jet_pt).c_str());
     box.Draw("same");
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "pp");
+    // latex.SetTextAlign(11);
+    // latex.SetTextSize(0.055*sf);
+    // latex.DrawLatex(0.05, 0.05, "pp");
 
     pads[1]->cd();
     worlds[1]->Draw("axis");
@@ -411,9 +411,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*mebs_aa)[0]->Draw("same hist ][");
     (*syst_aa)[0]->Draw("same hist ][");
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 50-90%");
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.055*sf);
+    latex.DrawLatex(0.05, 0.05, "PbPb 50-90%");
 
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
@@ -432,9 +432,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[0]->Draw("same hist ][");
     legend_part1.Draw();
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 50-90%");
+    // latex.SetTextAlign(11);
+    // latex.SetTextSize(0.055*sf);
+    // latex.DrawLatex(0.05, 0.05, "PbPb 50-90%");
 
     pads[2]->cd();
     worlds[2]->Draw("axis");
@@ -446,9 +446,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*mebs_aa)[1]->Draw("same hist ][");
     (*syst_aa)[1]->Draw("same hist ][");
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 30-50%");
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.055*sf);
+    latex.DrawLatex(0.05, 0.05, "PbPb 30-50%");
 
     latex.SetTextSize(0.055*sf);
     latex.SetTextAlign(11);
@@ -467,9 +467,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[1]->Draw("same hist ][");
     legend_part2.Draw();
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 30-50%");
+    // latex.SetTextAlign(11);
+    // latex.SetTextSize(0.055*sf);
+    // latex.DrawLatex(0.05, 0.05, "PbPb 30-50%");
 
     pads[3]->cd();
     worlds[3]->Draw("axis");
@@ -482,9 +482,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[2]->Draw("same hist ][");
     legend_part5.Draw();
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 10-30%");
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.055*sf);
+    latex.DrawLatex(0.05, 0.05, "PbPb 10-30%");
 
     pads[8]->cd();
     worlds[8]->Draw("axis");
@@ -498,9 +498,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[2]->Draw("same hist ][");
     legend_part3.Draw();
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 10-30%");
+    // latex.SetTextAlign(11);
+    // latex.SetTextSize(0.055*sf);
+    // latex.DrawLatex(0.05, 0.05, "PbPb 10-30%");
 
     pads[4]->cd();
     worlds[4]->Draw("axis");
@@ -513,9 +513,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[3]->Draw("same hist ][");
     legend_part6.Draw();
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 0-10%");
+    latex.SetTextAlign(11);
+    latex.SetTextSize(0.055*sf);
+    latex.DrawLatex(0.05, 0.05, "PbPb 0-10%");
 
     pads[9]->cd();
     worlds[9]->Draw("axis");
@@ -529,9 +529,9 @@ int congratulate(char const* config, char const* selections, char const* output)
     (*syst_aa)[3]->Draw("same hist ][");
     legend_part4.Draw();
 
-    latex.SetTextAlign(21);
-    latex.SetTextSize(0.06*sf);
-    latex.DrawLatex(0.5, 0.05, "PbPb 0-10%");
+    // latex.SetTextAlign(11);
+    // latex.SetTextSize(0.055*sf);
+    // latex.DrawLatex(0.05, 0.05, "PbPb 0-10%");
 
     canvas.SaveAs((set + "_final_data_systematics_" + name + "_log.pdf").c_str());
     

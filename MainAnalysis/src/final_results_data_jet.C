@@ -463,22 +463,22 @@ int congratulate(char const* config, char const* selections, char const* output)
 
     pads[0][0]->cd();
     latex.SetTextAlign(11);
-    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "50-90%");
 
     pads[0][1]->cd();
     latex.SetTextAlign(11);
-    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "30-50%");
 
     pads[0][2]->cd();
     latex.SetTextAlign(11);
-    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "10-30%");
 
     pads[0][3]->cd();
     latex.SetTextAlign(11);
-    latex.SetTextSize(0.06 / factor_y * factor_x);
+    latex.SetTextSize(0.055 / factor_y * factor_x);
     latex.DrawLatex(0.05 / factor_y * factor_x, 0.05 / factor_y * factor_x, "0-10%");
 
     pads[0][1]->cd();
