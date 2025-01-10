@@ -189,6 +189,9 @@ int gather_theory(char const* config, char const* selections, char const* output
         double xjg_total = 0;
         double xjg_part1 = 0;
         double xjg_part2 = 0;
+        double pho_total = 0;
+        double pho_part1 = 0;
+        double pho_part2 = 0;
         double total = 0;
         double part1 = 0;
         double part2 = 0;
@@ -218,15 +221,18 @@ int gather_theory(char const* config, char const* selections, char const* output
                 if ((*jetPt)[k] < 100 && (*jetPt)[k] > 30 && (*jetDj)[k] < 0.3) {
                     total += weight;
                     xjg_total += weight * (*jetPt)[k] / (*photonPt)[0];
+                    pho_total += weight * (*photonPt)[0];
 
                     if ((*jetPt)[k] < 60) {
                         part1 += weight;
                         xjg_part1 += weight * (*jetPt)[k] / (*photonPt)[0];
+                        pho_part1 += weight * (*photonPt)[0];
                     }
 
                     if ((*jetPt)[k] > 60) {
                         part2 += weight;
                         xjg_part2 += weight * (*jetPt)[k] / (*photonPt)[0];
+                        pho_part2 += weight * (*photonPt)[0];
                     }
                 }
 
@@ -235,6 +241,7 @@ int gather_theory(char const* config, char const* selections, char const* output
         }
 
         std::cout << xjg_total / total << " " << xjg_part1 / part1 << " " << xjg_part2 / part2 << std::endl;
+        std::cout << pho_total / total << " " << pho_part1 / part1 << " " << pho_part2 / part2 << std::endl;
 
         hist_dr_jpt[i]->divide(*hist_nevt[i]);
 
