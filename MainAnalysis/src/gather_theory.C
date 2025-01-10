@@ -186,6 +186,13 @@ int gather_theory(char const* config, char const* selections, char const* output
         std::vector<double> *jetDj = 0;
         double weight;
 
+        double xjg_total = 0;
+        double xjg_part1 = 0;
+        double xjg_part2 = 0;
+        double total = 0;
+        double part1 = 0;
+        double part2 = 0;
+
         t->SetBranchAddress("photonPt", &photonPt);
         t->SetBranchAddress("photonEta", &photonEta);
         t->SetBranchAddress("photonPhi", &photonPhi);
@@ -208,9 +215,26 @@ int gather_theory(char const* config, char const* selections, char const* output
                 if (std::abs((float) (*jetEta)[k]) > jet_eta_abs) { continue; }
                 if (!back_to_back((float) (*photonPhi)[0], (float) (*jetPhi)[k], dphi_min_numerator/dphi_min_denominator)) { continue; }
 
+                if ((*jetPt)[k] < 100 && (*jetPt)[k] > 30 && (*jetDj)[k] < 0.3) {
+                    total += weight;
+                    xjg_total += weight * (*jetPt)[k] / (*photonPt)[0];
+
+                    if ((*jetPt)[k] < 60) {
+                        part1 += weight;
+                        xjg_part1 += weight * (*jetPt)[k] / (*photonPt)[0];
+                    }
+
+                    if ((*jetPt)[k] > 60) {
+                        part2 += weight;
+                        xjg_part2 += weight * (*jetPt)[k] / (*photonPt)[0];
+                    }
+                }
+
                 (*hist_dr_jpt[i])[0]->Fill(mg->index_for(v{(float) (*jetDj)[k], (float) (*jetPt)[k]}), (float) weight);
             }
         }
+
+        std::cout << xjg_total / total << " " << xjg_part1 / part1 << " " << xjg_part2 / part2 << std::endl;
 
         hist_dr_jpt[i]->divide(*hist_nevt[i]);
 
