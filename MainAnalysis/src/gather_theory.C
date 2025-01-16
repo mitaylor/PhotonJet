@@ -218,7 +218,7 @@ int gather_theory(char const* config, char const* selections, char const* output
                 if (std::abs((float) (*jetEta)[k]) > jet_eta_abs) { continue; }
                 if (!back_to_back((float) (*photonPhi)[0], (float) (*jetPhi)[k], dphi_min_numerator/dphi_min_denominator)) { continue; }
 
-                if ((*jetPt)[k] < 100 && (*jetPt)[k] > 30 && (*jetDj)[k] < 0.3) {
+                if ((*jetPt)[k] < 100 && (*jetPt)[k] > 30 && (*jetDj)[k] < 0.01) {
                     total += weight;
                     xjg_total += weight * (*jetPt)[k] / (*photonPt)[0];
                     pho_total += weight * (*photonPt)[0];
